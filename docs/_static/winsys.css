@@ -1,0 +1,94 @@
+@import "default.css";
+
+body {
+    font-family: "Lucida Sans Unicode", sans-serif;
+    font-size: 92%;
+	background-color : #fff;
+}
+
+div.body {
+	background-color : #f0fff0;
+}
+
+div.document {
+	background-color : #f2f2f2;
+}
+
+div.footer {
+	background-color : #e2e2e2;
+    color: #323232;
+}
+
+div.footer a {
+	color : inherit;
+}
+
+div.related {
+	background-color : white;
+    color: #333;
+	border-bottom : 1px solid #666;
+	border-top : 1px solid #666;
+}
+div.related a {
+	color : green;
+}
+
+div.bodywrapper {
+	border-left : 1px solid #ccc;
+}
+
+div.body h1,
+div.body h2,
+div.body h3,
+div.body h4,
+div.body h5,
+div.body h6 {
+	color : #008000;
+	background-color : #e0ffe0;
+}
+
+div.documentwrapper {
+	background-color : black;
+	border-color : #ccc;
+}
+
+div.sphinxsidebar {
+	background-color : black;
+}
+
+div.sphinxsidebar h3,
+div.sphinxsidebar h4 {
+	font-weight : bold;
+	color : #e0e0e0;
+}
+
+div.sphinxsidebar a {
+	color : #c0ffc0;
+}
+
+a {
+	color : green;
+}
+
+div.body > li {
+	margin-bottom : 0.5em;
+	width : 64%;
+}
+
+div.admonition li {
+	margin-bottom : 0.5em;
+	width : 84%;
+}
+td.linenos pre {
+    padding: 0;
+	margin : 13px 0 13px 0;
+}
+
+
+div.fulltoc ul {
+  margin-left : 0;
+}
+div.fulltoc li {
+  color : #666;
+  margin-top : 0.125em;
+}

@@ -1,0 +1,17 @@
+Scheduled Tasks
+* Add context manager
+* Bring in security module
+
+fs
+* Sparse files
+* Reparse points
+* Extended Attributes?
+* Folder Junctions
+
+security
+
+constants
+
+shell
+
+unit test
