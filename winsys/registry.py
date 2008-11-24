@@ -110,7 +110,7 @@ def create_moniker (computer, root, path, value=None):
   else:
     return moniker
 
-class Key (core._WinSysObject):
+class Registry (core._WinSysObject):
 
   ACCESS = {
     u"Q" : REGISTRY_ACCESS.KEY_QUERY_VALUE,
@@ -119,43 +119,47 @@ class Key (core._WinSysObject):
     u"W" : REGISTRY_ACCESS.KEY_WRITE,
     u"C" : REGISTRY_ACCESS.KEY_READ | REGISTRY_ACCESS.KEY_WRITE,
     u"F" : REGISTRY_ACCESS.KEY_ALL_ACCESS,
+    u"S" : ACCESS.READ_CONTROL | ACCESS.WRITE_DAC,
   }
-  DEFAULT_ACCESS = u"R"
+  DEFAULT_ACCESS = u"F"
   
-  def __init__ (self, hKey=None, moniker=u""):
+  def __init__ (self, moniker, access=DEFAULT_ACCESS):
     core._WinSysObject.__init__ (self)
-    utils._set (self, "hKey", hKey)
+    utils._set (self, "hKey", None)
     utils._set (self, "moniker", unicode (moniker))
+    utils._set (self, "id", parse_moniker (self.moniker.lower ()))
+    utils._set (self, "access", self._access (access))
     utils._set (self, "name", moniker.split (sep)[-1] if moniker else "")
     
   @classmethod
   def _access (cls, access):
+    if access is None:
+      return None      
     try:
       return int (access)
     except ValueError:
       return reduce (operator.or_, (cls.ACCESS[a] for a in access.upper ()), 0)
 
-  def pyobject (self, access=None):
+  def __eq__ (self, other):
+    return self.id == other.id and self.access == other.access
+    
+  def __add__ (self, path):
+    return self.__class__ (self.moniker + sep + path)
+  
+  def pyobject (self):
     if self.hKey is None:
-      hKey, moniker = self._from_string (self.moniker, access=self._access (access or self.DEFAULT_ACCESS))
+      hKey, moniker = self._from_string (self.moniker, access=self.access)
       utils._set (self, "hKey", hKey)
       if self.hKey is None:
-        raise x_not_found ("Key %s not accessible", "pyobject", 0)
-      else:
-        return self.hKey
-
-    else:
-      if access is None:
-        return self.hKey
-      else:
-        return wrapped (win32api.RegOpenKeyEx, self.hKey, "", 0, self._access (access))
+        raise x_not_found ("Registry path %s not found", "pyobject", 0)
+    return self.hKey
   
   def as_string (self):
     return self.moniker
   
   def security (self, options=security.Security.DEFAULT_OPTIONS):
     return security.Security.from_object (
-      self.pyobject (ACCESS.READ_CONTROL | ACCESS.WRITE_DAC), 
+      self.pyobject (), 
       object_type=SE_OBJECT_TYPE.REGISTRY_KEY, 
       options=options
     )
@@ -167,6 +171,7 @@ class Key (core._WinSysObject):
   def dumped (self, level=0):
     output = []
     output.append (self.as_string ())
+    output.append ("access: %s" % self.access)
     if bool (self):
       output.append ("keys:\n%s" % utils.dumped_list ((key.name for key in self.keys (ignore_access_errors=True)), level))
       output.append ("values:\n%s" % utils.dumped_dict (dict ((name, repr (value)) for (name, value, type) in self.values (ignore_access_errors=True)), level))
@@ -186,18 +191,12 @@ class Key (core._WinSysObject):
   def __setattr__ (self, attr, value):
     self.set_value (attr, value)
     
-  def values (self, ignore_access_errors=False):
-    return values (self, ignore_access_errors=ignore_access_errors)
-      
-  def keys (self, access=DEFAULT_ACCESS, ignore_access_errors=False):
-    return keys (self, ignore_access_errors=ignore_access_errors)
-  
   def get_value (self, name):
     return wrapped (win32api.RegQueryValueEx, self.pyobject (), name)
 
-  def get_key (self, name, access=DEFAULT_ACCESS):
+  def get_key (self, name):
     return self.__class__ (
-      wrapped (win32api.RegOpenKeyEx, self.pyobject (), name, 0, self._access (access)),
+      wrapped (win32api.RegOpenKeyEx, self.pyobject (), name, 0, self.access),
       self.moniker+ sep + name
     )
 
@@ -211,7 +210,7 @@ class Key (core._WinSysObject):
         return REGISTRY_VALUE_TYPE.REG_DWORD
       if isinstance (value, list):
         return REGISTRY_VALUE_TYPE.REG_MULTI_SZ
-      if unicode (value).count (u"%") % 2 == 0:
+      if "%" in value and value.count (u"%") % 2 == 0:
         return REGISTRY_VALUE_TYPE.REG_EXPAND_SZ
       return REGISTRY_VALUE_TYPE.REG_SZ
     
@@ -221,29 +220,8 @@ class Key (core._WinSysObject):
       type = _guess_type (value)
     wrapped (win32api.RegSetValueEx, self.pyobject (), label, 0, type, value)
     
-  def delete (self, *args, **kwargs):
-    return delete (self, *args, **kwargs)
-    
-  def create (self, *args, **kwargs):
-    return create (self, *args, **kwargs)
-    
-  def walk (self, *args, **kwargs):
-    return walk (self, *args, **kwargs)
-    
   def add (self, name):
     return create (self.moniker + sep + name)
-  
-  def parent (self, access=DEFAULT_ACCESS):
-    computer, root, path, value = parse_moniker (self.moniker)
-    parent_moniker = create_moniker (computer, root, sep.join (path.split (sep)[:-1]))
-    pcomputer, proot, ppath, pvalue = parse_moniker (parent_moniker)
-    if ppath:
-      return self.from_string (parent_moniker, access)
-    else:
-      raise x_registry ("%s has no parent" % self.moniker)
-      
-  def copy (self, other):
-    return copy (self, other)
   
   @classmethod
   def _from_string (cls, string, access=DEFAULT_ACCESS):
@@ -255,37 +233,38 @@ class Key (core._WinSysObject):
     
     try:
       return wrapped (win32api.RegOpenKeyEx, hRoot, path, 0, cls._access (access)), value
-    except (x_not_found, x_access_denied):
+    except x_not_found:
       return None, value
       
   @classmethod
   def from_string (cls, string, access=DEFAULT_ACCESS):
     hKey, value = cls._from_string (string, access)
     if value is None:
-      return cls (hKey, string)
+      return cls (string, access)
     else:
-      return cls (hKey, string).get_value (value)
+      return cls (string, access).get_value (value)
 
 #
 # Module-level convenience functions, many of them called from
-# within the Key class by simply passing all parameters through.
+# within the Registry class by simply passing all parameters through.
 # Most will take as the first param anything which can be converted
-# to a Key, including a regpath string, a pywin32 HKEY or an
-# actual Key instance.
+# to a Registry, including a regpath string, a pywin32 HKEY or an
+# actual Registry instance.
 #
-def key (root, access=Key.DEFAULT_ACCESS):
+def registry (root, access=Registry.DEFAULT_ACCESS):
   if root is None:
     return None
-  elif isinstance (root, Key):
+  elif isinstance (root, Registry):
     return root
-  elif isinstance (root, PyHANDLE):
-    return Key (root, None)
+  elif isinstance (root, basestring):
+    return Registry.from_string (root, access=access)
   else:
-    return Key.from_string (unicode (root), access=access)
+    raise x_registry ("root must be None, an existing key or a moniker", "registry", 0)
 
-def values (key, ignore_access_errors=False):
+def values (root, ignore_access_errors=False):
+  root = registry (root)
   try:
-    hKey = key.pyobject ()
+    hKey = root.pyobject ()
   except x_access_denied:
     if ignore_access_errors:
       raise StopIteration
@@ -299,57 +278,54 @@ def values (key, ignore_access_errors=False):
       yield wrapped (win32api.RegEnumValue, hKey, i)
     except x_access_denied:
       if ignore_access_errors:
-        pass
+        raise StopIteration
       else:
         raise
     i += 1
 
-def keys (root, access=Key.DEFAULT_ACCESS, ignore_access_errors=False):
-  root = key (root)
+def keys (root, ignore_access_errors=False):
+  root = registry (root)
   try:
-    hRoot = root.pyobject (access=Key._access (access))
+    hRoot = root.pyobject ()
   except x_access_denied:
     if ignore_access_errors:
       raise StopIteration
     else:
       raise
   
-  for subname, reserved, subclass, written_at in wrapped (win32api.RegEnumKeyEx, hRoot):
-    try:
-      yield Key (
-        wrapped (win32api.RegOpenKeyEx, hRoot, subname, 0, Key._access (access)), 
-        root.moniker + sep + subname
-      )
-    except x_access_denied:
-      if ignore_access_errors:
-        continue
-      else:
-        raise
+  try:
+    for subname, reserved, subclass, written_at in wrapped (win32api.RegEnumKeyEx, hRoot):
+      yield Registry (root.moniker + sep + subname)
+  except x_access_denied:
+    if ignore_access_errors:
+      raise StopIteration
+    else:
+      raise
 
 def copy (from_key, to_key):
-  source = key (from_key)
-  target = key (to_key)
+  source = registry (from_key)
+  target = registry (to_key)
   if not target:
     target.create ()
 
   for root, subkeys, subvalues in walk (source):
-    target_root = key (target.moniker + utils.relative_to (root.moniker, source.moniker))
+    target_root = registry (target.moniker + utils.relative_to (root.moniker, source.moniker))
     for k in subkeys:
-      target_key = key (target.moniker + utils.relative_to (k.moniker, source.moniker))
+      target_key = registry (target.moniker + utils.relative_to (k.moniker, source.moniker))
       target_key.create ()    
     for name, value, type in subvalues:
       target_root.set_value (name, (value, type))
       
-  return key (to_key)
+  return registry (to_key)
   
 def delete (root):
-  root = key (root)
+  root = registry (root)
   for k in root.keys ():
     k.delete ()
-  win32api.RegDeleteKey (root.parent ().pyobject ("D"), root.name)
+  win32api.RegDeleteKey (root.parent ().pyobject (), root.name)
 
 def create (root, sec=None):
-  computer0, root0, path0, value0 = parse_moniker (key (root).moniker)
+  computer0, root0, path0, value0 = parse_moniker (registry (root).moniker)
   
   parts = path0.split (sep)
   for i, part in enumerate (parts):
@@ -359,20 +335,44 @@ def create (root, sec=None):
     else:
       hRoot = root
     security_attributes = sec.pyobject () if sec else None
-    wrapped (win32api.RegCreateKeyEx, hRoot, path, Key._access (Key.DEFAULT_ACCESS), security_attributes)
+    wrapped (win32api.RegCreateKeyEx, hRoot, path, Registry._access (Registry.DEFAULT_ACCESS), security_attributes)
 
-def walk (root, access=Key.DEFAULT_ACCESS, ignore_access_errors=False):
-  root = key (root)
-  access = Key._access (access)
+def walk (root, ignore_access_errors=False):
+  root = registry (root)
   yield (
     root, 
-    root.keys (access=access, ignore_access_errors=ignore_access_errors), 
+    root.keys (ignore_access_errors=ignore_access_errors), 
     root.values (ignore_access_errors=ignore_access_errors)
   )
-  for subkey in root.keys (access=access, ignore_access_errors=ignore_access_errors):
-    for result in walk (subkey, access, ignore_access_errors):
+  for subkey in root.keys (ignore_access_errors=ignore_access_errors):
+    for result in walk (subkey, ignore_access_errors=ignore_access_errors):
       yield result
 
+def flat (root, ignore_access_errors=False):
+  for key, subkeys, values in walk (root, ignore_access_errors=ignore_access_errors):
+    yield key
+    for value in values:
+      yield value
+
+def parent (key):
+  key = registry (key)
+  computer, root, path, value = parse_moniker (key.moniker)
+  parent_moniker = create_moniker (computer, root, sep.join (path.split (sep)[:-1]))
+  pcomputer, proot, ppath, pvalue = parse_moniker (parent_moniker)
+  if ppath:
+    return registry (parent_moniker, key.access)
+  else:
+    raise x_registry ("%s has no parent" % key.moniker)
+      
+Registry.values = values
+Registry.keys = keys
+Registry.delete = delete
+Registry.create = create
+Registry.walk = walk
+Registry.flat = flat
+Registry.copy = copy
+Registry.parent = parent
+
 if __name__ == '__main__':
-  key ("HKLM/Software/python/PythonCore/%s" % ".".join (str (i) for i in sys.version_info[:2])).dump ()
+  registry ("HKLM/Software/python/PythonCore/%s" % ".".join (str (i) for i in sys.version_info[:2])).dump ()
   raw_input ("Press enter...")

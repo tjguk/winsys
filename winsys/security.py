@@ -487,11 +487,21 @@ class Security (_SecurityObject):
     self.inherits = not bool (self._control & SD_CONTROL.DACL_PROTECTED)
 
   def as_string (self):
+    security_information = 0
+    if self._owner:
+      security_information |= SECURITY_INFORMATION.OWNER
+    if self._group:
+      security_information |= SECURITY_INFORMATION.GROUP
+    if self._dacl:
+      security_information |= SECURITY_INFORMATION.DACL
+    if self._sacl:
+      security_information |= SECURITY_INFORMATION.SACL
+    print "as_string", security_information
     return wrapped (
       win32security.ConvertSecurityDescriptorToStringSecurityDescriptor,
       self.pyobject ().SECURITY_DESCRIPTOR,
       REVISION.SDDL_REVISION_1, 
-      reduce (operator.or_, SECURITY_INFORMATION.values ())
+      security_information
     )
     
   def dumped (self, level):
