@@ -76,8 +76,8 @@ def parse_moniker (moniker):
   except KeyError:
     root = None
   
-  if root is None:
-    key1 = keys.pop (0)    
+  if root is None and keys:
+    key1 = keys.pop (0)
     try:
       root = REGISTRY_HIVE[key1.upper ()]
     except KeyError:
@@ -187,7 +187,7 @@ class Registry (core._WinSysObject):
         return self.get_key (attr)
       except x_not_found:
         raise AttributeError
-    
+
   def __setattr__ (self, attr, value):
     self.set_value (attr, value)
     
@@ -195,22 +195,20 @@ class Registry (core._WinSysObject):
     return wrapped (win32api.RegQueryValueEx, self.pyobject (), name)
 
   def get_key (self, name):
-    return self.__class__ (
-      wrapped (win32api.RegOpenKeyEx, self.pyobject (), name, 0, self.access),
-      self.moniker+ sep + name
-    )
+    return self + name
 
   def set_value (self, label, value):
     def _guess_type (value):
       try:
         int (value)
-      except ValueError:
+      except (ValueError, TypeError):
         pass
       else:
         return REGISTRY_VALUE_TYPE.REG_DWORD
       if isinstance (value, list):
         return REGISTRY_VALUE_TYPE.REG_MULTI_SZ
-      if "%" in value and value.count (u"%") % 2 == 0:
+      value = unicode (value)
+      if u"%" in value and value.count (u"%") % 2 == 0:
         return REGISTRY_VALUE_TYPE.REG_EXPAND_SZ
       return REGISTRY_VALUE_TYPE.REG_SZ
     
@@ -220,8 +218,8 @@ class Registry (core._WinSysObject):
       type = _guess_type (value)
     wrapped (win32api.RegSetValueEx, self.pyobject (), label, 0, type, value)
     
-  def add (self, name):
-    return create (self.moniker + sep + name)
+  def add (self, name, sec=None):
+    return create (self + name, sec=sec)
   
   @classmethod
   def _from_string (cls, string, access=DEFAULT_ACCESS):
@@ -325,7 +323,8 @@ def delete (root):
   win32api.RegDeleteKey (root.parent ().pyobject (), root.name)
 
 def create (root, sec=None):
-  computer0, root0, path0, value0 = parse_moniker (registry (root).moniker)
+  key = registry (root)
+  computer0, root0, path0, value0 = parse_moniker (key.moniker)
   
   parts = path0.split (sep)
   for i, part in enumerate (parts):
@@ -336,6 +335,8 @@ def create (root, sec=None):
       hRoot = root
     security_attributes = sec.pyobject () if sec else None
     wrapped (win32api.RegCreateKeyEx, hRoot, path, Registry._access (Registry.DEFAULT_ACCESS), security_attributes)
+  
+  return key
 
 def walk (root, ignore_access_errors=False):
   root = registry (root)

@@ -9,7 +9,7 @@ import win32api
 import pywintypes
 import winerror
 
-from winsys import core, utils, accounts
+from winsys import core, utils, accounts, _privilege
 from winsys.constants import *
 from winsys.exceptions import *
 
@@ -30,81 +30,10 @@ WINERROR_MAP = {
 }
 wrapped = wrapper (WINERROR_MAP, x_security)
 
-class _SecurityObject (core._WinSysObject):
-  u"""Base class behind all of the security classes.
-  Each class is expected to wrap an underlying Windows
-  structure, probably represented by a pywin32 object,
-  altho' possibly implemented by ctypes.
-  """
-  def pyobject (self):
-    u"""This should return the underlying -- probably
-    pywin32-based -- object, usually after calling 
-    copying the presentation data back out.
-    
-    By default it is not implemented 
-    """
-    raise NotImplementedError
-  
-  def raw (self):
-    u"""Intended where a pywin32 object offers a buffer
-    interface to its underlying data.
-    
-    By default it is not implemented
-    """
-    raise NotImplementedError
-
-class Privilege (_SecurityObject):
-
-  def __init__ (self, luid, attributes=0):
-    u"""luid is one of the PRIVILEGE_NAME constants
-    attributes is the result of or-ing the different PRIVILEGE_ATTRIBUTE items you want
-    """
-    _SecurityObject.__init__ (self)
-    self._luid = luid
-    self._attributes = attributes
-    self.name = wrapped (win32security.LookupPrivilegeName, u"", self._luid)
-    self.description = wrapped (win32security.LookupPrivilegeDisplayName, u"", self.name)
-    
-  def as_string (self):
-    attributes = self._attributes
-    if attributes == 0:
-      prefix = u"-"
-    elif PRIVILEGE_ATTRIBUTE.ENABLED_BY_DEFAULT & attributes:
-      prefix = u"*"
-    elif PRIVILEGE_ATTRIBUTE.ENABLED & attributes:
-      prefix = u"+"
-    else:
-      prefix = u" "
-    return u"%s %s (%d)" % (prefix, self.name, self._luid)
-  
-  def dumped (self, level=0):
-    output = []
-    output.append (u"Name: %s" % self.name)
-    output.append (u"LUID: %s" % self._luid)
-    output.append (u"Attributes: %s" % u" | " .join (PRIVILEGE_ATTRIBUTE.names_from_value (self._attributes)))
-    return utils.dumped (u"\n".join (output), level)
-
-  def __eq__ (self, other):
-    return self.name == other.name
-    
-  def __lt__ (self, other):
-    return self.name < other.name
-    
-  def pyobject (self):
-    return self._luid
-    
-  def _get_enabled (self):
-    return bool (self._attributes & PRIVILEGE_ATTRIBUTE.ENABLED)
-  enabled = property (_get_enabled)
-
-  @classmethod
-  def from_string (cls, string):
-    return cls (wrapped (win32security.LookupPrivilegeValue, u"", unicode (string)))
-  
-class Token (_SecurityObject):
+class Token (core._WinSysObject):
 
   def __init__ (self, hToken, hProcess=None, hThread=None):
-    _SecurityObject.__init__ (self)
+    core._WinSysObject.__init__ (self)
     self.hToken = hToken
     self.hProcess = hProcess
     self.hThread = hThread
@@ -122,7 +51,7 @@ class Token (_SecurityObject):
     if attr == u"RestrictedSids" or attr is None:
       self._info[u'restricted_sids'] = [accounts.principal (sid) for sid, attributes in self.info (u"RestrictedSids")]
     if attr == u"Privileges" or attr is None:
-      self._info[u'privileges'] = [Privilege (luid, a) for (luid, a) in self.info (u"Privileges")]
+      self._info[u'privileges'] = [_privilege.Privilege (luid, a) for (luid, a) in self.info (u"Privileges")]
     if attr == u"PrimaryGroup" or attr is None:
       self._info[u'primary_group'] = accounts.principal (self.info (u"PrimaryGroup"))
     if attr == u"Source" or attr is None:
@@ -186,13 +115,13 @@ class Token (_SecurityObject):
 
   def change_privileges (self, enable_privs=[], disable_privs=[]):
     privs = []
-    privs.extend ((privilege (p).pyobject (), PRIVILEGE_ATTRIBUTE.ENABLED) for p in enable_privs)
-    privs.extend ((privilege (p).pyobject (), 0) for p in disable_privs)
+    privs.extend ((_privilege.privilege (p).pyobject (), PRIVILEGE_ATTRIBUTE.ENABLED) for p in enable_privs)
+    privs.extend ((_privilege.privilege (p).pyobject (), 0) for p in disable_privs)
     old_privs = wrapped (win32security.AdjustTokenPrivileges, self.hToken, 0, privs)
     self._refresh (u"Privileges")
     return (
-      [privilege (priv) for (priv, status) in old_privs if status == PRIVILEGE_ATTRIBUTE.ENABLED],
-      [privilege (priv) for (priv, status) in old_privs if status == 0]
+      [_privilege.privilege (priv) for (priv, status) in old_privs if status == PRIVILEGE_ATTRIBUTE.ENABLED],
+      [_privilege.privilege (priv) for (priv, status) in old_privs if status == 0]
     )
       
   def impersonate (self):
@@ -202,7 +131,7 @@ class Token (_SecurityObject):
   def unimpersonate (self):
     wrapped (win32security.RevertToSelf)
     
-class ACE (_SecurityObject):
+class ACE (core._WinSysObject):
 
   ACCESS = {
     u"R" : GENERIC_ACCESS.READ,
@@ -225,7 +154,7 @@ class ACE (_SecurityObject):
     @param type "ALLOW" or "DENY" or number representing one of the *_ACE_TYPE constants
     @param flags Bitmask or Set of strings or numbers representing the AceFlags constants
     """
-    _SecurityObject.__init__ (self)
+    core._WinSysObject.__init__ (self)
     self.type = type
     self.is_allowed = type in (ACE_TYPE.ACCESS_ALLOWED, ACE_TYPE.ACCESS_ALLOWED_OBJECT)
     self._trustee = trustee
@@ -321,7 +250,7 @@ class ACE (_SecurityObject):
     elif issubclass (cls, SACE):
       _class = SACE
     else:
-      if name not in ACE_TYPE.names (u"ACCESS_*"):
+      if name in ACE_TYPE.names (u"ACCESS_*"):
         _class = DACE
       else:
         _class = SACE
@@ -353,7 +282,7 @@ class DACE (ACE):
 class SACE (ACE):
   pass
 
-class ACL (_SecurityObject):
+class ACL (core._WinSysObject):
 
   _ACE = ACE
   _ACE_MAP = {
@@ -362,7 +291,7 @@ class ACL (_SecurityObject):
   }
 
   def __init__ (self, acl=None):
-    _SecurityObject.__init__ (self)
+    core._WinSysObject.__init__ (self)
     if acl is None:
       self._list = None
     else:
@@ -392,8 +321,8 @@ class ACL (_SecurityObject):
   def __delitem__ (self, index):
     del self._list[index]
 
-  def __getattr__ (self, attr):
-    return getattr (self._list, attr)
+  #~ def __getattr__ (self, attr):
+    #~ return getattr (self._list, attr)
 
   def __len__ (self):
     return len (self._list or [])
@@ -407,12 +336,12 @@ class ACL (_SecurityObject):
   def __contains__ (self, a):
     return ace (a) in (self._list or [])
 
-  def pyobject (self):
+  def pyobject (self, include_inherited=False):
     if self._list is None:
       return None
     
     acl = wrapped (win32security.ACL)
-    aces = sorted (a for a in self._list if not a.inherited)
+    aces = sorted (a for a in self._list if not a.inherited or include_inherited)
     for ace in aces:
       adder_fn = self._ACE_MAP.get (ace.type)
       if adder_fn:
@@ -443,7 +372,7 @@ class DACL (ACL):
 class SACL (ACL):
   _ACE = SACE
 
-class Security (_SecurityObject):
+class Security (core._WinSysObject):
 
   OPTIONS = {
     u"O" : SECURITY_INFORMATION.OWNER,
@@ -465,7 +394,7 @@ class Security (_SecurityObject):
     originating_object=None,
     originating_object_type=None
   ):
-    _SecurityObject.__init__ (self)
+    core._WinSysObject.__init__ (self)
     self._control = control
     self._owner = None
     self._group = None
@@ -496,10 +425,10 @@ class Security (_SecurityObject):
       security_information |= SECURITY_INFORMATION.DACL
     if self._sacl:
       security_information |= SECURITY_INFORMATION.SACL
-    print "as_string", security_information
+    sa = self.pyobject (include_inherited=True)
     return wrapped (
       win32security.ConvertSecurityDescriptorToStringSecurityDescriptor,
-      self.pyobject ().SECURITY_DESCRIPTOR,
+      sa.SECURITY_DESCRIPTOR,
       REVISION.SDDL_REVISION_1, 
       security_information
     )
@@ -633,13 +562,13 @@ class Security (_SecurityObject):
         sa.GetSecurityDescriptorSacl ()
       )
   
-  def pyobject (self):
+  def pyobject (self, include_inherited=False):
     sa = wrapped (win32security.SECURITY_ATTRIBUTES)
     sa.bInheritHandle = self.inherit_handle
     owner = None if self._owner is None else self._owner.pyobject ()
     group = None if self._group is None else self._group.pyobject ()
-    dacl = None if self._dacl is None else self._dacl.pyobject ()
-    sacl = None if self._sacl is None else self._sacl.pyobject ()
+    dacl = None if self._dacl is None else self._dacl.pyobject (include_inherited=include_inherited)
+    sacl = None if self._sacl is None else self._sacl.pyobject (include_inherited=include_inherited)
     if owner:
       sa.SetSecurityDescriptorOwner (owner, False)
     if group:
@@ -731,7 +660,7 @@ def security (obj=object, obj_type=None, options=Security.DEFAULT_OPTIONS):
   else:
     return Security.from_object (unicode (obj), object_type=SE_OBJECT_TYPE.FILE_OBJECT, options=options)
 
-class LogonSession (_SecurityObject):
+class LogonSession (core._WinSysObject):
   
   _MAP = {
     u"UserName" : accounts.principal,
@@ -740,7 +669,7 @@ class LogonSession (_SecurityObject):
   }
   
   def __init__ (self, session_id):
-    _SecurityObject.__init__ (self)
+    core._WinSysObject.__init__ (self)
     self._session_id = session_id
     self._session_info = {}
     for k, v in wrapepd (win32security.LsaGetLogonSessionData, session_id).items ():
@@ -765,10 +694,10 @@ class LogonSession (_SecurityObject):
     output.append (u"LogonTime: %s" % self.LogonTime)
     return utils.dumped ("\n".join (output), level)
 
-class LSA (_SecurityObject):
+class LSA (core._WinSysObject):
   
   def __init__ (self, system_name=None):
-    _SecurityObject.__init__ (self)
+    core._WinSysObject.__init__ (self)
     self._lsa = wrapped (win32security.LsaOpenPolicy, system_name, 0)
   
   @staticmethod
@@ -779,16 +708,6 @@ class LSA (_SecurityObject):
 #
 # Friendly constructors
 #
-
-def privilege (privilege):
-  u"""Friendly constructor for the Privilege class"""
-  if issubclass (privilege.__class__, Privilege):
-    return privilege
-  elif issubclass (privilege.__class__, int):
-    return Privilege (privilege)
-  else:
-    return Privilege.from_string (unicode (privilege))
-
 def ace (ace):
   if ace is None:
     return None

@@ -31,6 +31,11 @@ def teardown ():
   dacl.AddAccessAllowedAce (win32security.ACL_REVISION_DS, win32con.KEY_ALL_ACCESS, sid)
   win32security.SetSecurityInfo (hKey, win32security.SE_REGISTRY_KEY, win32security.DACL_SECURITY_INFORMATION | win32security.UNPROTECTED_DACL_SECURITY_INFORMATION, None, None, dacl, None)
   win32api.RegDeleteKey (win32con.HKEY_CURRENT_USER, r"Software\winsys\winsys2")
+  try:
+    win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"Software\winsys1")
+  except win32api.error, (errno, errctx, errmsg):
+    if errno != winerror.ERROR_FILE_NOT_FOUND:
+      raise
   win32api.RegDeleteKey (win32con.HKEY_CURRENT_USER, r"Software\winsys")
   
 #
@@ -80,9 +85,14 @@ def key0_subset_of_key1 (key0, key1):
 #~ def test_moniker_ill_formed ():
   #~ assert_raises (registry.x_moniker_ill_formed, registry.parse_moniker, r"IN\VA:LID\MONI\KER")
   
+@raises (registry.x_moniker_no_root)
 def test_moniker_computer_only ():
-  assert_raises (registry.x_moniker_no_root, registry.parse_moniker, r"\\computer")
+  registry.parse_moniker (r"\\computer")
     
+@raises (registry.x_moniker_no_root)
+def test_moniker_invalid_root ():
+  registry.parse_moniker (r"<nonsense>")
+
 def test_moniker_slash_and_root ():
   assert_equals (registry.parse_moniker (r"\HKLM"), (None, win32con.HKEY_LOCAL_MACHINE, "", None))
     
@@ -98,8 +108,9 @@ def test_moniker_root_and_body ():
 def test_moniker_computer_root_and_body ():
   assert_equals (registry.parse_moniker (r"\\COMPUTER\HKLM\Software\Microsoft"), ("COMPUTER", win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", None))
 
+@raises (registry.x_moniker_no_root)
 def test_moniker_body_only ():
-  assert_raises (registry.x_moniker_no_root, registry.parse_moniker, r"Software\Microsoft")
+  registry.parse_moniker (r"Software\Microsoft")
 
 def test_moniker_default_value ():
   assert_equals (registry.parse_moniker (r"HKLM\Software\Microsoft:"), (None, win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", ""))
@@ -120,19 +131,20 @@ def test_moniker_create ():
   parts = "COMPUTER", win32con.HKEY_LOCAL_MACHINE, "PATH", None
   assert_equals (registry.parse_moniker (registry.create_moniker (*parts)), parts)
 
-def test_key_None ():
-  assert (registry.registry (None) is None)
+def test_registry_None ():
+  assert registry.registry (None) is None
   
-def test_key_Key ():
+def test_registry_Key ():
   key = registry.registry ("HKLM")
-  assert (registry.registry (key) is key)
+  assert registry.registry (key) is key
 
-def test_key_string ():
-  assert (registry.registry (TEST_KEY).winsys1 == GUID)
+def test_registry_string ():
+  assert registry.registry (TEST_KEY).winsys1 == GUID
 
-def test_key_other ():
+@raises (registry.x_registry)
+def test_registry_other ():
   hKey = win32api.RegOpenKey (win32con.HKEY_LOCAL_MACHINE, "Software")
-  assert_raises (registry.x_registry, registry.registry, hKey)
+  registry.registry (hKey)
   
 def test_values ():
   values = registry.values (TEST_KEY)
@@ -349,19 +361,100 @@ def test_Registry_security ():
     win32security.SE_REGISTRY_KEY,
     security_information
   )
-  print security.as_string ()
-  print win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
-        sd,
-        win32security.SDDL_REVISION_1, 
-        security_information
-      )
   assert \
-    security.as_string () == win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
+    security.as_string () == \
+      win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
         sd,
         win32security.SDDL_REVISION_1, 
         security_information
       )
 
-if __name__ == '__main__':
-  import nose
-  nose.main ()
+def test_Registry_nonzero_exists ():
+  win32api.RegCreateKey (win32con.HKEY_CURRENT_USER, r"Software\winsys1")
+  try:
+    assert bool (registry.registry (TEST_KEY1))
+  finally:
+    win32api.RegDeleteKey (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"Software"), "winsys1")
+
+def test_Registry_nonzero_not_exists ():
+  try:
+    win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"Software\winsys1")
+  except win32api.error, (errno, errctx, errmsg):
+    if errno != winerror.ERROR_FILE_NOT_FOUND:
+      raise
+  else:
+    raise RuntimeError ("Key exists but should not")
+  
+  assert not bool (registry.registry (TEST_KEY1))
+
+def test_Registry_dumped ():
+  #
+  # Just test it doesn't fall over
+  #
+  dump = registry.registry ("HKLM").dumped ()
+
+def test_Registry_get_value ():
+  assert \
+    registry.registry (TEST_KEY).get_value ("winsys1") == \
+    win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys1")
+    
+def test_Registry_get_key ():
+  assert \
+    registry.registry (TEST_KEY).get_key ("winsys1") == \
+    registry.registry (TEST_KEY + r"\winsys1")
+    
+def test_Registry_getattr_value ():
+  value, type = win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys1")
+  assert registry.registry (TEST_KEY).winsys1 == value
+    
+def test_Registry_getattr_value_shadows_key ():
+  value, type = win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys2")
+  assert registry.registry (TEST_KEY).winsys2 == value
+    
+def test_Registry_getattr_key ():
+  win32api.RegCreateKey (win32con.HKEY_CURRENT_USER, r"software\winsys\winsys3")
+  try:
+    assert registry.registry (TEST_KEY).winsys3 == registry.registry (TEST_KEY).get_key ("winsys3")
+  finally:
+    win32api.RegDeleteKey (win32con.HKEY_CURRENT_USER, r"Software\winsys\winsys3")
+
+def test_Registry_set_value_type ():
+  registry.registry (TEST_KEY).set_value ("winsys4", ("abc", win32con.REG_BINARY))
+  assert registry.registry (TEST_KEY).get_value ("winsys4") == ("abc", win32con.REG_BINARY)
+
+def test_Registry_set_value_int ():
+  registry.registry (TEST_KEY).set_value ("winsys4", 1)
+  assert registry.registry (TEST_KEY).get_value ("winsys4") == (1, win32con.REG_DWORD)
+
+def test_Registry_set_value_multi ():
+  registry.registry (TEST_KEY).set_value ("winsys4", ['a', 'b', 'c'])
+  assert registry.registry (TEST_KEY).get_value ("winsys4") == (['a', 'b', 'c'], win32con.REG_MULTI_SZ)
+
+def test_Registry_set_value_expand_even_percent ():
+  registry.registry (TEST_KEY).set_value ("winsys4", "%TEMP%")
+  assert registry.registry (TEST_KEY).get_value ("winsys4") == ("%TEMP%", win32con.REG_EXPAND_SZ)
+
+def test_Registry_set_value_expand_odd_percent ():
+  registry.registry (TEST_KEY).set_value ("winsys4", "50%")
+  assert registry.registry (TEST_KEY).get_value ("winsys4") == ("50%", win32con.REG_SZ)
+
+def test_Registry_set_value_empty_string ():
+  registry.registry (TEST_KEY).set_value ("winsys4", "")
+  assert registry.registry (TEST_KEY).get_value ("winsys4") == ("", win32con.REG_SZ)
+
+def test_Registry_set_value_non_empty_string ():
+  registry.registry (TEST_KEY).set_value ("winsys4", "winsys")
+  assert registry.registry (TEST_KEY).get_value ("winsys4") == ("winsys", win32con.REG_SZ)
+
+def test_Registry_set_value_none ():
+  registry.registry (TEST_KEY).set_value ("winsys4", None)
+  assert registry.registry (TEST_KEY).get_value ("winsys4") == ("", win32con.REG_SZ)
+
+def test_Registry_set_value_default ():
+  registry.registry (TEST_KEY).set_value ("", "test")
+  assert registry.registry (TEST_KEY).get_value ("") == ("test", win32con.REG_SZ)
+
+def test_add ():
+  key0 = registry.registry (TEST_KEY)
+  new_key = key0.add ("winsys1")
+  assert new_key == key0 + "winsys1"
