@@ -10,6 +10,7 @@ import tempfile
 
 everyone, _, _ = win32security.LookupAccountName (None, "Everyone")
 me = accounts.me ()
+administrators = accounts.principal ("Administrators")
 
 filehandle = filename = None
 def setup ():
@@ -170,25 +171,36 @@ def test_ace_reset_objects_inherit ():
 #
 # access
 #
-def test_ace_access ():
+def test_ace_access_int ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
   assert ace._access_mask == ntsecuritycon.GENERIC_ALL
   ace.access = ntsecuritycon.GENERIC_READ
   assert ace._access_mask == ntsecuritycon.GENERIC_READ
+  
+def test_ace_access_string ():
+  ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
+  assert ace._access_mask == ntsecuritycon.GENERIC_ALL
   ace.access = "W"
   assert ace._access_mask == ntsecuritycon.GENERIC_WRITE
 
 #
 # trustee
 #
-def test_ace_trustee ():
+def test_ace_trustee_principal ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
   assert ace._trustee == everyone
   ace.trustee = me
   assert ace._trustee == me
+  
+def test_ace_trustee_string ():
+  ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
+  assert ace._trustee == everyone
   ace.trustee = "Administrators"
-  assert ace._trustee == accounts.principal ("Administrators")
+  assert ace._trustee == administrators
 
+#
+# ACE constructors
+#
 def test_ace_from_ace ():
   sd = win32security.GetNamedSecurityInfo (
     filename, win32security.SE_FILE_OBJECT, 

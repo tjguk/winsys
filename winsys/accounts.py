@@ -109,6 +109,8 @@ class Principal (core._WinSysObject):
     u"""string is the name of an account in the form "domain\name".
     The domain is optional, so the simplest form is simply "name"
     """
+    if string == "":
+      string = win32api.GetUserNameEx (win32con.NameSamCompatible)
     sid, domain, type = wrapped (
       win32security.LookupAccountName,
       None if system_name is None else unicode (system_name), 

@@ -48,10 +48,12 @@ class ACE (core._WinSysObject):
     return (self.trustee, self.access, self.type)
 
   def __eq__ (self, other):
+    other = ace (other)
     return (self.trustee, self.access, self.type) == (other.trustee, other.access, other.type)
     
   def __lt__ (self, other):
     u"""Deny comes first, then what?"""
+    other = ace (other)
     return (self.is_allowed < other.is_allowed)
     
   def as_string (self):
@@ -154,7 +156,7 @@ class ACE (core._WinSysObject):
       return int (type)
     except (ValueError, TypeError):
       try:
-        return cls.TYPES[type]
+        return cls.TYPES[type.upper ()]
       except KeyError:
         raise x_unknown_value ("%s is not a valid type string" % type, "_type", 0)
   
