@@ -1,13 +1,8 @@
 import os, sys
 import operator
 
-from nose.tools import *
-
 from winsys import _privileges
-import win32api
-import win32con
 import win32security
-import ntsecuritycon
 
 def test_privilege_Privilege ():
   privilege = _privileges.Privilege (win32security.LookupPrivilegeValue ("", win32security.SE_BACKUP_NAME))
