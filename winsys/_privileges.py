@@ -1,27 +1,50 @@
 # -*- coding: iso-8859-1 -*-
 import os, sys
-import contextlib
-import operator
 
-import win32security
-import win32api
-import pywintypes
 import winerror
+import win32api
+import win32security
 
 from winsys import core, utils
 from winsys.constants import *
 from winsys.exceptions import *
 
-PyHANDLE = pywintypes.HANDLEType
-PyACL = pywintypes.ACLType
-PySECURITY_ATTRIBUTES = pywintypes.SECURITY_ATTRIBUTESType
-
 class x_privilege (x_winsys):
+  pass
+  
+class x_privilege_no_token (x_privilege):
   pass
 
 WINERROR_MAP = {
+  winerror.ERROR_NO_TOKEN : x_privilege_no_token
 }
 wrapped = wrapper (WINERROR_MAP, x_privilege)
+
+#
+# Convenience implementation functions
+#
+def _get_token ():
+  try:
+    return wrapped (
+      win32security.OpenThreadToken, 
+      wrapped (win32api.GetCurrentThread), 
+      ntsecuritycon.MAXIMUM_ALLOWED, 
+      True
+    )
+  except x_privilege_no_token:
+    return wrapped (
+      win32security.OpenProcessToken, 
+      wrapped (win32api.GetCurrentProcess),
+      ntsecuritycon.MAXIMUM_ALLOWED
+    )
+  
+def _set_privilege (self, luid, enable=True):
+  wrapped (
+    win32security.AdjustTokenPrivileges, 
+    _get_token (), 
+    False, 
+    [(luid, win32security.SE_PRIVILEGE_ENABLED if enable else 0)]
+  )
 
 class Privilege (core._WinSysObject):
 
@@ -65,7 +88,14 @@ class Privilege (core._WinSysObject):
     
   def _get_enabled (self):
     return bool (self._attributes & PRIVILEGE_ATTRIBUTE.ENABLED)
-  enabled = property (_get_enabled)
+  def _set_enabled (self, set):
+    raise NotImplemented
+    _set_privilege (self._luid, set)
+    if set:
+      self._attributes |= PRIVILEGE_ATTRIBUTE.ENABLED
+    else:
+      self._attributes &= ~PRIVILEGE_ATTRIBUTE.ENABLED
+  enabled = property (_get_enabled, _set_enabled)
 
   @classmethod
   def from_string (cls, string):
@@ -79,3 +109,4 @@ def privilege (privilege):
     return Privilege (privilege)
   else:
     return Privilege.from_string (unicode (privilege))
+

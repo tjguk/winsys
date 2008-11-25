@@ -9,7 +9,7 @@ import win32api
 import pywintypes
 import winerror
 
-from winsys import core, utils, accounts, _aces, _acls, _privilege
+from winsys import core, utils, accounts, _aces, _acls, _privileges
 from winsys.constants import *
 from winsys.exceptions import *
 
@@ -48,7 +48,7 @@ class Token (core._WinSysObject):
     if attr == u"RestrictedSids" or attr is None:
       self._info[u'restricted_sids'] = [accounts.principal (sid) for sid, attributes in self.info (u"RestrictedSids")]
     if attr == u"Privileges" or attr is None:
-      self._info[u'privileges'] = [_privilege.Privilege (luid, a) for (luid, a) in self.info (u"Privileges")]
+      self._info[u'privileges'] = [_privileges.Privilege (luid, a) for (luid, a) in self.info (u"Privileges")]
     if attr == u"PrimaryGroup" or attr is None:
       self._info[u'primary_group'] = accounts.principal (self.info (u"PrimaryGroup"))
     if attr == u"Source" or attr is None:
@@ -57,7 +57,7 @@ class Token (core._WinSysObject):
       except x_access_denied:
         self._info[u'source'] = None
     if attr == u"DefaultDacl" or attr is None:
-      self._info[u'default_dacl'] = DACL (self.info (u"DefaultDacl"))
+      self._info[u'default_dacl'] = _acls.DACL (self.info (u"DefaultDacl"))
     if attr == u"Type" or attr is None:
       self._info[u'type'] = self.info (u"Type")
     #~ self._info['impersonation_level'] = self.info ("ImpersonationLevel")
@@ -112,13 +112,13 @@ class Token (core._WinSysObject):
 
   def change_privileges (self, enable_privs=[], disable_privs=[]):
     privs = []
-    privs.extend ((_privilege.privilege (p).pyobject (), PRIVILEGE_ATTRIBUTE.ENABLED) for p in enable_privs)
-    privs.extend ((_privilege.privilege (p).pyobject (), 0) for p in disable_privs)
+    privs.extend ((_privileges.privilege (p).pyobject (), PRIVILEGE_ATTRIBUTE.ENABLED) for p in enable_privs)
+    privs.extend ((_privileges.privilege (p).pyobject (), 0) for p in disable_privs)
     old_privs = wrapped (win32security.AdjustTokenPrivileges, self.hToken, 0, privs)
     self._refresh (u"Privileges")
     return (
-      [_privilege.privilege (priv) for (priv, status) in old_privs if status == PRIVILEGE_ATTRIBUTE.ENABLED],
-      [_privilege.privilege (priv) for (priv, status) in old_privs if status == 0]
+      [_privileges.privilege (priv) for (priv, status) in old_privs if status == PRIVILEGE_ATTRIBUTE.ENABLED],
+      [_privileges.privilege (priv) for (priv, status) in old_privs if status == 0]
     )
       
   def impersonate (self):
