@@ -29,18 +29,22 @@ def teardown ():
   dacl = win32security.ACL ()
   sid, _, _ = win32security.LookupAccountName (None, win32api.GetUserName ())
   dacl.AddAccessAllowedAce (win32security.ACL_REVISION_DS, win32con.KEY_ALL_ACCESS, sid)
-  win32security.SetSecurityInfo (hKey, win32security.SE_REGISTRY_KEY, win32security.DACL_SECURITY_INFORMATION | win32security.UNPROTECTED_DACL_SECURITY_INFORMATION, None, None, dacl, None)
-  win32api.RegDeleteKey (win32con.HKEY_CURRENT_USER, r"Software\winsys\winsys2")
-  try:
-    win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"Software\winsys1")
-  except win32api.error, (errno, errctx, errmsg):
-    if errno != winerror.ERROR_FILE_NOT_FOUND:
-      raise
-  win32api.RegDeleteKey (win32con.HKEY_CURRENT_USER, r"Software\winsys")
+  win32security.SetSecurityInfo (
+    hKey, win32security.SE_REGISTRY_KEY, 
+    win32security.DACL_SECURITY_INFORMATION | win32security.UNPROTECTED_DACL_SECURITY_INFORMATION, 
+    None, None, dacl, None
+  )
+  remove_key (win32con.HKEY_CURRENT_USER, r"Software\winsys")
   
 #
 # Utility functions
 #
+def remove_key (root, key):
+  hkey = win32api.RegOpenKey (root, key)
+  for name, reserved, klass, last_written in win32api.RegEnumKeyEx (hkey):
+    remove_key (hkey, name)
+  win32api.RegDeleteKey (root, key)
+
 def remove_access (path=r"software\winsys"):
   hKey = win32api.RegOpenKeyEx (
     win32con.HKEY_CURRENT_USER, path, 0, 
@@ -454,7 +458,17 @@ def test_Registry_set_value_default ():
   registry.registry (TEST_KEY).set_value ("", "test")
   assert registry.registry (TEST_KEY).get_value ("") == ("test", win32con.REG_SZ)
 
-def test_add ():
+def test_Registry_add ():
   key0 = registry.registry (TEST_KEY)
   new_key = key0.add ("winsys1")
   assert new_key == key0 + "winsys1"
+
+def test_Registry_from_string ():
+  key = registry.Registry.from_string (TEST_KEY)
+  assert key.moniker == TEST_KEY
+  assert key.access == registry.Registry._access (registry.Registry.DEFAULT_ACCESS)
+  assert key.id == registry.parse_moniker (TEST_KEY.lower ())
+
+def test_Registry_from_string_value ():
+  assert registry.Registry.from_string (TEST_KEY + ":winsys1") == registry.Registry.from_string (TEST_KEY).get_value ("winsys1")
+
