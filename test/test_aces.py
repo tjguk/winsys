@@ -1,5 +1,8 @@
 import os, sys
+import operator
+
 from nose.tools import *
+
 from winsys import _aces, accounts
 import win32security
 import ntsecuritycon
@@ -14,7 +17,7 @@ def setup ():
   filehandle, filename = tempfile.mkstemp ()
   print filename
   dacl = win32security.ACL ()
-  dacl.AddAccessAllowedAceEx (win32security.ACL_REVISION_DS, 0, ntsecuritycon.FILE_ALL_ACCESS, everyone)
+  dacl.AddAccessAllowedAceEx (win32security.ACL_REVISION_DS, 0, ntsecuritycon.FILE_READ_DATA, everyone)
   win32security.SetNamedSecurityInfo (
     filename, win32security.SE_FILE_OBJECT, 
     win32security.DACL_SECURITY_INFORMATION, 
@@ -25,9 +28,6 @@ def teardown ():
   os.close (filehandle)
   os.unlink (filename)
 
-def test_ace_none ():
-  assert _aces.ace (None) is None
-  
 def test_ace_ace ():
   ace = _aces.ACE (everyone, "F", "ALLOW")
   assert _aces.ace (ace) is ace
@@ -51,6 +51,10 @@ def test_ace_tuple2 ():
   assert ace2._flags == _aces.ACE.FLAGS
   assert ace2.object_type is None
   assert ace2.inherited_object_type is None
+
+@raises (_aces.x_ace)
+def test_ace_invalid ():
+  _aces.ace (None)
 
 def test_ace_eq ():
   assert \
@@ -194,9 +198,12 @@ def test_ace_from_ace ():
   raw_ace = dacl.GetAce (0)
   ace = _aces.ACE.from_ace (raw_ace)
   assert ace.trustee.pyobject () == everyone
-  assert ace.access == ntsecuritycon.FILE_ALL_ACCESS
+  assert ace.access == ntsecuritycon.FILE_READ_DATA
   assert ace.type == win32security.ACCESS_ALLOWED_ACE_TYPE
-  ace.dump ()
+
+##
+## TODO: Add tests for object aces, sacl vs dacl aces
+##
 
 #
 # Check that you can't change any of the attributes of an inherited ACE
@@ -216,3 +223,32 @@ def test_ace_set_access_inherited ():
 @raises (_aces.x_access_denied)
 def test_ace_set_trustee_inherited ():
   _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE).trustee = ""
+
+def test_ace_access_int ():
+  assert _aces.ACE._access (1) == 1
+  
+def test_ace_access_string ():
+  for k, v in _aces.ACE.ACCESS.items ():
+    assert _aces.ACE._access (k) == v
+  assert _aces.ACE._access ("".join (_aces.ACE.ACCESS.keys ())) == reduce (operator.or_, _aces.ACE.ACCESS.values ())
+
+@raises (_aces.x_unknown_value)
+def test_ace_access_invalid ():
+  assert "*" not in _aces.ACE.ACCESS
+  _aces.ACE._access ("*")
+
+def test_ace_type_int ():
+  assert _aces.ACE._type (1) == 1
+
+def test_ace_type_string ():
+  for k, v in _aces.ACE.TYPES.items ():
+    assert _aces.ACE._type (k) == v
+
+@raises (_aces.x_unknown_value)
+def test_ace_type_invalid ():
+  assert "*" not in _aces.ACE.TYPES
+  _aces.ACE._type ("*")
+
+def test_ace_as_tuple ():
+  ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE)
+  assert ace.as_tuple () == (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE)

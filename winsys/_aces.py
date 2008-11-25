@@ -9,6 +9,9 @@ from winsys.exceptions import *
 class x_ace (x_winsys):
   pass
 
+class x_unknown_value (x_ace):
+  pass
+
 class ACE (core._WinSysObject):
 
   ACCESS = {
@@ -140,14 +143,20 @@ class ACE (core._WinSysObject):
     try:
       return int (access)
     except (ValueError, TypeError):
-      return reduce (operator.or_, (cls.ACCESS[a] for a in access.upper ()), 0)
+      try:
+        return reduce (operator.or_, (cls.ACCESS[a] for a in access.upper ()), 0)
+      except KeyError:
+        raise x_unknown_value ("%s is not a valid access string" % access, "_access", 0)
         
   @classmethod
   def _type (cls, type):
     try:
       return int (type)
     except (ValueError, TypeError):
-      return cls.TYPES[type]
+      try:
+        return cls.TYPES[type]
+      except KeyError:
+        raise x_unknown_value ("%s is not a valid type string" % type, "_type", 0)
   
   @classmethod
   def from_tuple (cls, ace_info):
@@ -155,7 +164,7 @@ class ACE (core._WinSysObject):
     return cls (accounts.principal (trustee), cls._access (access), cls._type (allow_or_deny))
 
   def as_tuple (self):
-    return self.type, self.trustee, self.access, self._flags
+    return self.trustee, self.access, self.type, self._flags
 
 class DACE (ACE):
   pass
@@ -167,12 +176,10 @@ class SACE (ACE):
 # Friendly constructors
 #
 def ace (ace):
-  if ace is None:
-    return None
-  elif issubclass (ace.__class__, ACE):
-    return ace
-  else:
-    try:
+  try:
+    if issubclass (ace.__class__, ACE):
+      return ace
+    else:
       return ACE.from_tuple (ace)
-    except ValueError:
-      raise x_ace ("ACE must be None, an existing ACE or a 3-tuple of (trustee, access, type)", "ace", 0)
+  except (ValueError, TypeError):
+    raise x_ace ("ACE must be an existing ACE or a 3-tuple of (trustee, access, type)", "ace", 0)
