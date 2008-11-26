@@ -331,12 +331,12 @@ class LogonSession (core._WinSysObject):
   def __init__ (self, session_id):
     core._WinSysObject.__init__ (self)
     self._session_id = session_id
-    self._session_info = {}
+    self._session_info = dict (session_id = self._session_id)
     for k, v in wrapped (win32security.LsaGetLogonSessionData, session_id).items ():
       mapper = self._MAP.get (k)
       if mapper: v = mapper (v)
       self._session_info[k] = v
-    
+
   def __getattr__ (self, attr):
     return self._session_info[attr]
     
@@ -344,7 +344,7 @@ class LogonSession (core._WinSysObject):
     return self._session_info.keys ()
     
   def as_string (self):
-    return u"Logon Session for %(UserName)s" % self._session_info
+    return u"Logon Session %(session_id)s for %(UserName)s" % self._session_info
     
   def dumped (self, level):
     output = []

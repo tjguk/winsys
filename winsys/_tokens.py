@@ -48,7 +48,7 @@ class Token (core._WinSysObject):
     "RestrictedSids" : _from_sid_and_attributes,
     "Privileges" : _from_privileges,
     "PrimaryGroup" : accounts.principal,
-    "DefaultDacl" : _acls.DACL,
+    "DefaultDacl" : _acls.acl,
   }
 
   def __init__ (self, hToken, hProcess=None, hThread=None):
@@ -79,6 +79,9 @@ class Token (core._WinSysObject):
     output.append (u"session_id: %s" % self.SessionId)
     output.append (u"statistics:\n%s" % utils.dumped_dict (self.Statistics, level))
     return utils.dumped (u"\n".join (output), level)
+    
+  def pyobject (self):
+    return self.hToken
 
   @classmethod
   def from_thread (cls, access=GENERAL.MAXIMUM_ALLOWED):
