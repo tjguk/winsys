@@ -9,7 +9,13 @@ import win32api
 import pywintypes
 import winerror
 
-from winsys import core, utils, accounts, _aces, _acls, _privileges, _tokens
+from winsys import core, utils
+from winsys._tokens import token, Token
+from winsys._aces import ace
+from winsys._acls import acl
+from winsys._privileges import privilege
+from winsys._tokens import token
+from winsys.accounts import principal
 from winsys.constants import *
 from winsys.exceptions import *
 
@@ -113,7 +119,7 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No Owner has been set for this Security object")
     return self._owner
   def _set_owner (self, owner):
-    self._owner = accounts.principal (owner)
+    self._owner = principal (owner)
   owner = property (_get_owner, _set_owner)
 
   def _get_group (self):
@@ -121,7 +127,7 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No Group has been set for this Security object")
     return self._group
   def _set_group (self, group):
-    self._group = accounts.principal (group)
+    self._group = principal (group)
   group = property (_get_group, _set_group)
 
   def _get_dacl (self):
@@ -129,7 +135,7 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No DACL has been set for this Security object")
     return self._dacl
   def _set_dacl (self, dacl):
-    self._dacl = _acls.acl (dacl)
+    self._dacl = acl (dacl)
   dacl = property (_get_dacl, _set_dacl)
 
   def _get_sacl (self):
@@ -137,7 +143,7 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No SACL has been set for this Security object")
     return self._sacl
   def _set_sacl (self, sacl):
-    self._sacl = _acls.acl (sacl)
+    self._sacl = acl (sacl)
   sacl = property (_get_sacl, _set_sacl)
 
   def __enter__ (self):
@@ -317,8 +323,8 @@ def security (obj=object, obj_type=None, options=Security.DEFAULT_OPTIONS):
 class LogonSession (core._WinSysObject):
   
   _MAP = {
-    u"UserName" : accounts.principal,
-    u"Sid" : accounts.principal,
+    u"UserName" : principal,
+    u"Sid" : principal,
     u"LogonTime" : utils.from_pytime
   }
   
@@ -326,7 +332,7 @@ class LogonSession (core._WinSysObject):
     core._WinSysObject.__init__ (self)
     self._session_id = session_id
     self._session_info = {}
-    for k, v in wrapepd (win32security.LsaGetLogonSessionData, session_id).items ():
+    for k, v in wrapped (win32security.LsaGetLogonSessionData, session_id).items ():
       mapper = self._MAP.get (k)
       if mapper: v = mapper (v)
       self._session_info[k] = v
@@ -360,26 +366,22 @@ class LSA (core._WinSysObject):
       yield LogonSession (session_id)
 
 #
-# Friendly constructors
-#
-
-#
 # Convenience functions
 #
 
 @contextlib.contextmanager
 def impersonate (user, password):
-  impersonation_token = token (accounts.principal (user).logon (password)).impersonate ()
+  impersonation_token = token (principal (user).logon (password)).impersonate ()
   yield impersonation_token
   impersonation_token.unimpersonate ()
 
 @contextlib.contextmanager
-def change_privileges (enable_privs=[], disable_privs=[], token=None):
-  if token is None:
-    token = Token.from_thread ()
-  old_enabled_privs, old_disabled_privs = token.change_privileges (enable_privs, disable_privs)
-  yield token
-  token.change_privileges (old_enabled_privs, old_disabled_privs)
+def change_privileges (enable_privs=[], disable_privs=[], _token=None):
+  if _token is None:
+    _token = token ()
+  old_enabled_privs, old_disabled_privs = _token.change_privileges (enable_privs, disable_privs)
+  yield _token
+  _token.change_privileges (old_enabled_privs, old_disabled_privs)
 
 if __name__ == '__main__':
-  Token.from_thread ().dump ()
+  token ().dump ()

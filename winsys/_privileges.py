@@ -103,10 +103,12 @@ class Privilege (core._WinSysObject):
   
 def privilege (privilege):
   u"""Friendly constructor for the Privilege class"""
-  if issubclass (privilege.__class__, Privilege):
+  if isinstance (privilege, Privilege):
     return privilege
-  elif issubclass (privilege.__class__, int):
+  elif isinstance (privilege, int):
     return Privilege (privilege)
+  elif isinstance (privilege, tuple):
+    return Privilege (*privilege)
   else:
     return Privilege.from_string (unicode (privilege))
 
