@@ -16,12 +16,13 @@ from constants import *
 
 PySID = pywintypes.SIDType
 
-class x_security (x_winsys):
+class x_accounts (x_winsys):
   pass
 
 WINERROR_MAP = {
+  winerror.ERROR_NONE_MAPPED : x_not_found
 }
-wrapped = wrapper (WINERROR_MAP, x_security)
+wrapped = wrapper (WINERROR_MAP, x_accounts)
 
 def principal (principal):
   u"""Factory function for the Principal class. principal
@@ -36,7 +37,7 @@ def principal (principal):
     return None
   elif type (principal) == PySID:
     return Principal (principal)
-  elif issubclass (principal.__class__, Principal):
+  elif isinstance (principal, Principal):
     return principal
   else:
     return Principal.from_string (unicode (principal))
@@ -110,7 +111,7 @@ class Principal (core._WinSysObject):
     The domain is optional, so the simplest form is simply "name"
     """
     if string == "":
-      string = win32api.GetUserNameEx (win32con.NameSamCompatible)
+      string = wrapped (win32api.GetUserNameEx, win32con.NameSamCompatible)
     sid, domain, type = wrapped (
       win32security.LookupAccountName,
       None if system_name is None else unicode (system_name), 
