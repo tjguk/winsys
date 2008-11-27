@@ -1,5 +1,4 @@
 import os, sys
-import utils
 
 import win32api
 import win32security
@@ -10,19 +9,12 @@ from winsys import _tokens
 token0 = None
 alice = None
 def setup ():
-  utils.create_user ("alice", "Passw0rd")
-  utils.create_group ("winsys")
-  utils.add_user_to_group ("alice", "winsys")
   global token0
   token0 = win32security.OpenProcessToken (win32api.GetCurrentProcess (), ntsecuritycon.MAXIMUM_ALLOWED)
   global alice
   alice, _, _ = win32security.LookupAccountName (None, "alice")
 
 me, _, _ = win32security.LookupAccountName (None, win32api.GetUserName ())
-
-def teardown ():
-  utils.delete_user ("alice")
-  utils.delete_group ("winsys")
 
 def test_token_None ():
   assert _tokens.token (None) is None
@@ -54,7 +46,7 @@ def test_Token_impersonate ():
   finally:
     win32security.RevertToSelf ()
 
-def test_Token_unnimpersonate ():
+def test_Token_unimpersonate ():
   hToken = win32security.LogonUser (
     "alice",
     "",
@@ -62,11 +54,31 @@ def test_Token_unnimpersonate ():
     win32security.LOGON32_LOGON_NETWORK,
     win32security.LOGON32_PROVIDER_DEFAULT
   )
-  token = _tokens.Token (hToken)
-  win32security.ImpersonateLoggedOnUser (token.pyobject ())
-  assert token.Owner.pyobject () == alice
-  win32security.RevertToSelf () ##token.unimpersonate ()
-  print token.Owner.pyobject ()
-  print me
-  print alice
-  assert token.Owner.pyobject () == me
+  win32security.ImpersonateLoggedOnUser (_tokens.Token (hToken).pyobject ())
+  assert _tokens.token ().Owner.pyobject () == alice
+  win32security.RevertToSelf ()
+  assert _tokens.token ().Owner.pyobject () == me
+
+def test_Token_change_privileges_enable ():
+  for disabled_priv, status in win32security.GetTokenInformation (token0, win32security.TokenPrivileges):
+    if not status & win32security.SE_PRIVILEGE_ENABLED: break
+  
+  was_enabled, was_disabled = _tokens.Token (token0).change_privileges (enable_privs=[disabled_priv])
+  
+  for priv, status in win32security.GetTokenInformation (token0, win32security.TokenPrivileges):
+    if priv == disabled_priv:
+      assert status & win32security.SE_PRIVILEGE_ENABLED
+  
+  was_enabled, was_disabled = _tokens.Token (token0).change_privileges (was_enabled, was_disabled)
+
+def test_Token_change_privileges_disable ():
+  for enabled_priv , status in win32security.GetTokenInformation (token0, win32security.TokenPrivileges):
+    if status & win32security.SE_PRIVILEGE_ENABLED: break
+  
+  was_enabled, was_disabled = _tokens.Token (token0).change_privileges (disable_privs=[enabled_priv])
+  
+  for priv, status in win32security.GetTokenInformation (token0, win32security.TokenPrivileges):
+    if priv == enabled_priv:
+      assert not status & win32security.SE_PRIVILEGE_ENABLED
+  
+  was_enabled, was_disabled = _tokens.Token (token0).change_privileges (was_enabled, was_disabled)
