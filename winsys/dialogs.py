@@ -230,7 +230,6 @@ class Dialog:
         #
         return win32gui.GetDlgItemText (self.hwnd, item_id)
       except:
-        raise
         return ""
     elif class_name == "Button":
       return bool (win32gui.SendMessage (hwnd, win32con.BM_GETCHECK, 0, 0))
