@@ -69,7 +69,7 @@ def test_Token_change_privileges_enable ():
     if priv == disabled_priv:
       assert status & win32security.SE_PRIVILEGE_ENABLED
   
-  was_enabled, was_disabled = _tokens.Token (token0).change_privileges (was_enabled, was_disabled)
+  _tokens.Token (token0).change_privileges (was_enabled, was_disabled)
 
 def test_Token_change_privileges_disable ():
   for enabled_priv , status in win32security.GetTokenInformation (token0, win32security.TokenPrivileges):
@@ -81,4 +81,4 @@ def test_Token_change_privileges_disable ():
     if priv == enabled_priv:
       assert not status & win32security.SE_PRIVILEGE_ENABLED
   
-  was_enabled, was_disabled = _tokens.Token (token0).change_privileges (was_enabled, was_disabled)
+  _tokens.Token (token0).change_privileges (was_enabled, was_disabled)

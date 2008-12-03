@@ -368,7 +368,6 @@ class LSA (core._WinSysObject):
 #
 # Convenience functions
 #
-
 @contextlib.contextmanager
 def impersonate (user, password):
   impersonation_token = token (principal (user).logon (password)).impersonate ()
