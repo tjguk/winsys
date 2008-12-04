@@ -47,14 +47,8 @@ def SendMessage (*args, **kwargs):
 def MoveWindow (*args, **kwargs):
   return wrapped (win32gui.MoveWindow, *args, **kwargs)
 
-class Dialog:
-  """A general-purpose dialog class for collecting arbitrary information in
-  text strings and handing it back to the user. Only Ok & Cancel buttons are
-  allowed, and all the fields are considered to be strings. The list of
-  fields is of the form: [(label, default), ...] and the values are saved
-  in the same order.
-  """
-
+class BaseDialog (object):
+  
   IDC_LABEL_BASE = 1025
   IDC_FIELD_BASE = IDC_LABEL_BASE + 1000
   IDC_CALLBACK_BASE = IDC_FIELD_BASE + 1000
@@ -78,27 +72,24 @@ class Dialog:
   # Only the standard Ok & Cancel buttons are allowed
   #
   BUTTONS = [("Cancel", win32con.IDCANCEL), ("Ok", win32con.IDOK)]
-
-  def __init__ (self, title, fields, parent_hwnd=0):
+  
+  def __init__ (self, title, parent_hwnd=0):
     """Initialise the dialog with a title and a list of fields of
     the form [(label, default), ...].
     """
     wrapped (win32gui.InitCommonControls)
     self.hinst = win32gui.dllhandle
     self.title = title
-    self.fields = list (fields)
-    if not self.fields:
-      raise RuntimeError ("Must pass at least one field")
     self.parent_hwnd = parent_hwnd
-    self.results = []
     
-  def _get_dialog_template (self, dlg_class_name):
+  def _get_dialog_template (self):
     """Put together a sensible default layout for this dialog, taking
     into account the default structure and the (variable) number of fields.
     
     NB Although sensible default positions are chosen here, the horizontal
     layout will be overridden by the _resize functionality below.
     """
+    dlg_class_name = _register_wndclass ()
     style = win32con.WS_THICKFRAME | win32con.WS_POPUP | win32con.WS_VISIBLE | win32con.WS_CAPTION | win32con.WS_SYSMENU | win32con.DS_SETFONT | win32con.WS_MINIMIZEBOX
     cs = win32con.WS_CHILD | win32con.WS_VISIBLE
 
@@ -112,22 +103,36 @@ class Dialog:
       field_t = label_t
       field_h = self.CONTROL_H
 
-      dlg.append (["STATIC", field, self.IDC_LABEL_BASE + i, (label_l, label_t, self.LABEL_W, self.CONTROL_H), cs | win32con.SS_LEFT])
-      if (default_value is True or default_value is False):
+      if field is None:
+        field_type = "STATIC"
+      elif (default_value is True or default_value is False):
         field_type = "BUTTON"
-        field_styles = win32con.WS_TABSTOP | win32con.BS_AUTOCHECKBOX
-        field_w = self.CONTROL_H
       elif isinstance (default_value, list):
-        if callback is not None:
-          raise RuntimeError ("Cannot combine a list with a callback")
         field_type = "COMBOBOX"
-        field_styles = win32con.WS_TABSTOP | win32con.CBS_DROPDOWNLIST
-        field_w = self.FIELD_W
-        field_h = 4 * self.CONTROL_H
       else:
         field_type = "EDIT"
-        field_styles = win32con.WS_TABSTOP | win32con.WS_BORDER
-        field_w = self.FIELD_W - ((self.CALLBACK_W) if callback else 0)
+      
+      if field_type == "STATIC":
+        field_w = self.W - (2 * self.GUTTER_W)
+        field_l = self.GUTTER_W
+        field_styles = 0
+        
+      else:
+        dlg.append (["STATIC", field, self.IDC_LABEL_BASE + i, (label_l, label_t, self.LABEL_W, self.CONTROL_H), cs | win32con.SS_LEFT])
+        if field_type == "BUTTON":
+          field_styles = win32con.WS_TABSTOP | win32con.BS_AUTOCHECKBOX
+          field_w = self.CONTROL_H
+        elif field_type == "COMBOBOX":
+          if callback is not None:
+            raise RuntimeError ("Cannot combine a list with a callback")
+          field_styles = win32con.WS_TABSTOP | win32con.CBS_DROPDOWNLIST
+          field_w = self.FIELD_W
+          field_h = 4 * self.CONTROL_H
+        elif field_type == "EDIT":
+          field_styles = win32con.WS_TABSTOP | win32con.WS_BORDER
+          field_w = self.FIELD_W - ((self.CALLBACK_W) if callback else 0)
+        else:
+          raise x_dialogs ("Problemo", "_get_dialog_template", 0)
         
       dlg.append ([field_type, None, self.IDC_FIELD_BASE + i, (field_l, field_t, field_w, field_h), cs | field_styles])
       if callback:
@@ -140,6 +145,30 @@ class Dialog:
 
     return dlg
 
+class ProgressDialog (BaseDialog):
+  
+  def __init__ (self, title, parent_hwnd=0):
+    BaseDialog.__init__ (self, title, parent_hwnd)
+    self.fields = [(None, "")]
+
+class Dialog (BaseDialog):
+  """A general-purpose dialog class for collecting arbitrary information in
+  text strings and handing it back to the user. Only Ok & Cancel buttons are
+  allowed, and all the fields are considered to be strings. The list of
+  fields is of the form: [(label, default), ...] and the values are saved
+  in the same order.
+  """
+
+  def __init__ (self, title, fields, parent_hwnd=0):
+    """Initialise the dialog with a title and a list of fields of
+    the form [(label, default), ...].
+    """
+    BaseDialog.__init__ (self, title, parent_hwnd)
+    self.fields = list (fields)
+    if not self.fields:
+      raise RuntimeError ("Must pass at least one field")
+    self.results = []
+    
   def run (self):
     """The heart of the dialog box functionality. The call to DialogBoxIndirect
     kicks off the dialog's message loop, finally returning via the EndDialog call
@@ -154,7 +183,7 @@ class Dialog:
     return wrapped (
       win32gui.DialogBoxIndirect,
       self.hinst, 
-      self._get_dialog_template (_register_wndclass ()), 
+      self._get_dialog_template (), 
       self.parent_hwnd,
       message_map
     )
@@ -193,21 +222,24 @@ class Dialog:
       return ctrl, l, t, r, b
     
     hDC = wrapped (win32gui.GetDC, self.hwnd)
-    label_w, label_h = max (wrapped (win32gui.GetTextExtentPoint32, hDC, label) for label, _, _ in self.fields)
+    label_w, label_h = max (wrapped (win32gui.GetTextExtentPoint32, hDC, label or "") for label, _, _ in self.fields)
     wrapped (win32gui.ReleaseDC, self.hwnd, hDC)
     
     for i, (field, default, callback) in enumerate (self.fields):
-      label, l, t, r, b = coords (self.hwnd, self.IDC_LABEL_BASE + i)
-      wrapped (win32gui.MoveWindow, label, self.GUTTER_W, t, label_w, b - t, repaint)
-      label_r = self.GUTTER_W + label_w
-      
-      if callback:
-        callback_button, l, t, r, b = coords (self.hwnd, self.IDC_CALLBACK_BASE + i)
-        callback_w = r - l
-        callback_l = dialog_w - self.GUTTER_W - callback_w
-        wrapped (win32gui.MoveWindow, callback_button, callback_l, t, r - l, b - t, repaint)
+      if field is not None:
+        label, l, t, r, b = coords (self.hwnd, self.IDC_LABEL_BASE + i)
+        wrapped (win32gui.MoveWindow, label, self.GUTTER_W, t, label_w, b - t, repaint)
+        label_r = self.GUTTER_W + label_w
+        
+        if callback:
+          callback_button, l, t, r, b = coords (self.hwnd, self.IDC_CALLBACK_BASE + i)
+          callback_w = r - l
+          callback_l = dialog_w - self.GUTTER_W - callback_w
+          wrapped (win32gui.MoveWindow, callback_button, callback_l, t, r - l, b - t, repaint)
+        else:
+          callback_w = 0
       else:
-        callback_w = 0
+        label_r = callback_w = 0
       
       field, l, t, r, b = coords (self.hwnd, self.IDC_FIELD_BASE + i)
       field_l = label_r + self.GUTTER_W
@@ -236,6 +268,8 @@ class Dialog:
     elif class_name == "ComboBox":
       field, default, callback = self.fields[item_id - self.IDC_FIELD_BASE]
       return default[win32gui.SendMessage (hwnd, win32con.CB_GETCURSEL, 0, 0)]
+    elif class_name == "Static":
+      return None
     else:
       raise RuntimeError ("Unknown class: %s" % class_name)
       
@@ -250,6 +284,8 @@ class Dialog:
       for item in value:
         win32gui.SendMessage (item_hwnd, win32con.CB_ADDSTRING, 0, utils.string_as_pointer (str (item)))
       win32gui.SendMessage (item_hwnd, win32con.CB_SETCURSEL, 0, 0)
+    elif class_name == "Static":
+      win32gui.SetDlgItemText (self.hwnd, item_id, str (value))
     else:
       raise RuntimeError ("Unknown class: %s" % class_name)
   
@@ -369,3 +405,7 @@ if __name__=='__main__':
     ('Size Threshold (Mb)', '100')
   )  
   print dialog ("Test2", ("Scan from:", r"c:\temp", _get_filename), ("List of things", ['Timothy', 'John', 'Golden']))
+  print dialog ("Test3", (None, "Waiting..."))
+  pd = ProgressDialog ("Test4")
+  pd.run ()
+  print pd.results ()
