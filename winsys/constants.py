@@ -90,7 +90,7 @@ class Constants (object):
     u"""Factory method to return a class instance from a list-like set of values
     within a namespace. Hands off to the from_dict factory.
     """
-    return cls ((from_pattern (pattern, key), getattr (namespace, key)) for key in keys)
+    return cls ((from_pattern (pattern, key), getattr (namespace, key, None)) for key in keys)
 
   @classmethod
   def from_pattern (cls, pattern=u"*", excluded=[], namespace=win32security):
