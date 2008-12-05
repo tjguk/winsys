@@ -155,6 +155,9 @@ ACCESS = Constants.from_list ([
   u"WRITE_OWNER",
   u"SYNCHRONIZE"
 ], namespace=ntsecuritycon)
+ACCESS.update (dict (
+  ACCESS_SYSTEM_SECURITY = win32con.ACCESS_SYSTEM_SECURITY
+))
 GENERIC_ACCESS = Constants.from_pattern (u"GENERIC_*", namespace=ntsecuritycon)
 STANDARD_ACCESS = Constants.from_list ([u"STANDARD_RIGHTS_READ", u"STANDARD_RIGHTS_WRITE", u"SYNCHRONIZE"], namespace=ntsecuritycon)
 

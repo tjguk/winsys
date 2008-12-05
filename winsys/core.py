@@ -57,6 +57,15 @@ class _WinSysObject (object):
 
   def __le__ (self, other):
     return self < other or self == other
+    
+
+class Unset (object): 
+  def __repr__ (self):
+    return "<Unset>"
+  def __nonzero__ (self):
+    return False
+
+UNSET = Unset ()
 
 LOGGING_FORMAT = u"%(asctime)s - %(levelname)s - %(name)s - %(message)s"
 logging.basicConfig (filename=u"winsys.log", format=LOGGING_FORMAT)

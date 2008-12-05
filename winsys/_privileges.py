@@ -45,7 +45,7 @@ def _set_privilege (self, luid, enable=True):
     win32security.AdjustTokenPrivileges, 
     _get_token (), 
     False, 
-    [(luid, PRIVILEGE.ENABLED if enable else 0)]
+    [(luid, PRIVILEGE_ATTRIBUTE.ENABLED if enable else 0)]
   )
 
 class Privilege (core._WinSysObject):

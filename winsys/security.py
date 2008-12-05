@@ -56,6 +56,7 @@ SD_CONTROL = constants.Constants.from_list ([
 
 PyHANDLE = pywintypes.HANDLEType
 PySECURITY_ATTRIBUTES = pywintypes.SECURITY_ATTRIBUTESType
+PySECURITY_DESCRIPTOR = type (pywintypes.SECURITY_DESCRIPTOR ())
 
 class x_security (x_winsys):
   pass
@@ -80,32 +81,33 @@ class Security (core._WinSysObject):
   
   def __init__ (
     self,
-    control=DEFAULT_CONTROL,
-    owner=None,
-    group=None,
-    dacl=None,
-    sacl=None,
+    control=core.UNSET,
+    owner=core.UNSET,
+    group=core.UNSET,
+    dacl=core.UNSET,
+    sacl=core.UNSET,
     inherit_handle=True,
-    originating_object=None,
-    originating_object_type=None
+    originating_object=core.UNSET,
+    originating_object_type=core.UNSET
   ):
     core._WinSysObject.__init__ (self)
+    if control is core.UNSET: control = self.DEFAULT_CONTROL
     self._control = control
-    self._owner = None
-    self._group = None
-    self._dacl = None
-    self._sacl = None
+    self._owner = core.UNSET
+    self._group = core.UNSET
+    self._dacl = core.UNSET
+    self._sacl = core.UNSET
     self.inherit_handle = inherit_handle
     self._originating_object = originating_object
     self._originating_object_type = originating_object_type
     
-    if owner is not None:
+    if owner is not core.UNSET:
       self.owner = owner
-    if group is not None:
+    if group is not core.UNSET:
       self.group = group
-    if dacl is not None:
+    if dacl is not core.UNSET:
       self.dacl = dacl
-    if sacl is not None:
+    if sacl is not core.UNSET:
       self.sacl = sacl
 
     self.inherits = not bool (self._control & SD_CONTROL.DACL_PROTECTED)
@@ -133,11 +135,11 @@ class Security (core._WinSysObject):
     
   def dumped (self, level):
     output = []
-    if self._control is not None: output.append (u"control:\n%s" % utils.dumped_flags (self._control, SD_CONTROL, level))
-    if self._owner is not None: output.append (u"owner: %s" % self.owner)
-    if self._group is not None: output.append (u"group: %s" % self.group)
-    if self._dacl is not None: output.append (u"dacl:\n%s" % self.dacl.dumped (level))
-    if self._sacl is not None: output.append (u"sacl:\n%s" % self.sacl.dumped (level))
+    if self._control is not core.UNSET: output.append (u"control:\n%s" % utils.dumped_flags (self._control, SD_CONTROL, level))
+    if self._owner is not core.UNSET: output.append (u"owner: %s" % self.owner)
+    if self._group is not core.UNSET: output.append (u"group: %s" % self.group)
+    if self._dacl is not core.UNSET: output.append (u"dacl:\n%s" % self.dacl.dumped (level))
+    if self._sacl is not core.UNSET: output.append (u"sacl:\n%s" % self.sacl.dumped (level))
     return utils.indented (u"\n".join (output), level)
   
   def break_inheritance (self, copy_first=True):
@@ -153,35 +155,35 @@ class Security (core._WinSysObject):
     self.dacl = self.dacl
   
   def _get_owner (self):
-    if self._owner is None:
+    if self._owner is core.UNSET:
       raise x_value_not_set (u"No Owner has been set for this Security object")
     return self._owner
   def _set_owner (self, owner):
-    self._owner = principal (owner)
+    self._owner = principal (owner) or core.UNSET
   owner = property (_get_owner, _set_owner)
 
   def _get_group (self):
-    if self._group is None:
+    if self._group is core.UNSET:
       raise x_value_not_set (u"No Group has been set for this Security object")
     return self._group
   def _set_group (self, group):
-    self._group = principal (group)
+    self._group = principal (group) or core.UNSET
   group = property (_get_group, _set_group)
 
   def _get_dacl (self):
-    if self._dacl is None:
+    if self._dacl is core.UNSET:
       raise x_value_not_set (u"No DACL has been set for this Security object")
     return self._dacl
   def _set_dacl (self, dacl):
-    self._dacl = acl (dacl)
+    self._dacl = acl (dacl) or core.UNSET
   dacl = property (_get_dacl, _set_dacl)
 
   def _get_sacl (self):
-    if self._sacl is None:
+    if self._sacl is core.UNSET:
       raise x_value_not_set (u"No SACL has been set for this Security object")
     return self._sacl
   def _set_sacl (self, sacl):
-    self._sacl = acl (sacl)
+    self._sacl = acl (sacl) or core.UNSET
   sacl = property (_get_sacl, _set_sacl)
 
   def __enter__ (self):
@@ -203,7 +205,7 @@ class Security (core._WinSysObject):
     except ValueError:
       return reduce (operator.or_, (cls.OPTIONS[opt] for opt in options.upper ()), 0)
       
-  def to_object (self, obj=None, object_type=None, options=None):
+  def to_object (self, obj=core.UNSET, object_type=core.UNSET, options=core.UNSET):
     u"""Write the current state of the object as the security settings
     on a Windows object, typically a file.
     
@@ -218,19 +220,19 @@ class Security (core._WinSysObject):
       raise exceptions.x_winsys (u"No object to write security to")
     object_type = object_type or self._originating_object_type or SE_OBJECT_TYPE.FILE_OBJECT
 
-    if options is None:
+    if options is core.UNSET:
       options = 0
-      if self._owner is not None:
+      if self._owner is not core.UNSET:
         options |= SECURITY_INFORMATION.OWNER
-      if self._group is not None:
+      if self._group is not core.UNSET:
         options |= SECURITY_INFORMATION.GROUP
-      if self._dacl is not None:
+      if self._dacl is not core.UNSET:
         options |= SECURITY_INFORMATION.DACL
         if self.inherits:
           options |= SECURITY_INFORMATION.UNPROTECTED_DACL
         else:
           options |= SECURITY_INFORMATION.PROTECTED_DACL
-      if self._sacl is not None:
+      if self._sacl is not core.UNSET:
         options |= SECURITY_INFORMATION.SACL
         if self.inherits:
           options |= SECURITY_INFORMATION.UNPROTECTED_SACL
@@ -263,10 +265,10 @@ class Security (core._WinSysObject):
   def pyobject (self, include_inherited=False):
     sa = wrapped (win32security.SECURITY_ATTRIBUTES)
     sa.bInheritHandle = self.inherit_handle
-    owner = None if self._owner is None else self._owner.pyobject ()
-    group = None if self._group is None else self._group.pyobject ()
-    dacl = None if self._dacl is None else self._dacl.pyobject (include_inherited=include_inherited)
-    sacl = None if self._sacl is None else self._sacl.pyobject (include_inherited=include_inherited)
+    owner = None if self._owner is core.UNSET else self._owner.pyobject ()
+    group = None if self._group is core.UNSET else self._group.pyobject ()
+    dacl = None if self._dacl is core.UNSET else self._dacl.pyobject (include_inherited=include_inherited)
+    sacl = None if self._sacl is core.UNSET else self._sacl.pyobject (include_inherited=include_inherited)
     if owner:
       sa.SetSecurityDescriptorOwner (owner, False)
     if group:
@@ -285,7 +287,10 @@ class Security (core._WinSysObject):
     return sa
 
   @classmethod
-  def from_object (cls, obj, object_type=SE_OBJECT_TYPE.FILE_OBJECT, options=DEFAULT_OPTIONS):
+  def from_object (cls, obj, object_type=core.UNSET, options=core.UNSET):
+    if object_type is core.UNSET: object_type = SE_OBJECT_TYPE.FILE_OBJECT
+    if options is core.UNSET: options = cls.DEFAULT_OPTIONS
+    
     options = cls._options (options)
     if isinstance (obj, PyHANDLE):
       sd = wrapped (win32security.GetSecurityInfo, obj, object_type, options)
@@ -303,9 +308,9 @@ class Security (core._WinSysObject):
     cls, 
     sd, 
     inherit_handle=True, 
-    originating_object=None, 
-    originating_object_type=None, 
-    options=DEFAULT_OPTIONS
+    originating_object=core.UNSET, 
+    originating_object_type=core.UNSET, 
+    options=core.UNSET
   ):
     u"""Factory method to construct a Security object from a PySECURITY_DESCRIPTOR
     object.
@@ -314,6 +319,8 @@ class Security (core._WinSysObject):
     @param inherit_handle A flag indicating whether the handle is to be inherited
     @return a Security instance
     """
+    if options is core.UNSET: options = self.DEFAULT_OPTIONS
+    
     options = cls._options (options)
     control, revision = sd.GetSecurityDescriptorControl ()
     owner = sd.GetSecurityDescriptorOwner () if SECURITY_INFORMATION.OWNER & options else None
@@ -328,35 +335,37 @@ class Security (core._WinSysObject):
     )
 
   @classmethod
-  def from_string (cls, sddl, options=DEFAULT_OPTIONS):
+  def from_string (cls, sddl, options=core.UNSET):
     u"""Factory method to construct a Security object from a string in
     Microsoft SDDL format.
 
     @param string A string in Microsoft SDDL format
     @return A Security instance
     """
+    if options is core.UNSET: options = self.DEFAULT_OPTIONS
+    
     return cls.from_security_descriptor (
       sd=wrapped (
         win32security.ConvertStringSecurityDescriptorToSecurityDescriptor,
-        unicode (string),
-        REVISION.SDDL_REVISION_1
+        unicode (sddl),
+        constants.REVISION.SDDL_REVISION_1
       ), 
       options=options
     )
 
-def security (obj=object, obj_type=None, options=Security.DEFAULT_OPTIONS):
+def security (obj=core.UNSET, obj_type=core.UNSET, options=core.UNSET):
   if obj is None:
     return None
-  elif obj is object:
+  elif obj is core.UNSET:
     return Security ()
   elif isinstance (obj, Security):
     return obj
   elif isinstance (obj, PyHANDLE):
     return Security.from_object (obj, obj_type, options=options)
-  elif isinstance (obj, PySECURITY_ATTRIBUTES):
+  elif isinstance (obj, PySECURITY_DESCRIPTOR):
     return Security.from_security_descriptor (obj, options=options)
   else:
-    return Security.from_object (unicode (obj), object_type=SE_OBJECT_TYPE.FILE_OBJECT, options=options)
+    return Security.from_object (unicode (obj), obj_type, options=options)
 
 #
 # Convenience functions
@@ -368,8 +377,8 @@ def impersonate (user, password):
   impersonation_token.unimpersonate ()
 
 @contextlib.contextmanager
-def change_privileges (enable_privs=[], disable_privs=[], _token=None):
-  if _token is None:
+def change_privileges (enable_privs=[], disable_privs=[], _token=core.UNSET):
+  if _token is core.UNSET:
     _token = token ()
   old_enabled_privs, old_disabled_privs = _token.change_privileges (enable_privs, disable_privs)
   yield _token
