@@ -7,9 +7,8 @@ from win32com.shell import shell, shellcon
 import struct
 import uuid
 
-from winsys.constants import *
+from winsys import constants, utils
 from winsys.exceptions import *
-from winsys import utils
 
 class x_dialogs (x_winsys):
   pass

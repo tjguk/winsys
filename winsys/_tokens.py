@@ -7,8 +7,7 @@ import win32api
 import winerror
 import pywintypes
 
-from winsys import core, utils, accounts, _aces, _acls, _privileges
-from winsys.constants import *
+from winsys import constants, core, utils, accounts, _aces, _acls, _privileges
 from winsys.exceptions import *
 
 class x_token (x_winsys):
@@ -84,7 +83,7 @@ class Token (core._WinSysObject):
     return self.hToken
 
   @classmethod
-  def from_thread (cls, access=GENERAL.MAXIMUM_ALLOWED):
+  def from_thread (cls, access=constants.GENERAL.MAXIMUM_ALLOWED):
     hProcess = win32api.GetCurrentProcess ()
     hThread = win32api.GetCurrentThread ()
     try:
@@ -94,11 +93,11 @@ class Token (core._WinSysObject):
 
   def change_privileges (self, enable_privs=[], disable_privs=[]):
     privs = []
-    privs.extend ((_privileges.privilege (p).pyobject (), PRIVILEGE_ATTRIBUTE.ENABLED) for p in enable_privs)
+    privs.extend ((_privileges.privilege (p).pyobject (), _privileges.PRIVILEGE_ATTRIBUTE.ENABLED) for p in enable_privs)
     privs.extend ((_privileges.privilege (p).pyobject (), 0) for p in disable_privs)
     old_privs = wrapped (win32security.AdjustTokenPrivileges, self.hToken, 0, privs)
     return (
-      [_privileges.privilege (priv) for (priv, status) in old_privs if status == PRIVILEGE_ATTRIBUTE.ENABLED],
+      [_privileges.privilege (priv) for (priv, status) in old_privs if status == _privileges.PRIVILEGE_ATTRIBUTE.ENABLED],
       [_privileges.privilege (priv) for (priv, status) in old_privs if status == 0]
     )
       

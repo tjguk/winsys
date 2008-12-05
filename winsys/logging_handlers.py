@@ -1,7 +1,8 @@
 import marshal
 import logging
 
-from winsys import core, ipc
+from winsys import constants, core, ipc
+from winsys.exceptions import *
 
 class MailslotHandler (logging.Handler):
   """A logging-compatible handler which will write to a named
@@ -23,7 +24,7 @@ class MailslotHandler (logging.Handler):
   def close (self):
     try:
       self.put (None)
-    except core.x_not_found:
+    except x_not_found:
       pass
 
 class PermanentMailslotHandler (MailslotHandler):
@@ -41,7 +42,7 @@ if __name__ == '__main__':
   import time
   import uuid
   mailslot_name = str (uuid.uuid1 ())
-  subprocess.Popen ([sys.executable, "mailslot_listener.pyw", mailslot_name])
+  subprocess.Popen ([sys.executable, "extras/mailslot_listener.pyw", mailslot_name])
   time.sleep (1)
   logger = logging.getLogger (mailslot_name)
   logger.setLevel (logging.DEBUG)

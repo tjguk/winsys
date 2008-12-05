@@ -10,12 +10,12 @@ import win32gui
 import win32con
 import win32api
 
-from winsys import core, ipc, utils, dialogs
+from winsys import core, exceptions, ipc, utils, dialogs
 
 WINERROR_MAP = {
-  winerror.ERROR_INVALID_WINDOW_HANDLE : core.x_invalid_handle,
+  winerror.ERROR_INVALID_WINDOW_HANDLE : exceptions.x_invalid_handle,
 }
-wrapped = utils.wrapped (WINERROR_MAP)
+wrapped = exceptions.wrapper (WINERROR_MAP)
 
 class MainWindow:
   
@@ -70,19 +70,17 @@ class MainWindow:
     win32gui.SendMessage (hwnd, win32con.EM_SETREADONLY, 1, 0)
 
 def handle_mailslot (hwnd, mailslot_name):
-  mailslot = ipc.Mailslot (mailslot_name)
+  mailslot = ipc.mailslot (mailslot_name)
   while True:
     text = marshal.loads (mailslot.get ())
     if text is None:
       try:
         wrapped (win32gui.PostMessage, hwnd, win32con.WM_CLOSE, 0, 0)
-      except core.x_invalid_handle:
+      except exceptions.x_invalid_handle:
         pass
       break
     else:
-      buf = buffer (text + "\n")
-      addr, length = win32gui.PyGetBufferAddressAndLen (buf)
-      win32gui.SendMessage (hwnd, win32con.WM_SETTEXT, 0, addr)
+      win32gui.SendMessage (hwnd, win32con.WM_SETTEXT, 0, utils.string_as_pointer (text + "\n"))
       
 def main (mailslot_name):
   window = MainWindow ("Listening to mailslot %s" % mailslot_name)
@@ -90,7 +88,7 @@ def main (mailslot_name):
   win32gui.PumpMessages ()
   try:
     ipc.Mailslot (mailslot_name).put (marshal.dumps (None))
-  except core.x_not_found:
+  except exceptions.x_not_found:
     pass
 
 if __name__=='__main__':

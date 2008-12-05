@@ -12,9 +12,15 @@ import win32evtlog
 import win32evtlogutil
 import pywintypes
 
-from winsys import core, utils, registry, accounts
-from winsys.constants import *
+from winsys import constants, core, utils, registry, accounts
 from winsys.exceptions import *
+
+EVENTLOG_READ = constants.Constants.from_pattern (u"EVENTLOG_*_READ", namespace=win32evtlog)
+EVENTLOG_TYPE = constants.Constants.from_pattern (u"EVENTLOG_*_TYPE", namespace=win32evtlog)
+EVENTLOG_TYPE.update (dict (
+  AUDIT_FAILURE = win32evtlog.EVENTLOG_AUDIT_FAILURE,
+  AUDIT_SUCCESS = win32evtlog.EVENTLOG_AUDIT_SUCCESS
+))
 
 PyHANDLE = pywintypes.HANDLEType
 

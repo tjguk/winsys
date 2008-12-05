@@ -5,9 +5,11 @@ import winerror
 import win32api
 import win32security
 
-from winsys import core, utils
-from winsys.constants import *
+from winsys import constants, core, utils
 from winsys.exceptions import *
+
+PRIVILEGE_ATTRIBUTE = constants.Constants.from_pattern (u"SE_PRIVILEGE_*", namespace=win32security)
+PRIVILEGE = constants.Constants.from_pattern (u"SE_*_NAME", namespace=win32security)
 
 class x_privilege (x_winsys):
   pass
@@ -28,14 +30,14 @@ def _get_token ():
     return wrapped (
       win32security.OpenThreadToken, 
       wrapped (win32api.GetCurrentThread), 
-      ntsecuritycon.MAXIMUM_ALLOWED, 
+      constants.MAXIMUM_ALLOWED, 
       True
     )
   except x_privilege_no_token:
     return wrapped (
       win32security.OpenProcessToken, 
       wrapped (win32api.GetCurrentProcess),
-      ntsecuritycon.MAXIMUM_ALLOWED
+      constants.MAXIMUM_ALLOWED
     )
   
 def _set_privilege (self, luid, enable=True):
@@ -43,7 +45,7 @@ def _set_privilege (self, luid, enable=True):
     win32security.AdjustTokenPrivileges, 
     _get_token (), 
     False, 
-    [(luid, win32security.SE_PRIVILEGE_ENABLED if enable else 0)]
+    [(luid, PRIVILEGE.ENABLED if enable else 0)]
   )
 
 class Privilege (core._WinSysObject):

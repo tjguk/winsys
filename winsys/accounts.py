@@ -5,14 +5,17 @@ principals: users, groups, sids &c.
 from __future__ import with_statement
 import os, sys
 
+import win32con
 import win32security
 import win32api
 import pywintypes
 import winerror
 
-from winsys import core, utils
+from winsys import constants, core, utils
 from winsys.exceptions import *
-from constants import *
+
+LOGON = constants.Constants.from_pattern (u"LOGON32_*", namespace=win32security)
+EXTENDED_NAME = constants.Constants.from_pattern (u"Name*", namespace=win32con)
 
 PySID = pywintypes.SIDType
 

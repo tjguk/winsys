@@ -7,9 +7,11 @@ import winerror
 import win32event
 import win32file
 
-from winsys import core, utils, security
-from winsys.constants import *
+from winsys import constants, core, fs, security, utils
 from winsys.exceptions import *
+
+WAIT = constants.Constants.from_pattern (u"WAIT_*", namespace=win32event)
+WAIT.update (dict (INFINITE=win32event.INFINITE))
 
 PyHANDLE = pywintypes.HANDLEType
 
@@ -54,11 +56,11 @@ class Mailslot (core._WinSysObject):
       self._hWrite = wrapped (
         win32file.CreateFile,
         self.name, 
-        win32file.GENERIC_WRITE,
-        win32file.FILE_SHARE_READ, 
+        fs.FILE_ACCESS.GENERIC_WRITE,
+        fs.FILE_SHARE.READ, 
         None, 
-        win32file.OPEN_EXISTING, 
-        win32file.FILE_ATTRIBUTE_NORMAL, 
+        fs.FILE_CREATION.OPEN_EXISTING, 
+        fs.FILE_ATTRIBUTE.NORMAL, 
         None
       )
     return self._hWrite
@@ -170,7 +172,13 @@ class Event (core._WinSysObject):
   
   def _handle (self):
     if self._hEvent is None:
-      self._hEvent = wrapped (win32event.CreateEvent, self.security, self.needs_manual_reset, self.initially_set, self.name)
+      self._hEvent = wrapped (
+        win32event.CreateEvent, 
+        self.security, 
+        self.needs_manual_reset, 
+        self.initially_set, 
+        self.name
+      )
     return self._hEvent
   
   def pulse (self):
@@ -183,13 +191,13 @@ class Event (core._WinSysObject):
     wrapped (win32event.ResetEvent, self._handle ())
   reset = clear
     
-  def wait (self, timeout_s=win32event.INFINITE):
-    if timeout_s == win32event.INFINITE:
+  def wait (self, timeout_s=WAIT.INFINITE):
+    if timeout_s == WAIT.INFINITE:
       timeout_ms = timeout_s
     else:
       timeout_ms = timeout_s * 1000.0
     result = wrapped (win32event.WaitForSingleObject, self._handle (), int (timeout_ms))
-    if result == win32event.WAIT_TIMEOUT:
+    if result == WAIT.TIMEOUT:
       return False
     else:
       return True

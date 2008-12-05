@@ -139,30 +139,7 @@ class Constants (object):
     """
     return [self._dict[name] for name in names_from_value (value, patterns)]
 
-ACE_FLAG = Constants.from_list ([u"CONTAINER_INHERIT_ACE", u"INHERIT_ONLY_ACE", u"INHERITED_ACE", u"NO_PROPAGATE_INHERIT_ACE", u"OBJECT_INHERIT_ACE"], pattern=u"*_ACE")
-ACE_TYPE = Constants.from_pattern (u"*_ACE_TYPE")
-DACE_TYPE = Constants.from_pattern (u"ACCESS_*_ACE_TYPE")
-SACE_TYPE = Constants.from_pattern (u"SYSTEM_*_ACE_TYPE")
-PRIVILEGE_ATTRIBUTE = Constants.from_pattern (u"SE_PRIVILEGE_*")
-PRIVILEGE = Constants.from_pattern (u"SE_*_NAME")
 WELL_KNOWN_SID = Constants.from_pattern (u"Win*Sid")
-SE_OBJECT_TYPE = Constants.from_list ([
-  u"SE_UNKNOWN_OBJECT_TYPE",
-  u"SE_FILE_OBJECT",
-  u"SE_SERVICE",
-  u"SE_PRINTER",
-  u"SE_REGISTRY_KEY",
-  u"SE_LMSHARE",
-  u"SE_KERNEL_OBJECT",
-  u"SE_WINDOW_OBJECT",
-  u"SE_DS_OBJECT",
-  u"SE_DS_OBJECT_ALL",
-  u"SE_PROVIDER_DEFINED_OBJECT",
-  u"SE_WMIGUID_OBJECT",
-  u"SE_REGISTRY_WOW64_32KEY"
-], pattern=u"SE_*")
-SECURITY_INFORMATION = Constants.from_pattern (u"*_SECURITY_INFORMATION")
-LOGON = Constants.from_pattern (u"LOGON32_*")
 GENERAL = Constants.from_dict (dict (
   MAXIMUM_ALLOWED=ntsecuritycon.MAXIMUM_ALLOWED,
   INFINITE=win32event.INFINITE
@@ -180,136 +157,14 @@ ACCESS = Constants.from_list ([
 ], namespace=ntsecuritycon)
 GENERIC_ACCESS = Constants.from_pattern (u"GENERIC_*", namespace=ntsecuritycon)
 STANDARD_ACCESS = Constants.from_list ([u"STANDARD_RIGHTS_READ", u"STANDARD_RIGHTS_WRITE", u"SYNCHRONIZE"], namespace=ntsecuritycon)
-FILE_ACCESS = Constants.from_pattern ("FILE_*", namespace=ntsecuritycon)
-FILE_ACCESS.update (STANDARD_ACCESS)
-FILE_ACCESS.update (GENERIC_ACCESS)
-FILE_ACCESS.update (ACCESS)
-FILE_SHARE = Constants.from_pattern (u"FILE_SHARE_*", namespace=win32file)
 
 SCHEDULED_TASK_ERROR = Constants.from_pattern (u"SCHED_E_*", namespace=taskscheduler)
 TASKPAGE = Constants.from_pattern (u"TASKPAGE_*", namespace=taskscheduler)
 TASK = Constants.from_pattern (u"TASK_*", namespace=taskscheduler)
 TASK_PRIORITY = Constants.from_pattern (u"*_PRIORITY_CLASS", namespace=taskscheduler)
 
-FILE_NOTIFY_CHANGE = Constants.from_pattern (u"FILE_NOTIFY_CHANGE_*", namespace=win32con)
-FILE_ACTION = Constants.from_dict (dict (
-  ADDED = 1,
-  REMOVED = 2,
-  MODIFIED = 3,
-  RENAMED_OLD_NAME = 4,
-  RENAMED_NEW_NAME = 5
-))
-FILE_ATTRIBUTE = Constants.from_pattern (u"FILE_ATTRIBUTE_*", namespace=win32file)
-FILE_ATTRIBUTE.update (dict (
-  ENCRYPTED=0x00004000, 
-  REPARSE_POINT=0x00000400,
-  SPARSE_FILE=0x00000200,
-  VIRTUAL=0x00010000,
-  NOT_CONTENT_INDEXES=0x00002000,
-))
-PROGRESS = Constants.from_pattern (u"PROGRESS_*", namespace=win32file)
-MOVEFILE = Constants.from_pattern (u"MOVEFILE_*", namespace=win32file)
-FILE_FLAG = Constants.from_pattern (u"FILE_FLAG_*", namespace=win32con)
-FILE_CREATION = Constants.from_list ([u"CREATE_ALWAYS", u"CREATE_NEW", u"OPEN_ALWAYS", u"OPEN_EXISTING", u"TRUNCATE_EXISTING"], namespace=win32con)
 
-COMPRESSION_FORMAT = Constants.from_dict (dict (
-  NONE = (0x0000),   
-  DEFAULT = (0x0001),   
-  LZNT1 = (0x0002)
-))
 FSCTL = Constants.from_pattern (u"FSCTL_*", namespace=winioctlcon)
-
-SD_CONTROL = Constants.from_list ([
-  #~ "SE_DACL_AUTO_INHERIT_REQ", 
-  u"SE_DACL_AUTO_INHERITED", 
-  u"SE_DACL_DEFAULTED", 
-  u"SE_DACL_PRESENT", 
-  u"SE_DACL_PROTECTED", 
-  u"SE_GROUP_DEFAULTED",
-  u"SE_OWNER_DEFAULTED",
-  #~ "SE_RM_CONTROL_VALID",
-  #~ "SE_SACL_AUTO_INHERIT_REQ",
-  u"SE_SACL_AUTO_INHERITED",
-  u"SE_SACL_DEFAULTED",
-  u"SE_SACL_PRESENT",
-  u"SE_SACL_PROTECTED",
-  u"SE_SELF_RELATIVE"
-], pattern=u"SE_*")
-
-EXTENDED_NAME = Constants.from_pattern (u"Name*", namespace=win32con)
-
-VOLUME_FLAG = Constants.from_dict (dict (
-  FILE_CASE_SENSITIVE_SEARCH      = 0x00000001,
-  FILE_CASE_PRESERVED_NAMES       = 0x00000002,
-  FILE_UNICODE_ON_DISK            = 0x00000004,
-  FILE_PERSISTENT_ACLS            = 0x00000008,
-  FILE_FILE_COMPRESSION           = 0x00000010,
-  FILE_VOLUME_QUOTAS              = 0x00000020,
-  FILE_SUPPORTS_SPARSE_FILES      = 0x00000040,
-  FILE_SUPPORTS_REPARSE_POINTS    = 0x00000080,
-  FILE_SUPPORTS_REMOTE_STORAGE    = 0x00000100,
-  FILE_VOLUME_IS_COMPRESSED       = 0x00008000,
-  FILE_SUPPORTS_OBJECT_IDS        = 0x00010000,
-  FILE_SUPPORTS_ENCRYPTION        = 0x00020000,
-  FILE_NAMED_STREAMS              = 0x00040000,
-  FILE_READ_ONLY_VOLUME           = 0x00080000,
-  FILE_SEQUENTIAL_WRITE_ONCE      = 0x00100000,
-  FILE_SUPPORTS_TRANSACTIONS      = 0x00200000  
-), pattern=u"FILE_*")
-DRIVE_TYPE = Constants.from_pattern (u"DRIVE_*", namespace=win32file)
-
-REGISTRY_HIVE = Constants.from_list ([
-  u"HKEY_CLASSES_ROOT",
-  u"HKEY_CURRENT_CONFIG",
-  u"HKEY_CURRENT_USER",
-  u"HKEY_DYN_DATA",
-  u"HKEY_LOCAL_MACHINE",
-  u"HKEY_PERFORMANCE_DATA",
-  u"HKEY_PERFORMANCE_NLSTEXT",
-  u"HKEY_PERFORMANCE_TEXT",
-  u"HKEY_USERS",
-], namespace=win32con)
-REGISTRY_HIVE.update (dict (
-  HKLM = REGISTRY_HIVE.HKEY_LOCAL_MACHINE,
-  HKCU = REGISTRY_HIVE.HKEY_CURRENT_USER,
-  HKCR = REGISTRY_HIVE.HKEY_CLASSES_ROOT,
-  HKU = REGISTRY_HIVE.HKEY_USERS
-))
-REGISTRY_ACCESS = Constants.from_list ([
-  u"KEY_ALL_ACCESS",
-  u"KEY_CREATE_LINK",
-  u"KEY_CREATE_SUB_KEY",
-  u"KEY_ENUMERATE_SUB_KEYS",
-  u"KEY_EXECUTE",
-  u"KEY_NOTIFY",
-  u"KEY_QUERY_VALUE",
-  u"KEY_READ",
-  u"KEY_SET_VALUE",
-  u"KEY_WOW64_32KEY",
-  u"KEY_WOW64_64KEY",
-  u"KEY_WRITE",
-], namespace=win32con)
-REGISTRY_VALUE_TYPE = Constants.from_list ([
-  u"REG_BINARY",
-  u"REG_DWORD",
-  u"REG_DWORD_LITTLE_ENDIAN",
-  u"REG_DWORD_BIG_ENDIAN",
-  u"REG_EXPAND_SZ",
-  u"REG_LINK",
-  u"REG_MULTI_SZ",
-  u"REG_NONE",
-  u"REG_QWORD",
-  u"REG_QWORD_LITTLE_ENDIAN",
-  u"REG_SZ",
-], namespace=win32con)
-
-EVENTLOG_READ = Constants.from_pattern (u"EVENTLOG_*_READ", namespace=win32evtlog)
-EVENTLOG_TYPE = Constants.from_pattern (u"EVENTLOG_*_TYPE", namespace=win32evtlog)
-EVENTLOG_TYPE.update (dict (
-  AUDIT_FAILURE = win32evtlog.EVENTLOG_AUDIT_FAILURE,
-  AUDIT_SUCCESS = win32evtlog.EVENTLOG_AUDIT_SUCCESS
-))
-
 
 #
 # Constants used by SHBrowseForFolder
@@ -333,9 +188,3 @@ BIF = Constants.from_dict (dict (
 ), pattern=u"BIF_*")
 BIF.update (dict (USENEWUI = BIF.NEWDIALOGSTYLE | BIF.EDITBOX))
 BFFM = Constants.from_pattern (u"BFFM_*", namespace=shellcon)
-
-#
-# Constants used by WaitFor*Objects
-#
-WAIT = Constants.from_pattern (u"WAIT_*", namespace=win32event)
-WAIT.update (dict (INFINITE=win32event.INFINITE))

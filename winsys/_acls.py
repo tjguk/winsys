@@ -5,8 +5,7 @@ import win32security
 import pywintypes
 import winerror
 
-from winsys import core, utils, accounts, _aces
-from winsys.constants import *
+from winsys import constants, core, utils, accounts, _aces
 from winsys.exceptions import *
 
 PyACL = pywintypes.ACLType
@@ -22,8 +21,8 @@ class ACL (core._WinSysObject):
 
   _ACE = _aces.ACE
   _ACE_MAP = {
-    ACE_TYPE.ACCESS_ALLOWED : u"AddAccessAllowedAceEx",
-    ACE_TYPE.ACCESS_DENIED : u"AddAccessDeniedAceEx"
+    _aces.ACE_TYPE.ACCESS_ALLOWED : u"AddAccessAllowedAceEx",
+    _aces.ACE_TYPE.ACCESS_DENIED : u"AddAccessDeniedAceEx"
   }
 
   def __init__ (self, acl=None):
@@ -79,7 +78,7 @@ class ACL (core._WinSysObject):
       adder_fn = self._ACE_MAP.get (ace.type)
       if adder_fn:
         adder = getattr (acl, adder_fn)
-        adder (REVISION.ACL_REVISION_DS, ace._flags, ace.access, ace.trustee.pyobject ())
+        adder (constants.REVISION.ACL_REVISION_DS, ace._flags, ace.access, ace.trustee.pyobject ())
       else:
         raise NotImplementedError
     return acl

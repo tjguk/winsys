@@ -5,11 +5,56 @@ import re
 
 import winerror
 import win32api
+import win32con
 import pywintypes
 
-from winsys import core, utils, security
-from winsys.constants import *
+from winsys import constants, core, utils, security
 from winsys.exceptions import *
+
+REGISTRY_HIVE = constants.Constants.from_list ([
+  u"HKEY_CLASSES_ROOT",
+  u"HKEY_CURRENT_CONFIG",
+  u"HKEY_CURRENT_USER",
+  u"HKEY_DYN_DATA",
+  u"HKEY_LOCAL_MACHINE",
+  u"HKEY_PERFORMANCE_DATA",
+  u"HKEY_PERFORMANCE_NLSTEXT",
+  u"HKEY_PERFORMANCE_TEXT",
+  u"HKEY_USERS",
+], namespace=win32con)
+REGISTRY_HIVE.update (dict (
+  HKLM = REGISTRY_HIVE.HKEY_LOCAL_MACHINE,
+  HKCU = REGISTRY_HIVE.HKEY_CURRENT_USER,
+  HKCR = REGISTRY_HIVE.HKEY_CLASSES_ROOT,
+  HKU = REGISTRY_HIVE.HKEY_USERS
+))
+REGISTRY_ACCESS = constants.Constants.from_list ([
+  u"KEY_ALL_ACCESS",
+  u"KEY_CREATE_LINK",
+  u"KEY_CREATE_SUB_KEY",
+  u"KEY_ENUMERATE_SUB_KEYS",
+  u"KEY_EXECUTE",
+  u"KEY_NOTIFY",
+  u"KEY_QUERY_VALUE",
+  u"KEY_READ",
+  u"KEY_SET_VALUE",
+  u"KEY_WOW64_32KEY",
+  u"KEY_WOW64_64KEY",
+  u"KEY_WRITE",
+], namespace=win32con)
+REGISTRY_VALUE_TYPE = constants.Constants.from_list ([
+  u"REG_BINARY",
+  u"REG_DWORD",
+  u"REG_DWORD_LITTLE_ENDIAN",
+  u"REG_DWORD_BIG_ENDIAN",
+  u"REG_EXPAND_SZ",
+  u"REG_LINK",
+  u"REG_MULTI_SZ",
+  u"REG_NONE",
+  u"REG_QWORD",
+  u"REG_QWORD_LITTLE_ENDIAN",
+  u"REG_SZ",
+], namespace=win32con)
 
 PyHANDLE = pywintypes.HANDLEType
 
@@ -114,12 +159,12 @@ class Registry (core._WinSysObject):
 
   ACCESS = {
     u"Q" : REGISTRY_ACCESS.KEY_QUERY_VALUE,
-    u"D" : ACCESS.DELETE,
+    u"D" : constants.ACCESS.DELETE,
     u"R" : REGISTRY_ACCESS.KEY_READ,
     u"W" : REGISTRY_ACCESS.KEY_WRITE,
     u"C" : REGISTRY_ACCESS.KEY_READ | REGISTRY_ACCESS.KEY_WRITE,
     u"F" : REGISTRY_ACCESS.KEY_ALL_ACCESS,
-    u"S" : ACCESS.READ_CONTROL | ACCESS.WRITE_DAC,
+    u"S" : constants.ACCESS.READ_CONTROL | constants.ACCESS.WRITE_DAC,
   }
   DEFAULT_ACCESS = u"F"
   
@@ -160,7 +205,7 @@ class Registry (core._WinSysObject):
   def security (self, options=security.Security.DEFAULT_OPTIONS):
     return security.Security.from_object (
       self.pyobject (), 
-      object_type=SE_OBJECT_TYPE.REGISTRY_KEY, 
+      object_type=security.SE_OBJECT_TYPE.REGISTRY_KEY, 
       options=options
     )
 

@@ -3,6 +3,7 @@ from nose.tools import *
 import winerror
 import win32api
 import win32con
+import win32file
 import win32security
 import ntsecuritycon
 import pywintypes
@@ -10,7 +11,7 @@ import pywintypes
 import tempfile
 import uuid
 
-from winsys import registry, utils
+from winsys import security
 
 GUID = str (uuid.uuid1 ())
 TEST_ROOT = tempfile.mkdtemp (prefix="winsys-")
@@ -54,5 +55,29 @@ def teardown ():
   remove (TEST_FILE)
   remove (TEST_ROOT)
 
-def test_nothing ():
-  pass
+def test_security_None ():
+  assert security.security (None) is None
+
+def test_security_object ():
+  assert security.security () == security.Security ()
+
+def test_security_Security ():
+  s = security.Security ()
+  assert security.security (s) is s
+
+def test_security_HANDLE ():
+  hFile = win32file.CreateFile (
+    TEST_FILE,
+    ntsecuritycon.GENERIC_READ,
+    win32file.FILE_SHARE_READ,
+    None,
+    win32con.OPEN_EXISTING,
+    win32file.FILE_ATTRIBUTE_NORMAL,
+    None
+  )
+  try:
+    s1 = security.security (hFile, win32security.SE_FILE_OBJECT)
+  finally:
+    hFile.Close ()
+  
+  #~ s0 = 

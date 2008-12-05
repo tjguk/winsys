@@ -9,15 +9,50 @@ import win32api
 import pywintypes
 import winerror
 
-from winsys import core, utils
+from winsys import constants, core, utils
 from winsys._tokens import token, Token
 from winsys._aces import ace
 from winsys._acls import acl
 from winsys._privileges import privilege
 from winsys._tokens import token
 from winsys.accounts import principal
-from winsys.constants import *
 from winsys.exceptions import *
+
+SE_OBJECT_TYPE = constants.Constants.from_list ([
+  u"SE_UNKNOWN_OBJECT_TYPE",
+  u"SE_FILE_OBJECT",
+  u"SE_SERVICE",
+  u"SE_PRINTER",
+  u"SE_REGISTRY_KEY",
+  u"SE_LMSHARE",
+  u"SE_KERNEL_OBJECT",
+  u"SE_WINDOW_OBJECT",
+  u"SE_DS_OBJECT",
+  u"SE_DS_OBJECT_ALL",
+  u"SE_PROVIDER_DEFINED_OBJECT",
+  u"SE_WMIGUID_OBJECT",
+  u"SE_REGISTRY_WOW64_32KEY"
+], pattern=u"SE_*", namespace=win32security)
+SECURITY_INFORMATION = constants.Constants.from_pattern (
+  u"*_SECURITY_INFORMATION", 
+  namespace=win32security
+)
+SD_CONTROL = constants.Constants.from_list ([
+  #~ "SE_DACL_AUTO_INHERIT_REQ", 
+  u"SE_DACL_AUTO_INHERITED", 
+  u"SE_DACL_DEFAULTED", 
+  u"SE_DACL_PRESENT", 
+  u"SE_DACL_PROTECTED", 
+  u"SE_GROUP_DEFAULTED",
+  u"SE_OWNER_DEFAULTED",
+  #~ "SE_RM_CONTROL_VALID",
+  #~ "SE_SACL_AUTO_INHERIT_REQ",
+  u"SE_SACL_AUTO_INHERITED",
+  u"SE_SACL_DEFAULTED",
+  u"SE_SACL_PRESENT",
+  u"SE_SACL_PROTECTED",
+  u"SE_SELF_RELATIVE"
+], pattern=u"SE_*", namespace=win32security)
 
 PyHANDLE = pywintypes.HANDLEType
 PySECURITY_ATTRIBUTES = pywintypes.SECURITY_ATTRIBUTESType
@@ -75,6 +110,9 @@ class Security (core._WinSysObject):
 
     self.inherits = not bool (self._control & SD_CONTROL.DACL_PROTECTED)
 
+  def __eq__ (self, other):
+    return str (self) == str (other)
+  
   def as_string (self):
     security_information = 0
     if self._owner:
@@ -89,7 +127,7 @@ class Security (core._WinSysObject):
     return wrapped (
       win32security.ConvertSecurityDescriptorToStringSecurityDescriptor,
       sa.SECURITY_DESCRIPTOR,
-      REVISION.SDDL_REVISION_1, 
+      constants.REVISION.SDDL_REVISION_1, 
       security_information
     )
     
@@ -320,51 +358,6 @@ def security (obj=object, obj_type=None, options=Security.DEFAULT_OPTIONS):
   else:
     return Security.from_object (unicode (obj), object_type=SE_OBJECT_TYPE.FILE_OBJECT, options=options)
 
-class LogonSession (core._WinSysObject):
-  
-  _MAP = {
-    u"UserName" : principal,
-    u"Sid" : principal,
-    u"LogonTime" : utils.from_pytime
-  }
-  
-  def __init__ (self, session_id):
-    core._WinSysObject.__init__ (self)
-    self._session_id = session_id
-    self._session_info = dict (session_id = self._session_id)
-    for k, v in wrapped (win32security.LsaGetLogonSessionData, session_id).items ():
-      mapper = self._MAP.get (k)
-      if mapper: v = mapper (v)
-      self._session_info[k] = v
-
-  def __getattr__ (self, attr):
-    return self._session_info[attr]
-    
-  def __dir__ (self):
-    return self._session_info.keys ()
-    
-  def as_string (self):
-    return u"Logon Session %(session_id)s for %(UserName)s" % self._session_info
-    
-  def dumped (self, level):
-    output = []
-    output.append (u"session_id: %s" % self._session_id)
-    output.append (u"UserName: %s" % self.UserName)
-    output.append (u"Sid: %s" % (self.Sid.sid if self.Sid else None))
-    output.append (u"LogonTime: %s" % self.LogonTime)
-    return utils.dumped ("\n".join (output), level)
-
-class LSA (core._WinSysObject):
-  
-  def __init__ (self, system_name=None):
-    core._WinSysObject.__init__ (self)
-    self._lsa = wrapped (win32security.LsaOpenPolicy, system_name, 0)
-  
-  @staticmethod
-  def logon_sessions ():
-    for session_id in wrapped (win32security.LsaEnumerateLogonSessions):
-      yield LogonSession (session_id)
-
 #
 # Convenience functions
 #
@@ -381,6 +374,3 @@ def change_privileges (enable_privs=[], disable_privs=[], _token=None):
   old_enabled_privs, old_disabled_privs = _token.change_privileges (enable_privs, disable_privs)
   yield _token
   _token.change_privileges (old_enabled_privs, old_disabled_privs)
-
-if __name__ == '__main__':
-  token ().dump ()

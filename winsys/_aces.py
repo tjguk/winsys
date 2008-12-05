@@ -2,8 +2,8 @@
 import os, sys
 import operator
 
-from winsys import core, utils, accounts
-from winsys.constants import *
+import win32security
+from winsys import core, utils, accounts, constants
 from winsys.exceptions import *
 
 class x_ace (x_winsys):
@@ -12,14 +12,25 @@ class x_ace (x_winsys):
 class x_unknown_value (x_ace):
   pass
 
+ACE_FLAG = constants.Constants.from_list ([
+  u"CONTAINER_INHERIT_ACE", 
+  u"INHERIT_ONLY_ACE", 
+  u"INHERITED_ACE", 
+  u"NO_PROPAGATE_INHERIT_ACE", 
+  u"OBJECT_INHERIT_ACE"
+], pattern=u"*_ACE", namespace=win32security)
+ACE_TYPE = constants.Constants.from_pattern (u"*_ACE_TYPE", namespace=win32security)
+DACE_TYPE = constants.Constants.from_pattern (u"ACCESS_*_ACE_TYPE", namespace=win32security)
+SACE_TYPE = constants.Constants.from_pattern (u"SYSTEM_*_ACE_TYPE", namespace=win32security)
+
 class ACE (core._WinSysObject):
 
   ACCESS = {
-    u"R" : GENERIC_ACCESS.READ,
-    u"W" : GENERIC_ACCESS.WRITE,
-    u"X" : GENERIC_ACCESS.EXECUTE,
-    u"C" : GENERIC_ACCESS.READ | GENERIC_ACCESS.WRITE | GENERIC_ACCESS.EXECUTE,
-    u"F" : GENERIC_ACCESS.ALL
+    u"R" : constants.GENERIC_ACCESS.READ,
+    u"W" : constants.GENERIC_ACCESS.WRITE,
+    u"X" : constants.GENERIC_ACCESS.EXECUTE,
+    u"C" : constants.GENERIC_ACCESS.READ | constants.GENERIC_ACCESS.WRITE | constants.GENERIC_ACCESS.EXECUTE,
+    u"F" : constants.GENERIC_ACCESS.ALL
   }
   TYPES = {
     u"ALLOW" : ACE_TYPE.ACCESS_ALLOWED,
