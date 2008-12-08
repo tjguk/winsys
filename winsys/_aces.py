@@ -57,15 +57,6 @@ class ACE (core._WinSysObject):
   def _id (self):
     return (self.trustee, self.access, self.type)
 
-  def __eq__ (self, other):
-    other = self.ace (other)
-    return (self.trustee, self.access, self.type) == (other.trustee, other.access, other.type)
-    
-  def __lt__ (self, other):
-    u"""Deny comes first, then what?"""
-    other = self.ace (other)
-    return (self.is_allowed < other.is_allowed)
-    
   def as_string (self):
     type = ACE_TYPE.name_from_value (self.type)
     flags = " | ".join (ACE_FLAG.names_from_value (self.flags))
@@ -198,6 +189,15 @@ class DACE (ACE):
       except KeyError:
         raise x_unknown_value ("%s is not a valid type string" % type, "_type", core.UNSET)
   
+  def __eq__ (self, other):
+    other = self.dace (other)
+    return (self.trustee, self.access, self.type) == (other.trustee, other.access, other.type)
+    
+  def __lt__ (self, other):
+    u"""Deny comes first, then what?"""
+    other = self.dace (other)
+    return (self.is_allowed < other.is_allowed)
+    
 class SACE (ACE):
   
   AUDIT_WHAT = {
@@ -219,7 +219,7 @@ class SACE (ACE):
 
   @classmethod
   def ace (cls, ace):
-    return dace (ace)
+    return sace (ace)
   
   @classmethod
   def from_tuple (cls, ace_info):
@@ -236,14 +236,29 @@ class SACE (ACE):
     return audit_success, audit_failure
   
   def as_tuple (self):
-    return self.trustee, self.access, self.type, self.flags
+    return self.trustee, self.access, self.type, self.flags, (self.audit_success, self.audit_failure)
+
+  def __eq__ (self, other):
+    other = self.sace (other)
+    return self.as_tuple () == other.as_tuple ()
+    
+  def __lt__ (self, other):
+    other = self.sace (other)
+    self.as_tuple () < other.as_tuple ()
 
 #
 # Friendly constructors
 #
 def dace (dace):
+  """Attempt to return a DACE either from an existing DACE
+  or from a tuple of trustee, access, type. Each element will
+  be passed to its corresponding factory function so trustee may be
+  anything which a principal () will accept; access may be an
+  int flagset or one of the ACCESS strings; type is one of the
+  DACE_TYPE flags or one of the TYPES strings.
+  """
   try:
-    if issubclass (dace.__class__, DACE):
+    if isinstance (dace, DACE):
       return dace
     else:
       return DACE.from_tuple (dace)
@@ -251,10 +266,37 @@ def dace (dace):
     raise x_ace ("DACE must be an existing DACE or a 3-tuple of (trustee, access, type)", "dace", 0)
 
 def sace (sace):
+  """Attempt to return a SACE either from an existing SACE
+  or from a tuple of trustee, access, type. Each element will
+  be passed to its corresponding factory function so trustee may be
+  anything which a principal () will accept; access may be an
+  int flagset or one of the ACCESS strings; audit_what is either a
+  2-tuple of (audit_success, audit_failure) booleans or one of the
+  AUDIT_WHAT strings.
+  """
   try:
-    if issubclass (sace.__class__, SACE):
+    if isinstance (sace, SACE):
       return sace
     else:
       return SACE.from_tuple (sace)
   except (ValueError, TypeError):
     raise x_ace ("SACE must be an existing SACE or a 4-tuple of (trustee, access, audit_what)", "sace", 0)
+
+def ace (ace):
+  """Attempt to return a SACE / DACE depending on the structure passed
+  in. An existing ACE subtype will be passed straight through while if
+  a tuple is passed through, the last element is used as a distinguisher.
+  """
+  try:
+    if isinstance (ace, ACE):
+      return ace
+    else:
+      trustee, access, data = ace
+      if data in DACE.TYPES.keys () + DACE.TYPES.values ():
+        return DACE.from_tuple (ace)
+      elif data in SACE.AUDIT_WHAT.keys () + SACE.AUDIT_WHAT.values ():
+        return SACE.from_tuple (ace)
+      else:
+        raise TypeError
+  except (ValueError, TypeError):
+    raise x_ace ("ACE must be an existing DACE/SACE or a 3-tuple which can be passed to dace or sace", "ace", core.UNSET)

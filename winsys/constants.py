@@ -169,25 +169,3 @@ TASK_PRIORITY = Constants.from_pattern (u"*_PRIORITY_CLASS", namespace=tasksched
 
 FSCTL = Constants.from_pattern (u"FSCTL_*", namespace=winioctlcon)
 
-#
-# Constants used by SHBrowseForFolder
-#
-BIF = Constants.from_dict (dict (
-  BIF_RETURNONLYFSDIRS   = 0x0001,
-  BIF_DONTGOBELOWDOMAIN  = 0x0002,
-  BIF_STATUSTEXT         = 0x0004,
-  BIF_RETURNFSANCESTORS  = 0x0008,
-  BIF_EDITBOX            = 0x0010,
-  BIF_VALIDATE           = 0x0020,
-  BIF_NEWDIALOGSTYLE     = 0x0040,
-  BIF_BROWSEINCLUDEURLS  = 0x0080,
-  BIF_UAHINT             = 0x0100,
-  BIF_NONEWFOLDERBUTTON  = 0x0200,
-  BIF_NOTRANSLATETARGETS = 0x0400,
-  BIF_BROWSEFORCOMPUTER  = 0x1000,
-  BIF_BROWSEFORPRINTER   = 0x2000,
-  BIF_BROWSEINCLUDEFILES = 0x4000,
-  BIF_SHAREABLE          = 0x8000
-), pattern=u"BIF_*")
-BIF.update (dict (USENEWUI = BIF.NEWDIALOGSTYLE | BIF.EDITBOX))
-BFFM = Constants.from_pattern (u"BFFM_*", namespace=shellcon)
