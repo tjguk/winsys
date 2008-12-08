@@ -3,7 +3,7 @@ import operator
 
 from nose.tools import *
 
-from winsys import _aces, accounts
+from winsys import core, _aces, accounts
 import win32security
 import ntsecuritycon
 import tempfile
@@ -29,144 +29,144 @@ def teardown ():
   os.close (filehandle)
   os.unlink (filename)
 
-def test_ace_ace ():
-  ace = _aces.ACE (everyone, "F", "ALLOW")
-  assert _aces.ace (ace) is ace
+def test_ace_dace ():
+  dace = _aces.DACE (everyone, "F", "ALLOW")
+  assert _aces.dace (dace) is dace
 
 def test_ace_tuple1 ():
-  ace1 = _aces.ace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE))
-  assert ace1.type == win32security.ACCESS_ALLOWED_ACE_TYPE
-  assert ace1.is_allowed == True
-  assert ace1._trustee.pyobject () == everyone
-  assert ace1._access_mask == ntsecuritycon.GENERIC_ALL
-  assert ace1._flags == _aces.ACE.FLAGS
-  assert ace1.object_type is None
-  assert ace1.inherited_object_type is None
+  dace1 = _aces.dace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE))
+  assert dace1.type == win32security.ACCESS_ALLOWED_ACE_TYPE
+  assert dace1.is_allowed == True
+  assert dace1._trustee.pyobject () == everyone
+  assert dace1._access_mask == ntsecuritycon.GENERIC_ALL
+  assert dace1.flags == _aces.ACE.FLAGS
+  assert dace1.object_type is core.UNSET
+  assert dace1.inherited_object_type is core.UNSET
   
 def test_ace_tuple2 ():
-  ace2 = _aces.ace ((accounts.principal ("Everyone"), "F", "ALLOW"))
-  assert ace2.type == win32security.ACCESS_ALLOWED_ACE_TYPE
-  assert ace2.is_allowed == True
-  assert ace2._trustee.pyobject () == everyone
-  assert ace2._access_mask == ntsecuritycon.GENERIC_ALL
-  assert ace2._flags == _aces.ACE.FLAGS
-  assert ace2.object_type is None
-  assert ace2.inherited_object_type is None
+  dace2 = _aces.dace ((accounts.principal ("Everyone"), "F", "ALLOW"))
+  assert dace2.type == win32security.ACCESS_ALLOWED_ACE_TYPE
+  assert dace2.is_allowed == True
+  assert dace2._trustee.pyobject () == everyone
+  assert dace2._access_mask == ntsecuritycon.GENERIC_ALL
+  assert dace2.flags == _aces.ACE.FLAGS
+  assert dace2.object_type is core.UNSET
+  assert dace2.inherited_object_type is core.UNSET
 
 @raises (_aces.x_ace)
 def test_ace_invalid ():
-  _aces.ace (None)
+  _aces.dace (None)
 
-def test_ace_eq ():
+def test_dace_eq ():
   assert \
-    _aces.ace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)) == \
-    _aces.ace ((accounts.principal ("Everyone"), "F", "ALLOW"))
+    _aces.dace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)) == \
+    _aces.dace ((accounts.principal ("Everyone"), "F", "ALLOW"))
 
-def test_ace_ne_trustee ():
+def test_dace_ne_trustee ():
    assert \
-    _aces.ace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)) != \
-    _aces.ace ((accounts.principal ("Administrators"), "F", "ALLOW"))
+    _aces.dace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)) != \
+    _aces.dace ((accounts.principal ("Administrators"), "F", "ALLOW"))
 
-def test_ace_ne_access ():
+def test_dace_ne_access ():
    assert \
-    _aces.ace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)) != \
-    _aces.ace ((accounts.principal ("Everyone"), "R", "ALLOW"))
+    _aces.dace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)) != \
+    _aces.dace ((accounts.principal ("Everyone"), "R", "ALLOW"))
 
-def test_ace_ne_type ():
+def test_dace_ne_type ():
    assert \
-    _aces.ace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)) != \
-    _aces.ace ((accounts.principal ("Everyone"), "R", "DENY"))
+    _aces.dace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)) != \
+    _aces.dace ((accounts.principal ("Everyone"), "R", "DENY"))
 
-def test_ace_lt ():
-  assert _aces.ace (("Everyone", "R", "DENY")) < _aces.ace (("Everyone", "R", "ALLOW"))
+def test_dace_lt ():
+  assert _aces.dace (("Everyone", "R", "DENY")) < _aces.dace (("Everyone", "R", "ALLOW"))
 
-def test_ace_as_string ():
-  _aces.ace (("Everyone", "R", "ALLOW")).as_string ()
+def test_dace_as_string ():
+  _aces.dace (("Everyone", "R", "ALLOW")).as_string ()
 
 #
 # INHERITED_ACE
 #
 def test_ace_inherited ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
-  ace._flags |= win32security.INHERITED_ACE
+  ace.flags |= win32security.INHERITED_ACE
   assert ace.inherited
 
 def test_ace_not_inherited ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
-  ace._flags &= ~win32security.INHERITED_ACE
+  ace.flags &= ~win32security.INHERITED_ACE
   assert not ace.inherited
 
 def test_ace_set_inherited ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
-  ace._flags &= ~win32security.INHERITED_ACE
+  ace.flags &= ~win32security.INHERITED_ACE
   assert not ace.inherited
   ace.inherited = True
-  assert ace._flags & win32security.INHERITED_ACE
+  assert ace.flags & win32security.INHERITED_ACE
 
 def test_ace_reset_inherited ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
-  ace._flags |= win32security.INHERITED_ACE
+  ace.flags |= win32security.INHERITED_ACE
   assert ace.inherited
   ace.inherited = False
-  assert not ace._flags & win32security.INHERITED_ACE
+  assert not ace.flags & win32security.INHERITED_ACE
 
 #
 # CONTAINER_INHERIT_ACE
 #
 def test_ace_containers_inherit ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
-  ace._flags |= win32security.CONTAINER_INHERIT_ACE
+  ace.flags |= win32security.CONTAINER_INHERIT_ACE
   assert ace.containers_inherit
 
 def test_ace_not_containers_inherit ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
-  ace._flags &= ~win32security.CONTAINER_INHERIT_ACE
+  ace.flags &= ~win32security.CONTAINER_INHERIT_ACE
   assert not ace.containers_inherit
 
 def test_ace_set_containers_inherit ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
-  ace._flags &= ~win32security.INHERITED_ACE
-  ace._flags &= ~win32security.CONTAINER_INHERIT_ACE
+  ace.flags &= ~win32security.INHERITED_ACE
+  ace.flags &= ~win32security.CONTAINER_INHERIT_ACE
   assert not ace.containers_inherit
   ace.containers_inherit = True
-  assert ace._flags & win32security.CONTAINER_INHERIT_ACE
+  assert ace.flags & win32security.CONTAINER_INHERIT_ACE
 
 def test_ace_reset_containers_inherit ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
-  ace._flags &= ~win32security.INHERITED_ACE
-  ace._flags |= win32security.CONTAINER_INHERIT_ACE
+  ace.flags &= ~win32security.INHERITED_ACE
+  ace.flags |= win32security.CONTAINER_INHERIT_ACE
   assert ace.containers_inherit
   ace.containers_inherit = False
-  assert not ace._flags & win32security.CONTAINER_INHERIT_ACE
+  assert not ace.flags & win32security.CONTAINER_INHERIT_ACE
 
 #
 # OBJECTS_INHERIT_aCE
 #
 def test_ace_objects_inherit ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
-  ace._flags |= win32security.OBJECT_INHERIT_ACE
+  ace.flags |= win32security.OBJECT_INHERIT_ACE
   assert ace.objects_inherit
 
 def test_ace_not_objects_inherit ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
-  ace._flags &= ~win32security.OBJECT_INHERIT_ACE
+  ace.flags &= ~win32security.OBJECT_INHERIT_ACE
   assert not ace.objects_inherit
 
 def test_ace_set_objects_inherit ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
-  ace._flags &= ~win32security.INHERITED_ACE
-  ace._flags &= ~win32security.OBJECT_INHERIT_ACE
+  ace.flags &= ~win32security.INHERITED_ACE
+  ace.flags &= ~win32security.OBJECT_INHERIT_ACE
   assert not ace.objects_inherit
   ace.objects_inherit = True
-  assert ace._flags & win32security.OBJECT_INHERIT_ACE
+  assert ace.flags & win32security.OBJECT_INHERIT_ACE
 
 def test_ace_reset_objects_inherit ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
-  ace._flags &= ~win32security.INHERITED_ACE
-  ace._flags |= win32security.OBJECT_INHERIT_ACE
+  ace.flags &= ~win32security.INHERITED_ACE
+  ace.flags |= win32security.OBJECT_INHERIT_ACE
   assert ace.objects_inherit
   ace.objects_inherit = False
-  assert not ace._flags & win32security.OBJECT_INHERIT_ACE
+  assert not ace.flags & win32security.OBJECT_INHERIT_ACE
 
 #
 # access
@@ -249,18 +249,18 @@ def test_ace_access_invalid ():
   assert "*" not in _aces.ACE.ACCESS
   _aces.ACE._access ("*")
 
-def test_ace_type_int ():
-  assert _aces.ACE._type (1) == 1
+def test_dace_type_int ():
+  assert _aces.DACE._type (1) == 1
 
-def test_ace_type_string ():
-  for k, v in _aces.ACE.TYPES.items ():
-    assert _aces.ACE._type (k) == v
+def test_dace_type_string ():
+  for k, v in _aces.DACE.TYPES.items ():
+    assert _aces.DACE._type (k) == v
 
 @raises (_aces.x_unknown_value)
-def test_ace_type_invalid ():
-  assert "*" not in _aces.ACE.TYPES
-  _aces.ACE._type ("*")
+def test_dace_type_invalid ():
+  assert "*" not in _aces.DACE.TYPES
+  _aces.DACE._type ("*")
 
-def test_ace_as_tuple ():
-  ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE)
-  assert ace.as_tuple () == (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE)
+def test_dace_as_tuple ():
+  dace = _aces.DACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE)
+  assert dace.as_tuple () == (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE)

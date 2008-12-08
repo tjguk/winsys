@@ -20,10 +20,6 @@ wrapped = wrapper (WINERROR_MAP, x_acl)
 class ACL (core._WinSysObject):
 
   _ACE = _aces.ACE
-  _ACE_MAP = {
-    _aces.ACE_TYPE.ACCESS_ALLOWED : u"AddAccessAllowedAceEx",
-    _aces.ACE_TYPE.ACCESS_DENIED : u"AddAccessDeniedAceEx"
-  }
 
   def __init__ (self, acl=None):
     core._WinSysObject.__init__ (self)
@@ -38,6 +34,9 @@ class ACL (core._WinSysObject):
       output.append (ace.dumped (level))
     return utils.dumped (u"\n".join (output), level)
 
+  def pyobject (self, *args, **kwargs):
+    raise NotImplementedError
+
   def __iter__ (self):
     if self._list is None:
       raise x_value_not_set (u"No entry has been set for this ACL")
@@ -45,13 +44,13 @@ class ACL (core._WinSysObject):
       return iter (sorted (self._list))
 
   def append (self, _ace):
-    self._list.append (_aces.ace (_ace))
+    self._list.append (self._ACE.ace (_ace))
 
   def __getitem__ (self, index):
     return self._list[index]
 
   def __setitem__ (self, index, item):
-    self._list[index] = _aces.ace (item)
+    self._list[index] = self._ACE.ace (item)
 
   def __delitem__ (self, index):
     del self._list[index]
@@ -66,7 +65,21 @@ class ACL (core._WinSysObject):
     return repr (self._list)
   
   def __contains__ (self, a):
-    return _aces.ace (a) in (self._list or [])
+    return self._ACE.ace (a) in (self._list or [])
+
+  @classmethod
+  def from_list (cls, aces):
+    acl = cls (wrapped (win32security.ACL))
+    for a in aces:
+      acl.append (cls._ACE.ace (a))
+    return acl
+  
+class DACL (ACL):
+  _ACE = _aces.DACE
+  _ACE_MAP = {
+    _aces.ACE_TYPE.ACCESS_ALLOWED : u"AddAccessAllowedAceEx",
+    _aces.ACE_TYPE.ACCESS_DENIED : u"AddAccessDeniedAceEx",
+  }
 
   def pyobject (self, include_inherited=False):
     if self._list is None:
@@ -78,18 +91,11 @@ class ACL (core._WinSysObject):
       adder_fn = self._ACE_MAP.get (ace.type)
       if adder_fn:
         adder = getattr (acl, adder_fn)
-        adder (constants.REVISION.ACL_REVISION_DS, ace._flags, ace.access, ace.trustee.pyobject ())
+        adder (constants.REVISION.ACL_REVISION_DS, ace.flags, ace.access, ace.trustee.pyobject ())
       else:
-        raise NotImplementedError
+        raise NotImplementedError, ace.type
     return acl
     
-  @classmethod
-  def from_list (cls, aces):
-    acl = cls (wrapped (win32security.ACL))
-    for a in aces:
-      acl.append (_aces.ace (a))
-    return acl
-  
   @classmethod
   def public (cls):
     return cls.from_list ([(u"Everyone", u"F", u"ALLOW")])
@@ -98,18 +104,42 @@ class ACL (core._WinSysObject):
   def private (cls):
     return cls.from_list ([("", u"F", u"ALLOW")])
 
-class DACL (ACL):
-  _ACE = _aces.DACE
-
 class SACL (ACL):
   _ACE = _aces.SACE
+  _ACE_MAP = {
+    _aces.ACE_TYPE.SYSTEM_AUDIT : u"AddAuditAccessAce",
+  }
+  
+  def pyobject (self, include_inherited=False):
+    if self._list is None:
+      return None
+    
+    acl = wrapped (win32security.ACL)
+    aces = sorted (a for a in self._list if not a.inherited or include_inherited)
+    for ace in aces:
+      adder_fn = self._ACE_MAP.get (ace.type)
+      if adder_fn:
+        adder = getattr (acl, adder_fn)
+        adder (constants.REVISION.ACL_REVISION_DS, ace.access, ace.trustee.pyobject (), ace.audit_success, ace.audit_failure)
+      else:
+        raise NotImplementedError, ace.type
+    return acl
+    
 
-def acl (acl):
+def acl (acl, klass=core.UNSET):
+  if klass is core.UNSET: klass = DACL
+    
   if acl is None:
-    return ACL (None)
+    return klass (None)
   elif type (acl) is PyACL:
-    return ACL (acl)
-  elif issubclass (acl.__class__, ACL):
+    return klass (acl)
+  elif isinstance (acl, ACL):
     return acl
   else:
-    return ACL.from_list (iter (acl))
+    return klass.from_list (iter (acl))
+
+def dacl (dacl):
+  return acl (dacl, DACL)
+
+def sacl (sacl):
+  return acl (sacl, SACL)

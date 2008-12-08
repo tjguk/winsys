@@ -16,7 +16,6 @@ from winsys import security
 
 GUID = str (uuid.uuid1 ())
 TEST_ROOT = tempfile.mkdtemp (prefix="winsys-")
-print TEST_ROOT
 TEST_FILE = os.path.join (TEST_ROOT, "file.txt")
 TEST1_DIR = os.path.join (TEST_ROOT, "dir1")
 TEST1_FILE = os.path.join (TEST1_DIR, "file1.txt")
@@ -102,11 +101,20 @@ def test_security_Security ():
 def test_security_HANDLE_file_type ():
   hFile = handle (TEST_FILE)
   try:
-    assert win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
+    s0 = win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
       win32security.GetSecurityInfo (hFile, win32security.SE_FILE_OBJECT, OPTIONS),
       win32security.SDDL_REVISION_1,
       OPTIONS
-    ) == str (security.security (hFile, security.SE_OBJECT_TYPE.FILE_OBJECT, options=OPTIONS))
+    )
+    s1 = str (security.security (hFile, security.SE_OBJECT_TYPE.FILE_OBJECT, options=OPTIONS))
+    print s0
+    print s1
+    assert s0 == s1
+    #~ assert win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
+      #~ win32security.GetSecurityInfo (hFile, win32security.SE_FILE_OBJECT, OPTIONS),
+      #~ win32security.SDDL_REVISION_1,
+      #~ OPTIONS
+    #~ ) == str (security.security (hFile, security.SE_OBJECT_TYPE.FILE_OBJECT, options=OPTIONS))
   finally:
     hFile.Close ()
 

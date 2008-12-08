@@ -11,8 +11,8 @@ import winerror
 
 from winsys import constants, core, utils
 from winsys._tokens import token, Token
-from winsys._aces import ace
-from winsys._acls import acl
+from winsys._aces import dace, sace
+from winsys._acls import acl, DACL, SACL
 from winsys._privileges import privilege
 from winsys._tokens import token
 from winsys.accounts import principal
@@ -175,7 +175,7 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No DACL has been set for this Security object")
     return self._dacl
   def _set_dacl (self, dacl):
-    self._dacl = acl (dacl) or core.UNSET
+    self._dacl = acl (dacl, DACL) or core.UNSET
   dacl = property (_get_dacl, _set_dacl)
 
   def _get_sacl (self):
@@ -183,7 +183,7 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No SACL has been set for this Security object")
     return self._sacl
   def _set_sacl (self, sacl):
-    self._sacl = acl (sacl) or core.UNSET
+    self._sacl = acl (sacl, SACL) or core.UNSET
   sacl = property (_get_sacl, _set_sacl)
 
   def __enter__ (self):
@@ -284,6 +284,10 @@ class Security (core._WinSysObject):
       sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, 0)
     else:
       sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, SD_CONTROL.DACL_PROTECTED)
+    #~ if dacl:
+      #~ sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_AUTO_INHERITED, SD_CONTROL.DACL_AUTO_INHERITED)
+    #~ if sacl:
+      #~ sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_AUTO_INHERITED, SD_CONTROL.SACL_AUTO_INHERITED)
     return sa
 
   @classmethod
@@ -297,7 +301,7 @@ class Security (core._WinSysObject):
     else:
       sd = wrapped (win32security.GetNamedSecurityInfo, obj, object_type, options)
     return cls.from_security_descriptor (
-      sd, 
+      sd,
       originating_object=obj, 
       originating_object_type=object_type, 
       options=options
@@ -323,10 +327,10 @@ class Security (core._WinSysObject):
     
     options = cls._options (options)
     control, revision = sd.GetSecurityDescriptorControl ()
-    owner = sd.GetSecurityDescriptorOwner () if SECURITY_INFORMATION.OWNER & options else None
-    group = sd.GetSecurityDescriptorGroup () if SECURITY_INFORMATION.GROUP & options else None
-    dacl = sd.GetSecurityDescriptorDacl () if SECURITY_INFORMATION.DACL & options else None
-    sacl = sd.GetSecurityDescriptorSacl () if SECURITY_INFORMATION.SACL & options else None
+    owner = sd.GetSecurityDescriptorOwner () if SECURITY_INFORMATION.OWNER & options else core.UNSET
+    group = sd.GetSecurityDescriptorGroup () if SECURITY_INFORMATION.GROUP & options else core.UNSET
+    dacl = sd.GetSecurityDescriptorDacl () if SECURITY_INFORMATION.DACL & options else core.UNSET
+    sacl = sd.GetSecurityDescriptorSacl () if SECURITY_INFORMATION.SACL & options else core.UNSET
     return cls (
       control,
       owner, group, dacl, sacl,
@@ -342,7 +346,7 @@ class Security (core._WinSysObject):
     @param string A string in Microsoft SDDL format
     @return A Security instance
     """
-    if options is core.UNSET: options = self.DEFAULT_OPTIONS
+    if options is core.UNSET: options = cls.DEFAULT_OPTIONS
     
     return cls.from_security_descriptor (
       sd=wrapped (

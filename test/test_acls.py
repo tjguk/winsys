@@ -30,11 +30,11 @@ def test_acl_ACL ():
   assert acl is acl0
 
 def test_acl_iterable ():
-  aces0 = [("Everyone", "R", "Allow"), ("Administrators", "F", "Allow")]
+  daces0 = [("Everyone", "R", "Allow"), ("Administrators", "F", "Allow")]
   def iteraces ():
-    for ace in aces0:
-      yield ace
-  assert list (_acls.acl (iteraces ())) == list (_aces.ace (ace) for ace in aces0)
+    for dace in daces0:
+      yield dace
+  assert list (_acls.dacl (iteraces ())) == list (_aces.dace (dace) for dace in daces0)
 
 def test_ACL_iterated ():
   #
@@ -42,16 +42,16 @@ def test_ACL_iterated ():
   #
   acl = _acls.acl ([("Everyone", "R", "Allow"), ("Administrators", "F", "Deny")])
   assert list (acl) == [
-    _aces.ace (("Administrators", "F", "Deny")), 
-    _aces.ace (("Everyone", "R", "Allow"))
+    _aces.dace (("Administrators", "F", "Deny")), 
+    _aces.dace (("Everyone", "R", "Allow"))
   ]
 
 def test_ACL_append ():
   acl = _acls.acl ([("Everyone", "R", "Allow")])
   acl.append (("Administrators", "F", "Deny"))
   assert list (acl) == [
-    _aces.ace (("Administrators", "F", "Deny")), 
-    _aces.ace (("Everyone", "R", "Allow"))
+    _aces.dace (("Administrators", "F", "Deny")), 
+    _aces.dace (("Everyone", "R", "Allow"))
   ]
 
 def test_ACL_getitem ():
@@ -71,7 +71,7 @@ def test_ACL_delitem ():
   acl = _acls.acl ([("Everyone", "R", "Allow"), ("Administrators", "F", "Deny")])
   del acl[0]
   assert list (acl) == [
-    _aces.ace (("Administrators", "F", "Deny")), 
+    _aces.dace (("Administrators", "F", "Deny")), 
   ]
 
 def test_ACL_len ():
@@ -91,10 +91,10 @@ def test_ACL_contains ():
     assert ace in acl
   assert ("Everyone", "F", "Deny") not in acl
 
-def test_ACL_public ():
-  acl = _acls.ACL.public ()
+def test_DACL_public ():
+  acl = _acls.DACL.public ()
   assert list (acl) == [("Everyone", "F", "ALLOW")]
 
-def test_ACL_private ():
-  acl = _acls.ACL.private ()
+def test_DACL_private ():
+  acl = _acls.DACL.private ()
   assert list (acl) == [(me, "F", "ALLOW")]

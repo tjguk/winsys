@@ -17,7 +17,9 @@ ACE_FLAG = constants.Constants.from_list ([
   u"INHERIT_ONLY_ACE", 
   u"INHERITED_ACE", 
   u"NO_PROPAGATE_INHERIT_ACE", 
-  u"OBJECT_INHERIT_ACE"
+  u"OBJECT_INHERIT_ACE",
+  u"FAILED_ACCESS_ACE_FLAG",
+  u"SUCCESSFUL_ACCESS_ACE_FLAG"
 ], pattern=u"*_ACE", namespace=win32security)
 ACE_TYPE = constants.Constants.from_pattern (u"*_ACE_TYPE", namespace=win32security)
 DACE_TYPE = constants.Constants.from_pattern (u"ACCESS_*_ACE_TYPE", namespace=win32security)
@@ -32,13 +34,9 @@ class ACE (core._WinSysObject):
     u"C" : constants.GENERIC_ACCESS.READ | constants.GENERIC_ACCESS.WRITE | constants.GENERIC_ACCESS.EXECUTE,
     u"F" : constants.GENERIC_ACCESS.ALL
   }
-  TYPES = {
-    u"ALLOW" : ACE_TYPE.ACCESS_ALLOWED,
-    u"DENY" : ACE_TYPE.ACCESS_DENIED
-  }
   FLAGS = ACE_FLAG.OBJECT_INHERIT | ACE_FLAG.CONTAINER_INHERIT
   
-  def __init__ (self, trustee, access, type, flags=FLAGS, object_type=None, inherited_object_type=None):
+  def __init__ (self, trustee, access, type, flags=core.UNSET, object_type=core.UNSET, inherited_object_type=core.UNSET):
     u"""Construct a new ACE
 
     @param trustee "domain \ user" or Principal instance representing the security principal
@@ -47,11 +45,12 @@ class ACE (core._WinSysObject):
     @param flags Bitmask or Set of strings or numbers representing the AceFlags constants
     """
     core._WinSysObject.__init__ (self)
+    if flags is core.UNSET: flags = self.FLAGS
+    
     self.type = type
-    self.is_allowed = type in (ACE_TYPE.ACCESS_ALLOWED, ACE_TYPE.ACCESS_ALLOWED_OBJECT)
     self._trustee = trustee
     self._access_mask = access
-    self._flags = flags
+    self.flags = flags
     self.object_type = object_type
     self.inherited_object_type = inherited_object_type
     
@@ -59,17 +58,17 @@ class ACE (core._WinSysObject):
     return (self.trustee, self.access, self.type)
 
   def __eq__ (self, other):
-    other = ace (other)
+    other = self.ace (other)
     return (self.trustee, self.access, self.type) == (other.trustee, other.access, other.type)
     
   def __lt__ (self, other):
     u"""Deny comes first, then what?"""
-    other = ace (other)
+    other = self.ace (other)
     return (self.is_allowed < other.is_allowed)
     
   def as_string (self):
     type = ACE_TYPE.name_from_value (self.type)
-    flags = " | ".join (ACE_FLAG.names_from_value (self._flags))
+    flags = " | ".join (ACE_FLAG.names_from_value (self.flags))
     access = utils.mask_as_string (self.access)
     return u"%s %s %s %s" % (self.trustee, access, flags, type)
 
@@ -78,39 +77,39 @@ class ACE (core._WinSysObject):
     output.append (u"trustee: %s" % self.trustee)
     output.append (u"access: %s" % utils.mask_as_string (self.access))
     output.append (u"type: %s" % ACE_TYPE.name_from_value (self.type))
-    if self._flags:
-      output.append (u"flags:\n%s" % utils.dumped_flags (self._flags, ACE_FLAG, level))
+    if self.flags:
+      output.append (u"flags:\n%s" % utils.dumped_flags (self.flags, ACE_FLAG, level))
     return utils.dumped (u"\n".join (output), level)
   
   def _get_inherited (self):
-    return bool (self._flags & ACE_FLAG.INHERITED)
+    return bool (self.flags & ACE_FLAG.INHERITED)
   def _set_inherited (self, switch):
     if switch:
-      self._flags |= ACE_FLAG.INHERITED
+      self.flags |= ACE_FLAG.INHERITED
     else:
-      self._flags &= ~ACE_FLAG.INHERITED
+      self.flags &= ~ACE_FLAG.INHERITED
   inherited = property (_get_inherited, _set_inherited)
   
   def _get_containers_inherit (self):
-    return bool (self._flags & ACE_FLAG.CONTAINER_INHERIT)
+    return bool (self.flags & ACE_FLAG.CONTAINER_INHERIT)
   def _set_containers_inherit (self, switch):
     if self.inherited:
       raise x_access_denied (u"Cannot change an inherited ACE")
     if switch:
-      self._flags |= ACE_FLAG.CONTAINER_INHERIT
+      self.flags |= ACE_FLAG.CONTAINER_INHERIT
     else:
-      self._flags &= ~ACE_FLAG.CONTAINER_INHERIT
+      self.flags &= ~ACE_FLAG.CONTAINER_INHERIT
   containers_inherit = property (_get_containers_inherit, _set_containers_inherit)
   
   def _get_objects_inherit (self):
-    return bool (self._flags & ACE_FLAG.OBJECT_INHERIT)
+    return bool (self.flags & ACE_FLAG.OBJECT_INHERIT)
   def _set_objects_inherit (self, switch):
     if self.inherited:
       raise x_access_denied (u"Cannot change an inherited ACE")
     if switch:
-      self._flags |= ACE_FLAG.OBJECT_INHERIT
+      self.flags |= ACE_FLAG.OBJECT_INHERIT
     else:
-      self._flags &= ~ACE_FLAG.OBJECT_INHERIT
+      self.flags &= ~ACE_FLAG.OBJECT_INHERIT
   objects_inherit = property (_get_objects_inherit, _set_objects_inherit)
   
   def _get_access (self):
@@ -159,8 +158,36 @@ class ACE (core._WinSysObject):
       try:
         return reduce (operator.or_, (cls.ACCESS[a] for a in access.upper ()), 0)
       except KeyError:
-        raise x_unknown_value ("%s is not a valid access string" % access, "_access", 0)
+        raise x_unknown_value ("%s is not a valid access string" % access, "_access", core.UNSET)
         
+class DACE (ACE):
+  
+  TYPES = {
+    u"ALLOW" : ACE_TYPE.ACCESS_ALLOWED,
+    u"DENY" : ACE_TYPE.ACCESS_DENIED,
+  }
+
+  def __init__ (
+    self, 
+    trustee, access, type, 
+    flags=core.UNSET, 
+    object_type=core.UNSET, inherited_object_type=core.UNSET
+  ):
+    ACE.__init__ (self, trustee, access, type, flags, object_type, inherited_object_type)
+    self.is_allowed = type in (ACE_TYPE.ACCESS_ALLOWED, ACE_TYPE.ACCESS_ALLOWED_OBJECT)
+
+  def as_tuple (self):
+    return self.trustee, self.access, self.type, self.flags
+
+  @classmethod
+  def ace (cls, ace):
+    return dace (ace)
+  
+  @classmethod
+  def from_tuple (cls, ace_info):
+    (trustee, access, allow_or_deny) = ace_info
+    return cls (accounts.principal (trustee), cls._access (access), cls._type (allow_or_deny))
+
   @classmethod
   def _type (cls, type):
     try:
@@ -169,30 +196,65 @@ class ACE (core._WinSysObject):
       try:
         return cls.TYPES[type.upper ()]
       except KeyError:
-        raise x_unknown_value ("%s is not a valid type string" % type, "_type", 0)
+        raise x_unknown_value ("%s is not a valid type string" % type, "_type", core.UNSET)
+  
+class SACE (ACE):
+  
+  AUDIT_WHAT = {
+    "SUCCESS" : (1, 0),
+    "FAILURE" : (0, 1),
+    "ALL" : (1, 1),
+  }
+
+  def __init__ (
+    self,
+    trustee, access, type, 
+    flags=core.UNSET,
+    audit_success=core.UNSET, audit_failure=core.UNSET, 
+    object_type=core.UNSET, inherited_object_type=core.UNSET
+  ):
+    ACE.__init__ (self, trustee, access, type, flags, object_type, inherited_object_type)
+    self.audit_success = audit_success or (ACE_FLAG.SUCCESSFUL_ACCESS & self.flags)
+    self.audit_failure = audit_failure or (ACE_FLAG.FAILED_ACCESS & self.flags)
+
+  @classmethod
+  def ace (cls, ace):
+    return dace (ace)
   
   @classmethod
   def from_tuple (cls, ace_info):
-    (trustee, access, allow_or_deny) = ace_info
-    return cls (accounts.principal (trustee), cls._access (access), cls._type (allow_or_deny))
+    (trustee, access, audit_what) = ace_info
+    audit_success, audit_failure = cls._audit_what (audit_what)
+    return cls (accounts.principal (trustee), cls._access (access), ACE_TYPE.SYSTEM_AUDIT, audit_success, audit_failure)
 
+  @classmethod
+  def _audit_what (cls, audit_what):
+    try:
+      audit_success, audit_failure = [int (i) for i in audit_what]
+    except (ValueError, TypeError):
+      audit_success, audit_failure = cls.AUDIT_WHAT[audit_what.upper ()]
+    return audit_success, audit_failure
+  
   def as_tuple (self):
-    return self.trustee, self.access, self.type, self._flags
-
-class DACE (ACE):
-  pass
-
-class SACE (ACE):
-  pass
+    return self.trustee, self.access, self.type, self.flags
 
 #
 # Friendly constructors
 #
-def ace (ace):
+def dace (dace):
   try:
-    if issubclass (ace.__class__, ACE):
-      return ace
+    if issubclass (dace.__class__, DACE):
+      return dace
     else:
-      return ACE.from_tuple (ace)
+      return DACE.from_tuple (dace)
   except (ValueError, TypeError):
-    raise x_ace ("ACE must be an existing ACE or a 3-tuple of (trustee, access, type)", "ace", 0)
+    raise x_ace ("DACE must be an existing DACE or a 3-tuple of (trustee, access, type)", "dace", 0)
+
+def sace (sace):
+  try:
+    if issubclass (sace.__class__, SACE):
+      return sace
+    else:
+      return SACE.from_tuple (sace)
+  except (ValueError, TypeError):
+    raise x_ace ("SACE must be an existing SACE or a 4-tuple of (trustee, access, audit_what)", "sace", 0)
