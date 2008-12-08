@@ -369,9 +369,7 @@ class Dialog (BaseDialog):
     )
   
   def OnProgressMessage (self, hwnd, msg, wparam, lparam):
-    print "OnProgressMessage#0", lparam
-    message = utils.pointer_as_string (lparam)
-    print "OnProgressMessage#1", message
+    message = utils.pointer_as_string (lparam).decode ("utf8")
     self._set_item (self._progress_id, message)
     
   def OnProgressComplete (self, hwnd, msg, wparam, lparam):
@@ -387,7 +385,7 @@ class Dialog (BaseDialog):
     
     def progress_thread (hwnd, iterator):
       for message in iterator:
-        print "progress_thread", message
+        message = unicode (message)
         win32gui.PostMessage (
           hwnd, 
           self.WM_PROGRESS_MESSAGE, 
