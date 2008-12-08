@@ -269,6 +269,14 @@ class Security (core._WinSysObject):
     group = None if self._group is core.UNSET else self._group.pyobject ()
     dacl = None if self._dacl is core.UNSET else self._dacl.pyobject (include_inherited=include_inherited)
     sacl = None if self._sacl is core.UNSET else self._sacl.pyobject (include_inherited=include_inherited)
+    
+    sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_AUTO_INHERITED, self._control & SD_CONTROL.DACL_AUTO_INHERITED)
+    sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_AUTO_INHERITED, self._control & SD_CONTROL.SACL_AUTO_INHERITED)
+    if self.inherits:
+      sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, 0)
+    else:
+      sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, SD_CONTROL.DACL_PROTECTED)
+
     if owner:
       sa.SetSecurityDescriptorOwner (owner, False)
     if group:
@@ -280,14 +288,6 @@ class Security (core._WinSysObject):
     #
     sa.SetSecurityDescriptorDacl (True, dacl, False)
     sa.SetSecurityDescriptorSacl (True, sacl, False)
-    if self.inherits:
-      sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, 0)
-    else:
-      sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, SD_CONTROL.DACL_PROTECTED)
-    #~ if dacl:
-      #~ sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_AUTO_INHERITED, SD_CONTROL.DACL_AUTO_INHERITED)
-    #~ if sacl:
-      #~ sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_AUTO_INHERITED, SD_CONTROL.SACL_AUTO_INHERITED)
     return sa
 
   @classmethod
