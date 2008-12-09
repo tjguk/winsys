@@ -8,7 +8,7 @@ import struct
 import threading
 import uuid
 
-from winsys import core, constants, utils
+from winsys import core, constants, utils, ipc
 from winsys.exceptions import *
 
 #
@@ -201,6 +201,8 @@ class Dialog (BaseDialog):
     if not self.fields:
       raise RuntimeError ("Must pass at least one field")
     self.results = []
+    self.progress_thread = core.UNSET
+    self.progress_cancelled = ipc.event ()
     
   def run (self):
     """The heart of the dialog box functionality. The call to DialogBoxIndirect
@@ -342,7 +344,7 @@ class Dialog (BaseDialog):
     #
     # MINMAXINFO is a struct of 5 POINT items, each of which
     # is a pair of LONGs. We extract the structure into a list,
-    # set it's final item (the Y coord of MaxTrackSize) to be
+    # set the Y coord of MaxTrackSize and of MinTrackSize to be
     # the window's current height and write the data back into
     # the same place.
     #
@@ -354,45 +356,107 @@ class Dialog (BaseDialog):
     win32gui.PySetMemory (lparam, struct.pack (MINMAXINO_FORMAT, *minmaxinfo))
     return 0
 
-  def _allow_ok (self, allow=True):
+  def _enable (self, id, allow=True):
+    """Convenience function to enable or disable a control by id
+    """
     wrapped (
       win32gui.EnableWindow, 
-      wrapped (win32gui.GetDlgItem, self.hwnd, win32con.IDOK), 
-      allow
-    )
-  
-  def _allow_cancel (self, allow=True):
-    wrapped (
-      win32gui.EnableWindow, 
-      wrapped (win32gui.GetDlgItem, self.hwnd, win32con.IDCANCEL), 
+      wrapped (win32gui.GetDlgItem, self.hwnd, id), 
       allow
     )
   
   def OnProgressMessage (self, hwnd, msg, wparam, lparam):
+    """Respond to a progress update from within the progress
+    thread. LParam will be a pointer to a string containing
+    a utf8-encoded string which is to be displayed in the
+    dialog's progress static.
+    """
+    print "OnProgressMessage", utils.pointer_as_string (lparam).decode ("utf8")
     message = utils.pointer_as_string (lparam).decode ("utf8")
     self._set_item (self._progress_id, message)
     
   def OnProgressComplete (self, hwnd, msg, wparam, lparam):
-    self._allow_cancel (False)
-    self._allow_ok (True)
+    """Respond to the a message signalling that all processing is
+    now complete by re-enabling the ok button, disabling cancel,
+    and setting focus to the ok so a return or space will close
+    the dialog.
+    """
+    length = wparam
+    message = win32gui.PyGetString (lparam, wparam)
+    self._set_item (self._progress_id, message)
+    self._enable (win32con.IDCANCEL, False)
+    self._enable (win32con.IDOK, True)
+    wrapped (win32gui.SetFocus, wrapped (win32gui.GetDlgItem, hwnd, win32con.IDOK))
+
+  def _progress_complete (self, message):
+    print "_progress_complete", message
+    address, length = win32gui.PyGetBufferAddressAndLen (buffer (message))
+    win32gui.PostMessage (
+      self.hwnd, 
+      self.WM_PROGRESS_MESSAGE, 
+      length, address
+    )
+    
+  def OnOk (self, hwnd):
+  
+    def progress_thread (iterator, cancelled):
+      try:
+        for message in iterator:
+          if cancelled:
+            self._progress_complete ("User cancelled")
+            break
+          message = unicode (message)
+          win32gui.PostMessage (
+            hwnd, 
+            self.WM_PROGRESS_MESSAGE, 
+            0, utils.string_as_pointer (message.encode ("utf8"))
+          )
+      except:
+        self._progress_complete ("Error occurred")
+      else:
+        self._progress_complete ("Complete")
+
+    #
+    # Ignore static fields when returning results
+    #
+    self.results = [self._get_item (self.IDC_FIELD_BASE + i) for i, field in enumerate (self.fields) if field[0]]
+    if self.progress_callback:
+      self._set_item (self._progress_id, "Working...")
+      for i in range (len (self.fields) - 1):
+        self._enable (self.IDC_FIELD_BASE + i, False)
+      self._enable (win32con.IDOK, False)
+      wrapped (win32gui.SetFocus, wrapped (win32gui.GetDlgItem, hwnd, win32con.IDCANCEL))
+      progress_iterator = self.progress_callback (*self.results)
+      self.progress_callback = None
+      self.progress_thread = threading.Thread (
+        target=progress_thread, 
+        args=(progress_iterator, self.progress_cancelled)
+      )
+      self.progress_thread.start ()
+    else:
+      win32gui.EndDialog (self.hwnd, win32con.IDOK)
+
+  def OnCancel (self, hwnd):
+    self.results = []
+    if self.progress_thread:
+      self.progress_cancelled.set ()
+      self._set_item (self._progress_id, "Cancelling...")
+      self.progress_thread.join ()
+    win32gui.EndDialog (self.hwnd, win32con.IDCANCEL)
+
+  def OnCallback (self, hwnd):
+    field_id = self.IDC_FIELD_BASE + id - self.IDC_CALLBACK_BASE
+    field, default, callback = self.fields[field_id - self.IDC_FIELD_BASE]
+    result = callback (self.hwnd, self._get_item (field_id))
+    if result:
+      self._set_item (field_id, result)
 
   def OnCommand (self, hwnd, msg, wparam, lparam):
     """React to commands from the dialog controls, principally
     the buttons. If Ok is pressed, set the ok_pressed flag and
     store the results. If cancel, reset the ok_pressed flag and
     clear results. In either case, end the dialog.
-    """
-    
-    def progress_thread (hwnd, iterator):
-      for message in iterator:
-        message = unicode (message)
-        win32gui.PostMessage (
-          hwnd, 
-          self.WM_PROGRESS_MESSAGE, 
-          0, utils.string_as_pointer (message.encode ("utf8"))
-        )
-      win32gui.PostMessage (hwnd, self.WM_PROGRESS_COMPLETE, 0, 0)
-    
+    """    
     id = win32api.LOWORD (wparam)
     #
     # If OK is pressed, copy the fields' current values
@@ -402,25 +466,9 @@ class Dialog (BaseDialog):
     # empty list.
     #
     if id == win32con.IDOK:
-      #
-      # Ignore static fields when returning results
-      #
-      self.results = [self._get_item (self.IDC_FIELD_BASE + i) for i, field in enumerate (self.fields) if field[0]]
-      if self.progress_callback:
-        self._allow_ok (False)
-        progress_iterator = self.progress_callback (*self.results)
-        self.progress_callback = None
-        thread = threading.Thread (
-          target=progress_thread, 
-          args=(hwnd, progress_iterator)
-        )
-        thread.setDaemon (True)
-        thread.start ()
-      else:
-        win32gui.EndDialog (self.hwnd, win32con.IDOK)
+      self.OnOk (hwnd)
     elif id == win32con.IDCANCEL:
-      self.results = []
-      win32gui.EndDialog (self.hwnd, win32con.IDCANCEL)
+      self.OnCancel (hwnd)
     
     #
     # If one of the callback buttons is pressed, call the
@@ -430,11 +478,7 @@ class Dialog (BaseDialog):
     # a filename).
     #
     elif self.IDC_CALLBACK_BASE <= id < (self.IDC_CALLBACK_BASE + len (self.fields)):
-      field_id = self.IDC_FIELD_BASE + id - self.IDC_CALLBACK_BASE
-      field, default, callback = self.fields[field_id - self.IDC_FIELD_BASE]
-      result = callback (self.hwnd, self._get_item (field_id))
-      if result:
-        self._set_item (field_id, result)
+      OnCallback (hwnd)
 
 def _fields_to_fields (fields):
   _fields = []
@@ -449,7 +493,6 @@ def dialog (title, *fields):
   """Shortcut function to populate and run a dialog, returning
   the button pressed and values saved.
   """
-  print _fields_to_fields (fields)
   d = Dialog (title, _fields_to_fields (fields))
   d.run ()
   return d.results
@@ -487,15 +530,28 @@ def get_filename (start_folder=None, hwnd=None):
     return shell.SHGetPathFromIDList (pidl)
 
 if __name__=='__main__':
+  from winsys import fs
+  import csv
+  
   def _get_filename (hwnd, data): 
     return get_filename (data, hwnd)
 
-  def progress_callback (field_values):
+  #~ def progress_callback (root, csv_filename):
+    #~ fsroot = fs.Dir (root)
+    #~ with open (csv_filename, "wb") as f:
+      #~ writer = csv.writer (f)
+      #~ for dir in fsroot.dirs ():
+        #~ yield dir
+        #~ writer.writerows ([[f] for f in dir.files ()])
+        
+  def progress_callback (*args):
     import time
-    for f in range (10):
-      yield str (f)
+    for i in range (10):
+      yield str (i)
       time.sleep (0.5)
-  
+      if i % 2 == 1:
+        raise RuntimeError
+
   #~ print dialog (
     #~ "Test", 
     #~ ('Root', r'\\vogbs022\user', _get_filename), 
@@ -504,4 +560,4 @@ if __name__=='__main__':
   #~ )  
   #~ print dialog ("Test2", ("Scan from:", r"c:\temp", _get_filename), ("List of things", ['Timothy', 'John', 'Golden']))
   #~ print dialog ("Test3", (None, "Waiting..."))
-  print progress_dialog ("Test4", progress_callback, ("Name", "Tim"))
+  print progress_dialog ("Test4", progress_callback, ("Root", "c:/temp"), ("Output .csv", "c:/temp/temp.csv"))

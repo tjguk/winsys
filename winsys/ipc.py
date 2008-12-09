@@ -158,7 +158,7 @@ class Event (core._WinSysObject):
     self._hEvent = None
   
   def as_string (self):
-    return self.name or str (int (self.hEvent))
+    return self.name or str (int (self._handle ()))
     
   def dumped (self, level=0):
     output = []
@@ -204,6 +204,9 @@ class Event (core._WinSysObject):
       
   def isSet (self):
     return self.wait (0)
+    
+  def __nonzero__ (self):
+    return self.isSet ()
   
 #
 # Module-level convenience functions
