@@ -2,6 +2,8 @@ import os, sys
 import operator
 import pythoncom
 import winxpgui as win32gui
+import pythoncom
+import win32com.server.policy
 import win32api
 import win32con
 from win32com.shell import shell, shellcon
@@ -44,6 +46,58 @@ wrapped = wrapper (WINERROR_MAP, x_dialogs)
 
 ENCODING = "UTF-8"
 
+class DropTarget (win32com.server.policy.DesignatedWrapPolicy):
+  _reg_clsid_ = '{72AA1C07-73BA-4CA8-88B9-7F03FEA173E8}'
+  _reg_progid_ = "WinSysDialogs.DropTarget"
+  _reg_desc_ = "Drop target handler for WinSys Dialogs"
+  _public_methods_ = ['DragEnter', 'DragOver', 'DragLeave', 'Drop']
+  _com_interfaces_ = [pythoncom.IID_IDropTarget]
+  
+  _data_format = (
+    win32con.CF_HDROP, 
+    None, 
+    pythoncom.DVASPECT_CONTENT, 
+    -1, 
+    pythoncom.TYMED_HGLOBAL
+  )
+
+  def __init__ (self, hwnd):
+    self._wrap_ (self)
+    self.hwnd = hwnd
+
+  #
+  # NB for the interface to work, all the functions must
+  # be present even they do nothing.
+  #
+  
+  def DragEnter (self, data_object, key_state, point, effect):
+    try:
+      data_object.QueryGetData (self._data_format)
+    except pywintypes.error:
+      return shellcon.DROPEFFECT_NONE
+    else:
+      return shellcon.DROPEFFECT_COPY
+  
+  def Drop (self, data_object, key_state, point, effect):
+    child_point = wrapped (win32gui.ScreenToClient, self.hwnd, point)
+    child_hwnd = wrapped (win32gui.ChildWindowFromPoint, self.hwnd, child_point)
+    data = data_object.GetData (self._data_format)
+    n_files = shell.DragQueryFileW (data.data_handle, -1)
+    if n_files:
+      SendMessage (
+        child_hwnd, win32con.WM_SETTEXT, None,
+        utils.string_as_pointer (shell.DragQueryFileW (data.data_handle, 0).encode (ENCODING))
+      )
+
+  def DragOver (self, key_state, point, effect):
+    child_point = wrapped (win32gui.ScreenToClient, self.hwnd, point)
+    child_hwnd = wrapped (win32gui.ChildWindowFromPoint, self.hwnd, child_point)
+    class_name = wrapped (win32gui.GetClassName, child_hwnd)
+    return shellcon.DROPEFFECT_COPY if class_name == "Edit" else shellcon.DROPEFFECT_NONE
+  
+  def DragLeave (self):
+    pass
+  
 def as_code (text):
   return text.lower ().replace (" ", "")
 
@@ -122,6 +176,7 @@ class BaseDialog (object):
     the form [(label, default), ...].
     """
     wrapped (win32gui.InitCommonControls)
+    wrapped (pythoncom.OleInitialize)
     self.hinst = win32gui.dllhandle
     self.title = title
     self.parent_hwnd = parent_hwnd
@@ -166,7 +221,7 @@ class BaseDialog (object):
         field_type = "COMBOBOX"
       else:
         field_type = "EDIT"
-      
+
       dlg.append (["STATIC", field, self.IDC_LABEL_BASE + i, (label_l, label_t, self.LABEL_W, self.CONTROL_H), cs | win32con.SS_LEFT])
       if field_type == "BUTTON":
         field_styles = win32con.WS_TABSTOP | win32con.BS_AUTOCHECKBOX
@@ -252,9 +307,20 @@ class Dialog (BaseDialog):
     new size.
     """
     self.hwnd = hwnd
-    for i, (field, default, callback) in enumerate (self.fields):
-      self._set_item (self.IDC_FIELD_BASE + i, default)
+    
+    pythoncom.RegisterDragDrop (
+      hwnd,
+      pythoncom.WrapObject (
+        DropTarget (hwnd),
+        pythoncom.IID_IDropTarget,
+        pythoncom.IID_IDropTarget
+      )
+    )
 
+    for i, (field, default, callback) in enumerate (self.fields):
+      id = self.IDC_FIELD_BASE + i
+      self._set_item (id, default)
+    
     parent = self.parent_hwnd or wrapped (win32gui.GetDesktopWindow)
     l, t, r, b = wrapped (win32gui.GetWindowRect, self.hwnd)
     dt_l, dt_t, dt_r, dt_b = wrapped (win32gui.GetWindowRect, parent)
