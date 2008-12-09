@@ -77,3 +77,4 @@ log = _logger.log
 info = _logger.info
 warn = _logger.warn
 error = _logger.error
+exception = _logger.exception

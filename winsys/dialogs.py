@@ -1,4 +1,5 @@
 import os, sys
+import operator
 import pythoncom
 import winxpgui as win32gui
 import win32api
@@ -46,20 +47,20 @@ def as_code (text):
 
 def _register_wndclass ():
   class_name = str (uuid.uuid1 ())
-  wc = win32gui.WNDCLASS ()
+  wc = wrapped (win32gui.WNDCLASS)
   wc.SetDialogProc ()
   wc.hInstance = win32gui.dllhandle
   wc.lpszClassName = class_name
   wc.style = win32con.CS_VREDRAW | win32con.CS_HREDRAW
-  wc.hCursor = win32gui.LoadCursor (0, win32con.IDC_ARROW)
+  wc.hCursor = wrapped (win32gui.LoadCursor, 0, win32con.IDC_ARROW)
   wc.hbrBackground = win32con.COLOR_WINDOW + 1
   wc.lpfnWndProc = {} 
   wc.cbWndExtra = win32con.DLGWINDOWEXTRA + struct.calcsize ("Pi")
   icon_flags = win32con.LR_LOADFROMFILE | win32con.LR_DEFAULTSIZE
 
-  python_exe = win32api.GetModuleHandle (None)
-  wc.hIcon = win32gui.LoadIcon (python_exe, 1)
-  class_atom = win32gui.RegisterClass (wc)
+  python_exe = wrapped (win32api.GetModuleHandle, None)
+  wc.hIcon = wrapped (win32gui.LoadIcon, python_exe, 1)
+  class_atom = wrapped (win32gui.RegisterClass, wc)
   return class_name
   
 _class_name = _register_wndclass ()
@@ -67,14 +68,25 @@ _class_name = _register_wndclass ()
 def SendMessage (*args, **kwargs):
   return wrapped (win32gui.SendMessage, *args, **kwargs)
   
+def PostMessage (*args, **kwargs):
+  return wrapped (win32gui.PostMessage, *args, **kwargs)
+  
 def MoveWindow (*args, **kwargs):
   return wrapped (win32gui.MoveWindow, *args, **kwargs)
 
 class BaseDialog (object):
   
+  #
+  # User messages to handle the progress aspect of the dialog
+  #
   WM_PROGRESS_MESSAGE = win32con.WM_USER + 1
   WM_PROGRESS_COMPLETE = win32con.WM_USER + 2
-  
+
+  #
+  # Fields, labels & callback buttons are created
+  # in a regular way so they can be determined again
+  # by their offset from the base.
+  #
   IDC_LABEL_BASE = 1025
   IDC_FIELD_BASE = IDC_LABEL_BASE + 1000
   IDC_CALLBACK_BASE = IDC_FIELD_BASE + 1000
@@ -93,6 +105,10 @@ class BaseDialog (object):
   FIELD_W = W - GUTTER_W - LABEL_W - GUTTER_W - GUTTER_W
   BUTTON_W = 36
   CALLBACK_W = CONTROL_H
+  
+  #
+  # Default styles
+  #
   
   #
   # Only the standard Ok & Cancel buttons are allowed
@@ -117,14 +133,20 @@ class BaseDialog (object):
     NB Although sensible default positions are chosen here, the horizontal
     layout will be overridden by the _resize functionality below.
     """
-    if self.progress_callback:
-      self.fields.append ((None, "", None))
-    
     dlg_class_name = _register_wndclass ()
-    style = win32con.WS_THICKFRAME | win32con.WS_POPUP | win32con.WS_VISIBLE | win32con.WS_CAPTION | win32con.WS_SYSMENU | win32con.DS_SETFONT | win32con.WS_MINIMIZEBOX
+    style = reduce (operator.or_, (
+      win32con.WS_THICKFRAME, 
+      win32con.WS_POPUP, 
+      win32con.WS_VISIBLE, 
+      win32con.WS_CAPTION, 
+      win32con.WS_SYSMENU, 
+      win32con.DS_SETFONT, 
+      win32con.WS_MINIMIZEBOX
+    ))
     cs = win32con.WS_CHILD | win32con.WS_VISIBLE
 
-    dlg_h = self.GUTTER_H + len (self.fields) * (self.CONTROL_H + self.GUTTER_H) + self.CONTROL_H + self.GUTTER_H
+    n_fields = len (self.fields) + (1 if self.progress_callback else 0)
+    dlg_h = self.GUTTER_H + n_fields * (self.CONTROL_H + self.GUTTER_H) + self.CONTROL_H + self.GUTTER_H
     dlg = [[self.title, (0, 0, self.W, dlg_h), style, None, (9, "Lucida Sans Regular"), None, dlg_class_name],]
 
     for i, (field, default_value, callback) in enumerate (self.fields):
@@ -143,32 +165,34 @@ class BaseDialog (object):
       else:
         field_type = "EDIT"
       
-      if field_type == "STATIC":
-        field_w = self.W - (2 * self.GUTTER_W)
-        field_l = self.GUTTER_W
-        field_styles = 0
-        self._progress_id = self.IDC_FIELD_BASE + i
-
+      dlg.append (["STATIC", field, self.IDC_LABEL_BASE + i, (label_l, label_t, self.LABEL_W, self.CONTROL_H), cs | win32con.SS_LEFT])
+      if field_type == "BUTTON":
+        field_styles = win32con.WS_TABSTOP | win32con.BS_AUTOCHECKBOX
+        field_w = self.CONTROL_H
+      elif field_type == "COMBOBOX":
+        if callback is not None:
+          raise RuntimeError ("Cannot combine a list with a callback")
+        field_styles = win32con.WS_TABSTOP | win32con.CBS_DROPDOWNLIST
+        field_w = self.FIELD_W
+        field_h = 4 * self.CONTROL_H
+      elif field_type == "EDIT":
+        field_styles = win32con.WS_TABSTOP | win32con.WS_BORDER | win32con.ES_AUTOHSCROLL 
+        field_w = self.FIELD_W - ((self.CALLBACK_W) if callback else 0)
       else:
-        dlg.append (["STATIC", field, self.IDC_LABEL_BASE + i, (label_l, label_t, self.LABEL_W, self.CONTROL_H), cs | win32con.SS_LEFT])
-        if field_type == "BUTTON":
-          field_styles = win32con.WS_TABSTOP | win32con.BS_AUTOCHECKBOX
-          field_w = self.CONTROL_H
-        elif field_type == "COMBOBOX":
-          if callback is not None:
-            raise RuntimeError ("Cannot combine a list with a callback")
-          field_styles = win32con.WS_TABSTOP | win32con.CBS_DROPDOWNLIST
-          field_w = self.FIELD_W
-          field_h = 4 * self.CONTROL_H
-        elif field_type == "EDIT":
-          field_styles = win32con.WS_TABSTOP | win32con.WS_BORDER | win32con.ES_AUTOHSCROLL 
-          field_w = self.FIELD_W - ((self.CALLBACK_W) if callback else 0)
-        else:
-          raise x_dialogs ("Problemo", "_get_dialog_template", 0)
-        
+        raise x_dialogs ("Problemo", "_get_dialog_template", 0)
+
       dlg.append ([field_type, None, self.IDC_FIELD_BASE + i, (field_l, field_t, field_w, field_h), cs | field_styles])
       if callback:
         dlg.append (["BUTTON", "...", self.IDC_CALLBACK_BASE + i, (field_l + field_w + self.GUTTER_W, field_t, self.CALLBACK_W, self.CONTROL_H), cs | win32con.WS_TABSTOP | win32con.BS_PUSHBUTTON])
+
+    i += 1
+    if self.progress_callback:
+      self._progress_id = self.IDC_FIELD_BASE + i
+      field_t = self.GUTTER_H + (self.CONTROL_H + self.GUTTER_H) * i
+      field_w = self.W - (2 * self.GUTTER_W)
+      field_l = self.GUTTER_W
+      field_styles = win32con.SS_CENTER
+      dlg.append (["STATIC", None, self.IDC_FIELD_BASE + i, (field_l, field_t, field_w, field_h), cs | field_styles])
 
     cs = win32con.WS_CHILD | win32con.WS_VISIBLE | win32con.WS_TABSTOP | win32con.BS_PUSHBUTTON
     button_t = field_t + self.CONTROL_H + self.GUTTER_H
@@ -177,12 +201,6 @@ class BaseDialog (object):
 
     return dlg
 
-class ProgressDialog (BaseDialog):
-  
-  def __init__ (self, title, parent_hwnd=0):
-    BaseDialog.__init__ (self, title, parent_hwnd)
-    self.fields = [(None, "")]
-
 class Dialog (BaseDialog):
   """A general-purpose dialog class for collecting arbitrary information in
   text strings and handing it back to the user. Only Ok & Cancel buttons are
@@ -190,7 +208,6 @@ class Dialog (BaseDialog):
   fields is of the form: [(label, default), ...] and the values are saved
   in the same order.
   """
-
   def __init__ (self, title, fields, progress_callback=core.UNSET, parent_hwnd=0):
     """Initialise the dialog with a title and a list of fields of
     the form [(label, default), ...].
@@ -249,8 +266,7 @@ class Dialog (BaseDialog):
     """Attempt to resize the controls on the dialog, spreading
     then horizontally to cover the full extent of the dialog
     box, with left-aligned labels and right-aligned buttons.
-    """
-    
+    """    
     def coords (hwnd, id):
       ctrl = wrapped (win32gui.GetDlgItem, hwnd, id)
       l, t, r, b = wrapped (win32gui.GetWindowRect, ctrl)
@@ -272,7 +288,7 @@ class Dialog (BaseDialog):
           callback_button, l, t, r, b = coords (self.hwnd, self.IDC_CALLBACK_BASE + i)
           callback_w = r - l
           callback_l = dialog_w - self.GUTTER_W - callback_w
-          wrapped (win32gui.MoveWindow, callback_button, callback_l, t, r - l, b - t, repaint)
+          MoveWindow (callback_button, callback_l, t, r - l, b - t, repaint)
         else:
           callback_w = 0
       else:
@@ -281,15 +297,15 @@ class Dialog (BaseDialog):
       field, l, t, r, b = coords (self.hwnd, self.IDC_FIELD_BASE + i)
       field_l = label_r + self.GUTTER_W
       field_w = dialog_w - self.GUTTER_W - field_l - (callback_w + self.GUTTER_W if callback_w else 0)
-      wrapped (win32gui.MoveWindow, field, field_l, t, field_w, b - t, repaint)
+      MoveWindow (field, field_l, t, field_w, b - t, repaint)
 
     for i, (caption, id) in enumerate (reversed (self.BUTTONS)):
       button, l, t, r, b = coords (self.hwnd, id)
-      wrapped (win32gui.MoveWindow, button, dialog_w - ((i + 1) * (self.GUTTER_W + (r - l))), t, r - l, b - t, repaint)
+      MoveWindow (button, dialog_w - ((i + 1) * (self.GUTTER_W + (r - l))), t, r - l, b - t, repaint)
 
   def _get_item (self, item_id):
-    hwnd = win32gui.GetDlgItem (self.hwnd, item_id)
-    class_name = win32gui.GetClassName (hwnd)
+    hwnd = wrapped (win32gui.GetDlgItem, self.hwnd, item_id)
+    class_name = wrapped (win32gui.GetClassName, hwnd)
     if class_name == "Edit":      
       try:
         #
@@ -297,32 +313,32 @@ class Dialog (BaseDialog):
         # from having their text read. Assume any error means that
         # the control is empty.
         #
-        return win32gui.GetDlgItemText (self.hwnd, item_id)
+        return wrapped (win32gui.GetDlgItemText, self.hwnd, item_id)
       except:
         return ""
     elif class_name == "Button":
-      return bool (win32gui.SendMessage (hwnd, win32con.BM_GETCHECK, 0, 0))
+      return bool (SendMessage (hwnd, win32con.BM_GETCHECK, 0, 0))
     elif class_name == "ComboBox":
       field, default, callback = self.fields[item_id - self.IDC_FIELD_BASE]
-      return default[win32gui.SendMessage (hwnd, win32con.CB_GETCURSEL, 0, 0)]
+      return default[SendMessage (hwnd, win32con.CB_GETCURSEL, 0, 0)]
     elif class_name == "Static":
       return None
     else:
       raise RuntimeError ("Unknown class: %s" % class_name)
       
   def _set_item (self, item_id, value):
-    item_hwnd = win32gui.GetDlgItem (self.hwnd, item_id)
-    class_name = win32gui.GetClassName (item_hwnd)
+    item_hwnd = wrapped (win32gui.GetDlgItem, self.hwnd, item_id)
+    class_name = wrapped (win32gui.GetClassName, item_hwnd)
     if class_name == "Edit":
-      win32gui.SetDlgItemText (self.hwnd, item_id, str (value))
+      wrapped (win32gui.SetDlgItemText, self.hwnd, item_id, str (value))
     elif class_name == "Button":
-      win32gui.SendMessage (item_hwnd, win32con.BM_SETCHECK, int (value), 0)
+      SendMessage (item_hwnd, win32con.BM_SETCHECK, int (value), 0)
     elif class_name == "ComboBox":
       for item in value:
-        win32gui.SendMessage (item_hwnd, win32con.CB_ADDSTRING, 0, utils.string_as_pointer (str (item)))
-      win32gui.SendMessage (item_hwnd, win32con.CB_SETCURSEL, 0, 0)
+        SendMessage (item_hwnd, win32con.CB_ADDSTRING, 0, utils.string_as_pointer (str (item)))
+      SendMessage (item_hwnd, win32con.CB_SETCURSEL, 0, 0)
     elif class_name == "Static":
-      win32gui.SetDlgItemText (self.hwnd, item_id, str (value))
+      wrapped (win32gui.SetDlgItemText, self.hwnd, item_id, str (value))
     else:
       raise RuntimeError ("Unknown class: %s" % class_name)
   
@@ -340,7 +356,7 @@ class Dialog (BaseDialog):
     the window's current size and using the minmaxinfo message
     to set the maximum & minimum window heights to be its current height.
     """
-    dlg_l, dlg_t, dlg_r, dlg_b = win32gui.GetWindowRect (hwnd)
+    dlg_l, dlg_t, dlg_r, dlg_b = wrapped (win32gui.GetWindowRect, hwnd)
     #
     # MINMAXINFO is a struct of 5 POINT items, each of which
     # is a pair of LONGs. We extract the structure into a list,
@@ -371,8 +387,7 @@ class Dialog (BaseDialog):
     a utf8-encoded string which is to be displayed in the
     dialog's progress static.
     """
-    print "OnProgressMessage", utils.pointer_as_string (lparam).decode ("utf8")
-    message = utils.pointer_as_string (lparam).decode ("utf8")
+    message = win32gui.PyGetString (lparam, wparam)
     self._set_item (self._progress_id, message)
     
   def OnProgressComplete (self, hwnd, msg, wparam, lparam):
@@ -381,7 +396,6 @@ class Dialog (BaseDialog):
     and setting focus to the ok so a return or space will close
     the dialog.
     """
-    length = wparam
     message = win32gui.PyGetString (lparam, wparam)
     self._set_item (self._progress_id, message)
     self._enable (win32con.IDCANCEL, False)
@@ -389,40 +403,55 @@ class Dialog (BaseDialog):
     wrapped (win32gui.SetFocus, wrapped (win32gui.GetDlgItem, hwnd, win32con.IDOK))
 
   def _progress_complete (self, message):
-    print "_progress_complete", message
+    """Convenience function to tell the dialog that progress is complete,
+    passing a message along which will be displayed in the progress box
+    """
     address, length = win32gui.PyGetBufferAddressAndLen (buffer (message))
-    win32gui.PostMessage (
-      self.hwnd, 
-      self.WM_PROGRESS_MESSAGE, 
-      length, address
-    )
+    PostMessage (self.hwnd, self.WM_PROGRESS_COMPLETE, length, address)
     
   def OnOk (self, hwnd):
+    """When OK is pressed, if this isn't a progress dialog then simply
+    gather the results and return. If this is a progress dialog then
+    start a thread to handle progress via the progress iterator.
+    """
   
     def progress_thread (iterator, cancelled):
+      """Handle the progress side of the dialog by iterating over a supplied
+      iterator (presumably a generator) sending generated values as messages
+      to the progress box -- these might be percentages or files processed
+      or whatever.
+      
+      If the user cancels an event will be fired which is detected here and
+      the iteration broken. Likewise an exception will be logged to the usual
+      places and a suitable message sent.
+      """
       try:
         for message in iterator:
           if cancelled:
             self._progress_complete ("User cancelled")
             break
-          message = unicode (message)
-          win32gui.PostMessage (
-            hwnd, 
-            self.WM_PROGRESS_MESSAGE, 
-            0, utils.string_as_pointer (message.encode ("utf8"))
-          )
+          else:
+            address, length = win32gui.PyGetBufferAddressAndLen (buffer (message))
+            PostMessage (self.hwnd, self.WM_PROGRESS_MESSAGE, length, address)
       except:
+        core.exception ("dialogs.progress_thread")
         self._progress_complete ("Error occurred")
       else:
         self._progress_complete ("Complete")
 
     #
-    # Ignore static fields when returning results
+    # Gather results from fields in the order they were entered
     #
-    self.results = [self._get_item (self.IDC_FIELD_BASE + i) for i, field in enumerate (self.fields) if field[0]]
+    self.results = [self._get_item (self.IDC_FIELD_BASE + i) for i, field in enumerate (self.fields)]
+      
+    #
+    # If this is a progress dialog, disable everything except the
+    # Cancel button and start a thread which will loop over the
+    # iterator keeping an eye out for a cancel event.
+    #
     if self.progress_callback:
       self._set_item (self._progress_id, "Working...")
-      for i in range (len (self.fields) - 1):
+      for i in range (len (self.fields)):
         self._enable (self.IDC_FIELD_BASE + i, False)
       self._enable (win32con.IDOK, False)
       wrapped (win32gui.SetFocus, wrapped (win32gui.GetDlgItem, hwnd, win32con.IDCANCEL))
@@ -433,54 +462,53 @@ class Dialog (BaseDialog):
         args=(progress_iterator, self.progress_cancelled)
       )
       self.progress_thread.start ()
+    
+    #
+    # Either this isn't a progress dialog or the progress is
+    # complete. In either event, close the dialog with an OK state.
+    #
     else:
-      win32gui.EndDialog (self.hwnd, win32con.IDOK)
+      wrapped (win32gui.EndDialog, hwnd, win32con.IDOK)
 
   def OnCancel (self, hwnd):
+    """If the user presses cancel check to see whether we're running within
+    a progress thread. If so, set the cancel event and wait for the thread
+    to catch up. Either way, close the dialog with a cancelled state.
+    """
     self.results = []
     if self.progress_thread:
       self.progress_cancelled.set ()
       self._set_item (self._progress_id, "Cancelling...")
       self.progress_thread.join ()
-    win32gui.EndDialog (self.hwnd, win32con.IDCANCEL)
+    wrapped (win32gui.EndDialog, hwnd, win32con.IDCANCEL)
 
-  def OnCallback (self, hwnd):
-    field_id = self.IDC_FIELD_BASE + id - self.IDC_CALLBACK_BASE
+  def OnCallback (self, hwnd, field_id):
+    """If the user pressed a callback button associated with a text
+    field, find the field and call its callback with the dialog window
+    and the field's current value. If anything is returned, put that
+    value back into the field.
+    """
     field, default, callback = self.fields[field_id - self.IDC_FIELD_BASE]
-    result = callback (self.hwnd, self._get_item (field_id))
+    result = callback (hwnd, self._get_item (field_id))
     if result:
       self._set_item (field_id, result)
 
   def OnCommand (self, hwnd, msg, wparam, lparam):
-    """React to commands from the dialog controls, principally
-    the buttons. If Ok is pressed, set the ok_pressed flag and
-    store the results. If cancel, reset the ok_pressed flag and
-    clear results. In either case, end the dialog.
+    """Handle button presses: OK, Cancel and the callback buttons
+    which are optional for text fields
     """    
     id = win32api.LOWORD (wparam)
-    #
-    # If OK is pressed, copy the fields' current values
-    # into a list in the order in which they were passed
-    # in and displayed and then exit. If Cancel is pressed,
-    # exit without copying the values, resulting in an
-    # empty list.
-    #
     if id == win32con.IDOK:
       self.OnOk (hwnd)
     elif id == win32con.IDCANCEL:
       self.OnCancel (hwnd)
-    
-    #
-    # If one of the callback buttons is pressed, call the
-    # corresponding callback function, passing the dialog's
-    # hwnd and the field's current value. (This is to
-    # facilitate things like a further dialog to fetch
-    # a filename).
-    #
     elif self.IDC_CALLBACK_BASE <= id < (self.IDC_CALLBACK_BASE + len (self.fields)):
-      OnCallback (hwnd)
+      self.OnCallback (hwnd, self.IDC_FIELD_BASE + id - self.IDC_CALLBACK_BASE)
 
 def _fields_to_fields (fields):
+  """Helper function to transform a list of possibly 2-tuple field 
+  tuples into 3-tuples
+  """
   _fields = []
   for field in fields:
     if len (field) < 3:
@@ -498,6 +526,9 @@ def dialog (title, *fields):
   return d.results
 
 def progress_dialog (title, progress_callback, *fields):
+  """Shortcut function to populate an run a dialog with a progress
+  callback which must yield messages
+  """
   d = Dialog (title, _fields_to_fields (fields), progress_callback=progress_callback)
   d.run ()
   return d.results
@@ -509,11 +540,12 @@ def get_filename (start_folder=None, hwnd=None):
   """
   def _set_start_folder (hwnd, msg, lp, data):
     if msg == BFFM.INITIALIZED and data:
-      win32gui.SendMessage (hwnd, BFFM.SETSELECTION, 1, utils.string_as_pointer (data))
+      SendMessage (hwnd, BFFM.SETSELECTION, 1, utils.string_as_pointer (data))
   
   pythoncom.CoInitialize ()
   try:
-    pidl, display_name, image_list = shell.SHBrowseForFolder (
+    pidl, display_name, image_list = wrapped (
+      shell.SHBrowseForFolder,
       hwnd or win32gui.GetDesktopWindow (),
       None,
       "Select a file or folder",
@@ -527,7 +559,7 @@ def get_filename (start_folder=None, hwnd=None):
   if (pidl, display_name, image_list) == (None, None, None):
     return None
   else:
-    return shell.SHGetPathFromIDList (pidl)
+    return wrapped (shell.SHGetPathFromIDList, pidl)
 
 if __name__=='__main__':
   from winsys import fs
@@ -549,15 +581,14 @@ if __name__=='__main__':
     for i in range (10):
       yield str (i)
       time.sleep (0.5)
-      if i % 2 == 1:
+      if i == 8:
         raise RuntimeError
 
-  #~ print dialog (
-    #~ "Test", 
-    #~ ('Root', r'\\vogbs022\user', _get_filename), 
-    #~ ('Ignore access errors', True), 
-    #~ ('Size Threshold (Mb)', '100')
-  #~ )  
-  #~ print dialog ("Test2", ("Scan from:", r"c:\temp", _get_filename), ("List of things", ['Timothy', 'John', 'Golden']))
-  #~ print dialog ("Test3", (None, "Waiting..."))
+  print dialog (
+    "Test", 
+    ('Root', r'\\vogbs022\user', _get_filename), 
+    ('Ignore access errors', True), 
+    ('Size Threshold (Mb)', '100')
+  )  
+  print dialog ("Test2", ("Scan from:", r"c:\temp", _get_filename), ("List of things", ['Timothy', 'John', 'Golden']))
   print progress_dialog ("Test4", progress_callback, ("Root", "c:/temp"), ("Output .csv", "c:/temp/temp.csv"))
