@@ -28,9 +28,16 @@ OPTIONS = \
   security.SECURITY_INFORMATION.DACL | \
   security.SECURITY_INFORMATION.SACL 
 
+#
+# convenience functions
+#
 def handle (filepath):
   return win32file.CreateFile (
     filepath,
+    #
+    # If you don't specify ACCESS_SYSTEM_SECURITY, you won't be able
+    # to read the SACL via this handle.
+    #
     ntsecuritycon.GENERIC_READ | win32con.ACCESS_SYSTEM_SECURITY,
     win32file.FILE_SHARE_READ,
     None,
@@ -38,7 +45,15 @@ def handle (filepath):
     win32file.FILE_ATTRIBUTE_NORMAL,
     None
   )
+  
+def as_string (sd):
+  return win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
+    sd, win32security.SDDL_REVISION_1, OPTIONS
+  )
 
+def equal (sd, security):
+  return as_string (sd) == str (security)
+    
 #
 # Fixtures
 #
@@ -48,6 +63,10 @@ def setup ():
     win32api.GetCurrentProcess (), 
     ntsecuritycon.MAXIMUM_ALLOWED
   )
+  #
+  # If you don't enable SeSecurity, you won't be able to
+  # read SACL in this process.
+  #
   win32security.AdjustTokenPrivileges ( 
     hToken,
     False, 
@@ -101,31 +120,20 @@ def test_security_Security ():
 def test_security_HANDLE_file_type ():
   hFile = handle (TEST_FILE)
   try:
-    s0 = win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
+    assert equal (
       win32security.GetSecurityInfo (hFile, win32security.SE_FILE_OBJECT, OPTIONS),
-      win32security.SDDL_REVISION_1,
-      OPTIONS
+      security.security (hFile, security.SE_OBJECT_TYPE.FILE_OBJECT, options=OPTIONS)
     )
-    s1 = str (security.security (hFile, security.SE_OBJECT_TYPE.FILE_OBJECT, options=OPTIONS))
-    print s0
-    print s1
-    assert s0 == s1
-    #~ assert win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
-      #~ win32security.GetSecurityInfo (hFile, win32security.SE_FILE_OBJECT, OPTIONS),
-      #~ win32security.SDDL_REVISION_1,
-      #~ OPTIONS
-    #~ ) == str (security.security (hFile, security.SE_OBJECT_TYPE.FILE_OBJECT, options=OPTIONS))
   finally:
     hFile.Close ()
 
 def test_security_HANDLE_no_type ():
   hFile = handle (TEST_FILE)
   try:
-    assert win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
+    assert equal (
       win32security.GetSecurityInfo (hFile, win32security.SE_FILE_OBJECT, OPTIONS),
-      win32security.SDDL_REVISION_1,
-      OPTIONS
-    ) == str (security.security (hFile, options=OPTIONS))
+      security.security (hFile, options=OPTIONS)
+    )
   finally:
     hFile.Close ()
 
@@ -133,29 +141,23 @@ def test_security_SD ():
   hFile = handle (TEST_FILE)
   try:
     sa = win32security.GetSecurityInfo (hFile, win32security.SE_FILE_OBJECT, OPTIONS)
-    assert win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
-      sa,
-      win32security.SDDL_REVISION_1,
-      OPTIONS
-    ) == str (security.security (sa, options=OPTIONS))
+    assert equal (sa, security.security (sa, options=OPTIONS))
   finally:
     hFile.Close ()
 
 def test_security_string_no_type ():
-  assert win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
+  assert equal (
     win32security.GetNamedSecurityInfo (TEST_FILE, win32security.SE_FILE_OBJECT, OPTIONS),
-    win32security.SDDL_REVISION_1,
-    OPTIONS
-  ) == str (security.security (TEST_FILE, options=OPTIONS))
+    security.security (TEST_FILE, options=OPTIONS)
+  )
 
 def test_security_string_event ():
   hEvent = win32event.CreateEvent (None, 0, 0, GUID)
   try:
-    assert win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
+    assert equal (
       win32security.GetNamedSecurityInfo (GUID, win32security.SE_KERNEL_OBJECT, OPTIONS),
-      win32security.SDDL_REVISION_1,
-      OPTIONS
-    ) == str (security.security (GUID, security.SE_OBJECT_TYPE.KERNEL_OBJECT, options=OPTIONS))
+      security.security (GUID, security.SE_OBJECT_TYPE.KERNEL_OBJECT, options=OPTIONS)
+    )
   finally:
     hEvent.Close ()
     
@@ -164,12 +166,8 @@ def test_security_nonsense ():
   security.security (object)
 
 def test_Security_from_string ():
-  string = win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
-    win32security.GetNamedSecurityInfo (TEST_FILE, win32security.SE_FILE_OBJECT, OPTIONS),
-    win32security.SDDL_REVISION_1,
-    OPTIONS
-  )
-  assert string == str (security.Security.from_string (string, options=OPTIONS))
+  sd = win32security.GetNamedSecurityInfo (TEST_FILE, win32security.SE_FILE_OBJECT, OPTIONS)
+  assert equal (sd, security.Security.from_string (as_string (sd), options=OPTIONS))
 
 def test_Security_from_security_descriptor ():
   _event = win32event.CreateEvent (None, 0, 0, GUID)
@@ -185,11 +183,7 @@ def test_Security_from_security_descriptor ():
       originating_object_type=security.SE_OBJECT_TYPE.KERNEL_OBJECT, 
       options=OPTIONS
     )
-    assert win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
-      sd, 
-      win32security.SDDL_REVISION_1,
-      OPTIONS
-    ) == str (s)
+    assert equal (sd, s)
     assert s.inherit_handle is True
     assert s._originating_object is hEvent
     assert s._originating_object_type == win32security.SE_KERNEL_OBJECT    
@@ -201,11 +195,10 @@ def test_Security_from_object_HANDLE ():
   hEvent = win32event.OpenEvent (win32event.EVENT_ALL_ACCESS | win32con.ACCESS_SYSTEM_SECURITY, 0, GUID)
   try:
     s = security.Security.from_object (hEvent, security.SE_OBJECT_TYPE.KERNEL_OBJECT, options=OPTIONS)
-    assert win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
+    assert equal (
       win32security.GetSecurityInfo (hEvent, win32security.SE_KERNEL_OBJECT, OPTIONS),
-      win32security.SDDL_REVISION_1,
-      OPTIONS
-    ) == str (s)
+      s
+    )
     assert s.inherit_handle is True
     assert s._originating_object == hEvent
     assert s._originating_object_type == win32security.SE_KERNEL_OBJECT
@@ -216,11 +209,10 @@ def test_Security_from_object_name ():
   hEvent = win32event.CreateEvent (None, 0, 0, GUID)
   try:
     s = security.Security.from_object (GUID, security.SE_OBJECT_TYPE.KERNEL_OBJECT, options=OPTIONS)
-    assert win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
+    assert equal (
       win32security.GetNamedSecurityInfo (GUID, win32security.SE_KERNEL_OBJECT, OPTIONS),
-      win32security.SDDL_REVISION_1,
-      OPTIONS
-    ) == str (s)
+      s
+    )
     assert s.inherit_handle is True
     assert s._originating_object == GUID
     assert s._originating_object_type == win32security.SE_KERNEL_OBJECT

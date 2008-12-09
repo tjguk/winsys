@@ -29,11 +29,23 @@ def teardown ():
   os.close (filehandle)
   os.unlink (filename)
 
-def test_ace_dace ():
+def test_dace_dace ():
   dace = _aces.DACE (everyone, "F", "ALLOW")
   assert _aces.dace (dace) is dace
 
-def test_ace_tuple1 ():
+def test_sace_sace ():
+  sace = _aces.SACE (everyone, "F", "SUCCESS")
+  assert _aces.sace (sace) is sace
+
+def test_ace_dace ():
+  dace = _aces.DACE (everyone, "F", "ALLOW")
+  assert _aces.ace (dace) is dace
+
+def test_ace_sace ():
+  dace = _aces.SACE (everyone, "F", "FAILURE")
+  assert _aces.ace (sace) is sace
+
+def test_dace_tuple1 ():
   dace1 = _aces.dace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE))
   assert dace1.type == win32security.ACCESS_ALLOWED_ACE_TYPE
   assert dace1.is_allowed == True
@@ -43,7 +55,7 @@ def test_ace_tuple1 ():
   assert dace1.object_type is core.UNSET
   assert dace1.inherited_object_type is core.UNSET
   
-def test_ace_tuple2 ():
+def test_dace_tuple2 ():
   dace2 = _aces.dace ((accounts.principal ("Everyone"), "F", "ALLOW"))
   assert dace2.type == win32security.ACCESS_ALLOWED_ACE_TYPE
   assert dace2.is_allowed == True
@@ -54,7 +66,7 @@ def test_ace_tuple2 ():
   assert dace2.inherited_object_type is core.UNSET
 
 @raises (_aces.x_ace)
-def test_ace_invalid ():
+def test_dace_invalid ():
   _aces.dace (None)
 
 def test_dace_eq ():
@@ -82,6 +94,62 @@ def test_dace_lt ():
 
 def test_dace_as_string ():
   _aces.dace (("Everyone", "R", "ALLOW")).as_string ()
+
+#
+# SACE tests
+#
+def test_sace_tuple1 ():
+  sace1 = _aces.sace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, (1, 0)))
+  assert sace1.type == win32security.SYSTEM_AUDIT_ACE_TYPE
+  assert sace1.audit_success
+  assert not sace1.audit_failure
+  assert sace1._trustee.pyobject () == everyone
+  assert sace1._access_mask == ntsecuritycon.GENERIC_ALL
+  assert sace1.flags == _aces.ACE.FLAGS
+  assert sace1.object_type is core.UNSET
+  assert sace1.inherited_object_type is core.UNSET
+  
+def test_sace_tuple2 ():
+  sace1 = _aces.sace ((accounts.principal ("Everyone"), "F", "FAILURE"))
+  assert sace1.type == win32security.SYSTEM_AUDIT_ACE_TYPE
+  assert not sace1.audit_success
+  assert sace1.audit_failure
+  assert sace1._trustee.pyobject () == everyone
+  assert sace1._access_mask == ntsecuritycon.GENERIC_ALL
+  assert sace1.flags == _aces.ACE.FLAGS
+  assert sace1.object_type is core.UNSET
+  assert sace1.inherited_object_type is core.UNSET
+
+@raises (_aces.x_ace)
+def test_sace_invalid ():
+  _aces.sace (None)
+
+def test_sace_eq ():
+  assert \
+    _aces.sace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, (1, 1))) == \
+    _aces.sace ((accounts.principal ("Everyone"), "F", "ALL"))
+
+def test_sace_ne_trustee ():
+   assert \
+    _aces.sace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, (1, 1))) != \
+    _aces.sace ((accounts.principal ("Administrators"), "F", "ALL"))
+
+def test_sace_ne_access ():
+   assert \
+    _aces.sace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, (1, 0))) != \
+    _aces.sace ((accounts.principal ("Everyone"), "R", (1, 0)))
+
+def test_sace_ne_type ():
+   assert \
+    _aces.sace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, (1, 0))) != \
+    _aces.sace ((accounts.principal ("Everyone"), "R", "FAILURE"))
+
+def test_sace_lt ():
+  assert _aces.dace (("Everyone", "R", (0, 1))) < _aces.dace (("Everyone", "R", (1, 1)))
+
+def test_sace_as_string ():
+  _aces.sace (("Everyone", "R", "ALL")).as_string ()
+
 
 #
 # INHERITED_ACE
@@ -201,7 +269,7 @@ def test_ace_trustee_string ():
 #
 # ACE constructors
 #
-def test_ace_from_ace ():
+def test_ace_from_ace_dace ():
   sd = win32security.GetNamedSecurityInfo (
     filename, win32security.SE_FILE_OBJECT, 
     win32security.DACL_SECURITY_INFORMATION
@@ -209,9 +277,23 @@ def test_ace_from_ace ():
   dacl = sd.GetSecurityDescriptorDacl ()
   raw_ace = dacl.GetAce (0)
   ace = _aces.ACE.from_ace (raw_ace)
+  assert isinstance (ace, _aces.DACE)
   assert ace.trustee.pyobject () == everyone
   assert ace.access == ntsecuritycon.FILE_READ_DATA
   assert ace.type == win32security.ACCESS_ALLOWED_ACE_TYPE
+
+def test_ace_from_ace_sace ():
+  sd = win32security.GetNamedSecurityInfo (
+    filename, win32security.SE_FILE_OBJECT, 
+    win32security.SACL_SECURITY_INFORMATION
+  )
+  dacl = sd.GetSecurityDescriptorSacl ()
+  raw_ace = dacl.GetAce (0)
+  ace = _aces.ACE.from_ace (raw_ace)
+  assert isinstance (ace, _aces.SACE)
+  assert ace.trustee.pyobject () == everyone
+  assert ace.access == ntsecuritycon.FILE_READ_DATA
+  assert ace.type == win32security.SYSTEM_AUDIT_ACE_TYPE
 
 ##
 ## TODO: Add tests for object aces, sacl vs dacl aces
@@ -264,3 +346,8 @@ def test_dace_type_invalid ():
 def test_dace_as_tuple ():
   dace = _aces.DACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE)
   assert dace.as_tuple () == (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE)
+
+if __name__ == '__main__':
+  import nose
+  nose.runmodule () 
+  raw_input ("Press enter...")
