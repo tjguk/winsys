@@ -42,6 +42,8 @@ WINERROR_MAP = {
 }
 wrapped = wrapper (WINERROR_MAP, x_dialogs)
 
+ENCODING = "UTF-8"
+
 def as_code (text):
   return text.lower ().replace (" ", "")
 
@@ -299,6 +301,11 @@ class Dialog (BaseDialog):
       field_w = dialog_w - self.GUTTER_W - field_l - (callback_w + self.GUTTER_W if callback_w else 0)
       MoveWindow (field, field_l, t, field_w, b - t, repaint)
 
+    if self._progress_id:
+      field, l, t, r, b = coords (self.hwnd, self._progress_id)
+      field_w = dialog_w - 2 * self.GUTTER_W
+      MoveWindow (field, l, t, field_w, b - t, repaint)
+    
     for i, (caption, id) in enumerate (reversed (self.BUTTONS)):
       button, l, t, r, b = coords (self.hwnd, id)
       MoveWindow (button, dialog_w - ((i + 1) * (self.GUTTER_W + (r - l))), t, r - l, b - t, repaint)
@@ -387,7 +394,7 @@ class Dialog (BaseDialog):
     a utf8-encoded string which is to be displayed in the
     dialog's progress static.
     """
-    message = win32gui.PyGetString (lparam, wparam)
+    message = unicode (win32gui.PyGetString (lparam, wparam), ENCODING)
     self._set_item (self._progress_id, message)
     
   def OnProgressComplete (self, hwnd, msg, wparam, lparam):
@@ -396,7 +403,7 @@ class Dialog (BaseDialog):
     and setting focus to the ok so a return or space will close
     the dialog.
     """
-    message = win32gui.PyGetString (lparam, wparam)
+    message = unicode (win32gui.PyGetString (lparam, wparam), ENCODING)
     self._set_item (self._progress_id, message)
     self._enable (win32con.IDCANCEL, False)
     self._enable (win32con.IDOK, True)
@@ -406,7 +413,7 @@ class Dialog (BaseDialog):
     """Convenience function to tell the dialog that progress is complete,
     passing a message along which will be displayed in the progress box
     """
-    address, length = win32gui.PyGetBufferAddressAndLen (buffer (message))
+    address, length = win32gui.PyGetBufferAddressAndLen (buffer (message.encode (ENCODING)))
     PostMessage (self.hwnd, self.WM_PROGRESS_COMPLETE, length, address)
     
   def OnOk (self, hwnd):
@@ -431,7 +438,7 @@ class Dialog (BaseDialog):
             self._progress_complete ("User cancelled")
             break
           else:
-            address, length = win32gui.PyGetBufferAddressAndLen (buffer (message))
+            address, length = win32gui.PyGetBufferAddressAndLen (buffer (message.encode (ENCODING)))
             PostMessage (self.hwnd, self.WM_PROGRESS_MESSAGE, length, address)
       except:
         core.exception ("dialogs.progress_thread")
@@ -578,17 +585,15 @@ if __name__=='__main__':
         
   def progress_callback (*args):
     import time
-    for i in range (10):
-      yield str (i)
+    for i in u"The quick brown fox jumps over the lazy dog".split ():
+      yield i
       time.sleep (0.5)
-      if i == 8:
-        raise RuntimeError
 
-  print dialog (
-    "Test", 
-    ('Root', r'\\vogbs022\user', _get_filename), 
-    ('Ignore access errors', True), 
-    ('Size Threshold (Mb)', '100')
-  )  
-  print dialog ("Test2", ("Scan from:", r"c:\temp", _get_filename), ("List of things", ['Timothy', 'John', 'Golden']))
+  #~ print dialog (
+    #~ "Test", 
+    #~ ('Root', r'\\vogbs022\user', _get_filename), 
+    #~ ('Ignore access errors', True), 
+    #~ ('Size Threshold (Mb)', '100')
+  #~ )  
+  #~ print dialog ("Test2", ("Scan from:", r"c:\temp", _get_filename), ("List of things", ['Timothy', 'John', 'Golden']))
   print progress_dialog ("Test4", progress_callback, ("Root", "c:/temp"), ("Output .csv", "c:/temp/temp.csv"))
