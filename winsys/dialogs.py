@@ -461,7 +461,8 @@ class Dialog (BaseDialog):
     a utf8-encoded string which is to be displayed in the
     dialog's progress static.
     """
-    message = marshal.loads (win32gui.PyGetString (lparam, wparam))
+    string = win32gui.PyGetString (lparam, wparam)
+    message = marshal.loads (string) 
     self._set_item (self._progress_id, message)
     
   def OnProgressComplete (self, hwnd, msg, wparam, lparam):
@@ -483,12 +484,17 @@ class Dialog (BaseDialog):
     address, length = win32gui.PyGetBufferAddressAndLen (buffer (marshal.dumps (message)))
     PostMessage (self.hwnd, self.WM_PROGRESS_COMPLETE, length, address)
     
+  def _progress_message (self, message):
+    """Convenience function to send progress messages to the dialog
+    """
+    address, length = win32gui.PyGetBufferAddressAndLen (buffer (marshal.dumps (message)))
+    PostMessage (self.hwnd, self.WM_PROGRESS_MESSAGE, length, address)
+    
   def OnOk (self, hwnd):
     """When OK is pressed, if this isn't a progress dialog then simply
     gather the results and return. If this is a progress dialog then
     start a thread to handle progress via the progress iterator.
     """
-  
     def progress_thread (iterator, cancelled):
       """Handle the progress side of the dialog by iterating over a supplied
       iterator (presumably a generator) sending generated values as messages
@@ -505,8 +511,7 @@ class Dialog (BaseDialog):
             self._progress_complete ("User cancelled")
             break
           else:
-            address, length = win32gui.PyGetBufferAddressAndLen (buffer (marshal.dumps (message)))
-            PostMessage (self.hwnd, self.WM_PROGRESS_MESSAGE, length, address)
+            self._progress_message (message)
       except:
         core.exception ("dialogs.progress_thread")
         self._progress_complete ("Error occurred")
