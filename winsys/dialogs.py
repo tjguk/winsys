@@ -1,4 +1,5 @@
 import os, sys
+import marshal
 import operator
 import pythoncom
 import winxpgui as win32gui
@@ -460,7 +461,7 @@ class Dialog (BaseDialog):
     a utf8-encoded string which is to be displayed in the
     dialog's progress static.
     """
-    message = unicode (win32gui.PyGetString (lparam, wparam), ENCODING)
+    message = marshal.loads (win32gui.PyGetString (lparam, wparam))
     self._set_item (self._progress_id, message)
     
   def OnProgressComplete (self, hwnd, msg, wparam, lparam):
@@ -469,7 +470,7 @@ class Dialog (BaseDialog):
     and setting focus to the ok so a return or space will close
     the dialog.
     """
-    message = unicode (win32gui.PyGetString (lparam, wparam), ENCODING)
+    message = marshal.loads (win32gui.PyGetString (lparam, wparam))
     self._set_item (self._progress_id, message)
     self._enable (win32con.IDCANCEL, False)
     self._enable (win32con.IDOK, True)
@@ -479,7 +480,7 @@ class Dialog (BaseDialog):
     """Convenience function to tell the dialog that progress is complete,
     passing a message along which will be displayed in the progress box
     """
-    address, length = win32gui.PyGetBufferAddressAndLen (buffer (message.encode (ENCODING)))
+    address, length = win32gui.PyGetBufferAddressAndLen (buffer (marshal.dumps (message)))
     PostMessage (self.hwnd, self.WM_PROGRESS_COMPLETE, length, address)
     
   def OnOk (self, hwnd):
@@ -504,7 +505,7 @@ class Dialog (BaseDialog):
             self._progress_complete ("User cancelled")
             break
           else:
-            address, length = win32gui.PyGetBufferAddressAndLen (buffer (message.encode (ENCODING)))
+            address, length = win32gui.PyGetBufferAddressAndLen (buffer (marshal.dumps (message)))
             PostMessage (self.hwnd, self.WM_PROGRESS_MESSAGE, length, address)
       except:
         core.exception ("dialogs.progress_thread")
