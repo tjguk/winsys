@@ -82,3 +82,8 @@ def test_Token_change_privileges_disable ():
       assert not status & win32security.SE_PRIVILEGE_ENABLED
   
   _tokens.Token (token0).change_privileges (was_enabled, was_disabled)
+
+if __name__ == '__main__':
+  import nose
+  nose.runmodule () 
+  raw_input ("Press enter...")

@@ -58,3 +58,8 @@ def test_Privilege_enabled_set ():
   luid = win32security.LookupPrivilegeValue ("", win32security.SE_BACKUP_NAME)
   privilege = _privileges.Privilege (luid, win32security.SE_PRIVILEGE_ENABLED)
   assert privilege.enabled and (privilege._attributes & win32security.SE_PRIVILEGE_ENABLED)
+
+if __name__ == '__main__':
+  import nose
+  nose.runmodule () 
+  raw_input ("Press enter...")

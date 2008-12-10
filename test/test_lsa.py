@@ -13,3 +13,8 @@ def teardown ():
 def test_LSA_logon_sessions ():
   for logon_session in _lsa.LSA.logon_sessions ():
     logon_session.dump ()
+
+if __name__ == '__main__':
+  import nose
+  nose.runmodule () 
+  raw_input ("Press enter...")

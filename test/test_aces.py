@@ -42,7 +42,7 @@ def test_ace_dace ():
   assert _aces.ace (dace) is dace
 
 def test_ace_sace ():
-  dace = _aces.SACE (everyone, "F", "FAILURE")
+  sace = _aces.SACE (everyone, "F", "FAILURE")
   assert _aces.ace (sace) is sace
 
 def test_dace_tuple1 ():
@@ -145,7 +145,7 @@ def test_sace_ne_type ():
     _aces.sace ((accounts.principal ("Everyone"), "R", "FAILURE"))
 
 def test_sace_lt ():
-  assert _aces.dace (("Everyone", "R", (0, 1))) < _aces.dace (("Everyone", "R", (1, 1)))
+  assert _aces.sace (("Everyone", "R", (0, 1))) < _aces.sace (("Everyone", "R", (1, 1)))
 
 def test_sace_as_string ():
   _aces.sace (("Everyone", "R", "ALL")).as_string ()

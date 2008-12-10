@@ -190,12 +190,12 @@ class DACE (ACE):
         raise x_unknown_value ("%s is not a valid type string" % type, "_type", core.UNSET)
   
   def __eq__ (self, other):
-    other = self.dace (other)
+    other = self.ace (other)
     return (self.trustee, self.access, self.type) == (other.trustee, other.access, other.type)
     
   def __lt__ (self, other):
     u"""Deny comes first, then what?"""
-    other = self.dace (other)
+    other = self.ace (other)
     return (self.is_allowed < other.is_allowed)
     
 class SACE (ACE):
@@ -239,11 +239,11 @@ class SACE (ACE):
     return self.trustee, self.access, self.type, self.flags, (self.audit_success, self.audit_failure)
 
   def __eq__ (self, other):
-    other = self.sace (other)
+    other = self.ace (other)
     return self.as_tuple () == other.as_tuple ()
     
   def __lt__ (self, other):
-    other = self.sace (other)
+    other = self.ace (other)
     self.as_tuple () < other.as_tuple ()
 
 #

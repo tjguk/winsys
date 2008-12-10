@@ -30,3 +30,8 @@ def test_principal_string ():
 @raises (accounts.x_not_found)
 def test_principal_invalid ():
   accounts.principal (object)
+
+if __name__ == '__main__':
+  import nose
+  nose.runmodule () 
+  raw_input ("Press enter...")

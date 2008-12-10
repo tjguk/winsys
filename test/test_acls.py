@@ -98,3 +98,8 @@ def test_DACL_public ():
 def test_DACL_private ():
   acl = _acls.DACL.private ()
   assert list (acl) == [(me, "F", "ALLOW")]
+
+if __name__ == '__main__':
+  import nose
+  nose.runmodule () 
+  raw_input ("Press enter...")

@@ -471,3 +471,8 @@ def test_Registry_from_string ():
 
 def test_Registry_from_string_value ():
   assert registry.Registry.from_string (TEST_KEY + ":winsys1") == registry.Registry.from_string (TEST_KEY).get_value ("winsys1")
+
+if __name__ == '__main__':
+  import nose
+  nose.runmodule () 
+  raw_input ("Press enter...")

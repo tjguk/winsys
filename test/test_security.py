@@ -218,3 +218,8 @@ def test_Security_from_object_name ():
     assert s._originating_object_type == win32security.SE_KERNEL_OBJECT
   finally:
     hEvent.Close ()
+  
+if __name__ == '__main__':
+  import nose
+  nose.runmodule () 
+  raw_input ("Press enter...")
