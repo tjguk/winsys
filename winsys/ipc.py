@@ -39,8 +39,17 @@ class Mailslot (core._WinSysObject):
     self.name = name
     self.message_size = message_size
     self.timeout_ms = timeout_ms
-    self._hRead = None
-    self._hWrite = None
+    self._hRead = self._hWrite = None
+    #
+    # If the name is a local mailslot it could conceivably
+    # be used for reading or for writing. If it is a
+    # remote (including domain) mailslot, it can only
+    # be written to.
+    #
+    if name.startswith (r"\\."):
+      self._hWrite = None
+    else:
+      self._hWrite = self._write_handle ()
 
   def _read_handle (self):
     if self._hWrite is not None:
