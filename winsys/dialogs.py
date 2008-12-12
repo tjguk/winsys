@@ -461,8 +461,7 @@ class Dialog (BaseDialog):
     a utf8-encoded string which is to be displayed in the
     dialog's progress static.
     """
-    string = win32gui.PyGetString (lparam, wparam)
-    message = marshal.loads (string) 
+    message = marshal.loads (win32gui.PyGetString (lparam, wparam)) 
     self._set_item (self._progress_id, message)
     
   def OnProgressComplete (self, hwnd, msg, wparam, lparam):
