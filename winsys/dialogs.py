@@ -481,14 +481,16 @@ class Dialog (BaseDialog):
     """Convenience function to tell the dialog that progress is complete,
     passing a message along which will be displayed in the progress box
     """
-    address, length = win32gui.PyGetBufferAddressAndLen (buffer (marshal.dumps (message)))
-    PostMessage (self.hwnd, self.WM_PROGRESS_COMPLETE, length, address)
+    _message = buffer (marshal.dumps (message))
+    address, length = win32gui.PyGetBufferAddressAndLen (_message)
+    SendMessage (self.hwnd, self.WM_PROGRESS_COMPLETE, length, address)
     
   def _progress_message (self, message):
     """Convenience function to send progress messages to the dialog
     """
-    address, length = win32gui.PyGetBufferAddressAndLen (buffer (marshal.dumps (message)))
-    PostMessage (self.hwnd, self.WM_PROGRESS_MESSAGE, length, address)
+    _message = buffer (marshal.dumps (message))
+    address, length = win32gui.PyGetBufferAddressAndLen (_message)
+    SendMessage (self.hwnd, self.WM_PROGRESS_MESSAGE, length, address)
     
   def OnOk (self, hwnd):
     """When OK is pressed, if this isn't a progress dialog then simply
