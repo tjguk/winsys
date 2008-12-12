@@ -474,5 +474,5 @@ def test_Registry_from_string_value ():
 
 if __name__ == '__main__':
   import nose
-  nose.runmodule () 
+  nose.runmodule (exit=False) 
   raw_input ("Press enter...")

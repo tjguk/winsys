@@ -2,6 +2,7 @@ import os, sys
 import operator
 
 from nose.tools import *
+import utils
 
 from winsys import core, _aces, accounts
 import win32security
@@ -14,20 +15,24 @@ administrators = accounts.principal ("Administrators")
 
 filehandle = filename = None
 def setup ():
+  utils.change_priv (win32security.SE_SECURITY_NAME, True)
   global filehandle, filename
   filehandle, filename = tempfile.mkstemp ()
   print filename
   dacl = win32security.ACL ()
   dacl.AddAccessAllowedAceEx (win32security.ACL_REVISION_DS, 0, ntsecuritycon.FILE_READ_DATA, everyone)
+  sacl = win32security.ACL ()
+  sacl.AddAuditAccessAce (win32security.ACL_REVISION_DS, ntsecuritycon.FILE_READ_DATA, everyone, 1, 1)
   win32security.SetNamedSecurityInfo (
     filename, win32security.SE_FILE_OBJECT, 
-    win32security.DACL_SECURITY_INFORMATION, 
-    None, None, dacl, None
+    win32security.DACL_SECURITY_INFORMATION | win32security.SACL_SECURITY_INFORMATION, 
+    None, None, dacl, sacl
   )
   
 def teardown ():
   os.close (filehandle)
   os.unlink (filename)
+  utils.change_priv (win32security.SE_SECURITY_NAME, False)
 
 def test_dace_dace ():
   dace = _aces.DACE (everyone, "F", "ALLOW")
@@ -99,7 +104,7 @@ def test_dace_as_string ():
 # SACE tests
 #
 def test_sace_tuple1 ():
-  sace1 = _aces.sace ((accounts.principal (everyone), ntsecuritycon.GENERIC_ALL, (1, 0)))
+  sace1 = _aces.sace ((everyone, ntsecuritycon.GENERIC_ALL, (1, 0)))
   assert sace1.type == win32security.SYSTEM_AUDIT_ACE_TYPE
   assert sace1.audit_success
   assert not sace1.audit_failure
@@ -287,8 +292,8 @@ def test_ace_from_ace_sace ():
     filename, win32security.SE_FILE_OBJECT, 
     win32security.SACL_SECURITY_INFORMATION
   )
-  dacl = sd.GetSecurityDescriptorSacl ()
-  raw_ace = dacl.GetAce (0)
+  sacl = sd.GetSecurityDescriptorSacl ()
+  raw_ace = sacl.GetAce (0)
   ace = _aces.ACE.from_ace (raw_ace)
   assert isinstance (ace, _aces.SACE)
   assert ace.trustee.pyobject () == everyone
@@ -349,5 +354,5 @@ def test_dace_as_tuple ():
 
 if __name__ == '__main__':
   import nose
-  nose.runmodule () 
+  nose.runmodule (exit=False) 
   raw_input ("Press enter...")

@@ -16,5 +16,5 @@ def test_LSA_logon_sessions ():
 
 if __name__ == '__main__':
   import nose
-  nose.runmodule () 
+  nose.runmodule (exit=False) 
   raw_input ("Press enter...")

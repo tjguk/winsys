@@ -57,21 +57,12 @@ def equal (sd, security):
 #
 # Fixtures
 #
-SECURITY_PRIV = win32security.LookupPrivilegeValue (None, win32security.SE_SECURITY_NAME)
 def setup ():
-  hToken = win32security.OpenProcessToken (
-    win32api.GetCurrentProcess (), 
-    ntsecuritycon.MAXIMUM_ALLOWED
-  )
   #
   # If you don't enable SeSecurity, you won't be able to
   # read SACL in this process.
   #
-  win32security.AdjustTokenPrivileges ( 
-    hToken,
-    False, 
-    [(SECURITY_PRIV, win32security.SE_PRIVILEGE_ENABLED)]
-  )
+  utils.change_priv (win32security.SE_SECURITY_NAME, True)
   assert os.path.isdir (TEST_ROOT)
   open (TEST_FILE, "w").close ()
   os.mkdir (TEST1_DIR)
@@ -101,11 +92,7 @@ def teardown ():
   remove (TEST_FILE)
   remove (TEST_ROOT)
 
-  win32security.AdjustTokenPrivileges ( 
-    win32security.OpenProcessToken (win32api.GetCurrentProcess (), ntsecuritycon.MAXIMUM_ALLOWED),
-    False, 
-    [(SECURITY_PRIV, 0)]
-  )
+  utils.change_priv (win32security.SE_SECURITY_NAME, False)
 
 def test_security_None ():
   assert security.security (None) is None
@@ -221,5 +208,5 @@ def test_Security_from_object_name ():
   
 if __name__ == '__main__':
   import nose
-  nose.runmodule () 
+  nose.runmodule (exit=False) 
   raw_input ("Press enter...")

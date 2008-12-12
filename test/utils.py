@@ -1,5 +1,8 @@
+import win32api
 import win32net
 import win32netcon
+import win32security
+import ntsecuritycon
 
 def create_user (user, password):
   user_info = dict (
@@ -46,3 +49,21 @@ def delete_group (group):
     win32net.NetLocalGroupDel (None, group)
   except win32net.error, (errno, errctx, errmsg):
     if errno != 2220: raise
+
+def change_priv (priv_name, enable=True):
+  hToken = win32security.OpenProcessToken (
+    win32api.GetCurrentProcess (), 
+    ntsecuritycon.MAXIMUM_ALLOWED
+  )
+  #
+  # If you don't enable SeSecurity, you won't be able to
+  # read SACL in this process.
+  #
+  win32security.AdjustTokenPrivileges ( 
+    hToken,
+    False, 
+    [(
+      win32security.LookupPrivilegeValue (None, win32security.SE_SECURITY_NAME), 
+      win32security.SE_PRIVILEGE_ENABLED if enable else 0
+    )]
+  )
