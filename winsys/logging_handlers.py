@@ -47,6 +47,8 @@ if __name__ == '__main__':
   logger = logging.getLogger (mailslot_name)
   logger.setLevel (logging.DEBUG)
   logger.addHandler (MailslotHandler (mailslot_name))
+  logger.debug ("DEBUG")
   logger.info ("INFO")
   logger.warn ("WARN")
+  logger.error ("ERROR")
   raw_input ("Press enter...")
