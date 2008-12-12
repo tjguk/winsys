@@ -225,7 +225,13 @@ class SACE (ACE):
   def from_tuple (cls, ace_info):
     (trustee, access, audit_what) = ace_info
     audit_success, audit_failure = cls._audit_what (audit_what)
-    return cls (accounts.principal (trustee), cls._access (access), ACE_TYPE.SYSTEM_AUDIT, audit_success, audit_failure)
+    return cls (
+      trustee=accounts.principal (trustee), 
+      access=cls._access (access), 
+      type=ACE_TYPE.SYSTEM_AUDIT, 
+      audit_success=audit_success, 
+      audit_failure=audit_failure
+    )
 
   @classmethod
   def _audit_what (cls, audit_what):
@@ -244,7 +250,7 @@ class SACE (ACE):
     
   def __lt__ (self, other):
     other = self.ace (other)
-    self.as_tuple () < other.as_tuple ()
+    return self.as_tuple () < other.as_tuple ()
 
 #
 # Friendly constructors

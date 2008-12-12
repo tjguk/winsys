@@ -12,6 +12,7 @@ import pywintypes
 import tempfile
 import uuid
 
+import utils
 from winsys import security
 
 GUID = str (uuid.uuid1 ())
