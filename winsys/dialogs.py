@@ -409,6 +409,8 @@ class Dialog (BaseDialog):
       SendMessage (item_hwnd, win32con.BM_SETCHECK, int (value), 0)
     elif class_name == "ComboBox":
       for item in value:
+        if isinstance (item, tuple):
+          item = item[0]
         SendMessage (item_hwnd, win32con.CB_ADDSTRING, 0, utils.string_as_pointer (str (item)))
       SendMessage (item_hwnd, win32con.CB_SETCURSEL, 0, 0)
     elif class_name == "Static":
