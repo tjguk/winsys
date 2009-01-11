@@ -91,7 +91,12 @@ class DACL (ACL):
       adder_fn = self._ACE_MAP.get (ace.type)
       if adder_fn:
         adder = getattr (acl, adder_fn)
-        adder (constants.REVISION.ACL_REVISION_DS, ace.flags, ace.access, ace.trustee.pyobject ())
+        adder (
+          constants.REVISION.ACL_REVISION_DS, 
+          ace.flags, 
+          ace.access, 
+          ace.trustee.pyobject ()
+        )
       else:
         raise NotImplementedError, ace.type
     return acl
@@ -107,7 +112,7 @@ class DACL (ACL):
 class SACL (ACL):
   _ACE = _aces.SACE
   _ACE_MAP = {
-    _aces.ACE_TYPE.SYSTEM_AUDIT : u"AddAuditAccessAce",
+    _aces.ACE_TYPE.SYSTEM_AUDIT : u"AddAuditAccessAceEx",
   }
   
   def pyobject (self, include_inherited=False):
@@ -120,7 +125,14 @@ class SACL (ACL):
       adder_fn = self._ACE_MAP.get (ace.type)
       if adder_fn:
         adder = getattr (acl, adder_fn)
-        adder (constants.REVISION.ACL_REVISION_DS, ace.access, ace.trustee.pyobject (), ace.audit_success, ace.audit_failure)
+        adder (
+          constants.REVISION.ACL_REVISION_DS, 
+          ace.flags,
+          ace.access, 
+          ace.trustee.pyobject (), 
+          ace.audit_success, 
+          ace.audit_failure
+        )
       else:
         raise NotImplementedError, ace.type
     return acl

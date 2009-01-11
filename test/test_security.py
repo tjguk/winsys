@@ -53,6 +53,8 @@ def as_string (sd):
   )
 
 def equal (sd, security):
+  print as_string (sd)
+  print str (security)
   return as_string (sd) == str (security)
     
 #

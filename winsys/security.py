@@ -135,11 +135,16 @@ class Security (core._WinSysObject):
     
   def dumped (self, level):
     output = []
-    if self._control is not core.UNSET: output.append (u"control:\n%s" % utils.dumped_flags (self._control, SD_CONTROL, level))
-    if self._owner is not core.UNSET: output.append (u"owner: %s" % self.owner)
-    if self._group is not core.UNSET: output.append (u"group: %s" % self.group)
-    if self._dacl is not core.UNSET: output.append (u"dacl:\n%s" % self.dacl.dumped (level))
-    if self._sacl is not core.UNSET: output.append (u"sacl:\n%s" % self.sacl.dumped (level))
+    if self._control is not core.UNSET: 
+      output.append (u"control:\n%s" % utils.dumped_flags (self._control, SD_CONTROL, level))
+    if self._owner is not core.UNSET: 
+      output.append (u"owner: %s" % self.owner)
+    if self._group is not core.UNSET: 
+      output.append (u"group: %s" % self.group)
+    if self._dacl is not core.UNSET: 
+      output.append (u"dacl:\n%s" % self.dacl.dumped (level))
+    if self._sacl is not core.UNSET: 
+      output.append (u"sacl:\n%s" % self.sacl.dumped (level))
     return utils.indented (u"\n".join (output), level)
   
   def break_inheritance (self, copy_first=True):
@@ -226,12 +231,14 @@ class Security (core._WinSysObject):
         options |= SECURITY_INFORMATION.OWNER
       if self._group is not core.UNSET:
         options |= SECURITY_INFORMATION.GROUP
+      
       if self._dacl is not core.UNSET:
         options |= SECURITY_INFORMATION.DACL
         if self.inherits:
           options |= SECURITY_INFORMATION.UNPROTECTED_DACL
         else:
           options |= SECURITY_INFORMATION.PROTECTED_DACL
+      
       if self._sacl is not core.UNSET:
         options |= SECURITY_INFORMATION.SACL
         if self.inherits:
@@ -273,9 +280,11 @@ class Security (core._WinSysObject):
     sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_AUTO_INHERITED, self._control & SD_CONTROL.DACL_AUTO_INHERITED)
     sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_AUTO_INHERITED, self._control & SD_CONTROL.SACL_AUTO_INHERITED)
     if self.inherits:
-      sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, 0)
+      if dacl: sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, 0)
+      if sacl: sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_PROTECTED, 0)
     else:
-      sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, SD_CONTROL.DACL_PROTECTED)
+      if dacl: sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, SD_CONTROL.DACL_PROTECTED)
+      if sacl: sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_PROTECTED, SD_CONTROL.SACL_PROTECTED)
 
     if owner:
       sa.SetSecurityDescriptorOwner (owner, False)
@@ -286,8 +295,8 @@ class Security (core._WinSysObject):
     # respectively, whether the ACL is present (!) and whether
     # it's the result of inheritance.
     #
-    sa.SetSecurityDescriptorDacl (True, dacl, False)
-    sa.SetSecurityDescriptorSacl (True, sacl, False)
+    sa.SetSecurityDescriptorDacl (True, dacl, self.inherits)
+    sa.SetSecurityDescriptorSacl (True, sacl, self.inherits)
     return sa
 
   @classmethod
