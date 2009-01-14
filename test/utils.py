@@ -55,15 +55,11 @@ def change_priv (priv_name, enable=True):
     win32api.GetCurrentProcess (), 
     ntsecuritycon.MAXIMUM_ALLOWED
   )
-  #
-  # If you don't enable SeSecurity, you won't be able to
-  # read SACL in this process.
-  #
   win32security.AdjustTokenPrivileges ( 
     hToken,
     False, 
     [(
-      win32security.LookupPrivilegeValue (None, win32security.SE_SECURITY_NAME), 
+      win32security.LookupPrivilegeValue (None, priv_name), 
       win32security.SE_PRIVILEGE_ENABLED if enable else 0
     )]
   )

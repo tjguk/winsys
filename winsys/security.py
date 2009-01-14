@@ -13,8 +13,7 @@ from winsys import constants, core, utils
 from winsys._tokens import token, Token
 from winsys._aces import dace, sace
 from winsys._acls import acl, DACL, SACL
-from winsys._privileges import privilege
-from winsys._tokens import token
+from winsys._privileges import privilege, PRIVILEGE_ATTRIBUTE, PRIVILEGE
 from winsys.accounts import principal
 from winsys.exceptions import *
 

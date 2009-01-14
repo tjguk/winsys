@@ -46,9 +46,7 @@ class Mailslot (core._WinSysObject):
     # remote (including domain) mailslot, it can only
     # be written to.
     #
-    if name.startswith (r"\\."):
-      self._hWrite = None
-    else:
+    if not name.startswith (r"\\."):
       self._hWrite = self._write_handle ()
 
   def _read_handle (self):
