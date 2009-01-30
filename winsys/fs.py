@@ -636,7 +636,7 @@ class Entry (core._WinSysObject):
         yield ancestor
 
   def security (self, options=security.Security.DEFAULT_OPTIONS):
-    return security.Security.read (self._filepath, options=options)
+    return security.security (self._filepath, options=options)
     
   def compress (self):
     with Handle (self._filepath, True) as hFile:
@@ -960,7 +960,7 @@ def move (source_filepath, target_filepath, callback=None, callback_data=None, c
 def copy (source_filepath, target_filepath, callback=None, callback_data=None):
   target_file = file (target_filepath)
   if target_file and target_file.directory:
-    target_filepath.join (source.name)
+    target_filepath.join (source_filepath)
   wrapped (
     win32file.CopyFileEx,
     utils.normalised (source_filepath), 
