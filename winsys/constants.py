@@ -12,7 +12,7 @@ is useful when displaying Win32 structures.
 """
 import re
 
-from win32com.taskscheduler import taskscheduler
+#~ from win32com.taskscheduler import taskscheduler
 from win32com.shell import shellcon
 import win32con
 import win32event
@@ -161,10 +161,10 @@ ACCESS.update (dict (
 GENERIC_ACCESS = Constants.from_pattern (u"GENERIC_*", namespace=ntsecuritycon)
 STANDARD_ACCESS = Constants.from_list ([u"STANDARD_RIGHTS_READ", u"STANDARD_RIGHTS_WRITE", u"SYNCHRONIZE"], namespace=ntsecuritycon)
 
-SCHEDULED_TASK_ERROR = Constants.from_pattern (u"SCHED_E_*", namespace=taskscheduler)
-TASKPAGE = Constants.from_pattern (u"TASKPAGE_*", namespace=taskscheduler)
-TASK = Constants.from_pattern (u"TASK_*", namespace=taskscheduler)
-TASK_PRIORITY = Constants.from_pattern (u"*_PRIORITY_CLASS", namespace=taskscheduler)
+#~ SCHEDULED_TASK_ERROR = Constants.from_pattern (u"SCHED_E_*", namespace=taskscheduler)
+#~ TASKPAGE = Constants.from_pattern (u"TASKPAGE_*", namespace=taskscheduler)
+#~ TASK = Constants.from_pattern (u"TASK_*", namespace=taskscheduler)
+#~ TASK_PRIORITY = Constants.from_pattern (u"*_PRIORITY_CLASS", namespace=taskscheduler)
 
 
 FSCTL = Constants.from_pattern (u"FSCTL_*", namespace=winioctlcon)
