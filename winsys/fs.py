@@ -205,7 +205,6 @@ class FilePath (unicode):
     ones as instance attributes:
     
     FilePath.parts - a list of the components
-    FilePath.drive - drive letter, or UNC server/mount
     FilePath.root - always a backslash
     FilePath.filename - final component (may be blank)
     FilePath.name - same as filename unless empty in which case second-last component
@@ -661,7 +660,16 @@ class Entry (core._WinSysObject):
     return move (self._filepath, unicode (other), callback, callback_data)
     
   def take_ownership (self):
-    with self.security () as s:
+    """Set the new owner of the file to be the logged-on user.
+    This is no more than a slight shortcut to the equivalent
+    security operations.
+    """
+    #
+    # Specify no options when reading as we may have no rights 
+    # whatsoever on the security descriptor and be relying on
+    # the take_ownership privilege.
+    #
+    with self.security (options=0) as s:
       s.owner = security.Principal.me ()
     
 class File (Entry):
@@ -680,6 +688,9 @@ class File (Entry):
     return delete (self._filepath)
     
   def copy (self, other, callback=None, callback_data=None):
+    other_file = file (other)
+    if other_file and other_file.directory:
+      other = os.path.join (other, self.filepath.filename)
     return copy (self._filepath, unicode (other), callback, callback_data)
     
   def equal_contents (self, other):

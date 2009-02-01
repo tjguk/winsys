@@ -8,6 +8,8 @@ import winerror
 from winsys import constants, core, utils, accounts, _aces
 from winsys.exceptions import *
 
+__all__ = ['x_acl', 'ACL', 'DACL', 'SACL', 'acl', 'dacl', 'sacl']
+
 PyACL = pywintypes.ACLType
 
 class x_acl (x_winsys):

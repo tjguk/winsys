@@ -6,15 +6,17 @@ import operator
 
 import win32security
 import win32api
+import win32con
+import win32process
 import pywintypes
 import winerror
 
 from winsys import constants, core, utils
-from winsys._tokens import token, Token
-from winsys._aces import dace, sace
-from winsys._acls import acl, DACL, SACL
-from winsys._privileges import privilege, PRIVILEGE_ATTRIBUTE, PRIVILEGE
-from winsys.accounts import principal
+from winsys._tokens import *
+from winsys._aces import *
+from winsys._acls import *
+from winsys._privileges import *
+from winsys.accounts import *
 from winsys.exceptions import *
 
 SE_OBJECT_TYPE = constants.Constants.from_list ([
@@ -116,13 +118,13 @@ class Security (core._WinSysObject):
   
   def as_string (self):
     security_information = 0
-    if self._owner:
+    if self._owner is not core.UNSET:
       security_information |= SECURITY_INFORMATION.OWNER
-    if self._group:
+    if self._group is not core.UNSET:
       security_information |= SECURITY_INFORMATION.GROUP
-    if self._dacl:
+    if self._dacl is not core.UNSET:
       security_information |= SECURITY_INFORMATION.DACL
-    if self._sacl:
+    if self._sacl is not core.UNSET:
       security_information |= SECURITY_INFORMATION.SACL
     sa = self.pyobject (include_inherited=True)
     return wrapped (
@@ -179,7 +181,7 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No DACL has been set for this Security object")
     return self._dacl
   def _set_dacl (self, dacl):
-    self._dacl = acl (dacl, DACL) or core.UNSET
+    self._dacl = acl (dacl, DACL)
   dacl = property (_get_dacl, _set_dacl)
 
   def _get_sacl (self):
@@ -187,7 +189,7 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No SACL has been set for this Security object")
     return self._sacl
   def _set_sacl (self, sacl):
-    self._sacl = acl (sacl, SACL) or core.UNSET
+    self._sacl = acl (sacl, SACL)
   sacl = property (_get_sacl, _set_sacl)
 
   def __enter__ (self):
@@ -395,3 +397,28 @@ def change_privileges (enable_privs=[], disable_privs=[], _token=core.UNSET):
   old_enabled_privs, old_disabled_privs = _token.change_privileges (enable_privs, disable_privs)
   yield _token
   _token.change_privileges (old_enabled_privs, old_disabled_privs)
+
+def runas (user, password, command_line):
+  with principal (user).impersonate (password, logon_type=LOGON.LOGON_INTERACTIVE) as hToken:
+    token (hToken).dump ()
+    hDuplicateToken = wrapped (
+      win32security.DuplicateTokenEx,
+      hToken,
+      win32security.SecurityImpersonation,
+      constants.GENERAL.MAXIMUM_ALLOWED,
+      win32security.TokenPrimary,
+      None
+    )
+    return wrapped (
+      win32process.CreateProcessAsUser, 
+      hDuplicateToken, 
+      None, 
+      command_line,
+      None,
+      None,
+      1,
+      0,
+      None,
+      None,
+      win32process.STARTUPINFO ()
+    )

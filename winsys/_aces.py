@@ -6,6 +6,8 @@ import win32security
 from winsys import core, utils, accounts, constants
 from winsys.exceptions import *
 
+__all__ = ['x_ace', 'x_unknown_value', 'ACE_FLAG', 'ACE_TYPE', 'DACE_TYPE', 'SACE_TYPE', 'ACE', 'DACE', 'SACE', 'dace', 'sace', 'ace']
+
 class x_ace (x_winsys):
   pass
 

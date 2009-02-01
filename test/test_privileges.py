@@ -1,8 +1,13 @@
+from __future__ import with_statement
 import os, sys
 import operator
 
 from winsys import _privileges
 import win32security
+
+def _token_privs ():
+  token = _privileges._get_token ()
+  return dict (win32security.GetTokenInformation (token, win32security.TokenPrivileges))
 
 def test_privilege_Privilege ():
   privilege = _privileges.Privilege (win32security.LookupPrivilegeValue ("", win32security.SE_BACKUP_NAME))
@@ -34,11 +39,17 @@ def test_Privilege_eq ():
   assert \
     _privileges.privilege (win32security.SE_BACKUP_NAME) == \
     _privileges.privilege (win32security.SE_BACKUP_NAME)
+  assert not \
+    _privileges.privilege (win32security.SE_BACKUP_NAME) == \
+    _privileges.privilege (win32security.SE_RESTORE_NAME)
 
 def test_Privilege_ne ():
   assert \
     _privileges.privilege (win32security.SE_BACKUP_NAME) != \
     _privileges.privilege (win32security.SE_RESTORE_NAME)
+  assert not \
+    _privileges.privilege (win32security.SE_BACKUP_NAME) != \
+    _privileges.privilege (win32security.SE_BACKUP_NAME)
 
 def test_Privilege_lt ():
   assert \
@@ -59,6 +70,13 @@ def test_Privilege_enabled_set ():
   privilege = _privileges.Privilege (luid, win32security.SE_PRIVILEGE_ENABLED)
   assert privilege.enabled and (privilege._attributes & win32security.SE_PRIVILEGE_ENABLED)
 
+def test_Privilege_context ():
+  luid = win32security.LookupPrivilegeValue ("", win32security.SE_BACKUP_NAME)
+  assert not bool (_token_privs ()[luid])
+  with _privileges.privilege (luid) as p:
+    assert bool (_token_privs ()[luid])
+  assert not bool (_token_privs ()[luid])
+  
 if __name__ == '__main__':
   import nose
   nose.runmodule (exit=False) 

@@ -10,6 +10,8 @@ import pywintypes
 from winsys import constants, core, utils, accounts, _aces, _acls, _privileges
 from winsys.exceptions import *
 
+__all__ = ['Token', 'token', 'x_token', 'x_no_token']
+
 class x_token (x_winsys):
   pass
 
@@ -108,10 +110,10 @@ class Token (core._WinSysObject):
   def unimpersonate (self):
     wrapped (win32security.RevertToSelf)
     
-def token (token=object):
+def token (token=core.UNSET):
   if token is None:
     return None
-  elif token is object:
+  elif token is core.UNSET:
     return Token.from_thread ()
   elif type (token) is PyHANDLE:
     return Token (token)

@@ -97,10 +97,24 @@ def teardown ():
 
   utils.change_priv (win32security.SE_SECURITY_NAME, False)
 
+#
+# The security function should convert its argument to something
+# useful:
+#
+# None is return unchanged
+# (default) returns an empty Security instance
+# a Security instance is returned unchanged
+# a handle specified as a file returns a corresponding Security instance 
+# an unspecified handle is assumed to be a file and the corresponding Security instance returned
+# a pywin32 security descriptor returns the corresponding Security object
+# a filename operates like an unspecified handle
+# a name specified as something other than a file returns the corresponding Security object
+# anything else should raise an x_security exception
+#
 def test_security_None ():
   assert security.security (None) is None
 
-def test_security_object ():
+def test_security_default ():
   assert security.security () == security.Security ()
 
 def test_security_Security ():
@@ -155,6 +169,12 @@ def test_security_string_event ():
 def test_security_nonsense ():
   security.security (object)
 
+#
+# The Security class has a number of class-level constructors
+# .from_string expects an SDDL string
+# .from_security_descriptor expects a pywin32 security descriptor
+# .from_object expects either an object handle or an object name
+#
 def test_Security_from_string ():
   sd = win32security.GetNamedSecurityInfo (TEST_FILE, win32security.SE_FILE_OBJECT, OPTIONS)
   assert equal (sd, security.Security.from_string (as_string (sd), options=OPTIONS))

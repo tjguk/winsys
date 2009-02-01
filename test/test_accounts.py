@@ -1,5 +1,7 @@
+from __future__ import with_statement
 import os, sys
 
+import win32api
 import win32security
 from nose.tools import *
 
@@ -30,7 +32,13 @@ def test_principal_string ():
 @raises (accounts.x_not_found)
 def test_principal_invalid ():
   accounts.principal (object)
-
+  
+def text_context ():
+  assert win32api.GetUserName () <> "alice"
+  with accounts.principal ("alice").impersonate ("Passw0rd"):
+    assert win32api.GetUserName () == "alice"
+  assert win32api.GetUserName () <> "alice"
+  
 if __name__ == '__main__':
   import nose
   nose.runmodule (exit=False) 
