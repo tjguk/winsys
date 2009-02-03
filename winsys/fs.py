@@ -926,7 +926,12 @@ def walk (top, depthfirst=False, ignore_access_errors=False):
   if depthfirst: yield top, dirs, nondirs
 
 def flat (root, pattern="*", includedirs=False, depthfirst=False, ignore_access_errors=False):
-  for dirpath, dirs, files in walk (utils.normalised (root.rstrip (seps)), depthfirst=depthfirst, ignore_access_errors=ignore_access_errors):
+  walker = walk (
+    utils.normalised (root.rstrip (seps) + sep),
+    depthfirst=depthfirst, 
+    ignore_access_errors=ignore_access_errors
+  )
+  for dirpath, dirs, files in walker:
     if includedirs:
       for dir in dirs:
         if fnmatch.fnmatch (dir.name, pattern):

@@ -421,26 +421,27 @@ def change_privileges (enable_privs=[], disable_privs=[], _token=core.UNSET):
   _token.change_privileges (old_enabled_privs, old_disabled_privs)
 
 def runas (user, password, command_line):
-  with principal (user).impersonate (password, logon_type=LOGON.LOGON_INTERACTIVE) as hToken:
-    token (hToken).dump ()
-    hDuplicateToken = wrapped (
-      win32security.DuplicateTokenEx,
-      hToken,
-      win32security.SecurityImpersonation,
-      constants.GENERAL.MAXIMUM_ALLOWED,
-      win32security.TokenPrimary,
-      None
-    )
-    return wrapped (
-      win32process.CreateProcessAsUser, 
-      hDuplicateToken, 
-      None, 
-      command_line,
-      None,
-      None,
-      1,
-      0,
-      None,
-      None,
-      win32process.STARTUPINFO ()
-    )
+  with privilege (PRIVILEGE.TCB):
+    with principal (user).impersonate (password, logon_type=LOGON.LOGON_INTERACTIVE) as hToken:
+      token (hToken).dump ()
+      hDuplicateToken = wrapped (
+        win32security.DuplicateTokenEx,
+        hToken,
+        win32security.SecurityImpersonation,
+        constants.GENERAL.MAXIMUM_ALLOWED,
+        win32security.TokenPrimary,
+        None
+      )
+      return wrapped (
+        win32process.CreateProcessAsUser, 
+        hDuplicateToken, 
+        None, 
+        command_line,
+        None,
+        None,
+        1,
+        0,
+        None,
+        None,
+        win32process.STARTUPINFO ()
+      )
