@@ -10,24 +10,26 @@ from wsgiref.util import request_uri, application_uri, shift_path_info
 from winsys import fs
 
 def get_files (path, size_threshold, results):
-  while True:
     for f in fs.flat (path, ignore_access_errors=True):
       try:
         if f.size > size_threshold:
           results.put (f)
       except:
         pass
+        
+    results.put (None)
 
 class App (object):
   
   REFRESH_THRESHOLD = 1000
-  SIZE_THRESHOLD = 1024 * 1024
+  SIZE_THRESHOLD = 10 * 1024 * 1024
   TOP_N_FILES = 50
    
   def __init__ (self, path):
     self.path = path
     self.files_queue = Queue.Queue ()
     self.files = set ()
+    self.complete = False
     
     file_getter = threading.Thread (
       target=get_files, 
@@ -39,25 +41,22 @@ class App (object):
   def __call__ (self, environ, start_response):
     path = shift_path_info (environ)
     if path.rstrip ("/") == "":
-      start_response (
-        "200 OK", 
-        [
-          ("Content-Type", "text/html; charset=utf-8"),
-          ("Refresh", "60"),
-        ]
-      )
+      headers = [("Content-Type", "text/html; charset=utf-8")]
+      if not self.complete: headers.append (("Refresh", "60"))
+      start_response ("200 OK", headers)
       return (d.encode ("utf8") + "\n" for d in self.handler ())
     else:      
       start_response ("404 Not Found", [("Content-Type", "text/plain")])
       return []
 
   def doc (self, files):
-    title = "Top %d / %d files on %s over %dMb" % (self.TOP_N_FILES, len (files), self.path, self.SIZE_THRESHOLD / 1024.0 / 1024.0)
+    title = "Top %d of %s files on %s over %dMb" % (self.TOP_N_FILES, "all" if self.complete else len (files), self.path, self.SIZE_THRESHOLD / 1024.0 / 1024.0)
     doc = []
     doc.append (u"<html><head><title>%s</title>" % title)
     doc.append (u"""<style>
     body {font-family : verdana, arial, sans-serif;}
     p.updated {margin-bottom : 1em; font-style : italic;}
+    table {width : 100%;}
     thead tr {background-color : black; color : white; font-weight : bold;}
     table td {padding-right : 0.5em;}
     table td.filename {width : 72%;}
@@ -79,7 +78,11 @@ class App (object):
     for i in range (self.REFRESH_THRESHOLD):
       try:
         f = self.files_queue.get_nowait ()
-        self.files.add (f)
+        if f is None:
+          self.complete = True
+          break
+        else:
+          self.files.add (f)
       except Queue.Empty:
         break
     return self.doc (sorted (self.files, key=_key))
