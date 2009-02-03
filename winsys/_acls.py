@@ -20,6 +20,20 @@ WINERROR_MAP = {
 wrapped = wrapper (WINERROR_MAP, x_acl)
 
 class ACL (core._WinSysObject):
+  """An ACL maps the Windows security ACL concept, but behaves like
+  a Python list. You can append to it, iterate over it, delete from
+  it, check its length and test it for membership. A special case is
+  made for the so-called NULL ACL. This is different from an empty
+  ACL (which is effectively completely restrictive). A NULL ACL is
+  completely unrestrictive. This is mapped by holding None and treating
+  this specially where needed.
+  
+  DACL & SACL subclasses are defined to cope with the slightly different
+  ways in which the structures are manipulated, but the core functionality
+  is in this base class. This class need rarely be instantiated directly;
+  normally it will be invoked by the Security class which is accessor
+  properties for this purpose.
+  """
 
   _ACE = _aces.ACE
 

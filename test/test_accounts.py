@@ -7,12 +7,6 @@ from nose.tools import *
 
 from winsys import accounts
 
-def setup ():
-  pass
-
-def teardown ():
-  pass
-
 def test_principal_None ():
   assert accounts.principal (None) is None
 

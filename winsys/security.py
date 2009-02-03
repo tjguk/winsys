@@ -125,6 +125,7 @@ class Security (core._WinSysObject):
     if self._dacl is not core.UNSET:
       security_information |= SECURITY_INFORMATION.DACL
     if self._sacl is not core.UNSET:
+      print "self._sacl =", repr (self._sacl)
       security_information |= SECURITY_INFORMATION.SACL
     sa = self.pyobject (include_inherited=True)
     return wrapped (
@@ -181,7 +182,10 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No DACL has been set for this Security object")
     return self._dacl
   def _set_dacl (self, dacl):
-    self._dacl = acl (dacl, DACL)
+    #~ if dacl is None:
+      #~ self._dacl = core.UNSET
+    #~ else:
+      self._dacl = acl (dacl, DACL)
   dacl = property (_get_dacl, _set_dacl)
 
   def _get_sacl (self):
@@ -189,7 +193,10 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No SACL has been set for this Security object")
     return self._sacl
   def _set_sacl (self, sacl):
-    self._sacl = acl (sacl, SACL)
+    #~ if sacl is None:
+      #~ self._sacl = core.UNSET
+    #~ else:
+      self._sacl = acl (sacl, SACL)
   sacl = property (_get_sacl, _set_sacl)
 
   def __enter__ (self):
@@ -339,6 +346,21 @@ class Security (core._WinSysObject):
     control, revision = sd.GetSecurityDescriptorControl ()
     owner = sd.GetSecurityDescriptorOwner () if SECURITY_INFORMATION.OWNER & options else core.UNSET
     group = sd.GetSecurityDescriptorGroup () if SECURITY_INFORMATION.GROUP & options else core.UNSET
+    #
+    # These next couple of lines are tricky. We have, for each ACL, three
+    # situations. An ACL which simply isn't present (often the SACL); an ACL
+    # which is present but which is NULL (aka the NULL ACL); an ACL which is
+    # present and which is not NULL, altho' it may have nothing in it!
+    #
+    # For the first, we store core.UNSET; for the second we pass None to our ACL
+    # class and for the third and third we pass the PyACL through to our ACL.
+    #
+    # This is more complicated, tho', because the pywin32 GetSecurityDescriptorDacl/Sacl
+    # function returns None in the first *and* second cases, making it impossible
+    # to determine whether there is or isn't a DACL found. This means we can't
+    # really distinguish a NULL ACL from a non-existent ACL. For simplicity, assume
+    # it's there and pass None through to the ACL.
+    #
     dacl = sd.GetSecurityDescriptorDacl () if SECURITY_INFORMATION.DACL & options else core.UNSET
     sacl = sd.GetSecurityDescriptorSacl () if SECURITY_INFORMATION.SACL & options else core.UNSET
     return cls (

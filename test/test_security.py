@@ -229,6 +229,68 @@ def test_Security_from_object_name ():
   finally:
     hEvent.Close ()
   
+@raises (security.x_value_not_set)
+def test_Security_no_owner ():
+  security.security ().owner
+
+@raises (security.x_value_not_set)
+def test_Security_no_group ():
+  security.security ().group
+
+@raises (security.x_value_not_set)
+def test_Security_no_dacl ():
+  security.security ().dacl
+
+@raises (security.x_value_not_set)
+def test_Security_no_sacl ():
+  security.security ().sacl
+
+@raises (security.x_value_not_set)
+def test_Security_set_owner_none ():
+  s = security.security ()
+  s.owner = None
+  s.owner
+
+@raises (security.x_value_not_set)
+def test_Security_set_group_none ():
+  s = security.security ()
+  s.group = None
+  s.group
+  
+def test_Security_set_dacl_none ():
+  s = security.security ()
+  s.dacl = None
+  assert s.dacl is None
+  assert s.pyobject ().GetSecurityDescriptorDacl () is None  
+
+def test_Security_set_sacl_none ():
+  s = security.security ()
+  s.sacl = None
+  assert s.sacl is None
+  assert s.pyobject ().GetSecurityDescriptorSacl () is None
+
+def test_Security_set_owner ():
+  s = security.security ()
+  s.owner = "Administrator"
+  assert s.owner == security.principal ("Administrator")
+
+def test_Security_set_group ():
+  s = security.security ()
+  s.group = "Everyone"
+  assert s.group == security.principal ("Everyone")
+
+def test_Security_set_dacl_empty ():
+  s = security.security ()
+  s.dacl = []
+  assert len (s.dacl) == 0
+  assert s.pyobject ().GetSecurityDescriptorDacl ().GetAceCount () == 0
+
+def test_Security_set_sacl_empty ():
+  s = security.security ()
+  s.sacl = []
+  assert len (s.sacl) == 0
+  assert s.pyobject ().GetSecurityDescriptorSacl ().GetAceCount () == 0
+
 if __name__ == '__main__':
   import nose
   nose.runmodule (exit=False) 
