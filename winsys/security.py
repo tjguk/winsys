@@ -182,9 +182,9 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No DACL has been set for this Security object")
     return self._dacl
   def _set_dacl (self, dacl):
-    #~ if dacl is None:
-      #~ self._dacl = core.UNSET
-    #~ else:
+    if dacl is core.UNSET:
+      self._dacl = core.UNSET
+    else:
       self._dacl = acl (dacl, DACL)
   dacl = property (_get_dacl, _set_dacl)
 
@@ -193,9 +193,9 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No SACL has been set for this Security object")
     return self._sacl
   def _set_sacl (self, sacl):
-    #~ if sacl is None:
-      #~ self._sacl = core.UNSET
-    #~ else:
+    if sacl is core.UNSET:
+      self._sacl = core.UNSET
+    else:
       self._sacl = acl (sacl, SACL)
   sacl = property (_get_sacl, _set_sacl)
 
@@ -361,8 +361,14 @@ class Security (core._WinSysObject):
     # really distinguish a NULL ACL from a non-existent ACL. For simplicity, assume
     # it's there and pass None through to the ACL.
     #
-    dacl = sd.GetSecurityDescriptorDacl () if SECURITY_INFORMATION.DACL & options else core.UNSET
-    sacl = sd.GetSecurityDescriptorSacl () if SECURITY_INFORMATION.SACL & options else core.UNSET
+    if not control & SD_CONTROL.DACL_PRESENT:
+      dacl = core.UNSET
+    else:
+      dacl = sd.GetSecurityDescriptorDacl () if SECURITY_INFORMATION.DACL & options else core.UNSET
+    if not control & SD_CONTROL.SACL_PRESENT:
+      sacl = core.UNSET
+    else:
+      sacl = sd.GetSecurityDescriptorSacl () if SECURITY_INFORMATION.SACL & options else core.UNSET
     return cls (
       control,
       owner, group, dacl, sacl,
