@@ -1,3 +1,9 @@
+"""Run a simple web server which responds to requests to monitor a directory
+tree and identify files over a certain size threshold. The directory is
+scanned to pick up the current situation and then monitored for new / removed
+files. By default, the page auto-refreshes every 60 seconds and shows the
+top 50 files ordered by size.
+"""
 from __future__ import with_statement
 import os, sys
 import cgi
@@ -8,7 +14,7 @@ import Queue
 import urllib
 import urlparse
 from wsgiref.simple_server import make_server
-from wsgiref.util import request_uri, application_uri, shift_path_info
+from wsgiref.util import shift_path_info
 
 from winsys import fs
 
@@ -26,16 +32,14 @@ def get_files (path, size_threshold_mb, results, stop_event):
 
 def watch_files (path, size_threshold_mb, results, stop_event):
   size_threshold = size_threshold_mb * 1024 * 1024
-  watcher = fs.watch (path)
+  watcher = fs.watch (path, True)
   while True:
     if stop_event.is_set (): break
-    action, old_filename, new_filename = watcher.next ()
-    if old_filename:
-      old_file = fs.file (os.path.join (path, old_filename))
+    action, old_file, new_file = watcher.next ()
+    if old_file:
       if (not old_file) or (old_file and old_file.size > size_threshold):
         results.put (old_file)
-    if new_filename and new_filename<> old_filename:
-      new_file = fs.file (os.path.join (path, new_filename))
+    if new_file and new_file <> old_file:
       if new_file and new_file.size > size_threshold:
         results.put (new_file)
 
