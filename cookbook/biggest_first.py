@@ -18,8 +18,6 @@ from wsgiref.util import shift_path_info
 
 from winsys import fs
 
-PORT = "8000"
-
 def get_files (path, size_threshold_mb, results, stop_event):
   """Intended to run inside a thread: scan the contents of
   a tree recursively, pushing every file which is at least
@@ -28,7 +26,7 @@ def get_files (path, size_threshold_mb, results, stop_event):
   """
   size_threshold = size_threshold_mb * 1024 * 1024
   for f in fs.flat (path, ignore_access_errors=True):
-    if stop_event.is_set (): break
+    if stop_event.isSet (): break
     try:
       if f.size > size_threshold:
         results.put (f)
@@ -43,7 +41,7 @@ def watch_files (path, size_threshold_mb, results, stop_event):
   size_threshold = size_threshold_mb * 1024 * 1024
   watcher = fs.watch (path, True)
   while True:
-    if stop_event.is_set (): break
+    if stop_event.isSet (): break
     action, old_file, new_file = watcher.next ()
     if old_file:
       if (not old_file) or (old_file and old_file.size > size_threshold):
@@ -53,6 +51,19 @@ def watch_files (path, size_threshold_mb, results, stop_event):
         results.put (new_file)
 
 class Path (object):
+  """Keep track of the files and changes under a particular
+  path tree. No attempt is made to optimise the cases where
+  one tree is contained within another.
+  
+  When the Path is started, it kicks of two threads: one to
+  do a complete scan; the other to monitor changes. Both
+  write back to the same results queue which is the basis
+  for the set of files which will be sorted and presented
+  on the webpage.
+  
+  For manageability, the files are pulled off the queue a
+  chunk at a time (by default 1000).
+  """
   
   def __init__ (self, path, size_threshold_mb, n_files_at_a_time):
     self._path = path
@@ -81,6 +92,11 @@ class Path (object):
   __repr__ = __str__
 
   def updated (self):
+    """Pull at most _n_files_at_a_time files from the queue. If the
+    file exists, add it to the set (which will, of course, ignore
+    duplicates). If it doesn't exist, remove it from the set, ignoring
+    the case where it isn't there to start with.
+    """
     for i in range (self._n_files_at_a_time):
       try:
         f = self._changes.get_nowait ()
@@ -96,6 +112,11 @@ class Path (object):
     self._stop_event.set ()
 
 class App (object):
+  """The controlling WSGI app. On each request, it looks up the
+  path handler which corresponds to the path form variable. It then
+  pulls any new entries and displays them according to the user's
+  parameters.
+  """
   
   PATH = ""
   N_FILES_AT_A_TIME = 1000
@@ -170,9 +191,12 @@ class App (object):
     path = form.get ("path", self.PATH)
     size_threshold_mb = int (form.get ("size_threshold_mb", self.SIZE_THRESHOLD_MB) or 0)
     refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
-    print self.paths
-    print self._paths_accessed
     if path and fs.Dir (path):
+      #
+      # Ignore any non-existent paths, including garbage.
+      # Create a new path handler if needed, or pull back
+      # and existing one, and return the latest list.
+      #
       with self._paths_lock:
         path_handler = self.paths.setdefault (path, Path (path, size_threshold_mb, self.N_FILES_AT_A_TIME))
         if path_handler._size_threshold_mb <> size_threshold_mb:
@@ -200,9 +224,13 @@ class App (object):
     return self.doc (files, form)
  
   def __call__ (self, environ, start_response):
+    """Only attempt to handle the root URI. If a refresh interval
+    is requested (the default) then send a header which forces
+    the refresh.
+    """
     path = shift_path_info (environ)
     if path.rstrip ("/") == "":
-      form = dict ((k, v[0]) for (k, v) in urlparse.parse_qs (environ['QUERY_STRING']).items () if v)
+      form = dict ((k, v[0]) for (k, v) in cgi.parse_qs (environ['QUERY_STRING']).items () if v)
       refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
       headers = []
       headers.append (("Content-Type", "text/html; charset=utf-8"))
@@ -218,15 +246,16 @@ class App (object):
     for path_handler in self.paths.values ():
       path_handler.finish ()
 
-def run_browser ():
-  import os
-  os.startfile ("http://localhost:%s" % PORT)
-
 if __name__ == '__main__':
-  threading.Timer (3.0, run_browser).start ()
+  PORT = 8000
+  threading.Timer (
+    3.0, 
+    lambda: os.startfile ("http://localhost:%s" % PORT)
+  ).start ()
+  
   app = App ()
   try:
-    make_server ('', int (PORT), app).serve_forever ()
+    make_server ('', PORT, app).serve_forever ()
   except KeyboardInterrupt:
     print "Shutting down gracefully..."
   finally:
