@@ -881,7 +881,9 @@ def file (filepath, ignore_access_errors=False):
     else:
       return Dir (filepath)
   
-  if isinstance (filepath, Entry):
+  if filepath is None:
+    return None
+  elif isinstance (filepath, Entry):
     return filepath
   else:
     try:
@@ -1141,6 +1143,7 @@ class _DirWatcher (object):
   BUFFER_SIZE = 8192
   
   def __init__ (self, root, subdirs=False, watch_for=WATCH_FOR, buffer_size=BUFFER_SIZE):
+    self.root = root
     self.subdirs = subdirs
     self.watch_for = watch_for
     self.buffer_size = buffer_size
@@ -1187,8 +1190,10 @@ class _DirWatcher (object):
       elif action == FILE_ACTION.RENAMED_NEW_NAME:
         new_name = filename
 
+      old_name = os.path.join (self.root, old_name) if old_name else None
+      new_name = os.path.join (self.root, new_name) if new_name else None
       if action:
-        result = (action, old_name, new_name)
+        result = (action, file (old_name), file (new_name))
         if result <> last_result:
           self._changes.append (result)
       
@@ -1203,7 +1208,7 @@ def watch (root, subdirs=False, watch_for=_DirWatcher.WATCH_FOR, buffer_size=_Di
 
 if __name__ == '__main__':
   print "Watching", os.path.abspath (".")
-  watcher = watcher (".", True)
+  watcher = watch (".", True)
   try:
     for action, old_filename, new_filename in watcher:
       if action in (FILE_ACTION.ADDED, FILE_ACTION.MODIFIED):

@@ -21,6 +21,11 @@ from winsys import fs
 PORT = "8000"
 
 def get_files (path, size_threshold_mb, results, stop_event):
+  """Intended to run inside a thread: scan the contents of
+  a tree recursively, pushing every file which is at least
+  as big as the size threshold onto a results queue. Stop
+  if the stop_event is set.
+  """
   size_threshold = size_threshold_mb * 1024 * 1024
   for f in fs.flat (path, ignore_access_errors=True):
     if stop_event.is_set (): break
@@ -31,6 +36,10 @@ def get_files (path, size_threshold_mb, results, stop_event):
       continue
 
 def watch_files (path, size_threshold_mb, results, stop_event):
+  """Intended to run inside a thread: monitor a directory tree
+  for file changes. Convert the changed files to fs.File objects
+  and push then onto a results queue. Stop if the stop_event is set.
+  """
   size_threshold = size_threshold_mb * 1024 * 1024
   watcher = fs.watch (path, True)
   while True:
