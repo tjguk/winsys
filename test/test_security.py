@@ -260,13 +260,11 @@ def test_Security_set_group_none ():
 def test_Security_set_dacl_none ():
   s = security.security ()
   s.dacl = None
-  assert s.dacl is None
   assert s.pyobject ().GetSecurityDescriptorDacl () is None  
 
 def test_Security_set_sacl_none ():
   s = security.security ()
   s.sacl = None
-  assert s.sacl is None
   assert s.pyobject ().GetSecurityDescriptorSacl () is None
 
 def test_Security_set_owner ():
