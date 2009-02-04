@@ -166,6 +166,8 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No Owner has been set for this Security object")
     return self._owner
   def _set_owner (self, owner):
+    if owner is None:
+      raise x_value_not_set (u"Cannot set owner to None for this Security object")
     self._owner = principal (owner) or core.UNSET
   owner = property (_get_owner, _set_owner)
 
@@ -174,6 +176,8 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No Group has been set for this Security object")
     return self._group
   def _set_group (self, group):
+    if group is None:
+      raise x_value_not_set (u"Cannot set group to None for this Security object")
     self._group = principal (group) or core.UNSET
   group = property (_get_group, _set_group)
 

@@ -261,33 +261,64 @@ def test_Security_set_dacl_none ():
   s = security.security ()
   s.dacl = None
   assert s.pyobject ().GetSecurityDescriptorDacl () is None  
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  sd.SetSecurityDescriptorDacl (1, None, 0)
+  assert equal (sd, s)  
 
 def test_Security_set_sacl_none ():
   s = security.security ()
   s.sacl = None
   assert s.pyobject ().GetSecurityDescriptorSacl () is None
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  sd.SetSecurityDescriptorSacl (1, None, 0)
+  assert equal (sd, s)  
 
 def test_Security_set_owner ():
+  administrator = security.principal ("Administrator")
   s = security.security ()
   s.owner = "Administrator"
-  assert s.owner == security.principal ("Administrator")
+  assert s.owner == administrator
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  sd.SetSecurityDescriptorOwner (administrator.pyobject (), 0)
+  assert equal (sd, s)
 
 def test_Security_set_group ():
+  everyone = security.principal ("Everyone")
   s = security.security ()
   s.group = "Everyone"
-  assert s.group == security.principal ("Everyone")
+  assert s.group == everyone
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  sd.SetSecurityDescriptorGroup (everyone.pyobject (), 0)
+  assert equal (sd, s)
 
 def test_Security_set_dacl_empty ():
   s = security.security ()
   s.dacl = []
   assert len (s.dacl) == 0
   assert s.pyobject ().GetSecurityDescriptorDacl ().GetAceCount () == 0
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  acl = win32security.ACL ()
+  sd.SetSecurityDescriptorDacl (1, acl, 0)
+  assert equal (sd, s)
 
 def test_Security_set_sacl_empty ():
   s = security.security ()
   s.sacl = []
   assert len (s.sacl) == 0
   assert s.pyobject ().GetSecurityDescriptorSacl ().GetAceCount () == 0
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  acl = win32security.ACL ()
+  sd.SetSecurityDescriptorSacl (1, acl, 0)
+  assert equal (sd, s)
+
+#~ def test_Security_add_to_dacl ():
+  #~ s = security.security ()
+  #~ s.dacl = []
+  #~ s.dacl.append (("Administrator", "F", "ALLOW"))
+  #~ sd = win32security.SECURITY_DESCRIPTOR ()
+  #~ dacl = win32security.ACL ()
+  #~ dacl.
+  #~ sd.SetSecurityDescriptorDacl (1, 
 
 if __name__ == '__main__':
   import nose
