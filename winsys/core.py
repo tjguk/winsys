@@ -67,14 +67,19 @@ class Unset (object):
 
 UNSET = Unset ()
 
-LOGGING_FORMAT = u"%(asctime)s - %(levelname)s - %(name)s - %(message)s"
-logging.basicConfig (filename=u"winsys.log", format=LOGGING_FORMAT)
+#
+# Create a logger without any handlers. 
+#
 _logger = logging.getLogger (u"winsys")
-_logger.setLevel (logging.DEBUG)
-
 debug = _logger.debug
 log = _logger.log
 info = _logger.info
 warn = _logger.warn
 error = _logger.error
 exception = _logger.exception
+
+def add_logging_handler (handler):
+  _logger.addHandler (handler)
+  
+def remove_logging_handler (handler):
+  _logger.removeHandler (handler)
