@@ -1,6 +1,7 @@
 from __future__ import with_statement
 import os, sys
 import cgi
+import datetime
 import threading
 import time
 import Queue
@@ -92,6 +93,7 @@ class App (object):
   def __init__ (self):
     self._paths_lock = threading.Lock ()
     self.paths = {}
+    self._paths_accessed = {}
   
   def doc (self, files, form):
     path = form.get ("path", self.PATH)
@@ -156,13 +158,30 @@ class App (object):
     size_threshold_mb = int (form.get ("size_threshold_mb", self.SIZE_THRESHOLD_MB) or 0)
     refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
     print self.paths
-    if path:
+    print self._paths_accessed
+    if path and fs.Dir (path):
       with self._paths_lock:
         path_handler = self.paths.setdefault (path, Path (path, size_threshold_mb, self.N_FILES_AT_A_TIME))
         if path_handler._size_threshold_mb <> size_threshold_mb:
           path_handler.finish ()
           path_handler = self.paths[path] = Path (path, size_threshold_mb, self.N_FILES_AT_A_TIME)
+        self._paths_accessed[path] = datetime.datetime.now ()
         files = sorted (path_handler.updated (), key=_key)
+        
+        #
+        # If any path hasn't been queried for at least
+        # three minutes, close the thread down and delete
+        # its entry. If it is queried again, it will just
+        # be restarted as new.
+        #
+        for path, last_accessed in self._paths_accessed.items ():
+          if (datetime.datetime.now () - last_accessed).seconds > 180:
+            path_handler = self.paths.get (path)
+            if path_handler:
+              path_handler.finish ()
+              del self.paths[path]
+              del self._paths_accessed[path]
+    
     else:
       files = []
     return self.doc (files, form)
