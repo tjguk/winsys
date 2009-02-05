@@ -37,12 +37,13 @@ class ACL (core._WinSysObject):
 
   _ACE = _aces.ACE
 
-  def __init__ (self, acl=None):
+  def __init__ (self, acl=None, inherited=True):
     core._WinSysObject.__init__ (self)
     if acl is None:
       self._list = None
     else:
       self._list = list (self._ACE.from_ace (acl.GetAce (index)) for index in range (acl.GetAceCount ()))
+    self.inherited = inherited
     
     #
     # Used when inheritance is broken to keep
@@ -52,6 +53,7 @@ class ACL (core._WinSysObject):
 
   def dumped (self, level=0):
     output = []
+    output.append (u"inherited: %s" % self.inherited)
     for ace in self._list or []:
       output.append (ace.dumped (level))
     return utils.dumped (u"\n".join (output), level)
@@ -66,13 +68,21 @@ class ACL (core._WinSysObject):
       return iter (sorted (self._list))
 
   def append (self, _ace):
-    self._list.append (self._ACE.ace (_ace))
+    """Append an ACE to the ACL; it is assumed to be
+    non-inherited as it's meaningless to add an inherited
+    ace into an ACL.
+    """
+    ace = self._ACE.ace (_ace)
+    ace.inherited = False
+    self._list.append (ace)
 
   def __getitem__ (self, index):
     return self._list[index]
 
   def __setitem__ (self, index, item):
-    self._list[index] = self._ACE.ace (item)
+    ace = self._ACE.ace (item)
+    ace.inherited = False
+    self._list[index] = ace
 
   def __delitem__ (self, index):
     del self._list[index]
@@ -104,10 +114,13 @@ class ACL (core._WinSysObject):
           ace.inherited = False
       else:
         self._list = [a for a in (self._list or []) if not a.inherited]
-      
-  def restore_inheritance (self):
-    if self._list is not None:
-      self._list.extend (self._original_list)
+    self.inherited = False
+
+  def restore_inheritance (self, copy_back):
+    if copy_back:
+      if self._list is not None:
+        self._list.extend (self._original_list)
+    self.inherited = True
 
 class DACL (ACL):
   _ACE = _aces.DACE

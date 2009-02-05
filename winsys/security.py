@@ -111,8 +111,6 @@ class Security (core._WinSysObject):
     if sacl is not core.UNSET:
       self.sacl = sacl
 
-    self.inherits = not bool (self._control & SD_CONTROL.DACL_PROTECTED)
-
   def __eq__ (self, other):
     return str (self) == str (other)
   
@@ -148,20 +146,18 @@ class Security (core._WinSysObject):
     if self._sacl is not core.UNSET: 
       output.append (u"sacl:\n%s" % self.sacl.dumped (level))
     return utils.indented (u"\n".join (output), level)
-  
-  def break_inheritance (self, copy_first=True):
-    if self._dacl:
-      self.dacl.break_inheritance (copy_first)
-    if self._sacl:
-      self.sacl.break_inheritance (copy_first)
-    self.inherits = False
 
-  def restore_inheritance (self):
-    if self._dacl:
-      self.dacl.restore_inheritance ()
-    if self._sacl:
-      self.sacl.restore_inheritance ()
-    self.inherits = True
+  def break_inheritance (self, copy_first=True, break_dacl=True, break_sacl=True):
+    if break_dacl and self._dacl:
+      self.dacl.break_inheritance (copy_first)
+    if break_sacl and self._sacl:
+      self.sacl.break_inheritance (copy_first)
+
+  def restore_inheritance (self, copy_back=True, restore_dacl=True, restore_sacl=True):
+    if restore_dacl and self._dacl:
+      self.dacl.restore_inheritance (copy_back)
+    if restore_sacl and self._sacl:
+      self.sacl.restore_inheritance (copy_back)
   
   def _get_owner (self):
     if self._owner is core.UNSET:
@@ -248,14 +244,14 @@ class Security (core._WinSysObject):
       
       if self._dacl is not core.UNSET:
         options |= SECURITY_INFORMATION.DACL
-        if self.inherits:
+        if self.dacl.inherited:
           options |= SECURITY_INFORMATION.UNPROTECTED_DACL
         else:
           options |= SECURITY_INFORMATION.PROTECTED_DACL
       
       if self._sacl is not core.UNSET:
         options |= SECURITY_INFORMATION.SACL
-        if self.inherits:
+        if self.sacl.inherited:
           options |= SECURITY_INFORMATION.UNPROTECTED_SACL
         else:
           options |= SECURITY_INFORMATION.PROTECTED_SACL
@@ -290,15 +286,21 @@ class Security (core._WinSysObject):
     group = None if self._group is core.UNSET else self._group.pyobject ()
     dacl = None if self._dacl is core.UNSET else self._dacl.pyobject (include_inherited=include_inherited)
     sacl = None if self._sacl is core.UNSET else self._sacl.pyobject (include_inherited=include_inherited)
+    dacl_inherited = self.dacl.inherited if dacl else 0
+    sacl_inherited = self.sacl.inherited if sacl else 0
     
     sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_AUTO_INHERITED, self._control & SD_CONTROL.DACL_AUTO_INHERITED)
     sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_AUTO_INHERITED, self._control & SD_CONTROL.SACL_AUTO_INHERITED)
-    if self.inherits:
-      if dacl: sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, 0)
-      if sacl: sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_PROTECTED, 0)
-    else:
-      if dacl: sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, SD_CONTROL.DACL_PROTECTED)
-      if sacl: sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_PROTECTED, SD_CONTROL.SACL_PROTECTED)
+    if dacl:
+      if dacl_inherited:
+        sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, 0)
+      else:
+        sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, SD_CONTROL.DACL_PROTECTED)
+    if sacl:
+      if sacl_inherited:
+        sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_PROTECTED, 0)
+      else:
+        sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_PROTECTED, SD_CONTROL.SACL_PROTECTED)
 
     if owner:
       sa.SetSecurityDescriptorOwner (owner, False)
@@ -309,8 +311,8 @@ class Security (core._WinSysObject):
     # respectively, whether the ACL is present (!) and whether
     # it's the result of inheritance.
     #
-    sa.SetSecurityDescriptorDacl (True, dacl, self.inherits)
-    sa.SetSecurityDescriptorSacl (True, sacl, self.inherits)
+    sa.SetSecurityDescriptorDacl (True, dacl, dacl_inherited)
+    sa.SetSecurityDescriptorSacl (True, sacl, sacl_inherited)
     return sa
 
   @classmethod
