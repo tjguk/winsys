@@ -150,16 +150,18 @@ class Security (core._WinSysObject):
     return utils.indented (u"\n".join (output), level)
   
   def break_inheritance (self, copy_first=True):
-    if copy_first and self.dacl:
-      for ace in self.dacl:
-        ace.inherited = False
-    else:
-      self.dacl = [a for a in (self.dacl or []) if not a.inherited]
+    if self._dacl:
+      self.dacl.break_inheritance (copy_first)
+    if self._sacl:
+      self.sacl.break_inheritance (copy_first)
     self.inherits = False
 
   def restore_inheritance (self):
+    if self._dacl:
+      self.dacl.restore_inheritance ()
+    if self._sacl:
+      self.sacl.restore_inheritance ()
     self.inherits = True
-    self.dacl = self.dacl
   
   def _get_owner (self):
     if self._owner is core.UNSET:

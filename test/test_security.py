@@ -311,14 +311,47 @@ def test_Security_set_sacl_empty ():
   sd.SetSecurityDescriptorSacl (1, acl, 0)
   assert equal (sd, s)
 
-#~ def test_Security_add_to_dacl ():
-  #~ s = security.security ()
-  #~ s.dacl = []
-  #~ s.dacl.append (("Administrator", "F", "ALLOW"))
-  #~ sd = win32security.SECURITY_DESCRIPTOR ()
-  #~ dacl = win32security.ACL ()
-  #~ dacl.
-  #~ sd.SetSecurityDescriptorDacl (1, 
+def test_Security_add_to_dacl_simple ():
+  administrator = security.principal ("Administrator")
+  s = security.security ()
+  s.dacl = []
+  s.dacl.append (("Administrator", "F", "ALLOW"))
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  dacl = win32security.ACL ()
+  dacl.AddAccessAllowedAceEx (
+    win32security.ACL_REVISION_DS, 
+    security.DACE.FLAGS,
+    ntsecuritycon.GENERIC_ALL, 
+    administrator.pyobject ()
+  )
+  sd.SetSecurityDescriptorDacl (1, dacl, 0)
+  assert equal (sd, s)
+
+def test_Security_add_to_sacl_simple ():
+  administrator = security.principal ("Administrator")
+  s = security.security ()
+  s.sacl = []
+  s.sacl.append (("Administrator", "F", "SUCCESS"))
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  sacl = win32security.ACL ()
+  sacl.AddAuditAccessAceEx (
+    win32security.ACL_REVISION_DS, 
+    security.SACE.FLAGS,
+    ntsecuritycon.GENERIC_ALL,
+    administrator.pyobject (),
+    1, 0
+  )
+  sd.SetSecurityDescriptorSacl (1, sacl, 0)
+  assert equal (sd, s)
+  
+def test_Security_break_inheritance ():
+  s = security.security (TEST_FILE)
+  assert s.inherits
+  s.break_inheritance (False)
+  s.to_object ()
+  sd = win32security.GetNamedSecurityInfo (TEST_FILE, win32security.SE_FILE_OBJECT, OPTIONS)
+  assert (sd.GetSecurityDescriptorControl ()[0] & win32security.SE_DACL_PROTECTED)
+  assert sd.GetSecurityDescriptorDacl ().GetAceCount () == 0
 
 if __name__ == '__main__':
   import nose

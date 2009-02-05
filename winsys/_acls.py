@@ -43,6 +43,12 @@ class ACL (core._WinSysObject):
       self._list = None
     else:
       self._list = list (self._ACE.from_ace (acl.GetAce (index)) for index in range (acl.GetAceCount ()))
+    
+    #
+    # Used when inheritance is broken to keep
+    # a copy of the inherited list.
+    #
+    self._original_list = []
 
   def dumped (self, level=0):
     output = []
@@ -89,7 +95,20 @@ class ACL (core._WinSysObject):
     for a in aces:
       acl.append (cls._ACE.ace (a))
     return acl
-  
+    
+  def break_inheritance (self, copy_first):
+    if self._list is not None:
+      self._original_list = [a for a in self._list if a.inherited]
+      if copy_first:
+        for ace in self._list:
+          ace.inherited = False
+      else:
+        self._list = [a for a in (self._list or []) if not a.inherited]
+      
+  def restore_inheritance (self):
+    if self._list is not None:
+      self._list.extend (self._original_list)
+
 class DACL (ACL):
   _ACE = _aces.DACE
   _ACE_MAP = {
