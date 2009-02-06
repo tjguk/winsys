@@ -73,19 +73,19 @@ class Path (object):
     self._stop_event = threading.Event ()
     self._files = set ()
     
-    file_getter = threading.Thread (
+    self.file_getter = threading.Thread (
       target=get_files, 
       args=(path, size_threshold_mb, self._changes, self._stop_event)
     )
-    file_getter.setDaemon (1)
-    file_getter.start ()
+    self.file_getter.setDaemon (1)
+    self.file_getter.start ()
     
-    file_watcher = threading.Thread (
+    self.file_watcher = threading.Thread (
       target=watch_files,
       args=(path, size_threshold_mb, self._changes, self._stop_event)
     )
-    file_watcher.setDaemon (1)
-    file_watcher.start ()
+    self.file_watcher.setDaemon (1)
+    self.file_watcher.start ()
     
   def __str__ (self):
     return "<Path: %s (%d files above %d Mb)>" % (self._path, len (self._files), self._size_threshold_mb)
@@ -110,7 +110,15 @@ class Path (object):
     
   def finish (self):
     self._stop_event.set ()
-
+    
+  def status (self):
+    status = []
+    if self.file_getter.isAlive ():
+      status.append ("Scanning")
+    if self.file_watcher.isAlive ():
+      status.append ("Monitoring")
+    return " & ".join (status)
+    
 class App (object):
   """The controlling WSGI app. On each request, it looks up the
   path handler which corresponds to the path form variable. It then
@@ -129,12 +137,12 @@ class App (object):
     self.paths = {}
     self._paths_accessed = {}
   
-  def doc (self, files, form):
+  def doc (self, files, status, form):
     path = form.get ("path", self.PATH)
     top_n_files = int (form.get ("top_n_files", self.TOP_N_FILES) or 0)
     size_threshold_mb = int (form.get ("size_threshold_mb", self.SIZE_THRESHOLD_MB) or 0)
     refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
-    title = "Top %d files on %s over %dMb" % (top_n_files, path, size_threshold_mb)
+    title = cgi.escape ("Top %d files on %s over %dMb - %s" % (top_n_files, path, size_threshold_mb, status))
     
     doc = []
     doc.append (u"<html><head><title>%s</title>" % title)
@@ -191,6 +199,7 @@ class App (object):
     path = form.get ("path", self.PATH)
     size_threshold_mb = int (form.get ("size_threshold_mb", self.SIZE_THRESHOLD_MB) or 0)
     refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
+    status = "Waiting"
     if path and fs.Dir (path):
       #
       # Ignore any non-existent paths, including garbage.
@@ -204,6 +213,7 @@ class App (object):
           path_handler = self.paths[path] = Path (path, size_threshold_mb, self.N_FILES_AT_A_TIME)
         self._paths_accessed[path] = datetime.datetime.now ()
         files = sorted (path_handler.updated (), key=_key)
+        status = path_handler.status ()
         
         #
         # If any path hasn't been queried for at least
@@ -221,7 +231,7 @@ class App (object):
     
     else:
       files = []
-    return self.doc (files, form)
+    return self.doc (files, status, form)
  
   def __call__ (self, environ, start_response):
     """Only attempt to handle the root URI. If a refresh interval
