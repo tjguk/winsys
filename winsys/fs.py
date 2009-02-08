@@ -1065,7 +1065,7 @@ def mount (filepath, vol):
 def dismount (filepath):
   return wrapped (win32file.DeleteVolumeMountPoint, utils.normalised (filepath) + sep)
 
-class _DirWatcherAsync (object):
+class _DirWatcher (object):
   
   WATCH_FOR = reduce (operator.or_, FILE_NOTIFY_CHANGE.values ())
   BUFFER_SIZE = 8192
@@ -1127,75 +1127,6 @@ class _DirWatcherAsync (object):
             result = (action, old_name, new_name)
             if result <> last_result:
               self._changes.append (result)
-      
-      if self._changes:
-        return self._changes.popleft ()
-  
-  def stop (self):
-    self.hDir.close ()
-    
-def watch_async (root, subdirs=False, watch_for=_DirWatcherAsync.WATCH_FOR, buffer_size=_DirWatcherAsync.BUFFER_SIZE):
-  return _DirWatcherAsync (root, subdirs, watch_for, buffer_size)
-
-class _DirWatcher (object):
-  
-  WATCH_FOR = reduce (operator.or_, FILE_NOTIFY_CHANGE.values ())
-  BUFFER_SIZE = 8192
-  
-  def __init__ (self, root, subdirs=False, watch_for=WATCH_FOR, buffer_size=BUFFER_SIZE):
-    self.root = root
-    self.subdirs = subdirs
-    self.watch_for = watch_for
-    self.buffer_size = buffer_size
-    self.hDir = wrapped (
-      win32file.CreateFile,
-      utils.normalised (root),
-      FILE_ACCESS.LIST_DIRECTORY,
-      #
-      # This must allow RWD otherwises files in
-      # the dir will be constrained.
-      #
-      FILE_SHARE.READ | FILE_SHARE.WRITE | FILE_SHARE.DELETE,
-      None,
-      FILE_CREATION.OPEN_EXISTING,
-      FILE_FLAG.BACKUP_SEMANTICS,
-      None
-    )
-    self._changes = collections.deque ()
-    
-  def __iter__ (self):
-    return self
-    
-  def next (self):
-    last_result = None
-    old_name = new_name = None
-    for action, filename in wrapped (
-      win32file.ReadDirectoryChangesW, 
-      self.hDir, 
-      self.buffer_size, 
-      self.subdirs, 
-      self.watch_for, 
-      None,
-      None
-    ):
-      if action == FILE_ACTION.ADDED:
-        new_name = filename
-      elif action == FILE_ACTION.REMOVED:
-        old_name = filename
-      elif action == FILE_ACTION.MODIFIED:
-        old_name = new_name = filename
-      elif action == FILE_ACTION.RENAMED_OLD_NAME:
-        old_name = filename
-        action = None
-      elif action == FILE_ACTION.RENAMED_NEW_NAME:
-        new_name = filename
-
-      old_name = os.path.join (self.root, old_name) if old_name else None
-      new_name = os.path.join (self.root, new_name) if new_name else None
-      if action:
-        result = (action, file (old_name), file (new_name))
-        if result <> last_result:
-          self._changes.append (result)
       
       if self._changes:
         return self._changes.popleft ()
