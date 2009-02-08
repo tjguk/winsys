@@ -150,7 +150,7 @@ def test_sace_ne_type ():
     _aces.sace ((accounts.principal ("Everyone"), "R", "FAILURE"))
 
 def test_sace_lt ():
-  assert _aces.sace (("Everyone", "R", (0, 1))) < _aces.sace (("Everyone", "R", (1, 1)))
+  assert _aces.sace (("Everyone", "R", (1, 1))) < _aces.sace (("Everyone", "R", (0, 1)))
 
 def test_sace_as_string ():
   _aces.sace (("Everyone", "R", "ALL")).as_string ()

@@ -105,13 +105,11 @@ def teardown ():
   utils.change_priv (win32security.SE_SECURITY_NAME, False)
 
 def restore_access (filepath=TEST_FILE):
-  dacl = win32security.ACL ()
-  sid, _, _ = win32security.LookupAccountName (None, win32api.GetUserName ())
-  #~ dacl.AddAccessAllowedAce (win32security.ACL_REVISION_DS, ntsecuritycon.FILE_ALL_ACCESS, sid)
   win32security.SetNamedSecurityInfo (
     filepath, win32security.SE_FILE_OBJECT, 
-    win32security.DACL_SECURITY_INFORMATION | win32security.UNPROTECTED_DACL_SECURITY_INFORMATION, 
-    None, None, None, None
+    win32security.DACL_SECURITY_INFORMATION | win32security.UNPROTECTED_DACL_SECURITY_INFORMATION | 
+    win32security.SACL_SECURITY_INFORMATION | win32security.UNPROTECTED_SACL_SECURITY_INFORMATION, 
+    None, None, win32security.ACL (), win32security.ACL ()
   )
 
 #

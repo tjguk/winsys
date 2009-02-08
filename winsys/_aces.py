@@ -251,8 +251,9 @@ class SACE (ACE):
     return self.as_tuple () == other.as_tuple ()
     
   def __lt__ (self, other):
+    """Failure before success"""
     other = self.ace (other)
-    return self.as_tuple () < other.as_tuple ()
+    return self.audit_failure > other.audit_failure or self.audit_success > other.audit_success
 
 #
 # Friendly constructors

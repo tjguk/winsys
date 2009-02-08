@@ -123,7 +123,6 @@ class Security (core._WinSysObject):
     if self._dacl is not core.UNSET:
       security_information |= SECURITY_INFORMATION.DACL
     if self._sacl is not core.UNSET:
-      print "self._sacl =", repr (self._sacl)
       security_information |= SECURITY_INFORMATION.SACL
     sa = self.pyobject (include_inherited=True)
     return wrapped (
