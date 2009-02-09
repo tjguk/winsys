@@ -16,7 +16,8 @@ import urlparse
 from wsgiref.simple_server import make_server
 from wsgiref.util import shift_path_info
 
-from winsys import fs
+import error_handler
+from winsys import fs, misc
 
 def get_files (path, size_threshold_mb, results, stop_event):
   """Intended to run inside a thread: scan the contents of
@@ -49,7 +50,7 @@ def watch_files (path, size_threshold_mb, results, stop_event):
     if new_file and new_file <> old_file:
       if new_file and new_file.size > size_threshold:
         results.put (new_file)
-
+        
 class Path (object):
   """Keep track of the files and changes under a particular
   path tree. No attempt is made to optimise the cases where
@@ -128,7 +129,7 @@ class App (object):
   
   PATH = ""
   N_FILES_AT_A_TIME = 1000
-  SIZE_THRESHOLD_MB = 10
+  SIZE_THRESHOLD_MB = 100
   TOP_N_FILES = 50
   REFRESH_SECS = 60
   
@@ -154,6 +155,7 @@ class App (object):
     p.updated {margin-bottom : 1em; font-style : italic;}
     table {width : 100%;}
     thead tr {background-color : black; color : white; font-weight : bold;}
+    tr.odd {background-color : #ddd;}
     table td {padding-right : 0.5em;}
     table td.filename {width : 72%;}
     </style>""")
@@ -173,10 +175,11 @@ class App (object):
       doc.append (u"<h1>%s</h1>" % title)
       doc.append (u'<p class="updated">Last updated %s</p>' % time.asctime ())
       doc.append (u'<table><thead><tr><td class="filename">Filename</td><td class="size">Size (Mb)</td><td class="updated">Updated</td></tr></thead>')
-      for f in files[:top_n_files]:
+      for i, f in enumerate (files[:top_n_files]):
         try:
           doc.append (
-            u'<tr><td class="filename">%s</td><td class="size">%5.2f</td><td class="updated">%s</td>' % (
+            u'<tr class="%s"><td class="filename">%s</td><td class="size">%5.2f</td><td class="updated">%s</td>' % (
+              "odd" if i % 2 else "even",
               f.filepath.relative_to (path).lstrip (fs.seps), 
               f.size / 1024.0 / 1024.0, 
               f.written_at
@@ -238,8 +241,8 @@ class App (object):
     is requested (the default) then send a header which forces
     the refresh.
     """
-    path = shift_path_info (environ)
-    if path.rstrip ("/") == "":
+    path = shift_path_info (environ).rstrip ("/")
+    if path == "":
       form = dict ((k, v[0]) for (k, v) in cgi.parse_qs (environ['QUERY_STRING']).items () if v)
       refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
       headers = []
@@ -257,6 +260,7 @@ class App (object):
       path_handler.finish ()
 
 if __name__ == '__main__':
+  misc.set_console_title ("Monitor Directory")
   PORT = 8000
   threading.Timer (
     3.0, 
