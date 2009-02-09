@@ -149,6 +149,7 @@ class App (object):
     doc.append (u"<html><head><title>%s</title>" % title)
     doc.append (u"""<style>
     body {font-family : calibri, verdana, sans-serif;}
+    h1 {font-size : 120%;}
     form#params {font-size : 120%;}
     form#params input {font-family : calibri, verdana, sans-serif;}
     form#params span.label {font-weight : bold;}
