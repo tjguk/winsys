@@ -3,11 +3,13 @@ import os, sys
 import time
 import uuid
 
+import win32api
+import win32con
+import win32gui
 import win32console
 import win32gui
 
-from winsys import constants, core, utils, security
-from winsys.exceptions import *
+from winsys import core, registry
 
 def set_console_title (text):
   title = win32console.GetConsoleTitle ()
@@ -22,3 +24,21 @@ def console_hwnd ():
     return win32gui.FindWindow (None, title)
   finally:
     set_console_title (old_title)
+
+def set_environment (**kwargs):
+  root = registry.registry ("HKCU")
+  env = root.Environment
+  for label, value in kwargs.items ():
+    env.set_value (label, value)
+  win32gui.SendMessageTimeout (
+    win32con.HWND_BROADCAST, win32con.WM_SETTINGCHANGE, 
+    0, "Environment", 
+    win32con.SMTO_ABORTIFHUNG, 2000
+  )
+
+def get_environment ():
+  return dict (
+    (label, value) for
+      (label, value, type) in
+      registry.registry (r"HKCU\Environment").values ()
+  )
