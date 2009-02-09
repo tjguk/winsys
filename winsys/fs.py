@@ -1072,6 +1072,7 @@ class _DirWatcher (object):
   TIMEOUT = 500
   
   def __init__ (self, root, subdirs=False, watch_for=WATCH_FOR, buffer_size=BUFFER_SIZE):
+    self.root = root
     self.subdirs = subdirs
     self.watch_for = watch_for
     self.overlapped = wrapped (pywintypes.OVERLAPPED)
@@ -1109,22 +1110,22 @@ class _DirWatcher (object):
           raise StopIteration
       
         last_result = None
-        old_name = new_name = None
+        old_file = new_file = None
         for action, filename in wrapped (win32file.FILE_NOTIFY_INFORMATION, self.buffer, n_bytes):
           if action == FILE_ACTION.ADDED:
-            new_name = filename
+            new_file = file (os.path.join (self.root, filename))
           elif action == FILE_ACTION.REMOVED:
-            old_name = filename
+            old_file = file (os.path.join (self.root, filename))
           elif action == FILE_ACTION.MODIFIED:
-            old_name = new_name = filename
+            old_file = new_file = file (os.path.join (self.root, filename))
           elif action == FILE_ACTION.RENAMED_OLD_NAME:
-            old_name = filename
+            old_file = file (os.path.join (self.root, filename))
             action = None
           elif action == FILE_ACTION.RENAMED_NEW_NAME:
-            new_name = filename
+            new_file = file (os.path.join (self.root, filename))
 
           if action:
-            result = (action, old_name, new_name)
+            result = (action, old_file, new_file)
             if result <> last_result:
               self._changes.append (result)
       
