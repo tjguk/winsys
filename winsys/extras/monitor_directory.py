@@ -10,6 +10,7 @@ import cgi
 import datetime
 import threading
 import time
+import traceback
 import Queue
 import urllib
 import urlparse
@@ -17,7 +18,7 @@ from wsgiref.simple_server import make_server
 from wsgiref.util import shift_path_info
 
 #~ import error_handler
-from winsys import fs, misc
+from winsys import core, fs, misc
 
 def get_files (path, size_threshold_mb, results, stop_event):
   """Intended to run inside a thread: scan the contents of
@@ -43,15 +44,15 @@ def watch_files (path, size_threshold_mb, results, stop_event):
   watcher = fs.watch (path, True)
   while True:
     if stop_event.isSet (): break
-    action, old_file, new_file = watcher.next ()
     try:
+      action, old_file, new_file = watcher.next ()
       if old_file:
         if (not old_file) or (old_file and old_file.size > size_threshold):
           results.put (old_file)
       if new_file and new_file <> old_file:
         if new_file and new_file.size > size_threshold:
           results.put (new_file)
-    except fs.x_no_such_file:
+    except fs.exceptions.x_winsys:
       pass
         
 class Path (object):
@@ -70,7 +71,6 @@ class Path (object):
   """
   
   def __init__ (self, path, size_threshold_mb, n_files_at_a_time):
-    print "About to start Path for %s, %s" % (path, size_threshold_mb)
     self._path = path
     self._size_threshold_mb = size_threshold_mb
     self._n_files_at_a_time = n_files_at_a_time
