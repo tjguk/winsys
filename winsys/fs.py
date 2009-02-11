@@ -1095,18 +1095,24 @@ class _DirWatcher (object):
     self._changes = collections.deque ()
     
   def __iter__ (self):
+    self.iterating = True
     return self
     
   def next (self):
+    if not self.iterating:
+      raise StopIteration
+    
     try:
       wrapped (win32file.ReadDirectoryChangesW, self.hDir, self.buffer, self.subdirs, self.watch_for, self.overlapped)
     except exceptions.x_invalid_handle:
+      self.iterating = False
       raise StopIteration
 
     while True:
       if wrapped (win32event.WaitForSingleObject, self.overlapped.hEvent, self.TIMEOUT) == win32event.WAIT_OBJECT_0:
         n_bytes = wrapped (win32file.GetOverlappedResult, self.hDir, self.overlapped, True)
         if n_bytes == 0:
+          self.iterating = False
           raise StopIteration
       
         last_result = None
