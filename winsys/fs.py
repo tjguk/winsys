@@ -764,11 +764,11 @@ class Dir (Entry):
   def flat (self, *args, **kwargs):
     return flat (self._filepath, *args, **kwargs)
 
-  def files (self, *args, **kwargs):
-    return (f for f in files (os.path.join (self._filepath, u"*"), *args, **kwargs) if not f.directory)
+  def files (self, pattern=u"*", *args, **kwargs):
+    return (f for f in files (os.path.join (self._filepath, pattern), *args, **kwargs) if not f.directory)
     
-  def dirs (self):
-    return (f for f in files (os.path.join (self._filepath, u"*")) if f.directory)
+  def dirs (self, pattern=u"*"):
+    return (f for f in files (os.path.join (self._filepath, pattern)) if f.directory)
       
   def walk (self, *args, **kwargs):
     for dirpath, dirs, files in walk (self._filepath, *args, **kwargs):
