@@ -16,7 +16,7 @@ import urlparse
 from wsgiref.simple_server import make_server
 from wsgiref.util import shift_path_info
 
-import error_handler
+#~ import error_handler
 from winsys import fs, misc
 
 def get_files (path, size_threshold_mb, results, stop_event):
@@ -44,12 +44,15 @@ def watch_files (path, size_threshold_mb, results, stop_event):
   while True:
     if stop_event.isSet (): break
     action, old_file, new_file = watcher.next ()
-    if old_file:
-      if (not old_file) or (old_file and old_file.size > size_threshold):
-        results.put (old_file)
-    if new_file and new_file <> old_file:
-      if new_file and new_file.size > size_threshold:
-        results.put (new_file)
+    try:
+      if old_file:
+        if (not old_file) or (old_file and old_file.size > size_threshold):
+          results.put (old_file)
+      if new_file and new_file <> old_file:
+        if new_file and new_file.size > size_threshold:
+          results.put (new_file)
+    except fs.x_no_such_file:
+      pass
         
 class Path (object):
   """Keep track of the files and changes under a particular
@@ -67,6 +70,7 @@ class Path (object):
   """
   
   def __init__ (self, path, size_threshold_mb, n_files_at_a_time):
+    print "About to start Path for %s, %s" % (path, size_threshold_mb)
     self._path = path
     self._size_threshold_mb = size_threshold_mb
     self._n_files_at_a_time = n_files_at_a_time
@@ -211,7 +215,9 @@ class App (object):
       # and existing one, and return the latest list.
       #
       with self._paths_lock:
-        path_handler = self.paths.setdefault (path, Path (path, size_threshold_mb, self.N_FILES_AT_A_TIME))
+        if path not in self.paths:
+          self.paths[path] = Path (path, size_threshold_mb, self.N_FILES_AT_A_TIME)
+        path_handler = self.paths[path]
         if path_handler._size_threshold_mb <> size_threshold_mb:
           path_handler.finish ()
           path_handler = self.paths[path] = Path (path, size_threshold_mb, self.N_FILES_AT_A_TIME)
@@ -264,7 +270,7 @@ if __name__ == '__main__':
   misc.set_console_title ("Monitor Directory")
   PORT = 8000
   threading.Timer (
-    3.0, 
+    2.0, 
     lambda: os.startfile ("http://localhost:%s" % PORT)
   ).start ()
   
