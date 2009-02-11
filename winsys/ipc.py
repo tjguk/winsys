@@ -1,4 +1,5 @@
 # -*- coding: iso-8859-1 -*-
+import marshal
 import re
 import time
 
@@ -154,6 +155,14 @@ class Mailslot (core._WinSysObject):
     if self._hWrite is not None:
       wrapped (win32file.CloseHandle, self._hWrite)
 
+class MarshalledMailslot (Mailslot):
+  
+  def get (self, block=True, timeout_ms=None):
+    return marshal.loads (Mailslot.get (self, block, timeout_ms))
+    
+  def put (self, data):
+    Mailslot.put (self, marshal.dumps (data))
+
 class Event (core._WinSysObject):
   
   def __init__ (self, security=None, needs_manual_reset=False, initially_set=False, name=None):
@@ -218,7 +227,7 @@ class Event (core._WinSysObject):
 #
 # Module-level convenience functions
 #
-def mailslot (mailslot, message_size=0, timeout_ms=-1):
+def mailslot (mailslot, marshalled=True, message_size=0, timeout_ms=-1):
   """factory function to return a Mailslot instance
   based on the name given. If the name is not a fully-qualified
   mailslot name (\\.\mailslot) then it is assumed to be on
@@ -229,9 +238,13 @@ def mailslot (mailslot, message_size=0, timeout_ms=-1):
   elif isinstance (mailslot, Mailslot):
     return mailslot
   else:
+    if marshalled:
+      klass = MarshalledMailslot
+    else:
+      klass = Mailslot
     if not re.match (ur"\\\\[^\\]+\\mailslot\\", unicode (mailslot), re.UNICODE):
       mailslot = ur"\\.\mailslot\%s" % mailslot
-    return Mailslot (mailslot, message_size, timeout_ms)
+    return klass (mailslot, message_size, timeout_ms)
 
 def event (name=None, initially_set=0, needs_manual_reset=0, security=None):
   return Event (security, needs_manual_reset, initially_set, name)

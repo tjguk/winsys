@@ -4,18 +4,27 @@ principals: users, groups, sids &c.
 """
 from __future__ import with_statement
 import os, sys
+import contextlib
+import socket
 
 import win32con
 import win32security
 import win32api
+import win32cred
 import pywintypes
 import winerror
 
 from winsys import constants, core, utils
 from winsys.exceptions import *
 
+__all__ = ['LOGON', 'EXTENDED_NAME', 'x_accounts', 'principal', 'Principal', 'User', 'Group', 'me']
+
 LOGON = constants.Constants.from_pattern (u"LOGON32_*", namespace=win32security)
 EXTENDED_NAME = constants.Constants.from_pattern (u"Name*", namespace=win32con)
+CREDUI_FLAGS = constants.Constants.from_pattern (u"CREDUI_FLAGS_*", namespace=win32cred)
+CRED_FLAGS = constants.Constants.from_pattern (u"CRED_FLAGS_*", namespace=win32cred)
+CRED_TYPE = constants.Constants.from_pattern (u"CRED_TYPE_*", namespace=win32cred)
+CRED_TI = constants.Constants.from_pattern (u"CRED_TI_*", namespace=win32cred)
 
 PySID = pywintypes.SIDType
 
@@ -50,8 +59,6 @@ class Principal (core._WinSysObject):
   and, where possible, a name.
   """
 
-  type = None
-  
   def __init__ (self, sid, system_name=None):
     u"""Initialise a Principal from and (optionally) a system name. The sid
     must be a PySID and the system name, if present must be a security
@@ -92,18 +99,34 @@ class Principal (core._WinSysObject):
       wrapped (win32security.ConvertSidToStringSid, self.sid)
     ), level)
 
-  def logon (self, password):
+  def logon (self, password=core.UNSET, logon_type=core.UNSET):
     u"""Log on as an authenticated user, returning that
     user's token. This is used by security.impersonate
     which wraps the token in a Token object and manages
     its lifetime in a context.
     """
+    if logon_type is core.UNSET:
+      logon_type = LOGON.LOGON_NETWORK
+    if password is core.UNSET:
+      flags = 0
+      flags |= CREDUI_FLAGS.GENERIC_CREDENTIALS
+      flags |= CREDUI_FLAGS.DO_NOT_PERSIST
+      _, password, _ = wrapped (
+        win32cred.CredUIPromptForCredentials,
+        self.domain, 
+        0, 
+        self.name, 
+        None,
+        False, 
+        flags, 
+        {}
+      )
     hUser = wrapped (
       win32security.LogonUser,
       self.name,
       self.domain,
       password,
-      LOGON.LOGON_NETWORK,
+      logon_type,
       LOGON.PROVIDER_DEFAULT
     )
     return hUser
@@ -132,12 +155,23 @@ class Principal (core._WinSysObject):
     logged-on user
     """
     return cls.from_string (wrapped (win32api.GetUserNameEx, EXTENDED_NAME.SamCompatible))
-
-class User (Principal):
-  pass
+    
+  @contextlib.contextmanager
+  def impersonate (self, password=core.UNSET, logon_type=core.UNSET):
+    hLogon = self.logon (password, logon_type)
+    wrapped (win32security.ImpersonateLoggedOnUser, hLogon)
+    yield hLogon
+    wrapped (win32security.RevertToSelf)
+    
+  def __enter__ (self):
+    wrapped (win32security.ImpersonateLoggedOnUser, self.logon (logon_type=LOGON.LOGON_INTERACTIVE))
   
-class Group (Principal):
-  pass
+  def __exit__ (self, exc_type, exc_val, exc_tb):
+    wrapped (win32security.RevertToSelf)
+
+class User (Principal): pass
+  
+class Group (Principal): pass
 
 #
 # Module-level convenience functions

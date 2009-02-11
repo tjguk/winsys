@@ -8,6 +8,8 @@ import winerror
 from winsys import constants, core, utils, accounts, _aces
 from winsys.exceptions import *
 
+__all__ = ['x_acl', 'ACL', 'DACL', 'SACL', 'acl', 'dacl', 'sacl']
+
 PyACL = pywintypes.ACLType
 
 class x_acl (x_winsys):
@@ -18,18 +20,40 @@ WINERROR_MAP = {
 wrapped = wrapper (WINERROR_MAP, x_acl)
 
 class ACL (core._WinSysObject):
+  """An ACL maps the Windows security ACL concept, but behaves like
+  a Python list. You can append to it, iterate over it, delete from
+  it, check its length and test it for membership. A special case is
+  made for the so-called NULL ACL. This is different from an empty
+  ACL (which is effectively completely restrictive). A NULL ACL is
+  completely unrestrictive. This is mapped by holding None and treating
+  this specially where needed.
+  
+  DACL & SACL subclasses are defined to cope with the slightly different
+  ways in which the structures are manipulated, but the core functionality
+  is in this base class. This class need rarely be instantiated directly;
+  normally it will be invoked by the Security class which is accessor
+  properties for this purpose.
+  """
 
   _ACE = _aces.ACE
 
-  def __init__ (self, acl=None):
+  def __init__ (self, acl=None, inherited=True):
     core._WinSysObject.__init__ (self)
     if acl is None:
       self._list = None
     else:
       self._list = list (self._ACE.from_ace (acl.GetAce (index)) for index in range (acl.GetAceCount ()))
+    self.inherited = inherited
+    
+    #
+    # Used when inheritance is broken to keep
+    # a copy of the inherited list.
+    #
+    self._original_list = []
 
   def dumped (self, level=0):
     output = []
+    output.append (u"inherited: %s" % self.inherited)
     for ace in self._list or []:
       output.append (ace.dumped (level))
     return utils.dumped (u"\n".join (output), level)
@@ -44,13 +68,21 @@ class ACL (core._WinSysObject):
       return iter (sorted (self._list))
 
   def append (self, _ace):
-    self._list.append (self._ACE.ace (_ace))
+    """Append an ACE to the ACL; it is assumed to be
+    non-inherited as it's meaningless to add an inherited
+    ace into an ACL.
+    """
+    ace = self._ACE.ace (_ace)
+    ace.inherited = False
+    self._list.append (ace)
 
   def __getitem__ (self, index):
     return self._list[index]
 
   def __setitem__ (self, index, item):
-    self._list[index] = self._ACE.ace (item)
+    ace = self._ACE.ace (item)
+    ace.inherited = False
+    self._list[index] = ace
 
   def __delitem__ (self, index):
     del self._list[index]
@@ -73,7 +105,23 @@ class ACL (core._WinSysObject):
     for a in aces:
       acl.append (cls._ACE.ace (a))
     return acl
-  
+    
+  def break_inheritance (self, copy_first):
+    if self._list is not None:
+      self._original_list = [a for a in self._list if a.inherited]
+      if copy_first:
+        for ace in self._list:
+          ace.inherited = False
+      else:
+        self._list = [a for a in (self._list or []) if not a.inherited]
+    self.inherited = False
+
+  def restore_inheritance (self, copy_back):
+    if copy_back:
+      if self._list is not None:
+        self._list.extend (self._original_list)
+    self.inherited = True
+
 class DACL (ACL):
   _ACE = _aces.DACE
   _ACE_MAP = {

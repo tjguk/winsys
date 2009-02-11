@@ -205,7 +205,6 @@ class FilePath (unicode):
     ones as instance attributes:
     
     FilePath.parts - a list of the components
-    FilePath.drive - drive letter, or UNC server/mount
     FilePath.root - always a backslash
     FilePath.filename - final component (may be blank)
     FilePath.name - same as filename unless empty in which case second-last component
@@ -661,7 +660,16 @@ class Entry (core._WinSysObject):
     return move (self._filepath, unicode (other), callback, callback_data)
     
   def take_ownership (self):
-    with self.security () as s:
+    """Set the new owner of the file to be the logged-on user.
+    This is no more than a slight shortcut to the equivalent
+    security operations.
+    """
+    #
+    # Specify no options when reading as we may have no rights 
+    # whatsoever on the security descriptor and be relying on
+    # the take_ownership privilege.
+    #
+    with self.security (options=0) as s:
       s.owner = security.Principal.me ()
     
 class File (Entry):
@@ -680,6 +688,9 @@ class File (Entry):
     return delete (self._filepath)
     
   def copy (self, other, callback=None, callback_data=None):
+    other_file = file (other)
+    if other_file and other_file.directory:
+      other = os.path.join (other, self.filepath.filename)
     return copy (self._filepath, unicode (other), callback, callback_data)
     
   def equal_contents (self, other):
@@ -753,11 +764,11 @@ class Dir (Entry):
   def flat (self, *args, **kwargs):
     return flat (self._filepath, *args, **kwargs)
 
-  def files (self, *args, **kwargs):
-    return (f for f in files (os.path.join (self._filepath, u"*"), *args, **kwargs) if not f.directory)
+  def files (self, pattern=u"*", *args, **kwargs):
+    return (f for f in files (os.path.join (self._filepath, pattern), *args, **kwargs) if not f.directory)
     
-  def dirs (self):
-    return (f for f in files (os.path.join (self._filepath, u"*")) if f.directory)
+  def dirs (self, pattern=u"*"):
+    return (f for f in files (os.path.join (self._filepath, pattern)) if f.directory)
       
   def walk (self, *args, **kwargs):
     for dirpath, dirs, files in walk (self._filepath, *args, **kwargs):
@@ -807,6 +818,9 @@ class Dir (Entry):
           callback (f.filepath)
         f.delete ()
     rmdir (self._filepath)
+    
+  def watch (self, *args, **kwargs):
+    watch (self._filepath, *args, **kwargs)
 
 def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
   parts = _get_parts (unicode (pattern))
@@ -867,7 +881,9 @@ def file (filepath, ignore_access_errors=False):
     else:
       return Dir (filepath)
   
-  if isinstance (filepath, Entry):
+  if filepath is None:
+    return None
+  elif isinstance (filepath, Entry):
     return filepath
   else:
     try:
@@ -915,7 +931,12 @@ def walk (top, depthfirst=False, ignore_access_errors=False):
   if depthfirst: yield top, dirs, nondirs
 
 def flat (root, pattern="*", includedirs=False, depthfirst=False, ignore_access_errors=False):
-  for dirpath, dirs, files in walk (utils.normalised (root.rstrip (seps)), depthfirst=depthfirst, ignore_access_errors=ignore_access_errors):
+  walker = walk (
+    utils.normalised (root.rstrip (seps) + sep),
+    depthfirst=depthfirst, 
+    ignore_access_errors=ignore_access_errors
+  )
+  for dirpath, dirs, files in walker:
     if includedirs:
       for dir in dirs:
         if fnmatch.fnmatch (dir.name, pattern):
@@ -1051,6 +1072,7 @@ class _DirWatcher (object):
   TIMEOUT = 500
   
   def __init__ (self, root, subdirs=False, watch_for=WATCH_FOR, buffer_size=BUFFER_SIZE):
+    self.root = root
     self.subdirs = subdirs
     self.watch_for = watch_for
     self.overlapped = wrapped (pywintypes.OVERLAPPED)
@@ -1088,22 +1110,22 @@ class _DirWatcher (object):
           raise StopIteration
       
         last_result = None
-        old_name = new_name = None
+        old_file = new_file = None
         for action, filename in wrapped (win32file.FILE_NOTIFY_INFORMATION, self.buffer, n_bytes):
           if action == FILE_ACTION.ADDED:
-            new_name = filename
+            new_file = file (os.path.join (self.root, filename))
           elif action == FILE_ACTION.REMOVED:
-            old_name = filename
+            old_file = file (os.path.join (self.root, filename))
           elif action == FILE_ACTION.MODIFIED:
-            old_name = new_name = filename
+            old_file = new_file = file (os.path.join (self.root, filename))
           elif action == FILE_ACTION.RENAMED_OLD_NAME:
-            old_name = filename
+            old_file = file (os.path.join (self.root, filename))
             action = None
           elif action == FILE_ACTION.RENAMED_NEW_NAME:
-            new_name = filename
+            new_file = file (os.path.join (self.root, filename))
 
           if action:
-            result = (action, old_name, new_name)
+            result = (action, old_file, new_file)
             if result <> last_result:
               self._changes.append (result)
       
@@ -1113,12 +1135,12 @@ class _DirWatcher (object):
   def stop (self):
     self.hDir.close ()
     
-def watcher (root, subdirs=False, watch_for=_DirWatcher.WATCH_FOR, buffer_size=_DirWatcher.BUFFER_SIZE):
+def watch (root, subdirs=False, watch_for=_DirWatcher.WATCH_FOR, buffer_size=_DirWatcher.BUFFER_SIZE):
   return _DirWatcher (root, subdirs, watch_for, buffer_size)
 
 if __name__ == '__main__':
   print "Watching", os.path.abspath (".")
-  watcher = watcher (".", True)
+  watcher = watch (".", True)
   try:
     for action, old_filename, new_filename in watcher:
       if action in (FILE_ACTION.ADDED, FILE_ACTION.MODIFIED):

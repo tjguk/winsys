@@ -6,6 +6,8 @@ import win32security
 from winsys import core, utils, accounts, constants
 from winsys.exceptions import *
 
+__all__ = ['x_ace', 'x_unknown_value', 'ACE_FLAG', 'ACE_TYPE', 'DACE_TYPE', 'SACE_TYPE', 'ACE', 'DACE', 'SACE', 'dace', 'sace', 'ace']
+
 class x_ace (x_winsys):
   pass
 
@@ -249,8 +251,9 @@ class SACE (ACE):
     return self.as_tuple () == other.as_tuple ()
     
   def __lt__ (self, other):
+    """Failure before success"""
     other = self.ace (other)
-    return self.as_tuple () < other.as_tuple ()
+    return self.audit_failure > other.audit_failure or self.audit_success > other.audit_success
 
 #
 # Friendly constructors

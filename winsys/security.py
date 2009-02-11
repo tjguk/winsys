@@ -6,15 +6,17 @@ import operator
 
 import win32security
 import win32api
+import win32con
+import win32process
 import pywintypes
 import winerror
 
 from winsys import constants, core, utils
-from winsys._tokens import token, Token
-from winsys._aces import dace, sace
-from winsys._acls import acl, DACL, SACL
-from winsys._privileges import privilege, PRIVILEGE_ATTRIBUTE, PRIVILEGE
-from winsys.accounts import principal
+from winsys._tokens import *
+from winsys._aces import *
+from winsys._acls import *
+from winsys._privileges import *
+from winsys.accounts import *
 from winsys.exceptions import *
 
 SE_OBJECT_TYPE = constants.Constants.from_list ([
@@ -109,20 +111,18 @@ class Security (core._WinSysObject):
     if sacl is not core.UNSET:
       self.sacl = sacl
 
-    self.inherits = not bool (self._control & SD_CONTROL.DACL_PROTECTED)
-
   def __eq__ (self, other):
     return str (self) == str (other)
   
   def as_string (self):
     security_information = 0
-    if self._owner:
+    if self._owner is not core.UNSET:
       security_information |= SECURITY_INFORMATION.OWNER
-    if self._group:
+    if self._group is not core.UNSET:
       security_information |= SECURITY_INFORMATION.GROUP
-    if self._dacl:
+    if self._dacl is not core.UNSET:
       security_information |= SECURITY_INFORMATION.DACL
-    if self._sacl:
+    if self._sacl is not core.UNSET:
       security_information |= SECURITY_INFORMATION.SACL
     sa = self.pyobject (include_inherited=True)
     return wrapped (
@@ -145,24 +145,26 @@ class Security (core._WinSysObject):
     if self._sacl is not core.UNSET: 
       output.append (u"sacl:\n%s" % self.sacl.dumped (level))
     return utils.indented (u"\n".join (output), level)
-  
-  def break_inheritance (self, copy_first=True):
-    if copy_first and self.dacl:
-      for ace in self.dacl:
-        ace.inherited = False
-    else:
-      self.dacl = [a for a in (self.dacl or []) if not a.inherited]
-    self.inherits = False
 
-  def restore_inheritance (self):
-    self.inherits = True
-    self.dacl = self.dacl
+  def break_inheritance (self, copy_first=True, break_dacl=True, break_sacl=True):
+    if break_dacl and self._dacl:
+      self.dacl.break_inheritance (copy_first)
+    if break_sacl and self._sacl:
+      self.sacl.break_inheritance (copy_first)
+
+  def restore_inheritance (self, copy_back=True, restore_dacl=True, restore_sacl=True):
+    if restore_dacl and self._dacl:
+      self.dacl.restore_inheritance (copy_back)
+    if restore_sacl and self._sacl:
+      self.sacl.restore_inheritance (copy_back)
   
   def _get_owner (self):
     if self._owner is core.UNSET:
       raise x_value_not_set (u"No Owner has been set for this Security object")
     return self._owner
   def _set_owner (self, owner):
+    if owner is None:
+      raise x_value_not_set (u"Cannot set owner to None for this Security object")
     self._owner = principal (owner) or core.UNSET
   owner = property (_get_owner, _set_owner)
 
@@ -171,6 +173,8 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No Group has been set for this Security object")
     return self._group
   def _set_group (self, group):
+    if group is None:
+      raise x_value_not_set (u"Cannot set group to None for this Security object")
     self._group = principal (group) or core.UNSET
   group = property (_get_group, _set_group)
 
@@ -179,7 +183,10 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No DACL has been set for this Security object")
     return self._dacl
   def _set_dacl (self, dacl):
-    self._dacl = acl (dacl, DACL) or core.UNSET
+    if dacl is core.UNSET:
+      self._dacl = core.UNSET
+    else:
+      self._dacl = acl (dacl, DACL)
   dacl = property (_get_dacl, _set_dacl)
 
   def _get_sacl (self):
@@ -187,7 +194,10 @@ class Security (core._WinSysObject):
       raise x_value_not_set (u"No SACL has been set for this Security object")
     return self._sacl
   def _set_sacl (self, sacl):
-    self._sacl = acl (sacl, SACL) or core.UNSET
+    if sacl is core.UNSET:
+      self._sacl = core.UNSET
+    else:
+      self._sacl = acl (sacl, SACL)
   sacl = property (_get_sacl, _set_sacl)
 
   def __enter__ (self):
@@ -233,14 +243,14 @@ class Security (core._WinSysObject):
       
       if self._dacl is not core.UNSET:
         options |= SECURITY_INFORMATION.DACL
-        if self.inherits:
+        if self.dacl.inherited:
           options |= SECURITY_INFORMATION.UNPROTECTED_DACL
         else:
           options |= SECURITY_INFORMATION.PROTECTED_DACL
       
       if self._sacl is not core.UNSET:
         options |= SECURITY_INFORMATION.SACL
-        if self.inherits:
+        if self.sacl.inherited:
           options |= SECURITY_INFORMATION.UNPROTECTED_SACL
         else:
           options |= SECURITY_INFORMATION.PROTECTED_SACL
@@ -275,15 +285,21 @@ class Security (core._WinSysObject):
     group = None if self._group is core.UNSET else self._group.pyobject ()
     dacl = None if self._dacl is core.UNSET else self._dacl.pyobject (include_inherited=include_inherited)
     sacl = None if self._sacl is core.UNSET else self._sacl.pyobject (include_inherited=include_inherited)
+    dacl_inherited = self.dacl.inherited if dacl else 0
+    sacl_inherited = self.sacl.inherited if sacl else 0
     
     sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_AUTO_INHERITED, self._control & SD_CONTROL.DACL_AUTO_INHERITED)
     sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_AUTO_INHERITED, self._control & SD_CONTROL.SACL_AUTO_INHERITED)
-    if self.inherits:
-      if dacl: sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, 0)
-      if sacl: sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_PROTECTED, 0)
-    else:
-      if dacl: sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, SD_CONTROL.DACL_PROTECTED)
-      if sacl: sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_PROTECTED, SD_CONTROL.SACL_PROTECTED)
+    if dacl:
+      if dacl_inherited:
+        sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, 0)
+      else:
+        sa.SetSecurityDescriptorControl (SD_CONTROL.DACL_PROTECTED, SD_CONTROL.DACL_PROTECTED)
+    if sacl:
+      if sacl_inherited:
+        sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_PROTECTED, 0)
+      else:
+        sa.SetSecurityDescriptorControl (SD_CONTROL.SACL_PROTECTED, SD_CONTROL.SACL_PROTECTED)
 
     if owner:
       sa.SetSecurityDescriptorOwner (owner, False)
@@ -294,8 +310,8 @@ class Security (core._WinSysObject):
     # respectively, whether the ACL is present (!) and whether
     # it's the result of inheritance.
     #
-    sa.SetSecurityDescriptorDacl (True, dacl, self.inherits)
-    sa.SetSecurityDescriptorSacl (True, sacl, self.inherits)
+    sa.SetSecurityDescriptorDacl (True, dacl, dacl_inherited)
+    sa.SetSecurityDescriptorSacl (True, sacl, sacl_inherited)
     return sa
 
   @classmethod
@@ -337,8 +353,29 @@ class Security (core._WinSysObject):
     control, revision = sd.GetSecurityDescriptorControl ()
     owner = sd.GetSecurityDescriptorOwner () if SECURITY_INFORMATION.OWNER & options else core.UNSET
     group = sd.GetSecurityDescriptorGroup () if SECURITY_INFORMATION.GROUP & options else core.UNSET
-    dacl = sd.GetSecurityDescriptorDacl () if SECURITY_INFORMATION.DACL & options else core.UNSET
-    sacl = sd.GetSecurityDescriptorSacl () if SECURITY_INFORMATION.SACL & options else core.UNSET
+    #
+    # These next couple of lines are tricky. We have, for each ACL, three
+    # situations. An ACL which simply isn't present (often the SACL); an ACL
+    # which is present but which is NULL (aka the NULL ACL); an ACL which is
+    # present and which is not NULL, altho' it may have nothing in it!
+    #
+    # For the first, we store core.UNSET; for the second we pass None to our ACL
+    # class and for the third and third we pass the PyACL through to our ACL.
+    #
+    # This is more complicated, tho', because the pywin32 GetSecurityDescriptorDacl/Sacl
+    # function returns None in the first *and* second cases, making it impossible
+    # to determine whether there is or isn't a DACL found. This means we can't
+    # really distinguish a NULL ACL from a non-existent ACL. For simplicity, assume
+    # it's there and pass None through to the ACL.
+    #
+    if not control & SD_CONTROL.DACL_PRESENT:
+      dacl = core.UNSET
+    else:
+      dacl = sd.GetSecurityDescriptorDacl () if SECURITY_INFORMATION.DACL & options else core.UNSET
+    if not control & SD_CONTROL.SACL_PRESENT:
+      sacl = core.UNSET
+    else:
+      sacl = sd.GetSecurityDescriptorSacl () if SECURITY_INFORMATION.SACL & options else core.UNSET
     return cls (
       control,
       owner, group, dacl, sacl,
@@ -395,3 +432,29 @@ def change_privileges (enable_privs=[], disable_privs=[], _token=core.UNSET):
   old_enabled_privs, old_disabled_privs = _token.change_privileges (enable_privs, disable_privs)
   yield _token
   _token.change_privileges (old_enabled_privs, old_disabled_privs)
+
+def runas (user, password, command_line):
+  with privilege (PRIVILEGE.TCB):
+    with principal (user).impersonate (password, logon_type=LOGON.LOGON_INTERACTIVE) as hToken:
+      token (hToken).dump ()
+      hDuplicateToken = wrapped (
+        win32security.DuplicateTokenEx,
+        hToken,
+        win32security.SecurityImpersonation,
+        constants.GENERAL.MAXIMUM_ALLOWED,
+        win32security.TokenPrimary,
+        None
+      )
+      return wrapped (
+        win32process.CreateProcessAsUser, 
+        hDuplicateToken, 
+        None, 
+        command_line,
+        None,
+        None,
+        1,
+        0,
+        None,
+        None,
+        win32process.STARTUPINFO ()
+      )

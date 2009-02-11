@@ -8,6 +8,8 @@ import win32security
 from winsys import constants, core, utils
 from winsys.exceptions import *
 
+__all__ = ['PRIVILEGE_ATTRIBUTE', 'PRIVILEGE', 'Privilege', 'privilege', 'x_privilege', 'x_privilege_no_token']
+
 PRIVILEGE_ATTRIBUTE = constants.Constants.from_pattern (u"SE_PRIVILEGE_*", namespace=win32security)
 PRIVILEGE = constants.Constants.from_pattern (u"SE_*_NAME", namespace=win32security)
 
@@ -30,18 +32,18 @@ def _get_token ():
     return wrapped (
       win32security.OpenThreadToken, 
       wrapped (win32api.GetCurrentThread), 
-      constants.MAXIMUM_ALLOWED, 
+      constants.GENERAL.MAXIMUM_ALLOWED, 
       True
     )
   except x_privilege_no_token:
     return wrapped (
       win32security.OpenProcessToken, 
       wrapped (win32api.GetCurrentProcess),
-      constants.MAXIMUM_ALLOWED
+      constants.GENERAL.MAXIMUM_ALLOWED
     )
   
 def _set_privilege (self, luid, enable=True):
-  wrapped (
+  return wrapped (
     win32security.AdjustTokenPrivileges, 
     _get_token (), 
     False, 
@@ -91,7 +93,7 @@ class Privilege (core._WinSysObject):
   def _get_enabled (self):
     return bool (self._attributes & PRIVILEGE_ATTRIBUTE.ENABLED)
   def _set_enabled (self, set):
-    raise NotImplemented
+    #~ raise NotImplemented
     _set_privilege (self._luid, set)
     if set:
       self._attributes |= PRIVILEGE_ATTRIBUTE.ENABLED
@@ -102,6 +104,23 @@ class Privilege (core._WinSysObject):
   @classmethod
   def from_string (cls, string):
     return cls (wrapped (win32security.LookupPrivilegeValue, u"", unicode (string)))
+    
+  def __enter__ (self):
+    self._previous_privs = wrapped (
+      win32security.AdjustTokenPrivileges, 
+      _get_token (), 
+      False, 
+      [(self._luid, PRIVILEGE_ATTRIBUTE.ENABLED)]
+    )
+    return self
+    
+  def __exit__ (self, exc_type, exc_val, exc_tb):
+    wrapped (
+      win32security.AdjustTokenPrivileges, 
+      _get_token (), 
+      False, 
+      self._previous_privs
+    )
   
 def privilege (privilege):
   u"""Friendly constructor for the Privilege class"""
@@ -113,4 +132,3 @@ def privilege (privilege):
     return Privilege (*privilege)
   else:
     return Privilege.from_string (unicode (privilege))
-

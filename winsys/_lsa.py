@@ -4,6 +4,8 @@ from winsys import constants, core, utils
 from winsys import accounts
 from winsys.exceptions import *
 
+__all__ = ['LogonSession', 'LSA', 'x_lsa']
+
 class x_lsa (x_winsys):
   pass
 

@@ -67,6 +67,20 @@ def setup ():
   #
   utils.change_priv (win32security.SE_SECURITY_NAME, True)
   assert os.path.isdir (TEST_ROOT)
+  sacl = win32security.ACL ()
+  sid, _, _ = win32security.LookupAccountName (None, win32api.GetUserName ())
+  sacl.AddAuditAccessAceEx (
+    win32security.ACL_REVISION_DS, 
+    win32security.OBJECT_INHERIT_ACE | win32security.CONTAINER_INHERIT_ACE, 
+    ntsecuritycon.FILE_ALL_ACCESS, 
+    sid, 
+    1, 1
+  )
+  win32security.SetNamedSecurityInfo (
+    TEST_ROOT, win32security.SE_FILE_OBJECT, 
+    win32security.SACL_SECURITY_INFORMATION, 
+    None, None, None, sacl
+  )  
   open (TEST_FILE, "w").close ()
   os.mkdir (TEST1_DIR)
   open (TEST1_FILE, "w").close ()
@@ -74,15 +88,8 @@ def setup ():
   open (TEST2_FILE, "w").close ()
   
 def teardown ():
-  dacl = win32security.ACL ()
-  sid, _, _ = win32security.LookupAccountName (None, win32api.GetUserName ())
-  dacl.AddAccessAllowedAce (win32security.ACL_REVISION_DS, ntsecuritycon.FILE_ALL_ACCESS, sid)
   def remove (path):
-    win32security.SetNamedSecurityInfo (
-      path, win32security.SE_FILE_OBJECT, 
-      win32security.DACL_SECURITY_INFORMATION | win32security.UNPROTECTED_DACL_SECURITY_INFORMATION, 
-      None, None, dacl, None
-    )
+    restore_access (path)
     if os.path.isdir (path):
       os.rmdir (path)
     else:
@@ -97,10 +104,32 @@ def teardown ():
 
   utils.change_priv (win32security.SE_SECURITY_NAME, False)
 
+def restore_access (filepath=TEST_FILE):
+  win32security.SetNamedSecurityInfo (
+    filepath, win32security.SE_FILE_OBJECT, 
+    win32security.DACL_SECURITY_INFORMATION | win32security.UNPROTECTED_DACL_SECURITY_INFORMATION | 
+    win32security.SACL_SECURITY_INFORMATION | win32security.UNPROTECTED_SACL_SECURITY_INFORMATION, 
+    None, None, win32security.ACL (), win32security.ACL ()
+  )
+
+#
+# The security function should convert its argument to something
+# useful:
+#
+# None is return unchanged
+# (default) returns an empty Security instance
+# a Security instance is returned unchanged
+# a handle specified as a file returns a corresponding Security instance 
+# an unspecified handle is assumed to be a file and the corresponding Security instance returned
+# a pywin32 security descriptor returns the corresponding Security object
+# a filename operates like an unspecified handle
+# a name specified as something other than a file returns the corresponding Security object
+# anything else should raise an x_security exception
+#
 def test_security_None ():
   assert security.security (None) is None
 
-def test_security_object ():
+def test_security_default ():
   assert security.security () == security.Security ()
 
 def test_security_Security ():
@@ -155,6 +184,12 @@ def test_security_string_event ():
 def test_security_nonsense ():
   security.security (object)
 
+#
+# The Security class has a number of class-level constructors
+# .from_string expects an SDDL string
+# .from_security_descriptor expects a pywin32 security descriptor
+# .from_object expects either an object handle or an object name
+#
 def test_Security_from_string ():
   sd = win32security.GetNamedSecurityInfo (TEST_FILE, win32security.SE_FILE_OBJECT, OPTIONS)
   assert equal (sd, security.Security.from_string (as_string (sd), options=OPTIONS))
@@ -209,6 +244,167 @@ def test_Security_from_object_name ():
   finally:
     hEvent.Close ()
   
+@raises (security.x_value_not_set)
+def test_Security_no_owner ():
+  security.security ().owner
+
+@raises (security.x_value_not_set)
+def test_Security_no_group ():
+  security.security ().group
+
+@raises (security.x_value_not_set)
+def test_Security_no_dacl ():
+  security.security ().dacl
+
+@raises (security.x_value_not_set)
+def test_Security_no_sacl ():
+  security.security ().sacl
+
+@raises (security.x_value_not_set)
+def test_Security_set_owner_none ():
+  s = security.security ()
+  s.owner = None
+  s.owner
+
+@raises (security.x_value_not_set)
+def test_Security_set_group_none ():
+  s = security.security ()
+  s.group = None
+  s.group
+  
+def test_Security_set_dacl_none ():
+  s = security.security ()
+  s.dacl = None
+  assert s.pyobject ().GetSecurityDescriptorDacl () is None  
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  sd.SetSecurityDescriptorDacl (1, None, 0)
+  assert equal (sd, s)  
+
+def test_Security_set_sacl_none ():
+  s = security.security ()
+  s.sacl = None
+  assert s.pyobject ().GetSecurityDescriptorSacl () is None
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  sd.SetSecurityDescriptorSacl (1, None, 0)
+  assert equal (sd, s)  
+
+def test_Security_set_owner ():
+  administrator = security.principal ("Administrator")
+  s = security.security ()
+  s.owner = "Administrator"
+  assert s.owner == administrator
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  sd.SetSecurityDescriptorOwner (administrator.pyobject (), 0)
+  assert equal (sd, s)
+
+def test_Security_set_group ():
+  everyone = security.principal ("Everyone")
+  s = security.security ()
+  s.group = "Everyone"
+  assert s.group == everyone
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  sd.SetSecurityDescriptorGroup (everyone.pyobject (), 0)
+  assert equal (sd, s)
+
+def test_Security_set_dacl_empty ():
+  s = security.security ()
+  s.dacl = []
+  assert len (s.dacl) == 0
+  assert s.pyobject ().GetSecurityDescriptorDacl ().GetAceCount () == 0
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  acl = win32security.ACL ()
+  sd.SetSecurityDescriptorDacl (1, acl, 0)
+  assert equal (sd, s)
+
+def test_Security_set_sacl_empty ():
+  s = security.security ()
+  s.sacl = []
+  assert len (s.sacl) == 0
+  assert s.pyobject ().GetSecurityDescriptorSacl ().GetAceCount () == 0
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  acl = win32security.ACL ()
+  sd.SetSecurityDescriptorSacl (1, acl, 0)
+  assert equal (sd, s)
+
+def test_Security_add_to_dacl_simple ():
+  administrator = security.principal ("Administrator")
+  s = security.security ()
+  s.dacl = []
+  s.dacl.append (("Administrator", "F", "ALLOW"))
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  dacl = win32security.ACL ()
+  dacl.AddAccessAllowedAceEx (
+    win32security.ACL_REVISION_DS, 
+    security.DACE.FLAGS,
+    ntsecuritycon.GENERIC_ALL, 
+    administrator.pyobject ()
+  )
+  sd.SetSecurityDescriptorDacl (1, dacl, 0)
+  assert equal (sd, s)
+
+def test_Security_add_to_sacl_simple ():
+  administrator = security.principal ("Administrator")
+  s = security.security ()
+  s.sacl = []
+  s.sacl.append (("Administrator", "F", "SUCCESS"))
+  sd = win32security.SECURITY_DESCRIPTOR ()
+  sacl = win32security.ACL ()
+  sacl.AddAuditAccessAceEx (
+    win32security.ACL_REVISION_DS, 
+    security.SACE.FLAGS,
+    ntsecuritycon.GENERIC_ALL,
+    administrator.pyobject (),
+    1, 0
+  )
+  sd.SetSecurityDescriptorSacl (1, sacl, 0)
+  assert equal (sd, s)
+  
+@with_setup (None, restore_access)
+def test_Security_break_dacl_inheritance_no_copy ():
+  s = security.security (TEST_FILE, options=OPTIONS)
+  assert s.dacl.inherited
+  s.break_inheritance (copy_first=False, break_dacl=True, break_sacl=False)
+  s.to_object ()
+  sd = win32security.GetNamedSecurityInfo (TEST_FILE, win32security.SE_FILE_OBJECT, OPTIONS)
+  assert (sd.GetSecurityDescriptorControl ()[0] & win32security.SE_DACL_PROTECTED)
+  assert (not sd.GetSecurityDescriptorControl ()[0] & win32security.SE_SACL_PROTECTED)
+  assert sd.GetSecurityDescriptorDacl ().GetAceCount () == 0
+
+@with_setup (None, restore_access)
+def test_Security_break_dacl_inheritance_copy ():
+  s = security.security (TEST_FILE, options=OPTIONS)
+  n_aces = len (s.dacl)
+  assert s.dacl.inherited
+  s.break_inheritance (copy_first=True, break_dacl=True, break_sacl=False)
+  s.to_object ()
+  sd = win32security.GetNamedSecurityInfo (TEST_FILE, win32security.SE_FILE_OBJECT, OPTIONS)
+  assert (sd.GetSecurityDescriptorControl ()[0] & win32security.SE_DACL_PROTECTED)
+  assert (not sd.GetSecurityDescriptorControl ()[0] & win32security.SE_SACL_PROTECTED)
+  assert sd.GetSecurityDescriptorDacl ().GetAceCount () == n_aces
+
+@with_setup (None, restore_access)
+def test_Security_break_sacl_inheritance_no_copy ():
+  s = security.security (TEST_FILE, options=OPTIONS)
+  assert s.sacl.inherited
+  s.break_inheritance (copy_first=False, break_dacl=False, break_sacl=True)
+  s.to_object ()
+  sd = win32security.GetNamedSecurityInfo (TEST_FILE, win32security.SE_FILE_OBJECT, OPTIONS)
+  assert (sd.GetSecurityDescriptorControl ()[0] & win32security.SE_SACL_PROTECTED)
+  assert (not sd.GetSecurityDescriptorControl ()[0] & win32security.SE_DACL_PROTECTED)
+  assert sd.GetSecurityDescriptorSacl ().GetAceCount () == 0
+
+@with_setup (None, restore_access)
+def test_Security_break_sacl_inheritance_copy ():
+  s = security.security (TEST_FILE, options=OPTIONS)
+  n_aces = len (s.sacl)
+  assert s.sacl.inherited
+  s.break_inheritance (copy_first=True, break_dacl=False, break_sacl=True)
+  s.to_object ()
+  sd = win32security.GetNamedSecurityInfo (TEST_FILE, win32security.SE_FILE_OBJECT, OPTIONS)
+  assert (sd.GetSecurityDescriptorControl ()[0] & win32security.SE_SACL_PROTECTED)
+  assert (not sd.GetSecurityDescriptorControl ()[0] & win32security.SE_DACL_PROTECTED)
+  assert sd.GetSecurityDescriptorSacl ().GetAceCount () == n_aces
+
 if __name__ == '__main__':
   import nose
   nose.runmodule (exit=False) 
