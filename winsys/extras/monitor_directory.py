@@ -136,6 +136,7 @@ class App (object):
   SIZE_THRESHOLD_MB = 100
   TOP_N_FILES = 50
   REFRESH_SECS = 60
+  HIGHLIGHT_MINS = 5
   
   def __init__ (self):
     self._paths_lock = threading.Lock ()
@@ -147,7 +148,11 @@ class App (object):
     top_n_files = int (form.get ("top_n_files", self.TOP_N_FILES) or 0)
     size_threshold_mb = int (form.get ("size_threshold_mb", self.SIZE_THRESHOLD_MB) or 0)
     refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
-    title = cgi.escape ("Top %d files on %s over %dMb - %s" % (top_n_files, path, size_threshold_mb, status))
+    highlight_mins = int (form.get ("highlight_mins", self.HIGHLIGHT_MINS) or 0)
+    if files:
+      title = cgi.escape ("Top %d files on %s over %dMb - %s" % (min (len (files), TOP_N_FILES), path, size_threshold_mb, status))
+    else:
+      title = cgi.escape ("Top files on %s over %dMb - %s" % (path, size_threshold_mb, status))
     
     doc = []
     doc.append (u"<html><head><title>%s</title>" % title)
@@ -160,7 +165,8 @@ class App (object):
     p.updated {margin-bottom : 1em; font-style : italic;}
     table {width : 100%;}
     thead tr {background-color : black; color : white; font-weight : bold;}
-    tr.odd {background-color : #ddd;}
+    table tr.odd {background-color : #ddd;}
+    table tr.highlight td {background-color : #ffff80;}
     table td {padding-right : 0.5em;}
     table td.filename {width : 72%;}
     </style>""")
@@ -173,9 +179,11 @@ class App (object):
     <span class="label">for files over</span>&nbsp;<input type="text" name="size_threshold_mb" value="%(size_threshold_mb)s" size="5" maxlength="5" />Mb
     <span class="label">showing the top</span>&nbsp;<input type="text" name="top_n_files" value="%(top_n_files)s" size="3" maxlength="3" /> files
     <span class="label">refreshing every</span>&nbsp;<input type="text" name="refresh_secs" value="%(refresh_secs)s" size="3" maxlength="3" /> secs
+    <span class="label">highlighting the last&nbsp;</span>&nbsp;<input type="text" name="highlight_mins" value="%(highlight_mins)s" size="3" maxlength="3" /> mins
     <input type="submit" value="Refresh" />
     </form><hr>""" % locals ())
     
+    now = datetime.datetime.now ()
     if path:
       doc.append (u"<h1>%s</h1>" % title)
       doc.append (u'<p class="updated">Last updated %s</p>' % time.asctime ())
@@ -183,11 +191,12 @@ class App (object):
       for i, f in enumerate (files[:top_n_files]):
         try:
           doc.append (
-            u'<tr class="%s"><td class="filename">%s</td><td class="size">%5.2f</td><td class="updated">%s</td>' % (
+            u'<tr class="%s %s"><td class="filename">%s</td><td class="size">%5.2f</td><td class="updated">%s</td>' % (
               "odd" if i % 2 else "even",
+              "highlight" if (now - max (f.written_at, f.created_at)).seconds <= 60 * highlight_mins else "",
               f.filepath.relative_to (path).lstrip (fs.seps), 
               f.size / 1024.0 / 1024.0, 
-              f.written_at
+              max (f.written_at, f.created_at)
             )
           )
         except fs.exceptions.x_winsys:
@@ -200,7 +209,7 @@ class App (object):
   def handler (self, form):
     def _key (f):
       try:
-        return -f.size / time.mktime (f.written_at.timetuple ())
+        return -f.size / time.mktime (max (f.written_at, f.created_at).timetuple ())
       except fs.exceptions.x_winsys:
         return None
 
@@ -251,6 +260,8 @@ class App (object):
     path = shift_path_info (environ).rstrip ("/")
     if path == "":
       form = dict ((k, v[0]) for (k, v) in cgi.parse_qs (environ['QUERY_STRING']).items () if v)
+      if form.get ("path"):
+        form['path'] = form['path'].rstrip ("\\") + "\\"
       refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
       headers = []
       headers.append (("Content-Type", "text/html; charset=utf-8"))

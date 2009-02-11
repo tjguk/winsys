@@ -915,7 +915,7 @@ def listdir (dir, ignore_access_errors=False):
     return []
 
 def walk (top, depthfirst=False, ignore_access_errors=False):
-  top = file (top)
+  top = file (top, ignore_access_errors=ignore_access_errors)
   dirs, nondirs = [], []
   root = os.path.join (unicode (top), u"*")
   for f in files (root, ignore_access_errors=ignore_access_errors):
