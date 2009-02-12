@@ -1075,6 +1075,7 @@ class _DirWatcher (object):
   TIMEOUT = 500
   
   def __init__ (self, root, subdirs=False, watch_for=WATCH_FOR, buffer_size=BUFFER_SIZE):
+    self.iterating = True
     self.root = root
     self.subdirs = subdirs
     self.watch_for = watch_for
