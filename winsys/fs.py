@@ -28,6 +28,9 @@ import win32file
 
 from winsys import constants, core, exceptions, security, utils, _kernel32
 
+if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
+  winerror.ERROR_BAD_RECOVERY_POLICY = 6012
+
 FILE_ACCESS = constants.Constants.from_pattern ("FILE_*", namespace=ntsecuritycon)
 FILE_ACCESS.update (constants.STANDARD_ACCESS)
 FILE_ACCESS.update (constants.GENERIC_ACCESS)
