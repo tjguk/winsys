@@ -1,13 +1,40 @@
+"""Set up a windows box so that the version of Python running
+this script is considered to be the active one. This involves:
+
+1) Adding it to the system or user PATH, removing all other paths
+which contain a Python executable.
+
+2) Associating .py files with it so that double-clicking or typing
+the .py file name alone will run the right version.
+
+3) Adding it as an AppPath so that Start > Run > python will run
+this version.
+
+4) Establishing it as a drop handler so that dragging a file over
+a .py file will run the .py file with this version of Python, passing
+the dropped file as sys.argv[1].
+
+5) Finally, sending a broadcast message to all windows to indicate that
+the environment has changed and that they ought to refetch their copy.
+"""
 import os, sys
 import _winreg
+import warnings
 try:
   import ctypes
   from ctypes import wintypes
 except ImportError:
+  warnings.warn ("ctypes not found; PATH changes will not be visible until next login")
   ctypes = wintypes = None
 
 EXECUTABLE = os.path.abspath (sys.executable)
 PYTHON_DIRNAME = os.path.dirname (EXECUTABLE)
+
+try:
+  enumerate
+except NameError:
+  def enumerate (sequence):
+    return [(i, sequence[i]) for i in range (len (sequence))]
 
 def find_python_exes (paths):
   return [i for (i, p) in enumerate (paths) if os.path.exists (os.path.join (p, "python.exe"))]
@@ -45,34 +72,33 @@ def add_to_path (user_or_system):
   
   system_python_exes = find_python_exes (system_paths)
   user_python_exes = find_python_exes (user_paths)
-  if system_python_exes and user_python_exes:
-    raise RuntimeError (
-      "python.exe found in system & user paths:\n%s\n%s" % (
-        ", ".join (system_paths[i] for i in system_python_exes), 
-        ", ".join (system_paths[i] for i in system_python_exes)
-      )
-    )
 
   #
   # Find the current user path, remove any existing Python-related paths,
   # add the current python.exe/scripts path to the end and write it
   # back to the registry.
   #
-  if user_or_system == "user":
-    for python_path in set (user_paths[i] for i in user_python_exes):
-      user_paths = [u for u in user_paths if not u.startswith (python_path)]
-    user_paths.append (PYTHON_DIRNAME)
-    user_paths.append (os.path.join (PYTHON_DIRNAME, "scripts"))
-    _winreg.SetValueEx (_winreg.CreateKey (user_key, "Environment"), "PATH", 0, _winreg.REG_EXPAND_SZ, ";".join (user_paths))
-    _winreg.SetValueEx (_winreg.CreateKey (user_key, "Environment"), "OLDPATH", 0, _winreg.REG_EXPAND_SZ, old_user_path)
-  else:
-    for python_path in set (system_paths[i] for i in system_python_exes):
+  if user_or_system == "system":
+    for python_path in [system_paths[i] for i in system_python_exes]:
       system_paths = [p for p in system_paths if not p.startswith (python_path)]
     system_paths.append (PYTHON_DIRNAME)
     system_paths.append (os.path.join (PYTHON_DIRNAME, "scripts"))
-    _winreg.SetValueEx (_winreg.CreateKey (system_key, "Environment"), "PATH", 0, _winreg.REG_EXPAND_SZ, ";".join (system_paths))
-    _winreg.SetValueEx (_winreg.CreateKey (system_key, "Environment"), "OLDPATH", 0, _winreg.REG_EXPAND_SZ, old_system_path)
-  
+    new_system_path = ";".join (system_paths)
+    if new_system_path <> old_system_path:
+      _winreg.SetValueEx (_winreg.CreateKey (system_key, "Environment"), "PATH", 0, _winreg.REG_EXPAND_SZ, ";".join (system_paths))
+      _winreg.SetValueEx (_winreg.CreateKey (system_key, "Environment"), "OLDPATH", 0, _winreg.REG_EXPAND_SZ, old_system_path)
+
+  for python_path in [user_paths[i] for i in user_python_exes]:
+    user_paths = [u for u in user_paths if not u.startswith (python_path)]
+  if user_or_system == "user":
+    user_paths.append (PYTHON_DIRNAME)
+    user_paths.append (os.path.join (PYTHON_DIRNAME, "scripts"))
+  new_user_path = ";".join (user_paths)
+  if new_user_path <> old_user_path:
+    _winreg.SetValueEx (_winreg.CreateKey (user_key, "Environment"), "OLDPATH", 0, _winreg.REG_EXPAND_SZ, old_user_path)
+    _winreg.SetValueEx (_winreg.CreateKey (user_key, "Environment"), "PATH", 0, _winreg.REG_EXPAND_SZ, new_user_path)
+
+
 def add_association (user_or_system):
   if user_or_system == "user":
     root = _winreg.HKEY_CURRENT_USER
@@ -88,7 +114,7 @@ def add_association (user_or_system):
   _winreg.SetValueEx (
     _winreg.CreateKey (
       root,
-      r"Python.File\shell\open\command"
+      r"Software\Classes\Python.File\shell\open\command"
     ), "", 0, _winreg.REG_SZ, '"%s" "%%1" %%*' % EXECUTABLE
   )
 
@@ -120,14 +146,17 @@ def add_pathext ():
   make this change as system.
   """
   PYTHON_PATHEXTS = ['.py', '.pyc', '.pyw', '.pys', '.pyo']
-  SYSTEM_REG = r"SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
+  SYSTEM_REG = r"SYSTEM\CurrentControlSet\Control\Session Manager"
   system_key = _winreg.CreateKey (_winreg.HKEY_LOCAL_MACHINE, SYSTEM_REG)
     
-  old_pathexts = _winreg.QueryValueEx (_winreg.CreateKey (system_key, ""), "PATHEXT")[0]
-  _winreg.SetValueEx (system_key, "OLD_PATHEXT", 0, _winreg.REG_EXPAND_SZ, ";".join (pathexts))
+  old_pathexts = _winreg.QueryValueEx (_winreg.CreateKey (system_key, "Environment"), "PATHEXT")[0]
+  _winreg.SetValueEx (system_key, "OLD_PATHEXT", 0, _winreg.REG_SZ, old_pathexts)
   
-  pathexts = [p for p in old_pathexts.split (";") if p not in PYTHON_PATHEXTS] + PYTHON_PATHEXTS
-  _winreg.SetValueEx (system_key, "PATHEXT", 0, _winreg.REG_EXPAND_SZ, ";".join (pathexts))
+  print "old_pathexts", old_pathexts
+  pathexts = [p for p in old_pathexts.lower ().split (";") if p not in PYTHON_PATHEXTS] + PYTHON_PATHEXTS
+  print "pathexts", pathexts
+  print ";".join (pathexts)
+  _winreg.SetValueEx (system_key, "PATHEXT", 0, _winreg.REG_SZ, ";".join (pathexts))
 
 if ctypes and wintypes:
   def notify_changes ():
@@ -155,10 +184,9 @@ if __name__ == '__main__':
     user_or_system = "system"
   
   add_to_path (user_or_system)
-  sys.exit ()
   add_association (user_or_system)
-  add_drop_handler (user_or_system)
   add_apppath (user_or_system)
+  add_drop_handler (user_or_system)
   if user_or_system == "system":
     add_pathext ()
   notify_changes ()

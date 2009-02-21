@@ -2,6 +2,7 @@
 import marshal
 import re
 import time
+import warnings
 
 import pywintypes
 import winerror
@@ -22,10 +23,16 @@ class x_ipc (x_winsys):
 class x_mailslot (x_ipc):
   pass
 
-class x_mailslot_invalid_use (x_ipc):
+class x_mailslot_invalid_use (x_mailslot):
   pass
 
-class x_mailslot_empty (x_ipc):
+class x_mailslot_empty (x_mailslot):
+  pass
+  
+class x_mailslot_message_too_big (x_mailslot):
+  pass
+
+class x_mailslot_message_too_complex (x_mailslot):
   pass
   
 WINERROR_MAP = {
@@ -34,10 +41,69 @@ WINERROR_MAP = {
 wrapped = wrapper (WINERROR_MAP, x_ipc)
 
 class Mailslot (core._WinSysObject):
+  """A mailslot is a mechanism for passing small datasets (up to about
+  400 bytes) between machines in the same network. For transport and
+  name resolution it uses NetBIOS so you can't, for example, use a
+  machine's IP address when specifying the location of a mailslot.
+  You can, however, use "*" in order to broadcast your message to
+  all listening machines.
   
-  def __init__ (self, name, message_size=0, timeout_ms=-1, *args, **kwargs):
+  A mailslot is either read-only or write-only. The typical case
+  is that one machine starts up a reading mailslot, say for trace
+  output, and all other machines write to that mailslot either by
+  specifying the machine name directly or by broadcasting. This is
+  particularly convenient as the writing machines have no need to
+  determine where the trace-collecting mailslot is running or even
+  if it is running at all.
+  
+  The format for mailslot names is \\<computer>\mailslot\<path>\<to>\<mailslot>
+  The computer name can be "." for the local computer, a Windows
+  computer name, a domain name, or an asterisk to indicate a broadcast. 
+  It's not necessary to have a complex path for the mailslot but it is
+  supported and could be used to segregate functionally similar
+  mailslots on the same or different machines.
+  
+  This class deliberately wraps the mailslot API in a Python
+  API which is plug-compatible with that of the Python Queue
+  mechanism with the following notes:
+  
+  * A mailslot is either read-only or write-only. Generally,
+    the first action taken on it determines which it is, although
+    remote mailslots can only be written to so this is predetermined.
+    
+  * A mailslot can be context-managed so that it is opened and
+    closed correctly regardless of any errors.
+    
+  * A mailslot is its own iterator (strictly: generator)
+  """
+  
+  MAX_MESSAGE_SIZE = 420
+  
+  def __init__ (
+    self, 
+    name, 
+    serialiser=(str, str), 
+    message_size=0, 
+    timeout_ms=-1, 
+    *args, **kwargs
+  ):
+    """Set up a mailslot of the given name, which must be valid according to
+    the Microsoft docs.
+    
+    serialiser : a pair of functions which will be used to 
+    encode & decode data respectively. Typical serialisers
+    are (str, str) and (marshal.dumps, marshal.loads).
+    
+    message_size : the maximum size of a message to this mailslot,
+    up to the system-defined maximum of about 400 bytes if passing
+    between computers. 
+    
+    timeout_ms : how many milliseconds to wait when reading from 
+    this mailslot
+    """
     core._WinSysObject.__init__ (self, *args, **kwargs)
     self.name = name
+    self.serialiser = serialiser
     self.message_size = message_size
     self.timeout_ms = timeout_ms
     self._hRead = self._hWrite = None
@@ -49,7 +115,13 @@ class Mailslot (core._WinSysObject):
     #
     if not name.startswith (r"\\."):
       self._hWrite = self._write_handle ()
-
+      if self.message_size != 0 and self.message_size > self.MAX_MESSAGE_SIZE:
+        warnings.warn (
+          "You have specified a message size of %d for a remote mailslot."
+          "Messages over %d in size will probably fail" % \
+          (self.message_size, self.MAX_MESSAGE_SIZE)
+        )
+  
   def _read_handle (self):
     if self._hWrite is not None:
       raise x_mailslot_invalid_use ("Cannot read from this mailslot; it is used for writing")
@@ -141,12 +213,20 @@ class Mailslot (core._WinSysObject):
           raise x_mailslot_empty
       else:
         hr, data = wrapped (win32file.ReadFile, hMailslot, nextsize, None)
-        return data
+        serialiser_in, serialiser_out = self.serialiser
+        return serialiser_out (data)
     
   def get_nowait (self):
     return self.get (False, 0)
     
   def put (self, data):
+    serialiser_in, serialiser_out = self.serialiser    
+    data = serialiser_in (data)
+    if self.message_size and len (data) > self.message_size:
+      raise x_mailslot_message_too_big (
+        "Mailslot messages must be <= %d bytes" % self.message_size, 
+        "%s.put" % self.__class__.__name__, 0
+      )
     wrapped (win32file.WriteFile, self._write_handle (), data, None)
     
   def close (self):
@@ -154,14 +234,6 @@ class Mailslot (core._WinSysObject):
       wrapped (win32file.CloseHandle, self._hRead)
     if self._hWrite is not None:
       wrapped (win32file.CloseHandle, self._hWrite)
-
-class MarshalledMailslot (Mailslot):
-  
-  def get (self, block=True, timeout_ms=None):
-    return marshal.loads (Mailslot.get (self, block, timeout_ms))
-    
-  def put (self, data):
-    Mailslot.put (self, marshal.dumps (data))
 
 class Event (core._WinSysObject):
   
@@ -239,12 +311,12 @@ def mailslot (mailslot, marshalled=True, message_size=0, timeout_ms=-1):
     return mailslot
   else:
     if marshalled:
-      klass = MarshalledMailslot
+      serialiser = (marshal.dumps, marshal.loads)
     else:
-      klass = Mailslot
+      serialiser = (str, str)
     if not re.match (ur"\\\\[^\\]+\\mailslot\\", unicode (mailslot), re.UNICODE):
       mailslot = ur"\\.\mailslot\%s" % mailslot
-    return klass (mailslot, message_size, timeout_ms)
+    return Mailslot (mailslot, serialiser, message_size, timeout_ms)
 
 def event (name=None, initially_set=0, needs_manual_reset=0, security=None):
   return Event (security, needs_manual_reset, initially_set, name)
