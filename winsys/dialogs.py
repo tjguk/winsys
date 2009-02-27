@@ -215,26 +215,35 @@ class BaseDialog (object):
       field_h = self.CONTROL_H
 
       if field is None:
-        field_type = "STATIC"
-      elif (default_value is True or default_value is False):
-        field_type = "BUTTON"
+        field_type, sub_type = "STATIC", None
+      elif isinstance (default_value, bool):
+        field_type, sub_type = "BUTTON", "CHECKBOX"
+      elif isinstance (default_value, tuple):
+        field_type, sub_type = "BUTTON", "RADIOBUTTON"
       elif isinstance (default_value, list):
-        field_type = "COMBOBOX"
+        field_type, sub_type = "COMBOBOX", None
       else:
-        field_type = "EDIT"
+        field_type, sub_type = "EDIT", None
 
       dlg.append (["STATIC", field, self.IDC_LABEL_BASE + i, (label_l, label_t, self.LABEL_W, self.CONTROL_H), cs | win32con.SS_LEFT])
-      if field_type == "BUTTON":
-        field_styles = win32con.WS_TABSTOP | win32con.BS_AUTOCHECKBOX
+      if field_type != "STATIC":
+        field_styles = win32con.WS_TABSTOP
+      else:
+        field_styles = 0
+      if (field_type, sub_type) == ("BUTTON", "CHECKBOX"):
+        field_styles |= win32con.BS_AUTOCHECKBOX
+        field_w = self.CONTROL_H
+      elif (field_type, sub_type) == ("BUTTON", "RADIOBUTTON"):
+        field_styles |= win32con.BS_AUTORADIOBUTTON
         field_w = self.CONTROL_H
       elif field_type == "COMBOBOX":
         if callback is not None:
-          raise RuntimeError ("Cannot combine a list with a callback")
-        field_styles = win32con.WS_TABSTOP | win32con.CBS_DROPDOWNLIST
+          raise x_dialogs ("Cannot combine a list with a callback")
+        field_styles |= win32con.CBS_DROPDOWNLIST
         field_w = self.FIELD_W
         field_h = 4 * self.CONTROL_H
       elif field_type == "EDIT":
-        field_styles = win32con.WS_TABSTOP | win32con.WS_BORDER | win32con.ES_AUTOHSCROLL 
+        field_styles |= win32con.WS_BORDER | win32con.ES_AUTOHSCROLL
         field_w = self.FIELD_W - ((self.CALLBACK_W) if callback else 0)
       else:
         raise x_dialogs ("Problemo", "_get_dialog_template", 0)
@@ -403,10 +412,13 @@ class Dialog (BaseDialog):
   def _set_item (self, item_id, value):
     item_hwnd = wrapped (win32gui.GetDlgItem, self.hwnd, item_id)
     class_name = wrapped (win32gui.GetClassName, item_hwnd)
+    styles = wrapped (win32gui.GetWindowLong, self.hwnd, win32con.GWL_STYLE)
     if class_name == "Edit":
       wrapped (win32gui.SetDlgItemText, self.hwnd, item_id, str (value))
     elif class_name == "Button":
-      SendMessage (item_hwnd, win32con.BM_SETCHECK, int (value), 0)
+      if styles & win32con.BS_CHECKBOX:
+        SendMessage (item_hwnd, win32con.BM_SETCHECK, int (value), 0)
+      #~ elif styles & win32con.BS_RADIOBUTTON:
     elif class_name == "ComboBox":
       for item in value:
         if isinstance (item, tuple):

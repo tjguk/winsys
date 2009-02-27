@@ -41,19 +41,39 @@ def watch_files (path, size_threshold_mb, results, stop_event):
   and push then onto a results queue. Stop if the stop_event is set.
   """
   size_threshold = size_threshold_mb * 1024 * 1024
-  watcher = fs.watch (path, True)
+  BUFFER_SIZE = 8192
+  MAX_BUFFER_SIZE = 1024 * 1024
+  
+  #
+  # The double loop is because the watcher process
+  # can fall over with an internal which is (I think)
+  # related to a small buffer size. If that happens,
+  # restart the process with a bigger buffer up to a
+  # maximum size.
+  #
+  buffer_size = BUFFER_SIZE
   while True:
-    if stop_event.isSet (): break
-    try:
-      action, old_file, new_file = watcher.next ()
-      if old_file:
-        if (not old_file) or (old_file and old_file.size > size_threshold):
-          results.put (old_file)
-      if new_file and new_file <> old_file:
-        if new_file and new_file.size > size_threshold:
-          results.put (new_file)
-    except fs.exceptions.x_winsys:
-      pass
+    watcher = fs.watch (path, True, buffer_size=buffer_size)
+    
+    while True:
+      if stop_event.isSet (): break
+      try:
+        action, old_file, new_file = watcher.next ()
+        if old_file:
+          if (not old_file) or (old_file and old_file.size > size_threshold):
+            results.put (old_file)
+        if new_file and new_file <> old_file:
+          if new_file and new_file.size > size_threshold:
+            results.put (new_file)
+      except fs.exceptions.x_winsys:
+        pass
+      except RuntimeError:
+        try:
+          watcher.stop ()
+        except:
+          pass
+        buffer_size = min (2 * buffer_size, MAX_BUFFER_SIZE)
+        print "Tripped up on a RuntimeError. Trying with buffer of", buffer_size
         
 class Path (object):
   """Keep track of the files and changes under a particular
@@ -150,7 +170,7 @@ class App (object):
     refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
     highlight_mins = int (form.get ("highlight_mins", self.HIGHLIGHT_MINS) or 0)
     if files:
-      title = cgi.escape ("Top %d files on %s over %dMb - %s" % (min (len (files), TOP_N_FILES), path, size_threshold_mb, status))
+      title = cgi.escape ("Top %d files on %s over %dMb - %s" % (min (len (files), self.TOP_N_FILES), path, size_threshold_mb, status))
     else:
       title = cgi.escape ("Top files on %s over %dMb - %s" % (path, size_threshold_mb, status))
     
