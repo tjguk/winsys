@@ -8,8 +8,10 @@ import win32com.server.policy
 import win32api
 import win32con
 from win32com.shell import shell, shellcon
+import win32ui
 import struct
 import threading
+import traceback
 import uuid
 
 from winsys import core, constants, utils, ipc
@@ -163,6 +165,9 @@ class BaseDialog (object):
   BUTTON_W = 36
   CALLBACK_W = CONTROL_H
   
+  MAX_W = 640
+  MAX_H = 480
+  
   #
   # Default styles
   #
@@ -204,18 +209,18 @@ class BaseDialog (object):
     cs = win32con.WS_CHILD | win32con.WS_VISIBLE
 
     n_fields = len (self.fields) + (1 if self.progress_callback else 0)
-    dlg_h = self.GUTTER_H + n_fields * (self.CONTROL_H + self.GUTTER_H) + self.CONTROL_H + self.GUTTER_H
-    dlg = [[self.title, (0, 0, self.W, dlg_h), style, None, (9, "Lucida Sans Regular"), None, dlg_class_name],]
+    dlg = []
 
+    control_t = self.GUTTER_H
     for i, (field, default_value, callback) in enumerate (self.fields):
       label_l = self.GUTTER_W
-      label_t = self.GUTTER_H + (self.CONTROL_H + self.GUTTER_H) * i
+      label_t = control_t
       field_l = label_l + self.LABEL_W + self.GUTTER_W
       field_t = label_t
-      field_h = self.CONTROL_H
+      display_h = field_h = self.CONTROL_H
 
       if field is None:
-        field_type, sub_type = "STATIC", None
+        field_type, sub_type = "EDIT", "READONLY"
       elif isinstance (default_value, bool):
         field_type, sub_type = "BUTTON", "CHECKBOX"
       elif isinstance (default_value, tuple):
@@ -242,30 +247,43 @@ class BaseDialog (object):
         field_styles |= win32con.CBS_DROPDOWNLIST
         field_w = self.FIELD_W
         field_h = 4 * self.CONTROL_H
+        display_h = self.CONTROL_H
       elif field_type == "EDIT":
-        field_styles |= win32con.WS_BORDER | win32con.ES_AUTOHSCROLL
+        field_styles |= win32con.WS_BORDER | win32con.ES_AUTOHSCROLL | win32con.ES_AUTOVSCROLL
         field_w = self.FIELD_W - ((self.CALLBACK_W) if callback else 0)
+        if "\r\n" in default_value:
+          field_styles |= win32con.ES_MULTILINE
+          display_h = field_h = self.CONTROL_H * min (default_value.count ("\r\n"), 10)
+        if sub_type == "READONLY":
+          field_styles |= win32con.ES_READONLY        
       else:
         raise x_dialogs ("Problemo", "_get_dialog_template", 0)
 
       dlg.append ([field_type, None, self.IDC_FIELD_BASE + i, (field_l, field_t, field_w, field_h), cs | field_styles])
       if callback:
         dlg.append (["BUTTON", "...", self.IDC_CALLBACK_BASE + i, (field_l + field_w + self.GUTTER_W, field_t, self.CALLBACK_W, self.CONTROL_H), cs | win32con.WS_TABSTOP | win32con.BS_PUSHBUTTON])
+      
+      control_t += display_h + self.GUTTER_H
 
     i += 1
     if self.progress_callback:
       self._progress_id = self.IDC_FIELD_BASE + i
-      field_t = self.GUTTER_H + (self.CONTROL_H + self.GUTTER_H) * i
+      field_t = control_t
       field_w = self.W - (2 * self.GUTTER_W)
       field_l = self.GUTTER_W
-      field_styles = win32con.SS_CENTER
+      field_h = self.CONTROL_H
+      field_styles = win32con.SS_LEFT
       dlg.append (["STATIC", None, self.IDC_FIELD_BASE + i, (field_l, field_t, field_w, field_h), cs | field_styles])
+      control_t += field_h + self.GUTTER_H
 
     cs = win32con.WS_CHILD | win32con.WS_VISIBLE | win32con.WS_TABSTOP | win32con.BS_PUSHBUTTON
-    button_t = field_t + self.CONTROL_H + self.GUTTER_H
+    button_t = control_t
     for i, (caption, id) in enumerate (reversed (self.BUTTONS)):
-      dlg.append (["BUTTON", caption, id, (self.W - ((i + 1) * (self.GUTTER_W + self.BUTTON_W)), button_t, self.BUTTON_W, self.CONTROL_H), cs])
+      field_h = self.CONTROL_H
+      dlg.append (["BUTTON", caption, id, (self.W - ((i + 1) * (self.GUTTER_W + self.BUTTON_W)), button_t, self.BUTTON_W, field_h), cs])
+    control_t += field_h + self.GUTTER_H
 
+    dlg.insert (0, [self.title, (0, 0, self.W, control_t), style, None, (9, "Lucida Sans Regular"), None, dlg_class_name])
     return dlg
 
 class Dialog (BaseDialog):
@@ -309,6 +327,9 @@ class Dialog (BaseDialog):
       message_map
     )
 
+  def corners (self, l, t, r, b):
+    return l, t, r, b
+  
   def OnInitDialog (self, hwnd, msg, wparam, lparam):
     """Attempt to position the dialog box more or less in
     the middle of its parent (possibly the desktop). Then
@@ -332,7 +353,9 @@ class Dialog (BaseDialog):
       self._set_item (id, default)
     
     parent = self.parent_hwnd or wrapped (win32gui.GetDesktopWindow)
-    l, t, r, b = wrapped (win32gui.GetWindowRect, self.hwnd)
+    l, t, r, b = self.corners (*wrapped (win32gui.GetWindowRect, self.hwnd))
+    r = min (r, l + self.MAX_W)
+    
     dt_l, dt_t, dt_r, dt_b = wrapped (win32gui.GetWindowRect, parent)
     centre_x, centre_y = wrapped (win32gui.ClientToScreen, parent, ((dt_r - dt_l) / 2, (dt_b - dt_t) / 2))
     wrapped (win32gui.MoveWindow, self.hwnd, centre_x - (r / 2), centre_y - (b / 2), r - l, b - t, 0)
@@ -353,8 +376,10 @@ class Dialog (BaseDialog):
       return ctrl, l, t, r, b
     
     hDC = wrapped (win32gui.GetDC, self.hwnd)
-    label_w, label_h = max (wrapped (win32gui.GetTextExtentPoint32, hDC, label or "") for label, _, _ in self.fields)
-    wrapped (win32gui.ReleaseDC, self.hwnd, hDC)
+    try:
+      label_w, label_h = max (wrapped (win32gui.GetTextExtentPoint32, hDC, label or "") for label, _, _ in self.fields)
+    finally:
+      wrapped (win32gui.ReleaseDC, self.hwnd, hDC)
     
     for i, (field, default, callback) in enumerate (self.fields):
       if field is not None:
@@ -414,10 +439,11 @@ class Dialog (BaseDialog):
     class_name = wrapped (win32gui.GetClassName, item_hwnd)
     styles = wrapped (win32gui.GetWindowLong, self.hwnd, win32con.GWL_STYLE)
     if class_name == "Edit":
-      wrapped (win32gui.SetDlgItemText, self.hwnd, item_id, str (value))
+      value = str (value).replace ("\r\n", "\n").replace ("\n", "\r\n")
+      wrapped (win32gui.SetDlgItemText, self.hwnd, item_id, value)
     elif class_name == "Button":
-      if styles & win32con.BS_CHECKBOX:
-        SendMessage (item_hwnd, win32con.BM_SETCHECK, int (value), 0)
+      #~ if styles & win32con.BS_CHECKBOX:
+      SendMessage (item_hwnd, win32con.BM_SETCHECK, int (value), 0)
       #~ elif styles & win32con.BS_RADIOBUTTON:
     elif class_name == "ComboBox":
       for item in value:
@@ -528,8 +554,12 @@ class Dialog (BaseDialog):
           else:
             self._progress_message (message)
       except:
-        core.exception ("dialogs.progress_thread")
-        self._progress_complete ("Error occurred")
+        InfoDialog (  
+          "An error occurred: please contact the Helpdesk", 
+          traceback.format_exc (), 
+          parent_hwnd=hwnd
+        ).run ()
+        self._progress_complete ("An error occurred")
       else:
         self._progress_complete ("Complete")
 
@@ -654,6 +684,24 @@ def get_filename (start_folder=None, hwnd=None):
     return None
   else:
     return wrapped (shell.SHGetPathFromIDList, pidl)
+
+class InfoDialog (Dialog):
+
+  def __init__ (self, title, info, parent_hwnd=0):
+    self.info = str (info).replace ("\r\n", "\n").replace ("\n", "\r\n")
+    Dialog.__init__ (self, title, [(None, self.info, None)], parent_hwnd=parent_hwnd)
+    self.BUTTONS = [("Ok", win32con.IDOK)]
+
+  def OnOk (self, hwnd):
+    wrapped (win32gui.EndDialog, hwnd, win32con.IDOK)
+    
+  def corners (self, l, t, r, b):
+    hDC = wrapped (win32gui.GetDC, self.hwnd)
+    try:
+      w, h = max (wrapped (win32gui.GetTextExtentPoint32, hDC, line) for line in self.info.split ("\r\n"))
+      return l, t, l + w + 2 * self.GUTTER_W, b
+    finally:
+      wrapped (win32gui.ReleaseDC, self.hwnd, hDC)
 
 if __name__=='__main__':
   from winsys import fs
