@@ -472,6 +472,11 @@ class Dialog (BaseDialog):
     """
     dlg_l, dlg_t, dlg_r, dlg_b = wrapped (win32gui.GetWindowRect, hwnd)
     #
+    # If returning from minmization, do nothing
+    #
+    if wrapped (win32gui.GetClientRect, hwnd) == (0, 0, 0, 0):
+      return 0
+    #
     # MINMAXINFO is a struct of 5 POINT items, each of which
     # is a pair of LONGs. We extract the structure into a list,
     # set the Y coord of MaxTrackSize and of MinTrackSize to be
