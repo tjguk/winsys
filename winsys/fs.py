@@ -32,7 +32,7 @@ if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
 
 from . import constants, core, exceptions, security, utils, _kernel32
 from ._fs_core import *
-from ._fs_filepath import *
+from ._fs_filepath import FilePath
 
 FILE_ACCESS = constants.Constants.from_pattern ("FILE_*", namespace=ntsecuritycon)
 FILE_ACCESS.update (constants.STANDARD_ACCESS)
@@ -200,10 +200,6 @@ class Drive (core._WinSysObject):
     output.append (u"mount_points:\n%s" % utils.dumped_list ((u"%s => %s" % i for i in mount_points), level))
     return utils.dumped ("\n".join (output), level)
 
-def drives ():
-  for drive in wrapped (win32api.GetLogicalDriveStrings).strip ("\x00").split ("\x00"):
-    yield Drive (drive)
-
 class Volume (core._WinSysObject):
   
   def __init__ (self, volume):
@@ -265,29 +261,6 @@ class Volume (core._WinSysObject):
   def dismount (self, filepath):
     Dir (filepath).dismount ()
         
-def volume (volume):
-  if isinstance (volume, Volume):
-    return volume
-  elif volume.startswith (ur"\\?\Volume"):
-    return Volume (volume)
-  else:
-    return Volume (wrapped (win32file.GetVolumeNameForVolumeMountPoint, volume.rstrip (sep) + sep))
-
-def volumes ():
-  hSearch, volume_name = _kernel32.FindFirstVolume ()
-  yield Volume (volume_name)
-  while True:
-    volume_name = _kernel32.FindNextVolume (hSearch)
-    if volume_name is None:
-      break
-    else:
-      yield Volume (volume_name)
-
-def mounts ():
-  for v in volumes ():
-    for m in v.mounts:
-      yield Dir (m), v
-
 class Entry (core._WinSysObject):
   
   def __init__ (self, filepath):
@@ -1021,6 +994,33 @@ def dismount (filepath):
 
 def zip (filepath, *args, **kwargs):
   return entry (filepath).zip (*args, **kwargs)
+
+def drives ():
+  for drive in wrapped (win32api.GetLogicalDriveStrings).strip ("\x00").split ("\x00"):
+    yield Drive (drive)
+
+def volume (volume):
+  if isinstance (volume, Volume):
+    return volume
+  elif volume.startswith (ur"\\?\Volume"):
+    return Volume (volume)
+  else:
+    return Volume (wrapped (win32file.GetVolumeNameForVolumeMountPoint, volume.rstrip (sep) + sep))
+
+def volumes ():
+  hSearch, volume_name = _kernel32.FindFirstVolume ()
+  yield Volume (volume_name)
+  while True:
+    volume_name = _kernel32.FindNextVolume (hSearch)
+    if volume_name is None:
+      break
+    else:
+      yield Volume (volume_name)
+
+def mounts ():
+  for v in volumes ():
+    for m in v.mounts:
+      yield Dir (m), v
 
 class _DirWatcher (object):
   
