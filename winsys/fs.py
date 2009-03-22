@@ -96,7 +96,8 @@ def _get_parts (filepath):
   u"""Helper function to regularise a file path and then
   to pick out its drive and path components.
   """
-  filepath = os.path.abspath (filepath)
+  is_dir = filepath[-1] in seps
+  filepath = os.path.abspath (filepath) + (sep if is_dir else "")
   prefix_match = re.match (ur"([A-Za-z]:)", filepath)
   if not prefix_match:
     prefix_match = re.match (ur"(\\\\\?\\[A-Za-z]:)", filepath)
@@ -270,7 +271,7 @@ class Entry (core._WinSysObject):
       self._filepath = unicode (filepath)
     else:
       pieces = _get_parts (filepath)
-      self.name = pieces[-1] or (pieces[-2] + sep)
+      self.name = pieces[-1] or pieces[-2]
       self._real_filepath = None
       self._filepath = "".join (pieces[:2]) + sep.join (pieces[2:])
 
@@ -880,8 +881,8 @@ def glob (pattern, ignore_access_errors=False):
   dirname = os.path.dirname (pattern)
   return (entry.filepath for entry in files (pattern, ignore_access_errors=False))
 
-def listdir (dir, ignore_access_errors=False):
-  pattern = FilePath (dir.rstrip (seps)) + u"*"
+def listdir (d, ignore_access_errors=False):
+  pattern = dir (d).filepath + u"*"
   try:
     return (f.name for f in files (pattern, ignore_access_errors=ignore_access_errors))
   except win32file.error:

@@ -9,7 +9,8 @@ class FilePath (unicode):
   directory name, filename, parent directory &c.
   """
   def __new__ (meta, filepath, *args, **kwargs):
-    filepath = os.path.abspath (filepath)
+    is_dir = filepath[-1] in seps    
+    filepath = utils.normalised (filepath) + (sep if is_dir else "")
     return unicode.__new__ (meta, filepath, *args, **kwargs)
 
   def __init__ (self, filepath, *args, **kwargs):
@@ -17,8 +18,8 @@ class FilePath (unicode):
     ones as instance attributes:
     
     FilePath.parts - a list of the components
-    FilePath.root - always a backslash
-    FilePath.filename - final component (may be blank)
+    FilePath.root - the drive or UNC server/share always ending in a backslash
+    FilePath.filename - final component (may be blank if the path looks like a directory)
     FilePath.name - same as filename unless empty in which case second-last component
     FilePath.dirname - all path components before the last
     FilePath.path - combination of volume and dirname
@@ -41,6 +42,7 @@ class FilePath (unicode):
     output.append (u"parts: %s" % self.parts)
     output.append (u"root: %s" % self.root)
     output.append (u"dirname: %s" % self.dirname)
+    output.append (u"name: %s" % self.name)
     output.append (u"path: %s" % self.path)
     output.append (u"filename: %s" % self.filename)
     if self.parent:
@@ -49,16 +51,15 @@ class FilePath (unicode):
   
   def _get_parts (self):
     if self._parts is None:
-      normself = utils.normalised (self)
-      root = wrapped (win32file.GetVolumePathName, normself)
-      rest = normself[len (root):]
+      root = wrapped (win32file.GetVolumePathName, self)
+      rest = self[len (root):]
       self._parts = [root] + rest.split (sep)
     return self._parts
   parts = property (_get_parts)
   
   def _get_root (self):
     if self._root is None:
-      self._root = self.parts[0]
+      self._root = self.__class__ (self.parts[0])
     return self._root
   root = property (_get_root)
   
@@ -76,7 +77,7 @@ class FilePath (unicode):
   
   def _get_path (self):
     if self._path is None:
-      self._path = self.root + self.dirname
+      self._path = self.__class__ (self.root + self.dirname)
     return self._path
   path = property (_get_path)
   
@@ -84,7 +85,7 @@ class FilePath (unicode):
     if self._parent is None:
       parent_dir = [p for p in self.parts if p][:-1]
       if parent_dir:
-        self._parent = parent_dir[0] + sep.join (parent_dir[1:])
+        self._parent = self.__class__ (parent_dir[0] + sep.join (parent_dir[1:]))
       else:
         self._parent = None
     return self._parent
