@@ -208,7 +208,7 @@ class Mailslot (core._WinSysObject):
           if (timeout is not None) and (time.time () - t0) > timeout:
             raise x_mailslot_empty
           else:
-            time.sleep (0.1)
+            time.sleep (0.001)
         else:
           raise x_mailslot_empty
       else:
