@@ -7,7 +7,7 @@ import win32con
 import win32event
 import win32file
 
-from . import exceptions, constants
+from .. import exceptions, constants
 
 sep = unicode (os.sep)
 seps = u"/\\"

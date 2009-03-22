@@ -2,12 +2,12 @@
 u"""Provide functions unavailable via pywin32 which reside in kernel32.dll
 """
 import winerror
-from ctypes import windll
+from ctypes import windll, wintypes
 import ctypes
 import win32api
 import win32file
 
-from winsys.exceptions import *
+from .exceptions import *
 
 kernel32 = windll.kernel32
 
@@ -99,3 +99,17 @@ def FindVolumeMountPointClose (hSearch):
   if kernel32.FindVolumeMountPointClose (hSearch) == 0:
     return error (x_kernel32, "FindVolumeMountPointClose")
 
+def GetCompressedFileSize (filepath):
+  u"""Return the size in bytes of a file. If the file is compressed,
+  return the compressed size, otherwise return the regular size.
+  
+  Altho' this function is already exposed by pywin32, there is a
+  bug in the implementation such that non-trivial unicode causes
+  an error.
+  """
+  hi = wintypes.DWORD ()
+  lo = kernel32.GetCompressedFileSizeW (unicode (filepath), ctypes.byref (hi))
+  if lo == 0xffffffff and ctypes.GetLastError != winerror.NO_ERROR:
+    return error (x_kernel32, "GetCompressedFileSize")
+  else:
+    return lo + (hi.value * 2 << 31)

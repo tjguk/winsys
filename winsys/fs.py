@@ -31,8 +31,9 @@ if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
   winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
 from . import constants, core, exceptions, security, utils, _kernel32
-from ._fs_core import *
-from ._fs_filepath import FilePath
+from ._fs.core import *
+from ._fs.utils import *
+from ._fs.filepath import FilePath
 
 FILE_ACCESS = constants.Constants.from_pattern ("FILE_*", namespace=ntsecuritycon)
 FILE_ACCESS.update (constants.STANDARD_ACCESS)
@@ -91,23 +92,6 @@ COMPRESSION_FORMAT = constants.Constants.from_dict (dict (
 ))
 
 PyHANDLE = pywintypes.HANDLEType
-
-def _get_parts (filepath):
-  u"""Helper function to regularise a file path and then
-  to pick out its drive and path components.
-  """
-  is_dir = filepath[-1] in seps
-  filepath = os.path.abspath (filepath) + (sep if is_dir else "")
-  prefix_match = re.match (ur"([A-Za-z]:)", filepath)
-  if not prefix_match:
-    prefix_match = re.match (ur"(\\\\\?\\[A-Za-z]:)", filepath)
-    if not prefix_match:
-      prefix_match = re.match (ur"(\\\\[^\?\*\\\:\/]+\\[^\?\*\\\:\/]+)", filepath)
-      if not prefix_match:
-        raise x_fs (u"Unable to match %s against known path types" % filepath)
-  
-  prefix = prefix_match.group (1)
-  return [prefix, sep] + filepath[1+len (prefix):].split (sep)
 
 def handle (filepath, write=False):
   u"""Helper function to return a file handle either for querying
@@ -270,10 +254,10 @@ class Entry (core._WinSysObject):
       self._real_filepath = filepath
       self._filepath = unicode (filepath)
     else:
-      pieces = _get_parts (filepath)
+      pieces = get_parts (filepath)
       self.name = pieces[-1] or pieces[-2]
       self._real_filepath = None
-      self._filepath = "".join (pieces[:2]) + sep.join (pieces[2:])
+      self._filepath = pieces[0] + sep.join (pieces[1:])
 
   def dumped (self, level=0):
     output = []
@@ -348,7 +332,7 @@ class Entry (core._WinSysObject):
   uncompressed_size = property (_get_uncompressed_size)
   
   def _get_size (self):
-    return wrapped (win32file.GetCompressedFileSize, utils.normalised (self._filepath))
+    return _kernel32.GetCompressedFileSize (utils.normalised (self._filepath))
   size = property (_get_size)
   
   def _get_attributes (self):
@@ -625,7 +609,7 @@ class Dir (Entry):
   
   def __init__ (self, filepath, *args, **kwargs):
     Entry.__init__ (self, filepath.rstrip (seps) + sep, *args, **kwargs)
-    parts = _get_parts (self._filepath)
+    parts = get_parts (self._filepath)
     self.name = parts[-1] + sep
   
   def compress (self, apply_to_contents=True, callback=None):
@@ -788,8 +772,8 @@ class Dir (Entry):
   mkdir = create
 
 def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
-  parts = _get_parts (unicode (pattern))
-  dirpath = parts[0] + parts[1] + sep.join (parts[2:-1])
+  parts = get_parts (unicode (pattern))
+  dirpath = parts[0] + sep.join (parts[1:-1])
   try:
     iterator = wrapped (win32file.FindFilesIterator, pattern)
   except exceptions.x_access_denied:
@@ -840,12 +824,12 @@ def entry (filepath, ignore_access_errors=False):
     guess whether it's intended to be a dir or a file
     by looking for a trailing slash.
     """
-    parts = _get_parts (filepath)
+    parts = get_parts (filepath)
     if parts[-1]:
       return File (filepath)
     else:
       return Dir (filepath)
-  
+
   if filepath is None:
     return None
   elif isinstance (filepath, Entry):

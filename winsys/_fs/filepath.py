@@ -1,7 +1,9 @@
 import os
+import re
 
-from . import utils
-from ._fs_core import *
+from .. import utils
+from .core import *
+from .utils import *
 
 class FilePath (unicode):
   u"""Helper class which subclasses unicode, and can therefore be passed
@@ -48,12 +50,13 @@ class FilePath (unicode):
     if self.parent:
       output.append (u"parent: %s" % self.parent)
     return utils.dumped (u"\n".join (output), level)
-  
+
   def _get_parts (self):
+    u"""Helper function to regularise a file path and then
+    to pick out its drive and path components.
+    """
     if self._parts is None:
-      root = wrapped (win32file.GetVolumePathName, self)
-      rest = self[len (root):]
-      self._parts = [root] + rest.split (sep)
+      self._parts = _get_parts (self)
     return self._parts
   parts = property (_get_parts)
   
