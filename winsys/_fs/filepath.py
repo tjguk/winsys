@@ -56,7 +56,7 @@ class FilePath (unicode):
     to pick out its drive and path components.
     """
     if self._parts is None:
-      self._parts = _get_parts (self)
+      self._parts = get_parts (self)
     return self._parts
   parts = property (_get_parts)
   
