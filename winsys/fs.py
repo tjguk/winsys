@@ -99,7 +99,7 @@ def handle (filepath, write=False):
   """
   return wrapped (
     win32file.CreateFile,
-    utils.normalised (filepath),
+    normalised (filepath),
     (FILE_ACCESS.READ | FILE_ACCESS.WRITE) if write else 0,
     (FILE_SHARE.READ | FILE_SHARE.WRITE) if write else FILE_SHARE.READ,
     None,
@@ -332,11 +332,11 @@ class Entry (core._WinSysObject):
   uncompressed_size = property (_get_uncompressed_size)
   
   def _get_size (self):
-    return _kernel32.GetCompressedFileSize (utils.normalised (self._filepath))
+    return _kernel32.GetCompressedFileSize (normalised (self._filepath))
   size = property (_get_size)
   
   def _get_attributes (self):
-    return Attributes (wrapped (win32file.GetFileAttributesExW, utils.normalised (self._filepath))[0])
+    return Attributes (wrapped (win32file.GetFileAttributesExW, normalised (self._filepath))[0])
   attributes = property (_get_attributes)
   
   def _get_id (self):
@@ -356,9 +356,9 @@ class Entry (core._WinSysObject):
   def _set_file_attribute (self, key, value):
     attr = FILE_ATTRIBUTE[key.upper ()]
     if value:
-      wrapped (win32file.SetFileAttributesW, utils.normalised (self._filepath), self.attributes.flags | attr)
+      wrapped (win32file.SetFileAttributesW, normalised (self._filepath), self.attributes.flags | attr)
     else:
-      wrapped (win32file.SetFileAttributesW, utils.normalised (self._filepath), self.attributes.flags & ~attr)
+      wrapped (win32file.SetFileAttributesW, normalised (self._filepath), self.attributes.flags & ~attr)
       
   def _get_archive (self):
     return self.attributes.archive
@@ -387,7 +387,7 @@ class Entry (core._WinSysObject):
   def _get_normal (self):
     return self.attributes.normal
   def _set_normal (self, value):
-    wrapped (win32file.SetFileAttributesW, utils.normalised (self._filepath), FILE_ATTRIBUTE.NORMAL)
+    wrapped (win32file.SetFileAttributesW, normalised (self._filepath), FILE_ATTRIBUTE.NORMAL)
   hidden = property (_get_hidden, _set_hidden)
   
   def _get_not_content_indexed (self):
@@ -449,7 +449,7 @@ class Entry (core._WinSysObject):
     the POV of the current user) on the filesystem so that
     it can be checked with if fs.entry ("..."):
     """
-    return (wrapped (win32file.GetFileAttributesW, utils.normalised (self._filepath)) != -1)
+    return (wrapped (win32file.GetFileAttributesW, normalised (self._filepath)) != -1)
   
   def parent (self):
     if self.filepath.parent:
@@ -500,7 +500,7 @@ class Entry (core._WinSysObject):
     wrapped (
       win32file.MoveFileWithProgress,
       self._filepath, 
-      utils.normalised (unicode (other)),
+      normalised (unicode (other)),
       progress_wrapper (callback), 
       callback_data, 
       flags
@@ -552,19 +552,19 @@ class File (Entry):
     return self == other or filecmp.cmp (self._filepath, other.filepath)
     
   def hard_link_to (self, other):
-    otherpath = utils.normalised (unicode (other))
+    otherpath = normalised (unicode (other))
     wrapped (
       win32file.CreateHardLink, 
       otherpath, 
-      utils.normalised (self._filepath)
+      normalised (self._filepath)
     )
-    return file (utils.normalised (unicode (other)))
+    return file (normalised (unicode (other)))
     
   def hard_link_from (self, other):
-    otherpath = utils.normalised (unicode (other))
+    otherpath = normalised (unicode (other))
     wrapped (
       win32file.CreateHardLink, 
-      utils.normalised (self._filepath), 
+      normalised (self._filepath), 
       otherpath
     )
     return self
@@ -681,11 +681,11 @@ class Dir (Entry):
       else:
         wrapped (
           win32file.CreateDirectory, 
-          utils.normalised (path), 
+          normalised (path), 
           security.pyobject () if security else None
         )
     
-    return Dir (utils.normalised (path))
+    return Dir (normalised (path))
     
   def files (self, pattern=u"*", *args, **kwargs):
     return (f for f in files (os.path.join (self._filepath, pattern), *args, **kwargs) if not f.directory)
@@ -890,7 +890,7 @@ def walk (top, depthfirst=False, ignore_access_errors=False):
 
 def flat (root, pattern="*", includedirs=False, depthfirst=False, ignore_access_errors=False):
   walker = walk (
-    utils.normalised (root.rstrip (seps) + sep),
+    normalised (root.rstrip (seps) + sep),
     depthfirst=depthfirst, 
     ignore_access_errors=ignore_access_errors
   )
@@ -1022,7 +1022,7 @@ class _DirWatcher (object):
     self.buffer = wrapped (win32file.AllocateReadBuffer, buffer_size)
     self.hDir = wrapped (
       win32file.CreateFile,
-      utils.normalised (root),
+      normalised (root),
       FILE_ACCESS.LIST_DIRECTORY,
       #
       # This must allow RWD otherwises files in

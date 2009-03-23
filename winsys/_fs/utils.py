@@ -22,7 +22,7 @@ def get_parts (filepath):
   if not prefix_match:
     prefix_match = re.match (ur"(\\\\\?\\[A-Za-z]:\\)", filepath)
     if not prefix_match:
-      prefix_match = re.match (ur"(\\\\[^\?\*\\\:\/]+\\[^\?\*\\\:\/]+\\)", filepath)
+      prefix_match = re.match (ur"(\\\\[^\?\*\\\:\/]+\\[^\?\*\\\:\/]+\\?)", filepath)
   
   if prefix_match:
     prefix = prefix_match.group (1)
@@ -38,3 +38,22 @@ def get_parts (filepath):
       prefix = os.getcwd ()
     filepath = os.path.join (prefix, filepath)
     return get_parts (filepath)
+
+def normalised (filepath):
+  u"""Convert any path or path-like object into the
+  length-unlimited unicode equivalent. This should avoid
+  issues with maximum path length and the like.
+  """
+  
+  #
+  # os.path.abspath will return a sep-terminated string
+  # for the root directory and a non-sep-terminated
+  # string for all other paths.
+  #
+  filepath = unicode (filepath)
+  if filepath.startswith (2 * sep):
+    return filepath
+  else:
+    is_dir = filepath[-1] in seps
+    abspath = os.path.abspath (filepath)
+    return (u"\\\\?\\" + abspath) + (sep if is_dir and not abspath.endswith (sep) else "")

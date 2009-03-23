@@ -11,8 +11,7 @@ class FilePath (unicode):
   directory name, filename, parent directory &c.
   """
   def __new__ (meta, filepath, *args, **kwargs):
-    is_dir = filepath[-1] in seps    
-    filepath = utils.normalised (filepath) + (sep if is_dir else "")
+    filepath = normalised (filepath) ## + (sep if is_dir else "")
     return unicode.__new__ (meta, filepath, *args, **kwargs)
 
   def __init__ (self, filepath, *args, **kwargs):

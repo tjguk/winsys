@@ -28,17 +28,6 @@ def _longword (lo, hi):
 def _set (obj, attr, value):
   obj.__dict__[attr] = value
 
-def normalised (filepath):
-  u"""Convert any path or path-like object into the
-  length-unlimited unicode equivalent. This should avoid
-  issues with maximum path length and the like.
-  """
-  filepath = unicode (filepath)
-  if filepath.startswith (u"\\\\"):
-    return filepath.rstrip ("\\")
-  else:
-    return u"\\\\?\\" + os.path.abspath (filepath)
-
 def relative_to (path1, path0):
   """Entirely unsophisticated functionality to remove a short
   path from the beginning of a longer one off the same root.
