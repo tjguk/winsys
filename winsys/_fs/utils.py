@@ -28,7 +28,7 @@ def get_parts (filepath):
   if prefix_match:
     prefix = prefix_match.group (1)
     rest = filepath[len (prefix):]
-    return [prefix] + rest.split (sep)
+    return [prefix.rstrip (sep) + sep] + rest.split (sep)
   else:
     #
     # Assume it's relative to the current drive
