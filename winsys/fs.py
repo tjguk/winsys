@@ -682,8 +682,6 @@ class Dir (Entry):
   mkdir = create
 
 def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
-  parts = get_parts (unicode (pattern))
-  dirpath = parts[0] + sep.join (parts[1:-1])
   try:
     iterator = wrapped (win32file.FindFilesIterator, pattern)
   except exceptions.x_access_denied:
@@ -701,6 +699,8 @@ def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
     core.warn ("Ignored no-such-file on first iteration of %s", pattern)
     raise StopIteration
 
+  parts = get_parts (unicode (pattern))
+  dirpath = parts[0] + sep.join (parts[1:-1])
   while True:
     try:
       f = iterator.next ()
@@ -728,7 +728,7 @@ def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
       raise StopIteration
 
 def entry (filepath, ignore_access_errors=False):
-  
+
   def _guess (filepath):
     u"""If the path doesn't exist on the filesystem,
     guess whether it's intended to be a dir or a file
