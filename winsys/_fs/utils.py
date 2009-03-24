@@ -4,6 +4,18 @@ import re
 
 from .core import *
 
+LEGAL_FILECHAR = r"[^\?\*\\\:\/]"
+LEGAL_FILECHARS = LEGAL_FILECHAR + "+"
+LEGAL_VOLCHAR = r"[^\?\*\\\/]"
+LEGAL_VOLCHARS = LEGAL_VOLCHAR + "+"
+UNC = sep * 4 + LEGAL_FILECHARS + sep * 2 + LEGAL_FILECHARS
+DRIVE = r"[a-z]:"
+VOLUME = sep * 4 + r"\?" + sep * 2 + LEGAL_VOLCHARS
+PREFIX = r"((?:%s|%s|%s)\\)" % (UNC, DRIVE, VOLUME)
+PATHSEG = "(" + LEGAL_FILECHARS + ")" + sep * 2 + "?"
+PATHSEGS = "(?:%s)*" % PATHSEG
+FILEPATH = PREFIX + PATHSEGS
+
 def get_parts (filepath):
   u"""Helper function to regularise a file path and then
   to pick out its drive and path components.
@@ -18,17 +30,17 @@ def get_parts (filepath):
   If that fails, assume it's relative to the current drive
   and/or directory.
   """
-  filepath = filepath.replace ("/", "\\")
-  prefix_match = re.match (ur"([A-Za-z]:\\)", filepath)
+  filepath = filepath.replace ("/", sep)
+  prefix_match = re.match (ur"([A-Za-z]:)", filepath)
   if not prefix_match:
-    prefix_match = re.match (ur"(\\\\\?\\[A-Za-z]:\\)", filepath)
+    prefix_match = re.match (ur"(\\\\\?\\[A-Za-z]:)", filepath)
     if not prefix_match:
-      prefix_match = re.match (ur"(\\\\[^\?\*\\\:\/]+\\[^\?\*\\\:\/]+\\?)", filepath)
+      prefix_match = re.match (ur"(\\\\[^\?\*\\\:\/]+\\[^\?\*\\\:\/]+)", filepath)
   
   if prefix_match:
     prefix = prefix_match.group (1)
     rest = filepath[len (prefix):]
-    return [prefix.rstrip (sep) + sep] + rest.split (sep)
+    return [prefix.rstrip (sep) + sep] + rest.lstrip (sep).split (sep)
   else:
     #
     # Assume it's relative to the current drive
