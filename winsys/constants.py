@@ -167,5 +167,4 @@ STANDARD_ACCESS = Constants.from_list ([u"STANDARD_RIGHTS_READ", u"STANDARD_RIGH
 #~ TASK_PRIORITY = Constants.from_pattern (u"*_PRIORITY_CLASS", namespace=taskscheduler)
 
 
-FSCTL = Constants.from_pattern (u"FSCTL_*", namespace=winioctlcon)
 
