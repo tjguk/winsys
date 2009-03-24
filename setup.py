@@ -7,12 +7,11 @@ if __name__ == '__main__':
       name='WinSys',
       version=winsys.__version__,
       url='http://svn.timgolden.me.uk/winsys',
-      download_url='http://pypi.python.org/pypi/WinSys',
+      download_url='http://timgolden.me.uk/python/downloads',
       license='MIT',
       author='Tim Golden',
       author_email='mail@timgolden.me.uk',
       description='Python tools for the Windows sysadmin',
-      zip_safe=True,
       classifiers=[
           'Development Status :: 4 - Beta',
           'Environment :: Console',

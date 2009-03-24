@@ -5,6 +5,7 @@ to all such as default implementations of __str__ and fill-in comparison
 functions to ensure total ordering.
 """
 import logging
+import tempfile
 
 from winsys import utils
 
@@ -84,5 +85,4 @@ def add_logging_handler (handler):
 def remove_logging_handler (handler):
   _logger.removeHandler (handler)
 
-add_logging_handler (logging.StreamHandler ())
-
+add_logging_handler (logging.FileHandler (tempfile.mkstemp (".log", "winsys-")[-1]))
