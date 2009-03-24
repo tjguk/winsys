@@ -950,18 +950,24 @@ class _DirWatcher (object):
     return self
     
   def next (self):
-    try:
-      wrapped (win32file.ReadDirectoryChangesW, self.hDir, self.buffer, self.subdirs, self.watch_for, self.overlapped)
-    except exceptions.x_invalid_handle:
-      raise StopIteration
-
+    wrapped (
+      win32file.ReadDirectoryChangesW, 
+      self.hDir, 
+      self.buffer, 
+      self.subdirs, 
+      self.watch_for, 
+      self.overlapped
+    )
     while True:
-      if wrapped (win32event.WaitForSingleObject, self.overlapped.hEvent, self.TIMEOUT) == win32event.WAIT_OBJECT_0:
+      if wrapped (
+          win32event.WaitForSingleObject, 
+          self.overlapped.hEvent, 
+          self.TIMEOUT
+      ) == win32event.WAIT_OBJECT_0:
         n_bytes = wrapped (win32file.GetOverlappedResult, self.hDir, self.overlapped, True)
         if n_bytes == 0:
           continue
-          # raise StopIteration
-      
+
         last_result = None
         old_file = new_file = None
         for action, filename in wrapped (win32file.FILE_NOTIFY_INFORMATION, self.buffer, n_bytes):
