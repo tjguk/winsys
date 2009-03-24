@@ -106,4 +106,4 @@ class FilePath (unicode):
     return self.__class__ (os.path.join (unicode (self), unicode (other)))
   
   def relative_to (self, other):
-    return utils.relative_to (self, unicode (other))
+    return relative_to (self, unicode (other))
