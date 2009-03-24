@@ -90,3 +90,16 @@ def Handle (handle_or_filepath, write=False):
   if not handle_supplied:
     hFile.close ()
 
+def relative_to (path1, path0):
+  """Entirely unsophisticated functionality to remove a short
+  path from the beginning of a longer one off the same root.
+  This is to assist in things like copying a directory or registry
+  tree from one area to another.
+  """
+  path1 = normalised (path1).lower ()
+  path0 = normalised (path0).lower ()
+  if path1.startswith (path0):
+    return path1[len (path0):]
+  else:
+    raise RuntimeError ("%s and %s have nothing in common" % (path1, path0))
+
