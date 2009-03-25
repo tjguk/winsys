@@ -31,8 +31,14 @@ if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
   winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
 from . import constants, core, exceptions, security, utils, _kernel32
-from ._fs.core import *
-from ._fs.utils import *
+from ._fs.core import (
+  sep, seps, 
+  x_fs, x_no_such_file, x_too_many_files, x_invalid_name, x_no_certificate, x_not_ready, wrapped,
+  FILE_ACCESS, FILE_SHARE, FILE_NOTIFY_CHANGE, FILE_ACTION, FILE_ATTRIBUTE,
+  PROGRESS, MOVEFILE, FILE_FLAG, FILE_CREATION,
+  VOLUME_FLAG, DRIVE_TYPE, COMPRESSION_FORMAT, FSCTL
+)
+from ._fs.utils import get_parts, normalised, handle, Handle, relative_to
 from ._fs.filepath import FilePath
 
 class _Attributes (core._WinSysObject):

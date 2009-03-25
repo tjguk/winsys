@@ -2,7 +2,12 @@ import os
 import contextlib
 import re
 
-from .core import *
+from .core import (
+  sep, seps,
+  wrapped,
+  FILE_ACCESS, FILE_SHARE, FILE_CREATION, FILE_ATTRIBUTE, FILE_FLAG,
+  PyHANDLE
+)
 
 LEGAL_FILECHAR = r"[^\?\*\\\:\/]"
 LEGAL_FILECHARS = LEGAL_FILECHAR + "+"

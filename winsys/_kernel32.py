@@ -7,7 +7,7 @@ import ctypes
 import win32api
 import win32file
 
-from .exceptions import *
+from .exceptions import x_winsys
 
 kernel32 = windll.kernel32
 

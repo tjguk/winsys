@@ -2,8 +2,8 @@ import os
 import re
 
 from .. import utils
-from .core import *
-from .utils import *
+from .core import sep, seps
+from .utils import get_parts, relative_to
 
 class FilePath (unicode):
   u"""Helper class which subclasses unicode, and can therefore be passed
