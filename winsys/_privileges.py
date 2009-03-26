@@ -126,7 +126,7 @@ def privilege (privilege):
   u"""Friendly constructor for the Privilege class"""
   if isinstance (privilege, Privilege):
     return privilege
-  elif isinstance (privilege, int):
+  elif isinstance (privilege, (long, int)):
     return Privilege (privilege)
   elif isinstance (privilege, tuple):
     return Privilege (*privilege)
