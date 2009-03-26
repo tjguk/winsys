@@ -2,8 +2,8 @@ import os
 import re
 
 from .. import utils
-from .core import *
-from .utils import *
+from .core import sep, seps
+from .utils import get_parts, relative_to
 
 class FilePath (unicode):
   u"""Helper class which subclasses unicode, and can therefore be passed
@@ -25,6 +25,8 @@ class FilePath (unicode):
     FilePath.dirname - all path components before the last
     FilePath.path - combination of volume and dirname
     FilePath.parent - combination of volume and all path components before second penultimate
+    FilePath.base - base part of filename (ie the piece before the dot)
+    FilePath.ext - ext part of filename (ie the dot and the piece after)
     """
     self._parts = None
     self._root = None
@@ -33,6 +35,8 @@ class FilePath (unicode):
     self._dirname= None
     self._path = None
     self._parent = None
+    self._base = None
+    self._ext = None
       
   def dump (self, level=0):
     print self.dumped (level=level)
@@ -46,6 +50,8 @@ class FilePath (unicode):
     output.append (u"name: %s" % self.name)
     output.append (u"path: %s" % self.path)
     output.append (u"filename: %s" % self.filename)
+    #~ output.append (u"base: %s" % self.base)
+    #~ output.append (u"ext: %s" % self.ext
     if self.parent:
       output.append (u"parent: %s" % self.parent)
     return utils.dumped (u"\n".join (output), level)

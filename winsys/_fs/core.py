@@ -6,6 +6,7 @@ import winerror
 import win32con
 import win32event
 import win32file
+import winioctlcon
 
 from .. import exceptions, constants
 
@@ -98,6 +99,7 @@ COMPRESSION_FORMAT = constants.Constants.from_dict (dict (
   DEFAULT = 0x0001,   
   LZNT1 = 0x0002
 ))
+FSCTL = constants.Constants.from_pattern (u"FSCTL_*", namespace=winioctlcon)
 
 PyHANDLE = pywintypes.HANDLEType
 

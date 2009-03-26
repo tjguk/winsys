@@ -31,11 +31,17 @@ if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
   winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
 from . import constants, core, exceptions, security, utils, _kernel32
-from ._fs.core import *
-from ._fs.utils import *
+from ._fs.core import (
+  sep, seps, 
+  x_fs, x_no_such_file, x_too_many_files, x_invalid_name, x_no_certificate, x_not_ready, wrapped,
+  FILE_ACCESS, FILE_SHARE, FILE_NOTIFY_CHANGE, FILE_ACTION, FILE_ATTRIBUTE,
+  PROGRESS, MOVEFILE, FILE_FLAG, FILE_CREATION,
+  VOLUME_FLAG, DRIVE_TYPE, COMPRESSION_FORMAT, FSCTL
+)
+from ._fs.utils import get_parts, normalised, handle, Handle, relative_to
 from ._fs.filepath import FilePath
 
-class Attributes (core._WinSysObject):
+class _Attributes (core._WinSysObject):
   u"""Simple class wrapper for the list of file attributes
   (readonly, hidden, &c.). 
   """
@@ -61,7 +67,7 @@ class Attributes (core._WinSysObject):
 class Drive (core._WinSysObject):
   
   def __init__ (self, drive):
-    self.name = drive.rstrip (sep) + sep
+    self.name = drive.rstrip (sep).rstrip (":") + ":" + sep
     self.type = wrapped (win32file.GetDriveTypeW, self.name)
     
   def as_string (self):
@@ -88,7 +94,7 @@ class Drive (core._WinSysObject):
   def dumped (self, level):
     output = []
     output.append (u"name: %s" % self.name)
-    output.append (u"type: %s" % DRIVE_TYPE.name_from_value (self.type))
+    output.append (u"type (DRIVE_TYPE): %s" % DRIVE_TYPE.name_from_value (self.type))
     if self.volume:
       output.append (u"volume:\n%s" % self.volume.dumped (level))
     mount_points = [(mount_point, volume) for (mount_point, volume) in mounts () if mount_point.filepath.startswith (self.name)]
@@ -146,7 +152,7 @@ class Volume (core._WinSysObject):
     if self.serial_number is not None:
       output.append (u"serial_number: %08x" % self.serial_number)
     output.append (u"maximum_component_length: %s" % self.maximum_component_length)
-    output.append (u"flags:\n%s" % utils.dumped_flags (self.flags, VOLUME_FLAG, level))
+    output.append (u"flags (VOLUME_FLAG):\n%s" % utils.dumped_flags (self.flags, VOLUME_FLAG, level))
     output.append (u"file_system_name: %s" % self.file_system_name)
     return utils.dumped (u"\n".join (output), level)
     
@@ -246,7 +252,7 @@ class Entry (core._WinSysObject):
   size = property (_get_size)
   
   def _get_attributes (self):
-    return Attributes (wrapped (win32file.GetFileAttributesExW, normalised (self._filepath))[0])
+    return _Attributes (wrapped (win32file.GetFileAttributesExW, normalised (self._filepath))[0])
   attributes = property (_get_attributes)
   
   def _get_id (self):
@@ -890,6 +896,12 @@ def dismount (filepath):
 def zip (filepath, *args, **kwargs):
   return entry (filepath).zip (*args, **kwargs)
 
+def drive (drive):
+  if isinstance (drive, Drive):
+    return drive
+  else:
+    return Drive (drive)
+
 def drives ():
   for drive in wrapped (win32api.GetLogicalDriveStrings).strip ("\x00").split ("\x00"):
     yield Drive (drive)
@@ -950,18 +962,24 @@ class _DirWatcher (object):
     return self
     
   def next (self):
-    try:
-      wrapped (win32file.ReadDirectoryChangesW, self.hDir, self.buffer, self.subdirs, self.watch_for, self.overlapped)
-    except exceptions.x_invalid_handle:
-      raise StopIteration
-
+    wrapped (
+      win32file.ReadDirectoryChangesW, 
+      self.hDir, 
+      self.buffer, 
+      self.subdirs, 
+      self.watch_for, 
+      self.overlapped
+    )
     while True:
-      if wrapped (win32event.WaitForSingleObject, self.overlapped.hEvent, self.TIMEOUT) == win32event.WAIT_OBJECT_0:
+      if wrapped (
+          win32event.WaitForSingleObject, 
+          self.overlapped.hEvent, 
+          self.TIMEOUT
+      ) == win32event.WAIT_OBJECT_0:
         n_bytes = wrapped (win32file.GetOverlappedResult, self.hDir, self.overlapped, True)
         if n_bytes == 0:
           continue
-          # raise StopIteration
-      
+
         last_result = None
         old_file = new_file = None
         for action, filename in wrapped (win32file.FILE_NOTIFY_INFORMATION, self.buffer, n_bytes):

@@ -41,15 +41,12 @@ def dumped (text, level, indent=2):
 
 def dumped_list (l, level, indent=2):
   return dumped (u"\n".join (unicode (i)  for i in l), level, indent)
-  #~ return indented (u"{\n%s\n}" % indented (u"\n".join (unicode (i)  for i in l) or u"None", level+1, indent), level, indent)
 
 def dumped_dict (d, level, indent=2):
   return dumped (u"\n".join (u"%s => %s" % (k, v) for (k, v) in d.items ()), level, indent)
-  #~ return indented (u"{\n%s\n}" % indented (u"\n".join (u"%s => %s" % (k, v) for (k, v) in d.items ()) or u"None", level+1, indent), level, indent)
 
 def dumped_flags (f, lookups, level, indent=2):
   return dumped (u"\n".join (lookups.names_from_value (f)) or u"None", level, indent)
-  #~ return indented (u"{\n%s\n}" % indented (u"\n".join (lookups.names_from_value (f)) or u"None", level+1, indent), level, indent)
 
 def pythonised (string):
   """Convert from initial caps to lowercase with underscores"""
