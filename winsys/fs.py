@@ -525,8 +525,6 @@ class Dir (Entry):
   
   def __init__ (self, filepath, *args, **kwargs):
     Entry.__init__ (self, filepath.rstrip (seps) + sep, *args, **kwargs)
-    parts = get_parts (self._filepath)
-    self.name = parts[-1] + sep
   
   def compress (self, apply_to_contents=True, callback=None):
     Entry.compress (self)
@@ -603,18 +601,43 @@ class Dir (Entry):
     
     return Dir (normalised (path))
     
-  def files (self, pattern=u"*", *args, **kwargs):
-    return (f for f in files (os.path.join (self._filepath, pattern), *args, **kwargs) if not f.directory)
-    
-  def dirs (self, pattern=u"*"):
-    return (f for f in files (os.path.join (self._filepath, pattern)) if f.directory)
-      
-  def walk (self, *args, **kwargs):
-    for dirpath, dirs, files in walk (self._filepath, *args, **kwargs):
-      yield dirpath, dirs, files
+  def entries (self, pattern=u"*", *args, **kwargs):
+    return files (os.path.join (self._filepath, pattern), *args, **kwargs)
   
-  def flat (self, *args, **kwargs):
-    return flat (self._filepath, *args, **kwargs)
+  def files (self, pattern=u"*", *args, **kwargs):
+    return (f for f in self.entries (pattern, *args, **kwargs) if not f.directory)
+    
+  def dirs (self, pattern=u"*", *args, **kwargs):
+    return (f for f in self.entries (pattern, *args, **kwargs) if f.directory)
+
+  def walk (self, depthfirst=False, ignore_access_errors=False):
+    top = self
+    dirs, nondirs = [], []
+    for f in self.entries (ignore_access_errors=ignore_access_errors):
+      if isinstance (f, Dir):
+        dirs.append (f)
+      else:
+        nondirs.append (f)
+
+    if not depthfirst: yield top, dirs, nondirs
+    for d in dirs:
+      for x in d.walk (depthfirst=depthfirst, ignore_access_errors=ignore_access_errors):
+        yield x
+    if depthfirst: yield top, dirs, nondirs
+
+  def flat (self, pattern="*", includedirs=False, depthfirst=False, ignore_access_errors=False):
+    walker = self.walk (
+      depthfirst=depthfirst, 
+      ignore_access_errors=ignore_access_errors
+    )
+    for dirpath, dirs, files in walker:
+      if includedirs:
+        for dir in dirs:
+          if fnmatch.fnmatch (dir.name, pattern):
+            yield dir
+      for file in files:
+        if fnmatch.fnmatch (file.name, pattern):
+          yield file
 
   def mounted_by (self):
     for dir, vol in mounts ():
@@ -788,36 +811,13 @@ def listdir (d, ignore_access_errors=False):
   except win32file.error:
     return []
 
-def walk (top, depthfirst=False, ignore_access_errors=False):
-  top = dir (top, ignore_access_errors=ignore_access_errors)
-  dirs, nondirs = [], []
-  root = os.path.join (unicode (top), u"*")
-  for f in files (root, ignore_access_errors=ignore_access_errors):
-    if isinstance (f, Dir):
-      dirs.append (f)
-    else:
-      nondirs.append (f)
-
-  if not depthfirst: yield top, dirs, nondirs
-  for d in dirs:
-    for x in walk (d, depthfirst=depthfirst, ignore_access_errors=ignore_access_errors):
-      yield x
-  if depthfirst: yield top, dirs, nondirs
+def walk (root, depthfirst=False, ignore_access_errors=False):
+  for w in dir (root).walk (depthfirst, ignore_access_errors):
+    yield w
 
 def flat (root, pattern="*", includedirs=False, depthfirst=False, ignore_access_errors=False):
-  walker = walk (
-    normalised (root.rstrip (seps) + sep),
-    depthfirst=depthfirst, 
-    ignore_access_errors=ignore_access_errors
-  )
-  for dirpath, dirs, files in walker:
-    if includedirs:
-      for dir in dirs:
-        if fnmatch.fnmatch (dir.name, pattern):
-          yield dir
-    for file in files:
-      if fnmatch.fnmatch (file.name, pattern):
-        yield file
+  for f in dir (root).flat (pattern, includedirs, ignore_access_errors):
+    yield f
 
 def progress_wrapper (callback):
   
