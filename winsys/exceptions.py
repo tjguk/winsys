@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 import pywintypes
 
-class x_winsys (Exception):
+class x_winsys (pywintypes.error):
   pass
   
 class x_access_denied (x_winsys):
