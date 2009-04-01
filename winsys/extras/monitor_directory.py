@@ -18,7 +18,7 @@ from wsgiref.simple_server import make_server
 from wsgiref.util import shift_path_info
 
 #~ import error_handler
-from winsys import core, fs, misc
+from winsys import core, fs, misc, security
 
 def get_files (path, size_threshold_mb, results, stop_event):
   """Intended to run inside a thread: scan the contents of
@@ -306,10 +306,11 @@ if __name__ == '__main__':
     lambda: os.startfile ("http://localhost:%s" % PORT)
   ).start ()
   
-  app = App ()
-  try:
-    make_server ('', PORT, app).serve_forever ()
-  except KeyboardInterrupt:
-    print "Shutting down gracefully..."
-  finally:
-    app.finish ()
+  with security.change_privileges ([security.PRIVILEGE.BACKUP]):
+    app = App ()
+    try:
+      make_server ('', PORT, app).serve_forever ()
+    except KeyboardInterrupt:
+      print "Shutting down gracefully..."
+    finally:
+      app.finish ()
