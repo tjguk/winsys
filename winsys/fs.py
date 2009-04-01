@@ -601,8 +601,8 @@ class Dir (Entry):
     
     return Dir (normalised (path))
     
-  def entries (self, pattern=u"*", *args, **kwargs):
-    return files (os.path.join (self._filepath, pattern), *args, **kwargs)
+  def entries (self, pattern=u"*", ignore_access_errors=False):
+    return files (os.path.join (self._filepath, pattern), ignore_access_errors=ignore_access_errors)
   
   def files (self, pattern=u"*", *args, **kwargs):
     return (f for f in self.entries (pattern, *args, **kwargs) if not f.directory)
