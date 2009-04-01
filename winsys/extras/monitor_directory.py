@@ -14,7 +14,7 @@ import traceback
 import Queue
 import urllib
 import urlparse
-from wsgiref.simple_server import make_server
+from wsgiref.simple_server import WSGIServer, WSGIRequestHandler
 from wsgiref.util import shift_path_info
 
 #~ import error_handler
@@ -310,7 +310,10 @@ if __name__ == '__main__':
   
   app = App ()
   try:
-    make_server (HOSTNAME, PORT, app).serve_forever ()
+    WSGIServer.allow_reuse_address = 0
+    server = WSGIServer ((HOSTNAME, PORT), WSGIRequestHandler)    
+    server.set_app (app)
+    server.serve_forever ()
   except KeyboardInterrupt:
     print "Shutting down gracefully..."
   finally:
