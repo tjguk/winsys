@@ -18,7 +18,7 @@ from wsgiref.simple_server import make_server
 from wsgiref.util import shift_path_info
 
 #~ import error_handler
-from winsys import core, fs, misc, security
+from winsys import core, fs, misc
 
 def get_files (path, size_threshold_mb, results, stop_event):
   """Intended to run inside a thread: scan the contents of
@@ -299,18 +299,19 @@ class App (object):
       path_handler.finish ()
 
 if __name__ == '__main__':
+  import socket
   misc.set_console_title ("Monitor Directory")
+  HOSTNAME = socket.getfqdn ()
   PORT = 8000
   threading.Timer (
     2.0, 
-    lambda: os.startfile ("http://localhost:%s" % PORT)
+    lambda: os.startfile ("http://%s:%s" % (HOSTNAME, PORT))
   ).start ()
   
-  with security.change_privileges ([security.PRIVILEGE.BACKUP]):
-    app = App ()
-    try:
-      make_server ('', PORT, app).serve_forever ()
-    except KeyboardInterrupt:
-      print "Shutting down gracefully..."
-    finally:
-      app.finish ()
+  app = App ()
+  try:
+    make_server (HOSTNAME, PORT, app).serve_forever ()
+  except KeyboardInterrupt:
+    print "Shutting down gracefully..."
+  finally:
+    app.finish ()
