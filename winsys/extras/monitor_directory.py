@@ -170,6 +170,7 @@ class App (object):
     size_threshold_mb = int (form.get ("size_threshold_mb", self.SIZE_THRESHOLD_MB) or 0)
     refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
     highlight_mins = int (form.get ("highlight_mins", self.HIGHLIGHT_MINS) or 0)
+    highlight_delta = datetime.timedelta (0, highlight_mins * 60)
     if files:
       title = cgi.escape ("Top %d files on %s over %dMb - %s" % (min (len (files), self.TOP_N_FILES), path, size_threshold_mb, status))
     else:
@@ -215,7 +216,7 @@ class App (object):
           doc.append (
             u'<tr class="%s %s"><td class="filename">%s</td><td class="size">%5.2f</td><td class="updated">%s</td>' % (
               "odd" if i % 2 else "even",
-              "highlight" if ((now - max (f.written_at, f.created_at)).seconds <= (60 * highlight_mins)) else "",
+              "highlight" if ((now - max (f.written_at, f.created_at)) <= highlight_delta) else "",
               f.filepath.relative_to (path).lstrip (fs.seps), 
               f.size / 1024.0 / 1024.0, 
               max (f.written_at, f.created_at)
