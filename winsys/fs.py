@@ -816,7 +816,7 @@ def walk (root, depthfirst=False, ignore_access_errors=False):
     yield w
 
 def flat (root, pattern="*", includedirs=False, depthfirst=False, ignore_access_errors=False):
-  for f in dir (root).flat (pattern, includedirs, ignore_access_errors):
+  for f in dir (root).flat (pattern, includedirs=includedirs, ignore_access_errors=ignore_access_errors):
     yield f
 
 def progress_wrapper (callback):
