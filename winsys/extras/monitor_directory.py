@@ -19,6 +19,7 @@ from wsgiref.util import shift_path_info
 
 #~ import error_handler
 from winsys import core, fs, misc
+print "Logging to", core.log_filepath
 
 def get_files (path, size_threshold_mb, results, stop_event):
   """Intended to run inside a thread: scan the contents of
