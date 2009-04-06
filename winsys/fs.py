@@ -706,7 +706,7 @@ class Dir (Entry):
       z.close ()
       
     return file (zip_filename)
-
+    
   rmdir = delete
   mkdir = create
 

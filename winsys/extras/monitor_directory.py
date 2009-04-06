@@ -21,6 +21,41 @@ from wsgiref.util import shift_path_info
 from winsys import core, fs, misc
 print "Logging to", core.log_filepath
 
+def deltastamp (delta):
+  
+  def pluralise (base, n):
+    if n > 1:
+      return "%d %ss" % (n, base)
+    else:
+      return "%d %s" % (n, base)
+
+  if delta > datetime.timedelta (0):
+    output_format = "%s ago"
+  else:
+    output_format = "in %s"
+  
+  days = delta.days
+  if days <> 0:
+    wks, days = divmod (days, 7)
+    if wks > 0:
+      if wks < 9:
+        output = pluralise ("wk", wks)
+      else:
+        output = pluralse ("mth", int (round (1.0 * wks / 4.125)))
+    else:
+      output = pluralise ("day", days)
+  else:
+    mins, secs = divmod (delta.seconds, 60)
+    hrs, mins = divmod (mins, 60)
+    if hrs > 0:
+      output = pluralise ("hr", hrs)
+    elif mins > 0:
+      output = pluralise ("min", mins)
+    else:
+      output = pluralise ("sec", secs)
+
+  return output_format % output
+
 def get_files (path, size_threshold_mb, results, stop_event):
   """Intended to run inside a thread: scan the contents of
   a tree recursively, pushing every file which is at least
@@ -157,6 +192,8 @@ class App (object):
   SIZE_THRESHOLD_MB = 100
   TOP_N_FILES = 50
   REFRESH_SECS = 60
+  HIGHLIGHT_DAYS = 0
+  HIGHLIGHT_HRS = 0
   HIGHLIGHT_MINS = 5
   
   def __init__ (self):
@@ -169,8 +206,11 @@ class App (object):
     top_n_files = int (form.get ("top_n_files", self.TOP_N_FILES) or 0)
     size_threshold_mb = int (form.get ("size_threshold_mb", self.SIZE_THRESHOLD_MB) or 0)
     refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
+    highlight_days = int (form.get ("highlight_days", self.HIGHLIGHT_DAYS) or 0)
+    highlight_hrs = int (form.get ("highlight_hrs", self.HIGHLIGHT_HRS) or 0)
     highlight_mins = int (form.get ("highlight_mins", self.HIGHLIGHT_MINS) or 0)
-    highlight_delta = datetime.timedelta (0, highlight_mins * 60)
+    highlight_delta = datetime.timedelta (days=highlight_days, hours=highlight_hrs, minutes=highlight_mins)
+    highlight_deltastamp = deltastamp (highlight_delta)
     if files:
       title = cgi.escape ("Top %d files on %s over %dMb - %s" % (min (len (files), self.TOP_N_FILES), path, size_threshold_mb, status))
     else:
@@ -201,7 +241,9 @@ class App (object):
     <span class="label">for files over</span>&nbsp;<input type="text" name="size_threshold_mb" value="%(size_threshold_mb)s" size="5" maxlength="5" />Mb
     <span class="label">showing the top</span>&nbsp;<input type="text" name="top_n_files" value="%(top_n_files)s" size="3" maxlength="3" /> files
     <span class="label">refreshing every</span>&nbsp;<input type="text" name="refresh_secs" value="%(refresh_secs)s" size="3" maxlength="3" /> secs
-    <span class="label">highlighting the last&nbsp;</span>&nbsp;<input type="text" name="highlight_mins" value="%(highlight_mins)s" size="3" maxlength="3" /> mins
+    <span class="label">highlighting the last&nbsp;</span>&nbsp;<input type="text" name="highlight_days" value="%(highlight_days)s" size="3" maxlength="3" /> days 
+      </span>&nbsp;<input type="text" name="highlight_hrs" value="%(highlight_hrs)s" size="3" maxlength="3" /> hrs 
+      </span>&nbsp;<input type="text" name="highlight_mins" value="%(highlight_mins)s" size="3" maxlength="3" /> mins
     <input type="submit" value="Refresh" />
     </form><hr>""" % locals ())
     
