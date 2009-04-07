@@ -251,7 +251,7 @@ class App (object):
     if path:
       doc.append (u"<h1>%s</h1>" % title)
       latest_filename = "\\".join (files[-1].filepath.parts[1:]) if files else "(no file yet)"
-      doc.append (u'<p class="updated">Last updated %s: %s</p>' % (time.asctime (), latest_filename))
+      doc.append (u'<p class="updated">Last updated %s</p>' % time.asctime ())
       doc.append (u'<table><thead><tr><td class="filename">Filename</td><td class="size">Size (Mb)</td><td class="updated">Updated</td></tr></thead>')
       for i, f in enumerate (files[:top_n_files]):
         try:
