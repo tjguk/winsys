@@ -423,18 +423,40 @@ class Entry (core._WinSysObject):
     )
     return entry (other)
     
-  def take_ownership (self):
+  def take_control (self, principal=core.UNSET):
+    """Give the logged-on user full control to a file. This may
+    need to be preceded by a call to take_ownership so that the
+    user gains WRITE_DAC permissions.
+    """
+    if principal is core.UNSET:
+      principal = security.me ()
+    #
+    # Specify only DACL when reading as we may have no more rights 
+    # than that, and we don't need any more.
+    #
+    with self.security (options="D") as s:
+      s.dacl.append ((principal, "F", "ALLOW"))
+
+  def take_ownership (self, principal=core.UNSET):
     """Set the new owner of the file to be the logged-on user.
     This is no more than a slight shortcut to the equivalent
     security operations.
+    
+    If you specify a principal (other than the logged-in user,
+    the default) you will need to have enabled SE_RESTORE privilege.
+    Even the logged-in user may need to have enabled SE_TAKE_OWNERSHIP
+    if that user has not been granted the appropriate security by
+    the ACL.
     """
+    if principal is core.UNSET:
+      principal = security.me ()
     #
     # Specify no options when reading as we may have no rights 
     # whatsoever on the security descriptor and be relying on
     # the take_ownership privilege.
     #
     with self.security (options=0) as s:
-      s.owner = security.Principal.me ()
+      s.owner = principal
     
 class File (Entry):
 
