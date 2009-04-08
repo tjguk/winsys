@@ -625,6 +625,12 @@ class Dir (Entry):
     
   def entries (self, pattern=u"*", *args, **kwargs):
     return files (os.path.join (self._filepath, pattern), *args, **kwargs)
+    
+  def file (self, name):
+    return file (os.path.join (self._filepath, name))
+    
+  def dir (self, name):
+    return dir (os.path.join (self._filepath, name))
   
   def files (self, pattern=u"*", *args, **kwargs):
     return (f for f in self.entries (pattern, *args, **kwargs) if not f.directory)
