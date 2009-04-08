@@ -16,7 +16,7 @@ LEGAL_VOLCHARS = LEGAL_VOLCHAR + "+"
 UNC = sep * 4 + LEGAL_FILECHARS + sep * 2 + LEGAL_FILECHARS
 DRIVE = r"[A-Za-z]:"
 VOLUME = sep * 4 + r"\?" + sep * 2 + LEGAL_VOLCHARS
-PREFIX = r"(%s|%s|%s)" % (UNC, DRIVE, VOLUME)
+PREFIX = r"((?:%s|%s|%s)\\?)" % (UNC, DRIVE, VOLUME)
 PATHSEG = "(" + LEGAL_FILECHARS + ")" + sep * 2 + "?"
 PATHSEGS = "(?:%s)*" % PATHSEG
 FILEPATH = PREFIX + PATHSEGS
@@ -28,9 +28,9 @@ def get_parts (filepath):
   Attempt to match the first part of the string against
   known path leaders:
   
-  <drive>:
-  \\?\<drive>:
-  \\server\share
+  <drive>:\
+  \\?\<drive>:\
+  \\server\share\
   
   If that fails, assume it's relative to the current drive
   and/or directory.
@@ -41,6 +41,7 @@ def get_parts (filepath):
   if prefix_match:
     prefix = prefix_match.group (1)
     rest = filepath[len (prefix):]
+    prefix = prefix.rstrip (sep) + sep
     return [prefix] + rest.split (sep)
   else:
     #

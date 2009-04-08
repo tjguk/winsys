@@ -13,5 +13,8 @@ security
 constants
 
 shell
+Create shortcut
+~desktop etc. filters
+%x% expansion
 
 unit test

@@ -1033,7 +1033,7 @@ class _DirWatcher (object):
   
   def stop (self):
     self.hDir.close ()
-    
+
 def watch (root, subdirs=False, watch_for=_DirWatcher.WATCH_FOR, buffer_size=_DirWatcher.BUFFER_SIZE):
   return _DirWatcher (root, subdirs, watch_for, buffer_size)
 
