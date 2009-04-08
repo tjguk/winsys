@@ -8,6 +8,7 @@ from __future__ import with_statement
 import os, sys
 import cgi
 import datetime
+import operator
 import threading
 import time
 import traceback
@@ -193,8 +194,8 @@ class App (object):
   TOP_N_FILES = 50
   REFRESH_SECS = 60
   HIGHLIGHT_DAYS = 0
-  HIGHLIGHT_HRS = 0
-  HIGHLIGHT_MINS = 5
+  HIGHLIGHT_HRS = 12
+  HIGHLIGHT_MINS = 0
   
   def __init__ (self):
     self._paths_lock = threading.Lock ()
@@ -272,12 +273,6 @@ class App (object):
     return doc
 
   def handler (self, form):
-    def _key (f):
-      try:
-        return -f.size / time.mktime (max (f.written_at, f.created_at).timetuple ())
-      except fs.exceptions.x_winsys:
-        return None
-
     path = form.get ("path", self.PATH)
     size_threshold_mb = int (form.get ("size_threshold_mb", self.SIZE_THRESHOLD_MB) or 0)
     refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
@@ -296,7 +291,7 @@ class App (object):
           path_handler.finish ()
           path_handler = self.paths[path] = Path (path, size_threshold_mb, self.N_FILES_AT_A_TIME)
         self._paths_accessed[path] = datetime.datetime.now ()
-        files = sorted (path_handler.updated (), key=_key)
+        files = sorted (path_handler.updated (), key=operator.attrgetter ("size"), reverse=True)
         status = path_handler.status ()
         
         #
