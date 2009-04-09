@@ -2,6 +2,8 @@ import os
 import contextlib
 import re
 
+import win32file
+
 from .core import (
   sep, seps,
   wrapped,
