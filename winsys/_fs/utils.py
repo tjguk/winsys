@@ -14,9 +14,9 @@ LEGAL_FILECHARS = LEGAL_FILECHAR + "+"
 LEGAL_VOLCHAR = r"[^\?\*\\\/]"
 LEGAL_VOLCHARS = LEGAL_VOLCHAR + "+"
 UNC = sep * 4 + LEGAL_FILECHARS + sep * 2 + LEGAL_FILECHARS
-DRIVE = r"[a-z]:"
+DRIVE = r"[A-Za-z]:"
 VOLUME = sep * 4 + r"\?" + sep * 2 + LEGAL_VOLCHARS
-PREFIX = r"((?:%s|%s|%s)\\)" % (UNC, DRIVE, VOLUME)
+PREFIX = r"((?:%s|%s|%s)\\?)" % (UNC, DRIVE, VOLUME)
 PATHSEG = "(" + LEGAL_FILECHARS + ")" + sep * 2 + "?"
 PATHSEGS = "(?:%s)*" % PATHSEG
 FILEPATH = PREFIX + PATHSEGS
@@ -36,16 +36,13 @@ def get_parts (filepath):
   and/or directory.
   """
   filepath = filepath.replace ("/", sep)
-  prefix_match = re.match (ur"([A-Za-z]:)", filepath)
-  if not prefix_match:
-    prefix_match = re.match (ur"(\\\\\?\\[A-Za-z]:)", filepath)
-    if not prefix_match:
-      prefix_match = re.match (ur"(\\\\[^\?\*\\\:\/]+\\[^\?\*\\\:\/]+)", filepath)
+  prefix_match = re.match (PREFIX, filepath)
   
   if prefix_match:
     prefix = prefix_match.group (1)
     rest = filepath[len (prefix):]
-    return [prefix.rstrip (sep) + sep] + rest.lstrip (sep).split (sep)
+    prefix = prefix.rstrip (sep) + sep
+    return [prefix] + rest.split (sep)
   else:
     #
     # Assume it's relative to the current drive

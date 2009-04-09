@@ -11,7 +11,7 @@ class FilePath (unicode):
   directory name, filename, parent directory &c.
   """
   def __new__ (meta, filepath, *args, **kwargs):
-    filepath = normalised (filepath) ## + (sep if is_dir else "")
+    filepath = normalised (filepath)
     return unicode.__new__ (meta, filepath, *args, **kwargs)
 
   def __init__ (self, filepath, *args, **kwargs):
@@ -19,9 +19,9 @@ class FilePath (unicode):
     ones as instance attributes:
     
     FilePath.parts - a list of the components
-    FilePath.root - the drive or UNC server/share always ending in a backslash
+    FilePath.root - the drive or UNC server/share always ending in no backslash
     FilePath.filename - final component (may be blank if the path looks like a directory)
-    FilePath.name - same as filename unless empty in which case second-last component
+    FilePath.name - same as filename unless blank in which case second-last component
     FilePath.dirname - all path components before the last
     FilePath.path - combination of volume and dirname
     FilePath.parent - combination of volume and all path components before second penultimate
@@ -50,8 +50,8 @@ class FilePath (unicode):
     output.append (u"name: %s" % self.name)
     output.append (u"path: %s" % self.path)
     output.append (u"filename: %s" % self.filename)
-    #~ output.append (u"base: %s" % self.base)
-    #~ output.append (u"ext: %s" % self.ext
+    output.append (u"base: %s" % self.base)
+    output.append (u"ext: %s" % self.ext)
     if self.parent:
       output.append (u"parent: %s" % self.parent)
     return utils.dumped (u"\n".join (output), level)
@@ -105,11 +105,36 @@ class FilePath (unicode):
     return self._name
   name = property (_get_name)
   
-  def __getitem__ (self, index):
-    return self.parts[index]
+  def _get_base (self):
+    if self._base is None:
+      self._base = os.path.splitext (self.filename)[0]
+    return self._base
+  base = property (_get_base)
+  
+  def _get_ext (self):
+    if self._ext is None:
+      self._ext = os.path.splitext (self.filename)[1]
+    return self._ext
+  ext = property (_get_ext)
+  
+  def __repr__ (self):
+    return u'<%s %s>' % (self.__class__.__name__, self)
   
   def __add__ (self, other):
     return self.__class__ (os.path.join (unicode (self), unicode (other)))
   
   def relative_to (self, other):
     return relative_to (self, unicode (other))
+
+  def changed (self, root=None, path=None, filename=None, base=None, ext=None):
+    if ext: ext = "." + ext.lstrip (".")
+    parts = self.parts
+    _filename = parts[-1]
+    _base, _ext = os.path.splitext (_filename)
+    if not (base or ext):
+      base, ext = os.path.splitext (filename or _filename)
+    return self.__class__.from_parts (root or parts[0], path or sep.join (parts[1:-1]), base or _base, ext or _ext)
+
+  @classmethod
+  def from_parts (cls, root, path, base, ext):
+    return cls (root + sep.join (os.path.normpath (path).split (os.sep) + [base+ext]))
