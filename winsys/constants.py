@@ -62,6 +62,12 @@ class Constants (object):
   def __contains__ (self, attribute):
     return attribute in self.keys ()
   
+  def constant (self, value):
+    try:
+      return int (value)
+    except ValueError:
+      return self[unicode (value).upper ()]
+  
   def update (self, other):
     u"""Act as a dict for updates so that several constant sets may
     be merged into one.

@@ -38,7 +38,7 @@ from ._fs.core import (
   PROGRESS, MOVEFILE, FILE_FLAG, FILE_CREATION,
   VOLUME_FLAG, DRIVE_TYPE, COMPRESSION_FORMAT, FSCTL
 )
-from ._fs.utils import get_parts, normalised, handle, Handle, relative_to
+from ._fs.utils import get_parts, normalised, handle, Handle
 from ._fs.filepath import FilePath
 
 class _Attributes (core._WinSysObject):

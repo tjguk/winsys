@@ -14,8 +14,10 @@ import win32cred
 import pywintypes
 import winerror
 
-from winsys import constants, core, utils
-from winsys.exceptions import *
+from . import constants, core, utils
+from .exceptions import (
+  x_winsys, x_not_found
+)
 
 __all__ = ['LOGON', 'EXTENDED_NAME', 'x_accounts', 'principal', 'Principal', 'User', 'Group', 'me']
 
@@ -68,7 +70,7 @@ class Principal (core._WinSysObject):
     self.sid = sid
     try:
       self.name, self.domain, self.type = wrapped (win32security.LookupAccountSid, system_name, self.sid)
-    except x_winsys, (errmsg, errctx, errno):
+    except x_winsys, (errno, errctx, errmsg):
       if errno == winerror.ERROR_NONE_MAPPED:
         self.name = str (self.sid)
         self.domain = self.type = None

@@ -23,9 +23,9 @@ def wrapper (winerror_map, default_exception=x_winsys):
       return function (*args, **kwargs)
     except pywintypes.error, (errno, errctx, errmsg):
       exception = winerror_map.get (errno, default_exception)
-      raise exception (errmsg, errctx, errno)
+      raise exception (errno, errctx, errmsg)
     except (WindowsError, IOError), err:
       exception = winerror_map.get (err.errno, default_exception)
       if exception:
-        raise exception (err.strerror, "", err.errno)
+        raise exception (err.errno, "", err.strerror)
   return _wrapped

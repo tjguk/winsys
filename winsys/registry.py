@@ -8,8 +8,8 @@ import win32api
 import win32con
 import pywintypes
 
-from winsys import constants, core, utils, security
-from winsys.exceptions import *
+from . import constants, core, utils, security
+from .exceptions import *
 
 REGISTRY_HIVE = constants.Constants.from_list ([
   u"HKEY_CLASSES_ROOT",
@@ -109,7 +109,7 @@ def parse_moniker (moniker):
   matcher = moniker_parser.match (moniker)
   if not matcher:
     core.debug (u"parse_moniker: %s", moniker)
-    raise x_moniker_ill_formed, u"Ill-formed moniker"
+    raise x_moniker_ill_formed, u"Ill-formed moniker: %s" % moniker
   computer, keypath, colon, value = matcher.groups ()
   keys = keypath.split (sep)
   
@@ -219,7 +219,7 @@ class Registry (core._WinSysObject):
     output.append ("access: %s" % self.access)
     if bool (self):
       output.append ("keys:\n%s" % utils.dumped_list ((key.name for key in self.keys (ignore_access_errors=True)), level))
-      output.append ("values:\n%s" % utils.dumped_dict (dict ((name, repr (value)) for (name, value, type) in self.values (ignore_access_errors=True)), level))
+      output.append ("values:\n%s" % utils.dumped_dict (dict ((name or "(Default)", repr (value)) for (name, value, type) in self.values (ignore_access_errors=True)), level))
       output.append ("security:\n%s" % utils.dumped (self.security ().dumped (level), level))
     return utils.dumped ("\n".join (output), level)
   
@@ -232,9 +232,11 @@ class Registry (core._WinSysObject):
         return self.get_key (attr)
       except x_not_found:
         raise AttributeError
+  __getitem__ = __getattr__
 
   def __setattr__ (self, attr, value):
     self.set_value (attr, value)
+  __setitem__ = __setattr__
     
   def get_value (self, name):
     return wrapped (win32api.RegQueryValueEx, self.pyobject (), name)

@@ -3,7 +3,7 @@ import re
 
 from .. import utils
 from .core import sep, seps
-from .utils import get_parts, relative_to, normalised
+from .utils import get_parts, normalised
 
 class FilePath (unicode):
   u"""Helper class which subclasses unicode, and can therefore be passed
@@ -124,7 +124,7 @@ class FilePath (unicode):
     return self.__class__ (os.path.join (unicode (self), unicode (other)))
   
   def relative_to (self, other):
-    return relative_to (self, unicode (other))
+    return utils.relative_to (self, unicode (other))
 
   def changed (self, root=None, path=None, filename=None, base=None, ext=None):
     if ext: ext = "." + ext.lstrip (".")

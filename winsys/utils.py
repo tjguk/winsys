@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 from __future__ import with_statement
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 import re
 import threading
 import pywintypes
@@ -28,6 +28,31 @@ def _longword (lo, hi):
 def _set (obj, attr, value):
   obj.__dict__[attr] = value
 
+def secs_as_string (secs):
+  d = timedelta (seconds=secs)
+  days = d.days
+  minutes, seconds = divmod (d.seconds, 60)
+  hours, minutes = divmod (minutes, 60)
+  return "".join ([
+    "%dd" % days if days else "",
+    "%dh" % hours if hours else "",
+    "%d'" % minutes if minutes else "",
+    '%d"' % seconds if seconds else ""
+  ])
+  
+def size_as_mb (n_bytes):
+  n_kb, n_b = divmod (n_bytes, 1024)
+  n_mb, n_kb = divmod (n_kb, 1024)
+  n_gb, n_mb = divmod (n_mb, 1024)
+  if n_gb > 0:
+    return "%3.2fGb" % (n_bytes / 1024.0 / 1024.0 / 1024.0)
+  elif n_mb > 0:
+    return "%3.2fMb" % (n_bytes / 1024.0 / 1024.0)
+  elif n_kb > 0:
+    return "%3.2fkb" % (n_bytes / 1024.0)
+  else:
+    return "%d" % n_bytes
+  
 #
 # Support functions for dump functionality.
 #
@@ -63,3 +88,20 @@ def string_as_pointer (string):
 def pointer_as_string (pointer):
   """Convert a WinAPI LPSTR to a Python string"""
   return win32gui.PyGetString (pointer)
+
+def relative_to (path1, path0):
+  """Entirely unsophisticated functionality to remove a short
+  path from the beginning of a longer one off the same root.
+  This is to assist in things like copying a directory or registry
+  tree from one area to another.
+  
+  NB This is used by the fs *and* registry modules so stays
+  here in the global utils
+  """
+  path1 = normalised (path1).lower ()
+  path0 = normalised (path0).lower ()
+  if path1.startswith (path0):
+    return path1[len (path0):]
+  else:
+    raise RuntimeError ("%s and %s have nothing in common" % (path1, path0))
+
