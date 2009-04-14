@@ -3,7 +3,7 @@ import re
 
 from .. import utils
 from .core import sep, seps
-from .utils import get_parts, normalised
+from .utils import get_parts, normalised, relative_to
 
 class FilePath (unicode):
   u"""Helper class which subclasses unicode, and can therefore be passed
@@ -11,7 +11,7 @@ class FilePath (unicode):
   directory name, filename, parent directory &c.
   """
   def __new__ (meta, filepath, *args, **kwargs):
-    filepath = normalised (filepath)
+    filepath = os.path.abspath (filepath).lower ()
     return unicode.__new__ (meta, filepath, *args, **kwargs)
 
   def __init__ (self, filepath, *args, **kwargs):
@@ -124,7 +124,7 @@ class FilePath (unicode):
     return self.__class__ (os.path.join (unicode (self), unicode (other)))
   
   def relative_to (self, other):
-    return utils.relative_to (self, unicode (other))
+    return relative_to (self, unicode (other))
 
   def changed (self, root=None, path=None, filename=None, base=None, ext=None):
     if ext: ext = "." + ext.lstrip (".")

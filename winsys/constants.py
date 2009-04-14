@@ -79,6 +79,9 @@ class Constants (object):
     
   def keys (self):
     return self._dict.keys ()
+
+  def __iter__ (self):
+    return iter (self._dict)
     
   def values (self):
     return self._dict.values ()

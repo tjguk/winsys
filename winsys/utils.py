@@ -29,6 +29,14 @@ def _set (obj, attr, value):
   obj.__dict__[attr] = value
 
 def secs_as_string (secs):
+  """Convert a number of seconds to dh'", eg
+  
+  25 => 25"
+  190 => 3'10"
+  6800 => 1h53'20"
+  440000 => 5d2h13'20"
+  345600 => 4d
+  """
   d = timedelta (seconds=secs)
   days = d.days
   minutes, seconds = divmod (d.seconds, 60)
@@ -41,6 +49,13 @@ def secs_as_string (secs):
   ])
   
 def size_as_mb (n_bytes):
+  """Convert a size in bytes to a human-readable form as follows:
+  
+  If < kb return the number unchanges
+  If >= kb and < mb return number of kb
+  If >= mb and < gb return number of mb
+  Otherwise return number of gb
+  """
   n_kb, n_b = divmod (n_bytes, 1024)
   n_mb, n_kb = divmod (n_kb, 1024)
   n_gb, n_mb = divmod (n_mb, 1024)
@@ -74,7 +89,9 @@ def dumped_flags (f, lookups, level, indent=2):
   return dumped (u"\n".join (lookups.names_from_value (f)) or u"None", level, indent)
 
 def pythonised (string):
-  """Convert from initial caps to lowercase with underscores"""
+  """Convert from initial caps to lowercase with underscores.
+  eg, given "TimGolden" return "tim_golden"
+  """
   return "_".join (s.lower () for s in re.findall (r"([A-Z][a-z]+)", string))
 
 #
@@ -98,10 +115,9 @@ def relative_to (path1, path0):
   NB This is used by the fs *and* registry modules so stays
   here in the global utils
   """
-  path1 = normalised (path1).lower ()
-  path0 = normalised (path0).lower ()
+  path1 = path1.lower ()
+  path0 = path0.lower ()
   if path1.startswith (path0):
     return path1[len (path0):]
   else:
     raise RuntimeError ("%s and %s have nothing in common" % (path1, path0))
-

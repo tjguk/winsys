@@ -87,7 +87,7 @@ class ACE (core._WinSysObject):
     return bool (self.flags & ACE_FLAG.CONTAINER_INHERIT)
   def _set_containers_inherit (self, switch):
     if self.inherited:
-      raise x_access_denied (u"Cannot change an inherited ACE")
+      raise x_access_denied (core.UNSET, u"ACE._get_containers_inherit", u"Cannot change an inherited ACE")
     if switch:
       self.flags |= ACE_FLAG.CONTAINER_INHERIT
     else:
@@ -98,7 +98,7 @@ class ACE (core._WinSysObject):
     return bool (self.flags & ACE_FLAG.OBJECT_INHERIT)
   def _set_objects_inherit (self, switch):
     if self.inherited:
-      raise x_access_denied (u"Cannot change an inherited ACE")
+      raise x_access_denied (core.UNSET, u"ACE._get_objects_inherit", u"Cannot change an inherited ACE")
     if switch:
       self.flags |= ACE_FLAG.OBJECT_INHERIT
     else:
@@ -109,7 +109,7 @@ class ACE (core._WinSysObject):
     return self._access_mask
   def _set_access (self, access):
     if self.inherited:
-      raise x_access_denied (u"Cannot change an inherited ACE")
+      raise x_access_denied (core.UNSET, u"ACE._set_access", u"Cannot change an inherited ACE")
     self._access_mask = self._access (access)
   access = property (_get_access, _set_access)
   
@@ -117,7 +117,7 @@ class ACE (core._WinSysObject):
     return self._trustee
   def _set_trustee (self, trustee):
     if self.inherited:
-      raise x_access_denied (u"Cannot change an inherited ACE")
+      raise x_access_denied (core.UNSET, u"ACE._get_trustee", u"Cannot change an inherited ACE")
     self._trustee = accounts.principal (trustee)
   trustee = property (_get_trustee, _set_trustee)
   
@@ -151,7 +151,7 @@ class ACE (core._WinSysObject):
       try:
         return reduce (operator.or_, (cls.ACCESS[a] for a in access.upper ()), 0)
       except KeyError:
-        raise x_unknown_value ("%s is not a valid access string" % access, "_access", core.UNSET)
+        raise x_unknown_value (core.UNSET, u"ACE._access", "%s is not a valid access string" % access)
         
 class DACE (ACE):
   
@@ -189,7 +189,7 @@ class DACE (ACE):
       try:
         return cls.TYPES[type.upper ()]
       except KeyError:
-        raise x_unknown_value ("%s is not a valid type string" % type, "_type", core.UNSET)
+        raise x_unknown_value (core.UNSET, "ACE._type", "%s is not a valid type string" % type)
   
   def __eq__ (self, other):
     other = self.ace (other)
@@ -272,7 +272,7 @@ def dace (dace):
     else:
       return DACE.from_tuple (dace)
   except (ValueError, TypeError):
-    raise x_ace ("DACE must be an existing DACE or a 3-tuple of (trustee, access, type)", "dace", 0)
+    raise x_ace (core.UNSET, "dace", "DACE must be an existing DACE or a 3-tuple of (trustee, access, type)")
 
 def sace (sace):
   """Attempt to return a SACE either from an existing SACE
@@ -289,7 +289,7 @@ def sace (sace):
     else:
       return SACE.from_tuple (sace)
   except (ValueError, TypeError):
-    raise x_ace ("SACE must be an existing SACE or a 4-tuple of (trustee, access, audit_what)", "sace", 0)
+    raise x_ace (core.UNSET, "sace", "SACE must be an existing SACE or a 4-tuple of (trustee, access, audit_what)")
 
 def ace (ace):
   """Attempt to return a SACE / DACE depending on the structure passed
@@ -308,4 +308,4 @@ def ace (ace):
       else:
         raise TypeError
   except (ValueError, TypeError):
-    raise x_ace ("ACE must be an existing DACE/SACE or a 3-tuple which can be passed to dace or sace", "ace", core.UNSET)
+    raise x_ace (core.UNSET, "ace", "ACE must be an existing DACE/SACE or a 3-tuple which can be passed to dace or sace")

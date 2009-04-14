@@ -17,7 +17,7 @@ class x_kernel32 (x_winsys):
 def error (exception, context="", message=""):
   errno = win32api.GetLastError ()
   message = message or win32api.FormatMessageW (errno)
-  raise exception (message, context, errno)
+  raise exception (errno, context, message)
 
 VOLUME_NAME_LENGTH = 255
 

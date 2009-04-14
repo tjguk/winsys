@@ -367,11 +367,18 @@ class Entry (core._WinSysObject):
     """
     return (wrapped (win32file.GetFileAttributesW, normalised (self._filepath)) != -1)
   
+  def relative_to (self, other):
+    """Return the part of this entry's filepath which extends beyond
+    other's. eg if this is 'c:/temp/abc.txt' and other is 'c:/temp/'
+    then return 'abc.txt'
+    """
+    return self.filepath.relative_to (other)
+  
   def parent (self):
     if self.filepath.parent:
       return Dir (self.filepath.parent)
     else:
-      raise x_no_such_file (u"%s has no parent" % self)
+      raise x_no_such_file (None, u"Entry.parent", u"%s has no parent" % self)
     
   def ancestors (self):
     try:
@@ -407,7 +414,11 @@ class Entry (core._WinSysObject):
     return self
   
   def query_encryption_users (self):
-    return [(principal (sid), hashblob, info) for (sid, hashblob, info) in wrapped (win32file.QueryUsersOnEncryptedFile, self._filepath)]
+    return [
+      (principal (sid), hashblob, info) 
+        for (sid, hashblob, info) 
+        in wrapped (win32file.QueryUsersOnEncryptedFile, self._filepath)
+    ]
   
   def move (self, other, callback=None, callback_data=None, clobber=False):
     flags = MOVEFILE.WRITE_THROUGH
@@ -443,7 +454,7 @@ class Entry (core._WinSysObject):
     security operations.
     
     If you specify a principal (other than the logged-in user,
-    the default) you will need to have enabled SE_RESTORE privilege.
+    the default) you may need to have enabled SE_RESTORE privilege.
     Even the logged-in user may need to have enabled SE_TAKE_OWNERSHIP
     if that user has not been granted the appropriate security by
     the ACL.
@@ -533,7 +544,7 @@ class File (Entry):
     The created / appended zip file is returned.
     """
     if zip_filename is core.UNSET:
-      zip_filename = os.path.join (self.filepath.parent, self.filepath.name + u".zip")
+      zip_filename = self.filepath.changed (ext=".zip")
     
     z = zipfile.ZipFile (zip_filename, mode=mode, compression=compression)
     z.write (self.filepath.filename)
@@ -613,7 +624,7 @@ class Dir (Entry):
       f = entry (path)
       if f:
         if not f.directory:
-          raise x_fs (u"%s exists and is not a directory" % f)
+          raise x_fs (None, "Dir.create", u"%s exists and is not a directory" % f)
       else:
         wrapped (
           win32file.CreateDirectory, 
@@ -674,7 +685,7 @@ class Dir (Entry):
   
   def mount (self, vol):
     for f in self.flat (includedirs=True):
-      raise x_fs (u"You can't mount to a non-empty directory")
+      raise x_fs (None, "Dir.mount", u"You can't mount to a non-empty directory")
     else:
       wrapped (win32file.SetVolumeMountPoint, self.filepath, volume (vol).name)    
       return self
@@ -686,16 +697,16 @@ class Dir (Entry):
   def copy (self, target_filepath, callback=None, callback_data=None):
     target = entry (target_filepath.rstrip (sep) + sep)
     if target and not target.directory:
-      raise x_no_such_file (u"%s exists but is not a directory")
+      raise x_no_such_file (None, "Dir.copy", u"%s exists but is not a directory")
     if not target:
       target.create ()
     
     for dirpath, dirs, files in self.walk ():
       for d in dirs:
-        target_dir = Dir (target.filepath + d.filepath.relative_to (self.filepath))
+        target_dir = Dir (target.filepath + d.relative_to (self.filepath))
         target_dir.create ()
       for f in files:
-        target_file = File (target.filepath + f.filepath.relative_to (self.filepath))
+        target_file = File (target.filepath + f.relative_to (self.filepath))
         f.copy (target_file, callback, callback_data)
   
   def delete (self, recursive=False):
@@ -729,7 +740,7 @@ class Dir (Entry):
     z = zipfile.ZipFile (zip_filename, mode=mode, compression=compression)
     try:
       for f in self.flat ():
-        z.write (f.filepath, f.filepath.relative_to (self.filepath))
+        z.write (f.filepath, f.relative_to (self.filepath))
     finally:
       z.close ()
       
@@ -815,7 +826,7 @@ def file (filepath, ignore_access_errors=False):
   if isinstance (f, File):
     return f
   elif isinstance (f, Dir) and f:
-    raise x_fs, (u"%s exists but is a directory" % filepath)
+    raise x_fs, (None, u"file", u"%s exists but is a directory" % filepath)
   else:
     return File (filepath)
 
@@ -824,7 +835,7 @@ def dir (filepath, ignore_access_errors=False):
   if isinstance (f, Dir):
     return f
   elif isinstance (f, File) and f:
-    raise x_fs, (u"%s exists but is a file" % filepath)
+    raise x_fs (None, u"dir", u"%s exists but is a file" % filepath)
   else:
     return Dir (filepath)
 

@@ -63,7 +63,7 @@ class ACL (core._WinSysObject):
 
   def __iter__ (self):
     if self._list is None:
-      raise x_value_not_set (u"No entry has been set for this ACL")
+      raise x_value_not_set (core.UNSET, "ACL.__iter__", u"No entry has been set for this ACL")
     else:
       return iter (sorted (self._list))
 

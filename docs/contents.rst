@@ -8,8 +8,9 @@ Contents
     index
     about
     core
-    ipc
     event_logs
+    ipc
+    registry
     misc
     cookbook
-    
+    exceptions

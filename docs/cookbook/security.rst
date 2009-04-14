@@ -1,5 +1,5 @@
-Examples of using the security module
-=====================================
+Using the security module
+=========================
 
 Dump the security on a specific file
 ------------------------------------

@@ -16,7 +16,7 @@ import winerror
 
 from . import constants, core, utils
 from .exceptions import (
-  x_winsys, x_not_found
+  wrapper, x_winsys, x_not_found
 )
 
 __all__ = ['LOGON', 'EXTENDED_NAME', 'x_accounts', 'principal', 'Principal', 'User', 'Group', 'me']

@@ -32,7 +32,6 @@ class x_not_ready (x_fs):
   pass
   
 WINERROR_MAP = {
-  None : x_fs,
   winerror.ERROR_ACCESS_DENIED : exceptions.x_access_denied,
   winerror.ERROR_PATH_NOT_FOUND : x_no_such_file,
   winerror.ERROR_FILE_NOT_FOUND : x_no_such_file,
@@ -42,7 +41,7 @@ WINERROR_MAP = {
   winerror.ERROR_NOT_READY : x_not_ready,
   winerror.ERROR_INVALID_HANDLE : exceptions.x_invalid_handle
 }
-wrapped = exceptions.wrapper (WINERROR_MAP)
+wrapped = exceptions.wrapper (WINERROR_MAP, x_fs)
 
 FILE_ACCESS = constants.Constants.from_pattern ("FILE_*", namespace=ntsecuritycon)
 FILE_ACCESS.update (constants.STANDARD_ACCESS)

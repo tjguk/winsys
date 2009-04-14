@@ -1,5 +1,5 @@
 import os, sys
-from sphinx import main
+import sphinx
 
 if __name__ == '__main__':
-  sys.exit (main (sys.argv))
+  sys.exit (sphinx.main (sys.argv))
