@@ -276,8 +276,8 @@ class Registry (core._WinSysObject):
     return self.moniker
   
   def security (self, options=security.Security.DEFAULT_OPTIONS):
-    """For a security request, hand off to the from_object method
-    of the security object, specifying a registry key as the object type.
+    """For a security request, hand off to the :meth:`~security.Security.from_object` method
+    of the :class:`security.Security` object, specifying a registry key as the object type.
     """
     return security.Security.from_object (
       self.pyobject (), 
