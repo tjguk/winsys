@@ -4,13 +4,13 @@ import re
 
 import win32file
 
-from .core import (
+from winsys._fs.core import (
   sep, seps,
   wrapped,
   FILE_ACCESS, FILE_SHARE, FILE_CREATION, FILE_ATTRIBUTE, FILE_FLAG,
   PyHANDLE
 )
-from .. import utils
+from winsys import utils
 
 LEGAL_FILECHAR = r"[^\?\*\\\:\/]"
 LEGAL_FILECHARS = LEGAL_FILECHAR + "+"

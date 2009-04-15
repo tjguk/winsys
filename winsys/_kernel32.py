@@ -7,11 +7,11 @@ import ctypes
 import win32api
 import win32file
 
-from .exceptions import x_winsys
+from winsys import exc
 
 kernel32 = windll.kernel32
 
-class x_kernel32 (x_winsys):
+class x_kernel32 (exc.x_winsys):
   pass
 
 def error (exception, context="", message=""):

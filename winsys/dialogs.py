@@ -14,8 +14,7 @@ import threading
 import traceback
 import uuid
 
-from winsys import core, constants, utils, ipc
-from winsys.exceptions import *
+from winsys import core, constants, exc, ipc, utils
 
 #
 # Constants used by SHBrowseForFolder
@@ -40,16 +39,19 @@ BIF = constants.Constants.from_dict (dict (
 BIF.update (dict (USENEWUI = BIF.NEWDIALOGSTYLE | BIF.EDITBOX))
 BFFM = constants.Constants.from_pattern (u"BFFM_*", namespace=shellcon)
 
-class x_dialogs (x_winsys):
-  pass
+class x_dialogs (exc.x_winsys):
+  "Base for dialog-related exceptions"
 
 WINERROR_MAP = {
 }
-wrapped = wrapper (WINERROR_MAP, x_dialogs)
+wrapped = exc.wrapper (WINERROR_MAP, x_dialogs)
 
 ENCODING = "UTF-8"
 
-class DropTarget (win32com.server.policy.DesignatedWrapPolicy):
+class _DropTarget (win32com.server.policy.DesignatedWrapPolicy):
+  """Helper class to implement the IDropTarget interface so that
+  files can be drag-dropped onto a text field in a dialog.
+  """
   _reg_clsid_ = '{72AA1C07-73BA-4CA8-88B9-7F03FEA173E8}'
   _reg_progid_ = "WinSysDialogs.DropTarget"
   _reg_desc_ = "Drop target handler for WinSys Dialogs"
@@ -72,8 +74,11 @@ class DropTarget (win32com.server.policy.DesignatedWrapPolicy):
   # NB for the interface to work, all the functions must
   # be present even they do nothing.
   #
-  
   def DragEnter (self, data_object, key_state, point, effect):
+    """Query the data block for a drag action which is over the dialog.
+    If we can handle it, indicate that we're ready to accept a drop from
+    this data.
+    """
     try:
       data_object.QueryGetData (self._data_format)
     except pywintypes.error:
@@ -93,12 +98,17 @@ class DropTarget (win32com.server.policy.DesignatedWrapPolicy):
       )
 
   def DragOver (self, key_state, point, effect):
+    """If there is a drag over one of the edit fields in the dialog
+    indicate that we will accept a drop, otherwise not.
+    """
     child_point = wrapped (win32gui.ScreenToClient, self.hwnd, point)
     child_hwnd = wrapped (win32gui.ChildWindowFromPoint, self.hwnd, child_point)
     class_name = wrapped (win32gui.GetClassName, child_hwnd)
     return shellcon.DROPEFFECT_COPY if class_name == "Edit" else shellcon.DROPEFFECT_NONE
   
   def DragLeave (self):
+    """Do nothing, but the method must be implemented.
+    """
     pass
   
 def as_code (text):
@@ -134,6 +144,12 @@ def MoveWindow (*args, **kwargs):
   return wrapped (win32gui.MoveWindow, *args, **kwargs)
 
 class BaseDialog (object):
+  """Basic template for a dialog with one or more fields plus
+  [Ok] and [Cancel] buttons. A simple spacing / sizing algorithm
+  is used. Most of the work is done inside :meth:`_get_dialog_template`
+  which examines the incoming fields and tries to place them according
+  to their various options.
+  """
   
   #
   # User messages to handle the progress aspect of the dialog
@@ -194,7 +210,7 @@ class BaseDialog (object):
     into account the default structure and the (variable) number of fields.
     
     NB Although sensible default positions are chosen here, the horizontal
-    layout will be overridden by the _resize functionality below.
+    layout will be overridden by the :meth:`_resize` functionality below.
     """
     dlg_class_name = _register_wndclass ()
     style = reduce (operator.or_, (
@@ -328,6 +344,9 @@ class Dialog (BaseDialog):
     )
 
   def corners (self, l, t, r, b):
+    """Designed to be subclassed (eg by :class:`InfoDialog`). By
+    default simply returns the values unchanged.
+    """
     return l, t, r, b
   
   def OnInitDialog (self, hwnd, msg, wparam, lparam):
@@ -342,7 +361,7 @@ class Dialog (BaseDialog):
     pythoncom.RegisterDragDrop (
       hwnd,
       pythoncom.WrapObject (
-        DropTarget (hwnd),
+        _DropTarget (hwnd),
         pythoncom.IID_IDropTarget,
         pythoncom.IID_IDropTarget
       )
@@ -412,6 +431,8 @@ class Dialog (BaseDialog):
       MoveWindow (button, dialog_w - ((i + 1) * (self.GUTTER_W + (r - l))), t, r - l, b - t, repaint)
 
   def _get_item (self, item_id):
+    """Return the current value of an item in the dialog.
+    """
     hwnd = wrapped (win32gui.GetDlgItem, self.hwnd, item_id)
     class_name = wrapped (win32gui.GetClassName, hwnd)
     if class_name == "Edit":      
@@ -435,6 +456,8 @@ class Dialog (BaseDialog):
       raise RuntimeError ("Unknown class: %s" % class_name)
       
   def _set_item (self, item_id, value):
+    """Set the current value of an item in the dialog
+    """
     item_hwnd = wrapped (win32gui.GetDlgItem, self.hwnd, item_id)
     class_name = wrapped (win32gui.GetClassName, item_hwnd)
     styles = wrapped (win32gui.GetWindowLong, self.hwnd, win32con.GWL_STYLE)
@@ -691,6 +714,9 @@ def get_filename (start_folder=None, hwnd=None):
     return wrapped (shell.SHGetPathFromIDList, pidl)
 
 class InfoDialog (Dialog):
+  """A simple dialog with no fields which simply displays information
+  in a read-only multiline edit box.
+  """
 
   def __init__ (self, title, info, parent_hwnd=0):
     self.info = str (info).replace ("\r\n", "\n").replace ("\n", "\r\n")
@@ -701,6 +727,9 @@ class InfoDialog (Dialog):
     wrapped (win32gui.EndDialog, hwnd, win32con.IDOK)
     
   def corners (self, l, t, r, b):
+    """Called when the dialog is first initialised: estimate how wide
+    the dialog should be according to the longest line of text
+    """
     hDC = wrapped (win32gui.GetDC, self.hwnd)
     try:
       w, h = max (wrapped (win32gui.GetTextExtentPoint32, hDC, line) for line in self.info.split ("\r\n"))

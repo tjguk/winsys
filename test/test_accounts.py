@@ -23,7 +23,7 @@ def test_principal_string ():
   everyone, domain, type = win32security.LookupAccountName (None, "Everyone")
   assert accounts.principal ("Everyone") == everyone
   
-@raises (accounts.x_not_found)
+@raises (accounts.exc.x_not_found)
 def test_principal_invalid ():
   accounts.principal (object)
   

@@ -30,16 +30,16 @@ import win32file
 if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
   winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
-from . import constants, core, exceptions, security, utils, _kernel32
-from ._fs.core import (
+from winsys import constants, core, exc, security, utils, _kernel32
+from winsys._fs.core import (
   sep, seps, 
   x_fs, x_no_such_file, x_too_many_files, x_invalid_name, x_no_certificate, x_not_ready, wrapped,
   FILE_ACCESS, FILE_SHARE, FILE_NOTIFY_CHANGE, FILE_ACTION, FILE_ATTRIBUTE,
   PROGRESS, MOVEFILE, FILE_FLAG, FILE_CREATION,
   VOLUME_FLAG, DRIVE_TYPE, COMPRESSION_FORMAT, FSCTL
 )
-from ._fs.utils import get_parts, normalised, handle, Handle
-from ._fs.filepath import FilePath
+from winsys._fs.utils import get_parts, normalised, handle, Handle
+from winsys._fs.filepath import FilePath
 
 class _Attributes (core._WinSysObject):
   u"""Simple class wrapper for the list of file attributes
@@ -752,7 +752,7 @@ class Dir (Entry):
 def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
   try:
     iterator = wrapped (win32file.FindFilesIterator, pattern)
-  except exceptions.x_access_denied:
+  except exc.x_access_denied:
     if ignore_access_errors:
       core.warn ("Ignored access error on first iteration of %s", pattern)
       raise StopIteration
@@ -780,7 +780,7 @@ def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
           yield File (os.path.join (dirpath, filename))
     except StopIteration:
       break
-    except exceptions.x_access_denied:
+    except exc.x_access_denied:
       if ignore_access_errors:
         core.warn ("Ignored access error on later iteration of %s", pattern)
         continue

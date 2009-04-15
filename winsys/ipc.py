@@ -9,15 +9,14 @@ import winerror
 import win32event
 import win32file
 
-from winsys import constants, core, fs, security, utils
-from winsys.exceptions import *
+from winsys import constants, core, exc, fs, security, utils
 
 WAIT = constants.Constants.from_pattern (u"WAIT_*", namespace=win32event)
 WAIT.update (dict (INFINITE=win32event.INFINITE))
 
 PyHANDLE = pywintypes.HANDLEType
 
-class x_ipc (x_winsys):
+class x_ipc (exc.x_winsys):
   pass
   
 class x_mailslot (x_ipc):
@@ -36,9 +35,9 @@ class x_mailslot_message_too_complex (x_mailslot):
   pass
   
 WINERROR_MAP = {
-  winerror.ERROR_FILE_NOT_FOUND : x_not_found,
+  winerror.ERROR_FILE_NOT_FOUND : exc.x_not_found,
 }
-wrapped = wrapper (WINERROR_MAP, x_ipc)
+wrapped = exc.wrapper (WINERROR_MAP, x_ipc)
 
 class Mailslot (core._WinSysObject):
   """A mailslot is a mechanism for passing small datasets (up to about
@@ -124,14 +123,14 @@ class Mailslot (core._WinSysObject):
   
   def _read_handle (self):
     if self._hWrite is not None:
-      raise x_mailslot_invalid_use ("Cannot read from this mailslot; it is used for writing")
+      raise x_mailslot_invalid_use (core.UNSET, "Mailslot._read_handle", "Cannot read from this mailslot; it is used for writing")
     if self._hRead is None:
       self._hRead = wrapped (win32file.CreateMailslot, self.name, self.message_size, self.timeout_ms, None)
     return self._hRead
     
   def _write_handle (self):
     if self._hRead is not None:
-      raise x_mailslot_invalid_use (u"Cannot write to this mailslot; it is used for reading")
+      raise x_mailslot_invalid_use (core.UNSET, "Mailslot._write_handle", u"Cannot write to this mailslot; it is used for reading")
     if self._hWrite is None:
       self._hWrite = wrapped (
         win32file.CreateFile,
@@ -151,7 +150,7 @@ class Mailslot (core._WinSysObject):
     elif self._hWrite:
       return self._hWrite
     else:
-      raise x_mailslot ("Mailslot has not yet been used for reading or writing")
+      raise x_mailslot (core.UNSET, "Mailslot.pyobject", "Mailslot has not yet been used for reading or writing")
   
   def __iter__ (self):
     while True:
@@ -224,8 +223,9 @@ class Mailslot (core._WinSysObject):
     data = serialiser_in (data)
     if self.message_size and len (data) > self.message_size:
       raise x_mailslot_message_too_big (
-        "Mailslot messages must be <= %d bytes" % self.message_size, 
-        "%s.put" % self.__class__.__name__, 0
+        core.UNSET,
+        "%s.put" % self.__class__.__name__,
+        "Mailslot messages must be <= %d bytes" % self.message_size
       )
     wrapped (win32file.WriteFile, self._write_handle (), data, None)
     
@@ -324,13 +324,13 @@ def event (name=None, initially_set=0, needs_manual_reset=0, security=None):
 def any (handle_list, timeout_ms=WAIT.INFINITE):
   result = wrapped (win32event.WaitForMultipleObjects, handle_list, 0, timeout_ms)
   if result == WAIT.TIMEOUT:
-    raise x_ipc_timeout ("Wait timed out", "any", 0)
+    raise x_ipc_timeout (core.UNSET, "any", "Wait timed out")
   else:
     return handle_list[result - WAIT.OBJECT_0]
 
 def all (handle_list, timeout_ms=WAIT.INFINITE):
   result = wrapped (win32event.WaitForMultipleObjects, handle_list, 1, timeout_ms)
   if result == WAIT.TIMEOUT:
-    raise x_ipc_timeout ("Wait timed out", "all", 0)
+    raise x_ipc_timeout (core.UNSET, "all", "Wait timed out")
   else:
     return handle_list[result - WAIT.OBJECT_0]

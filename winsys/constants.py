@@ -174,6 +174,3 @@ STANDARD_ACCESS = Constants.from_list ([u"STANDARD_RIGHTS_READ", u"STANDARD_RIGH
 #~ TASKPAGE = Constants.from_pattern (u"TASKPAGE_*", namespace=taskscheduler)
 #~ TASK = Constants.from_pattern (u"TASK_*", namespace=taskscheduler)
 #~ TASK_PRIORITY = Constants.from_pattern (u"*_PRIORITY_CLASS", namespace=taskscheduler)
-
-
-

@@ -115,8 +115,8 @@ def relative_to (path1, path0):
   NB This is used by the fs *and* registry modules so stays
   here in the global utils
   """
-  path1 = path1.lower ()
-  path0 = path0.lower ()
+  path1 = unicode (path1).lower ()
+  path0 = unicode (path0).lower ()
   if path1.startswith (path0):
     return path1[len (path0):]
   else:

@@ -3,12 +3,11 @@ import os, sys
 import operator
 
 import win32security
-from winsys import core, utils, accounts, constants
-from winsys.exceptions import *
+from winsys import core, exc, utils, accounts, constants
 
 __all__ = ['x_ace', 'x_unknown_value', 'ACE_FLAG', 'ACE_TYPE', 'DACE_TYPE', 'SACE_TYPE', 'ACE', 'DACE', 'SACE', 'dace', 'sace', 'ace']
 
-class x_ace (x_winsys):
+class x_ace (exc.x_winsys):
   pass
 
 class x_unknown_value (x_ace):
@@ -87,7 +86,7 @@ class ACE (core._WinSysObject):
     return bool (self.flags & ACE_FLAG.CONTAINER_INHERIT)
   def _set_containers_inherit (self, switch):
     if self.inherited:
-      raise x_access_denied (core.UNSET, u"ACE._get_containers_inherit", u"Cannot change an inherited ACE")
+      raise exc.x_access_denied (core.UNSET, u"ACE._get_containers_inherit", u"Cannot change an inherited ACE")
     if switch:
       self.flags |= ACE_FLAG.CONTAINER_INHERIT
     else:
@@ -98,7 +97,7 @@ class ACE (core._WinSysObject):
     return bool (self.flags & ACE_FLAG.OBJECT_INHERIT)
   def _set_objects_inherit (self, switch):
     if self.inherited:
-      raise x_access_denied (core.UNSET, u"ACE._get_objects_inherit", u"Cannot change an inherited ACE")
+      raise exc.x_access_denied (core.UNSET, u"ACE._get_objects_inherit", u"Cannot change an inherited ACE")
     if switch:
       self.flags |= ACE_FLAG.OBJECT_INHERIT
     else:
@@ -109,7 +108,7 @@ class ACE (core._WinSysObject):
     return self._access_mask
   def _set_access (self, access):
     if self.inherited:
-      raise x_access_denied (core.UNSET, u"ACE._set_access", u"Cannot change an inherited ACE")
+      raise exc.x_access_denied (core.UNSET, u"ACE._set_access", u"Cannot change an inherited ACE")
     self._access_mask = self._access (access)
   access = property (_get_access, _set_access)
   
@@ -117,7 +116,7 @@ class ACE (core._WinSysObject):
     return self._trustee
   def _set_trustee (self, trustee):
     if self.inherited:
-      raise x_access_denied (core.UNSET, u"ACE._get_trustee", u"Cannot change an inherited ACE")
+      raise exc.x_access_denied (core.UNSET, u"ACE._get_trustee", u"Cannot change an inherited ACE")
     self._trustee = accounts.principal (trustee)
   trustee = property (_get_trustee, _set_trustee)
   

@@ -5,19 +5,21 @@ import win32security
 import pywintypes
 import winerror
 
-from winsys import constants, core, utils, accounts, _aces
-from winsys.exceptions import *
+from winsys import constants, core, exc, utils, accounts, _aces
 
 __all__ = ['x_acl', 'ACL', 'DACL', 'SACL', 'acl', 'dacl', 'sacl']
 
 PyACL = pywintypes.ACLType
 
-class x_acl (x_winsys):
-  pass
+class x_acl (exc.x_winsys):
+  "Base for all ACL-related exceptions"
+  
+class x_value_not_set (x_acl):
+  "Raised when iterating over an ACL which has not been set"
 
 WINERROR_MAP = {
 }
-wrapped = wrapper (WINERROR_MAP, x_acl)
+wrapped = exc.wrapper (WINERROR_MAP, x_acl)
 
 class ACL (core._WinSysObject):
   """An ACL maps the Windows security ACL concept, but behaves like

@@ -1,4 +1,3 @@
-from __future__ import with_statement
 import os
 import csv
 from winsys import event_logs, dialogs

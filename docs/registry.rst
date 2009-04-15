@@ -1,7 +1,7 @@
 :mod:`registry` -- Registry
 ===========================
 
-..  automodule:: winsys.registry
+..  automodule:: registry
     :synopsis: Pythonic access to the registry
     :show-inheritance:
 ..  moduleauthor:: Tim Golden <mail@timgolden.me.uk>
@@ -12,15 +12,15 @@ Constants
 
 ..  data:: REGISTRY_HIVE
     
-    All possible registry roots
+    Registry roots (:const:`HKEY_CURRENT_USER`, :const:`HKLM`, etc.)
     
 ..  data:: REGISTRY_ACCESS
     
-    Valid access rights to registry keys
+    Access rights to registry keys (:const:`KEY_ALL_ACCESS`, :const:`KEY_QUERY_VALUE`, etc.)
     
 ..  data:: REGISTRY_VALUE_TYPE
 
-    Possible types for registry values
+    Types of registry values (:const:`REG_SZ`, :const:`REG_DWORD`, etc.)
 
 
 Exceptions
@@ -47,9 +47,6 @@ Functions
 
 Classes
 -------
-
-Registry
-~~~~~~~~
 
 ..  autoclass:: Registry
     :members:

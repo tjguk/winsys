@@ -1,8 +1,7 @@
 :mod:`exceptions` -- Exceptions
 ===============================
 
-..  automodule:: winsys.exceptions
-    :show-inheritance:
+..  automodule:: exc
 ..  moduleauthor:: Tim Golden <mail@timgolden.me.uk>
 
 

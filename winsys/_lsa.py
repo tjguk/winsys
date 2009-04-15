@@ -1,22 +1,20 @@
 import win32security
 
-from winsys import constants, core, utils
-from winsys import accounts
-from winsys.exceptions import *
+from winsys import accounts, constants, core, exc, utils
 
 __all__ = ['LogonSession', 'LSA', 'x_lsa']
 
-class x_lsa (x_winsys):
-  pass
+class x_lsa (exc.x_winsys):
+  "Base for all LSA-related exceptions"
 
 WINERROR_MAP = {
 }
-wrapped = wrapper (WINERROR_MAP, x_lsa)
+wrapped = exc.wrapper (WINERROR_MAP, x_lsa)
 
 def principal (account):
   try:
     return accounts.principal (account)
-  except x_not_found:
+  except exc.x_not_found:
     return "<unknown>"
 
 class LogonSession (core._WinSysObject):

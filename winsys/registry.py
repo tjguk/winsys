@@ -1,16 +1,10 @@
 # -*- coding: iso-8859-1 -*-
 """
-Introduction
-------------
 The registry consists of a series of roots from each of which descends
 a tree of keys and values. Each key has an anonymous (default) value
 and optionally a set of named values, each of which has a particular
 type (string, number etc.).
 
-.. _registry_monikers:
-
-Monikers
-~~~~~~~~
 For convenience in accessing registry keys and values, the module
 implements the idea of a registry moniker which has the form:
 :const:`[\\\\computer\\]HKEY[\\subkey path][:[value]]`. For example::
@@ -28,7 +22,7 @@ implements the idea of a registry moniker which has the form:
   registry.registry (r"HKCU\Control Panel\Desktop")
 
 The key function here is :func:`registry` which is a factory 
-returning an instance of the :class:`Registry` class which contains
+returning a :class:`Registry` object which contains
 most of the useful functionality in the module. However, the same
 functionality is replicated at module level in many cases for
 convenience.
@@ -48,8 +42,7 @@ import win32api
 import win32con
 import pywintypes
 
-from winsys import constants, core, utils, security
-from winsys.exceptions import *
+from winsys import constants, core, exc, security, utils
 
 REGISTRY_HIVE = constants.Constants.from_list ([
   u"HKEY_CLASSES_ROOT",
@@ -101,7 +94,7 @@ REGISTRY_VALUE_TYPE = constants.Constants.from_list ([
 
 PyHANDLE = pywintypes.HANDLEType
 
-class x_registry (x_winsys):
+class x_registry (exc.x_winsys):
   "Base exception for all registry exceptions"
   
 class x_moniker (x_registry):
@@ -116,40 +109,49 @@ class x_moniker_no_root (x_moniker):
 sep = u"\\"
 
 WINERROR_MAP = {
-  winerror.ERROR_PATH_NOT_FOUND : x_not_found,
-  winerror.ERROR_FILE_NOT_FOUND : x_not_found,
+  winerror.ERROR_PATH_NOT_FOUND : exc.x_not_found,
+  winerror.ERROR_FILE_NOT_FOUND : exc.x_not_found,
   winerror.ERROR_NO_MORE_ITEMS : StopIteration,
-  winerror.ERROR_ACCESS_DENIED : x_access_denied,
-  winerror.ERROR_INVALID_HANDLE : x_invalid_handle,
+  winerror.ERROR_ACCESS_DENIED : exc.x_access_denied,
+  winerror.ERROR_INVALID_HANDLE : exc.x_invalid_handle,
 }
-wrapped = wrapper (WINERROR_MAP, x_registry)
+wrapped = exc.wrapper (WINERROR_MAP, x_registry)
 
-moniker_parser = re.compile (ur"(?:\\\\([^\\]+)\\)?(.*)$", re.UNICODE)
-def _parse_moniker (moniker):
-  """Take a registry moniker and return the computer, root key, and subkey path. 
+
+def _parse_moniker (moniker, accept_value=True):
+  r"""Take a registry moniker and return the computer, root key, and subkey path. 
   NB: neither the computer nor the registry need exist; they
-  need simply to be of the right format. The slashes can be forward or
-  back; they will be converted to forward slashes before the moniker
-  is parsed, and the subkey path returned will use backslashes.
+  need simply to be of the right format. The slashes must be backslashes (since
+  registry key names can contain forward slashes).
   
   The moniker must be of the form:
   
-    [\\computer\]HKEY[\subkey path]
+    [\\computer\]HKEY[\subkey path][:value]
   
   Valid monikers are:
-    \\SVR01\HKEY_LOCAL_MACHINE\Software\Python
-    -> "SVR01", 0x80000002, "Software\Python"
+    \\SVR01\HKEY_LOCAL_MACHINE\Software\Python:Version
+    -> "SVR01", 0x80000002, "Software\Python", "Version"
     
     HKEY_CURRENT_USER\Software
-    -> "", 0x80000001, "Software"
+    -> "", 0x80000001, "Software", None
     
     HKEY_CURRENT_USER\Software\Python:
-    -> "", 0x80000001, "Software\Python"
+    -> "", 0x80000001, "Software\Python", ""
   """
+  if accept_value:
+    moniker_parser = re.compile (ur"(?:\\\\([^\\]+)\\)?([^:]+)(:?)(.*)", re.UNICODE)
+  else:
+    moniker_parser = re.compile (ur"(?:\\\\([^\\]+)\\)?(.*)", re.UNICODE)
+
   matcher = moniker_parser.match (moniker)
   if not matcher:
     raise x_moniker_ill_formed (core.UNSET, u"_parse_moniker", u"Ill-formed moniker: %s" % moniker)
-  computer, keypath = matcher.groups ()
+  
+  if accept_value:
+    computer, keypath, colon, value = matcher.groups ()
+  else:
+    computer, keypath = matcher.groups ()
+    colon = value = None
   keys = keypath.split (sep)
   
   root = path = None
@@ -172,16 +174,23 @@ def _parse_moniker (moniker):
   
   path = sep.join (keys)
   
-  return computer, root, path, None
+  #
+  # If a value is indicated (by a colon) but none is supplied,
+  # use "" to indicate that the default value is requested.
+  # Otherwise use None to indicate that no value is requested
+  #
+  if value == u"" and not colon:
+    value = None
+  return computer, root, path, value
 
 def create_moniker (computer, root, path, value=None):
   """Return a valid registry moniker from component parts. Computer
   is optional but root and path must be specified.
   
-  :param computer: (optional) name of a remote computer or "."
+  :param computer: (optional) name of a remote computer or "." or :const:`None`
   :param root: name or value from REGISTRY_HIVE
   :param path: backslash-separated registry path
-  :param value: (OBSOLETE) name of a value on that path. An empty string refers to the default value.
+  :param value: name of a value on that path. An empty string refers to the default value.
   :returns: a valid moniker string
   """
   if root not in REGISTRY_HIVE:
@@ -191,7 +200,10 @@ def create_moniker (computer, root, path, value=None):
     moniker = ur"\\%s\%s" % (computer, fullpath)
   else:
     moniker = fullpath
-  return moniker
+  if value:
+    return moniker + ":" + value
+  else:
+    return moniker
 
 class Registry (core._WinSysObject):
   """  
@@ -235,7 +247,7 @@ class Registry (core._WinSysObject):
     core._WinSysObject.__init__ (self)
     utils._set (self, "hKey", None)
     utils._set (self, "moniker", unicode (moniker))
-    utils._set (self, "id", _parse_moniker (self.moniker.lower ()))
+    utils._set (self, "id", _parse_moniker (self.moniker.lower (), accept_value=False))
     utils._set (self, "access", self._access (access))
     utils._set (self, "name", moniker.split (sep)[-1] if moniker else "")
     
@@ -266,10 +278,10 @@ class Registry (core._WinSysObject):
     :raises: :exc:`x_not_found` if the registry path the key refers to does not exist
     """
     if self.hKey is None:
-      hKey, moniker = self._from_string (self.moniker, access=self.access)
+      hKey, moniker, _ = self._from_string (self.moniker, access=self.access, accept_value=False)
       utils._set (self, "hKey", hKey)
       if self.hKey is None:
-        raise x_not_found (core.UNSET, u"Registry.pyobject", u"Registry path %s not found" % moniker)
+        raise exc.x_not_found (core.UNSET, u"Registry.pyobject", u"Registry path %s not found" % moniker)
     return self.hKey
   
   def as_string (self):
@@ -288,7 +300,7 @@ class Registry (core._WinSysObject):
   def __nonzero__ (self):
     """Determine whether the registry key exists or not.
     """
-    hKey, value = self._from_string (self.moniker)
+    hKey, moniker, _ = self._from_string (self.moniker, accept_value=False)
     return bool (hKey)
   
   def dumped (self, level=0):
@@ -309,10 +321,10 @@ class Registry (core._WinSysObject):
     try:
       value, type = self.get_value (attr)
       return value
-    except x_not_found:
+    except exc.x_not_found:
       try:
         return self.get_key (attr)
-      except x_not_found:
+      except exc.x_not_found:
         raise AttributeError
   __getitem__ = __getattr__
 
@@ -374,33 +386,34 @@ class Registry (core._WinSysObject):
     return create (self + name, sec=sec)
   
   @classmethod
-  def _from_string (cls, string, access=DEFAULT_ACCESS):
+  def _from_string (cls, string, access=DEFAULT_ACCESS, accept_value=True):
     """Treat the string param as a moniker and return the corresponding
     registry key and value name.
     """
-    computer, root, path, value = _parse_moniker (string)
+    computer, root, path, value = _parse_moniker (string, accept_value=accept_value)
+    moniker = REGISTRY_HIVE.name_from_value (root) + sep + path
     if computer:
       hRoot = wrapped (win32api.RegConnectRegistry, computer, root)
     else:
       hRoot = root
     
     try:
-      return wrapped (win32api.RegOpenKeyEx, hRoot, path, 0, cls._access (access)), value
-    except x_not_found:
-      return None, value
+      return wrapped (win32api.RegOpenKeyEx, hRoot, path, 0, cls._access (access)), moniker, value
+    except exc.x_not_found:
+      return None, moniker, value
       
   @classmethod
-  def from_string (cls, string, access=DEFAULT_ACCESS):
+  def from_string (cls, string, access=DEFAULT_ACCESS, accept_value=True):
     """Treat the string param as a moniker return either a key
     or a value.
     """
-    hKey, value = cls._from_string (string, access)
+    hKey, moniker, value = cls._from_string (string, access, accept_value)
     if value is None:
-      return cls (string, access)
+      return cls (moniker, access)
     else:
-      return cls (string, access).get_value (value)
+      return cls (moniker, access).get_value (value)
 
-def registry (root, access=Registry.DEFAULT_ACCESS):
+def registry (root, access=Registry.DEFAULT_ACCESS, accept_value=True):
   """Factory function for the Registry class.
   
   :param root: any of None, a Registry instance, or a moniker string
@@ -411,7 +424,7 @@ def registry (root, access=Registry.DEFAULT_ACCESS):
   elif isinstance (root, Registry):
     return root
   elif isinstance (root, basestring):
-    return Registry.from_string (root, access=access)
+    return Registry.from_string (root, access=access, accept_value=accept_value)
   else:
     raise x_registry (core.UNSET, u"registry", u"root must be None, an existing key or a moniker")
 
@@ -421,10 +434,10 @@ def values (root, ignore_access_errors=False):
   :param root: anything accepted by :func:`registry`
   :param ignore_access_errors: if True, will keep on iterating even if access denied
   """
-  root = registry (root)
+  root = registry (root, accept_value=False)
   try:
     hKey = root.pyobject ()
-  except x_access_denied:
+  except exc.x_access_denied:
     if ignore_access_errors:
       raise StopIteration
     else:
@@ -435,7 +448,7 @@ def values (root, ignore_access_errors=False):
   while True:
     try:
       yield wrapped (win32api.RegEnumValue, hKey, i)
-    except x_access_denied:
+    except exc.x_access_denied:
       if ignore_access_errors:
         raise StopIteration
       else:
@@ -448,10 +461,10 @@ def keys (root, ignore_access_errors=False):
   :param root: anything accepted by :func:`registry`
   :param ignore_access_errors: if True, will keep on iterating even if access denied
   """
-  root = registry (root)
+  root = registry (root, accept_value=False)
   try:
     hRoot = root.pyobject ()
-  except x_access_denied:
+  except exc.x_access_denied:
     if ignore_access_errors:
       raise StopIteration
     else:
@@ -460,7 +473,7 @@ def keys (root, ignore_access_errors=False):
   try:
     for subname, reserved, subclass, written_at in wrapped (win32api.RegEnumKeyExW, hRoot):
       yield Registry (root.moniker + sep + subname)
-  except x_access_denied:
+  except exc.x_access_denied:
     if ignore_access_errors:
       raise StopIteration
     else:
@@ -474,45 +487,46 @@ def copy (from_key, to_key):
   :param to_key: anything accepted by :func:`registry`
   :returns: a :class:`Registry` instance referring to to_key
   """
-  source = registry (from_key)
-  target = registry (to_key)
+  source = registry (from_key, accept_value=False)
+  target = registry (to_key, accept_value=False)
   if not target:
     target.create ()
 
   for root, subkeys, subvalues in walk (source):
-    target_root = registry (target.moniker + utils.relative_to (root.moniker, source.moniker))
+    target_root = registry (target.moniker + utils.relative_to (root.moniker, source.moniker), accept_value=False)
     for k in subkeys:
-      target_key = registry (target.moniker + utils.relative_to (k.moniker, source.moniker))
+      target_key = registry (target.moniker + utils.relative_to (k.moniker, source.moniker), accept_value=False)
       target_key.create ()    
     for name, value, type in subvalues:
       target_root.set_value (name, (value, type))
       
-  return registry (to_key)
+  return target
   
 def delete (root):
   """Delete a registry key and all its subkeys
   
   :param root: anything accepted by :func:`registry`
   """
-  root = registry (root)
+  root = registry (root, accept_value=False)
   for k in root.keys ():
     k.delete ()
   win32api.RegDeleteKey (root.parent ().pyobject (), root.name)
 
 def create (root, sec=None):
   """Create a key and apply specific security to it, returning the
-  key created
+  key created. Note that a colon in the key name is treated as part
+  of the name not as a value indicator.
   
   :param root: anything accepted by :func:`registry`
   :param sec: a :class:`security.Security` instance or None
   :returns: a :class:`Registry` instance corresponding to root
   """
-  key = registry (root)
-  computer0, root0, path0, value0 = _parse_moniker (key.moniker)
+  key = registry (root, accept_value=False)
+  computer0, root0, path0, value0 = _parse_moniker (key.moniker, accept_value=False)
   
   parts = path0.split (sep)
   for i, part in enumerate (parts):
-    computer, root, path, value = _parse_moniker (create_moniker (computer0, root0, sep.join (parts[:i+1])))
+    computer, root, path, value = _parse_moniker (create_moniker (computer0, root0, sep.join (parts[:i+1])), accept_value=False)
     if computer:
       hRoot = wrapped (win32api.RegConnectRegistry, computer, root)
     else:
@@ -529,7 +543,7 @@ def walk (root, ignore_access_errors=False):
   :param root: anything accepted by :func:`registry`
   :param ignore_access_errors: if True, will keep on iterating even if access denied
   """
-  root = registry (root)
+  root = registry (root, accept_value=False)
   yield (
     root, 
     root.keys (ignore_access_errors=ignore_access_errors), 
@@ -545,7 +559,7 @@ def flat (root, ignore_access_errors=False):
   :param root: anything accepted by :func:`registry`
   :param ignore_access_errors: if True, will keep on iterating even if access denied
   """
-  for key, subkeys, values in walk (root, ignore_access_errors=ignore_access_errors):
+  for key, subkeys, values in walk (root, ignore_access_errors):
     yield key
     for value in values:
       yield value
@@ -555,12 +569,12 @@ def parent (key):
   
   :param key: anything accepted by :func:`registry`
   """
-  key = registry (key)
-  computer, root, path, value = _parse_moniker (key.moniker)
+  key = registry (key, accept_value=False)
+  computer, root, path, value = _parse_moniker (key.moniker, accept_value=False)
   parent_moniker = create_moniker (computer, root, sep.join (path.split (sep)[:-1]))
-  pcomputer, proot, ppath, pvalue = _parse_moniker (parent_moniker)
+  pcomputer, proot, ppath, pvalue = _parse_moniker (parent_moniker, accept_value=False)
   if ppath:
-    return registry (parent_moniker, key.access)
+    return registry (parent_moniker, key.access, accept_value=False)
   else:
     raise x_registry (core.UNSET, u"parent", u"%s has no parent" % key.moniker)
       

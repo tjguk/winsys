@@ -1,9 +1,9 @@
 import os
 import re
 
-from .. import utils
-from .core import sep, seps
-from .utils import get_parts, normalised, relative_to
+from winsys import utils
+from winsys._fs.core import sep, seps
+from winsys._fs.utils import get_parts, normalised, relative_to
 
 class FilePath (unicode):
   u"""Helper class which subclasses unicode, and can therefore be passed

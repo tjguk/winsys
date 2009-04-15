@@ -27,6 +27,12 @@ An event source can be deleted at any time: its records simply become "orphans"
 in that the system will no longer be able to format their messages since it
 won't know the location of the DLL which contains the corresponding strings.
 
+..  note::
+
+    The logging library in Python's stdlib already has an NTEventLog handler,
+    so if all you want to do is to log events in a standard manner, then it's
+    probably best to use that.
+
 
 List the 10 most recent records in each event log
 -------------------------------------------------

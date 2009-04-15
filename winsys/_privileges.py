@@ -5,24 +5,23 @@ import winerror
 import win32api
 import win32security
 
-from winsys import constants, core, utils
-from winsys.exceptions import *
+from winsys import constants, core, exc, utils
 
 __all__ = ['PRIVILEGE_ATTRIBUTE', 'PRIVILEGE', 'Privilege', 'privilege', 'x_privilege', 'x_privilege_no_token']
 
 PRIVILEGE_ATTRIBUTE = constants.Constants.from_pattern (u"SE_PRIVILEGE_*", namespace=win32security)
 PRIVILEGE = constants.Constants.from_pattern (u"SE_*_NAME", namespace=win32security)
 
-class x_privilege (x_winsys):
-  pass
+class x_privilege (exc.x_winsys):
+  "Base for all privilege-related exceptions"
   
 class x_privilege_no_token (x_privilege):
-  pass
+  "Raised when a token cannot be found"
 
 WINERROR_MAP = {
   winerror.ERROR_NO_TOKEN : x_privilege_no_token
 }
-wrapped = wrapper (WINERROR_MAP, x_privilege)
+wrapped = exc.wrapper (WINERROR_MAP, x_privilege)
 
 #
 # Convenience implementation functions
@@ -93,7 +92,6 @@ class Privilege (core._WinSysObject):
   def _get_enabled (self):
     return bool (self._attributes & PRIVILEGE_ATTRIBUTE.ENABLED)
   def _set_enabled (self, set):
-    #~ raise NotImplemented
     _set_privilege (self._luid, set)
     if set:
       self._attributes |= PRIVILEGE_ATTRIBUTE.ENABLED

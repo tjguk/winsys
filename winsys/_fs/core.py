@@ -8,12 +8,12 @@ import win32event
 import win32file
 import winioctlcon
 
-from .. import exceptions, constants
+from winsys import exc, constants
 
 sep = unicode (os.sep)
 seps = u"/\\"
 
-class x_fs (exceptions.x_winsys):
+class x_fs (exc.x_winsys):
   pass
 
 class x_no_such_file (x_fs):
@@ -32,16 +32,16 @@ class x_not_ready (x_fs):
   pass
   
 WINERROR_MAP = {
-  winerror.ERROR_ACCESS_DENIED : exceptions.x_access_denied,
+  winerror.ERROR_ACCESS_DENIED : exc.x_access_denied,
   winerror.ERROR_PATH_NOT_FOUND : x_no_such_file,
   winerror.ERROR_FILE_NOT_FOUND : x_no_such_file,
   winerror.ERROR_BAD_NETPATH : x_no_such_file,
   winerror.ERROR_INVALID_NAME : x_invalid_name,
   winerror.ERROR_BAD_RECOVERY_POLICY : x_no_certificate,
   winerror.ERROR_NOT_READY : x_not_ready,
-  winerror.ERROR_INVALID_HANDLE : exceptions.x_invalid_handle
+  winerror.ERROR_INVALID_HANDLE : exc.x_invalid_handle
 }
-wrapped = exceptions.wrapper (WINERROR_MAP, x_fs)
+wrapped = exc.wrapper (WINERROR_MAP, x_fs)
 
 FILE_ACCESS = constants.Constants.from_pattern ("FILE_*", namespace=ntsecuritycon)
 FILE_ACCESS.update (constants.STANDARD_ACCESS)

@@ -307,19 +307,19 @@ def test_ace_from_ace_sace ():
 #
 # Check that you can't change any of the attributes of an inherited ACE
 #
-@raises (_aces.x_access_denied)
+@raises (_aces.exc.x_access_denied)
 def test_ace_set_containers_inherit_inherited ():
   _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE).containers_inherit = True
 
-@raises (_aces.x_access_denied)
+@raises (_aces.exc.x_access_denied)
 def test_ace_set_objects_inherit_inherited ():
   _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE).objects_inherit = True
 
-@raises (_aces.x_access_denied)
+@raises (_aces.exc.x_access_denied)
 def test_ace_set_access_inherited ():
   _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE).access = 0
 
-@raises (_aces.x_access_denied)
+@raises (_aces.exc.x_access_denied)
 def test_ace_set_trustee_inherited ():
   _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE).trustee = ""
 

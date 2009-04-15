@@ -14,10 +14,7 @@ import win32cred
 import pywintypes
 import winerror
 
-from . import constants, core, utils
-from .exceptions import (
-  wrapper, x_winsys, x_not_found
-)
+from winsys import constants, core, exc, utils
 
 __all__ = ['LOGON', 'EXTENDED_NAME', 'x_accounts', 'principal', 'Principal', 'User', 'Group', 'me']
 
@@ -30,13 +27,13 @@ CRED_TI = constants.Constants.from_pattern (u"CRED_TI_*", namespace=win32cred)
 
 PySID = pywintypes.SIDType
 
-class x_accounts (x_winsys):
-  pass
+class x_accounts (exc.x_winsys):
+  "Base for all accounts-related exceptions"
 
 WINERROR_MAP = {
-  winerror.ERROR_NONE_MAPPED : x_not_found
+  winerror.ERROR_NONE_MAPPED : exc.x_not_found
 }
-wrapped = wrapper (WINERROR_MAP, x_accounts)
+wrapped = exc.wrapper (WINERROR_MAP, x_accounts)
 
 def principal (principal):
   u"""Factory function for the Principal class. principal
@@ -70,7 +67,7 @@ class Principal (core._WinSysObject):
     self.sid = sid
     try:
       self.name, self.domain, self.type = wrapped (win32security.LookupAccountSid, system_name, self.sid)
-    except x_winsys, (errno, errctx, errmsg):
+    except exc.x_winsys, (errno, errctx, errmsg):
       if errno == winerror.ERROR_NONE_MAPPED:
         self.name = str (self.sid)
         self.domain = self.type = None

@@ -1,8 +1,7 @@
 import marshal
 import logging
 
-from winsys import constants, core, ipc
-from winsys.exceptions import *
+from winsys import exc, ipc
 
 class MailslotHandler (logging.Handler):
   """A logging-compatible handler which will write to a named
@@ -24,7 +23,7 @@ class MailslotHandler (logging.Handler):
   def close (self):
     try:
       self.put (None)
-    except x_not_found:
+    except exc.x_not_found:
       pass
 
 class PermanentMailslotHandler (MailslotHandler):

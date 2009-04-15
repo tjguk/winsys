@@ -7,24 +7,23 @@ import win32api
 import winerror
 import pywintypes
 
-from winsys import constants, core, utils, accounts, _aces, _acls, _privileges
-from winsys.exceptions import *
+from winsys import accounts, _aces, _acls, constants, core, exc, _privileges, utils 
 
 __all__ = ['Token', 'token', 'x_token', 'x_no_token']
 
-class x_token (x_winsys):
-  pass
+class x_token (exc.x_winsys):
+  "Base for all token-related exceptions"
 
 class x_no_token (x_token):
-  pass
+  "Raised when a token cannot be retrieved"
 
 PyHANDLE = pywintypes.HANDLEType
 
 WINERROR_MAP = {
-  winerror.ERROR_ACCESS_DENIED : x_access_denied,
+  winerror.ERROR_ACCESS_DENIED : exc.x_access_denied,
   winerror.ERROR_NO_TOKEN : x_no_token
 }
-wrapped = wrapper (WINERROR_MAP, x_token)
+wrapped = exc.wrapper (WINERROR_MAP, x_token)
 
 def _from_sid_and_attribute (data):
   sid, attributes = data

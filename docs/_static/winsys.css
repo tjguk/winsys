@@ -8,6 +8,7 @@ body {
 
 div.body {
 	background-color : #f0fff0;
+	font-size : 92%;
 }
 
 div.document {
@@ -45,6 +46,10 @@ div.body h5,
 div.body h6 {
 	color : #008000;
 	background-color : #e0ffe0;
+}
+
+div.body h3 {
+  font-size : 120%;
 }
 
 div.documentwrapper {
@@ -91,4 +96,8 @@ div.fulltoc ul {
 div.fulltoc li {
   color : #666;
   margin-top : 0.125em;
+}
+
+div.body tt {
+  font-size : 1em;
 }

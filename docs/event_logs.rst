@@ -2,7 +2,7 @@
 ===============================
 
 ..  module:: event_logs
-    :synopsis: Pythonic access to Event Logs
+    :synopsis: Read and write event log entries
 ..  moduleauthor:: Tim Golden <mail@timgolden.me.uk>
 
 Introduction
@@ -47,92 +47,39 @@ be logged against it.
 Exceptions
 ----------
 
-..  exception:: x_event_logs
-
-    Base of all exceptions in this module; subclass of :exc:`core.x_winsys`
+..  autoexception:: x_event_logs
 
 Constants
 ---------
 
 ..  data:: EVENTLOG_READ
-..  data:: EVENTLOG_TYPE
-..  data:: DEFAULT_LOG_NAME
 
-    "Application", the name of the most commonly-used event log for recording
-    user-initiated events.
+    Ways of iterating over an event log (Forwards, Backwards, etc.)
+    
+..  data:: EVENTLOG_TYPE
+
+    Types of event log record (Warning, Error, etc.)
 
 
 Functions
 ----------
 
 Of these functions, the two you're most likely to need are: :func:`event_log`,
-which returns an :class:`EventLog` instance corresponding to the named log,
+which returns an :class:`EventLog` corresponding to the named log,
 which you can then iterate over; and :func:`log_event`, which logs an event
 against a named source.
 
-..  function:: event_logs (computer : string = ".")
-
-    Iterate over each of the event logs on the computer in question, yielding
-    an :class:`EventLog` instance corresponding to each one.
-    
-..  function:: event_log (log)
-
-    Convenience function to return an :class:`EventLog` instance corresponding
-    to log: 
-    
-    * If log is :const:`None`, return :const:`None`
-    * If log is an existing :class:`EventLog` instance, return log
-    * Otherwise, treat log as a moniker of the form [\\\\computer\\]name
-      and return an :class:`EventLog` corresponding to that log on that
-      computer.
-      
-..  function:: event_sources (log_name=DEFAULT_LOG_NAME, computer=".")
-
-    Iterate over the event sources registered against an event log on
-    a computer, yield an :class:`EventSource` instance corresponding to
-    each one.
-    
-..  function:: event_source (source)
-
-    Convenience function to return an :class:`EventSource` instance corresponding
-    to source:
-    
-    * If source is :const:`None`, return :const:`None`
-    * If source is an existing :class:`EventSource` instance, return source
-    * Otherwise, treat source as a moniker of the form [[\\\\computer]\\log\\]name
-      and return a :class:`EventSource` corresponding to that source.
-      
-..  function:: log_event (source, type="error", message=None, data=None, id=0, category=0, principal=core.UNSET)
-
-    Log an event against the source, which implies an event log type. 
-    
-    :param source: the event source for this event
-    :type source: anything accepted by :func:`event_source`
-    :param type: whether information or error etc.
-    :type type: anything accepted by :data:`EVENTLOG_TYPE`
-    :param message: the message associated with the event
-    :type message: a string or list of strings 
-    :param data: arbitrary sequence of bytes
-    :param id: integer relevant to the event source
-    :param category: integer relevant to the event source
-    :param principal: who the event was logged by
-    :type principal: anything accepted by :func:`accounts.principal`
-    
+..  autofunction:: event_logs
+..  autofunction:: event_log
+..  autofunction:: event_sources
+..  autofunction:: event_source
+..  autofunction:: log_event 
 
 Classes
 -------
 
-_EventLogEntry
-~~~~~~~~~~~~~~
-
-..  class:: _EventLogEntry (event_log_name : string, event_log_entry)
-
-    An internal class corresponding to one record in an event log.
-    It exposes the attributes of the record in a Pythonic manner,
-    converting values to their WinSys equivalent where relevant.
-    Consistent with the rest of the WinSys package, the names
-    have been converted from their TitleCase originals to a
-    lower_with_underscore version.
+..  autoclass:: _EventLogEntry
+    :members:
     
     .. attribute:: record_number
     
@@ -178,22 +125,9 @@ _EventLogEntry
     and the corresponding strings filled in.
 
 
-EventLog
-~~~~~~~~
+..  autoclass:: EventLog
+    :members:
 
-..  class:: EventLog (computer : string, name : string)
-
-    Typically instantiated via the :func:`event_log` function, which uses
-    the friendlier moniker of name. The ``EventLog`` class does its
-    best to treat the corresponding event log as a Python sequence, allowing
-    forward and reverse iteration and item access. (The latter will not be
-    fast as it essentially iterates over the log until the right item is
-    found.)
-    
-    The records in the log are represented by instances of the internal
-    :class:`_EventLogEntry` class which exposes the attributes of the
-    log record in a Pythonic manner.
-    
     .. attribute:: file
     
     The real file which holds the database for this event log
@@ -242,39 +176,15 @@ EventLog
       from winsys import event_logs
       app = event_logs.event_log ("Application")
       
-      print "First record:", app[0]
-      print "Last record:", app[-1]
+      print "Oldest record:", app[0]
+      print "Latest record:", app[-1]
       
     At present, slices are not supported.
     
-    .. method:: clear ([save_to_filename : string = None])
-    
-    Clear the event log, optionally saving the raw data first if a filename
-    is specified. The save_to_filename is converted to unicode first, so it
-    is possible to pass a :class:`fs.File` object.
-    
-    .. method:: log_event (source, *args, **kwargs)
-    
-    Convenience function which passes its parameters to the module-level
-    :func:`log_event` function.
 
+..  autoclass:: EventSource
+    :members:
 
-EventSource
-~~~~~~~~~~~
-
-..  class:: EventSource (computer : string, log_name : string, source_name : string)
-
-    Generally instantiated from the module-level :func:`event_source` function
-    which takes slightly friendlier arguments. The event source is a sideways
-    concept in Windows event logs, providing the message structures for the
-    events in a log. Most user event sources register against the Application log
-    and this is treated as the default where relevant.
-    
-    Most of the functionality here is expected to be used internally to the
-    module, but the :meth:`create` and :meth:`delete` methods are user-oriented.
-    The class is its own context manager, but again this is principally to
-    support the module-level :func:`log_event` function.
-    
     .. attribute:: event_message_file
     
     The DLL containing the messages which the event source supports. For simple
@@ -283,21 +193,6 @@ EventSource
     .. attribute:: types_supported
     
     List of :data:`EVENTLOG_TYPE` name strings supported by this event source.
-    
-    .. classmethod:: create (name[, event_log_name=DEFAULT_LOG_NAME])
-    
-    Register a new event source in the registry, using the default pywin32-supplied
-    DLL and event types. By default the source will be registered against the
-    Application event log.
-    
-    .. method:: delete
-    
-    Remove this event source from the registry
-    
-    .. method:: log_event (*args, **kwargs)
-    
-    Convenience function which passes its parameters to the module-level
-    :func:`log_event` function.
 
 
 References
@@ -316,3 +211,4 @@ To Do
 
 * New Vista / 2008 Event Logs mechanism
 * Some way of incorporating DLLs of messages
+* Using EVENTLOG_SEEK_READ for better random access

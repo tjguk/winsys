@@ -11,8 +11,7 @@ import win32evtlog
 import win32evtlogutil
 import pywintypes
 
-from winsys import constants, core, utils, registry, accounts
-from winsys.exceptions import *
+from winsys import accounts, constants, core, exc, registry, utils
 
 EVENTLOG_READ = constants.Constants.from_pattern (u"EVENTLOG_*_READ", namespace=win32evtlog)
 EVENTLOG_TYPE = constants.Constants.from_pattern (u"EVENTLOG_*_TYPE", namespace=win32evtlog)
@@ -25,13 +24,13 @@ PyHANDLE = pywintypes.HANDLEType
 
 DEFAULT_LOG_NAME = "Application"
 
-class x_event_logs (x_winsys):
+class x_event_logs (exc.x_winsys):
   "Base exception for eventlog-specific exceptions"
   
 WINERROR_MAP = {
-  winerror.ERROR_ACCESS_DENIED : x_access_denied
+  winerror.ERROR_ACCESS_DENIED : exc.x_access_denied
 }
-wrapped = wrapper (WINERROR_MAP)
+wrapped = exc.wrapper (WINERROR_MAP)
 
 class _EventLogEntry (core._WinSysObject):
   """Internal class for convenient access to attributes of an event log
@@ -105,7 +104,7 @@ class EventLog (core._WinSysObject):
   except to find a few records at either end.
   
   Instances of this class are expected to be accessed via the 
-  :func:`event_log` function (qv).
+  :func:`event_log` function.
   """
   
   REG_ROOT = r"\\%s\HKLM\SYSTEM\CurrentControlSet\Services\Eventlog"
@@ -247,7 +246,6 @@ class EventLog (core._WinSysObject):
     log_event (source, *args, **kwargs)
 
 class EventSource (core._WinSysObject):
-  
   """An Event Source is an apparently necessary but in fact slightly unnecessary
   part of the event log mechanism. In principle, it represents a name and a DLL
   with a bunch of message ids in it. In practice, you can log an event with an
@@ -360,7 +358,7 @@ def event_logs (computer="."):
     yield EventLog (computer, key.name)
 
 def event_log (log):
-  """Convenience function to return an :class:`EventLog` object representing
+  r"""Convenience function to return an :class:`EventLog` object representing
   one of the existing event logs. Will raise :exc:`x_not_found` if the event
   log does not exist.
   
@@ -381,7 +379,7 @@ def event_sources (log_name=DEFAULT_LOG_NAME, computer="."):
     yield EventSource (computer, log_name, key.name)
     
 def event_source (source):
-  """Convenience function to return an :class:`EventSource` object representing
+  r"""Convenience function to return an :class:`EventSource` object representing
   one of the existing event sources. Will raise :exc:`exceptions.x_not_found` if the event
   source does not exist.
 

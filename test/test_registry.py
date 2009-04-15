@@ -9,9 +9,10 @@ import uuid
 from winsys import registry, utils
 
 GUID = str (uuid.uuid1 ())
-TEST_KEY = r"HKCU\Software\winsys"
-TEST_KEY1 = r"HKCU\Software\winsys1"
-TEST_KEY2 = r"HKCU\Software\winsys1\winsys2"
+TEST_KEY = r"HKEY_CURRENT_USER\Software\winsys"
+TEST_KEY1 = r"HKEY_CURRENT_USER\Software\winsys1"
+TEST_KEY2 = r"HKEY_CURRENT_USER\Software\winsys1\winsys2"
+TEST_KEY3 = r"HKEY_CURRENT_USER\Software\winsys1\win:sys3"
 
 #
 # Fixtures
@@ -20,6 +21,7 @@ def setup ():
   win32api.RegCreateKey (win32con.HKEY_CURRENT_USER, r"Software\winsys")
   hKey = win32api.RegOpenKeyEx (win32con.HKEY_CURRENT_USER, r"Software\winsys", 0, win32con.KEY_WRITE)
   win32api.RegSetValueEx (hKey, "winsys1", None, win32con.REG_SZ, GUID)
+  win32api.RegSetValueEx (hKey, "winsys1", "value", win32con.REG_SZ, GUID)
   win32api.RegSetValueEx (hKey, "winsys2", None, win32con.REG_SZ, GUID)
   hSubkey = win32api.RegCreateKey (hKey, "winsys2")
   win32api.RegSetValueEx (hSubkey, "winsys2", None, win32con.REG_SZ, GUID)
@@ -87,53 +89,53 @@ def key0_subset_of_key1 (key0, key1):
 # test disabled until I can figure out a way to make it fail!
 #
 #~ def test_moniker_ill_formed ():
-  #~ assert_raises (registry.x_moniker_ill_formed, registry.parse_moniker, r"IN\VA:LID\MONI\KER")
+  #~ assert_raises (registry.x_moniker_ill_formed, registry._parse_moniker, r"IN\VA:LID\MONI\KER")
   
 @raises (registry.x_moniker_no_root)
 def test_moniker_computer_only ():
-  registry.parse_moniker (r"\\computer")
+  registry._parse_moniker (r"\\computer")
     
 @raises (registry.x_moniker_no_root)
 def test_moniker_invalid_root ():
-  registry.parse_moniker (r"<nonsense>")
+  registry._parse_moniker (r"<nonsense>")
 
 def test_moniker_slash_and_root ():
-  assert_equals (registry.parse_moniker (r"\HKLM"), (None, win32con.HKEY_LOCAL_MACHINE, "", None))
+  assert_equals (registry._parse_moniker (r"\HKLM"), (None, win32con.HKEY_LOCAL_MACHINE, "", None))
     
 def test_moniker_root_only ():
-  assert_equals (registry.parse_moniker ("HKLM"), (None, win32con.HKEY_LOCAL_MACHINE, "", None))
+  assert_equals (registry._parse_moniker ("HKLM"), (None, win32con.HKEY_LOCAL_MACHINE, "", None))
     
 def test_moniker_computer_and_root ():
-  assert_equals (registry.parse_moniker (r"\\COMPUTER\HKLM"), ("COMPUTER", win32con.HKEY_LOCAL_MACHINE, "", None))
+  assert_equals (registry._parse_moniker (r"\\COMPUTER\HKLM"), ("COMPUTER", win32con.HKEY_LOCAL_MACHINE, "", None))
 
 def test_moniker_root_and_body ():
-  assert_equals (registry.parse_moniker (r"HKLM\Software\Microsoft"), (None, win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", None))
+  assert_equals (registry._parse_moniker (r"HKLM\Software\Microsoft"), (None, win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", None))
 
 def test_moniker_computer_root_and_body ():
-  assert_equals (registry.parse_moniker (r"\\COMPUTER\HKLM\Software\Microsoft"), ("COMPUTER", win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", None))
+  assert_equals (registry._parse_moniker (r"\\COMPUTER\HKLM\Software\Microsoft"), ("COMPUTER", win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", None))
 
 @raises (registry.x_moniker_no_root)
 def test_moniker_body_only ():
-  registry.parse_moniker (r"Software\Microsoft")
+  registry._parse_moniker (r"Software\Microsoft")
 
 def test_moniker_default_value ():
-  assert_equals (registry.parse_moniker (r"HKLM\Software\Microsoft:"), (None, win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", ""))
+  assert_equals (registry._parse_moniker (r"HKLM\Software\Microsoft:"), (None, win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", ""))
 
 def test_moniker_value ():
-  assert_equals (registry.parse_moniker (r"HKLM\Software\Microsoft:value"), (None, win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", "value"))
+  assert_equals (registry._parse_moniker (r"HKLM\Software\Microsoft:value"), (None, win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", "value"))
 
 def test_moniker_create ():
   parts = "COMPUTER", win32con.HKEY_LOCAL_MACHINE, "PATH", "VALUE"
-  assert_equals (registry.parse_moniker (registry.create_moniker (*parts)), parts)
+  assert_equals (registry._parse_moniker (registry.create_moniker (*parts)), parts)
 
 def test_moniker_create_named_root ():
   parts = "COMPUTER", "HKLM", "PATH", "VALUE"
   result = "COMPUTER", win32con.HKEY_LOCAL_MACHINE, "PATH", "VALUE"
-  assert_equals (registry.parse_moniker (registry.create_moniker (*parts)), result)
+  assert_equals (registry._parse_moniker (registry.create_moniker (*parts)), result)
 
 def test_moniker_create ():
   parts = "COMPUTER", win32con.HKEY_LOCAL_MACHINE, "PATH", None
-  assert_equals (registry.parse_moniker (registry.create_moniker (*parts)), parts)
+  assert_equals (registry._parse_moniker (registry.create_moniker (*parts)), parts)
 
 def test_registry_None ():
   assert registry.registry (None) is None
@@ -141,6 +143,9 @@ def test_registry_None ():
 def test_registry_Key ():
   key = registry.registry ("HKLM")
   assert registry.registry (key) is key
+  
+def test_registry_value ():
+  assert registry.registry (TEST_KEY + r":winsys1") == (GUID, win32con.REG_SZ)
 
 def test_registry_string ():
   assert registry.registry (TEST_KEY).winsys1 == GUID
@@ -155,7 +160,7 @@ def test_values ():
   assert values.next () == ('winsys1', GUID, win32con.REG_SZ)
   assert values.next () == ('winsys2', GUID, win32con.REG_SZ)
 
-@raises (registry.x_access_denied)
+@raises (registry.exc.x_access_denied)
 def test_values_access_denied ():
   key = registry.registry (TEST_KEY, win32con.KEY_ENUMERATE_SUB_KEYS)
   registry.values (key).next ()
@@ -169,7 +174,7 @@ def test_keys ():
   keys = registry.keys (TEST_KEY)
   assert keys.next () == registry.registry (TEST_KEY + r"\winsys2")
 
-@raises (registry.x_access_denied)
+@raises (registry.exc.x_access_denied)
 def test_keys_access_denied ():
   key = registry.registry (TEST_KEY, win32con.KEY_NOTIFY)
   keys = registry.keys (key, ignore_access_errors=False)
@@ -264,7 +269,7 @@ def test_walk ():
   assert key == registry.registry (TEST_KEY) + "winsys2"
   assert list (values) == [("winsys2", GUID, win32con.REG_SZ)]
 
-@raises (registry.x_access_denied)
+@raises (registry.exc.x_access_denied)
 def test_walk_access_denied ():
   key = registry.registry (TEST_KEY, access=registry.REGISTRY_ACCESS.KEY_NOTIFY)
   walker = registry.walk (key)
@@ -287,7 +292,7 @@ def test_flat ():
     ("winsys2", GUID, win32con.REG_SZ)
   ]
 
-@raises (registry.x_access_denied)
+@raises (registry.exc.x_access_denied)
 def test_flat_access_denied ():
   key = registry.registry (TEST_KEY, access=registry.REGISTRY_ACCESS.KEY_NOTIFY)
   list (registry.flat (key))
@@ -322,7 +327,7 @@ def test_Registry_init ():
   assert key.name == "winsys"
   assert key.access == win32con.KEY_ALL_ACCESS
   print key.id
-  assert key.id == registry.parse_moniker (TEST_KEY.lower ())
+  assert key.id == registry._parse_moniker (TEST_KEY.lower ())
 
 def test_Registry_init_access ():
   for k, v in registry.Registry.ACCESS.items ():
@@ -347,7 +352,7 @@ def test_Registry_add ():
 def test_Registry_pyobject ():
   assert isinstance (registry.registry (TEST_KEY).pyobject (), pywintypes.HANDLEType)
 
-@raises (registry.x_not_found)
+@raises (registry.exc.x_not_found)
 def test_Registry_pyobject_not_exists ():
   assert not bool (registry.registry (TEST_KEY + "xxx"))
   registry.registry (TEST_KEY + "xxx").pyobject ()
@@ -467,7 +472,7 @@ def test_Registry_from_string ():
   key = registry.Registry.from_string (TEST_KEY)
   assert key.moniker == TEST_KEY
   assert key.access == registry.Registry._access (registry.Registry.DEFAULT_ACCESS)
-  assert key.id == registry.parse_moniker (TEST_KEY.lower ())
+  assert key.id == registry._parse_moniker (TEST_KEY.lower ())
 
 def test_Registry_from_string_value ():
   assert registry.Registry.from_string (TEST_KEY + ":winsys1") == registry.Registry.from_string (TEST_KEY).get_value ("winsys1")
