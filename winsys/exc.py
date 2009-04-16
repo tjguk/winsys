@@ -2,21 +2,20 @@
 import pywintypes
 
 class x_winsys (pywintypes.error):
-  """Base for all WinSys exception. Subclasses pywintypes.error so that
+  u"""Base for all WinSys exception. Subclasses pywintypes.error so that
   except pywintypes.error clauses can be used to catch all relevant exceptions
   """
-  
 class x_access_denied (x_winsys):
-  "General purpose access-denied exception"
+  u"General purpose access-denied exception"
   
 class x_not_found (x_winsys):
-  "General purpose not-found exception"
+  u"General purpose not-found exception"
 
 class x_invalid_handle (x_winsys):
-  "General purpose invalid-handle exception"
+  u"General purpose invalid-handle exception"
 
 def wrapper (winerror_map, default_exception=x_winsys):
-  """Used by each module to map specific windows error codes onto
+  u"""Used by each module to map specific windows error codes onto
   Python exceptions. Always includes a default which is raised if
   no specific exception is found.
   """

@@ -12,13 +12,12 @@ GUID = str (uuid.uuid1 ())
 TEST_KEY = r"HKEY_CURRENT_USER\Software\winsys"
 TEST_KEY1 = r"HKEY_CURRENT_USER\Software\winsys1"
 TEST_KEY2 = r"HKEY_CURRENT_USER\Software\winsys1\winsys2"
-TEST_KEY3 = r"HKEY_CURRENT_USER\Software\winsys1\win:sys3"
 
 #
 # Fixtures
 #
 def setup ():
-  win32api.RegCreateKey (win32con.HKEY_CURRENT_USER, r"Software\winsys")
+  hwinsys = win32api.RegCreateKey (win32con.HKEY_CURRENT_USER, r"Software\winsys")
   hKey = win32api.RegOpenKeyEx (win32con.HKEY_CURRENT_USER, r"Software\winsys", 0, win32con.KEY_WRITE)
   win32api.RegSetValueEx (hKey, "winsys1", None, win32con.REG_SZ, GUID)
   win32api.RegSetValueEx (hKey, "winsys1", "value", win32con.REG_SZ, GUID)
@@ -80,6 +79,18 @@ def key0_subset_of_key1 (key0, key1):
   s0 = set ((utils.relative_to (key.moniker, key0), frozenset (values)) for key, subkeys, values in registry.walk (key0))
   s1 = set ((utils.relative_to (key.moniker, key1), frozenset (values)) for key, subkeys, values in registry.walk (key1))
   return s0 < s1
+
+#
+# Fixtures
+#
+def setup_key_with_colon ():
+  hKey = win32api.RegOpenKeyEx (win32con.HKEY_CURRENT_USER, r"Software\winsys", 0, win32con.KEY_WRITE)
+  hSubkey = win32api.RegCreateKey (hKey, "win:sys3")
+  win32api.RegSetValueEx (hSubkey, "winsys3", None, win32con.REG_SZ, GUID)
+  
+def teardown_key_with_colon ():
+  hKey = win32api.RegOpenKeyEx (win32con.HKEY_CURRENT_USER, r"Software\winsys", 0, win32con.KEY_WRITE)
+  win32api.RegDeleteKey (hKey, "win:sys3")
 
 #
 # TESTS
@@ -144,8 +155,12 @@ def test_registry_Key ():
   key = registry.registry ("HKLM")
   assert registry.registry (key) is key
   
+@with_setup (setup_key_with_colon, teardown_key_with_colon)
+def test_registry_key_no_value ():
+  assert registry.registry (TEST_KEY + r"\win:sys3", accept_value=False).winsys3 == GUID
+
 def test_registry_value ():
-  assert registry.registry (TEST_KEY + r":winsys1") == (GUID, win32con.REG_SZ)
+  assert registry.registry (TEST_KEY + r":winsys1") == GUID
 
 def test_registry_string ():
   assert registry.registry (TEST_KEY).winsys1 == GUID
@@ -157,8 +172,8 @@ def test_registry_other ():
   
 def test_values ():
   values = registry.values (TEST_KEY)
-  assert values.next () == ('winsys1', GUID, win32con.REG_SZ)
-  assert values.next () == ('winsys2', GUID, win32con.REG_SZ)
+  assert values.next () == ('winsys1', GUID)
+  assert values.next () == ('winsys2', GUID)
 
 @raises (registry.exc.x_access_denied)
 def test_values_access_denied ():
@@ -213,7 +228,7 @@ def test_copy_exists_not_empty_keys ():
   key1.create ()
   assert bool (key1)
   try:
-    key1.add ("winsys4")
+    key1.create ("winsys4")
     registry.copy (key0, key1)
     assert key0_subset_of_key1 (key0, key1)
   finally:
@@ -229,7 +244,7 @@ def test_copy_exists_not_empty_values ():
     key1.winsys4 = GUID
     registry.copy (key0, key1)
     assert set (set (key1.flat ()) - set (key0.flat ())) == \
-      set ([("winsys4", GUID, win32con.REG_SZ), key1, key1 + "winsys2"])
+      set ([("winsys4", GUID), key1, key1 + "winsys2"])
   finally:
     key1.delete ()
 
@@ -260,14 +275,17 @@ def test_create_does_exist ():
   registry.create (key)
   assert bool (key)
 
+@with_setup (setup_key_with_colon, teardown_key_with_colon)
 def test_walk ():
   walker = registry.walk (TEST_KEY)
   key, subkeys, values = walker.next ()
   assert key == registry.registry (TEST_KEY)
-  assert list (values) == [("winsys1", GUID, win32con.REG_SZ), ("winsys2", GUID, win32con.REG_SZ)]  
+  assert list (values) == [("winsys1", GUID), ("winsys2", GUID)]  
+  key, subkeys, values = walker.next ()
+  assert key == registry.registry (TEST_KEY) + "win:sys3"
   key, subkeys, values = walker.next ()
   assert key == registry.registry (TEST_KEY) + "winsys2"
-  assert list (values) == [("winsys2", GUID, win32con.REG_SZ)]
+  assert list (values) == [("winsys2", GUID)]
 
 @raises (registry.exc.x_access_denied)
 def test_walk_access_denied ():
@@ -282,14 +300,18 @@ def test_walk_ignore_access_denied ():
   key, keys, values = walker.next ()
   list (keys) == [key + "winsys2"]
 
+@with_setup (setup_key_with_colon, teardown_key_with_colon)
 def test_flat ():
   key = registry.registry (TEST_KEY)
+  print list (registry.flat (key))
   assert list (registry.flat (key)) == [
     key, 
-    ("winsys1", GUID, win32con.REG_SZ), 
-    ("winsys2", GUID, win32con.REG_SZ), 
+    ("winsys1", GUID), 
+    ("winsys2", GUID), 
+    key + "win:sys3",
+    ("winsys3", GUID),
     key + "winsys2", 
-    ("winsys2", GUID, win32con.REG_SZ)
+    ("winsys2", GUID)
   ]
 
 @raises (registry.exc.x_access_denied)
@@ -301,14 +323,10 @@ def test_flat_ignore_access_denied ():
   remove_access (r"software\winsys\winsys2")
   try:
     key = registry.registry (TEST_KEY)
-    f = registry.flat (key, ignore_access_errors=True)
-    print f.next ()
-    print f.next ()
     assert list (registry.flat (key, ignore_access_errors=True)) == [
       key, 
-      ("winsys1", GUID, win32con.REG_SZ), 
-      ("winsys2", GUID, win32con.REG_SZ),
-      key + "winsys2"
+      ("winsys1", GUID), 
+      ("winsys2", GUID),
     ]
   finally:
     restore_access (r"software\winsys\winsys2")
@@ -405,7 +423,7 @@ def test_Registry_dumped ():
 def test_Registry_get_value ():
   assert \
     registry.registry (TEST_KEY).get_value ("winsys1") == \
-    win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys1")
+    win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys1")[0]
     
 def test_Registry_get_key ():
   assert \
@@ -427,45 +445,71 @@ def test_Registry_getattr_key ():
   finally:
     win32api.RegDeleteKey (win32con.HKEY_CURRENT_USER, r"Software\winsys\winsys3")
 
-def test_Registry_set_value_type ():
-  registry.registry (TEST_KEY).set_value ("winsys4", ("abc", win32con.REG_BINARY))
-  assert registry.registry (TEST_KEY).get_value ("winsys4") == ("abc", win32con.REG_BINARY)
+def setup_set_value ():
+  try:
+    win32api.RegDeleteValue (
+      win32api.RegOpenKeyEx (
+        win32con.HKEY_CURRENT_USER, 
+        r"Software\winsys",
+        0,
+        win32con.KEY_ALL_ACCESS
+      ), 
+      "winsys4"
+    )
+  except win32api.error, (errno, errctx, errmsg):
+    if errno == 2:
+      pass
+    else:
+      raise
 
+@with_setup (setup_set_value)
+def test_Registry_set_value_type ():
+  registry.registry (TEST_KEY).set_value ("winsys4", "abc", win32con.REG_BINARY)
+  assert win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4") == ("abc", win32con.REG_BINARY)
+
+@with_setup (setup_set_value)
 def test_Registry_set_value_int ():
   registry.registry (TEST_KEY).set_value ("winsys4", 1)
-  assert registry.registry (TEST_KEY).get_value ("winsys4") == (1, win32con.REG_DWORD)
+  assert win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4") == (1, win32con.REG_DWORD)
 
+@with_setup (setup_set_value)
 def test_Registry_set_value_multi ():
   registry.registry (TEST_KEY).set_value ("winsys4", ['a', 'b', 'c'])
-  assert registry.registry (TEST_KEY).get_value ("winsys4") == (['a', 'b', 'c'], win32con.REG_MULTI_SZ)
+  assert win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4") == (['a', 'b', 'c'], win32con.REG_MULTI_SZ)
 
+@with_setup (setup_set_value)
 def test_Registry_set_value_expand_even_percent ():
   registry.registry (TEST_KEY).set_value ("winsys4", "%TEMP%")
-  assert registry.registry (TEST_KEY).get_value ("winsys4") == ("%TEMP%", win32con.REG_EXPAND_SZ)
+  assert win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4") == ("%TEMP%", win32con.REG_EXPAND_SZ)
 
+@with_setup (setup_set_value)
 def test_Registry_set_value_expand_odd_percent ():
   registry.registry (TEST_KEY).set_value ("winsys4", "50%")
-  assert registry.registry (TEST_KEY).get_value ("winsys4") == ("50%", win32con.REG_SZ)
+  assert win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4") == ("50%", win32con.REG_SZ)
 
+@with_setup (setup_set_value)
 def test_Registry_set_value_empty_string ():
   registry.registry (TEST_KEY).set_value ("winsys4", "")
-  assert registry.registry (TEST_KEY).get_value ("winsys4") == ("", win32con.REG_SZ)
+  assert win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4") == ("", win32con.REG_SZ)
 
+@with_setup (setup_set_value)
 def test_Registry_set_value_non_empty_string ():
   registry.registry (TEST_KEY).set_value ("winsys4", "winsys")
-  assert registry.registry (TEST_KEY).get_value ("winsys4") == ("winsys", win32con.REG_SZ)
+  assert win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4") == ("winsys", win32con.REG_SZ)
 
+@with_setup (setup_set_value)
 def test_Registry_set_value_none ():
   registry.registry (TEST_KEY).set_value ("winsys4", None)
-  assert registry.registry (TEST_KEY).get_value ("winsys4") == ("", win32con.REG_SZ)
+  assert win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4") == ("", win32con.REG_SZ)
 
+@with_setup (setup_set_value)
 def test_Registry_set_value_default ():
   registry.registry (TEST_KEY).set_value ("", "test")
-  assert registry.registry (TEST_KEY).get_value ("") == ("test", win32con.REG_SZ)
+  assert win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), None) == ("test", win32con.REG_SZ)
 
 def test_Registry_add ():
   key0 = registry.registry (TEST_KEY)
-  new_key = key0.add ("winsys1")
+  new_key = key0.create ("winsys1")
   assert new_key == key0 + "winsys1"
 
 def test_Registry_from_string ():

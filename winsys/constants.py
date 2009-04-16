@@ -23,6 +23,8 @@ import win32security
 import ntsecuritycon
 import fnmatch
 
+from winsys import utils
+
 def from_pattern (pattern, name):
   u"""Helper function to find the common pattern among a group
   of like-named constants. eg if the pattern is FILE_ACCESS_*
@@ -51,7 +53,12 @@ class Constants (object):
     FILE_ACCESS["READ"] and FILE_ACCESS.READ will both succeed.
     """
     return self._dict[attribute]
-  __getattr__ = __getitem__
+  
+  def __getattr__ (self, attribute):
+    try:
+      return self._dict[attribute]
+    except KeyError:
+      raise AttributeError
   
   def __repr__ (self):
     return "<Constants: %r>" % self._dict
@@ -59,6 +66,14 @@ class Constants (object):
   def __str__ (self):
     return "<Constants: %s>" % ", ".join (self._dict.keys ())
     
+  def doc (self, preamble):
+    namelen = len (max (self._dict, key=len))
+    separator = "+" + namelen * "-" + "+" + 10 * "-" + "+"
+    row_format = "|%%-%ds|0x%%08X|" % (namelen)
+    row = separator + "\n" + row_format
+    table = "\n".join (row % (k, utils.signed_to_unsigned (v)) for (k, v) in sorted (self._dict.items ())) + "\n" + separator
+    self.__doc__ = preamble + "\n\n" + table
+
   def __contains__ (self, attribute):
     return attribute in self.keys ()
   
@@ -148,7 +163,6 @@ class Constants (object):
     """
     return [self._dict[name] for name in names_from_value (value, patterns)]
 
-WELL_KNOWN_SID = Constants.from_pattern (u"Win*Sid")
 GENERAL = Constants.from_dict (dict (
   MAXIMUM_ALLOWED=ntsecuritycon.MAXIMUM_ALLOWED,
   INFINITE=win32event.INFINITE

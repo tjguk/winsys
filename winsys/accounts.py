@@ -1,8 +1,17 @@
 # -*- coding: iso-8859-1 -*-
-u"""Functions & classes to support working with security
-principals: users, groups, sids &c.
+ur"""All security in windows is handled via Security Principals. These can
+be a user (the most common case), a group of users, a computer, or something
+else. Security principals are uniquely identified by their SID: a binary code
+represented by a string S-a-b-cd-efg... where each of the segments represents
+an aspect of the security authorities involved. (A computer, a domain etc.).
+Certain of the SIDs are considered well-known such as the AuthenticatedUsers
+account on each machine which will always have the same SID.
+
+Most of the access to this module will be via the :func:`principal` 
+or :func:`me` functions. Although the module is designed to be used
+standalone, it is imported directly into the :mod:`security` module's
+namespace so its functionality can also be accessed from there.
 """
-from __future__ import with_statement
 import os, sys
 import contextlib
 import socket
@@ -19,11 +28,16 @@ from winsys import constants, core, exc, utils
 __all__ = ['LOGON', 'EXTENDED_NAME', 'x_accounts', 'principal', 'Principal', 'User', 'Group', 'me']
 
 LOGON = constants.Constants.from_pattern (u"LOGON32_*", namespace=win32security)
+LOGON.doc ("Types of logon used by LogonUser and related APIs")
 EXTENDED_NAME = constants.Constants.from_pattern (u"Name*", namespace=win32con)
+EXTENDED_NAME.doc ("Extended display formats for usernames")
 CREDUI_FLAGS = constants.Constants.from_pattern (u"CREDUI_FLAGS_*", namespace=win32cred)
+CREDUI_FLAGS.doc ("Options for username prompt UI")
 CRED_FLAGS = constants.Constants.from_pattern (u"CRED_FLAGS_*", namespace=win32cred)
 CRED_TYPE = constants.Constants.from_pattern (u"CRED_TYPE_*", namespace=win32cred)
 CRED_TI = constants.Constants.from_pattern (u"CRED_TI_*", namespace=win32cred)
+WELL_KNOWN_SID = constants.Constants.from_pattern (u"Win*Sid")
+WELL_KNOWN_SID.doc ("Well-known SIDs common to all computers")
 
 PySID = pywintypes.SIDType
 
@@ -36,22 +50,33 @@ WINERROR_MAP = {
 wrapped = exc.wrapper (WINERROR_MAP, x_accounts)
 
 def principal (principal):
-  u"""Factory function for the Principal class. principal
-  parameter can be:
+  ur"""Factory function for the :class:`Principal` class. This is the most
+  common way to create a :class:`Principal` object::
   
-  None - return None
-  Principal - return itself
-  PySID - return the corresponding Principal
-  account name - return the corresponding Principal
+    from winsys import accounts
+    authenticated_users = accounts.principal (accounts.WELL_KNOWN_SID.AuthenticatedUser)
+    local_admin = accounts.principal ("Administrator")
+    domain_users = accounts.principal (r"DOMAIN\Domain Users")
+  
+  :param principal: any of None, a :class:`Principal`, a `PySID`, a :const:`WELL_KNOWN_SID` or a string
+  :returns: a :class:`Principal` object corresponding to `principal`
   """
   if principal is None:
     return None
   elif type (principal) == PySID:
     return Principal (principal)
+  elif isinstance (principal, int):
+    return Principal.from_well_known (principal)
   elif isinstance (principal, Principal):
     return principal
   else:
     return Principal.from_string (unicode (principal))
+
+def me ():
+  ur"""Convenience function for the common case of getting the
+  logged-on user's account.
+  """
+  return Principal.me ()
 
 class Principal (core._WinSysObject):
   u"""Object wrapping a Windows security principal, represented by a SID
@@ -61,18 +86,15 @@ class Principal (core._WinSysObject):
   def __init__ (self, sid, system_name=None):
     u"""Initialise a Principal from and (optionally) a system name. The sid
     must be a PySID and the system name, if present must be a security
-    authority.
+    authority, eg a machine or a domain.
     """
     core._WinSysObject.__init__ (self)
     self.sid = sid
     try:
       self.name, self.domain, self.type = wrapped (win32security.LookupAccountSid, system_name, self.sid)
-    except exc.x_winsys, (errno, errctx, errmsg):
-      if errno == winerror.ERROR_NONE_MAPPED:
-        self.name = str (self.sid)
-        self.domain = self.type = None
-      else:
-        raise
+    except exc.x_not_found:
+      self.name = str (self.sid)
+      self.domain = self.type = None
 
   def __hash__ (self):
     return hash (self.sid)
@@ -103,6 +125,13 @@ class Principal (core._WinSysObject):
     user's token. This is used by security.impersonate
     which wraps the token in a Token object and manages
     its lifetime in a context.
+    
+    (EXPERIMENTAL) If no password is given, a UI pops up
+    to ask for a password.
+    
+    :param password: the password for this account
+    :param logon_type: one of the :const:`LOGON` values
+    :returns: a pywin32 handle to a logon session
     """
     if logon_type is core.UNSET:
       logon_type = LOGON.LOGON_NETWORK
@@ -132,8 +161,12 @@ class Principal (core._WinSysObject):
 
   @classmethod
   def from_string (cls, string, system_name=None):
-    u"""string is the name of an account in the form "domain\name".
-    The domain is optional, so the simplest form is simply "name"
+    ur"""Return a :class:`Principal` based on a name and a
+    security authority. If `string` is blank, the logged-on user is assumed.
+    
+    :param string: name of an account in the form "domain\name". domain is optional so the simplest form is simply "name"
+    :param system_name: name of a security authority (typically a machine or a domain)
+    :returns: a :class:`Principal` object for `string`
     """
     if string == "":
       string = wrapped (win32api.GetUserNameEx, win32con.NameSamCompatible)
@@ -145,7 +178,12 @@ class Principal (core._WinSysObject):
     return cls (sid, None if system_name is None else unicode (system_name))
 
   @classmethod
-  def from_well_known (cls, well_known, domain):
+  def from_well_known (cls, well_known, domain=None):
+    ur"""Return a :class:`Principal` based on one of the :const:`WELL_KNOWN_SID` values.
+    
+    :param well_known: one of the :const:`WELL_KNOWN_SID`
+    :param domain: anything accepted by :func:`principal` and corresponding to a domain
+    """
     return cls (wrapped (win32security.CreateWellKnownSid, well_known, principal (domain)))
 
   @classmethod
@@ -157,6 +195,13 @@ class Principal (core._WinSysObject):
     
   @contextlib.contextmanager
   def impersonate (self, password=core.UNSET, logon_type=core.UNSET):
+    """Context-managed function to impersonate this user and then
+    revert. Note that the :class:`Principal` is its own context manager
+    so this function is rarely needed. FIXME: Is it needed at all?
+    
+    :param password: password for this account
+    :param logon_type: one of the :const:`LOGON` values
+    """
     hLogon = self.logon (password, logon_type)
     wrapped (win32security.ImpersonateLoggedOnUser, hLogon)
     yield hLogon
@@ -165,15 +210,12 @@ class Principal (core._WinSysObject):
   def __enter__ (self):
     wrapped (win32security.ImpersonateLoggedOnUser, self.logon (logon_type=LOGON.LOGON_INTERACTIVE))
   
-  def __exit__ (self, exc_type, exc_val, exc_tb):
+  def __exit__ (self, *exc_info):
     wrapped (win32security.RevertToSelf)
 
-class User (Principal): pass
+class User (Principal):
+  """(UNUSED) User subclass"""
   
-class Group (Principal): pass
+class Group (Principal):
+  """(UNUSED) Group subclass"""
 
-#
-# Module-level convenience functions
-#
-def me ():
-  return Principal.me ()

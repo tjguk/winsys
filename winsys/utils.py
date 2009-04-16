@@ -3,6 +3,7 @@ from __future__ import with_statement
 import os
 from datetime import datetime, timedelta
 import re
+import struct
 import threading
 import pywintypes
 import winxpgui as win32gui
@@ -16,14 +17,19 @@ def from_pytime (pytime):
   except ValueError:
     return None
 
+def signed_to_unsigned (signed):
+  """Convert a (possibly signed) long to unsigned hex"""
+  unsigned, = struct.unpack ("L", struct.pack ("l", signed))
+  return unsigned
+
 def mask_as_string (mask, length=32):
-  return "".join (u"01"[bool (mask & (2 << i))] for i in range (length)[::-1])
+  return "".join (u"01"[bool (mask & (1 << i))] for i in range (length)[::-1])
 
 def mask_as_list (mask, length=32):
-  return [i for i in range (length) if ((2 << i) & mask)]
+  return [i for i in range (length) if ((1 << i) & mask)]
 
 def _longword (lo, hi):
-  return lo + (hi * 2 << 31)
+  return lo + (hi * 1 << 32)
 
 def _set (obj, attr, value):
   obj.__dict__[attr] = value

@@ -9,23 +9,12 @@
 
 Constants
 ---------
-
-..  data:: REGISTRY_HIVE
-    
-    Registry roots (:const:`HKEY_CURRENT_USER`, :const:`HKLM`, etc.)
-    
-..  data:: REGISTRY_ACCESS
-    
-    Access rights to registry keys (:const:`KEY_ALL_ACCESS`, :const:`KEY_QUERY_VALUE`, etc.)
-    
-..  data:: REGISTRY_VALUE_TYPE
-
-    Types of registry values (:const:`REG_SZ`, :const:`REG_DWORD`, etc.)
-
+..  autodata:: REGISTRY_HIVE
+..  autodata:: REGISTRY_ACCESS
+..  autodata:: REGISTRY_VALUE_TYPE
 
 Exceptions
 ----------
-
 ..  autoexception:: x_registry
 ..  autoexception:: x_moniker
 ..  autoexception:: x_moniker_ill_formed
@@ -33,7 +22,6 @@ Exceptions
 
 Functions
 ----------
-
 ..  autofunction:: create_moniker
 ..  autofunction:: registry
 ..  autofunction:: values
@@ -47,14 +35,13 @@ Functions
 
 Classes
 -------
-
 ..  autoclass:: Registry
     :members:
-
+    
+    ..  automethod:: __add__
 
 References
 ----------
-
 ..  seealso::
 
     :doc:`cookbook/registry`
@@ -62,6 +49,5 @@ References
 
 To Do
 -----
-
 * New Vista / 2008 Registry funcs (transactions etc.)
 * Export-a-like functionality to create a human-readable export function

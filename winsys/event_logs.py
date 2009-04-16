@@ -14,11 +14,13 @@ import pywintypes
 from winsys import accounts, constants, core, exc, registry, utils
 
 EVENTLOG_READ = constants.Constants.from_pattern (u"EVENTLOG_*_READ", namespace=win32evtlog)
+EVENTLOG_READ.doc ("Ways of reading event logs")
 EVENTLOG_TYPE = constants.Constants.from_pattern (u"EVENTLOG_*_TYPE", namespace=win32evtlog)
 EVENTLOG_TYPE.update (dict (
   AUDIT_FAILURE = win32evtlog.EVENTLOG_AUDIT_FAILURE,
   AUDIT_SUCCESS = win32evtlog.EVENTLOG_AUDIT_SUCCESS
 ))
+EVENTLOG_TYPE.doc ("Types of records in event logs")
 
 PyHANDLE = pywintypes.HANDLEType
 

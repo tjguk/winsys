@@ -6,6 +6,8 @@ Using the registry module
 .. highlight:: python
    :linenothreshold: 1
 
+The examples here all refer to the :mod:`registry` module.
+
 .. _copy-one-registry-key-to-another:
 
 Copy one registry key to another

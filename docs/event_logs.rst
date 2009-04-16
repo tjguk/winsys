@@ -52,14 +52,8 @@ Exceptions
 Constants
 ---------
 
-..  data:: EVENTLOG_READ
-
-    Ways of iterating over an event log (Forwards, Backwards, etc.)
-    
-..  data:: EVENTLOG_TYPE
-
-    Types of event log record (Warning, Error, etc.)
-
+..  autodata:: EVENTLOG_READ
+..  autodata:: EVENTLOG_TYPE
 
 Functions
 ----------

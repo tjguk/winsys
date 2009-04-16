@@ -1,6 +1,8 @@
 Using the security module
 =========================
 
+The examples here all refer to the :mod:`security` module.
+
 Dump the security on a specific file
 ------------------------------------
 

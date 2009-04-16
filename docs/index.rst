@@ -33,6 +33,7 @@ Then dump the details of the new top-level key, including its security.
     :language: python
     :linenos:
 
+This example makes use of the :mod:`registry`, :mod:`accounts` and :mod:`security` modules. 
 You can see :ref:`discussion <copy-one-registry-key-to-another>` of this example and more in the :ref:`cookbook`.
 
 Download

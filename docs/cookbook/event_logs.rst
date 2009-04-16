@@ -1,6 +1,8 @@
 Using the event_logs module
 ===========================
 
+The examples here all refer to the :mod:`event_logs` module.
+
 Log an event against an event source
 ------------------------------------
 
