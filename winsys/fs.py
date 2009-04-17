@@ -67,7 +67,7 @@ class _Attributes (core._WinSysObject):
 class Drive (core._WinSysObject):
   
   def __init__ (self, drive):
-    self.name = drive.rstrip (sep).rstrip (":") + ":" + sep
+    self.name = drive.rstrip (seps).rstrip (":") + ":" + sep
     self.type = wrapped (win32file.GetDriveTypeW, self.name)
     
   def as_string (self):
@@ -361,14 +361,20 @@ class Entry (core._WinSysObject):
     return self._filepath.lower () < unicode (other).lower ()
 
   def __nonzero__ (self):
-    u"""Determine whether the file exists (at least from
+    ur"""Determine whether the file exists (at least from
     the POV of the current user) on the filesystem so that
     it can be checked with if fs.entry ("..."):
     """
     return (wrapped (win32file.GetFileAttributesW, normalised (self._filepath)) != -1)
   
+  def like (self, pattern):
+    ur"""Return true if this filename's name (not the path) matches
+    `pattern` according to `fnmatch`.
+    """
+    return fnmatch.fnmatch (self.name, pattern)
+  
   def relative_to (self, other):
-    """Return the part of this entry's filepath which extends beyond
+    ur"""Return the part of this entry's filepath which extends beyond
     other's. eg if this is 'c:/temp/abc.txt' and other is 'c:/temp/'
     then return 'abc.txt'
     """
@@ -421,9 +427,9 @@ class Entry (core._WinSysObject):
     ]
   
   def move (self, other, callback=None, callback_data=None, clobber=False):
-  """
-  moves associated file ' to 'target_filepath' and returns file object to file location
-  """
+    ur"""
+    moves associated file ' to 'target_filepath' and returns file object to file location
+    """
     other_file = entry (other)
     if other_file and other_file.directory:
       target_filepath = other_file.filepath + self.filepath.filename
@@ -660,10 +666,10 @@ class Dir (Entry):
     return dir (os.path.join (self._filepath, name))
   
   def files (self, pattern=u"*", *args, **kwargs):
-    return (f for f in self.entries (pattern, *args, **kwargs) if not f.directory)
+    return (f for f in self.entries (pattern, *args, **kwargs) if isinstance (f, File))
     
   def dirs (self, pattern=u"*", *args, **kwargs):
-    return (f for f in self.entries (pattern, *args, **kwargs) if f.directory)
+    return (f for f in self.entries (pattern, *args, **kwargs) if isinstance (f, Dir))
 
   def walk (self, depthfirst=False, ignore_access_errors=False):
     top = self
@@ -716,18 +722,16 @@ class Dir (Entry):
     and returns Dir object. Pass the relative or full directory 
     of target location.    
     """
-    target = entry (target_filepath.rstrip (sep) + sep)
-    if target and not target.directory:
-      raise x_no_such_file (None, "Dir.copy", u"%s exists but is not a directory")
+    target = dir (target_filepath)
     if not target:
       target.create ()
     
     for dirpath, dirs, files in self.walk ():
       for d in dirs:
-        target_dir = Dir (target.filepath + d.relative_to (self.filepath))
+        target_dir = Dir (target_filepath + d.relative_to (self.filepath))
         target_dir.create ()
       for f in files:
-        target_file = File (target.filepath + f.relative_to (self.filepath))
+        target_file = File (target_filepath + f.relative_to (self.filepath))
         f.copy (target_file, callback, callback_data)
   
   def delete (self, recursive=False):
@@ -759,7 +763,7 @@ class Dir (Entry):
     The created / appended zip file is returned.
     """
     if zip_filename is core.UNSET:
-      zip_filename = os.path.join (self.filepath.parent, self.filepath.name + u".zip")
+      zip_filename = self.filepath.changed (ext=".zip")
     
     z = zipfile.ZipFile (zip_filename, mode=mode, compression=compression)
     try:
