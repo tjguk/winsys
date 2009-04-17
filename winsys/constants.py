@@ -10,6 +10,7 @@ which combine the effect of being a namespace and also providing
 functions to list the constant name or names given a value, which
 is useful when displaying Win32 structures.
 """
+import operator
 import re
 
 #~ from win32com.taskscheduler import taskscheduler
@@ -71,7 +72,7 @@ class Constants (object):
     separator = "+" + namelen * "-" + "+" + 10 * "-" + "+"
     row_format = "|%%-%ds|0x%%08X|" % (namelen)
     row = separator + "\n" + row_format
-    table = "\n".join (row % (k, utils.signed_to_unsigned (v)) for (k, v) in sorted (self._dict.items ())) + "\n" + separator
+    table = "\n".join (row % (k, utils.signed_to_unsigned (v)) for (k, v) in sorted (self._dict.items (), key=operator.itemgetter (1))) + "\n" + separator
     self.__doc__ = preamble + "\n\n" + table
 
   def __contains__ (self, attribute):

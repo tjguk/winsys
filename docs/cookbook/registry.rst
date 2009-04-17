@@ -1,10 +1,9 @@
-Using the registry module
-=========================
-
 .. currentmodule:: registry
-
 .. highlight:: python
    :linenothreshold: 1
+
+Using the registry module
+=========================
 
 The examples here all refer to the :mod:`registry` module.
 
@@ -12,9 +11,6 @@ The examples here all refer to the :mod:`registry` module.
 
 Copy one registry key to another
 --------------------------------
-
-Description
-~~~~~~~~~~~
 Copy an existing registry key to a new one and
 set the new key's security so that only the current user has
 change rights and all other users have read-only. Finally, display
@@ -24,8 +20,8 @@ the details of the new top-level key, including its security.
 
 Discussion
 ~~~~~~~~~~
-The functions in the :mod:`~winsys.registry` module hand off any references
-to a registry key to the :func:`~winsys.registry.registry` function which is
+The functions in the :mod:`registry` module hand off any references
+to a registry key to the :func:`registry` function which is
 as accepting as possible. Here, we're referring to the local machine
 (there's no server-style \\\\ prefix in either moniker) and using
 the HKLM/HKCU shortcut styles. In fact the code would work equally
@@ -48,9 +44,6 @@ in a readable format.
 
 Find a string in the registry
 -----------------------------
-
-Description
-~~~~~~~~~~~
 Search the registry under a particular root and find a value which
 contains the searched-for string. Output the registry key, the value
 name and the value itself.

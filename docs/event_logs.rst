@@ -44,17 +44,6 @@ method and at present forces an event source to exist before a record can
 be logged against it.
 
 
-Exceptions
-----------
-
-..  autoexception:: x_event_logs
-
-Constants
----------
-
-..  autodata:: EVENTLOG_READ
-..  autodata:: EVENTLOG_TYPE
-
 Functions
 ----------
 
@@ -187,6 +176,17 @@ Classes
     .. attribute:: types_supported
     
     List of :data:`EVENTLOG_TYPE` name strings supported by this event source.
+
+Exceptions
+----------
+
+..  autoexception:: x_event_logs
+
+Constants
+---------
+
+..  autodata:: EVENTLOG_READ
+..  autodata:: EVENTLOG_TYPE
 
 
 References

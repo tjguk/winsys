@@ -1,5 +1,5 @@
 # -*- coding: iso-8859-1 -*-
-"""
+ur"""
 The registry consists of a series of roots from each of which descends
 a tree of keys and values. Each key has an anonymous (default) value
 and optionally a set of named values, each of which has a particular
@@ -203,7 +203,7 @@ def create_moniker (computer, root, path, value=None):
     return moniker
 
 class Registry (core._WinSysObject):
-  """  
+  ur"""  
   Represent a registry key (including one of the roots) giving
   access to its subkeys and values as well as its security and walking
   its subtrees. The key is True if it exists, False otherwise.

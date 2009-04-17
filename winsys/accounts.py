@@ -16,11 +16,14 @@ import os, sys
 import contextlib
 import socket
 
+import ntsecuritycon
+import pywintypes
 import win32con
 import win32security
 import win32api
 import win32cred
-import pywintypes
+import win32net
+import win32netcon
 import winerror
 
 from winsys import constants, core, exc, utils
@@ -38,6 +41,14 @@ CRED_TYPE = constants.Constants.from_pattern (u"CRED_TYPE_*", namespace=win32cre
 CRED_TI = constants.Constants.from_pattern (u"CRED_TI_*", namespace=win32cred)
 WELL_KNOWN_SID = constants.Constants.from_pattern (u"Win*Sid")
 WELL_KNOWN_SID.doc ("Well-known SIDs common to all computers")
+USER_PRIV = constants.Constants.from_list ([u"USER_PRIV_GUEST", u"USER_PRIV_USER", u"USER_PRIV_ADMIN"], pattern="USER_PRIV_*", namespace=win32netcon)
+USER_PRIV.doc ("User-types for creating new users")
+UF = constants.Constants.from_pattern (u"UF_*", namespace=win32netcon)
+UF.doc ("Flags for creating new users")
+SID_TYPE = constants.Constants.from_pattern (u"SidType*", namespace=ntsecuritycon)
+SID_TYPE.doc ("Types of accounts for which SIDs exist")
+FILTER = constants.Constants.from_pattern (u"FILTER_*", namespace=win32netcon)
+FILTER.doc ("Filters when enumerating users")
 
 PySID = pywintypes.SIDType
 
@@ -49,28 +60,42 @@ WINERROR_MAP = {
 }
 wrapped = exc.wrapper (WINERROR_MAP, x_accounts)
 
-def principal (principal):
+def principal (principal, cls=core.UNSET):
   ur"""Factory function for the :class:`Principal` class. This is the most
   common way to create a :class:`Principal` object::
   
     from winsys import accounts
-    authenticated_users = accounts.principal (accounts.WELL_KNOWN_SID.AuthenticatedUser)
+    service_account = accounts.principal (accounts.WELL_KNOWN_SID.Service)
     local_admin = accounts.principal ("Administrator")
     domain_users = accounts.principal (r"DOMAIN\Domain Users")
   
-  :param principal: any of None, a :class:`Principal`, a `PySID`, a :const:`WELL_KNOWN_SID` or a string
+  :param principal: any of None, a :class:`Principal`, a `PySID`, 
+                    a :const:`WELL_KNOWN_SID` or a string
   :returns: a :class:`Principal` object corresponding to `principal`
   """
+  cls = Principal if cls is core.UNSET else cls
   if principal is None:
     return None
   elif type (principal) == PySID:
-    return Principal (principal)
+    return cls.from_sid (principal)
   elif isinstance (principal, int):
-    return Principal.from_well_known (principal)
-  elif isinstance (principal, Principal):
+    return cls.from_well_known (principal)
+  elif isinstance (principal, cls):
     return principal
   else:
-    return Principal.from_string (unicode (principal))
+    return cls.from_string (unicode (principal))
+    
+def user (name):
+  ur"""If you know you're after a user, use this. Particularly
+  useful when a system user is defined as an alias type
+  """
+  return principal (name, cls=User)
+
+def group (name):
+  ur"""If you know you're after a group, use this. Particularly
+  useful when a system group is defined as an alias type
+  """
+  return principal (name, cls=Group)
 
 def me ():
   ur"""Convenience function for the common case of getting the
@@ -78,11 +103,40 @@ def me ():
   """
   return Principal.me ()
 
-class Principal (core._WinSysObject):
-  u"""Object wrapping a Windows security principal, represented by a SID
-  and, where possible, a name.
+def users (system=None):
+  ur"""Convenience function to yield each of the local users
+  on a system.
+  
+  :param system: optional security authority
+  :returns: yield :class:`User` objects 
   """
+  return iter (_LocalUsers (system))
+  
+def groups (system=None):
+  ur"""Convenience function to yield each of the local users
+  on a system.
+  
+  :param system: optional security authority
+  :returns: yield :class:`User` objects 
+  """
+  return iter (_LocalGroups (system))
 
+class Principal (core._WinSysObject):
+  ur"""Object wrapping a Windows security principal, represented by a SID
+  and, where possible, a name. :class:`Principal` compares and hashes 
+  by SID so can be sorted and used as a dictionary key, set element, etc.
+  
+  A :class:`Principal` is its own context manager, impersonating the
+  corresponding user::
+  
+    from winsys import accounts
+    with accounts.principal ("python"):
+      print accounts.me ()
+
+  Note, though, that this will prompt for a password using the
+  Win32 password UI. To logon with a password, use the :meth:`impersonate`
+  context-managed function. TODO: allow password to be set securely.
+  """
   def __init__ (self, sid, system_name=None):
     u"""Initialise a Principal from and (optionally) a system name. The sid
     must be a PySID and the system name, if present must be a security
@@ -97,7 +151,7 @@ class Principal (core._WinSysObject):
       self.domain = self.type = None
 
   def __hash__ (self):
-    return hash (self.sid)
+    return hash (str (self.sid))
   
   def __eq__ (self, other):
     return self.sid == principal (other).sid
@@ -106,6 +160,10 @@ class Principal (core._WinSysObject):
     return self.sid < principal (other).sid
 
   def pyobject (self):
+    ur"""Return the internal representation of this object.
+    
+    :returns: pywin32 SID
+    """
     return self.sid
 
   def as_string (self):
@@ -128,10 +186,10 @@ class Principal (core._WinSysObject):
     
     (EXPERIMENTAL) If no password is given, a UI pops up
     to ask for a password.
-    
+
     :param password: the password for this account
     :param logon_type: one of the :const:`LOGON` values
-    :returns: a pywin32 handle to a logon session
+    :returns: a pywin32 handle to a token
     """
     if logon_type is core.UNSET:
       logon_type = LOGON.LOGON_NETWORK
@@ -175,6 +233,23 @@ class Principal (core._WinSysObject):
       None if system_name is None else unicode (system_name), 
       unicode (string)
     )
+    cls = cls.SID_TYPE_MAP.get (type, cls)
+    return cls (sid, None if system_name is None else unicode (system_name))
+    
+  @classmethod
+  def from_sid (cls, sid, system_name=None):
+    ur"""Return a :class:`Principal` based on a sid and a security authority.
+    
+    :param sid: a PySID
+    :param system_name: optional name of a security authority
+    :returns: a :class:`Principal` object for `sid`
+    """
+    name, domain, type = wrapped (
+      win32security.LookupAccountSid,
+      None if system_name is None else unicode (system_name),
+      sid
+    )
+    cls = cls.SID_TYPE_MAP.get (type, cls)
     return cls (sid, None if system_name is None else unicode (system_name))
 
   @classmethod
@@ -184,7 +259,7 @@ class Principal (core._WinSysObject):
     :param well_known: one of the :const:`WELL_KNOWN_SID`
     :param domain: anything accepted by :func:`principal` and corresponding to a domain
     """
-    return cls (wrapped (win32security.CreateWellKnownSid, well_known, principal (domain)))
+    return cls.from_sid (wrapped (win32security.CreateWellKnownSid, well_known, principal (domain)))
 
   @classmethod
   def me (cls):
@@ -196,8 +271,19 @@ class Principal (core._WinSysObject):
   @contextlib.contextmanager
   def impersonate (self, password=core.UNSET, logon_type=core.UNSET):
     """Context-managed function to impersonate this user and then
-    revert. Note that the :class:`Principal` is its own context manager
-    so this function is rarely needed. FIXME: Is it needed at all?
+    revert::
+    
+      from winsys import accounts, security
+      print accounts.me ()
+      python = accounts.principal ("python")
+      with python.impersonate ("Pa55w0rd"):
+        print accounts.me ()
+        open ("temp.txt", "w").close ()
+      print accounts.me ()
+      security.security ("temp.txt").owner == python
+    
+    Note that the :class:`Principal` class is also its own 
+    context manager but does not allow the password to be specified.
     
     :param password: password for this account
     :param logon_type: one of the :const:`LOGON` values
@@ -213,9 +299,155 @@ class Principal (core._WinSysObject):
   def __exit__ (self, *exc_info):
     wrapped (win32security.RevertToSelf)
 
-class User (Principal):
-  """(UNUSED) User subclass"""
+class User (Principal):  
+  
+  @classmethod
+  def create (cls, username, password, system=None):
+    ur"""Create a new user with `username` and `password`. Return
+    a :class:`User` for the new user.
+    
+    :param username: username of the new user. Must not already exist on `system`
+    :param password: password for the new user. Must meet security policy on `system`
+    :param system: optional system name
+    :returns: a :class:`User` for `username`
+    """
+    user_info = dict (
+      name = username,
+      password = password,
+      priv = USER_PRIV.USER,
+      home_dir = None,
+      comment = None,
+      flags = UF.SCRIPT,
+      script_path = None
+    )
+    wrapped (win32net.NetUserAdd, system, 1, user_info)
+    return cls.from_string (username, system)
+    
+  def delete (self, system=None):
+    """Delete this user from `system`.
+    
+    :param system: optional security authority
+    """
+    wrapped (win32net.NetUserDel, system, self.name)
+    
+  def add_to_group (self, other_group):
+    ur"""Add this user to a group
+    
+    :param other_group: anything accepted by :func:`group`
+    :returns: self
+    """
+    return group (other_group).add (self)
+    
+  def change_password (self, old_password, new_password):
+    ur"""Change this user's password
+    
+    :param old_password: the user's old password
+    :param new_password: the user's new password
+    """
+    
   
 class Group (Principal):
-  """(UNUSED) Group subclass"""
+  
+  @classmethod
+  def create (cls, groupname, system=None):
+    ur"""Create a new group. Return a :class:`Group` for the new group.
+    
+    :param groupname: name of the new group. Must not already exist on `system`
+    :param system: optional security authority
+    :returns: a :class:`Group` for `groupname`
+    """
+    wrapped (win32net.NetLocalGroupAdd, system, 0, dict (name=groupname))
+    return cls.from_string (groupname, system)
+    
+  def delete (self, system=None):
+    ur"""Delete this group from `system`.
+    
+    :param system: optional security authority
+    """
+    wrapped (win32net.NetLocalGroupDel, system, self.name)
+    
+  def add (self, member, system=None):
+    ur"""Add a :class:`Principal` to this local group
+    
+    :param member: anything accepted by :func:`principal`
+    :returns: :class:`Principal` for `member`
+    """
+    member = principal (member)
+    wrapped (win32net.NetLocalGroupAddMembers, system, self.name, 0, [dict (sid=member.sid)])
+    return member
+    
+  def remove (self, member, system=None):
+    ur"""Remove a :class:`Principal` from this local group. The
+    principal must already be a member of the group.
+    
+    :param member: anything accepted by :func:`principal`
+    """
+    member = principal (member)
+    wrapped (win32net.NetLocalGroupDelMembers, system, self.name, ["%s\\%s" % (member.domain, member.name)])
+    
+  def __contains__ (self, member):
+    ur"""Crudely, iterate over the group's members until you hit `member`
+    """
+    member = principal (member)
+    return any (member == m for m in self)
 
+  def __iter__ (self):
+    ur"""Yield the list of members of this group.
+    
+    :returns: yield a :class:`Principal` or subclass corresponding to each member
+              of this group
+    """
+    system = None
+    resume = 0
+    while True:
+      members, total, resume = wrapped (win32net.NetLocalGroupGetMembers, system, self.name, resume)
+      for member in members:
+        yield principal (member['sid'])
+      if resume == 0: break
+
+Principal.SID_TYPE_MAP = {
+  SID_TYPE.User : User,
+  SID_TYPE.Group : Group,
+  SID_TYPE.WellKnownGroup : Group
+}
+
+class _LocalGroups (object):
+  
+  def __init__ (self, system=None):
+    self.system = system
+    
+  def __iter__ (self):
+    resume = 0
+    while True:
+      groups, total, resume = wrapped (win32net.NetLocalGroupEnum, self.system, 0, resume)
+      for group in groups:
+        yield Group.from_string (group['name'])
+      if resume == 0: break
+  
+  def add (self, groupname):
+    return Group.create (groupname)
+  
+  def remove (self, local_group):
+    return group (local_group).delete ()
+
+class _LocalUsers (object):
+  
+  def __init__ (self, system=None):
+    self.system = system
+    
+  def __iter__ (self):
+    resume = 0
+    while True:
+      users, total, resume = wrapped (win32net.NetUserEnum, self.system, 0, FILTER.NORMAL_ACCOUNT, resume)
+      for user in users:
+        yield User.from_string (user['name'])
+      if resume == 0: break
+  
+  def add (self, username, password):
+    return User.create (username, password)
+  
+  def remove (self, local_user):
+    return user (local_user).delete ()
+
+local_groups = _LocalGroups ()
+local_users = _LocalUsers ()

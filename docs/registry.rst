@@ -7,19 +7,6 @@
 ..  moduleauthor:: Tim Golden <mail@timgolden.me.uk>
 
 
-Constants
----------
-..  autodata:: REGISTRY_HIVE
-..  autodata:: REGISTRY_ACCESS
-..  autodata:: REGISTRY_VALUE_TYPE
-
-Exceptions
-----------
-..  autoexception:: x_registry
-..  autoexception:: x_moniker
-..  autoexception:: x_moniker_ill_formed
-..  autoexception:: x_moniker_no_root    
-
 Functions
 ----------
 ..  autofunction:: create_moniker
@@ -39,6 +26,19 @@ Classes
     :members:
     
     ..  automethod:: __add__
+
+Constants
+---------
+..  autodata:: REGISTRY_HIVE
+..  autodata:: REGISTRY_ACCESS
+..  autodata:: REGISTRY_VALUE_TYPE
+
+Exceptions
+----------
+..  autoexception:: x_registry
+..  autoexception:: x_moniker
+..  autoexception:: x_moniker_ill_formed
+..  autoexception:: x_moniker_no_root    
 
 References
 ----------

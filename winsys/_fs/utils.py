@@ -100,7 +100,7 @@ def Handle (handle_or_filepath, write=False):
     hFile = handle_or_filepath
   else:
     handle_supplied = False
-    hFile = handle (handle_or_filepath)
+    hFile = handle (handle_or_filepath, write)
     
   yield hFile
 
