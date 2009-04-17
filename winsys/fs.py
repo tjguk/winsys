@@ -421,18 +421,26 @@ class Entry (core._WinSysObject):
     ]
   
   def move (self, other, callback=None, callback_data=None, clobber=False):
+  """
+  moves associated file ' to 'target_filepath' and returns file object to file location
+  """
+    other_file = entry (other)
+    if other_file and other_file.directory:
+      target_filepath = other_file.filepath + self.filepath.filename
+    else:
+      target_filepath = other_file.filepath
     flags = MOVEFILE.WRITE_THROUGH
     if clobber:
       flags |= MOVEFILE.REPLACE_EXISTING
     wrapped (
       win32file.MoveFileWithProgress,
       self._filepath, 
-      normalised (unicode (other)),
+      normalised (target_filepath),
       progress_wrapper (callback), 
       callback_data, 
       flags
     )
-    return entry (other)
+    return file (target_filepath)
     
   def take_control (self, principal=core.UNSET):
     """Give the logged-on user full control to a file. This may
@@ -479,10 +487,18 @@ class File (Entry):
   ##
   
   def delete (self):
+    """
+    deletes current file
+    """
     wrapped (win32file.DeleteFileW, self._filepath)
     return self
 
   def copy (self, other, callback=None, callback_data=None):
+    """
+    Copies associated file to directory specified by 'other' 
+    and returns file object.Pass the relative or full directory 
+    of target location.    
+    """
     other_file = entry (other)
     if other_file and other_file.directory:
       target_filepath = other_file.filepath + self.filepath.filename
@@ -695,6 +711,11 @@ class Dir (Entry):
     return self
   
   def copy (self, target_filepath, callback=None, callback_data=None):
+    """
+    Copies associated file to directory specified by 'target_filepath' 
+    and returns Dir object. Pass the relative or full directory 
+    of target location.    
+    """
     target = entry (target_filepath.rstrip (sep) + sep)
     if target and not target.directory:
       raise x_no_such_file (None, "Dir.copy", u"%s exists but is not a directory")
@@ -710,6 +731,9 @@ class Dir (Entry):
         f.copy (target_file, callback, callback_data)
   
   def delete (self, recursive=False):
+    """
+    deletes associated dir
+    """
     if recursive:
       for dirpath, dirs, files in self.walk (depthfirst=True, includedirs=True):
         for d in dirs:
@@ -878,12 +902,23 @@ def progress_wrapper (callback):
     return None
 
 def move (source_filepath, target_filepath, callback=None, callback_data=None, clobber=False):
+  """
+  moves file/dir from 'source_filepath' to 'target_filepath' and returns file/dir object to file/dir location
+  """
   return entry (source_filepath).move (target_filepath, callback, callback_data, clobber)
 
 def copy (source_filepath, target_filepath, callback=None, callback_data=None):
+  """
+  Copies file specefied in 'source_filepath' to directory specified 
+  by 'target_filepath' and returns object to copied file/dir. Pass 
+  the relative or full directory of target location.    
+  """
   return entry (source_filepath).copy (target_filepath, callback, callback_data)
 
 def delete (filepath):
+  """
+  deletes file/dir specefied by string passed into 'filepath'
+  """
   return entry (filepath).delete ()
   
 def rmdir (filepath, recursive=False):
