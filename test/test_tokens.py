@@ -4,7 +4,7 @@ import win32api
 import win32security
 import ntsecuritycon
 
-from winsys import _tokens
+from winsys._security import _tokens
 
 token0 = None
 alice = None

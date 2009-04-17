@@ -5,8 +5,9 @@ import win32security
 import pywintypes
 import winerror
 
-from winsys import constants, core, exc, utils, accounts, _aces
-from _security.core import REVISION
+from winsys import constants, core, exc, utils, accounts
+from winsys._security.core import REVISION
+from winsys._security import _aces
 
 __all__ = ['x_acl', 'ACL', 'DACL', 'SACL', 'acl', 'dacl', 'sacl']
 

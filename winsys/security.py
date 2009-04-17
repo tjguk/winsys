@@ -13,10 +13,10 @@ import winerror
 
 from winsys import constants, core, exc, utils
 from winsys._security.core import REVISION
-from winsys._tokens import *
-from winsys._aces import *
-from winsys._acls import *
-from winsys._privileges import *
+from winsys._security._tokens import *
+from winsys._security._aces import *
+from winsys._security._acls import *
+from winsys._security._privileges import *
 from winsys.accounts import *
 
 SE_OBJECT_TYPE = constants.Constants.from_list ([

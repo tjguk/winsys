@@ -4,7 +4,8 @@ import operator
 from nose.tools import *
 import utils
 
-from winsys import core, _aces, accounts
+from winsys import core, accounts
+from winsys._security import _aces
 import win32security
 import ntsecuritycon
 import tempfile

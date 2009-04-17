@@ -2,7 +2,7 @@ from __future__ import with_statement
 import os, sys
 import operator
 
-from winsys import _privileges
+from winsys._security import _privileges
 import win32security
 
 def _token_privs ():

@@ -7,7 +7,8 @@ import win32api
 import winerror
 import pywintypes
 
-from winsys import accounts, _aces, _acls, constants, core, exc, _privileges, utils 
+from winsys import accounts, constants, core, exc, utils 
+from winsys._security import _privileges, _aces, _acls
 
 __all__ = ['Token', 'token', 'x_token', 'x_no_token']
 

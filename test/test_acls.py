@@ -3,7 +3,8 @@ import operator
 
 from nose.tools import *
 
-from winsys import _aces, _acls, accounts
+from winsys import accounts
+from winsys._security import _aces, _acls
 import win32api
 import win32con
 import win32security
