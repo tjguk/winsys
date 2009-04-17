@@ -14,13 +14,8 @@ import operator
 import re
 
 #~ from win32com.taskscheduler import taskscheduler
-from win32com.shell import shellcon
 import win32con
 import win32event
-import win32evtlog
-import win32file
-import winioctlcon
-import win32security
 import ntsecuritycon
 import fnmatch
 
@@ -48,6 +43,8 @@ class Constants (object):
     set of initial values.
     """
     self._dict = dict (dict_initialiser)
+    self.preamble = ""
+    self.reset_doc ()
 
   def __getitem__ (self, attribute):
     u"""Act as a dictionary and as a namespace so that calls like 
@@ -67,13 +64,29 @@ class Constants (object):
   def __str__ (self):
     return "<Constants: %s>" % ", ".join (self._dict.keys ())
     
-  def doc (self, preamble):
+  def reset_doc (self):
     namelen = len (max (self._dict, key=len))
-    separator = "+" + namelen * "-" + "+" + 10 * "-" + "+"
-    row_format = "|%%-%ds|0x%%08X|" % (namelen)
+    try:
+      int (self._dict.values ()[0])
+    except:
+      valuelen = len (max (self._dict.values (), key=len))
+      prefix = ""
+      row_format = "|%%-%ds|%%-%ds|" % (namelen, valuelen)
+      converter = unicode
+    else:
+      valuelen = 2 * ((1 + len ("%x" % max (self._dict.values ()))) // 2)
+      prefix = "0x"
+      row_format = "|%%-%ds|%s%%0%dX|" % (namelen, prefix, valuelen)
+      converter = utils.signed_to_unsigned 
+      
+    separator = "+" + namelen * "-" + "+" + (len (prefix) + valuelen) * "-" + "+"
     row = separator + "\n" + row_format
-    table = "\n".join (row % (k, utils.signed_to_unsigned (v)) for (k, v) in sorted (self._dict.items (), key=operator.itemgetter (1))) + "\n" + separator
-    self.__doc__ = preamble + "\n\n" + table
+    table = "\n".join (row % (k, converter (v)) for (k, v) in sorted (self._dict.items (), key=operator.itemgetter (1))) + "\n" + separator
+    self.__doc__ = self.preamble + "\n\n" + table
+  
+  def doc (self, preamble):
+    self.preamble = preamble
+    self.reset_doc ()
 
   def __contains__ (self, attribute):
     return attribute in self.keys ()
@@ -89,6 +102,7 @@ class Constants (object):
     be merged into one.
     """
     self._dict.update (dict (other.items ()))
+    self.reset_doc ()
     
   def items (self):
     return self._dict.items ()
@@ -111,14 +125,14 @@ class Constants (object):
     return cls ((from_pattern (pattern, key), value) for (key, value) in d.items ())
   
   @classmethod
-  def from_list (cls, keys, namespace=win32security, pattern=None):
+  def from_list (cls, keys, namespace, pattern=None):
     u"""Factory method to return a class instance from a list-like set of values
     within a namespace. Hands off to the from_dict factory.
     """
     return cls ((from_pattern (pattern, key), getattr (namespace, key, None)) for key in keys)
 
   @classmethod
-  def from_pattern (cls, pattern=u"*", excluded=[], namespace=win32security):
+  def from_pattern (cls, pattern=u"*", excluded=[], namespace=win32con):
     u"""Factory method to return a class instance from a wildcard name pattern. This is
     the most common method of constructing a list of constants by passing in, eg,
     FILE_ATTRIBUTE_* and the win32file module as the namespace.
@@ -168,9 +182,7 @@ GENERAL = Constants.from_dict (dict (
   MAXIMUM_ALLOWED=ntsecuritycon.MAXIMUM_ALLOWED,
   INFINITE=win32event.INFINITE
 ))
-REVISION = Constants.from_list ([u"ACL_REVISION", u"ACL_REVISION_DS", u"SDDL_REVISION_1"])
 TOKEN_FLAG = Constants.from_pattern (u"TOKEN_*")
-SID_TYPE = Constants.from_pattern (u"SidType*")
 
 ACCESS = Constants.from_list ([
   u"DELETE",

@@ -11,6 +11,7 @@ __all__ = ['PRIVILEGE_ATTRIBUTE', 'PRIVILEGE', 'Privilege', 'privilege', 'x_priv
 
 PRIVILEGE_ATTRIBUTE = constants.Constants.from_pattern (u"SE_PRIVILEGE_*", namespace=win32security)
 PRIVILEGE = constants.Constants.from_pattern (u"SE_*_NAME", namespace=win32security)
+PRIVILEGE.doc ("Privileges granted through a user's token")
 
 class x_privilege (exc.x_winsys):
   "Base for all privilege-related exceptions"
@@ -129,4 +130,8 @@ def privilege (privilege):
   elif isinstance (privilege, tuple):
     return Privilege (*privilege)
   else:
-    return Privilege.from_string (unicode (privilege))
+    privilege = unicode (privilege)
+    try:
+      return Privilege.from_string (PRIVILEGE.constant (privilege))
+    except KeyError:
+      return Privilege.from_string (unicode (privilege))

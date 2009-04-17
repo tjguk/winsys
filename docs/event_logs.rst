@@ -5,29 +5,16 @@
     :synopsis: Read and write event log entries
 ..  moduleauthor:: Tim Golden <mail@timgolden.me.uk>
 
-Introduction
-------------
-
 Each Windows machine comes equipped with an expandable set of event logs
 for tracking system- or application-level event information. This module
 offers a Pythonic interface to event logs, including iterating over them,
 checking their length and accessing them by means of easy monikers, regardless
 of what machine they're on.
 
-.. _event_logs:
-
-Event Logs
-~~~~~~~~~~
-
 Each Windows system comes with predefined Event Logs called (in the English-language
 versions): Application, System, Security. Certain Microsoft applications create
 extra ones, but most applications create an event source against the Applications
 log.
-
-.. _event_sources:
-
-Event Sources
-~~~~~~~~~~~~~
 
 In principal, event sources are key to the way in which event logs work. An
 event source represents a DLL and a resource file containing messages, possibly

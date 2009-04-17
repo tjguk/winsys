@@ -14,22 +14,22 @@ sep = unicode (os.sep)
 seps = u"/\\"
 
 class x_fs (exc.x_winsys):
-  pass
+  u"Base for all fs-related exceptions"
 
 class x_no_such_file (x_fs):
-  pass
+  u"Raised when a file could not be found"
 
 class x_too_many_files (x_fs):
-  pass
+  u"Raised when more than one file matches a name"
   
 class x_invalid_name (x_fs):
-  pass
+  u"Raised when a filename contains invalid characters"
   
 class x_no_certificate (x_fs):
-  pass
+  u"Raised when encryption is attempted without a certificate"
   
 class x_not_ready (x_fs):
-  pass
+  u"Raised when a device is not ready"
   
 WINERROR_MAP = {
   winerror.ERROR_ACCESS_DENIED : exc.x_access_denied,
@@ -47,8 +47,11 @@ FILE_ACCESS = constants.Constants.from_pattern ("FILE_*", namespace=ntsecurityco
 FILE_ACCESS.update (constants.STANDARD_ACCESS)
 FILE_ACCESS.update (constants.GENERIC_ACCESS)
 FILE_ACCESS.update (constants.ACCESS)
+FILE_ACCESS.doc ("File-specific access rights")
 FILE_SHARE = constants.Constants.from_pattern (u"FILE_SHARE_*", namespace=win32file)
+FILE_SHARE.doc ("Ways of sharing a file for reading, writing, &c.")
 FILE_NOTIFY_CHANGE = constants.Constants.from_pattern (u"FILE_NOTIFY_CHANGE_*", namespace=win32con)
+FILE_NOTIFY_CHANGE.doc ("Notification types to watch for when a file changes")
 FILE_ACTION = constants.Constants.from_dict (dict (
   ADDED = 1,
   REMOVED = 2,
@@ -56,6 +59,7 @@ FILE_ACTION = constants.Constants.from_dict (dict (
   RENAMED_OLD_NAME = 4,
   RENAMED_NEW_NAME = 5
 ))
+FILE_ACTION.doc ("Results of a file change")
 FILE_ATTRIBUTE = constants.Constants.from_pattern (u"FILE_ATTRIBUTE_*", namespace=win32file)
 FILE_ATTRIBUTE.update (dict (
   ENCRYPTED=0x00004000, 
@@ -64,9 +68,13 @@ FILE_ATTRIBUTE.update (dict (
   VIRTUAL=0x00010000,
   NOT_CONTENT_INDEXES=0x00002000,
 ))
+FILE_ATTRIBUTE.doc ("Attributes applying to any file")
 PROGRESS = constants.Constants.from_pattern (u"PROGRESS_*", namespace=win32file)
+PROGRESS.doc ("States within a file move/copy progress")
 MOVEFILE = constants.Constants.from_pattern (u"MOVEFILE_*", namespace=win32file)
+MOVEFILE.doc ("Options when moving a file")
 FILE_FLAG = constants.Constants.from_pattern (u"FILE_FLAG_*", namespace=win32con)
+FILE_FLAG.doc ("File flags")
 FILE_CREATION = constants.Constants.from_list ([
   u"CREATE_ALWAYS", 
   u"CREATE_NEW", 
@@ -74,6 +82,7 @@ FILE_CREATION = constants.Constants.from_list ([
   u"OPEN_EXISTING", 
   u"TRUNCATE_EXISTING"
 ], namespace=win32con)
+FILE_CREATION.doc ("Options when creating a file")
 VOLUME_FLAG = constants.Constants.from_dict (dict (
   FILE_CASE_SENSITIVE_SEARCH      = 0x00000001,
   FILE_CASE_PRESERVED_NAMES       = 0x00000002,
@@ -92,13 +101,17 @@ VOLUME_FLAG = constants.Constants.from_dict (dict (
   FILE_SEQUENTIAL_WRITE_ONCE      = 0x00100000,
   FILE_SUPPORTS_TRANSACTIONS      = 0x00200000  
 ), pattern=u"FILE_*")
+VOLUME_FLAG.doc ("Characteristics of a volume")
 DRIVE_TYPE = constants.Constants.from_pattern (u"DRIVE_*", namespace=win32file)
+DRIVE_TYPE.doc ("Types of drive")
 COMPRESSION_FORMAT = constants.Constants.from_dict (dict (
   NONE = 0x0000,   
   DEFAULT = 0x0001,   
   LZNT1 = 0x0002
 ))
+COMPRESSION_FORMAT.doc ("Ways in which a file can be compressed")
 FSCTL = constants.Constants.from_pattern (u"FSCTL_*", namespace=winioctlcon)
+FSCTL.doc ("Types of fsctl operation")
 
 PyHANDLE = pywintypes.HANDLEType
 

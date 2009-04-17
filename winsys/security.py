@@ -12,6 +12,7 @@ import pywintypes
 import winerror
 
 from winsys import constants, core, exc, utils
+from winsys._security.core import REVISION
 from winsys._tokens import *
 from winsys._aces import *
 from winsys._acls import *
@@ -127,7 +128,7 @@ class Security (core._WinSysObject):
     return wrapped (
       win32security.ConvertSecurityDescriptorToStringSecurityDescriptor,
       sa.SECURITY_DESCRIPTOR,
-      constants.REVISION.SDDL_REVISION_1, 
+      REVISION.SDDL_REVISION_1, 
       security_information
     )
     
@@ -396,7 +397,7 @@ class Security (core._WinSysObject):
       sd=wrapped (
         win32security.ConvertStringSecurityDescriptorToSecurityDescriptor,
         unicode (sddl),
-        constants.REVISION.SDDL_REVISION_1
+        REVISION.SDDL_REVISION_1
       ), 
       options=options
     )

@@ -6,6 +6,7 @@ import pywintypes
 import winerror
 
 from winsys import constants, core, exc, utils, accounts, _aces
+from _security.core import REVISION
 
 __all__ = ['x_acl', 'ACL', 'DACL', 'SACL', 'acl', 'dacl', 'sacl']
 
@@ -142,7 +143,7 @@ class DACL (ACL):
       if adder_fn:
         adder = getattr (acl, adder_fn)
         adder (
-          constants.REVISION.ACL_REVISION_DS, 
+          REVISION.ACL_REVISION_DS, 
           ace.flags, 
           ace.access, 
           ace.trustee.pyobject ()
@@ -176,7 +177,7 @@ class SACL (ACL):
       if adder_fn:
         adder = getattr (acl, adder_fn)
         adder (
-          constants.REVISION.ACL_REVISION_DS, 
+          REVISION.ACL_REVISION_DS, 
           ace.flags,
           ace.access, 
           ace.trustee.pyobject (), 

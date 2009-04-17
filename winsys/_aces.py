@@ -174,7 +174,7 @@ class DACE (ACE):
   @classmethod
   def ace (cls, ace):
     return dace (ace)
-  
+
   @classmethod
   def from_tuple (cls, ace_info):
     (trustee, access, allow_or_deny) = ace_info
@@ -187,8 +187,8 @@ class DACE (ACE):
     except (ValueError, TypeError):
       try:
         return cls.TYPES[type.upper ()]
-      except KeyError:
-        raise x_unknown_value (core.UNSET, "ACE._type", "%s is not a valid type string" % type)
+    except KeyError:
+      raise x_unknown_value (core.UNSET, "ACE._type", "%s is not a valid type string" % type)
   
   def __eq__ (self, other):
     other = self.ace (other)

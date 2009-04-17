@@ -119,7 +119,7 @@ class EventLog (core._WinSysObject):
     if not key:
       raise x_not_found (None, "EventLog", r"\\%s\%s" % (self.computer, self.name))
     else:
-      values = dict ((name, value) for (name, value, type) in key.values ())
+      values = dict (key.values ())
       self.auto_backup_log_files = values.get ("AutoBackupLogFiles")
       self.display_name_file = values.get ("DisplayNameFile")
       self.display_name_id = values.get ("DisplayNameID")

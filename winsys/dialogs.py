@@ -1,3 +1,35 @@
+ur"""Provides for simple dialog boxes, doing just enough to return input
+from the user using edit controls, dropdown lists and checkboxes. Most
+interaction is via the :func:`dialog`, :func:`progress_dialog` or
+:func:`info_dialog` functions. This example offers the user a drop-down 
+list of installed Python directories, a text box to enter a size threshold and a 
+checkbox to indicate whether to email the result::
+
+  from winsys import dialogs, registry
+  SIZE_THRESHOLD_MB = "100"
+  PYTHONREG = registry.registry (r"hklm\software\python\pythoncore")
+  version, size_threshold_mb, email_result = dialogs.dialog (
+    "Find big files in Python",
+    ("Version", [k.InstallPath.get_value ("") for k in PYTHONREG.keys ()]),
+    ("Bigger than (Mb)", SIZE_THRESHOLD_MB),
+    ("Email?", False)
+  )
+  
+All dialogs are resizable horizontally but not vertically. All
+edit boxes (fields with a default which is a string) accept file-drops,
+eg from Explorer.
+
+The standard dialog (from :func:`dialog`) is modal and returns a tuple
+of values as soon as [Ok] is pressed or an empty list if [Cancel] is pressed.
+The progress dialog (from :func:`progress_dialog`) is also modal, but
+passes the tuple of values to a callback which yields update strings which
+are then displayed in the status box on the dialog. When the callback
+function completes, the dialog returns the tuple of values to the caller.
+:func:`info_dialog` is intended to be used for, eg, displaying a
+traceback or other bulky text for which a message box might be awkward.
+It displays multiline text in a readonly edit control which can be
+scrolled and select-copied.
+"""
 import os, sys
 import marshal
 import operator
@@ -16,9 +48,6 @@ import uuid
 
 from winsys import core, constants, exc, ipc, utils
 
-#
-# Constants used by SHBrowseForFolder
-#
 BIF = constants.Constants.from_dict (dict (
   BIF_RETURNONLYFSDIRS   = 0x0001,
   BIF_DONTGOBELOWDOMAIN  = 0x0002,
@@ -37,7 +66,9 @@ BIF = constants.Constants.from_dict (dict (
   BIF_SHAREABLE          = 0x8000
 ), pattern=u"BIF_*")
 BIF.update (dict (USENEWUI = BIF.NEWDIALOGSTYLE | BIF.EDITBOX))
+BIF.doc ("Styles for browsing for a folder")
 BFFM = constants.Constants.from_pattern (u"BFFM_*", namespace=shellcon)
+BFFM.doc ("Part of the browse-for-folder shell mechanism")
 
 class x_dialogs (exc.x_winsys):
   "Base for dialog-related exceptions"
@@ -49,7 +80,7 @@ wrapped = exc.wrapper (WINERROR_MAP, x_dialogs)
 ENCODING = "UTF-8"
 
 class _DropTarget (win32com.server.policy.DesignatedWrapPolicy):
-  """Helper class to implement the IDropTarget interface so that
+  ur"""Helper class to implement the IDropTarget interface so that
   files can be drag-dropped onto a text field in a dialog.
   """
   _reg_clsid_ = '{72AA1C07-73BA-4CA8-88B9-7F03FEA173E8}'
@@ -75,7 +106,7 @@ class _DropTarget (win32com.server.policy.DesignatedWrapPolicy):
   # be present even they do nothing.
   #
   def DragEnter (self, data_object, key_state, point, effect):
-    """Query the data block for a drag action which is over the dialog.
+    ur"""Query the data block for a drag action which is over the dialog.
     If we can handle it, indicate that we're ready to accept a drop from
     this data.
     """
@@ -98,7 +129,7 @@ class _DropTarget (win32com.server.policy.DesignatedWrapPolicy):
       )
 
   def DragOver (self, key_state, point, effect):
-    """If there is a drag over one of the edit fields in the dialog
+    ur"""If there is a drag over one of the edit fields in the dialog
     indicate that we will accept a drop, otherwise not.
     """
     child_point = wrapped (win32gui.ScreenToClient, self.hwnd, point)
@@ -107,7 +138,7 @@ class _DropTarget (win32com.server.policy.DesignatedWrapPolicy):
     return shellcon.DROPEFFECT_COPY if class_name == "Edit" else shellcon.DROPEFFECT_NONE
   
   def DragLeave (self):
-    """Do nothing, but the method must be implemented.
+    ur"""Do nothing, but the method must be implemented.
     """
     pass
   
@@ -115,6 +146,8 @@ def as_code (text):
   return text.lower ().replace (" ", "")
 
 def _register_wndclass ():
+  ur"""Register a simple window with default cursor, icon, etc.
+  """
   class_name = str (uuid.uuid1 ())
   wc = wrapped (win32gui.WNDCLASS)
   wc.SetDialogProc ()
@@ -134,6 +167,9 @@ def _register_wndclass ():
   
 _class_name = _register_wndclass ()
 
+#
+# Convenience functions for frequently-wrapped API calls
+#
 def SendMessage (*args, **kwargs):
   return wrapped (win32gui.SendMessage, *args, **kwargs)
   
@@ -144,7 +180,7 @@ def MoveWindow (*args, **kwargs):
   return wrapped (win32gui.MoveWindow, *args, **kwargs)
 
 class BaseDialog (object):
-  """Basic template for a dialog with one or more fields plus
+  ur"""Basic template for a dialog with one or more fields plus
   [Ok] and [Cancel] buttons. A simple spacing / sizing algorithm
   is used. Most of the work is done inside :meth:`_get_dialog_template`
   which examines the incoming fields and tries to place them according
@@ -194,7 +230,7 @@ class BaseDialog (object):
   BUTTONS = [("Cancel", win32con.IDCANCEL), ("Ok", win32con.IDOK)]
   
   def __init__ (self, title, parent_hwnd=0):
-    """Initialise the dialog with a title and a list of fields of
+    ur"""Initialise the dialog with a title and a list of fields of
     the form [(label, default), ...].
     """
     wrapped (win32gui.InitCommonControls)
@@ -206,7 +242,7 @@ class BaseDialog (object):
     self._progress_id = None
     
   def _get_dialog_template (self):
-    """Put together a sensible default layout for this dialog, taking
+    ur"""Put together a sensible default layout for this dialog, taking
     into account the default structure and the (variable) number of fields.
     
     NB Although sensible default positions are chosen here, the horizontal
@@ -303,14 +339,14 @@ class BaseDialog (object):
     return dlg
 
 class Dialog (BaseDialog):
-  """A general-purpose dialog class for collecting arbitrary information in
+  ur"""A general-purpose dialog class for collecting arbitrary information in
   text strings and handing it back to the user. Only Ok & Cancel buttons are
   allowed, and all the fields are considered to be strings. The list of
   fields is of the form: [(label, default), ...] and the values are saved
   in the same order.
   """
   def __init__ (self, title, fields, progress_callback=core.UNSET, parent_hwnd=0):
-    """Initialise the dialog with a title and a list of fields of
+    ur"""Initialise the dialog with a title and a list of fields of
     the form [(label, default), ...].
     """
     BaseDialog.__init__ (self, title, parent_hwnd)
@@ -323,7 +359,7 @@ class Dialog (BaseDialog):
     self.progress_cancelled = ipc.event ()
     
   def run (self):
-    """The heart of the dialog box functionality. The call to DialogBoxIndirect
+    ur"""The heart of the dialog box functionality. The call to DialogBoxIndirect
     kicks off the dialog's message loop, finally returning via the EndDialog call
     in OnCommand
     """
@@ -344,20 +380,19 @@ class Dialog (BaseDialog):
     )
 
   def corners (self, l, t, r, b):
-    """Designed to be subclassed (eg by :class:`InfoDialog`). By
+    ur"""Designed to be subclassed (eg by :class:`InfoDialog`). By
     default simply returns the values unchanged.
     """
     return l, t, r, b
   
   def OnInitDialog (self, hwnd, msg, wparam, lparam):
-    """Attempt to position the dialog box more or less in
+    ur"""Attempt to position the dialog box more or less in
     the middle of its parent (possibly the desktop). Then
     force a resize of the dialog controls which should take
     into account the different label lengths and the dialog's
     new size.
     """
     self.hwnd = hwnd
-    
     pythoncom.RegisterDragDrop (
       hwnd,
       pythoncom.WrapObject (
@@ -383,7 +418,7 @@ class Dialog (BaseDialog):
     return True
 
   def _resize (self, dialog_w, dialog_h, repaint=1):
-    """Attempt to resize the controls on the dialog, spreading
+    ur"""Attempt to resize the controls on the dialog, spreading
     then horizontally to cover the full extent of the dialog
     box, with left-aligned labels and right-aligned buttons.
     """    
@@ -431,7 +466,7 @@ class Dialog (BaseDialog):
       MoveWindow (button, dialog_w - ((i + 1) * (self.GUTTER_W + (r - l))), t, r - l, b - t, repaint)
 
   def _get_item (self, item_id):
-    """Return the current value of an item in the dialog.
+    ur"""Return the current value of an item in the dialog.
     """
     hwnd = wrapped (win32gui.GetDlgItem, self.hwnd, item_id)
     class_name = wrapped (win32gui.GetClassName, hwnd)
@@ -456,7 +491,7 @@ class Dialog (BaseDialog):
       raise RuntimeError ("Unknown class: %s" % class_name)
       
   def _set_item (self, item_id, value):
-    """Set the current value of an item in the dialog
+    ur"""Set the current value of an item in the dialog
     """
     item_hwnd = wrapped (win32gui.GetDlgItem, self.hwnd, item_id)
     class_name = wrapped (win32gui.GetClassName, item_hwnd)
@@ -489,7 +524,7 @@ class Dialog (BaseDialog):
     return 0
     
   def OnMinMaxInfo (self, hwnd, msg, wparam, lparam):
-    """Prevent the dialog from resizing vertically by extracting
+    ur"""Prevent the dialog from resizing vertically by extracting
     the window's current size and using the minmaxinfo message
     to set the maximum & minimum window heights to be its current height.
     """
@@ -515,7 +550,7 @@ class Dialog (BaseDialog):
     return 0
 
   def _enable (self, id, allow=True):
-    """Convenience function to enable or disable a control by id
+    ur"""Convenience function to enable or disable a control by id
     """
     wrapped (
       win32gui.EnableWindow, 
@@ -524,7 +559,7 @@ class Dialog (BaseDialog):
     )
   
   def OnProgressMessage (self, hwnd, msg, wparam, lparam):
-    """Respond to a progress update from within the progress
+    ur"""Respond to a progress update from within the progress
     thread. LParam will be a pointer to a string containing
     a utf8-encoded string which is to be displayed in the
     dialog's progress static.
@@ -533,7 +568,7 @@ class Dialog (BaseDialog):
     self._set_item (self._progress_id, message)
     
   def OnProgressComplete (self, hwnd, msg, wparam, lparam):
-    """Respond to the a message signalling that all processing is
+    ur"""Respond to the a message signalling that all processing is
     now complete by re-enabling the ok button, disabling cancel,
     and setting focus to the ok so a return or space will close
     the dialog.
@@ -545,7 +580,7 @@ class Dialog (BaseDialog):
     wrapped (win32gui.SetFocus, wrapped (win32gui.GetDlgItem, hwnd, win32con.IDOK))
 
   def _progress_complete (self, message):
-    """Convenience function to tell the dialog that progress is complete,
+    ur"""Convenience function to tell the dialog that progress is complete,
     passing a message along which will be displayed in the progress box
     """
     _message = buffer (marshal.dumps (message))
@@ -553,19 +588,19 @@ class Dialog (BaseDialog):
     SendMessage (self.hwnd, self.WM_PROGRESS_COMPLETE, length, address)
     
   def _progress_message (self, message):
-    """Convenience function to send progress messages to the dialog
+    ur"""Convenience function to send progress messages to the dialog
     """
     _message = buffer (marshal.dumps (message))
     address, length = win32gui.PyGetBufferAddressAndLen (_message)
     SendMessage (self.hwnd, self.WM_PROGRESS_MESSAGE, length, address)
     
   def OnOk (self, hwnd):
-    """When OK is pressed, if this isn't a progress dialog then simply
+    ur"""When OK is pressed, if this isn't a progress dialog then simply
     gather the results and return. If this is a progress dialog then
     start a thread to handle progress via the progress iterator.
     """
     def progress_thread (iterator, cancelled):
-      """Handle the progress side of the dialog by iterating over a supplied
+      ur"""Handle the progress side of the dialog by iterating over a supplied
       iterator (presumably a generator) sending generated values as messages
       to the progress box -- these might be percentages or files processed
       or whatever.
@@ -582,11 +617,11 @@ class Dialog (BaseDialog):
           else:
             self._progress_message (message)
       except:
-        InfoDialog (  
+        info_dialog (  
           "An error occurred: please contact the Helpdesk", 
           traceback.format_exc (), 
-          parent_hwnd=hwnd
-        ).run ()
+          hwnd
+        )
         self._progress_complete ("An error occurred")
       else:
         self._progress_complete ("Complete")
@@ -623,7 +658,7 @@ class Dialog (BaseDialog):
       wrapped (win32gui.EndDialog, hwnd, win32con.IDOK)
 
   def OnCancel (self, hwnd):
-    """If the user presses cancel check to see whether we're running within
+    ur"""If the user presses cancel check to see whether we're running within
     a progress thread. If so, set the cancel event and wait for the thread
     to catch up. Either way, close the dialog with a cancelled state.
     """
@@ -635,7 +670,7 @@ class Dialog (BaseDialog):
     wrapped (win32gui.EndDialog, hwnd, win32con.IDCANCEL)
 
   def OnCallback (self, hwnd, field_id):
-    """If the user pressed a callback button associated with a text
+    ur"""If the user pressed a callback button associated with a text
     field, find the field and call its callback with the dialog window
     and the field's current value. If anything is returned, put that
     value back into the field.
@@ -646,7 +681,7 @@ class Dialog (BaseDialog):
       self._set_item (field_id, result)
 
   def OnCommand (self, hwnd, msg, wparam, lparam):
-    """Handle button presses: OK, Cancel and the callback buttons
+    ur"""Handle button presses: OK, Cancel and the callback buttons
     which are optional for text fields
     """    
     id = win32api.LOWORD (wparam)
@@ -671,24 +706,104 @@ def _fields_to_fields (fields):
   
 def dialog (title, *fields):
   """Shortcut function to populate and run a dialog, returning
-  the button pressed and values saved.
+  the button pressed and values saved. After the title, the
+  function expects a series of 2-tuples where the first item
+  is the field label and the second is the default value. This
+  default value determines the type of ui element as follows:
+  
+  * list - a drop down list in the order given
+  * bool - a checkbox
+  * string - an edit control
+  
+  A third item may be present in the tuple where the second item
+  is a string. This is a callback function. If this is present and
+  is not None, a small button will be added to the right of the
+  corresponding edit control which, when pressed, will call the
+  callback which must return a string to be inserted in the edit
+  control, or None if no change is to be made. This is intended 
+  to throw up, eg, a file-browse dialog. A useful default is
+  available as :func:`get_filename`.
+  
+  :param title: any string to use as the title of the dialog
+  :param fields: series of 2-tuples consisting of a name and a default value. 
+  :returns: the values entered by the user in the order of `fields`
   """
   d = Dialog (title, _fields_to_fields (fields))
   d.run ()
   return d.results
 
 def progress_dialog (title, progress_callback, *fields):
-  """Shortcut function to populate an run a dialog with a progress
-  callback which must yield messages
+  """Populate and run a dialog with a progress 
+  callback which yields messages. Fields are the same as for
+  :func:`dialog` but the second parameter is a function which
+  takes the value list as parameters and yields strings as updates.
+  The strings will be displayed in a static control on the dialog
+  while the [Ok] button is disabled until the callback completes, 
+  at which point the [Ok] button is enabled again and the tuple
+  of values is returned to the caller.
+  
+  ..  note::
+  
+      The progress callback runs inside a thread so any necessary
+      thread-specific preparation must happen, eg invoking
+      pythoncom.CoInitialize.
+  
+  This example takes a directory from the user and finds the total
+  size of each of its subdirectories, showing the name of each one
+  as it is searched. Finally, it uses :func:`utils.size_as_mb` to
+  display a human-redable version of each directory size::
+  
+    from winsys import dialogs, fs, utils
+    
+    sizes = {}
+    def sizer (root):
+      for d in fs.dir (root).dirs ():
+        yield d.name
+        sizes[d] = sum (f.size for f in d.flat ())
+
+    dialogs.progress_dialog (
+      "Sizer", 
+      sizer,
+      ("Root", "c:/temp", dialogs.get_folder)
+    )
+    
+    for d, size in sorted (sizes.items ()):
+      print d.name, "=>", utils.size_as_mb (size)
+      
+  :param title: any string to use as the title of the dialog
+  :param progress_callback: a function accepting values as per `fields` and yielding progress as strings
+  :param fields: series of 2-tuples consisting of a name and a default value
+  :returns: the values entered by the user in the order of `fields`
   """
   d = Dialog (title, _fields_to_fields (fields), progress_callback=progress_callback)
   d.run ()
   return d.results
 
-def get_filename (start_folder=None, hwnd=None):
+def info_dialog (title, text, hwnd=core.UNSET):
+  """A dialog with no fields which simply displays information
+  in a read-only multiline edit box. The text can be arbitrarily big
+  but the dialog will only adjust vertically up to a certain point.
+  After that the user may scroll with the keyboard. The text can be
+  selected and copied::
+  
+    import os, sys
+    from winsys import dialogs
+    filepath = os.path.join (sys.prefix, "LICENSE.txt")
+    dialogs.info_dialog ("LICENSE.txt", open (filepath).read ())
+  
+  :param title: any string to use as the title of the dialog
+  :param info: any (possibly multiline) string to display in the body of the dialog
+  :param parent_hwnd: optional window handle
+  """
+  InfoDialog (title, text, hwnd).run ()
+
+def get_folder (hwnd=None, start_folder=None):
   """Quick interface to the shell's browse-for-folder dialog,
-  optionally starting in a particular folder and allowing file
-  and share selection.
+  optionally starting in a particular folder.
+  
+  ..  warning::
+      At present this interacts badly with TortoiseHg, causing the
+      interpreter to stack dump.
   """
   def _set_start_folder (hwnd, msg, lp, data):
     if msg == BFFM.INITIALIZED and data:
@@ -701,7 +816,7 @@ def get_filename (start_folder=None, hwnd=None):
       hwnd or win32gui.GetDesktopWindow (),
       None,
       "Select a file or folder",
-      BIF.BROWSEINCLUDEFILES | BIF.USENEWUI | BIF.SHAREABLE,
+      BIF.USENEWUI | BIF.SHAREABLE,
       _set_start_folder,
       start_folder
     )
@@ -713,10 +828,39 @@ def get_filename (start_folder=None, hwnd=None):
   else:
     return wrapped (shell.SHGetPathFromIDList, pidl)
 
-class InfoDialog (Dialog):
-  """A simple dialog with no fields which simply displays information
-  in a read-only multiline edit box.
+def get_filename (hwnd=None, start_folder=None):
+  """Quick interface to the shell's browse-for-folder dialog,
+  optionally starting in a particular folder and allowing file
+  and share selection.
+  
+  ..  warning::
+      At present this interacts badly with TortoiseHg, causing the
+      interpreter to stack dump.
   """
+  def _set_start_folder (hwnd, msg, lp, data):
+    if msg == BFFM.INITIALIZED and data:
+      SendMessage (hwnd, BFFM.SETSELECTION, 1, utils.string_as_pointer (data))
+  
+  pythoncom.CoInitialize ()
+  try:
+    pidl, display_name, image_list = wrapped (
+      shell.SHBrowseForFolder,
+      hwnd,
+      None,
+      u"Select a file or folder",
+      BIF.BROWSEINCLUDEFILES | BIF.USENEWUI | BIF.SHAREABLE,
+      _set_start_folder if start_folder else None,
+      start_folder
+    )
+  finally:
+    pythoncom.CoUninitialize ()
+
+  if (pidl, display_name, image_list) == (None, None, None):
+    return None
+  else:
+    return wrapped (shell.SHGetPathFromIDList, pidl)
+
+class InfoDialog (Dialog):
 
   def __init__ (self, title, info, parent_hwnd=0):
     self.info = str (info).replace ("\r\n", "\n").replace ("\n", "\r\n")
@@ -737,32 +881,3 @@ class InfoDialog (Dialog):
     finally:
       wrapped (win32gui.ReleaseDC, self.hwnd, hDC)
 
-if __name__=='__main__':
-  from winsys import fs
-  import csv
-  
-  def _get_filename (hwnd, data): 
-    return get_filename (data, hwnd)
-
-  #~ def progress_callback (root, csv_filename):
-    #~ fsroot = fs.Dir (root)
-    #~ with open (csv_filename, "wb") as f:
-      #~ writer = csv.writer (f)
-      #~ for dir in fsroot.dirs ():
-        #~ yield dir
-        #~ writer.writerows ([[f] for f in dir.files ()])
-        
-  def progress_callback (*args):
-    import time
-    for i in u"The quick brown fox jumps over the lazy dog".split ():
-      yield i
-      time.sleep (0.5)
-
-  #~ print dialog (
-    #~ "Test", 
-    #~ ('Root', r'\\vogbs022\user', _get_filename), 
-    #~ ('Ignore access errors', True), 
-    #~ ('Size Threshold (Mb)', '100')
-  #~ )  
-  #~ print dialog ("Test2", ("Scan from:", r"c:\temp", _get_filename), ("List of things", ['Timothy', 'John', 'Golden']))
-  print progress_dialog ("Test4", progress_callback, ("Root", "c:/temp"), ("Output .csv", "c:/temp/temp.csv"))

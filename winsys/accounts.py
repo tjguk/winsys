@@ -39,7 +39,7 @@ CREDUI_FLAGS.doc ("Options for username prompt UI")
 CRED_FLAGS = constants.Constants.from_pattern (u"CRED_FLAGS_*", namespace=win32cred)
 CRED_TYPE = constants.Constants.from_pattern (u"CRED_TYPE_*", namespace=win32cred)
 CRED_TI = constants.Constants.from_pattern (u"CRED_TI_*", namespace=win32cred)
-WELL_KNOWN_SID = constants.Constants.from_pattern (u"Win*Sid")
+WELL_KNOWN_SID = constants.Constants.from_pattern (u"Win*Sid", namespace=win32security)
 WELL_KNOWN_SID.doc ("Well-known SIDs common to all computers")
 USER_PRIV = constants.Constants.from_list ([u"USER_PRIV_GUEST", u"USER_PRIV_USER", u"USER_PRIV_ADMIN"], pattern="USER_PRIV_*", namespace=win32netcon)
 USER_PRIV.doc ("User-types for creating new users")
@@ -330,7 +330,17 @@ class User (Principal):
     """
     wrapped (win32net.NetUserDel, system, self.name)
     
-  def add_to_group (self, other_group):
+  def groups (self, system=None):
+    """Yield the groups this user belongs to
+    
+    :param system: optional security authority
+    """
+    for group_name, attributes in wrapped (win32net.NetUserGetGroups, system, self.name):
+      yield group (group_name)
+    for group_name in wrapped (win32net.NetUserGetLocalGroups, system, self.name):
+      yield group (group_name)
+    
+  def join (self, other_group):
     ur"""Add this user to a group
     
     :param other_group: anything accepted by :func:`group`
@@ -338,12 +348,13 @@ class User (Principal):
     """
     return group (other_group).add (self)
     
-  def change_password (self, old_password, new_password):
-    ur"""Change this user's password
+  def leave (self, other_group):
+    ur"""Remove this user from a group
     
-    :param old_password: the user's old password
-    :param new_password: the user's new password
+    :param other_group: anything accepted by :func:`group`
+    :returns: self
     """
+    return group (other_group).remove (self)
     
   
 class Group (Principal):
@@ -381,9 +392,11 @@ class Group (Principal):
     principal must already be a member of the group.
     
     :param member: anything accepted by :func:`principal`
+    :returns: :class:`Principal` for `member`
     """
     member = principal (member)
     wrapped (win32net.NetLocalGroupDelMembers, system, self.name, ["%s\\%s" % (member.domain, member.name)])
+    return member
     
   def __contains__ (self, member):
     ur"""Crudely, iterate over the group's members until you hit `member`

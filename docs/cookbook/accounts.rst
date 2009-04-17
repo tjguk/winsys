@@ -11,7 +11,7 @@ Get the logged-on user's account
 --------------------------------
 Get the account for the logged-on user.
 
-.. literalinclude:: accounts_get_logged_on_user.py
+.. literalinclude:: accounts/get_logged_on_user.py
    
 Discussion
 ~~~~~~~~~~
@@ -24,7 +24,7 @@ Temporarily switch the current process to use another user's identity. Create
 a file as that other user and then check that the file was created with that
 owner. (Assumes the existence of a "python" user).
 
-.. literalinclude:: accounts_act_as_another_user.py
+.. literalinclude:: accounts/act_as_another_user.py
 
 Discussion
 ~~~~~~~~~~
@@ -48,7 +48,7 @@ Create a local user
 -------------------
 Create a new local user with minimum permissions and a password. 
 
-..  literalinclude:: accounts_create_local_user.py
+..  literalinclude:: accounts/create_local_user.py
 
 Discussion
 ~~~~~~~~~~
@@ -63,7 +63,7 @@ Delete a local user
 -------------------
 Delete an existing local user
 
-..  literalinclude:: accounts_delete_local_user.py
+..  literalinclude:: accounts/delete_local_user.py
 
 Discussion
 ~~~~~~~~~~

@@ -10,6 +10,8 @@
 Functions
 ----------
 ..  autofunction:: principal
+..  autofunction:: user
+..  autofunction:: group
 ..  autofunction:: me
 
 Classes

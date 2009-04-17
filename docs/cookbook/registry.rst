@@ -16,7 +16,7 @@ set the new key's security so that only the current user has
 change rights and all other users have read-only. Finally, display
 the details of the new top-level key, including its security.
 
-..  literalinclude:: registry_copy_key.py
+..  literalinclude:: registry/copy_key.py
 
 Discussion
 ~~~~~~~~~~
@@ -48,7 +48,7 @@ Search the registry under a particular root and find a value which
 contains the searched-for string. Output the registry key, the value
 name and the value itself.
 
-..  literalinclude:: registry_find_value.py
+..  literalinclude:: registry/find_value.py
 
 Discussion
 ~~~~~~~~~~
