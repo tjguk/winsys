@@ -187,8 +187,8 @@ class DACE (ACE):
     except (ValueError, TypeError):
       try:
         return cls.TYPES[type.upper ()]
-    except KeyError:
-      raise x_unknown_value (core.UNSET, "ACE._type", "%s is not a valid type string" % type)
+      except KeyError:
+        raise x_unknown_value (core.UNSET, "ACE._type", "%s is not a valid type string" % type)
   
   def __eq__ (self, other):
     other = self.ace (other)
