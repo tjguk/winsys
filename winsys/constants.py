@@ -5,15 +5,17 @@ pywin32 package. Others belong to those sets but are not present in
 the modules. Still others are not present at all within pywin32 and
 are added here manually.
 
-The constants are grouped together into named Constants classes
+The constants are grouped together into :class:`Constants` classes
 which combine the effect of being a namespace and also providing
 functions to list the constant name or names given a value, which
 is useful when displaying Win32 structures.
+
+For useful documentation, each :class:`Constants` generates a readable
+docstring tabulating its names & values.
 """
 import operator
 import re
 
-#~ from win32com.taskscheduler import taskscheduler
 import win32con
 import win32event
 import ntsecuritycon
@@ -22,7 +24,7 @@ import fnmatch
 from winsys import utils
 
 def from_pattern (pattern, name):
-  u"""Helper function to find the common pattern among a group
+  ur"""Helper function to find the common pattern among a group
   of like-named constants. eg if the pattern is FILE_ACCESS_*
   then the part of the name after FILE_ACCESS_ will be returned.
   """
@@ -32,10 +34,43 @@ def from_pattern (pattern, name):
     return re.search (pattern.replace ("*", r"(\w+)"), name).group (1)
 
 class Constants (object):
-  u"""Provide a dict-like interface for a group of related
+  ur"""Provide a dict-like interface for a group of related
   constants. These can come from a module or other namespace according
   to a wildcard name, or can be added as a list of (unrelated) names from 
-  a namespace or can simply be a raw dictionary of name-value pairs.
+  a namespace or can simply be a raw dictionary of name-value pairs::
+  
+    import win32con
+    from winsys import constants
+    COMPRESSION_ENGINE = constants.Constants.from_pattern (
+      "COMPRESSION_ENGINE_*", 
+      namespace=win32con
+    )
+    COMPRESSION_ENGINE.update (dict (
+      EXTRA_VALUE = 5
+    ))
+    print COMPRESSION_ENGINE.MAXIMUM
+    print COMPRESSION_ENGINE.__doc__
+    
+  The convention is to name the set of constants after the common
+  prefix of the constant names, as in the example above, but it's
+  just a convention. The pattern parameter to the various factory
+  functions will be used to rename the constants on the way in,
+  but it can be empty.
+  
+  The constants can be accessed as attributes or as items. In addition,
+  passing a name or a value to the :meth:`constant` method will return
+  the value.
+  
+  To retrieve the name or names corresponding to a value, use the
+  :meth:`name_from_value` or :meth:`names_from_value` function::
+  
+    import win32con
+    from winsys import constants
+    ACE_TYPES = constants.Constants.from_pattern (
+      "*_ACE_TYPE",
+      namespace=win32con
+    )
+    print ACE_TYPES.name_from_value (ACE_TYPES.ACCESS_ALLOWED)
   """
   
   def __init__ (self, dict_initialiser):

@@ -9,6 +9,7 @@ Contents
     index
     about
     core
+    constants
     exceptions
     accounts
     dialogs

@@ -244,11 +244,14 @@ class Principal (core._WinSysObject):
     :param system_name: optional name of a security authority
     :returns: a :class:`Principal` object for `sid`
     """
-    name, domain, type = wrapped (
-      win32security.LookupAccountSid,
-      None if system_name is None else unicode (system_name),
-      sid
-    )
+    try:
+      name, domain, type = wrapped (
+        win32security.LookupAccountSid,
+        None if system_name is None else unicode (system_name),
+        sid
+      )
+    except exc.x_not_found:
+      name = domain = type = core.UNSET
     cls = cls.SID_TYPE_MAP.get (type, cls)
     return cls (sid, None if system_name is None else unicode (system_name))
 
