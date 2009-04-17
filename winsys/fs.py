@@ -67,7 +67,9 @@ class _Attributes (core._WinSysObject):
 class Drive (core._WinSysObject):
   
   def __init__ (self, drive):
-    self.name = drive.rstrip (seps).rstrip (":") + ":" + sep
+    if not re.match (r"[a-z](:|:/|:\\)?$", drive, re.IGNORECASE):
+      raise x_fs(core.UNSET,"Drive.__init__","Invalid drive name %s"%drive)
+    self.name = drive.upper().rstrip (seps).rstrip (":") + ":" + sep
     self.type = wrapped (win32file.GetDriveTypeW, self.name)
     
   def as_string (self):
