@@ -778,10 +778,10 @@ class Dir (Entry):
     
     for dirpath, dirs, files in self.walk ():
       for d in dirs:
-        target_dir = Dir (target_filepath + d.relative_to (self.filepath))
+        target_dir = Dir (target.filepath + d.relative_to (self.filepath))
         target_dir.create ()
       for f in files:
-        target_file = File (target_filepath + f.relative_to (self.filepath))
+        target_file = File (target.filepath + f.relative_to (self.filepath))
         f.copy (target_file, callback, callback_data)
   
   def delete (self, recursive=False):
