@@ -123,6 +123,9 @@ class FilePath (unicode):
   def __add__ (self, other):
     return self.__class__ (os.path.join (unicode (self), unicode (other)))
   
+  def __radd__ (self, other):
+    return self.__class__ (os.path.join (unicode (other), unicode (self)))
+  
   def relative_to (self, other):
     return relative_to (self, unicode (other))
 

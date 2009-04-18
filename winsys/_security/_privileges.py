@@ -82,10 +82,10 @@ class Privilege (core._WinSysObject):
     return utils.dumped (u"\n".join (output), level)
 
   def __eq__ (self, other):
-    return self.name == other.name
+    return self.name == privilege (other).name
     
   def __lt__ (self, other):
-    return self.name < other.name
+    return self.name < privilege (other).name
     
   def pyobject (self):
     return self._luid

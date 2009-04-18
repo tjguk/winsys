@@ -1,9 +1,10 @@
 from winsys import fs
-import win32file
 import os
+import filecmp
 import shutil
 import tempfile
 import uuid
+import win32file
 
 #
 # Convenience functions
@@ -17,6 +18,34 @@ def mkdir (filepath):
 def rmdirs (filepath):
   shutil.rmtree (os.path.join (TEST_ROOT, filepath))
   
+def dirs_are_equal (dir1, dir2):
+  #
+  # Make sure of same directory depth
+  #
+  if len (list (os.walk (dir1))) != len (list (os.walk (dir2))): 
+    return False
+  #
+  # Make sure of directory contents
+  #
+  for (path1, dirs1, files1), (path2, dirs2, files2) in zip (
+    os.walk (dir1), os.walk (dir2)
+  ):
+    if set (dirs1) != set (dirs2): 
+      return False
+    if set (files1) != set (files2):
+      return False
+    if any (not files_are_equal (os.path.join (path1, f1), os.path.join (path2, f2)) for f1, f2 in zip (files1, files2)):
+      return False
+  else:
+    return True
+    
+def files_are_equal (f1, f2):
+  if win32file.GetFileAttributesW (f1) != win32file.GetFileAttributesW (f2):
+    return False
+  if not filecmp.cmp (f1, f2, False):
+    return False
+  return True
+
 def setup ():
   global TEST_ROOT
   TEST_ROOT = tempfile.mkdtemp ()
@@ -64,24 +93,13 @@ def test_Drive_as_String():
 def test_DriveRoot():
   assert fs.Drive("C:").root()=="Dir: C:\\"
   
-def test_dir_copy ():
+def test_dir_copy_to_new_dir ():
   target_name = uuid.uuid1 ().hex
   source = os.path.join (TEST_ROOT, "a")
   target = os.path.join (TEST_ROOT, target_name)
   assert not os.path.isdir (target)
   fs.copy (source, target)
-  #
-  # Make sure of same directory depth
-  #
-  assert len (list (os.walk (source))) == len (list (os.walk (target)))
-  #
-  # Make sure of directory contents
-  #
-  for (source_path, source_dirs, source_files), (target_path, target_dirs, target_files) in zip (
-    os.walk (source), os.walk (target)
-  ):
-    assert set (source_dirs) == set (target_dirs)
-    assert set (source_files) == set (target_files)
+  assert dirs_are_equal (source, target)
   
 if __name__ == "__main__":
   import nose
