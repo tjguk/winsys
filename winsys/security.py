@@ -60,10 +60,10 @@ PySECURITY_ATTRIBUTES = pywintypes.SECURITY_ATTRIBUTESType
 PySECURITY_DESCRIPTOR = type (pywintypes.SECURITY_DESCRIPTOR ())
 
 class x_security (exc.x_winsys):
-  pass
+  u"Base for security-related exceptions"
 
 class x_value_not_set (x_security):
-  pass
+  u"Raised if an attempt is made to read a security value which hasn't been set"
 
 WINERROR_MAP = {
 }
@@ -77,6 +77,13 @@ class Security (core._WinSysObject):
     u"D" : SECURITY_INFORMATION.DACL,
     u"S" : SECURITY_INFORMATION.SACL
   }
+  u"""Mapping between characters and security info:
+  
+  * O - Owner
+  * G - Group
+  * D - DACL
+  * S - SACL
+  """
   DEFAULT_OPTIONS = u"OD"
   DEFAULT_CONTROL = SD_CONTROL.SELF_RELATIVE
   
@@ -214,6 +221,15 @@ class Security (core._WinSysObject):
       
   @classmethod
   def _options (cls, options):
+    ur"""Accept either an integer representing a bitmask combination
+    or :const:`SECURITY_INFORMATION` values; or a string whose
+    characters map, via :const:`OPTIONS` to the same values.
+    The following have the same result:
+    
+    * SECURITY_INFORMATION.OWNER | SECURITY_INFORMATION.DACL
+    * "OD"
+    * 0x05
+    """
     try:
       return int (options)
     except ValueError:
@@ -221,13 +237,19 @@ class Security (core._WinSysObject):
       
   def to_object (self, obj=core.UNSET, object_type=core.UNSET, options=core.UNSET):
     u"""Write the current state of the object as the security settings
-    on a Windows object, typically a file.
+    on a Windows object, typically a file. This is most often called
+    implicitly when the :class:`Security` object is used as a context
+    manager, but can be called explicitly, especially to copy one object's
+    security to another::
     
-    obj - name of the object (eg, a filepath)
-    object_type - from SE_OBJECT_TYPE
-    options - None to update whatever's changed; OR an or-ing of SECURITY_INFORMATION
-      constants; OR a string containing some or all of "OGDS" for Owner, Group,
-      DACL, SACL respectively.
+      from winsys import security
+      s = security.security ("filea")
+      s.to_object ("fileb")
+    
+    :param obj: (optional) object or object name to write security to if this :class:`Security` object
+                wasn't created from an object in the first place.
+    :param object_type:  an :const:`SE_OBJECT_TYPE` [:const:`FILE_OBJECT`]
+    :param options: anything accepted by :meth:`_options`
     """
     obj = obj or self._originating_object
     if not obj:
@@ -316,6 +338,9 @@ class Security (core._WinSysObject):
 
   @classmethod
   def from_object (cls, obj, object_type=core.UNSET, options=core.UNSET):
+    ur"""Constructs a :class:`Security` object from a PyHANDLE or an object name.
+    Almost never called directly; use :func:`security`.
+    """
     if object_type is core.UNSET: object_type = SE_OBJECT_TYPE.FILE_OBJECT
     if options is core.UNSET: options = cls.DEFAULT_OPTIONS
     
@@ -340,12 +365,9 @@ class Security (core._WinSysObject):
     originating_object_type=core.UNSET, 
     options=core.UNSET
   ):
-    u"""Factory method to construct a Security object from a PySECURITY_DESCRIPTOR
-    object.
-
-    @param sd A PySECURITY_DESCRIPTOR instance
-    @param inherit_handle A flag indicating whether the handle is to be inherited
-    @return a Security instance
+    ur"""Constructs a :class:`Security` object from a PySECURITY_DESCRIPTOR object.
+    Almost never called directly; use :func:`security` unless you need some
+    slightly special handling with inherited handles.
     """
     if options is core.UNSET: options = self.DEFAULT_OPTIONS
     
@@ -385,11 +407,9 @@ class Security (core._WinSysObject):
 
   @classmethod
   def from_string (cls, sddl, options=core.UNSET):
-    u"""Factory method to construct a Security object from a string in
-    Microsoft SDDL format.
-
-    @param string A string in Microsoft SDDL format
-    @return A Security instance
+    ur"""Constructs a :class:`Security` object from an SDDL string.
+    Useful for round-tripping, since the :meth:`__str__` method produces
+    an SDDL string.
     """
     if options is core.UNSET: options = cls.DEFAULT_OPTIONS
     
@@ -403,6 +423,30 @@ class Security (core._WinSysObject):
     )
 
 def security (obj=core.UNSET, obj_type=core.UNSET, options=core.UNSET):
+  ur"""Return a :class:`Security` object representing the security attributes
+  of a named object (eg a file, registry key) or a kernel object (eg a process,
+  a pipe). With no parameters, an empty :class:`Security` object is returned which can then be
+  set up with appropriate attributes and applied to other objects via its
+  :meth:`to_object` method. :const:`None` and an existing :class:`Security` 
+  object are passed through unchanged. A :const:`PySECURITY_DESCRIPTOR` is
+  converted to the corresponding :class:`Security` object. A pywin32 :const:`PyHANDLE`,
+  representing a kernel object finds the security attributes for that object.
+  Finally, a string finds the security attributes for the object of that name.
+  
+  The most common use is to pass a filename. The :meth:`from_object` method
+  assumes that an unqualified string represents a file. If it represents
+  something else, you need to specify its type in the `obj_type` parameter::
+
+    from winsys import security
+    s = security.security ("c:/windows")
+    s.dump ()
+  
+  :param obj: any of :const:`None`, a :class:`Security` object, a pywin32 :const:`PyHANDLE`,
+              a pywin32 :const:`PySECURITY_DESCRIPTOR`, or a string
+  :param obj_type: an :const:`SE_OBJECT_TYPE` [SE_OBJECT_TYPE.FILE_OBJECT]
+  :param options: anything acccepted by :meth:`_options` [:const:`DEFAULT_OPTIONS`]
+  :returns: a :class:`Security` object
+  """
   if obj is None:
     return None
   elif obj is core.UNSET:
@@ -420,13 +464,47 @@ def security (obj=core.UNSET, obj_type=core.UNSET, options=core.UNSET):
 # Convenience functions
 #
 @contextlib.contextmanager
-def impersonate (user, password):
+def impersonate (user, password=core.UNSET):
+  ur"""Context-manager which impersonates a user with a password
+  and then reverts to the current user::
+  
+    from __future__ import with_statement
+    from winsys import security
+    with security.impersonate ("Administrator", "password"):
+      print security.me ()
+      
+  ..  note::
+      A :class:`accounts.Principal` object is its own context manager
+      although it's not then possible to pass in a password.
+      
+  :param user: any valid username
+  :param password: username for that user; if not specified, user will be prompted
+  """
   impersonation_token = token (principal (user).logon (password)).impersonate ()
   yield impersonation_token
   impersonation_token.unimpersonate ()
 
 @contextlib.contextmanager
 def change_privileges (enable_privs=[], disable_privs=[], _token=core.UNSET):
+  ur"""Context manager which temporarily enables/disables privs within the 
+  current token, reverting when done to the previous situation::
+  
+    from __future__ import with_statement
+    from winsys import security, fs
+    
+    test = fs.file ("test")
+    test.touch ()
+    with security.change_privileges (["restore"]):
+      with test.security () as s:
+        print s.owner
+        s.owner = security.principal ("Administrator")
+        print s.owner
+  
+  :param enable_privs: list of privileges to enable; each priv is anything accepted by :func:`privilege`
+  :param disable_privs: list of privileges to disable; each priv is anything accepted by :func:`privilege`
+  :param _token: (internal) a token to use if not the current one
+  :returns: yields re-privileged token object
+  """
   if _token is core.UNSET:
     _token = token ()
   old_enabled_privs, old_disabled_privs = _token.change_privileges (enable_privs, disable_privs)

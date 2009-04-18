@@ -429,14 +429,34 @@ class Entry (core._WinSysObject):
     ]
   
   def move (self, other, callback=None, callback_data=None, clobber=False):
-    ur"""
-    moves associated file ' to 'target_filepath' and returns file object to file location
+    ur"""Move this entry to `other`. If `other` looks like a directory
+    (ie if :func:`entry` thinks it's a directory) then the target
+    filepath is this file's filepath appended to `other`. If not,
+    the target of the move is assumed to be the same type as this.
+    
+    Any directories in the target will be created as necessary.
+    
+    :param other: anything accepted by :func:`entry`
+    :param callback: a function whose signature matches :func:`dummy_callback`
+    :param callback_data: arbitrary data passed to the callback function
+    :param clobber: whether to overwrite an existing entry or not [False]
+    :returns: an :class:`Entry` for the target
     """
     other_file = entry (other)
-    if other_file and other_file.directory:
+    #
+    # If the target is either an existing directory
+    # (in which case entry will return Dir), or was
+    # passed in as a Dir, assume we're copying the
+    # adding the file into a directory.
+    #
+    if isinstance (other_file, Dir):
       target_filepath = other_file.filepath + self.filepath.filename
     else:
       target_filepath = other_file.filepath
+    target_dir = dir (target_filepath.path)
+    if not target_dir:
+      target_dir.create ()
+    
     flags = MOVEFILE.WRITE_THROUGH
     if clobber:
       flags |= MOVEFILE.REPLACE_EXISTING
@@ -448,10 +468,10 @@ class Entry (core._WinSysObject):
       callback_data, 
       flags
     )
-    return file (target_filepath)
+    return entry (target_filepath)
     
   def take_control (self, principal=core.UNSET):
-    """Give the logged-on user full control to a file. This may
+    ur"""Give the logged-on user full control to a file. This may
     need to be preceded by a call to take_ownership so that the
     user gains WRITE_DAC permissions.
     """
@@ -465,7 +485,7 @@ class Entry (core._WinSysObject):
       s.dacl.append ((principal, "F", "ALLOW"))
 
   def take_ownership (self, principal=core.UNSET):
-    """Set the new owner of the file to be the logged-on user.
+    ur"""Set the new owner of the file to be the logged-on user.
     This is no more than a slight shortcut to the equivalent
     security operations.
     
@@ -502,16 +522,44 @@ class File (Entry):
     return self
 
   def copy (self, other, callback=None, callback_data=None):
-    """
-    Copies associated file to directory specified by 'other' 
-    and returns file object.Pass the relative or full directory 
-    of target location.    
+    ur"""Copy this file to `other`. If `other` looks like a directory
+    (ie if :func:`entry` thinks it's a directory) then the target
+    filepath is this file's filepath appended to `other`. If not,
+    `other` is considered to be a file and the target of the copy.
+    
+    Any directories in the target will be created as necessary::
+    
+      from winsys import fs
+      source = fs.dir ("c:/temp")
+      target = fs.dir ("c:/temp2")
+      assert not target
+      for f in source.flat ():
+        if f.size > 1000000:
+          f.copy (
+            target.filepath + f.relative_to (source), 
+            fs.dummy_callback, 
+            f.filepath
+          )
+    
+    :param other: anything accepted by :func:`entry`
+    :param callback: a function whose signature matches :func:`dummy_callback`
+    :param callback_data: arbitrary data passed to the callback function
+    :returns: an :class:`Entry` for the target
     """
     other_file = entry (other)
-    if other_file and other_file.directory:
+    #
+    # If the target is either an existing directory
+    # (in which case entry will return Dir), or was
+    # passed in as a Dir, assume we're copying the
+    # adding the file into a directory.
+    #
+    if isinstance (other_file, Dir):
       target_filepath = other_file.filepath + self.filepath.filename
     else:
       target_filepath = other_file.filepath
+    target_dir = dir (target_filepath.path)
+    if not target_dir:
+      target_dir.create ()
     wrapped (
       win32file.CopyFileEx,
       self.filepath, 
@@ -741,7 +789,7 @@ class Dir (Entry):
     deletes associated dir
     """
     if recursive:
-      for dirpath, dirs, files in self.walk (depthfirst=True, includedirs=True):
+      for dirpath, dirs, files in self.walk (depthfirst=True):
         for d in dirs:
           d.delete (recursive=True)
         for f in files:
@@ -867,7 +915,7 @@ def dir (filepath, ignore_access_errors=False):
   elif isinstance (f, File) and f:
     raise x_fs (None, u"dir", u"%s exists but is a file" % filepath)
   else:
-    return Dir (filepath)
+    return Dir (unicode (filepath))
 
 def glob (pattern, ignore_access_errors=False):
   dirname = os.path.dirname (pattern)
@@ -887,6 +935,17 @@ def walk (root, depthfirst=False, ignore_access_errors=False):
 def flat (root, pattern="*", includedirs=False, depthfirst=False, ignore_access_errors=False):
   for f in dir (root).flat (pattern, includedirs=includedirs, ignore_access_errors=ignore_access_errors):
     yield f
+
+def dummy_callback (total_file_size, total_bytes_transferred, data):
+  ur"""Example callback for the :func:`move` and :func:`copy` functions.
+  
+  :param total_file_size: total size of the file being moved/copied
+  :param total_bytes_transferred: number of bytes transferred to far
+  :param data: arbitrary block of data
+  :returns: a True value to cancel the copy, False otherwise (including None)
+  """
+  if total_bytes_transferred > 0:
+    print "%s: %03.2f%% so far%s\r" % (data, 1.0 * total_file_size / total_bytes_transferred, " " * 40),
 
 def progress_wrapper (callback):
   

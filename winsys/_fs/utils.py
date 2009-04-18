@@ -108,4 +108,8 @@ def Handle (handle_or_filepath, write=False):
     hFile.close ()
 
 def relative_to (filepath1, filepath2):
-  return utils.relative_to (normalised (filepath1), normalised (filepath2))
+  #
+  # filepath2 must always be a directory; filepath1 may
+  # be a file or a directory.
+  #
+  return utils.relative_to (normalised (filepath1), normalised (filepath2.rstrip (seps) + sep))
