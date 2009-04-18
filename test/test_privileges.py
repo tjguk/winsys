@@ -21,6 +21,10 @@ def test_privilege_string ():
   luid = win32security.LookupPrivilegeValue ("", win32security.SE_BACKUP_NAME)
   assert _privileges.privilege (win32security.SE_BACKUP_NAME).pyobject () == luid
 
+def test_privilege_constant ():
+  luid = win32security.LookupPrivilegeValue ("", win32security.SE_BACKUP_NAME)
+  assert _privileges.privilege ("backup").pyobject () == luid
+
 def test_privilege_tuple ():
   luid, attributes = win32security.LookupPrivilegeValue ("", win32security.SE_BACKUP_NAME), win32security.SE_PRIVILEGE_ENABLED
   privilege = _privileges.privilege ((luid, attributes))
