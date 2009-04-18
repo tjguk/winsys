@@ -9,7 +9,7 @@ root, term = dialogs.dialog (
 root = registry.registry (root)
 term = term.lower ()
 for key, subkeys, values in root.walk (ignore_access_errors=True):
-  for name, value, type in values:
+  for name, value in values:
     if term in str (value).lower ():
       print key.moniker.encode ("utf8")
       print name.encode ("utf8") or "(Default)"

@@ -13,7 +13,7 @@ Log an information event against a WinSys event source,
 creating it if does not already exist. Once the event is written, remove
 the event source.
 
-..  literalinclude:: log_event.py
+..  literalinclude:: event_logs/log_event.py
 
 Discussion
 ~~~~~~~~~~
@@ -40,7 +40,7 @@ List the 10 most recent records in each event log
 Go through each event log on the system and list the 10 most recent
 events.
 
-..  literalinclude:: latest_10_events.py
+..  literalinclude:: event_logs/latest_10_events.py
     
 Discussion
 ~~~~~~~~~~
@@ -62,7 +62,7 @@ Go through the a remote System event log and write to CSV the
 record number, id and message for records matching a particular
 event source and type.
 
-..  literalinclude:: remote_events.py
+..  literalinclude:: event_logs/remote_events.py
 
 Discussion
 ~~~~~~~~~~

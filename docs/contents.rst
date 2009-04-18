@@ -17,5 +17,6 @@ Contents
     fs
     ipc
     registry
+    security
     misc
     cookbook

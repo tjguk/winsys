@@ -13,4 +13,4 @@ List details of the security which applies to a specific file.
 This is most interesting in an ad-hoc situation when you're
 trying to assess things using the interpreter.
 
-..  literalinclude:: dump_security.py
+..  literalinclude:: security/dump_security.py
