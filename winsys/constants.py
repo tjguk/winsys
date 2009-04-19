@@ -123,6 +123,9 @@ class Constants (object):
     self.preamble = preamble
     self.reset_doc ()
 
+  def dump (self):
+    print self.__doc__
+  
   def __contains__ (self, attribute):
     return attribute in self.keys ()
   

@@ -1,4 +1,23 @@
 # -*- coding: iso-8859-1 -*-
+ur"""Object permissions, user accounts and process privileges
+
+Windows manages security by granting rights -- such as the
+ability to read or write from an object -- in the form of
+Access Control Lists (ACLs) of Access Control Entries (ACEs)
+to specific security principals: users, groups or other entities.
+In addition, process security is managed by granting each logged-on
+session a Token which contains the rights associated with that
+session plus certain Privileges, such as the ability to take
+ownership of any object or to access security-related data.
+
+ACLs and ACEs are managed through the :class:`Security` object,
+accessed mostly by means of the :func:`security` function, or
+the :meth:`fs.Entry.security` method on external classes. Security
+principals are represented by :class:`Principal` objects, accessed
+via the :func:`principal` function. :class:`Privilege` objects
+refer to process privileges and are reached through the :func:`principal`
+function, or through the :attr:`Privileges` attribute of a :class:`Token`.
+"""
 from __future__ import with_statement
 import os, sys
 import contextlib
@@ -11,6 +30,15 @@ import win32process
 import pywintypes
 import winerror
 
+#
+# For ease of management, the bulk of the security module
+# has been split into submodules contained within a
+# subpackage. For convenience in access, these are all
+# imported into the security module which is intended to
+# be the normal means of accessing these functions,
+# classes, constants, etc. However, they may each be
+# imported individually if needs be.
+#
 from winsys import constants, core, exc, utils
 from winsys._security.core import REVISION
 from winsys._security._tokens import *
@@ -34,10 +62,12 @@ SE_OBJECT_TYPE = constants.Constants.from_list ([
   u"SE_WMIGUID_OBJECT",
   u"SE_REGISTRY_WOW64_32KEY"
 ], pattern=u"SE_*", namespace=win32security)
+SE_OBJECT_TYPE.doc (u"Types of object which can be secured")
 SECURITY_INFORMATION = constants.Constants.from_pattern (
   u"*_SECURITY_INFORMATION", 
   namespace=win32security
 )
+SECURITY_INFORMATION.doc (u"Information held with a security descriptor body")
 SD_CONTROL = constants.Constants.from_list ([
   #~ "SE_DACL_AUTO_INHERIT_REQ", 
   u"SE_DACL_AUTO_INHERITED", 
@@ -54,6 +84,7 @@ SD_CONTROL = constants.Constants.from_list ([
   u"SE_SACL_PROTECTED",
   u"SE_SELF_RELATIVE"
 ], pattern=u"SE_*", namespace=win32security)
+SD_CONTROL.doc (u"Information held with a security descriptor header")
 
 PyHANDLE = pywintypes.HANDLEType
 PySECURITY_ATTRIBUTES = pywintypes.SECURITY_ATTRIBUTESType
