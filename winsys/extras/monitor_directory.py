@@ -69,7 +69,7 @@ def get_files (path, size_threshold_mb, results, stop_event):
     try:
       if f.size > size_threshold:
         results.put (f)
-    except fs.exceptions.x_winsys:
+    except fs.exc.x_winsys:
       continue
 
 def watch_files (path, size_threshold_mb, results, stop_event):
@@ -102,7 +102,7 @@ def watch_files (path, size_threshold_mb, results, stop_event):
         if new_file and new_file <> old_file:
           if new_file and new_file.size > size_threshold:
             results.put (new_file)
-      except fs.exceptions.x_winsys:
+      except fs.exc.x_winsys:
         pass
       except RuntimeError:
         try:
@@ -265,7 +265,7 @@ class App (object):
               max (f.written_at, f.created_at)
             )
           )
-        except fs.exceptions.x_winsys:
+        except fs.exc.x_winsys:
           pass
       doc.append (u"</table>")
     
