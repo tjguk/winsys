@@ -619,7 +619,7 @@ class File (Entry):
       zip_filename = self.filepath.changed (ext=".zip")
     
     z = zipfile.ZipFile (zip_filename, mode=mode, compression=compression)
-    z.write (self.filepath.filename)
+    z.write (self.filepath, arcname=self.filepath.filename)
     z.close ()
       
     return file (zip_filename)
