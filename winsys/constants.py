@@ -77,9 +77,10 @@ class Constants (object):
     u"""Build an internal structure from a dictionary-like
     set of initial values.
     """
-    self._dict = dict (dict_initialiser)
     self.preamble = ""
-    self.reset_doc ()
+    self._dict = {}
+    self._key_dict = {}
+    self.init (dict_initialiser)
 
   def __getitem__ (self, attribute):
     u"""Act as a dictionary and as a namespace so that calls like 
@@ -99,24 +100,39 @@ class Constants (object):
   def __str__ (self):
     return "<Constants: %s>" % ", ".join (self._dict.keys ())
     
+  def init (self, dict_initialiser):
+    items = list (dict_initialiser)
+    self._dict.update ((name, value) for key, name, value in items)
+    self._key_dict.update ((value, key) for key, name, value in items)
+    self.reset_doc ()
+  
   def reset_doc (self):
     namelen = len (max (self._dict, key=len))
+    aliaslen = len (max (self._key_dict.values (), key=len))
     try:
       int (self._dict.values ()[0])
     except:
       valuelen = len (max (self._dict.values (), key=len))
       prefix = ""
-      row_format = "|%%-%ds|%%-%ds|" % (namelen, valuelen)
+      row_format = "|%%-%ds|%%-%ds|%%-%ds|" % (namelen, valuelen, aliaslen)
       converter = unicode
     else:
       valuelen = 2 * ((1 + len ("%x" % max (self._dict.values ()))) // 2)
       prefix = "0x"
-      row_format = "|%%-%ds|%s%%0%dX|" % (namelen, prefix, valuelen)
+      row_format = "|%%-%ds|%s%%0%dX|%%-%ds|" % (namelen, prefix, valuelen, aliaslen)
       converter = utils.signed_to_unsigned 
+    header_format = "|%%-%ds|%%-%ds|%%-%ds|" % (namelen, len (prefix) + valuelen, aliaslen)
       
-    separator = "+" + namelen * "-" + "+" + (len (prefix) + valuelen) * "-" + "+"
-    row = separator + "\n" + row_format
-    table = "\n".join (row % (k, converter (v)) for (k, v) in sorted (self._dict.items (), key=operator.itemgetter (1))) + "\n" + separator
+    separator = "+" + namelen * "-" + "+" + (len (prefix) + valuelen) * "-" + "+" + aliaslen * "-" + "+"
+    header = "+" + namelen * "=" + "+" + (len (prefix) + valuelen) * "=" + "+" + aliaslen * "=" + "+"
+    row = row_format + "\n" + separator
+    rows = ((name, converter (value), self._key_dict[value]) for (name, value) in self._dict.items ())
+    table = "\n".join ([
+      separator,
+      header_format % ("Name", "Val", "Win32"),
+      header, 
+      "\n".join (row % r for r in sorted (rows, key=operator.itemgetter (1))),
+    ])
     self.__doc__ = self.preamble + "\n\n" + table
   
   def doc (self, preamble):
@@ -139,8 +155,7 @@ class Constants (object):
     u"""Act as a dict for updates so that several constant sets may
     be merged into one.
     """
-    self._dict.update (dict (other.items ()))
-    self.reset_doc ()
+    self.init ((key, key, value) for key, value in other.items ())
     
   def items (self):
     return self._dict.items ()
@@ -160,14 +175,14 @@ class Constants (object):
     If a pattern is passed in, use the distinguished part of the name (the part
     which matches the wildcard) as the key name.
     """
-    return cls ((from_pattern (pattern, key), value) for (key, value) in d.items ())
+    return cls ((key, from_pattern (pattern, key), value) for (key, value) in d.items ())
   
   @classmethod
   def from_list (cls, keys, namespace, pattern=None):
     u"""Factory method to return a class instance from a list-like set of values
     within a namespace. Hands off to the from_dict factory.
     """
-    return cls ((from_pattern (pattern, key), getattr (namespace, key, None)) for key in keys)
+    return cls ((key, from_pattern (pattern, key), getattr (namespace, key, None)) for key in keys)
 
   @classmethod
   def from_pattern (cls, pattern=u"*", excluded=[], namespace=win32con):
@@ -176,7 +191,7 @@ class Constants (object):
     FILE_ATTRIBUTE_* and the win32file module as the namespace.
     """
     return cls (
-      (from_pattern (pattern, key), getattr (namespace, key)) for \
+      (key, from_pattern (pattern, key), getattr (namespace, key)) for \
         key in dir (namespace) if \
         fnmatch.fnmatch (key, pattern) and \
         key not in excluded

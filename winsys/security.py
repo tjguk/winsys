@@ -1,8 +1,6 @@
 # -*- coding: iso-8859-1 -*-
-ur"""Object permissions, user accounts and process privileges
-
-Windows manages security by granting rights -- such as the
-ability to read or write from an object -- in the form of
+ur"""Windows manages security by granting rights -- such as the
+ability to read or write an object -- in the form of
 Access Control Lists (ACLs) of Access Control Entries (ACEs)
 to specific security principals: users, groups or other entities.
 In addition, process security is managed by granting each logged-on
