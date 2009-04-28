@@ -45,8 +45,8 @@ USER_PRIV = constants.Constants.from_list ([u"USER_PRIV_GUEST", u"USER_PRIV_USER
 USER_PRIV.doc ("User-types for creating new users")
 UF = constants.Constants.from_pattern (u"UF_*", namespace=win32netcon)
 UF.doc ("Flags for creating new users")
-SID_TYPE = constants.Constants.from_pattern (u"SidType*", namespace=ntsecuritycon)
-SID_TYPE.doc ("Types of accounts for which SIDs exist")
+SID_NAME_USE = constants.Constants.from_pattern (u"SidType*", namespace=ntsecuritycon)
+SID_NAME_USE.doc ("Types of accounts for which SIDs exist")
 FILTER = constants.Constants.from_pattern (u"FILTER_*", namespace=win32netcon)
 FILTER.doc ("Filters when enumerating users")
 
@@ -253,7 +253,7 @@ class Principal (core._WinSysObject):
       None if system is None else unicode (system), 
       unicode (string)
     )
-    cls = cls.SID_TYPE_MAP.get (type, cls)
+    cls = cls.SID_NAME_USE_MAP.get (type, cls)
     return cls (sid, None if system is None else unicode (system))
     
   @classmethod
@@ -272,7 +272,7 @@ class Principal (core._WinSysObject):
       )
     except exc.x_not_found:
       name = domain = type = core.UNSET
-    cls = cls.SID_TYPE_MAP.get (type, cls)
+    cls = cls.SID_NAME_USE_MAP.get (type, cls)
     return cls (sid, None if system is None else unicode (system))
 
   @classmethod
@@ -382,7 +382,7 @@ class User (Principal):
   
 class Group (Principal):
   
-  SID_TYPE_MAP = {}
+  SID_NAME_USE_MAP = {}
   
   def __contains__ (self, member):
     ur"""Crudely, iterate over the group's members until you hit `member`
@@ -503,10 +503,10 @@ class LocalGroup (Group):
         yield principal (member['sid'])
       if resume == 0: break
 
-Principal.SID_TYPE_MAP = {
-  SID_TYPE.User : User,
-  SID_TYPE.Group : Group,
-  SID_TYPE.WellKnownGroup : Group
+Principal.SID_NAME_USE_MAP = {
+  SID_NAME_USE.User : User,
+  SID_NAME_USE.Group : Group,
+  SID_NAME_USE.WellKnownGroup : Group
 }
 
 def local_groups (system=None):
