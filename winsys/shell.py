@@ -34,10 +34,14 @@ from win32com.shell import shell, shellcon
 import win32api
 import pythoncom
 
-from winsys import core, constants
+from winsys import core, constants, exc
 
 class x_shell (core.x_winsys):
   pass
+
+WINERROR_MAP = {
+}
+wrapped = exc.wrapper (WINERROR_MAP, x_shell)
 
 #
 # Although this can be done in one call, Win9x didn't
@@ -255,6 +259,34 @@ def delete_file (
     hWnd
   )
   
+class Shortcut (core.x_winsys):
+  
+  def __init__ (self, filepath=None):
+    self._shell_link = wrapped (
+      pythoncom.CoCreateInstance,
+      shell.CLSID_ShellLink,
+      None,
+      pythoncom.CLSCTX_INPROC_SERVER,
+      shell.IID_IShellLink
+    )
+    self.filepath = filepath
+    if self.filepath:
+      wrapped (
+        self._shell_link.QueryInterface,
+        pythoncom.IID_IPersistFile
+      ).LoadFile (
+        self.filepath
+      )
+      
+  @classmethod
+  def from_lnk (cls, lnk_filepath):
+    return cls (lnk_filepath)
+  
+  @classmethod
+  def from_target (cls, target_filepath):
+    pass
+    
+
 def CreateShortcut (Path, Target, Arguments = "", StartIn = "", Icon = ("",0), Description = ""):
   u"""Create a Windows shortcut:
 

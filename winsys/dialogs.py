@@ -393,6 +393,30 @@ class Dialog (BaseDialog):
     new size.
     """
     self.hwnd = hwnd
+    
+    #
+    # If you want to have a translucent dialog,
+    # enable the next block.
+    #
+    if False:
+      wrapped (
+        win32gui.SetWindowLong,
+        self.hwnd,
+        win32con.GWL_EXSTYLE,
+        win32con.WS_EX_LAYERED | wrapped (
+          win32gui.GetWindowLong,
+          self.hwnd,
+          win32con.GWL_EXSTYLE
+        )
+      )
+      wrapped (
+        win32gui.SetLayeredWindowAttributes,
+        self.hwnd,
+        255,
+        (255 * 80) / 100,
+        win32con.LWA_ALPHA
+      )
+    
     pythoncom.RegisterDragDrop (
       hwnd,
       pythoncom.WrapObject (

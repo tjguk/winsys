@@ -603,7 +603,7 @@ class File (Entry):
     ).close ()
     return self
   
-  def zip (self, zip_filename=core.UNSET, mode="w", compression=zipfile.ZIP_DEFLATED):
+  def zip (self, zip_filename=core.UNSET, mode="w", compression=zipfile.ZIP_DEFLATED, allow_zip64=False):
     """Zip the file up into a zipfile. By default, the zipfile will have the
     name of the file with ".zip" appended and will be a sibling of the file.
     Also by default a new zipfile will be created, overwriting any existing one, and
@@ -618,7 +618,7 @@ class File (Entry):
     if zip_filename is core.UNSET:
       zip_filename = self.filepath.changed (ext=".zip")
     
-    z = zipfile.ZipFile (zip_filename, mode=mode, compression=compression)
+    z = zipfile.ZipFile (zip_filename, mode=mode, compression=compression, allowZip64=allow_zip64)
     z.write (self.filepath, arcname=self.filepath.filename)
     z.close ()
       
