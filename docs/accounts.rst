@@ -33,7 +33,7 @@ Constants
 ..  autodata:: WELL_KNOWN_SID
 ..  autodata:: USER_PRIV
 ..  autodata:: UF
-..  autodata:: SID_TYPE
+..  autodata:: SID_NAME_USE
 ..  autodata:: FILTER
 
 Exceptions
