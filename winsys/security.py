@@ -541,7 +541,7 @@ def change_privileges (enable_privs=[], disable_privs=[], _token=core.UNSET):
   _token.change_privileges (old_enabled_privs, old_disabled_privs)
 
 def runas (user, password, command_line):
-  with privilege (PRIVILEGE.TCB):
+  with change_privileges ([PRIVILEGE.ASSIGNPRIMARYTOKEN, PRIVILEGE.INCREASE_QUOTA]):
     with principal (user).impersonate (password, logon_type=LOGON.LOGON_INTERACTIVE) as hToken:
       token (hToken).dump ()
       hDuplicateToken = wrapped (

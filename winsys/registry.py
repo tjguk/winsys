@@ -697,6 +697,12 @@ def parent (key):
   else:
     raise x_registry (core.UNSET, u"parent", u"%s has no parent" % key.moniker)
       
+def hklm ():
+  return registry ("hklm")
+
+def hkcu ():
+  return registry ("hkcu")
+
 Registry.values = values
 Registry.keys = keys
 Registry.delete = delete

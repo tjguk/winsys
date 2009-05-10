@@ -29,7 +29,7 @@ Copy a registry key from HKLM to HKCU and set its permissions so that
 only the current user has change access while everyone else gets read.
 Then dump the details of the new top-level key, including its security.
 
-..  literalinclude:: cookbook/registry_copy_key.py
+..  literalinclude:: cookbook/registry/copy_key.py
     :language: python
     :linenos:
 

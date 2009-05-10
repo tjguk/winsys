@@ -2,32 +2,45 @@ import os
 import re
 
 from winsys import utils
-from winsys._fs.core import sep, seps
+from winsys._fs.core import sep, seps, x_fs
 from winsys._fs.utils import get_parts, normalised, relative_to
 
 class FilePath (unicode):
-  u"""Helper class which subclasses unicode, and can therefore be passed
-  directly to API calls. It provides common operations on file paths:
-  directory name, filename, parent directory &c.
+  ur"""A unicode subclass which knows about path structures on Windows.
+  The path itself need not exist on any filesystem, but it has to match
+  the rules which would make it possible.
+  
+  FilePaths can be absolute or relative. The only difference is that
+  the root attribute is empty for relative paths. They can be added
+  to each other or to other unicode strings which will use os.path.join
+  semantics.
+  
+  parts - a list of the components (cf :func:`fs.get_parts`)
+  root - the drive or UNC server/share ending in a backslash unless a drive-relative path
+  filename - final component (may be blank if the path looks like a directory)
+  name - same as filename unless blank in which case second-last component
+  dirname - all path components before the last
+  path - combination of root and dirname
+  parent - combination of root and all path components before second penultimate
+  base - base part of filename (ie the piece before the dot)
+  ext - ext part of filename (ie the dot and the piece after)
+
+  =================== ========== ========= ========= ========= =========== ========== ===== ====
+  Path                root       filename  name      dirname   path        parent     base  ext
+  =================== ========== ========= ========= ========= =========== ========== ===== ====
+  \\\\a\\b\\c\\d.txt  \\\\a\\b\\ d.txt     d.txt     \\c       \\\\a\\b\\c \\\\a\\b   d     .txt  
+  c:\\boot.ini        c:\\       boot.ini  boot.ini  \\        c:\\        c:\\       boot  .ini
+  boot.ini                       boot.ini  boot.ini                        x_fs       boot  .ini
+  c:\\t               c:\\       t         t         \\        c:\\        c:\\       t         
+  c:\\t\\             c:\\                 t         \\        c:\\        c:\\       t
+  c:\\t\\a.txt        c:\\       a.txt     a.txt     \\t       c:\\t       c:\\t      a     .txt
+  c:a.txt             c:         a.txt     a.txt               c:          x_fs       a     .txt
+  =================== ========== ========= ========= ========= =========== ========== ===== ====
   """
   def __new__ (meta, filepath, *args, **kwargs):
-    filepath = os.path.abspath (filepath).lower ()
-    return unicode.__new__ (meta, filepath, *args, **kwargs)
+    return unicode.__new__ (meta, filepath.lower (), *args, **kwargs)
 
   def __init__ (self, filepath, *args, **kwargs):
-    u"""Break the filepath into its component parts, adding useful
-    ones as instance attributes:
-    
-    FilePath.parts - a list of the components
-    FilePath.root - the drive or UNC server/share always ending in no backslash
-    FilePath.filename - final component (may be blank if the path looks like a directory)
-    FilePath.name - same as filename unless blank in which case second-last component
-    FilePath.dirname - all path components before the last
-    FilePath.path - combination of volume and dirname
-    FilePath.parent - combination of volume and all path components before second penultimate
-    FilePath.base - base part of filename (ie the piece before the dot)
-    FilePath.ext - ext part of filename (ie the dot and the piece after)
-    """
     self._parts = None
     self._root = None
     self._filename = None
@@ -57,9 +70,6 @@ class FilePath (unicode):
     return utils.dumped (u"\n".join (output), level)
 
   def _get_parts (self):
-    u"""Helper function to regularise a file path and then
-    to pick out its drive and path components.
-    """
     if self._parts is None:
       self._parts = get_parts (self)
     return self._parts
@@ -79,7 +89,7 @@ class FilePath (unicode):
   
   def _get_dirname (self):
     if self._dirname is None:
-      self._dirname = sep + sep.join (self.parts[1:-1])
+      self._dirname = sep.join (self.parts[1:-1])
     return self._dirname
   dirname = property (_get_dirname)
   
@@ -90,6 +100,8 @@ class FilePath (unicode):
   path = property (_get_path)
   
   def _get_parent (self):
+    if not self.drive:
+      raise x_fs (None, "FilePath.parent", "Cannot find parent for relative path")
     if self._parent is None:
       parent_dir = [p for p in self.parts if p][:-1]
       if parent_dir:
@@ -127,9 +139,26 @@ class FilePath (unicode):
     return self.__class__ (os.path.join (unicode (other), unicode (self)))
   
   def relative_to (self, other):
+    """Return this filepath as relative to another. cf :func:`utils.relative_to`
+    """
     return relative_to (self, unicode (other))
+    
+  def absolute (self):
+    """Return an absolute version of the current FilePath, whether
+    relative or not.
+    """
+    return self.__class__ (os.path.abspath (self))
 
   def changed (self, root=None, path=None, filename=None, base=None, ext=None):
+    """Return a new :class:`FilePath` with one or more parts changed. This is particularly
+    convenient for, say, changing the extension of a file or producing a version on
+    another path.
+    """
+    if root and path:
+      raise x_fs (None, "FilePath.changed", "You cannot change root *and* path")
+    elif filename and (base or ext):
+      raise x_fs (None, "FilePath.changed", "You cannot change filename *and* base or ext")
+      
     if ext: ext = "." + ext.lstrip (".")
     parts = self.parts
     _filename = parts[-1]
