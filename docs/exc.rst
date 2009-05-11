@@ -1,4 +1,4 @@
-:mod:`exceptions` -- Exceptions
+:mod:`exc` -- Exceptions
 ===============================
 
 ..  automodule:: exc

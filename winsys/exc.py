@@ -3,15 +3,17 @@ import pywintypes
 
 class x_winsys (pywintypes.error):
   u"""Base for all WinSys exception. Subclasses pywintypes.error so that
-  except pywintypes.error clauses can be used to catch all relevant exceptions
+  except pywintypes.error clauses can be used to catch all relevant exceptions.
+  Note that the __init__ is specified so that exception invocations can pass
+  just an error message by keyword.
   """
-  def __init__ (self, errno, errctx, errmsg):
+  def __init__ (self, errno=None, errctx=None, errmsg=None):
     #
     # Attempt to ensure that the correct sequence of arguments is
     # passed to the exception: this makes for more sane error-trapping
     # at the cost of a certain flexibility.
     #
-    pass
+    pywintypes.error.__init__ (self, errno, errctx, errmsg)
     
 class x_access_denied (x_winsys):
   u"General purpose access-denied exception"

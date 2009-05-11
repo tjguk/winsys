@@ -10,7 +10,7 @@ Contents
     about
     core
     constants
-    exceptions
+    exc
     accounts
     dialogs
     event_logs
