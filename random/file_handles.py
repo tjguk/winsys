@@ -193,7 +193,7 @@ def get_object_info (requests, results):
 def main ():
   requests = Queue.Queue ()
   results = Queue.Queue ()
-  for i in range (10):
+  for i in range (20):
     t = threading.Thread (target=get_object_info, args=(requests, results))
     t.setDaemon (True)
     t.start ()
@@ -213,7 +213,7 @@ def main ():
 
   while True:
     try:
-      yield results.get (True, 0.1)
+      yield results.get (True, 2)
     except Queue.Empty:
       break
     

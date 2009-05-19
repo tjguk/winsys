@@ -71,6 +71,15 @@ def test_drive_directory ():
 
 def test_drive_non_directory ():
   _test_parts (u"C:\\test\\abc.txt", [u"C:\\", u"test", u"abc.txt"])
+  
+#
+# dumps
+#
+def test_dump_absolute ():
+  fs.filepath (__file__).dump ()
+
+def test_dump_relative ():
+  fs.filepath ("@@").dump ()
 
 if __name__ == "__main__":
   import nose

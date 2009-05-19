@@ -65,7 +65,7 @@ class FilePath (unicode):
     output.append (u"filename: %s" % self.filename)
     output.append (u"base: %s" % self.base)
     output.append (u"ext: %s" % self.ext)
-    if self.parent:
+    if self.root and self.parent:
       output.append (u"parent: %s" % self.parent)
     return utils.dumped (u"\n".join (output), level)
 
