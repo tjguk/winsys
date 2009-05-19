@@ -501,7 +501,7 @@ class Dialog (BaseDialog):
         # from having their text read. Assume any error means that
         # the control is empty.
         #
-        return wrapped (win32gui.GetDlgItemText, self.hwnd, item_id)
+        return wrapped (win32gui.GetDlgItemText, self.hwnd, item_id).decode ("mbcs")
       except:
         return ""
     elif class_name == "Button":
@@ -521,7 +521,7 @@ class Dialog (BaseDialog):
     class_name = wrapped (win32gui.GetClassName, item_hwnd)
     styles = wrapped (win32gui.GetWindowLong, self.hwnd, win32con.GWL_STYLE)
     if class_name == "Edit":
-      value = str (value).replace ("\r\n", "\n").replace ("\n", "\r\n")
+      value = unicode (value).replace (u"\r\n", u"\n").replace (u"\n", u"\r\n")
       wrapped (win32gui.SetDlgItemText, self.hwnd, item_id, value)
     elif class_name == "Button":
       #~ if styles & win32con.BS_CHECKBOX:
@@ -534,7 +534,7 @@ class Dialog (BaseDialog):
         SendMessage (item_hwnd, win32con.CB_ADDSTRING, 0, utils.string_as_pointer (str (item)))
       SendMessage (item_hwnd, win32con.CB_SETCURSEL, 0, 0)
     elif class_name == "Static":
-      wrapped (win32gui.SetDlgItemText, self.hwnd, item_id, str (value))
+      wrapped (win32gui.SetDlgItemText, self.hwnd, item_id, unicode (value))
     else:
       raise RuntimeError ("Unknown class: %s" % class_name)
   
