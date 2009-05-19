@@ -1,8 +1,10 @@
 import os, sys
 from ctypes import *
 from ctypes.wintypes import *
+import Queue
 import re
 import struct
+import threading
 
 import ntsecuritycon
 import pywintypes
@@ -23,6 +25,7 @@ ntdll = windll.ntdll
 SystemHandleInformation = 16
 STATUS_INFO_LENGTH_MISMATCH = 0xC0000004
 STATUS_BUFFER_OVERFLOW = 0x80000005L
+STATUS_INVALID_HANDLE = 0xC0000008L
 STATUS_BUFFER_TOO_SMALL = 0xC0000023L
 STATUS_SUCCESS = 0
 
@@ -149,6 +152,8 @@ def get_type_info (handle):
     elif result == STATUS_INFO_LENGTH_MISMATCH:
       size = DWORD (size.value * 4)
       resize (public_object_type_information, size.value)
+    elif result == STATUS_INVALID_HANDLE:
+      return None
     else:
       raise x_file_handles ("ZwQueryObject.2", hex (result))
 
@@ -178,7 +183,21 @@ def can_access (handle):
     else:
       raise
 
+def get_object_info (requests, results):
+  while True:
+    pid, handle = requests.get ()
+    type = get_type_info (handle)
+    name = get_name_info (handle)
+    results.put ((pid, type, name))
+
 def main ():
+  requests = Queue.Queue ()
+  results = Queue.Queue ()
+  for i in range (10):
+    t = threading.Thread (target=get_object_info, args=(requests, results))
+    t.setDaemon (True)
+    t.start ()
+  
   public_object_type_information = PUBLIC_OBJECT_TYPE_INFORMATION ()
   object_name_information = OBJECT_NAME_INFORMATION ()
   this_pid = os.getpid ()
@@ -186,18 +205,20 @@ def main ():
   for pid, handle in get_handles ():
     if pid == this_pid:
       continue
-    print "PID", pid
     hDuplicate = get_process_handle (pid, handle)
     if hDuplicate is None:
       continue
+    else:
+      requests.put ((pid, int (hDuplicate)))
 
-    type = get_type_info (int (hDuplicate))
-    print "Type", type
-    name = get_name_info (int (hDuplicate))
-    if name is not None:
-      yield pid, type, name
-
+  while True:
+    try:
+      yield results.get (True, 0.1)
+    except Queue.Empty:
+      break
+    
 def filepath_from_devicepath (devicepath):
+  if devicepath is None: return None
   devicepath = devicepath.lower ()
   for device, drive in DEVICE_DRIVES.items ():
     if devicepath.startswith (device):
@@ -217,7 +238,6 @@ if __name__ == '__main__':
   
   try:
     for pid, type, devicepath in main ():
-      if type == "File":
-        print pid, type, filepath_from_devicepath (devicepath)
+      print pid, type, filepath_from_devicepath (devicepath)
   except x_file_handles, (context, errno):
     print "Error in", context, "with errno", errno
