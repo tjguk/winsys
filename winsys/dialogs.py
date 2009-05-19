@@ -335,7 +335,7 @@ class BaseDialog (object):
       dlg.append (["BUTTON", caption, id, (self.W - ((i + 1) * (self.GUTTER_W + self.BUTTON_W)), button_t, self.BUTTON_W, field_h), cs])
     control_t += field_h + self.GUTTER_H
 
-    dlg.insert (0, [self.title, (0, 0, self.W, control_t), style, None, (9, "Lucida Sans Regular"), None, dlg_class_name])
+    dlg.insert (0, [self.title, (0, 0, self.W, control_t), style, None, (9, "Lucida Sans Unicode"), None, dlg_class_name])
     return dlg
 
 class Dialog (BaseDialog):

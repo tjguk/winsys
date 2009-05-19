@@ -100,7 +100,7 @@ class FilePath (unicode):
   path = property (_get_path)
   
   def _get_parent (self):
-    if not self.drive:
+    if not self.root:
       raise x_fs (None, "FilePath.parent", "Cannot find parent for relative path")
     if self._parent is None:
       parent_dir = [p for p in self.parts if p][:-1]

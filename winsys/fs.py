@@ -805,7 +805,7 @@ class Dir (Entry):
     return self
 
   def watch (self, *args, **kwargs):
-    watch (self._filepath, *args, **kwargs)
+    return watch (self.filepath, *args, **kwargs)
 
   def zip (self, zip_filename=core.UNSET, mode="w", compression=zipfile.ZIP_DEFLATED):
     """Zip the directory up into a zip file. By default, the file will have the
