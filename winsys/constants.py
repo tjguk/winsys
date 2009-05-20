@@ -21,7 +21,7 @@ import win32event
 import ntsecuritycon
 import fnmatch
 
-from winsys import utils
+from winsys import core, utils
 
 def from_pattern (pattern, name):
   ur"""Helper function to find the common pattern among a group
@@ -73,7 +73,7 @@ class Constants (object):
     print ACE_TYPES.name_from_value (ACE_TYPES.ACCESS_ALLOWED)
   """
   
-  def __init__ (self, dict_initialiser):
+  def __init__ (self, dict_initialiser={}):
     u"""Build an internal structure from a dictionary-like
     set of initial values.
     """
@@ -107,12 +107,16 @@ class Constants (object):
     self.reset_doc ()
   
   def reset_doc (self):
+    if not self._dict:
+      self.__doc__ = ""
+      return
+      
     namelen = len (max (self._dict, key=len))
     aliaslen = len (max (self._key_dict.values (), key=len))
     try:
       int (self._dict.values ()[0])
     except:
-      valuelen = len (max (self._dict.values (), key=len))
+      valuelen = len (max ((unicode (v) for v in self._dict.values ()), key=len))
       prefix = ""
       row_format = "|%%-%ds|%%-%ds|%%-%ds|" % (namelen, valuelen, aliaslen)
       converter = unicode
@@ -216,7 +220,7 @@ class Constants (object):
     """
     return [name for name in self.names (patterns) if value & self[name]]
     
-  def name_from_value (self, value, patterns=[u"*"]):
+  def name_from_value (self, value, default=core.UNSET, patterns=[u"*"]):
     u"""Find the one name in the set of constants (optionally qualified by pattern)
     which matches value.
     """
@@ -224,7 +228,10 @@ class Constants (object):
       if self[name] == value:
         return name
     else:
-      raise KeyError, u"No constant matching name %s and value %d" % (patterns, value)
+      if default is core.UNSET:
+        raise KeyError, u"No constant matching name %s and value %s" % (patterns, value)
+      else:
+        return default
       
   def values_from_value (self, value, patterns=["*"]):
     """Return the list of values which make up the combined value
