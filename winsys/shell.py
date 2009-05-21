@@ -1,42 +1,25 @@
 # -*- coding: iso-8859-1 -*-
-u"""winshell - convenience functions to access Windows shell functionality
-
-Certain aspects of the Windows user interface are grouped by
- Microsoft as Shell functions. These include the Desktop, shortcut
- icons, special folders (such as My Documents) and a few other things.
-
-These are mostly available via the shell module of the win32all
- extensions, but whenever I need to use them, I've forgotten the
- various constants and so on.
-
-Several of the shell items have two variants: personal and common,
- or User and All Users. These refer to systems with profiles in use:
- anything from NT upwards, and 9x with Profiles turned on. Where
- relevant, the Personal/User version refers to that owned by the
- logged-on user and visible only to that user; the Common/All Users
- version refers to that maintained by an Administrator and visible
- to all users of the system.
-
-(c) Tim Golden <winshell@timgolden.me.uk> 25th November 2003
-Licensed under the (GPL-compatible) MIT License:
-http://www.opensource.org/licenses/mit-license.php
-
-9th Nov 2005  0.2  . License changed to MIT
-                   . Added functionality using SHFileOperation
-25th Nov 2003 0.1  . Initial release by Tim Golden
-"""
-
-__VERSION__ = u"0.2"
-
 import os, sys
 from win32com import storagecon
 from win32com.shell import shell, shellcon
+from win32com import storagecon
 import win32api
 import pythoncom
 
 from winsys import core, constants, exc
 
-class x_shell (core.x_winsys):
+STGM = constants.Constants.from_pattern ("STGM_*", namespace=storagecon)
+STGFMT = constants.Constants.from_pattern ("STGFMT_*", namespace=storagecon)
+FMTID = constants.Constants.from_pattern ("FMTID_*", namespace=pythoncom)
+PIDSI = constants.Constants.from_pattern ("PIDSI_*", namespace=storagecon)
+PIDDSI = constants.Constants.from_pattern ("PIDDSI_*", namespace=storagecon)
+
+PROPERTIES = {
+  FMTID.SummaryInformation : PIDSI,
+  FMTID.DocSummaryInformation : PIDDSI,
+}
+
+class x_shell (exc.x_winsys):
   pass
 
 WINERROR_MAP = {
@@ -259,7 +242,7 @@ def delete_file (
     hWnd
   )
   
-class Shortcut (core.x_winsys):
+class Shortcut (core._WinSysObject):
   
   def __init__ (self, filepath=None):
     self._shell_link = wrapped (
@@ -321,116 +304,46 @@ def CreateShortcut (Path, Target, Arguments = "", StartIn = "", Icon = ("",0), D
   persist = sh.QueryInterface (pythoncom.IID_IPersistFile)
   persist.Save (Path, 1)
 
-#
-# Constants for structured storage
-#
-# These come from ObjIdl.h
-FMTID_USER_DEFINED_PROPERTIES = u"{F29F85E0-4FF9-1068-AB91-08002B27B3D9}"
-FMTID_CUSTOM_DEFINED_PROPERTIES = u"{D5CDD505-2E9C-101B-9397-08002B2CF9AE}"
-
-PIDSI_TITLE               = 0x00000002
-PIDSI_SUBJECT             = 0x00000003
-PIDSI_AUTHOR              = 0x00000004
-PIDSI_CREATE_DTM          = 0x0000000c
-PIDSI_KEYWORDS            = 0x00000005
-PIDSI_COMMENTS            = 0x00000006
-PIDSI_TEMPLATE            = 0x00000007
-PIDSI_LASTAUTHOR          = 0x00000008
-PIDSI_REVNUMBER           = 0x00000009
-PIDSI_EDITTIME            = 0x0000000a
-PIDSI_LASTPRINTED         = 0x0000000b
-PIDSI_LASTSAVE_DTM        = 0x0000000d
-PIDSI_PAGECOUNT           = 0x0000000e
-PIDSI_WORDCOUNT           = 0x0000000f
-PIDSI_CHARCOUNT           = 0x00000010
-PIDSI_THUMBNAIL           = 0x00000011
-PIDSI_APPNAME             = 0x00000012
-PROPERTIES = (
-  PIDSI_TITLE,
-  PIDSI_SUBJECT,
-  PIDSI_AUTHOR,
-  PIDSI_CREATE_DTM,
-  PIDSI_KEYWORDS,
-  PIDSI_COMMENTS,
-  PIDSI_TEMPLATE,
-  PIDSI_LASTAUTHOR,
-  PIDSI_EDITTIME,
-  PIDSI_LASTPRINTED,
-  PIDSI_LASTSAVE_DTM,
-  PIDSI_PAGECOUNT,
-  PIDSI_WORDCOUNT,
-  PIDSI_CHARCOUNT,
-  PIDSI_APPNAME
-)
-
-#
-# This was taken from someone else's example,
-#  but I can't find where. If you know, please
-#  tell me so I can give due credit.
-#
-def structured_storage (filename):
-  u"""Pick out info from MS documents with embedded
-   structured storage (typically MS Word docs etc.)
-
-  Returns a dictionary of information found
-  """
-
-  if not pythoncom.StgIsStorageFile (filename):
-    return {}
-
-  flags = storagecon.STGM_READ | storagecon.STGM_SHARE_EXCLUSIVE
-  storage = pythoncom.StgOpenStorage (filename, None, flags)
+def property_dict (property_set_storage, fmtid):
+  properties = {}
   try:
-    properties_storage = storage.QueryInterface (pythoncom.IID_IPropertySetStorage)
-  except pythoncom.com_error:
-    return {}
+    property_storage = property_set_storage.Open (fmtid, STGM.READ | STGM.SHARE_EXCLUSIVE)
+  except pythoncom.com_error, error:
+    if error.strerror == 'STG_E_FILENOTFOUND':
+      return {}
+    else:
+      raise
+      
+  for name, property_id, vartype in property_storage:
+    if name is None:
+      name = PROPERTIES.get (fmtid, constants.Constants ()).name_from_value (property_id, unicode (hex (property_id)))
+    #~ if name is None:
+      #~ name = hex (property_id)
+    try:
+      for value in property_storage.ReadMultiple ([property_id]):
+        properties[name] = value
+    #
+    # There are certain values we can't read; they
+    # raise type errors from within the pythoncom
+    # implementation, thumbnail
+    #
+    except TypeError:
+      properties[name] = None
+  return properties
 
-  property_sheet = properties_storage.Open (FMTID_USER_DEFINED_PROPERTIES)
-  try:
-    data = property_sheet.ReadMultiple (PROPERTIES)
-  finally:
-    property_sheet = None
-
-  title, subject, author, created_on, keywords, comments, template_used, \
-   updated_by, edited_on, printed_on, saved_on, \
-   n_pages, n_words, n_characters, \
-   application = data
-
-  result = {}
-  if title: result[u'title'] = title
-  if subject: result[u'subject'] = subject
-  if author: result[u'author'] = author
-  if created_on: result[u'created_on'] = created_on
-  if keywords: result[u'keywords'] = keywords
-  if comments: result[u'comments'] = comments
-  if template_used: result[u'template_used'] = template_used
-  if updated_by: result[u'updated_by'] = updated_by
-  if edited_on: result[u'edited_on'] = edited_on
-  if printed_on: result[u'printed_on'] = printed_on
-  if saved_on: result[u'saved_on'] = saved_on
-  if n_pages: result[u'n_pages'] = n_pages
-  if n_words: result[u'n_words'] = n_words
-  if n_characters: result[u'n_characters'] = n_characters
-  if application: result[u'application'] = application
-  return result
-
-if __name__ == '__main__':
-  try:
-    print 'Desktop =>', desktop ()
-    print 'Common Desktop =>', desktop (1)
-    print 'Application Data =>', application_data ()
-    print 'Common Application Data =>', application_data (1)
-    print 'Bookmarks =>', bookmarks ()
-    print 'Common Bookmarks =>', bookmarks (1)
-    print 'Start Menu =>', start_menu ()
-    print 'Common Start Menu =>', start_menu (1)
-    print 'Programs =>', programs ()
-    print 'Common Programs =>', programs (1)
-    print 'Startup =>', startup ()
-    print 'Common Startup =>', startup (1)
-    print 'My Documents =>', my_documents ()
-    print 'Recent =>', recent ()
-    print 'SendTo =>', sendto ()
-  finally:
-    raw_input ("Press enter...")
-
+def property_sets (filepath):
+  property_set_storage = wrapped (
+    pythoncom.StgOpenStorageEx,
+    filepath, 
+    STGM.READ | STGM.SHARE_EXCLUSIVE, 
+    STGFMT.ANY, 
+    0, 
+    pythoncom.IID_IPropertySetStorage
+  )
+  for fmtid, clsid, flags, ctime, mtime, atime in property_set_storage:
+    yield FMTID.name_from_value (fmtid, unicode (fmtid)), property_dict (property_set_storage, fmtid)
+    if fmtid == FMTID.DocSummaryInformation:
+      fmtid = pythoncom.FMTID_UserDefinedProperties
+      user_defined_properties = property_dict (property_set_storage, fmtid)
+      if user_defined_properties:
+        yield FMTID.name_from_value (fmtid, unicode (fmtid)), user_defined_properties
