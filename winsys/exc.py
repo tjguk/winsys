@@ -13,6 +13,9 @@ class x_winsys (pywintypes.error):
     # passed to the exception: this makes for more sane error-trapping
     # at the cost of a certain flexibility.
     #
+    assert isinstance (errno, int) or errno is None
+    assert isinstance (errctx, basestring) or errctx is None
+    assert isinstance (errmsg, basestring) or errmsg is None
     pywintypes.error.__init__ (self, errno, errctx, errmsg)
     
 class x_access_denied (x_winsys):

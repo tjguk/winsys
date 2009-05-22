@@ -1,22 +1,35 @@
 # -*- coding: iso-8859-1 -*-
 import os, sys
+import binascii
+
 from win32com import storagecon
 from win32com.shell import shell, shellcon
 from win32com import storagecon
 import win32api
 import pythoncom
+import pywintypes
 
 from winsys import core, constants, exc
 
+CSIDL = constants.Constants.from_pattern ("CSIDL_*", namespace=shellcon)
 STGM = constants.Constants.from_pattern ("STGM_*", namespace=storagecon)
 STGFMT = constants.Constants.from_pattern ("STGFMT_*", namespace=storagecon)
 FMTID = constants.Constants.from_pattern ("FMTID_*", namespace=pythoncom)
+FMTID.update (constants.Constants.from_pattern ("FMTID_*", namespace=shell))
 PIDSI = constants.Constants.from_pattern ("PIDSI_*", namespace=storagecon)
 PIDDSI = constants.Constants.from_pattern ("PIDDSI_*", namespace=storagecon)
+PIDMSI = constants.Constants.from_pattern ("PIDMSI_*", namespace=shellcon)
+PIDASI = constants.Constants.from_pattern ("PIDASI_*", namespace=shellcon)
+PID_VOLUME = constants.Constants.from_pattern ("PID_VOLUME_*", namespace=shellcon)
+SHCONTF = constants.Constants.from_pattern ("SHCONTF_*", namespace=shellcon)
 
 PROPERTIES = {
   FMTID.SummaryInformation : PIDSI,
   FMTID.DocSummaryInformation : PIDDSI,
+  #~ FMTID.MediaFileSummaryInfo : PIDMSI,
+  FMTID.AudioSummaryInformation : PIDASI,
+  FMTID.Volume : PID_VOLUME,
+    
 }
 
 class x_shell (exc.x_winsys):
@@ -316,9 +329,8 @@ def property_dict (property_set_storage, fmtid):
       
   for name, property_id, vartype in property_storage:
     if name is None:
-      name = PROPERTIES.get (fmtid, constants.Constants ()).name_from_value (property_id, unicode (hex (property_id)))
-    #~ if name is None:
-      #~ name = hex (property_id)
+      property_names = PROPERTIES.get (fmtid, constants.Constants ())
+      name = property_names.name_from_value (property_id, unicode (hex (property_id)))
     try:
       for value in property_storage.ReadMultiple ([property_id]):
         properties[name] = value
@@ -332,14 +344,8 @@ def property_dict (property_set_storage, fmtid):
   return properties
 
 def property_sets (filepath):
-  property_set_storage = wrapped (
-    pythoncom.StgOpenStorageEx,
-    filepath, 
-    STGM.READ | STGM.SHARE_EXCLUSIVE, 
-    STGFMT.ANY, 
-    0, 
-    pythoncom.IID_IPropertySetStorage
-  )
+  pidl, flags = shell.SHILCreateFromPath (os.path.abspath (filepath), 0)
+  property_set_storage = shell.SHGetDesktopFolder ().BindToStorage (pidl, None, pythoncom.IID_IPropertySetStorage)
   for fmtid, clsid, flags, ctime, mtime, atime in property_set_storage:
     yield FMTID.name_from_value (fmtid, unicode (fmtid)), property_dict (property_set_storage, fmtid)
     if fmtid == FMTID.DocSummaryInformation:
@@ -347,3 +353,108 @@ def property_sets (filepath):
       user_defined_properties = property_dict (property_set_storage, fmtid)
       if user_defined_properties:
         yield FMTID.name_from_value (fmtid, unicode (fmtid)), user_defined_properties
+
+def convert (fmtid=pythoncom.FMTID_SummaryInformation):
+  """http://msdn.microsoft.com/en-us/library/aa380052(VS.85).aspx"""
+  fmtid = binascii.unhexlify ("".join ("6444048F-4C8B-11D1-8B70-080036B11A03".split ("-")))
+  chars = u"ABCDEFGHIJKLMNOPQRSTUVWXYZ012345"
+  l = []
+  for v in buffer (fmtid):
+    l.extend (1 if ((1 << j) & ord (v)) else 0 for j in range (8))
+  l.extend ([0, 0])
+  print [hex (ord (i)) for i in buffer (fmtid)]
+  print l
+
+  for i in range (len (l) / 5):
+    sublist = l[5*i:5*(i+1)]
+    number = sum (i * (1 << n) for (n, i) in enumerate (reversed (sublist)))
+    print sublist, number, chars[number]
+
+desktop = shell.SHGetDesktopFolder ()
+PyIShellFolder = type (desktop)
+PyIID = type (pywintypes.IID ("{00000000-0000-0000-0000-000000000000}"))
+
+class ShellEntry (core._WinSysObject):
+  
+  def __init__ (self, rpidl, parent=core.UNSET):
+    self.parent = desktop if parent is core.UNSET else parent
+    self.rpidl = rpidl
+    
+  def as_string (self):
+    return self.parent.GetDisplayNameOf (self.rpidl)
+  
+class ShellItem (ShellEntry):
+  pass
+
+class ShellFolder (ShellEntry):
+  
+  def __getattr__ (self, attr):
+    return getattr (self.shell_folder, attr)
+  
+  def walk (self, depthfirst=False, ignore_access_errors=False):
+    top = self
+    dirs, nondirs = [], []
+    for f in self.entries (ignore_access_errors=ignore_access_errors):
+      if isinstance (f, Dir):
+        dirs.append (f)
+      else:
+        nondirs.append (f)
+
+    if not depthfirst: yield top, dirs, nondirs
+    for d in dirs:
+      for x in d.walk (depthfirst=depthfirst, ignore_access_errors=ignore_access_errors):
+        yield x
+    if depthfirst: yield top, dirs, nondirs
+
+  
+  def walk (self, depthfirst=False):
+    top = self.shell_folder
+    folders = [shell_folder (f, self.shell_folder) for f in self.shell_folder.EnumObjects (None, SHCONTF.FOLDERS)]
+    non_folders = [self.shell_folder.EnumObjects (None, SHCONTF.NONFOLDERS)]
+    if not depthfirst: 
+        yield top, 
+    
+    for pidl in self.shell_folder:
+      yield self.shell_folder.GetDisplayNameOf (pidl, 0)
+      try:
+        for i in shell_folder (self.shell_folder.BindToObject (pidl, None, shell.IID_IShellFolder)).walk ():
+          yield i
+      except shell.error:
+        pass
+
+def shell_entry (shell_entry=core.UNSET):
+  if shell_entry is None:
+    return None
+  elif shell_entry is core.UNSET:
+    return ShellFolder ([], desktop)
+  elif isinstance (ShellEntry, shell_entry):
+    return shell_entry
+  elif isinstance (shell_entry, basestring):
+    pidl, flags = shell.SHILCreateFromPath (os.path.abspath (shell_folder), SHCONTF.FOLDERS)
+    if pidl is None:
+      return ShellFolder (
+        shell.SHGetFolderLocation (None, CSIDL.constant (shell_entry), None, 0),
+        desktop
+      )
+      pidl = 
+    return ShellFolder (desktop.BindToObject (pidl, None, shell.IID_IShellFolder))
+    
+
+def shell_folder (shell_folder=core.UNSET, parent=core.UNSET):
+  if shell_folder is None:
+    return None
+  elif shell_folder is core.UNSET:
+    return ShellFolder ([], desktop)
+  elif isinstance (shell_folder, PyIShellFolder):
+    return ShellFolder (shell_folder)
+  elif isinstance (shell_folder, basestring):
+    pidl, flags = shell.SHILCreateFromPath (os.path.abspath (shell_folder), 0)
+    if pidl is None:
+      pidl = shell.SHGetFolderLocation (None, CSIDL.constant (shell_folder), None, 0)
+    return ShellFolder (desktop.BindToObject (pidl, None, shell.IID_IShellFolder))
+  elif isinstance (shell_folder, list):
+    if parent is core.UNSET:
+      raise x_shell (errctx="shell_folder", errmsg="Cannot bind to PIDL without parent")
+    return ShellFolder (parent.BindToObject (shell_folder, None, shell.IID_IShellFolder))
+  else:
+    raise x_shell (errctx="shell_folder")
