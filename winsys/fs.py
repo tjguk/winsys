@@ -26,20 +26,442 @@ import win32api
 import win32con
 import win32event
 import win32file
+import winioctlcon
 
 if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
   winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
 from winsys import constants, core, exc, security, utils, _kernel32
-from winsys._fs.core import (
-  sep, seps, 
-  x_fs, x_no_such_file, x_too_many_files, x_invalid_name, x_no_certificate, x_not_ready, wrapped,
-  FILE_ACCESS, FILE_SHARE, FILE_NOTIFY_CHANGE, FILE_ACTION, FILE_ATTRIBUTE,
-  PROGRESS, MOVEFILE, FILE_FLAG, FILE_CREATION,
-  VOLUME_FLAG, DRIVE_TYPE, COMPRESSION_FORMAT, FSCTL
-)
-from winsys._fs.utils import get_parts, normalised, handle, Handle
-from winsys._fs.filepath import FilePath
+
+sep = unicode (os.sep)
+seps = u"/\\"
+
+class x_fs (exc.x_winsys):
+  u"Base for all fs-related exceptions"
+
+class x_no_such_file (x_fs):
+  u"Raised when a file could not be found"
+
+class x_too_many_files (x_fs):
+  u"Raised when more than one file matches a name"
+  
+class x_invalid_name (x_fs):
+  u"Raised when a filename contains invalid characters"
+  
+class x_no_certificate (x_fs):
+  u"Raised when encryption is attempted without a certificate"
+  
+class x_not_ready (x_fs):
+  u"Raised when a device is not ready"
+  
+WINERROR_MAP = {
+  winerror.ERROR_ACCESS_DENIED : exc.x_access_denied,
+  winerror.ERROR_PATH_NOT_FOUND : x_no_such_file,
+  winerror.ERROR_FILE_NOT_FOUND : x_no_such_file,
+  winerror.ERROR_BAD_NETPATH : x_no_such_file,
+  winerror.ERROR_INVALID_NAME : x_invalid_name,
+  winerror.ERROR_BAD_RECOVERY_POLICY : x_no_certificate,
+  winerror.ERROR_NOT_READY : x_not_ready,
+  winerror.ERROR_INVALID_HANDLE : exc.x_invalid_handle
+}
+wrapped = exc.wrapper (WINERROR_MAP, x_fs)
+
+FILE_ACCESS = constants.Constants.from_pattern ("FILE_*", namespace=ntsecuritycon)
+FILE_ACCESS.update (constants.STANDARD_ACCESS)
+FILE_ACCESS.update (constants.GENERIC_ACCESS)
+FILE_ACCESS.update (constants.ACCESS)
+FILE_ACCESS.doc ("File-specific access rights")
+FILE_SHARE = constants.Constants.from_pattern (u"FILE_SHARE_*", namespace=win32file)
+FILE_SHARE.doc ("Ways of sharing a file for reading, writing, &c.")
+FILE_NOTIFY_CHANGE = constants.Constants.from_pattern (u"FILE_NOTIFY_CHANGE_*", namespace=win32con)
+FILE_NOTIFY_CHANGE.doc ("Notification types to watch for when a file changes")
+FILE_ACTION = constants.Constants.from_dict (dict (
+  ADDED = 1,
+  REMOVED = 2,
+  MODIFIED = 3,
+  RENAMED_OLD_NAME = 4,
+  RENAMED_NEW_NAME = 5
+))
+FILE_ACTION.doc ("Results of a file change")
+FILE_ATTRIBUTE = constants.Constants.from_pattern (u"FILE_ATTRIBUTE_*", namespace=win32file)
+FILE_ATTRIBUTE.update (dict (
+  ENCRYPTED=0x00004000, 
+  REPARSE_POINT=0x00000400,
+  SPARSE_FILE=0x00000200,
+  VIRTUAL=0x00010000,
+  NOT_CONTENT_INDEXES=0x00002000,
+))
+FILE_ATTRIBUTE.doc ("Attributes applying to any file")
+PROGRESS = constants.Constants.from_pattern (u"PROGRESS_*", namespace=win32file)
+PROGRESS.doc ("States within a file move/copy progress")
+MOVEFILE = constants.Constants.from_pattern (u"MOVEFILE_*", namespace=win32file)
+MOVEFILE.doc ("Options when moving a file")
+FILE_FLAG = constants.Constants.from_pattern (u"FILE_FLAG_*", namespace=win32con)
+FILE_FLAG.doc ("File flags")
+FILE_CREATION = constants.Constants.from_list ([
+  u"CREATE_ALWAYS", 
+  u"CREATE_NEW", 
+  u"OPEN_ALWAYS", 
+  u"OPEN_EXISTING", 
+  u"TRUNCATE_EXISTING"
+], namespace=win32con)
+FILE_CREATION.doc ("Options when creating a file")
+VOLUME_FLAG = constants.Constants.from_dict (dict (
+  FILE_CASE_SENSITIVE_SEARCH      = 0x00000001,
+  FILE_CASE_PRESERVED_NAMES       = 0x00000002,
+  FILE_UNICODE_ON_DISK            = 0x00000004,
+  FILE_PERSISTENT_ACLS            = 0x00000008,
+  FILE_FILE_COMPRESSION           = 0x00000010,
+  FILE_VOLUME_QUOTAS              = 0x00000020,
+  FILE_SUPPORTS_SPARSE_FILES      = 0x00000040,
+  FILE_SUPPORTS_REPARSE_POINTS    = 0x00000080,
+  FILE_SUPPORTS_REMOTE_STORAGE    = 0x00000100,
+  FILE_VOLUME_IS_COMPRESSED       = 0x00008000,
+  FILE_SUPPORTS_OBJECT_IDS        = 0x00010000,
+  FILE_SUPPORTS_ENCRYPTION        = 0x00020000,
+  FILE_NAMED_STREAMS              = 0x00040000,
+  FILE_READ_ONLY_VOLUME           = 0x00080000,
+  FILE_SEQUENTIAL_WRITE_ONCE      = 0x00100000,
+  FILE_SUPPORTS_TRANSACTIONS      = 0x00200000  
+), pattern=u"FILE_*")
+VOLUME_FLAG.doc ("Characteristics of a volume")
+DRIVE_TYPE = constants.Constants.from_pattern (u"DRIVE_*", namespace=win32file)
+DRIVE_TYPE.doc ("Types of drive")
+COMPRESSION_FORMAT = constants.Constants.from_dict (dict (
+  NONE = 0x0000,   
+  DEFAULT = 0x0001,   
+  LZNT1 = 0x0002
+))
+COMPRESSION_FORMAT.doc ("Ways in which a file can be compressed")
+FSCTL = constants.Constants.from_pattern (u"FSCTL_*", namespace=winioctlcon)
+FSCTL.doc ("Types of fsctl operation")
+
+PyHANDLE = pywintypes.HANDLEType
+
+LEGAL_FILECHAR = r"[^\?\*\\\:\/]"
+LEGAL_FILECHARS = LEGAL_FILECHAR + "+"
+LEGAL_VOLCHAR = r"[^\?\*\\\/]"
+LEGAL_VOLCHARS = LEGAL_VOLCHAR + "+"
+UNC = sep * 4 + LEGAL_FILECHARS + sep * 2 + LEGAL_FILECHARS
+HEXDIGIT = "[0-9a-f]"
+DRIVE = r"[A-Za-z]:"
+VOLUME_PREAMBLE = sep * 4 + r"\?" + sep * 2 
+VOLUME = VOLUME_PREAMBLE + "Volume\{%s{8}-%s{4}-%s{4}-%s{4}-%s{12}\}" % (HEXDIGIT, HEXDIGIT, HEXDIGIT, HEXDIGIT, HEXDIGIT)
+DRIVE_VOLUME = VOLUME_PREAMBLE + DRIVE
+PREFIX = r"((?:%s|%s|%s|%s)\\?)" % (UNC, DRIVE, VOLUME, DRIVE_VOLUME)
+PATHSEG = "(" + LEGAL_FILECHARS + ")" + sep * 2 + "?"
+PATHSEGS = "(?:%s)*" % PATHSEG
+FILEPATH = PREFIX + PATHSEGS
+
+def get_parts (filepath):
+  ur"""Helper function to regularise a file path and then
+  to pick out its drive and path components.
+  
+  Attempt to match the first part of the string against
+  known path leaders::
+  
+    <drive>:\
+    \\?\<drive>:\
+    \\?\Volume{xxxx-...}\
+    \\server\share\
+  
+  If that fails, assume the path is relative. 
+  
+  ============================= ======================================
+  Path                          Parts
+  ============================= ======================================
+  c:/                           ["c:\\", ""]
+  c:/t                          ["c:\\", "t"]
+  c:/t/                         ["c:\\", "t", ""]
+  c:/t/test.txt                 ["c:\\", "t", "test.txt"]
+  c:/t/s/test.txt               ["c:\\", "t", "s", "test.txt"]
+  c:test.txt                    ["c:\\", "", "test.txt"]
+  s/test.txt                    ["", "s", "test.txt"]
+  \\\\server\\share             ["\\\\server\\share\\", ""]
+  \\\\server\\share\\a.txt      ["\\\\server\\share\\", "a.txt"]
+  \\\\server\\share\\t\\a.txt   ["\\\\server\\share\\", "t", "a.txt"]
+  \\\\?\\c:\test.txt            ["\\\\?\\c:\\", "test.txt"]
+  \\\\?\\Volume{xxxx-..}\\t.txt ["\\\\?\Volume{xxxx-..}\\", "t.txt"]
+  ============================= ======================================
+  
+  The upshot is that the first item in the list returned is
+  always the root (including trailing slash except for the special
+  case of the format <drive>:<path> representing the current directory
+  on <drive>) if the path is absolute, an empty string if it is relative. 
+  All other items before the last one represent the directories along
+  the way. The last item is the filename, empty if the whole
+  path represents a directory.
+  
+  The original filepath can usually be reconstructed as::
+  
+    from winsys import fs
+    filepath = "c:/temp/abc.txt"
+    parts = fs.get_parts (filepath)
+    assert parts[0] + "\\".join (parts[1:]) == filepath
+    
+  The exception is when a root (UNC or volume) is given without
+  a trailing slash. This is added in.
+
+  Note that if the path does not end with a slash, the directory
+  name itself is considered the filename. This is by design.
+  """
+  filepath = filepath.replace ("/", sep)
+  prefix_match = re.match (PREFIX, filepath)
+  
+  if prefix_match:
+    prefix = prefix_match.group (1)
+    rest = filepath[len (prefix):]
+    #
+    # Special-case the un-rooted drive letter
+    # so that paths of the form <drive>:<path>
+    # are still valid, indicating <path> in the
+    # current directory on <drive>
+    #
+    if prefix.startswith ("\\") or not prefix.endswith (":"):
+      prefix = prefix.rstrip (sep) + sep
+    return [prefix] + rest.split (sep)
+  else:
+    return [""] + filepath.split (sep)
+
+def normalised (filepath):
+  ur"""Convert any path or path-like object into the
+  length-unlimited unicode equivalent. This should avoid
+  issues with maximum path length and the like.
+  """
+  #
+  # os.path.abspath will return a sep-terminated string
+  # for the root directory and a non-sep-terminated
+  # string for all other paths.
+  #
+  filepath = unicode (filepath)
+  if filepath.startswith (2 * sep):
+    return filepath
+  else:
+    is_dir = filepath[-1] in seps
+    abspath = os.path.abspath (filepath)
+    return (u"\\\\?\\" + abspath) + (sep if is_dir and not abspath.endswith (sep) else "")
+
+def handle (filepath, write=False):
+  ur"""Helper function to return a file handle either for querying
+  (the default case) or for writing -- including writing directories
+  """
+  return wrapped (
+    win32file.CreateFile,
+    normalised (filepath),
+    (FILE_ACCESS.READ | FILE_ACCESS.WRITE) if write else 0,
+    (FILE_SHARE.READ | FILE_SHARE.WRITE) if write else FILE_SHARE.READ,
+    None,
+    FILE_CREATION.OPEN_EXISTING,
+    FILE_ATTRIBUTE.NORMAL | FILE_FLAG.BACKUP_SEMANTICS,
+    None
+  )
+
+@contextlib.contextmanager
+def Handle (handle_or_filepath, write=False):
+  ur"""Return the handle passed or on newly-created for
+  the filepath, making sure to close it afterwards
+  """
+  if isinstance (handle_or_filepath, PyHANDLE):
+    handle_supplied = True
+    hFile = handle_or_filepath
+  else:
+    handle_supplied = False
+    hFile = handle (handle_or_filepath, write)
+    
+  yield hFile
+
+  if not handle_supplied:
+    hFile.close ()
+
+def relative_to (filepath1, filepath2):
+  ur"""Return filepath2 relative to filepath1. Both names
+  are normalised first::
+  
+    ================ ================ ================
+    filepath1        filepath2        result
+    ---------------- ---------------- ----------------
+    c:/a/b.txt       c:/a             b.txt
+    ---------------- ---------------- ----------------
+    c:/a/b/c.txt     c:/a             b/c.txt
+    ---------------- ---------------- ----------------
+    c:/a/b/c.txt     c:/a/b           c.txt
+    ================ ================ ================
+  
+  :param filepath1: a file or directory
+  :param filepath2: a directory
+  :returns: filepath2 relative to filepath1
+  """
+  #
+  # filepath2 must always be a directory; filepath1 may
+  # be a file or a directory.
+  #
+  return utils.relative_to (normalised (filepath1), normalised (filepath2.rstrip (seps) + sep))
+
+class FilePath (unicode):
+  ur"""A unicode subclass which knows about path structures on Windows.
+  The path itself need not exist on any filesystem, but it has to match
+  the rules which would make it possible.
+  
+  FilePaths can be absolute or relative. The only difference is that
+  the root attribute is empty for relative paths. They can be added
+  to each other or to other unicode strings which will use os.path.join
+  semantics.
+  
+  parts - a list of the components (cf :func:`fs.get_parts`)
+  root - the drive or UNC server/share ending in a backslash unless a drive-relative path
+  filename - final component (may be blank if the path looks like a directory)
+  name - same as filename unless blank in which case second-last component
+  dirname - all path components before the last
+  path - combination of root and dirname
+  parent - combination of root and all path components before second penultimate
+  base - base part of filename (ie the piece before the dot)
+  ext - ext part of filename (ie the dot and the piece after)
+
+  =================== ========== ========= ========= ========= =========== ========== ===== ====
+  Path                root       filename  name      dirname   path        parent     base  ext
+  =================== ========== ========= ========= ========= =========== ========== ===== ====
+  \\\\a\\b\\c\\d.txt  \\\\a\\b\\ d.txt     d.txt     \\c       \\\\a\\b\\c \\\\a\\b   d     .txt  
+  c:\\boot.ini        c:\\       boot.ini  boot.ini  \\        c:\\        c:\\       boot  .ini
+  boot.ini                       boot.ini  boot.ini                        x_fs       boot  .ini
+  c:\\t               c:\\       t         t         \\        c:\\        c:\\       t         
+  c:\\t\\             c:\\                 t         \\        c:\\        c:\\       t
+  c:\\t\\a.txt        c:\\       a.txt     a.txt     \\t       c:\\t       c:\\t      a     .txt
+  c:a.txt             c:         a.txt     a.txt               c:          x_fs       a     .txt
+  =================== ========== ========= ========= ========= =========== ========== ===== ====
+  """
+  def __new__ (meta, filepath, *args, **kwargs):
+    return unicode.__new__ (meta, filepath.lower (), *args, **kwargs)
+
+  def __init__ (self, filepath, *args, **kwargs):
+    self._parts = None
+    self._root = None
+    self._filename = None
+    self._name = None
+    self._dirname= None
+    self._path = None
+    self._parent = None
+    self._base = None
+    self._ext = None
+      
+  def dump (self, level=0):
+    print self.dumped (level=level)
+  
+  def dumped (self, level=0):
+    output = []
+    output.append (self)
+    output.append (u"parts: %s" % self.parts)
+    output.append (u"root: %s" % self.root)
+    output.append (u"dirname: %s" % self.dirname)
+    output.append (u"name: %s" % self.name)
+    output.append (u"path: %s" % self.path)
+    output.append (u"filename: %s" % self.filename)
+    output.append (u"base: %s" % self.base)
+    output.append (u"ext: %s" % self.ext)
+    if self.root and self.parent:
+      output.append (u"parent: %s" % self.parent)
+    return utils.dumped (u"\n".join (output), level)
+
+  def _get_parts (self):
+    if self._parts is None:
+      self._parts = get_parts (self)
+    return self._parts
+  parts = property (_get_parts)
+  
+  def _get_root (self):
+    if self._root is None:
+      self._root = self.__class__ (self.parts[0])
+    return self._root
+  root = property (_get_root)
+  
+  def _get_filename (self):
+    if self._filename is None:
+      self._filename = self.parts[-1]
+    return self._filename
+  filename = property (_get_filename)
+  
+  def _get_dirname (self):
+    if self._dirname is None:
+      self._dirname = sep.join (self.parts[1:-1])
+    return self._dirname
+  dirname = property (_get_dirname)
+  
+  def _get_path (self):
+    if self._path is None:
+      self._path = self.__class__ (self.root + self.dirname)
+    return self._path
+  path = property (_get_path)
+  
+  def _get_parent (self):
+    if not self.root:
+      raise x_fs (None, "FilePath.parent", "Cannot find parent for relative path")
+    if self._parent is None:
+      parent_dir = [p for p in self.parts if p][:-1]
+      if parent_dir:
+        self._parent = self.__class__ (parent_dir[0] + sep.join (parent_dir[1:]))
+      else:
+        self._parent = None
+    return self._parent
+  parent = property (_get_parent)
+  
+  def _get_name (self):
+    if self._name is None:
+      self._name = self.parts[-1] or self.parts[-2]
+    return self._name
+  name = property (_get_name)
+  
+  def _get_base (self):
+    if self._base is None:
+      self._base = os.path.splitext (self.filename)[0]
+    return self._base
+  base = property (_get_base)
+  
+  def _get_ext (self):
+    if self._ext is None:
+      self._ext = os.path.splitext (self.filename)[1]
+    return self._ext
+  ext = property (_get_ext)
+  
+  def __repr__ (self):
+    return u'<%s %s>' % (self.__class__.__name__, self)
+  
+  def __add__ (self, other):
+    return self.__class__ (os.path.join (unicode (self), unicode (other)))
+  
+  def __radd__ (self, other):
+    return self.__class__ (os.path.join (unicode (other), unicode (self)))
+  
+  def relative_to (self, other):
+    """Return this filepath as relative to another. cf :func:`utils.relative_to`
+    """
+    return relative_to (self, unicode (other))
+    
+  def absolute (self):
+    """Return an absolute version of the current FilePath, whether
+    relative or not.
+    """
+    return self.__class__ (os.path.abspath (self))
+
+  def changed (self, root=None, path=None, filename=None, base=None, ext=None):
+    """Return a new :class:`FilePath` with one or more parts changed. This is particularly
+    convenient for, say, changing the extension of a file or producing a version on
+    another path.
+    """
+    if root and path:
+      raise x_fs (None, "FilePath.changed", "You cannot change root *and* path")
+    elif filename and (base or ext):
+      raise x_fs (None, "FilePath.changed", "You cannot change filename *and* base or ext")
+      
+    if ext: ext = "." + ext.lstrip (".")
+    parts = self.parts
+    _filename = parts[-1]
+    _base, _ext = os.path.splitext (_filename)
+    if not (base or ext):
+      base, ext = os.path.splitext (filename or _filename)
+    return self.__class__.from_parts (root or parts[0], path or sep.join (parts[1:-1]), base or _base, ext or _ext)
+
+  @classmethod
+  def from_parts (cls, root, path, base, ext):
+    return cls (root + sep.join (os.path.normpath (path).split (os.sep) + [base+ext]))
 
 class _Attributes (core._WinSysObject):
   u"""Simple class wrapper for the list of file attributes
@@ -848,13 +1270,13 @@ def entry (filepath, ignore_access_errors=False):
   elif isinstance (filepath, Entry):
     return filepath
   else:
-    try:
-      for f in files (filepath, ignore_access_errors=ignore_access_errors):
-        return f
-      else:
-        return _guess (filepath)
-    except x_no_such_file:
+    attributes = wrapped (win32file.GetFileAttributesW, filepath)
+    if attributes == -1:
       return _guess (filepath)
+    elif attributes & FILE_ATTRIBUTE.DIRECTORY:
+      return Dir (filepath)
+    else:
+      return File (filepath)
       
 def file (filepath, ignore_access_errors=False):
   f = entry (filepath, ignore_access_errors=ignore_access_errors)
