@@ -445,7 +445,8 @@ class Registry (core._WinSysObject):
       if u"%" in value and value.count (u"%") % 2 == 0:
         return REGISTRY_VALUE_TYPE.REG_EXPAND_SZ
       return REGISTRY_VALUE_TYPE.REG_SZ
-    
+
+    type = REGISTRY_VALUE_TYPE.constant (type)
     if type is None:
       try:
         _, type = wrapped (win32api.RegQueryValueEx, self.pyobject (), label)

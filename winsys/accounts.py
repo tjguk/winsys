@@ -213,6 +213,8 @@ class Principal (core._WinSysObject):
     """
     if logon_type is core.UNSET:
       logon_type = LOGON.LOGON_NETWORK
+    else:
+      logon_type = LOGON.constant (logon_type)
     if password is core.UNSET:
       flags = 0
       flags |= CREDUI_FLAGS.GENERIC_CREDENTIALS

@@ -59,7 +59,8 @@ class Constants (object):
   
   The constants can be accessed as attributes or as items. In addition,
   passing a name or a value to the :meth:`constant` method will return
-  the value.
+  the value. This is done automatically by most functions which expect
+  a parameter based on one of these constants sets.
   
   To retrieve the name or names corresponding to a value, use the
   :meth:`name_from_value` or :meth:`names_from_value` function::

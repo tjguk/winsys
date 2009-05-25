@@ -40,7 +40,7 @@ WINERROR_MAP = {
 wrapped = exc.wrapper (WINERROR_MAP, x_ipc)
 
 class Mailslot (core._WinSysObject):
-  """A mailslot is a mechanism for passing small datasets (up to about
+  ur"""A mailslot is a mechanism for passing small datasets (up to about
   400 bytes) between machines in the same network. For transport and
   name resolution it uses NetBIOS so you can't, for example, use a
   machine's IP address when specifying the location of a mailslot.
@@ -89,16 +89,14 @@ class Mailslot (core._WinSysObject):
     """Set up a mailslot of the given name, which must be valid according to
     the Microsoft docs.
     
-    serialiser : a pair of functions which will be used to 
-    encode & decode data respectively. Typical serialisers
-    are (str, str) and (marshal.dumps, marshal.loads).
-    
-    message_size : the maximum size of a message to this mailslot,
-    up to the system-defined maximum of about 400 bytes if passing
-    between computers. 
-    
-    timeout_ms : how many milliseconds to wait when reading from 
-    this mailslot
+    :param serialiser: a pair of functions which will be used to 
+                       encode & decode data respectively. Typical serialisers
+                       are (str, str) and (marshal.dumps, marshal.loads).
+    :param message_size: the maximum size of a message to this mailslot,
+                         up to the system-defined maximum of about 400 bytes 
+                         if passing between computers.     
+    :param timeout_ms: how many milliseconds to wait when reading from 
+                       this mailslot
     """
     core._WinSysObject.__init__ (self, *args, **kwargs)
     self.name = name

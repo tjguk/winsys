@@ -99,6 +99,57 @@ WINERROR_MAP = {
 wrapped = exc.wrapper (WINERROR_MAP, x_security)
 
 class Security (core._WinSysObject):
+  ur"""The heart of the :mod:`security` module, this class represents the security
+  descriptor of a file, kernel object or any other securable object. It's most
+  commonly instantiated from an object's security method (eg `fs.File.security`)
+  or by means of the :func:`security` function which can take the name or handle
+  of an object and return a corresponding :class:`Security` object.
+  
+  Key attributes are:
+  
+  * owner - a :class:`Principal` object representing the object owner
+  * group - a :class:`Principal` object representing the object group
+  * dacl - a :class:`security.DACL` object representing the DACL
+  * sacl - an :class:`security.SACL` object representing the SACL
+  
+  of which group and sacl are less likely to be used (group hardly at all).
+  These attributes are carefully-handled properties of the :class:`Security`
+  object and are intended to make it very easy to manipulate the ACLs and
+  ACEs of the Windows security model. The owner and group accept assignments
+  of anything accepted by :func:`principal` while the ACL attributes accept
+  anything accepted by :func:`acl`, in particular a list of :class:`ACE`
+  entries, themselves anything accepted by :func:`ace`. So a very simple
+  way to add the local administrator to the DACL with full control is::
+  
+    from winsys import security
+    with security.security ("c:/temp/blah.txt") as s:
+      s.dacl.append (("Administrator", "F", "ALLOW"))
+      
+  or to give only the logged-on user rights to a particular file
+  while explicitly denying the local administrator::
+  
+    from winsys import security
+    with security.security ("c:/temp/secret.txt") as s:
+      s.dacl = [
+        (security.me (), "F", "ALLOW"),
+        ("Administrator", "F", "DENY")
+      ]
+      s.break_inheritance (copy_first=False)
+  
+  By default, only Owner and Group
+  information is populated (although this can easily by changed by passing
+  other options when creating the object). And only those objects which are
+  populated, or explicitly requested will be updated when the security information
+  is written back to the underlying object or handle.
+  
+  A :class:`Security` object is its own context handler and this is the most
+  straightforward way to update security information, although the :meth:`Security.to_object`
+  method will let you write the security information back to any arbitrary object,
+  including the one it came from.
+  
+  For the purposes of serialisation, the standard SDDL format is used for
+  strings and can be round-tripped between :meth:`as_string` and :meth:`from_string`.
+  """
 
   OPTIONS = {
     u"O" : SECURITY_INFORMATION.OWNER,
@@ -183,16 +234,36 @@ class Security (core._WinSysObject):
     return utils.indented (u"\n".join (output), level)
 
   def break_inheritance (self, copy_first=True, break_dacl=True, break_sacl=True):
+    ur"""Cause this security object to start a new thread of inheritance. By
+    default, assume that DACL & SACL inheritance are both to be broken and
+    that existing permissions are to be retained, although uninherited.
+    
+    :param copy_first: whether to retain existing permissions [True]
+    :param break_dacl: whether to break DACL inheritance [True]
+    :param break_sacl: whether to break SACL inheritance [True]
+    :returns: `self`
+    """
     if break_dacl and self._dacl:
       self.dacl.break_inheritance (copy_first)
     if break_sacl and self._sacl:
       self.sacl.break_inheritance (copy_first)
+    return self
 
   def restore_inheritance (self, copy_back=True, restore_dacl=True, restore_sacl=True):
+    ur"""Cause this security object to regain its inhertance from its parents.
+    By default, assume that DACL & SACL inheritance are both to be recovered and
+    that existing permissions are to be copied back in.
+    
+    :param copy_back: whether to copy back inherited permissions [True]
+    :param restore_dacl: whether to restore DACL inheritance [True]
+    :param restore_sacl: whether to restore SACL inheritance [True]
+    :returns: `self`
+    """
     if restore_dacl and self._dacl:
       self.dacl.restore_inheritance (copy_back)
     if restore_sacl and self._sacl:
       self.sacl.restore_inheritance (copy_back)
+    return self
   
   def _get_owner (self):
     if self._owner is core.UNSET:
@@ -277,7 +348,7 @@ class Security (core._WinSysObject):
     
     :param obj: (optional) object or object name to write security to if this :class:`Security` object
                 wasn't created from an object in the first place.
-    :param object_type:  an :const:`SE_OBJECT_TYPE` [:const:`FILE_OBJECT`]
+    :param object_type:  an :const:`SE_OBJECT_TYPE` [:const:`file_object`]
     :param options: anything accepted by :meth:`_options`
     """
     obj = obj or self._originating_object
@@ -475,7 +546,7 @@ def security (obj=core.UNSET, obj_type=core.UNSET, options=core.UNSET):
   
   :param obj: any of :const:`None`, a :class:`Security` object, a pywin32 :const:`PyHANDLE`,
               a pywin32 :const:`PySECURITY_DESCRIPTOR`, or a string
-  :param obj_type: an :const:`SE_OBJECT_TYPE` [SE_OBJECT_TYPE.FILE_OBJECT]
+  :param obj_type: an :const:`SE_OBJECT_TYPE` [:const:`file_object`]
   :param options: anything acccepted by :meth:`_options` [:const:`DEFAULT_OPTIONS`]
   :returns: a :class:`Security` object
   """

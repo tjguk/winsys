@@ -360,7 +360,7 @@ def event_logs (computer="."):
     yield EventLog (computer, key.name)
 
 def event_log (log):
-  r"""Convenience function to return an :class:`EventLog` object representing
+  ur"""Convenience function to return an :class:`EventLog` object representing
   one of the existing event logs. Will raise :exc:`x_not_found` if the event
   log does not exist.
   

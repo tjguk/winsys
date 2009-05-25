@@ -7,6 +7,7 @@ loading them all into memory.
 """
 from __future__ import with_statement
 import os, sys
+import codecs
 import collections
 import contextlib
 import datetime
@@ -873,6 +874,7 @@ class Entry (core._WinSysObject):
     it can be checked with if fs.entry ("..."):
     """
     return (wrapped (win32file.GetFileAttributesW, normalised (self._filepath)) != -1)
+  __bool__ = __nonzero__
   
   def like (self, pattern):
     ur"""Return true if this filename's name (not the path) matches
@@ -1051,7 +1053,13 @@ class File (Entry):
   ##   Their ids (inodes) are equal
   ##   Their contents are equal
   ##
-  
+  def open (self, *args, **kwargs):
+    ur"""Use the `codecs.open` function to open this file as a Python file
+    object. Positional and keyword arguments are passed straight through to
+    the codecs function.
+    """
+    return codecs.open (self.filepath, *args, **kwargs)
+
   def delete (self):
     ur"""Delete this file"""
     wrapped (win32file.DeleteFileW, self._filepath)
@@ -1167,6 +1175,15 @@ class Dir (Entry):
     Entry.__init__ (self, filepath.rstrip (seps) + sep, *args, **kwargs)
   
   def compress (self, apply_to_contents=True, callback=None):
+    ur"""Flag this directory so that any new files are automatically
+    compressed. If apply_to_contents is True, iterate over all subdirectories
+    and their files, compressing likewise.
+    
+    :param apply_to_contents: whether to compress all existing subdirectories
+                              and their files
+    :param callback: called for each subdirectory / file compressed
+    :returns: this directory
+    """
     Entry.compress (self)
     if apply_to_contents:
       for dirpath, dirs, files in self.walk ():
@@ -1180,6 +1197,15 @@ class Dir (Entry):
     return self
   
   def uncompress (self, apply_to_contents=True, callback=None):
+    ur"""Flag this directory so that any new files are automatically
+    not compressed. If apply_to_contents is True, iterate over all 
+    subdirectories and their files, uncompressing likewise.
+    
+    :param apply_to_contents: whether to uncompress all existing subdirectories
+                              and their files
+    :param callback: called for each subdirectory / file uncompressed
+    :returns: this directory
+    """
     Entry.uncompress (self)
     if apply_to_contents:
       for dirpath, dirs, files in self.walk ():
@@ -1222,41 +1248,74 @@ class Dir (Entry):
     wrapped (win32security.EncryptionDisable, self._filepath, False)
     return self
 
-  def create (self, security=None):
+  def create (self, security_descriptor=None):
+    ur"""Create this directory, optionally specifying a security descriptor.
+    If the directory already exists, do nothing.
+    All intervening directories are automatically created if they do not
+    already exist. If any exists but is a file rather than a directory,
+    an exception is raised.
+    
+    :param security_descriptor: anything accepted by :func:`security.security`
+    :returns: a :class:`Dir` representing the newly-created directory
+    """
+    security_descriptor = security.security (security_descriptor)
     parts = self.filepath.parts
     root, pieces = parts[0], parts[1:]
     
     for i, piece in enumerate (pieces):
-      path = root + sep.join (pieces[:i+1])
+      path = normalised (root + sep.join (pieces[:i+1]))
       f = entry (path)
       if f:
         if not f.directory:
-          raise x_fs (None, "Dir.create", u"%s exists and is not a directory" % f)
+          raise x_fs (errctx="Dir.create", errmsg=u"%s exists and is not a directory" % f)
       else:
         wrapped (
           win32file.CreateDirectory, 
-          normalised (path), 
-          security.pyobject () if security else None
+          path, 
+          security_descriptor.pyobject () if security_descriptor else None
         )
     
-    return Dir (normalised (path))
+    return Dir (path)
     
   def entries (self, pattern=u"*", *args, **kwargs):
+    ur"""Iterate over all entries -- files & directories -- in this directory.
+    Implemented via :func:`files`
+    """
     return files (os.path.join (self._filepath, pattern), *args, **kwargs)
     
   def file (self, name):
+    ur"""Return a :class:`File` object representing a file called name inside
+    this directory.
+    """
     return file (os.path.join (self._filepath, name))
     
   def dir (self, name):
+    ur"""Return a :class:`Dir` object representing a Directory called name inside
+    this directory.
+    """
     return dir (os.path.join (self._filepath, name))
   
   def files (self, pattern=u"*", *args, **kwargs):
+    ur"""Iterate over all files in this directory which match pattern, yielding 
+    a :class:`File` object for each one. Implemented via :meth:`Dir.entries`.
+    """
     return (f for f in self.entries (pattern, *args, **kwargs) if isinstance (f, File))
     
   def dirs (self, pattern=u"*", *args, **kwargs):
+    ur"""Iterate over all directories in this directory which match pattern, yielding 
+    a :class:`Dir` object for each one. Implemented via :meth:`Dir.entries`.
+    """
     return (f for f in self.entries (pattern, *args, **kwargs) if isinstance (f, Dir))
 
   def walk (self, depthfirst=False, ignore_access_errors=False):
+    ur"""Mimic os.walk, iterating over each directory and the files within
+    in. Each iteration yields:
+    
+      :class:`Dir`, (generator for :class:`Dir` objects), (generator for :class:`File` objects)
+      
+    :param depthfirst: Whether to use breadth-first (the default) or depth-first traversal
+    :param ignore_access_errors: Whether to continue traversing in the face of access-denied errors
+    """
     top = self
     dirs, nondirs = [], []
     for f in self.entries (ignore_access_errors=ignore_access_errors):
@@ -1272,6 +1331,15 @@ class Dir (Entry):
     if depthfirst: yield top, dirs, nondirs
 
   def flat (self, pattern="*", includedirs=False, depthfirst=False, ignore_access_errors=False):
+    ur"""Iterate over this directory and all its subdirectories, yielding one
+    :class:`File` object on each iteration, and optionally :class:`Dir` objects
+    as well.
+    
+    :param pattern: limit the files returned by filename
+    :includedirs: whether to yield directories as well as files [False]
+    :depthfirst: as for :meth:`Dir.walk`
+    :ignore_access_errors: as for :meth:`Dir.walk`
+    """
     walker = self.walk (
       depthfirst=depthfirst, 
       ignore_access_errors=ignore_access_errors
@@ -1279,33 +1347,51 @@ class Dir (Entry):
     for dirpath, dirs, files in walker:
       if includedirs:
         for dir in dirs:
-          if fnmatch.fnmatch (dir.name, pattern):
+          if dir.like (pattern):
             yield dir
       for file in files:
-        if fnmatch.fnmatch (file.name, pattern):
+        if file.like (pattern):
           yield file
 
   def mounted_by (self):
+    ur"""Return the volume mounted on this directory, or None.
+    
+    :returns: a :class:`Volume` object or :const:`None`
+    """
     for dir, vol in mounts ():
       if dir == self:
         return vol
   
   def mount (self, vol):
+    ur"""Mount a volume on this directory. The directory must be empty or
+    an exception is raised. eg::
+    
+      from winsys import fs
+      fs.dir ("c:/temp").mkdir ("c_drive").mount ("c:")
+      
+    :param vol: anything accepted by :func:`volume`
+    """
     for f in self.flat (includedirs=True):
-      raise x_fs (None, "Dir.mount", u"You can't mount to a non-empty directory")
+      raise x_fs (errctx="Dir.mount", errmsg=u"You can't mount to a non-empty directory")
     else:
       wrapped (win32file.SetVolumeMountPoint, self.filepath, volume (vol).name)    
       return self
       
   def dismount (self):
+    ur"""Dismount whatever volume is mounted at this directory
+    """
     wrapped (win32file.DeleteVolumeMountPoint, self.filepath)
     return self
   
   def copy (self, target_filepath, callback=None, callback_data=None):
-    """
-    Copies associated file to directory specified by 'target_filepath' 
-    and returns Dir object. Pass the relative or full directory 
-    of target location.    
+    ur"""Copy this directory to another, which must be a directory if it
+    exists. If it does exist, this directory will be copied inside it; if
+    it does not exist, this directory will be copied over it.
+    
+    :param target_filepath: anything accepted by :func:`entry`
+    :param callback: cf :meth:`File.copy`
+    :param callback_data: cf :meth:`File.copy`
+    :returns: a :class:`Dir` object representing target_filepath
     """
     target = entry (target_filepath.rstrip (sep) + sep)
     if target and not target.directory:
@@ -1320,10 +1406,14 @@ class Dir (Entry):
       for f in files:
         target_file = File (target.filepath + f.relative_to (self.filepath))
         f.copy (target_file, callback, callback_data)
+        
+    return target
   
   def delete (self, recursive=False):
-    """
-    deletes associated dir
+    ur"""Delete this directory, optionally including its children.
+    
+    :param recursive: whether to remove all subdirectories and files first
+    :returns: this directory
     """
     if recursive:
       for dirpath, dirs, files in self.walk (depthfirst=True, includedirs=True):
@@ -1336,7 +1426,9 @@ class Dir (Entry):
     return self
     
   def watch (self, *args, **kwargs):
-    watch (self._filepath, *args, **kwargs)
+    ur"""Return a directory watcher, as per :func:`watch`
+    """
+    return watch (self._filepath, *args, **kwargs)
     
   def zip (self, zip_filename=core.UNSET, mode="w", compression=zipfile.ZIP_DEFLATED):
     """Zip the directory up into a zip file. By default, the file will have the
@@ -1348,6 +1440,12 @@ class Dir (Entry):
     can be appended to (if it exists) by specifying "a" as the mode param.
     
     The created / appended zip file is returned.
+    
+    :param zip_filename: The name of the zip file to hold the archive of this
+                         directory and its children. [directory.zip]
+    :param mode: cf zipfile.ZipFile
+    :param compressions: cf zipfile.ZipFile
+    :returns: a :class:`File` object representing the resulting zip file
     """
     if zip_filename is core.UNSET:
       zip_filename = os.path.join (self.filepath.parent, self.filepath.name + u".zip")
@@ -1365,11 +1463,20 @@ class Dir (Entry):
   mkdir = create
 
 def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
+  ur"""Iterate over files and directories matching pattern, which can include
+  a path. Calls win32file.FindFilesIterator under the covers, which uses
+  FindFirstFile / FindNextFile.
+  """
   #
-  # special-case "." and ".."
+  # special-case ".": FindFilesIterator treats a directory
+  # name as an invitation to return only that directory. 
+  # It treats . as an invitation to return all the files 
+  # in that directory
   #
-  if pattern in (".", ".."):
-    pattern = os.path.abspath (pattern)
+  if pattern == '.':
+    yield Dir (".")
+    raise StopIteration
+    
   try:
     iterator = wrapped (win32file.FindFilesIterator, pattern)
   except exc.x_access_denied:
@@ -1446,6 +1553,7 @@ def entry (filepath, ignore_access_errors=False):
   elif isinstance (filepath, Entry):
     return filepath
   else:
+    filepath = unicode (filepath)
     attributes = wrapped (win32file.GetFileAttributesW, filepath)
     if attributes == -1:
       return _guess (filepath)
@@ -1522,7 +1630,7 @@ def walk (root, depthfirst=False, ignore_access_errors=False):
 
 def flat (root, pattern="*", includedirs=False, depthfirst=False, ignore_access_errors=False):
   ur"""Iterate over a flattened version of the directory tree starting
-  from root. Implemented via :meth:`Dir.flat` (qv).
+  from root. Implemented via :meth:`Dir.flat`.
   
   :param root: anything accepted by :func:`dir`
   :param pattern: passed to :meth:`Dir.flat`
@@ -1553,29 +1661,22 @@ def progress_wrapper (callback):
   else:
     return None
 
-def move (source_filepath, target_filepath, callback=None, callback_data=None, clobber=False):
-  ur"""Move one :class:`Entry` object to another, implemented via :meth:`Entry.move` (qv)
+def move (source_filepath, *args, **kwargs):
+  ur"""Move one :class:`Entry` object to another, implemented via :meth:`File.move` or :meth:`Dir.move`
   
   :param source_filepath: anything accepted by :func:`entry`
-  :param target_filepath: passed to :meth:`Entry.move`
-  :param callback: passed to :meth:`Entry.move`
-  :param callback_data: passed to :meth:`Entry.move`
-  :param clobber: passed to :meth:`Entry.move`
   """
-  return entry (source_filepath).move (target_filepath, callback, callback_data, clobber)
+  return entry (source_filepath).move (*args, **kwargs)
 
-def copy (source_filepath, target_filepath, callback=None, callback_data=None):
-  ur"""Copy one :class:`Entry` object to another, implemented via :meth:`Entry.copy` (qv)
+def copy (source_filepath, *args, **kwargs):
+  ur"""Copy one :class:`Entry` object to another, implemented via :meth:`File.copy` or :meth:`Dir.copy`
   
   :param source_filepath: anything accepted by :func:`entry`
-  :param target_filepath: passed to :meth:`Entry.copy`
-  :param callback: passed to :meth:`Entry.copy`
-  :param callback_data: passed to :meth:`Entry.copy`
   """
-  return entry (source_filepath).copy (target_filepath, callback, callback_data)
+  return entry (source_filepath).copy (*args, **kwargs)
 
 def delete (filepath):
-  ur"""Deletes a :class:`Entry` object, implemented via :meth:`Entry.delete` (qv)
+  ur"""Deletes a :class:`Entry` object, implemented via :meth:`File.delete` or :meth:`Dir.delete`
   
   :param filepath: anything accepted by :func:`entry`
   """
@@ -1605,47 +1706,22 @@ def exists (filepath):
   :returns: :const:`True` if filepath exists, :const:`False` otherwise
   """
   return bool (entry (filepath))
-
-#
-# Module-level convenience functions mapping
-# to file/directory attributes.
-#
-def is_hidden (filepath):
-  return attributes (filepath).hidden
   
-def is_readonly (filepath):
-  return attributes (filepath).readonly
-  
-def is_system (filepath):
-  return attributes (filepath).system
-  
-def is_archive (filepath):
-  return attributes (filepath).archive
-  
-def is_compressed (filepath):
-  return attributes (filepath).compressed
-  
-def is_encrypted (filepath):
-  return attributes (filepath).encrypted
-  
-def is_directory (filepath):
-  return attributes (filepath).directory
-  
-def mkdir (dirpath, security=None):
-  ur"""Mimic os.mkdir, implemented via :meth:`Dir.create` (qv)
+def mkdir (dirpath, *args, **kwargs):
+  ur"""Mimic os.mkdir, implemented via :meth:`Dir.create`
   """
-  return dir (dirpath).create (security)
+  return dir (dirpath).create (*args, **kwargs)
 
-def touch (filepath, security=None):
+def touch (filepath):
   ur"""Update a file's modification time, creating it if it
-  does not exist, implemented via :meth:`File.create` (qv)
+  does not exist, implemented via :meth:`File.create`
   
   :param filepath: anything accepted by :func:`file`
   """
-  return file (filepath).create (security)
+  return file (filepath).create ()
 
 def mount (filepath, vol):
-  ur"""Mount vol at filepath, implemented via :meth:`Dir.mount` (qv)
+  ur"""Mount vol at filepath, implemented via :meth:`Dir.mount`
   
   :param filepath: anything accepted by :func:`dir`
   :param vol: passed to :meth:`Dir.mount`
@@ -1653,14 +1729,14 @@ def mount (filepath, vol):
   return dir (filepath).mount (vol)
 
 def dismount (filepath):
-  ur"""Dismount the volume at filepath, implemented via :meth:`Dir.dismount` (qv)
+  ur"""Dismount the volume at filepath, implemented via :meth:`Dir.dismount`
   
   :param filepath: anything accepted by :func:`dir`
   """
   return dir (filepath).dismount ()
 
 def zip (filepath, *args, **kwargs):
-  ur"""Create and return a zip archive of filepath, implemented via :meth:`Entry.zip` (qv)
+  ur"""Create and return a zip archive of filepath, implemented via :meth:`File.zip` or :meth:`Dir.zip`
   
   :param filepath: anything accepted by :func:`entry`
   """
@@ -1814,16 +1890,29 @@ class _DirWatcher (object):
   def stop (self):
     self.hDir.close ()
 
-def watch (root, subdirs=False, watch_for=_DirWatcher.WATCH_FOR, buffer_size=_DirWatcher.BUFFER_SIZE):
+def watch (
+  root, 
+  subdirs=False, 
+  watch_for=_DirWatcher.WATCH_FOR, 
+  buffer_size=_DirWatcher.BUFFER_SIZE
+):
   ur"""Return an iterator which returns a file change on every iteration.
   The file change comes in the form: action, old_filename, new_filename.
   action is one of the :const:`FILE_ACTION` constants, while the filenames
   speak for themselves. The filenames will be the same if the file has been
   updated. If the file is new, old_filename will be None; if it has been
   deleted, new_filename will be None; if it has been renamed, they will
-  be different.
+  be different::
+  
+    from winsys import fs
+    watcher = fs.watch ("c:/temp", subdirs=True)
+    for action, old_filename, new_filename in watcher:
+      if action == fs.FILE_ACTION.ADDED:
+        print new_filename, "added"
+      elif action == fs.FILE_ACTION.REMOVED:
+        print old_filename, "removed"
   """
-  return _DirWatcher (root, subdirs, watch_for, buffer_size)
+  return _DirWatcher (unicode (root), subdirs, watch_for, buffer_size)
 
 if __name__ == '__main__':
   print "Watching", os.path.abspath (".")

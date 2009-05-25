@@ -629,7 +629,7 @@ class Dialog (BaseDialog):
       to the progress box -- these might be percentages or files processed
       or whatever.
       
-      If the user cancels an event will be fired which is detected here and
+      If the user cancels, an event will be fired which is detected here and
       the iteration broken. Likewise an exception will be logged to the usual
       places and a suitable message sent.
       """
