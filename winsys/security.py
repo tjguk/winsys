@@ -196,27 +196,27 @@ class Security (core._WinSysObject):
   
   def _get_owner (self):
     if self._owner is core.UNSET:
-      raise x_value_not_set (core.UNSET, "Security._get_owner", u"No Owner has been set for this Security object")
+      raise x_value_not_set (errctx=u"Security._get_owner", errmsg=u"No Owner has been set for this Security object")
     return self._owner
   def _set_owner (self, owner):
     if owner is None:
-      raise x_value_not_set (core.UNSET, "Security._set_owner", u"Cannot set owner to None for this Security object")
+      raise x_value_not_set (errctx=u"Security._set_owner", errmsg=u"Cannot set owner to None for this Security object")
     self._owner = principal (owner) or core.UNSET
   owner = property (_get_owner, _set_owner)
 
   def _get_group (self):
     if self._group is core.UNSET:
-      raise x_value_not_set (core.UNSET, "Security._get_group", u"No Group has been set for this Security object")
+      raise x_value_not_set (errctx=u"Security._get_group", errmsg=u"No Group has been set for this Security object")
     return self._group
   def _set_group (self, group):
     if group is None:
-      raise x_value_not_set (core.UNSET, "Security._set_group", u"Cannot set group to None for this Security object")
+      raise x_value_not_set (errctx="Security._set_group", errmsg=u"Cannot set group to None for this Security object")
     self._group = principal (group) or core.UNSET
   group = property (_get_group, _set_group)
 
   def _get_dacl (self):
     if self._dacl is core.UNSET:
-      raise x_value_not_set (core.UNSET, "Security._get_dacl", u"No DACL has been set for this Security object")
+      raise x_value_not_set (errctx=u"Security._get_dacl", errmsg=u"No DACL has been set for this Security object")
     return self._dacl
   def _set_dacl (self, dacl):
     if dacl is core.UNSET:
@@ -227,7 +227,7 @@ class Security (core._WinSysObject):
 
   def _get_sacl (self):
     if self._sacl is core.UNSET:
-      raise x_value_not_set (core.UNSET, "Security._get_sacl", u"No SACL has been set for this Security object")
+      raise x_value_not_set (errctx=u"Security._get_sacl", errmsg=u"No SACL has been set for this Security object")
     return self._sacl
   def _set_sacl (self, sacl):
     if sacl is core.UNSET:
@@ -238,7 +238,7 @@ class Security (core._WinSysObject):
 
   def __enter__ (self):
     if not self._originating_object:
-      raise x_security (core.UNSET, "Security.__enter__", u"Cannot run anonymous security within a context")
+      raise x_security (errctx=u"Security.__enter__", errmsg=u"Cannot run anonymous security within a context")
     return self
 
   def __exit__ (self, exc_type, exc_value, traceback):
@@ -265,7 +265,7 @@ class Security (core._WinSysObject):
       return reduce (operator.or_, (cls.OPTIONS[opt] for opt in options.upper ()), 0)
       
   def to_object (self, obj=core.UNSET, object_type=core.UNSET, options=core.UNSET):
-    u"""Write the current state of the object as the security settings
+    ur"""Write the current state of the object as the security settings
     on a Windows object, typically a file. This is most often called
     implicitly when the :class:`Security` object is used as a context
     manager, but can be called explicitly, especially to copy one object's
@@ -282,8 +282,11 @@ class Security (core._WinSysObject):
     """
     obj = obj or self._originating_object
     if not obj:
-      raise x_security (core.UNSET, "Security.to_object", u"No object to write security to")
-    object_type = object_type or self._originating_object_type or SE_OBJECT_TYPE.FILE_OBJECT
+      raise x_security (errctx=u"Security.to_object", errmsg=u"No object to write security to")
+    if object_type is core.UNSET:
+      object_type = self._originating_object_type or SE_OBJECT_TYPE.FILE_OBJECT
+    else:
+      object_type = SE_OBJECT_TYPE.constant (object_type)
 
     if options is core.UNSET:
       options = 0
@@ -541,6 +544,7 @@ def change_privileges (enable_privs=[], disable_privs=[], _token=core.UNSET):
   _token.change_privileges (old_enabled_privs, old_disabled_privs)
 
 def runas (user, password, command_line):
+  raise NotImplementedError
   with change_privileges ([PRIVILEGE.ASSIGNPRIMARYTOKEN, PRIVILEGE.INCREASE_QUOTA]):
     with principal (user).impersonate (password, logon_type=LOGON.LOGON_INTERACTIVE) as hToken:
       token (hToken).dump ()

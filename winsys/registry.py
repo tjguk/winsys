@@ -142,7 +142,7 @@ def _parse_moniker (moniker, accept_value=True):
 
   matcher = moniker_parser.match (moniker)
   if not matcher:
-    raise x_moniker_ill_formed (core.UNSET, u"_parse_moniker", u"Ill-formed moniker: %s" % moniker)
+    raise x_moniker_ill_formed (errctx=u"_parse_moniker", errmsg=u"Ill-formed moniker: %s" % moniker)
   
   if accept_value:
     computer, keypath, colon, value = matcher.groups ()
@@ -167,7 +167,7 @@ def _parse_moniker (moniker, accept_value=True):
       root = None
 
   if root is None:
-    raise x_moniker_no_root (core.UNSET, u"_parse_moniker", u"A registry hive must be the first or second segment in moniker")
+    raise x_moniker_no_root (errctx=u"_parse_moniker", errmsg=u"A registry hive must be the first or second segment in moniker")
   
   path = sep.join (keys)
   
@@ -331,7 +331,7 @@ class Registry (core._WinSysObject):
       hKey, moniker, _ = self._from_string (self.moniker, access=self.access, accept_value=False)
       utils._set (self, "hKey", hKey)
       if self.hKey is None:
-        raise exc.x_not_found (core.UNSET, u"Registry.pyobject", u"Registry path %s not found" % moniker)
+        raise exc.x_not_found (errctx=u"Registry.pyobject", errmsg=u"Registry path %s not found" % moniker)
     return self.hKey
   
   def as_string (self):
@@ -499,7 +499,7 @@ def registry (root, access=Registry.DEFAULT_ACCESS, accept_value=True):
   elif isinstance (root, basestring):
     return Registry.from_string (root, access=access, accept_value=accept_value)
   else:
-    raise x_registry (core.UNSET, u"registry", u"root must be None, an existing key or a moniker")
+    raise x_registry (errctx=u"registry", errmsg=u"root must be None, an existing key or a moniker")
 
 def values (root, ignore_access_errors=False, _want_types=False):
   """Yield the values of a registry key as (name, value). This is convenient
@@ -695,7 +695,7 @@ def parent (key):
   if ppath:
     return registry (parent_moniker, key.access, accept_value=False)
   else:
-    raise x_registry (core.UNSET, u"parent", u"%s has no parent" % key.moniker)
+    raise x_registry (errctx=u"parent", errmsg=u"%s has no parent" % key.moniker)
       
 def hklm ():
   return registry ("hklm")

@@ -21,17 +21,59 @@ at the same time a subclass of unicode, so is accepted in system calls where str
 
 Functions
 ----------
+
+Factories
+~~~~~~~~~
 ..  autofunction:: entry
 ..  autofunction:: file
 ..  autofunction:: dir
+..  autofunction:: drive
+..  autofunction:: volume
+
+stdlib Extras
+~~~~~~~~~~~~~
+Several functions are either convenient or superior
+replacements to equivalent stdlib functionality.
+
+..  autofunction:: listdir
+..  autofunction:: glob
+..  autofunction:: mkdir
+..  autofunction:: rmdir
+..  autofunction:: walk
+..  autofunction:: flat
+..  autofunction:: move
+..  autofunction:: copy
+..  autofunction:: delete
+..  autofunction:: exists
+..  autofunction:: zip
+..  autofunction:: touch
+
+Helpers
+~~~~~~~
 ..  autofunction:: get_parts
+..  autofunction:: normalised
+..  autofunction:: handle
+..  autofunction:: relative_to
+..  autofunction:: attributes
+
+Additional Filesystem Operations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+..  autofunction:: mount
+..  autofunction:: dismount
+..  autofunction:: drives
+..  autofunction:: volumes
+..  autofunction:: mounts
+..  autofunction:: watch
 
 Classes
 -------
 
+.. autoclass:: _Attributes
+
 .. toctree::
    :maxdepth: 1
-   
+
+   fs_drive_vol
    fs_filepath
    fs_entry
    fs_file
@@ -39,19 +81,11 @@ Classes
 
 Constants
 ---------
-..  autodata:: FILE_ACCESS
-..  autodata:: FILE_SHARE
-..  autodata:: FILE_NOTIFY_CHANGE
-..  autodata:: FILE_ACTION
-..  autodata:: FILE_ATTRIBUTE
-..  autodata:: PROGRESS
-..  autodata:: MOVEFILE
-..  autodata:: FILE_FLAG
-..  autodata:: FILE_CREATION
-..  autodata:: VOLUME_FLAG
-..  autodata:: DRIVE_TYPE
-..  autodata:: COMPRESSION_FORMAT
-..  autodata:: FSCTL
+
+.. toctree::
+   :maxdepth: 1
+   
+   fs_constants
 
 Exceptions
 ----------

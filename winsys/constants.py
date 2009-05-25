@@ -150,6 +150,7 @@ class Constants (object):
     return attribute in self.keys ()
   
   def constant (self, value):
+    if value is None: return None
     try:
       return int (value)
     except ValueError:

@@ -22,14 +22,14 @@ PIDMSI = constants.Constants.from_pattern ("PIDMSI_*", namespace=shellcon)
 PIDASI = constants.Constants.from_pattern ("PIDASI_*", namespace=shellcon)
 PID_VOLUME = constants.Constants.from_pattern ("PID_VOLUME_*", namespace=shellcon)
 SHCONTF = constants.Constants.from_pattern ("SHCONTF_*", namespace=shellcon)
+SHGDN = constants.Constants.from_pattern ("SHGDN_*", namespace=shellcon)
 
 PROPERTIES = {
   FMTID.SummaryInformation : PIDSI,
   FMTID.DocSummaryInformation : PIDDSI,
-  #~ FMTID.MediaFileSummaryInfo : PIDMSI,
+  FMTID.MediaFileSummaryInformation : PIDMSI,
   FMTID.AudioSummaryInformation : PIDASI,
-  FMTID.Volume : PID_VOLUME,
-    
+  FMTID.Volume : PID_VOLUME,    
 }
 
 class x_shell (exc.x_winsys):
@@ -55,6 +55,9 @@ def common_desktop ():
 # Only here because already used in code
 #
   return desktop (common=1)
+
+def special_folder (folder_id):
+  return shell.SHGetSpecialFolderPath (None, CSIDL.constant (folder_id), 0)
 
 def application_data (common=0):
   u"What folder holds application configuration files?"
@@ -356,11 +359,11 @@ def property_sets (filepath):
 
 def convert (fmtid=pythoncom.FMTID_SummaryInformation):
   """http://msdn.microsoft.com/en-us/library/aa380052(VS.85).aspx"""
-  fmtid = binascii.unhexlify ("".join ("6444048F-4C8B-11D1-8B70-080036B11A03".split ("-")))
+  fmtid = binascii.unhexlify ("".join ("6D748DE2-8D38-4CC3-AC60-F009B057C557".split ("-")))
   chars = u"ABCDEFGHIJKLMNOPQRSTUVWXYZ012345"
   l = []
-  for v in buffer (fmtid):
-    l.extend (1 if ((1 << j) & ord (v)) else 0 for j in range (8))
+  for v in reversed (buffer (fmtid)):
+    l.extend (1 if ((1 << j) & ord (v)) else 0 for j in reversed (range (8)))
   l.extend ([0, 0])
   print [hex (ord (i)) for i in buffer (fmtid)]
   print l
@@ -436,7 +439,7 @@ def shell_entry (shell_entry=core.UNSET):
         shell.SHGetFolderLocation (None, CSIDL.constant (shell_entry), None, 0),
         desktop
       )
-      pidl = 
+      pidl = None
     return ShellFolder (desktop.BindToObject (pidl, None, shell.IID_IShellFolder))
     
 

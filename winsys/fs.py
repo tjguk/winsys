@@ -242,8 +242,12 @@ def normalised (filepath):
     return (u"\\\\?\\" + abspath) + (sep if is_dir and not abspath.endswith (sep) else "")
 
 def handle (filepath, write=False):
-  ur"""Helper function to return a file handle either for querying
+  ur"""Return a file handle either for querying
   (the default case) or for writing -- including writing directories
+  
+  :param filepath: anything whose unicode representation is a valid file path
+  :param write: is the handle to be used for writing [True]
+  :return: an open file handle for reading or writing, including directories
   """
   return wrapped (
     win32file.CreateFile,
@@ -259,7 +263,10 @@ def handle (filepath, write=False):
 @contextlib.contextmanager
 def Handle (handle_or_filepath, write=False):
   ur"""Return the handle passed or on newly-created for
-  the filepath, making sure to close it afterwards
+  the filepath, making sure to close it afterwards.
+  
+  :param handle_or_filepath: an existing handle or something accepted by :func:`handle`
+  :param write: passed through to :func:`handle`
   """
   if isinstance (handle_or_filepath, PyHANDLE):
     handle_supplied = True
@@ -275,17 +282,17 @@ def Handle (handle_or_filepath, write=False):
 
 def relative_to (filepath1, filepath2):
   ur"""Return filepath2 relative to filepath1. Both names
-  are normalised first::
+  are normalised first.
   
-    ================ ================ ================
-    filepath1        filepath2        result
-    ---------------- ---------------- ----------------
-    c:/a/b.txt       c:/a             b.txt
-    ---------------- ---------------- ----------------
-    c:/a/b/c.txt     c:/a             b/c.txt
-    ---------------- ---------------- ----------------
-    c:/a/b/c.txt     c:/a/b           c.txt
-    ================ ================ ================
+  ================ ================ ================
+  filepath1        filepath2        result
+  ================ ================ ================
+  c:/a/b.txt       c:/a             b.txt
+  ---------------- ---------------- ----------------
+  c:/a/b/c.txt     c:/a             b/c.txt
+  ---------------- ---------------- ----------------
+  c:/a/b/c.txt     c:/a/b           c.txt
+  ================ ================ ================
   
   :param filepath1: a file or directory
   :param filepath2: a directory
@@ -307,15 +314,17 @@ class FilePath (unicode):
   to each other or to other unicode strings which will use os.path.join
   semantics.
   
-  parts - a list of the components (cf :func:`fs.get_parts`)
-  root - the drive or UNC server/share ending in a backslash unless a drive-relative path
-  filename - final component (may be blank if the path looks like a directory)
-  name - same as filename unless blank in which case second-last component
-  dirname - all path components before the last
-  path - combination of root and dirname
-  parent - combination of root and all path components before second penultimate
-  base - base part of filename (ie the piece before the dot)
-  ext - ext part of filename (ie the dot and the piece after)
+  A FilePath offers quick access to the different parts of the path:
+  
+  * parts - a list of the components (cf :func:`fs.get_parts`)
+  * root - the drive or UNC server/share ending in a backslash unless a drive-relative path
+  * filename - final component (may be blank if the path looks like a directory)
+  * name - same as filename unless blank in which case second-last component
+  * dirname - all path components before the last
+  * path - combination of root and dirname
+  * parent - combination of root and all path components before second penultimate
+  * base - base part of filename (ie the piece before the dot)
+  * ext - ext part of filename (ie the dot and the piece after)
 
   =================== ========== ========= ========= ========= =========== ========== ===== ====
   Path                root       filename  name      dirname   path        parent     base  ext
@@ -437,14 +446,20 @@ class FilePath (unicode):
     
   def absolute (self):
     """Return an absolute version of the current FilePath, whether
-    relative or not.
+    relative or not. Use :func:`os.path.abspath` semantics.
     """
     return self.__class__ (os.path.abspath (self))
 
   def changed (self, root=None, path=None, filename=None, base=None, ext=None):
     """Return a new :class:`FilePath` with one or more parts changed. This is particularly
     convenient for, say, changing the extension of a file or producing a version on
-    another path.
+    another path, eg::
+    
+      from winsys import fs, shell
+      
+      BACKUP_DRIVE = "D:\\"
+      for f in fs.flat (shell.special_folder ("personal"), "*.doc"):
+        f.copy (f.filepath.changed (root=BACKUP_DRIVE))
     """
     if root and path:
       raise x_fs (None, "FilePath.changed", "You cannot change root *and* path")
@@ -461,21 +476,31 @@ class FilePath (unicode):
 
   @classmethod
   def from_parts (cls, root, path, base, ext):
+    ur"""Recreate a filepath from its constituent parts. No real validation is done;
+    it is assumed that the parameters are valid parts of a filepath.
+    """
     return cls (root + sep.join (os.path.normpath (path).split (os.sep) + [base+ext]))
+
+filepath = FilePath
 
 class _Attributes (core._WinSysObject):
   u"""Simple class wrapper for the list of file attributes
-  (readonly, hidden, &c.). 
-  """
+  (readonly, hidden, &c.) It can be accessed by attribute
+  access, item access and the "in" operator::
   
+    from winsys import fs
+    attributes = fs.file (fs.__file__).parent ().attributes
+    assert (attributes.directory)
+    assert (attributes[fs.FILE_ATTRIBUTE.DIRECTORY])
+    assert ("directory" in attributes)
+  """  
   def __init__ (self, flags=0):
     self.flags = flags
       
-  def __getattr__ (self, attr):
-    return bool (self.flags & FILE_ATTRIBUTE[attr.upper ()])
-    
-  def __contains__ (self, attr):
-    return getattr (self, attr)
+  def __getitem__ (self, item):
+    return bool (self.flags & FILE_ATTRIBUTE.constant (item))
+  __getattr__ = __getitem__
+  __contains__ = __getitem__
   
   def as_string (self):
     return "%08x" % self.flags
@@ -487,15 +512,22 @@ class _Attributes (core._WinSysObject):
     )
 
 class Drive (core._WinSysObject):
+  ur"""Wraps a drive litter, offering access to its :meth:`volume` 
+  and the ability to :meth:`mount` or :meth:`dismount` it on a particular 
+  volume.
+  """
   
   def __init__ (self, drive):
-    self.name = drive.rstrip (sep).rstrip (":") + ":" + sep
+    self.name = drive.rstrip (seps).rstrip (":") + ":" + sep
     self.type = wrapped (win32file.GetDriveTypeW, self.name)
     
   def as_string (self):
     return "Drive %s" % self.name
     
   def root (self):
+    ur"""Return a :class:`fs.Dir` object corresponding to the
+    root directory of this drive.
+    """
     return Dir (self.name)
   
   def _get_volume (self):
@@ -506,10 +538,16 @@ class Drive (core._WinSysObject):
   volume = property (_get_volume)
   
   def mount (self, vol):
+    ur"""Mount the specified volume in this drive.
+    
+    :param vol: anything accepted by :func:`volume`
+    :returns: self
+    """
     self.root ().mount (vol)
     return self
     
   def dismount (self):
+    ur"""Dismount this drive from its volume"""
     self.root ().dismount ()
     return self
   
@@ -524,6 +562,19 @@ class Drive (core._WinSysObject):
     return utils.dumped ("\n".join (output), level)
 
 class Volume (core._WinSysObject):
+  ur"""Wraps a filesystem volume, giving access to useful
+  information such as the filesystem and a list of drives
+  mounted on it. Also offers the ability to mount or dismount.
+  
+  Attributes:
+  
+  * label
+  * serial_number
+  * maximum_component_length
+  * flags - combination of :const:`VOLUME_FLAG`
+  * file_system_name
+  * mounts
+  """
   
   def __init__ (self, volume):
     self.name = volume
@@ -579,12 +630,46 @@ class Volume (core._WinSysObject):
     return utils.dumped (u"\n".join (output), level)
     
   def mount (self, filepath):
-    mount (filepath, self)
+    ur"""Mount this volume on a particular filepath
+    
+    :param filepath: anything accepted by :func:`dir`
+    """
+    return mount (filepath, self)
     
   def dismount (self, filepath):
-    Dir (filepath).dismount ()
+    ur"""Dismount this volume from a particular filepath
+    
+    :param filepath: anything accepted by :func:`dir`
+    """
+    dir (filepath).dismount ()
         
 class Entry (core._WinSysObject):
+  ur"""Heart of the fs module. This class is the parent of the
+  :class:`Dir` and :class:`File` classes and contains all the
+  functionality common to both. It is rarely instantiated itself,
+  altho' it's possible to do so.
+  
+  Attributes:
+  
+  * readable
+  * filepath
+  * created_at
+  * accessed_at
+  * written_at
+  * uncompressed_size
+  * size
+  * attributes
+  * id
+  * n_links
+  * attributes - an :class:`Attributes` object representing combinations of :const:`FILE_ATTRIBUTE`
+  
+  Common functionality:
+  
+  * *No* caching is done: all attributes etc. are checked on the filesystem every time
+  * Entries compare (eq, lt, etc.) according to their full filepath
+  * Entries are True according to their existence on a filesystem
+  * The str representation is the filepath utf8-encoded; unicode is the filepath itself
+  """
   
   def __init__ (self, filepath):
     if isinstance (filepath, FilePath):
@@ -791,24 +876,38 @@ class Entry (core._WinSysObject):
   
   def like (self, pattern):
     ur"""Return true if this filename's name (not the path) matches
-    `pattern` according to `fnmatch`.
+    `pattern` according to `fnmatch`, eg::
+    
+      from winsys import fs
+      for f in fs.files ():
+        if f.directory and f.like ("test_*"):
+          print f
     """
     return fnmatch.fnmatch (self.name, pattern)
   
   def relative_to (self, other):
     ur"""Return the part of this entry's filepath which extends beyond
     other's. eg if this is 'c:/temp/abc.txt' and other is 'c:/temp/'
-    then return 'abc.txt'
+    then return 'abc.txt'. cf :meth:`FilePath.relative_to`
     """
     return self.filepath.relative_to (other)
   
   def parent (self):
+    ur"""Return the :class:`Dir` object which represents the directory
+    this entry is in.
+    
+    :returns: :class:`Dir`
+    :raises: :exc:`x_no_such_file` if no parent exists (eg because this is a drive root)
+    """
     if self.filepath.parent:
       return Dir (self.filepath.parent)
     else:
       raise x_no_such_file (None, u"Entry.parent", u"%s has no parent" % self)
     
   def ancestors (self):
+    ur"""Iterate over this entry's ancestors, yielding the :class:`Dir` object
+    corresponding to each one.
+    """
     try:
       parent = self.parent ()
     except x_no_such_file:
@@ -819,29 +918,59 @@ class Entry (core._WinSysObject):
         yield ancestor
 
   def security (self, options=security.Security.DEFAULT_OPTIONS):
+    ur"""Return a :class:`security.Security` object corresponding to this
+    entry's security attributes. Note that the returning object is a context
+    manager so a common pattern is::
+
+      #
+      # Find all private key files and ensure that only
+      # the owner has any access.
+      #
+      from winsys import fs
+      for f in fs.flat ("*.ppk"):
+        with f.security () as s:
+          s.break_inheritance ()
+          s.dacl = [(s.owner, "F", "ALLOW")]
+    
+    :param options: cf :func:`security.security`
+    """
     return security.security (self._filepath, options=options)
     
   def compress (self):
+    ur"""Compress this entry; if it is a file, it will be compressed, if it
+    is a directory it will be marked so that any new files added to it will
+    be compressed automatically.
+    """
     with Handle (self._filepath, True) as hFile:
       compression_type = struct.pack ("H", COMPRESSION_FORMAT.DEFAULT)
       wrapped (win32file.DeviceIoControl, hFile, FSCTL.SET_COMPRESSION, compression_type, None, None)
       return self
   
   def uncompress (self):
+    ur"""Uncompress this entry; if it is a file, it will be uncompressed, if it
+    is a directory it will be marked so that any new files added to it will
+    not be compressed automatically.
+    """
     with Handle (self._filepath, True) as hFile:
       compression_type = struct.pack ("H", COMPRESSION_FORMAT.NONE)
       wrapped (win32file.DeviceIoControl, hFile, FSCTL.SET_COMPRESSION, compression_type, None, None)
       return self
       
   def encrypt (self):
+    ur"""FIXME: Need to work out how to create certificates for this
+    """
     wrapped (win32file.EncryptFile, self._filepath)
     return self
 
   def decrypt (self):
+    ur"""FIXME: Need to work out how to create certificates for this
+    """
     wrapped (win32file.DecryptFile (self._filepath))
     return self
   
   def query_encryption_users (self):
+    ur"""FIXME: Need to work out how to create certificates for this
+    """
     return [
       (principal (sid), hashblob, info) 
         for (sid, hashblob, info) 
@@ -849,8 +978,13 @@ class Entry (core._WinSysObject):
     ]
   
   def move (self, other, callback=None, callback_data=None, clobber=False):
-    ur"""
-    moves associated file ' to 'target_filepath' and returns file object to file location
+    ur"""Move this entry to the file/directory represented by other.
+    If other is a directory, self is copied into it (not over it)
+    
+    :param other: anything accepted by :func:`entry`
+    :param callback: a function which will receive a total size & total transferred
+    :param callback_data: passed as extra data to callback
+    :param clobber: whether to overwrite the other file if it exists
     """
     other_file = entry (other)
     if other_file and other_file.directory:
@@ -872,8 +1006,10 @@ class Entry (core._WinSysObject):
     
   def take_control (self, principal=core.UNSET):
     """Give the logged-on user full control to a file. This may
-    need to be preceded by a call to take_ownership so that the
+    need to be preceded by a call to :func:`take_ownership` so that the
     user gains WRITE_DAC permissions.
+    
+    :param principal: anything accepted by :func:`principal` [logged-on user]
     """
     if principal is core.UNSET:
       principal = security.me ()
@@ -894,6 +1030,8 @@ class Entry (core._WinSysObject):
     Even the logged-in user may need to have enabled SE_TAKE_OWNERSHIP
     if that user has not been granted the appropriate security by
     the ACL.
+    
+    :param principal: anything accepted by :func:`principal` [logged-on user]
     """
     if principal is core.UNSET:
       principal = security.me ()
@@ -915,17 +1053,19 @@ class File (Entry):
   ##
   
   def delete (self):
-    """
-    deletes current file
-    """
+    ur"""Delete this file"""
     wrapped (win32file.DeleteFileW, self._filepath)
     return self
 
   def copy (self, other, callback=None, callback_data=None):
-    """
-    Copies associated file to directory specified by 'other' 
-    and returns file object.Pass the relative or full directory 
-    of target location.    
+    ur"""Copy this file to another file or directory. If other is
+    a directory, this file is copied into it, otherwise this file
+    is copied over it.    
+    
+    :param other: anything accepted by :func:`entry`
+    :param callback: function receiving total size, total so far, callback_data
+    :param callback_data: passed to callback
+    :returns: :class:`File` object representing other
     """
     other_file = entry (other)
     if other_file and other_file.directory:
@@ -942,27 +1082,50 @@ class File (Entry):
     return file (target_filepath)
     
   def equal_contents (self, other):
+    ur"""Is this file equal in contents to another? Uses the stdlib
+    filecmp function which bales out as soon as it can.
+    
+    :param other: anything accepted by :func:`entry`
+    :returns: True if the contents match, False otherwise
+    """
+    other = entry (other)
     return self == other or filecmp.cmp (self._filepath, other.filepath)
     
   def hard_link_to (self, other):
-    otherpath = normalised (unicode (other))
+    ur"""Create other as a hard link to this file.
+    
+    :param other: anything accepted by :func:`file`
+    :returns: :class:`File` object corresponding to other
+    """
+    other = file (other)
     wrapped (
       win32file.CreateHardLink, 
-      otherpath, 
+      normalised (other),
       normalised (self._filepath)
     )
-    return file (normalised (unicode (other)))
+    return other
     
   def hard_link_from (self, other):
-    otherpath = normalised (unicode (other))
+    ur"""Create this file as a hard link from other
+    
+    :param other: anything accepted by :func:`file`
+    :returns: this :class:`File` object
+    """
+    other = file (other)
     wrapped (
       win32file.CreateHardLink, 
       normalised (self._filepath), 
-      otherpath
+      normalised (other._filepath)
     )
     return self
 
   def create (self, security=None):
+    ur"""Create this file optionally with specific security. If the
+    file already exists it will not be overwritten.
+    
+    :param security: a :class:`security.Security` object
+    :returns: this object
+    """
     wrapped (
       win32file.CreateFile,
       self._filepath,
@@ -976,7 +1139,7 @@ class File (Entry):
     return self
   
   def zip (self, zip_filename=core.UNSET, mode="w", compression=zipfile.ZIP_DEFLATED):
-    """Zip the file up into a zipfile. By default, the zipfile will have the
+    ur"""Zip the file up into a zipfile. By default, the zipfile will have the
     name of the file with ".zip" appended and will be a sibling of the file.
     Also by default a new zipfile will be created, overwriting any existing one, and
     standard compression will be used. The filename will be stored without any directory
@@ -1253,9 +1416,22 @@ def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
       raise StopIteration
 
 def entry (filepath, ignore_access_errors=False):
-
+  ur"""Return a :class:`File` or :class:`Dir` object representing this
+  filepath.
+  
+  ======================================= ==================================================
+  filepath                                Result
+  ======================================= ==================================================
+  :const:`None`                           :const:`None`
+  an :class:`Entry` or subclass object    the same object
+  an existing file                        a :class:`File` object representing that file
+  an existing directory                   a :class:`Dir` object representing that directory
+  a file which doesn't exist              a :class:`Dir` if filepath ends with \\, 
+                                          :class:`File` otherwise
+  ======================================= ==================================================
+  """
   def _guess (filepath):
-    u"""If the path doesn't exist on the filesystem,
+    ur"""If the path doesn't exist on the filesystem,
     guess whether it's intended to be a dir or a file
     by looking for a trailing slash.
     """
@@ -1279,6 +1455,12 @@ def entry (filepath, ignore_access_errors=False):
       return File (filepath)
       
 def file (filepath, ignore_access_errors=False):
+  ur"""Return a :class:`File` object representing this filepath on
+  the filepath. If filepath is already a :class:`File` object, return
+  it unchanged otherwise ensure that the filepath doesn't point to
+  an existing directory and return a :class:`File` object which
+  represents it.
+  """
   f = entry (filepath, ignore_access_errors=ignore_access_errors)
   if isinstance (f, File):
     return f
@@ -1288,6 +1470,12 @@ def file (filepath, ignore_access_errors=False):
     return File (filepath)
 
 def dir (filepath, ignore_access_errors=False):
+  ur"""Return a :class:`Dir` object representing this filepath on
+  the filepath. If filepath is already a :class:`Dir` object, return
+  it unchanged otherwise ensure that the filepath doesn't point to
+  an existing file and return a :class:`Dir` object which
+  represents it.
+  """
   f = entry (filepath, ignore_access_errors=ignore_access_errors)
   if isinstance (f, Dir):
     return f
@@ -1297,10 +1485,23 @@ def dir (filepath, ignore_access_errors=False):
     return Dir (filepath)
 
 def glob (pattern, ignore_access_errors=False):
-  dirname = os.path.dirname (pattern)
+  ur"""Mimic the built-in glob.glob functionality as a generator,
+  optionally ignoring access errors.
+  
+  :param pattern: passed to :func:`files`
+  :param ignore_access_errors: passed to :func:`files`
+  :returns: yields a :class:`FilePath` object for each matching file
+  """
   return (entry.filepath for entry in files (pattern, ignore_access_errors=False))
 
 def listdir (d, ignore_access_errors=False):
+  ur"""Mimic the built-in os.list functionality as a generator,
+  optionally ignoring access errors.
+  
+  :param d: anything accepted by :func:`dir`
+  :param ignore_access_errors: passed to :func:`files`
+  :returns: yield the name of each file in directory d
+  """
   pattern = dir (d).filepath + u"*"
   try:
     return (f.name for f in files (pattern, ignore_access_errors=ignore_access_errors))
@@ -1308,10 +1509,28 @@ def listdir (d, ignore_access_errors=False):
     return []
 
 def walk (root, depthfirst=False, ignore_access_errors=False):
+  ur"""Walk the directory tree starting from root, optionally ignoring
+  access errors.
+  
+  :param root: anything accepted by :func:`dir`
+  :param depthfirst: passed to :meth:`Dir.walk`
+  :param ignore_access_errors: passed to :meth:`Dir.walk`
+  :returns: as :meth:`Dir.walk`
+  """
   for w in dir (root).walk (depthfirst, ignore_access_errors):
     yield w
 
 def flat (root, pattern="*", includedirs=False, depthfirst=False, ignore_access_errors=False):
+  ur"""Iterate over a flattened version of the directory tree starting
+  from root. Implemented via :meth:`Dir.flat` (qv).
+  
+  :param root: anything accepted by :func:`dir`
+  :param pattern: passed to :meth:`Dir.flat`
+  :param includedirs: passed to :meth:`Dir.flat`
+  :param depthfirst: passed to :meth:`Dir.flat`
+  :param ignore_access_errors: passed to :meth:`Dir.flat`
+  :returns: as :meth:`Dir.flat`
+  """
   for f in dir (root).flat (pattern, includedirs=includedirs, ignore_access_errors=ignore_access_errors):
     yield f
 
@@ -1335,32 +1554,56 @@ def progress_wrapper (callback):
     return None
 
 def move (source_filepath, target_filepath, callback=None, callback_data=None, clobber=False):
-  """
-  moves file/dir from 'source_filepath' to 'target_filepath' and returns file/dir object to file/dir location
+  ur"""Move one :class:`Entry` object to another, implemented via :meth:`Entry.move` (qv)
+  
+  :param source_filepath: anything accepted by :func:`entry`
+  :param target_filepath: passed to :meth:`Entry.move`
+  :param callback: passed to :meth:`Entry.move`
+  :param callback_data: passed to :meth:`Entry.move`
+  :param clobber: passed to :meth:`Entry.move`
   """
   return entry (source_filepath).move (target_filepath, callback, callback_data, clobber)
 
 def copy (source_filepath, target_filepath, callback=None, callback_data=None):
-  """
-  Copies file specefied in 'source_filepath' to directory specified 
-  by 'target_filepath' and returns object to copied file/dir. Pass 
-  the relative or full directory of target location.    
+  ur"""Copy one :class:`Entry` object to another, implemented via :meth:`Entry.copy` (qv)
+  
+  :param source_filepath: anything accepted by :func:`entry`
+  :param target_filepath: passed to :meth:`Entry.copy`
+  :param callback: passed to :meth:`Entry.copy`
+  :param callback_data: passed to :meth:`Entry.copy`
   """
   return entry (source_filepath).copy (target_filepath, callback, callback_data)
 
 def delete (filepath):
-  """
-  deletes file/dir specefied by string passed into 'filepath'
+  ur"""Deletes a :class:`Entry` object, implemented via :meth:`Entry.delete` (qv)
+  
+  :param filepath: anything accepted by :func:`entry`
   """
   return entry (filepath).delete ()
   
 def rmdir (filepath, recursive=False):
+  ur"""Mimic the os.rmdir functionality, optionally recursing
+  
+  :param filepath: anything accepted by :func:`dir`
+  :param recursive: passed to :meth:`Dir.delete`
+  """
   return dir (filepath).delete (recursive=recursive)
 
 def attributes (filepath):
+  ur"""Return an :class:`Attributes` object representing the file attributes
+  of filepath, implemented via :meth:`Entry.attributes`
+  
+  :param filepath: anything accepted by :func:`entry`
+  :returns: an :class:`Attributes` object
+  """
   return entry (filepath).attributes
 
 def exists (filepath):
+  ur"""Mimic os.path.exists, implemented via the :class:`Entry` boolean mechanism
+  
+  :param filepath: anything accepted by :func:`entry`
+  :returns: :const:`True` if filepath exists, :const:`False` otherwise
+  """
   return bool (entry (filepath))
 
 #
@@ -1389,32 +1632,81 @@ def is_directory (filepath):
   return attributes (filepath).directory
   
 def mkdir (dirpath, security=None):
+  ur"""Mimic os.mkdir, implemented via :meth:`Dir.create` (qv)
+  """
   return dir (dirpath).create (security)
 
 def touch (filepath, security=None):
+  ur"""Update a file's modification time, creating it if it
+  does not exist, implemented via :meth:`File.create` (qv)
+  
+  :param filepath: anything accepted by :func:`file`
+  """
   return file (filepath).create (security)
 
 def mount (filepath, vol):
+  ur"""Mount vol at filepath, implemented via :meth:`Dir.mount` (qv)
+  
+  :param filepath: anything accepted by :func:`dir`
+  :param vol: passed to :meth:`Dir.mount`
+  """
   return dir (filepath).mount (vol)
 
 def dismount (filepath):
+  ur"""Dismount the volume at filepath, implemented via :meth:`Dir.dismount` (qv)
+  
+  :param filepath: anything accepted by :func:`dir`
+  """
   return dir (filepath).dismount ()
 
 def zip (filepath, *args, **kwargs):
+  ur"""Create and return a zip archive of filepath, implemented via :meth:`Entry.zip` (qv)
+  
+  :param filepath: anything accepted by :func:`entry`
+  """
   return entry (filepath).zip (*args, **kwargs)
 
 def drive (drive):
-  if isinstance (drive, Drive):
+  ur"""Return a :class:`Drive` object representing drive
+  
+  ======================================= ==================================================
+  drive                                   Result
+  ======================================= ==================================================
+  :const:`None`                           :const:`None`
+  an :class:`Drive` or subclass object    the same object
+  a drive letter                          a :class:`Drive` object
+  ======================================= ==================================================
+  """
+  if drive is None:
+    return None
+  elif isinstance (drive, Drive):
     return drive
   else:
     return Drive (drive)
 
 def drives ():
+  ur"""Iterate over all the drive letters in the system, yielding a :class:`Drive` object
+  representing each one.
+  """
   for drive in wrapped (win32api.GetLogicalDriveStrings).strip ("\x00").split ("\x00"):
     yield Drive (drive)
 
 def volume (volume):
-  if isinstance (volume, Volume):
+  ur"""Return a :class:`Volume` object corresponding to volume
+  
+  ======================================= ==================================================
+  volume                                  Result
+  ======================================= ==================================================
+  :const:`None`                           :const:`None`
+  an :class:`Volume` or subclass object   the same object
+  a volume name \\\\?\\Volume...          a :class:`Volume` object representing that volume
+  a directory name                        a :class:`Volume` object representing the volume
+                                          at that mountpoint
+  ======================================= ==================================================
+  """
+  if volume is None:
+    return None
+  elif isinstance (volume, Volume):
     return volume
   elif volume.startswith (ur"\\?\Volume"):
     return Volume (volume)
@@ -1422,6 +1714,9 @@ def volume (volume):
     return Volume (wrapped (win32file.GetVolumeNameForVolumeMountPoint, volume.rstrip (sep) + sep))
 
 def volumes ():
+  ur"""Iterate over all the volumes in the system, yielding a :class:`Volume` object
+  representing each one.
+  """
   hSearch, volume_name = _kernel32.FindFirstVolume ()
   yield Volume (volume_name)
   while True:
@@ -1432,6 +1727,12 @@ def volumes ():
       yield Volume (volume_name)
 
 def mounts ():
+  ur"""Iterate over all mounted volume mountpoints in the system, yielding a
+  (:class:`Dir`, :class:`Volume`) pair for each one, eg::
+  
+    from winsys import fs
+    drive_volumes = dict (fs.mounts ())
+  """
   for v in volumes ():
     for m in v.mounts:
       yield Dir (m), v
@@ -1514,6 +1815,14 @@ class _DirWatcher (object):
     self.hDir.close ()
 
 def watch (root, subdirs=False, watch_for=_DirWatcher.WATCH_FOR, buffer_size=_DirWatcher.BUFFER_SIZE):
+  ur"""Return an iterator which returns a file change on every iteration.
+  The file change comes in the form: action, old_filename, new_filename.
+  action is one of the :const:`FILE_ACTION` constants, while the filenames
+  speak for themselves. The filenames will be the same if the file has been
+  updated. If the file is new, old_filename will be None; if it has been
+  deleted, new_filename will be None; if it has been renamed, they will
+  be different.
+  """
   return _DirWatcher (root, subdirs, watch_for, buffer_size)
 
 if __name__ == '__main__':

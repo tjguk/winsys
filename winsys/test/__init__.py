@@ -1,3 +1,5 @@
+import os, sys
+import nose
 import utils
 
 def setup ():
@@ -8,3 +10,10 @@ def setup ():
 def teardown ():
   utils.delete_user ("alice")
   utils.delete_group ("winsys")
+
+def run ():
+  here = os.path.dirname (__file__)
+  sys.exit (nose.main (argv=["--where", here]))
+
+if __name__ == '__main__':
+  run ()

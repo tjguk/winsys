@@ -81,17 +81,14 @@ def test_DriveNameBack():
 def test_DriveNameForward():
   assert fs.Drive("C:/").name==u"C:\\"
 
-def test_DriveNameLower():
-  assert fs.Drive("c:\\").name == "C:\\"
-
 def test_DriveType():
   assert fs.Drive("C:").type==win32file.GetDriveTypeW("C:")
 
 def test_Drive_as_String():
- assert fs.Drive("C:")==u'Drive C:\\'
+ assert unicode (fs.Drive("C:"))==u'Drive C:\\'
  
 def test_DriveRoot():
-  assert fs.Drive("C:").root()=="Dir: C:\\"
+  assert fs.Drive("C:").root() == fs.dir (u"C:\\")
   
 def test_dir_copy_to_new_dir ():
   target_name = uuid.uuid1 ().hex
