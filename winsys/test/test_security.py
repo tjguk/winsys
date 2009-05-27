@@ -29,6 +29,11 @@ OPTIONS = \
   security.SECURITY_INFORMATION.DACL | \
   security.SECURITY_INFORMATION.SACL 
 
+def create_test_file ():
+  filepath = os.path.join (TEST_ROOT, str (uuid.uuid1 ()))
+  open (filepath, "w").close ()
+  return filepath
+
 #
 # convenience functions
 #
@@ -359,13 +364,17 @@ def test_Security_add_to_sacl_simple ():
   sd.SetSecurityDescriptorSacl (1, sacl, 0)
   assert equal (sd, s)
   
-@with_setup (None, restore_access)
+#~ @with_setup (None, restore_access)
 def test_Security_break_dacl_inheritance_no_copy ():
-  s = security.security (TEST_FILE, options=OPTIONS)
+  filepath = test_file ()
+  print "AceCount before", win32security.GetNamedSecurityInfo (filepath, win32security.SE_FILE_OBJECT, OPTIONS).GetSecurityDescriptorDacl ().GetAceCount ()
+  s = security.security (filepath, options=OPTIONS)
   assert s.dacl.inherited
   s.break_inheritance (copy_first=False, break_dacl=True, break_sacl=False)
+  print "dacl", s.dacl.dumped ()
   s.to_object ()
-  sd = win32security.GetNamedSecurityInfo (TEST_FILE, win32security.SE_FILE_OBJECT, OPTIONS)
+  sd = win32security.GetNamedSecurityInfo (filepath, win32security.SE_FILE_OBJECT, OPTIONS)
+  print "AceCount", sd.GetSecurityDescriptorDacl ().GetAceCount ()
   assert (sd.GetSecurityDescriptorControl ()[0] & win32security.SE_DACL_PROTECTED)
   assert (not sd.GetSecurityDescriptorControl ()[0] & win32security.SE_SACL_PROTECTED)
   assert sd.GetSecurityDescriptorDacl ().GetAceCount () == 0

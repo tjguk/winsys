@@ -104,20 +104,23 @@ class ACL (core._WinSysObject):
     return self._ACE.ace (a) in (self._list or [])
 
   @classmethod
-  def from_list (cls, aces):
-    acl = cls (wrapped (win32security.ACL))
+  def from_list (cls, aces, inherited=True):
+    acl = cls (wrapped (win32security.ACL), inherited)
     for a in aces:
       acl.append (cls._ACE.ace (a))
     return acl
     
   def break_inheritance (self, copy_first):
     if self._list is not None:
+      print "self._list", [(a.inherited, a) for a in self._list]
       self._original_list = [a for a in self._list if a.inherited]
+      print "self._original_list", self._original_list
       if copy_first:
         for ace in self._list:
           ace.inherited = False
       else:
         self._list = [a for a in (self._list or []) if not a.inherited]
+        print "not copy_first self._list", self._list
     self.inherited = False
 
   def restore_inheritance (self, copy_back):
@@ -190,20 +193,20 @@ class SACL (ACL):
     return acl
     
 
-def acl (acl, klass=core.UNSET):
+def acl (acl, klass=core.UNSET, inherited=True):
   if klass is core.UNSET: klass = DACL
     
   if acl is None:
-    return klass (None)
+    return klass (None, inherited)
   elif type (acl) is PyACL:
-    return klass (acl)
+    return klass (acl, inherited)
   elif isinstance (acl, ACL):
     return acl
   else:
-    return klass.from_list (iter (acl))
+    return klass.from_list (iter (acl), inherited)
 
-def dacl (dacl):
-  return acl (dacl, DACL)
+def dacl (dacl, inherited=True):
+  return acl (dacl, DACL, inherited)
 
-def sacl (sacl):
-  return acl (sacl, SACL)
+def sacl (sacl, inherited=True):
+  return acl (sacl, SACL, inherited)

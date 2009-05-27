@@ -293,7 +293,7 @@ class Security (core._WinSysObject):
     if dacl is core.UNSET:
       self._dacl = core.UNSET
     else:
-      self._dacl = acl (dacl, DACL)
+      self._dacl = acl (dacl, DACL, not self._control & SD_CONTROL.DACL_PROTECTED)
   dacl = property (_get_dacl, _set_dacl)
 
   def _get_sacl (self):
@@ -304,7 +304,7 @@ class Security (core._WinSysObject):
     if sacl is core.UNSET:
       self._sacl = core.UNSET
     else:
-      self._sacl = acl (sacl, SACL)
+      self._sacl = acl (sacl, SACL, not self._control & SD_CONTROL.SACL_PROTECTED)
   sacl = property (_get_sacl, _set_sacl)
 
   def __enter__ (self):
