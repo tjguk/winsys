@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Dir class &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="index.html" />
+    <link rel="up" title="fs – Files, Directories, &c." href="fs.html" />
+    <link rel="next" title="ipc – Interprocess Communication" href="ipc.html" />
+    <link rel="prev" title="The File class" href="fs_file.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="ipc.html" title="ipc – Interprocess Communication"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fs_file.html" title="The File class"
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li>
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-dir-class">
+<h1>The Dir class<a class="headerlink" href="#the-dir-class" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="fs.Dir">
+<em class="property">
+class </em><tt class="descname">Dir</tt><big>(</big><em>filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.Dir" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="fs.Dir.compress">
+<tt class="descname">compress</tt><big>(</big><em>apply_to_contents=True</em>, <em>callback=None</em><big>)</big><a class="headerlink" href="#fs.Dir.compress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag this directory so that any new files are automatically
+compressed. If apply_to_contents is True, iterate over all subdirectories
+and their files, compressing likewise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>apply_to_contents</em> &#8211; whether to compress all existing subdirectories
+and their files</li>
+<li><em>callback</em> &#8211; called for each subdirectory / file compressed</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">this directory</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.copy">
+<tt class="descname">copy</tt><big>(</big><em>target_filepath</em>, <em>callback=None</em>, <em>callback_data=None</em><big>)</big><a class="headerlink" href="#fs.Dir.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy this directory to another, which must be a directory if it
+exists. If it does exist, this directory will be copied inside it; if
+it does not exist, this directory will be copied over it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>target_filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></li>
+<li><em>callback</em> &#8211; cf <a title="fs.File.copy" class="reference external" href="fs_file.html#fs.File.copy"><tt class="xref docutils literal"><span class="pre">File.copy()</span></tt></a></li>
+<li><em>callback_data</em> &#8211; cf <a title="fs.File.copy" class="reference external" href="fs_file.html#fs.File.copy"><tt class="xref docutils literal"><span class="pre">File.copy()</span></tt></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="fs.Dir" class="reference internal" href="#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object representing target_filepath</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.create">
+<tt class="descname">create</tt><big>(</big><em>security_descriptor=None</em><big>)</big><a class="headerlink" href="#fs.Dir.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create this directory, optionally specifying a security descriptor.
+If the directory already exists, do nothing.
+All intervening directories are automatically created if they do not
+already exist. If any exists but is a file rather than a directory,
+an exception is raised.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>security_descriptor</em> &#8211; anything accepted by <a title="security.security" class="reference external" href="security.html#security.security"><tt class="xref docutils literal"><span class="pre">security.security()</span></tt></a></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a <a title="fs.Dir" class="reference internal" href="#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> representing the newly-created directory</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.delete">
+<tt class="descname">delete</tt><big>(</big><em>recursive=False</em><big>)</big><a class="headerlink" href="#fs.Dir.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete this directory, optionally including its children.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>recursive</em> &#8211; whether to remove all subdirectories and files first</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">this directory</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.dir">
+<tt class="descname">dir</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#fs.Dir.dir" title="Permalink to this definition">¶</a></dt>
+<dd>Return a <a title="fs.Dir" class="reference internal" href="#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object representing a Directory called name inside
+this directory.</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.dirs">
+<tt class="descname">dirs</tt><big>(</big><em>pattern=u'*'</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.Dir.dirs" title="Permalink to this definition">¶</a></dt>
+<dd>Iterate over all directories in this directory which match pattern, yielding 
+a <a title="fs.Dir" class="reference internal" href="#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object for each one. Implemented via <a title="fs.Dir.entries" class="reference internal" href="#fs.Dir.entries"><tt class="xref docutils literal"><span class="pre">Dir.entries()</span></tt></a>.</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.dismount">
+<tt class="descname">dismount</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Dir.dismount" title="Permalink to this definition">¶</a></dt>
+<dd>Dismount whatever volume is mounted at this directory</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.entries">
+<tt class="descname">entries</tt><big>(</big><em>pattern=u'*'</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.Dir.entries" title="Permalink to this definition">¶</a></dt>
+<dd>Iterate over all entries &#8211; files &amp; directories &#8211; in this directory.
+Implemented via <a title="fs.Dir.files" class="reference internal" href="#fs.Dir.files"><tt class="xref docutils literal"><span class="pre">files()</span></tt></a></dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.file">
+<tt class="descname">file</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#fs.Dir.file" title="Permalink to this definition">¶</a></dt>
+<dd>Return a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object representing a file called name inside
+this directory.</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.files">
+<tt class="descname">files</tt><big>(</big><em>pattern=u'*'</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.Dir.files" title="Permalink to this definition">¶</a></dt>
+<dd>Iterate over all files in this directory which match pattern, yielding 
+a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object for each one. Implemented via <a title="fs.Dir.entries" class="reference internal" href="#fs.Dir.entries"><tt class="xref docutils literal"><span class="pre">Dir.entries()</span></tt></a>.</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.flat">
+<tt class="descname">flat</tt><big>(</big><em>pattern='*'</em>, <em>includedirs=False</em>, <em>depthfirst=False</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.Dir.flat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over this directory and all its subdirectories, yielding one
+<a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object on each iteration, and optionally <a title="fs.Dir" class="reference internal" href="#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> objects
+as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>pattern</em> &#8211; limit the files returned by filename</td>
+</tr>
+<tr class="field"><th class="field-name">Includedirs:</th><td class="field-body">whether to yield directories as well as files [False]</td>
+</tr>
+<tr class="field"><th class="field-name">Depthfirst:</th><td class="field-body">as for <a title="fs.Dir.walk" class="reference internal" href="#fs.Dir.walk"><tt class="xref docutils literal"><span class="pre">Dir.walk()</span></tt></a></td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Ignore_access_errors:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">as for <a title="fs.Dir.walk" class="reference internal" href="#fs.Dir.walk"><tt class="xref docutils literal"><span class="pre">Dir.walk()</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.mkdir">
+<tt class="descname">mkdir</tt><big>(</big><em>security_descriptor=None</em><big>)</big><a class="headerlink" href="#fs.Dir.mkdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create this directory, optionally specifying a security descriptor.
+If the directory already exists, do nothing.
+All intervening directories are automatically created if they do not
+already exist. If any exists but is a file rather than a directory,
+an exception is raised.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>security_descriptor</em> &#8211; anything accepted by <a title="security.security" class="reference external" href="security.html#security.security"><tt class="xref docutils literal"><span class="pre">security.security()</span></tt></a></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a <a title="fs.Dir" class="reference internal" href="#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> representing the newly-created directory</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.mount">
+<tt class="descname">mount</tt><big>(</big><em>vol</em><big>)</big><a class="headerlink" href="#fs.Dir.mount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mount a volume on this directory. The directory must be empty or
+an exception is raised. eg:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
+<span class="n">fs</span><span class="o">.</span><span class="n">dir</span> <span class="p">(</span><span class="s">&quot;c:/temp&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span> <span class="p">(</span><span class="s">&quot;c_drive&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mount</span> <span class="p">(</span><span class="s">&quot;c:&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>vol</em> &#8211; anything accepted by <a title="fs.volume" class="reference external" href="fs.html#fs.volume"><tt class="xref docutils literal"><span class="pre">volume()</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.mounted_by">
+<tt class="descname">mounted_by</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Dir.mounted_by" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the volume mounted on this directory, or None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a <tt class="xref docutils literal"><span class="pre">Volume</span></tt> object or <tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.rmdir">
+<tt class="descname">rmdir</tt><big>(</big><em>recursive=False</em><big>)</big><a class="headerlink" href="#fs.Dir.rmdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete this directory, optionally including its children.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>recursive</em> &#8211; whether to remove all subdirectories and files first</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">this directory</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.uncompress">
+<tt class="descname">uncompress</tt><big>(</big><em>apply_to_contents=True</em>, <em>callback=None</em><big>)</big><a class="headerlink" href="#fs.Dir.uncompress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag this directory so that any new files are automatically
+not compressed. If apply_to_contents is True, iterate over all 
+subdirectories and their files, uncompressing likewise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>apply_to_contents</em> &#8211; whether to uncompress all existing subdirectories
+and their files</li>
+<li><em>callback</em> &#8211; called for each subdirectory / file uncompressed</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">this directory</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.walk">
+<tt class="descname">walk</tt><big>(</big><em>depthfirst=False</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.Dir.walk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mimic os.walk, iterating over each directory and the files within
+in. Each iteration yields:</p>
+<blockquote>
+<a title="fs.Dir" class="reference internal" href="#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a>, (generator for <a title="fs.Dir" class="reference internal" href="#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> objects), (generator for <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> objects)</blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>depthfirst</em> &#8211; Whether to use breadth-first (the default) or depth-first traversal</li>
+<li><em>ignore_access_errors</em> &#8211; Whether to continue traversing in the face of access-denied errors</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.watch">
+<tt class="descname">watch</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.Dir.watch" title="Permalink to this definition">¶</a></dt>
+<dd>Return a directory watcher, as per <a title="fs.watch" class="reference external" href="fs.html#fs.watch"><tt class="xref docutils literal"><span class="pre">watch()</span></tt></a></dd></dl>
+
+<dl class="method">
+<dt id="fs.Dir.zip">
+<tt class="descname">zip</tt><big>(</big><em>zip_filename=&lt;Unset&gt;</em>, <em>mode='w'</em>, <em>compression=8</em><big>)</big><a class="headerlink" href="#fs.Dir.zip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zip the directory up into a zip file. By default, the file will have the
+name of the directory with &#8220;.zip&#8221; appended and will be a sibling of the directory.
+Also by default a new zipfile will be created, overwriting any existing one, and
+standard compression will be used. Filenames are stored as relative to this dir.</p>
+<p>A different zip filename can be specific as the zip_filename parameter, and this
+can be appended to (if it exists) by specifying &#8220;a&#8221; as the mode param.</p>
+<p>The created / appended zip file is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>zip_filename</em> &#8211; The name of the zip file to hold the archive of this
+directory and its children. [directory.zip]</li>
+<li><em>mode</em> &#8211; cf zipfile.ZipFile</li>
+<li><em>compressions</em> &#8211; cf zipfile.ZipFile</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object representing the resulting zip file</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="fs_file.html"
+                                  title="previous chapter">The File class</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="ipc.html"
+                                  title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/fs_dir.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ipc.html" title="ipc – Interprocess Communication"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fs_file.html" title="The File class"
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li>
+          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>logging_handlers – Additional Logging Handlers &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="index.html" />
+    <link rel="up" title="Miscellaneous" href="misc.html" />
+    <link rel="next" title="Cookbook" href="cookbook.html" />
+    <link rel="prev" title="Miscellaneous" href="misc.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="cookbook.html" title="Cookbook"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="Miscellaneous"
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li>
+          <li><a href="misc.html" accesskey="U">Miscellaneous</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-logging_handlers">
+<h1><tt class="xref docutils literal"><span class="pre">logging_handlers</span></tt> &#8211; Additional Logging Handlers<a class="headerlink" href="#module-logging_handlers" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Python&#8217;s <a class="reference external" href="http://docs.python.org/library/logging.html">builtin logging module</a>
+offers the concept of <a class="reference external" href="http://docs.python.org/library/logging.html#handlers">handlers</a>
+each of which takes the logged message and passes to an output channel. There
+are handlers provided for screen, files, NT Event Logs and so on. This module
+offers two handlers to output to a named Windows mailslot. It makes use of the
+<a title="ipc.Mailslot" class="reference external" href="mailslots.html#ipc.Mailslot"><tt class="xref docutils literal"><span class="pre">ipc.Mailslot</span></tt></a> class and can write to a one-time
+mailslot or to a mailslot which is running permanently.</p>
+<p>The sort of situation where this might be useful is where you have a number
+of system routines running on and off. If they all log to the same mailslot,
+say on an administrator&#8217;s desktop, then he can see the progress of all in one
+place. Better still, if they log to all the mailslots of the same name in the
+domain, then everyone can have a logging screen running on their desktop which
+they can start up and close down at will to see the current progress.</p>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="logging_handlers.MailslotHandler">
+<em class="property">
+class </em><tt class="descname">MailslotHandler</tt><big>(</big><em>mailslot_name : string</em><big>)</big><a class="headerlink" href="#logging_handlers.MailslotHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up a handler going to the named mailslot. Note that the usual
+possibilities obtain for mailslot names: an unqualified name must exist
+on the local machine; a computer or domain-qualified name will broadcast
+to that machine or that domain without checking existence; a * will just
+broadcast, full-stop.</p>
+<p>The close function sends a None to the receiving mailslot, intended to act as a
+prompt to shut down. (Although that&#8217;s obviously in the hands of the receiver).</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="logging_handlers.PermanentMailslotHandler">
+<em class="property">
+class </em><tt class="descname">PermanentMailslotHandler</tt><big>(</big><em>mailslot_name : string</em><big>)</big><a class="headerlink" href="#logging_handlers.PermanentMailslotHandler" title="Permalink to this definition">¶</a></dt>
+<dd>Subclass the MailslotHandler and override the close function so that it
+doesn&#8217;t send the shutdown token to the receiving mailslot(s).</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="contents.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href=""><tt class="docutils literal"><span class="pre">logging_handlers</span></tt> &#8211; Additional Logging Handlers</a><ul>
+<li><a class="reference external" href="#introduction">Introduction</a></li>
+<li><a class="reference external" href="#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="misc.html"
+                                  title="previous chapter">Miscellaneous</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="cookbook.html"
+                                  title="next chapter">Cookbook</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/logging_handlers.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cookbook.html" title="Cookbook"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="Miscellaneous"
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li>
+          <li><a href="misc.html" >Miscellaneous</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

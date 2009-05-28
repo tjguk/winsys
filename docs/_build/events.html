@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Events &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="index.html" />
+    <link rel="up" title="ipc – Interprocess Communication" href="ipc.html" />
+    <link rel="next" title="registry – Registry" href="registry.html" />
+    <link rel="prev" title="Mailslots" href="mailslots.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="registry.html" title="registry – Registry"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mailslots.html" title="Mailslots"
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li>
+          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="events">
+<h1>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="ipc.Event">
+<em class="property">
+class </em><tt class="descname">Event</tt><big>(</big><span class="optional">[</span><em>security=None</em>, <em>needs_manual_reset=0</em>, <em>initially_set=0</em>, <em>name=None</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#ipc.Event" title="Permalink to this definition">¶</a></dt>
+<dd><p>An event object is an interprocess (but not intermachine) synchronisation
+mechanism which allows one or more threads of control to wait on others.
+The most common configuration is given by the defaults: anonymous,
+not set initially, and automatically reset once set (ie only set for long
+enough to release any waiting threads and then reset. A common
+variant is a named event which can then be referred to easily by other
+processes without having to pass handles around. This is why the <a title="ipc.event" class="reference external" href="ipc.html#ipc.event"><tt class="xref docutils literal"><span class="pre">ipc.event()</span></tt></a>
+function reverses the order of parameters and takes the name first.</p>
+<p>The Event class mimics Python&#8217;s Event objects which are in any case very
+close to the semantics of the underlying Windows object. For that reason,
+although <a title="ipc.Event.clear" class="reference internal" href="#ipc.Event.clear"><tt class="xref docutils literal"><span class="pre">clear()</span></tt></a> is used to reset the event, <a title="ipc.Event.reset" class="reference internal" href="#ipc.Event.reset"><tt class="xref docutils literal"><span class="pre">reset()</span></tt></a> is also
+provided as an alias, matching the Windows API.</p>
+<dl class="method">
+<dt id="ipc.Event.pulse">
+<tt class="descname">pulse</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.pulse" title="Permalink to this definition">¶</a></dt>
+<dd>Briefly set the event and then reset it</dd></dl>
+
+<dl class="method">
+<dt id="ipc.Event.set">
+<tt class="descname">set</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.set" title="Permalink to this definition">¶</a></dt>
+<dd>Set the event, causing waiting threads to release.</dd></dl>
+
+<dl class="method">
+<dt id="ipc.Event.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.clear" title="Permalink to this definition">¶</a></dt>
+<dd>Reset the event.</dd></dl>
+
+<dl class="method">
+<dt id="ipc.Event.reset">
+<tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.reset" title="Permalink to this definition">¶</a></dt>
+<dd>Alias for <a title="ipc.Event.clear" class="reference internal" href="#ipc.Event.clear"><tt class="xref docutils literal"><span class="pre">clear()</span></tt></a></dd></dl>
+
+<dl class="method">
+<dt id="ipc.Event.wait">
+<tt class="descname">wait</tt><big>(</big><span class="optional">[</span><em>timeout_s=-1</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#ipc.Event.wait" title="Permalink to this definition">¶</a></dt>
+<dd>Block for at most timeout_s seconds until the event is set. By default
+block forever.
+<em>NB</em> The timeout value is in (possibly fractional) seconds, whereas the
+underlying windows API expects timeouts in milliseconds.</dd></dl>
+
+<dl class="method">
+<dt id="ipc.Event.isSet">
+<tt class="descname">isSet</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.isSet" title="Permalink to this definition">¶</a></dt>
+<dd>return True if the event is set, False otherwise.</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="mailslots.html"
+                                  title="previous chapter">Mailslots</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="registry.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/events.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="registry.html" title="registry – Registry"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mailslots.html" title="Mailslots"
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li>
+          <li><a href="ipc.html" ><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

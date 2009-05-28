@@ -1,0 +1,816 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fs – Files, Directories, &c. &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="index.html" />
+    <link rel="next" title="The FilePath class" href="fs_filepath.html" />
+    <link rel="prev" title="event_logs – Event Logs" href="event_logs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="fs_filepath.html" title="The FilePath class"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="event_logs.html" title="event_logs – Event Logs"
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-fs">
+<h1><tt class="xref docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.<a class="headerlink" href="#module-fs" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The fs module makes it easy to work with files, directories, drives, volumes and paths within the Windows filesystems.
+The most common entry-point is to use <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a> to return a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> or <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object, although you
+can use <a title="fs.file" class="reference internal" href="#fs.file"><tt class="xref docutils literal"><span class="pre">file()</span></tt></a> or <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a> directly. Instances of these classes need not exist on any filesystem &#8211; in fact
+they equate to True or False according to the existence or not of a corresponding filesystem object. But they can
+be the source or target of all the usual filesystem operations. In common with other modules in this package,
+functionality is provided at the module level as well as at the class level, so you can, eg, call <a title="fs.File.copy" class="reference external" href="fs_file.html#fs.File.copy"><tt class="xref docutils literal"><span class="pre">File.copy()</span></tt></a>
+or <a title="fs.copy" class="reference internal" href="#fs.copy"><tt class="xref docutils literal"><span class="pre">copy()</span></tt></a> to copy a file to another location.</p>
+<p>An important part of the module is the <a title="fs.FilePath" class="reference external" href="fs_filepath.html#fs.FilePath"><tt class="xref docutils literal"><span class="pre">FilePath</span></tt></a> class which eases manipulation of filesystem paths and is
+at the same time a subclass of unicode, so is accepted in system calls where strings are expected.</p>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="factories">
+<h3>Factories<a class="headerlink" href="#factories" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="fs.entry">
+<tt class="descname">entry</tt><big>(</big><em>filepath</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> or <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object representing this
+filepath.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">filepath</th>
+<th class="head">Result</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
+<td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
+</tr>
+<tr><td>an <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> or subclass object</td>
+<td>the same object</td>
+</tr>
+<tr><td>an existing file</td>
+<td>a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object representing that file</td>
+</tr>
+<tr><td>an existing directory</td>
+<td>a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object representing that directory</td>
+</tr>
+<tr><td>a file which doesn&#8217;t exist</td>
+<td>a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> if filepath ends with \,
+<a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> otherwise</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.file">
+<tt class="descname">file</tt><big>(</big><em>filepath</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.file" title="Permalink to this definition">¶</a></dt>
+<dd>Return a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object representing this filepath on
+the filepath. If filepath is already a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object, return
+it unchanged otherwise ensure that the filepath doesn&#8217;t point to
+an existing directory and return a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object which
+represents it.</dd></dl>
+
+<dl class="function">
+<dt id="fs.dir">
+<tt class="descname">dir</tt><big>(</big><em>filepath</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.dir" title="Permalink to this definition">¶</a></dt>
+<dd>Return a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object representing this filepath on
+the filepath. If filepath is already a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object, return
+it unchanged otherwise ensure that the filepath doesn&#8217;t point to
+an existing file and return a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object which
+represents it.</dd></dl>
+
+<dl class="function">
+<dt id="fs.drive">
+<tt class="descname">drive</tt><big>(</big><em>drive</em><big>)</big><a class="headerlink" href="#fs.drive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a <tt class="xref docutils literal"><span class="pre">Drive</span></tt> object representing drive</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">drive</th>
+<th class="head">Result</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
+<td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
+</tr>
+<tr><td>an <tt class="xref docutils literal"><span class="pre">Drive</span></tt> or subclass object</td>
+<td>the same object</td>
+</tr>
+<tr><td>a drive letter</td>
+<td>a <tt class="xref docutils literal"><span class="pre">Drive</span></tt> object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.volume">
+<tt class="descname">volume</tt><big>(</big><em>volume</em><big>)</big><a class="headerlink" href="#fs.volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a <tt class="xref docutils literal"><span class="pre">Volume</span></tt> object corresponding to volume</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">volume</th>
+<th class="head">Result</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
+<td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
+</tr>
+<tr><td>an <tt class="xref docutils literal"><span class="pre">Volume</span></tt> or subclass object</td>
+<td>the same object</td>
+</tr>
+<tr><td>a volume name \\?\Volume...</td>
+<td>a <tt class="xref docutils literal"><span class="pre">Volume</span></tt> object representing that volume</td>
+</tr>
+<tr><td>a directory name</td>
+<td>a <tt class="xref docutils literal"><span class="pre">Volume</span></tt> object representing the volume
+at that mountpoint</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="stdlib-extras">
+<h3>stdlib Extras<a class="headerlink" href="#stdlib-extras" title="Permalink to this headline">¶</a></h3>
+<p>Several functions are either convenient or superior
+replacements to equivalent stdlib functionality.</p>
+<dl class="function">
+<dt id="fs.listdir">
+<tt class="descname">listdir</tt><big>(</big><em>d</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.listdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mimic the built-in os.list functionality as a generator,
+optionally ignoring access errors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>d</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
+<li><em>ignore_access_errors</em> &#8211; passed to <tt class="xref docutils literal"><span class="pre">files()</span></tt></li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">yield the name of each file in directory d</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.glob">
+<tt class="descname">glob</tt><big>(</big><em>pattern</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.glob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mimic the built-in glob.glob functionality as a generator,
+optionally ignoring access errors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>pattern</em> &#8211; passed to <tt class="xref docutils literal"><span class="pre">files()</span></tt></li>
+<li><em>ignore_access_errors</em> &#8211; passed to <tt class="xref docutils literal"><span class="pre">files()</span></tt></li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">yields a <a title="fs.FilePath" class="reference external" href="fs_filepath.html#fs.FilePath"><tt class="xref docutils literal"><span class="pre">FilePath</span></tt></a> object for each matching file</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.mkdir">
+<tt class="descname">mkdir</tt><big>(</big><em>dirpath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.mkdir" title="Permalink to this definition">¶</a></dt>
+<dd>Mimic os.mkdir, implemented via <a title="fs.Dir.create" class="reference external" href="fs_dir.html#fs.Dir.create"><tt class="xref docutils literal"><span class="pre">Dir.create()</span></tt></a></dd></dl>
+
+<dl class="function">
+<dt id="fs.rmdir">
+<tt class="descname">rmdir</tt><big>(</big><em>filepath</em>, <em>recursive=False</em><big>)</big><a class="headerlink" href="#fs.rmdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mimic the os.rmdir functionality, optionally recursing</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
+<li><em>recursive</em> &#8211; passed to <a title="fs.Dir.delete" class="reference external" href="fs_dir.html#fs.Dir.delete"><tt class="xref docutils literal"><span class="pre">Dir.delete()</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.walk">
+<tt class="descname">walk</tt><big>(</big><em>root</em>, <em>depthfirst=False</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.walk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Walk the directory tree starting from root, optionally ignoring
+access errors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>root</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
+<li><em>depthfirst</em> &#8211; passed to <a title="fs.Dir.walk" class="reference external" href="fs_dir.html#fs.Dir.walk"><tt class="xref docutils literal"><span class="pre">Dir.walk()</span></tt></a></li>
+<li><em>ignore_access_errors</em> &#8211; passed to <a title="fs.Dir.walk" class="reference external" href="fs_dir.html#fs.Dir.walk"><tt class="xref docutils literal"><span class="pre">Dir.walk()</span></tt></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">as <a title="fs.Dir.walk" class="reference external" href="fs_dir.html#fs.Dir.walk"><tt class="xref docutils literal"><span class="pre">Dir.walk()</span></tt></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.flat">
+<tt class="descname">flat</tt><big>(</big><em>root</em>, <em>pattern='*'</em>, <em>includedirs=False</em>, <em>depthfirst=False</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.flat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over a flattened version of the directory tree starting
+from root. Implemented via <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>root</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
+<li><em>pattern</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
+<li><em>includedirs</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
+<li><em>depthfirst</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
+<li><em>ignore_access_errors</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">as <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.move">
+<tt class="descname">move</tt><big>(</big><em>source_filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move one <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object to another, implemented via <tt class="xref docutils literal"><span class="pre">File.move()</span></tt> or <tt class="xref docutils literal"><span class="pre">Dir.move()</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>source_filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.copy">
+<tt class="descname">copy</tt><big>(</big><em>source_filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy one <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object to another, implemented via <a title="fs.File.copy" class="reference external" href="fs_file.html#fs.File.copy"><tt class="xref docutils literal"><span class="pre">File.copy()</span></tt></a> or <a title="fs.Dir.copy" class="reference external" href="fs_dir.html#fs.Dir.copy"><tt class="xref docutils literal"><span class="pre">Dir.copy()</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>source_filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.delete">
+<tt class="descname">delete</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object, implemented via <a title="fs.File.delete" class="reference external" href="fs_file.html#fs.File.delete"><tt class="xref docutils literal"><span class="pre">File.delete()</span></tt></a> or <a title="fs.Dir.delete" class="reference external" href="fs_dir.html#fs.Dir.delete"><tt class="xref docutils literal"><span class="pre">Dir.delete()</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.exists">
+<tt class="descname">exists</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mimic os.path.exists, implemented via the <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> boolean mechanism</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="xref xref docutils literal"><span class="pre">True</span></tt> if filepath exists, <tt class="xref xref docutils literal"><span class="pre">False</span></tt> otherwise</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.zip">
+<tt class="descname">zip</tt><big>(</big><em>filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.zip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return a zip archive of filepath, implemented via <a title="fs.File.zip" class="reference external" href="fs_file.html#fs.File.zip"><tt class="xref docutils literal"><span class="pre">File.zip()</span></tt></a> or <a title="fs.Dir.zip" class="reference external" href="fs_dir.html#fs.Dir.zip"><tt class="xref docutils literal"><span class="pre">Dir.zip()</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.touch">
+<tt class="descname">touch</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.touch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update a file&#8217;s modification time, creating it if it
+does not exist, implemented via <a title="fs.File.create" class="reference external" href="fs_file.html#fs.File.create"><tt class="xref docutils literal"><span class="pre">File.create()</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.file" class="reference internal" href="#fs.file"><tt class="xref docutils literal"><span class="pre">file()</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="helpers">
+<h3>Helpers<a class="headerlink" href="#helpers" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="fs.get_parts">
+<tt class="descname">get_parts</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.get_parts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to regularise a file path and then
+to pick out its drive and path components.</p>
+<p>Attempt to match the first part of the string against
+known path leaders:</p>
+<div class="highlight-python"><pre>&lt;drive&gt;:\
+\\?\&lt;drive&gt;:\
+\\?\Volume{xxxx-...}\
+\\server\share\</pre>
+</div>
+<p>If that fails, assume the path is relative.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Path</th>
+<th class="head">Parts</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>c:/</td>
+<td>[&#8220;c:\&#8221;, &#8220;&#8221;]</td>
+</tr>
+<tr><td>c:/t</td>
+<td>[&#8220;c:\&#8221;, &#8220;t&#8221;]</td>
+</tr>
+<tr><td>c:/t/</td>
+<td>[&#8220;c:\&#8221;, &#8220;t&#8221;, &#8220;&#8221;]</td>
+</tr>
+<tr><td>c:/t/test.txt</td>
+<td>[&#8220;c:\&#8221;, &#8220;t&#8221;, &#8220;test.txt&#8221;]</td>
+</tr>
+<tr><td>c:/t/s/test.txt</td>
+<td>[&#8220;c:\&#8221;, &#8220;t&#8221;, &#8220;s&#8221;, &#8220;test.txt&#8221;]</td>
+</tr>
+<tr><td>c:test.txt</td>
+<td>[&#8220;c:\&#8221;, &#8220;&#8221;, &#8220;test.txt&#8221;]</td>
+</tr>
+<tr><td>s/test.txt</td>
+<td>[&#8220;&#8221;, &#8220;s&#8221;, &#8220;test.txt&#8221;]</td>
+</tr>
+<tr><td>\\server\share</td>
+<td>[&#8220;\\server\share\&#8221;, &#8220;&#8221;]</td>
+</tr>
+<tr><td>\\server\share\a.txt</td>
+<td>[&#8220;\\server\share\&#8221;, &#8220;a.txt&#8221;]</td>
+</tr>
+<tr><td>\\server\share\t\a.txt</td>
+<td>[&#8220;\\server\share\&#8221;, &#8220;t&#8221;, &#8220;a.txt&#8221;]</td>
+</tr>
+<tr><td>\\?\c:test.txt</td>
+<td>[&#8220;\\?\c:\&#8221;, &#8220;test.txt&#8221;]</td>
+</tr>
+<tr><td>\\?\Volume{xxxx-..}\t.txt</td>
+<td>[&#8220;\\?Volume{xxxx-..}\&#8221;, &#8220;t.txt&#8221;]</td>
+</tr>
+</tbody>
+</table>
+<p>The upshot is that the first item in the list returned is
+always the root (including trailing slash except for the special
+case of the format &lt;drive&gt;:&lt;path&gt; representing the current directory
+on &lt;drive&gt;) if the path is absolute, an empty string if it is relative. 
+All other items before the last one represent the directories along
+the way. The last item is the filename, empty if the whole
+path represents a directory.</p>
+<p>The original filepath can usually be reconstructed as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
+<span class="n">filepath</span> <span class="o">=</span> <span class="s">&quot;c:/temp/abc.txt&quot;</span>
+<span class="n">parts</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">get_parts</span> <span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">parts</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mf">1</span><span class="p">:])</span> <span class="o">==</span> <span class="n">filepath</span>
+</pre></div>
+</div>
+<p>The exception is when a root (UNC or volume) is given without
+a trailing slash. This is added in.</p>
+<p>Note that if the path does not end with a slash, the directory
+name itself is considered the filename. This is by design.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.normalised">
+<tt class="descname">normalised</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.normalised" title="Permalink to this definition">¶</a></dt>
+<dd>Convert any path or path-like object into the
+length-unlimited unicode equivalent. This should avoid
+issues with maximum path length and the like.</dd></dl>
+
+<dl class="function">
+<dt id="fs.handle">
+<tt class="descname">handle</tt><big>(</big><em>filepath</em>, <em>write=False</em><big>)</big><a class="headerlink" href="#fs.handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a file handle either for querying
+(the default case) or for writing &#8211; including writing directories</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>filepath</em> &#8211; anything whose unicode representation is a valid file path</li>
+<li><em>write</em> &#8211; is the handle to be used for writing [True]</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">an open file handle for reading or writing, including directories</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.relative_to">
+<tt class="descname">relative_to</tt><big>(</big><em>filepath1</em>, <em>filepath2</em><big>)</big><a class="headerlink" href="#fs.relative_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return filepath2 relative to filepath1. Both names
+are normalised first.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">filepath1</th>
+<th class="head">filepath2</th>
+<th class="head">result</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>c:/a/b.txt</td>
+<td>c:/a</td>
+<td>b.txt</td>
+</tr>
+<tr><td>c:/a/b/c.txt</td>
+<td>c:/a</td>
+<td>b/c.txt</td>
+</tr>
+<tr><td>c:/a/b/c.txt</td>
+<td>c:/a/b</td>
+<td>c.txt</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>filepath1</em> &#8211; a file or directory</li>
+<li><em>filepath2</em> &#8211; a directory</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">filepath2 relative to filepath1</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.attributes">
+<tt class="descname">attributes</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an <tt class="xref docutils literal"><span class="pre">Attributes</span></tt> object representing the file attributes
+of filepath, implemented via <tt class="xref docutils literal"><span class="pre">Entry.attributes()</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">an <tt class="xref docutils literal"><span class="pre">Attributes</span></tt> object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="additional-filesystem-operations">
+<h3>Additional Filesystem Operations<a class="headerlink" href="#additional-filesystem-operations" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="fs.mount">
+<tt class="descname">mount</tt><big>(</big><em>filepath</em>, <em>vol</em><big>)</big><a class="headerlink" href="#fs.mount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mount vol at filepath, implemented via <a title="fs.Dir.mount" class="reference external" href="fs_dir.html#fs.Dir.mount"><tt class="xref docutils literal"><span class="pre">Dir.mount()</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
+<li><em>vol</em> &#8211; passed to <a title="fs.Dir.mount" class="reference external" href="fs_dir.html#fs.Dir.mount"><tt class="xref docutils literal"><span class="pre">Dir.mount()</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.dismount">
+<tt class="descname">dismount</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.dismount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dismount the volume at filepath, implemented via <a title="fs.Dir.dismount" class="reference external" href="fs_dir.html#fs.Dir.dismount"><tt class="xref docutils literal"><span class="pre">Dir.dismount()</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.drives">
+<tt class="descname">drives</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.drives" title="Permalink to this definition">¶</a></dt>
+<dd>Iterate over all the drive letters in the system, yielding a <tt class="xref docutils literal"><span class="pre">Drive</span></tt> object
+representing each one.</dd></dl>
+
+<dl class="function">
+<dt id="fs.volumes">
+<tt class="descname">volumes</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.volumes" title="Permalink to this definition">¶</a></dt>
+<dd>Iterate over all the volumes in the system, yielding a <tt class="xref docutils literal"><span class="pre">Volume</span></tt> object
+representing each one.</dd></dl>
+
+<dl class="function">
+<dt id="fs.mounts">
+<tt class="descname">mounts</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.mounts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over all mounted volume mountpoints in the system, yielding a
+(<a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a>, <tt class="xref docutils literal"><span class="pre">Volume</span></tt>) pair for each one, eg:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
+<span class="n">drive_volumes</span> <span class="o">=</span> <span class="nb">dict</span> <span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">mounts</span> <span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="fs.watch">
+<tt class="descname">watch</tt><big>(</big><em>root</em>, <em>subdirs=False</em>, <em>watch_for=287</em>, <em>buffer_size=8192</em><big>)</big><a class="headerlink" href="#fs.watch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator which returns a file change on every iteration.
+The file change comes in the form: action, old_filename, new_filename.
+action is one of the <tt class="xref docutils literal"><span class="pre">FILE_ACTION</span></tt> constants, while the filenames
+speak for themselves. The filenames will be the same if the file has been
+updated. If the file is new, old_filename will be None; if it has been
+deleted, new_filename will be None; if it has been renamed, they will
+be different:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
+<span class="n">watcher</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">watch</span> <span class="p">(</span><span class="s">&quot;c:/temp&quot;</span><span class="p">,</span> <span class="n">subdirs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">action</span><span class="p">,</span> <span class="n">old_filename</span><span class="p">,</span> <span class="n">new_filename</span> <span class="ow">in</span> <span class="n">watcher</span><span class="p">:</span>
+  <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="n">fs</span><span class="o">.</span><span class="n">FILE_ACTION</span><span class="o">.</span><span class="n">ADDED</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">new_filename</span><span class="p">,</span> <span class="s">&quot;added&quot;</span>
+  <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="n">fs</span><span class="o">.</span><span class="n">FILE_ACTION</span><span class="o">.</span><span class="n">REMOVED</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">old_filename</span><span class="p">,</span> <span class="s">&quot;removed&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="fs._Attributes">
+<em class="property">
+class </em><tt class="descname">_Attributes</tt><big>(</big><em>flags=0</em><big>)</big><a class="headerlink" href="#fs._Attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple class wrapper for the list of file attributes
+(readonly, hidden, &amp;c.) It can be accessed by attribute
+access, item access and the &#8220;in&#8221; operator:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
+<span class="n">attributes</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span> <span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="p">()</span><span class="o">.</span><span class="n">attributes</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">attributes</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="n">fs</span><span class="o">.</span><span class="n">FILE_ATTRIBUTE</span><span class="o">.</span><span class="n">DIRECTORY</span><span class="p">])</span>
+<span class="k">assert</span> <span class="p">(</span><span class="s">&quot;directory&quot;</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<ul>
+<li class="toctree-l1"><a class="reference external" href="fs_filepath.html">The FilePath class</a></li>
+<li class="toctree-l1"><a class="reference external" href="fs_entry.html">The Entry class</a></li>
+<li class="toctree-l1"><a class="reference external" href="fs_file.html">The File class</a></li>
+<li class="toctree-l1"><a class="reference external" href="fs_dir.html">The Dir class</a></li>
+</ul>
+</div>
+<div class="section" id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+</ul>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="fs.x_fs">
+<em class="property">
+exception </em><tt class="descname">x_fs</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_fs" title="Permalink to this definition">¶</a></dt>
+<dd>Base for all fs-related exceptions</dd></dl>
+
+<dl class="exception">
+<dt id="fs.x_no_such_file">
+<em class="property">
+exception </em><tt class="descname">x_no_such_file</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_no_such_file" title="Permalink to this definition">¶</a></dt>
+<dd>Raised when a file could not be found</dd></dl>
+
+<dl class="exception">
+<dt id="fs.x_too_many_files">
+<em class="property">
+exception </em><tt class="descname">x_too_many_files</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_too_many_files" title="Permalink to this definition">¶</a></dt>
+<dd>Raised when more than one file matches a name</dd></dl>
+
+<dl class="exception">
+<dt id="fs.x_invalid_name">
+<em class="property">
+exception </em><tt class="descname">x_invalid_name</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_invalid_name" title="Permalink to this definition">¶</a></dt>
+<dd>Raised when a filename contains invalid characters</dd></dl>
+
+<dl class="exception">
+<dt id="fs.x_no_certificate">
+<em class="property">
+exception </em><tt class="descname">x_no_certificate</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_no_certificate" title="Permalink to this definition">¶</a></dt>
+<dd>Raised when encryption is attempted without a certificate</dd></dl>
+
+<dl class="exception">
+<dt id="fs.x_not_ready">
+<em class="property">
+exception </em><tt class="descname">x_not_ready</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_not_ready" title="Permalink to this definition">¶</a></dt>
+<dd>Raised when a device is not ready</dd></dl>
+
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="cookbook/fs.html"><em>Using the fs module</em></a></dt>
+<dd>Cookbook examples of using the fs module</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="contents.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href=""><tt class="docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a><ul>
+<li><a class="reference external" href="#introduction">Introduction</a></li>
+<li><a class="reference external" href="#functions">Functions</a><ul>
+<li><a class="reference external" href="#factories">Factories</a></li>
+<li><a class="reference external" href="#stdlib-extras">stdlib Extras</a></li>
+<li><a class="reference external" href="#helpers">Helpers</a></li>
+<li><a class="reference external" href="#additional-filesystem-operations">Additional Filesystem Operations</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#classes">Classes</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#constants">Constants</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#exceptions">Exceptions</a></li>
+<li><a class="reference external" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="event_logs.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">event_logs</span></tt> &#8211; Event Logs</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="fs_filepath.html"
+                                  title="next chapter">The FilePath class</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/fs.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fs_filepath.html" title="The FilePath class"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="event_logs.html" title="event_logs – Event Logs"
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

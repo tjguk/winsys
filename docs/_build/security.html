@@ -1,0 +1,648 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>security &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="index.html" />
+    <link rel="next" title="Miscellaneous" href="misc.html" />
+    <link rel="prev" title="registry – Registry" href="registry.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="Miscellaneous"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="registry.html" title="registry – Registry"
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-security">
+<h1><tt class="xref docutils literal"><span class="pre">security</span></tt><a class="headerlink" href="#module-security" title="Permalink to this headline">¶</a></h1>
+<p>Windows manages security by granting rights &#8211; such as the
+ability to read or write an object &#8211; in the form of
+Access Control Lists (ACLs) of Access Control Entries (ACEs)
+to specific security principals: users, groups or other entities.
+In addition, process security is managed by granting each logged-on
+session a Token which contains the rights associated with that
+session plus certain Privileges, such as the ability to take
+ownership of any object or to access security-related data.</p>
+<p>ACLs and ACEs are managed through the <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object,
+accessed mostly by means of the <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security()</span></tt></a> function, or
+the <a title="fs.Entry.security" class="reference external" href="fs_entry.html#fs.Entry.security"><tt class="xref docutils literal"><span class="pre">fs.Entry.security()</span></tt></a> method on external classes. Security
+principals are represented by <tt class="xref docutils literal"><span class="pre">Principal</span></tt> objects, accessed
+via the <tt class="xref docutils literal"><span class="pre">principal()</span></tt> function. <a title="security.Privilege" class="reference internal" href="#security.Privilege"><tt class="xref docutils literal"><span class="pre">Privilege</span></tt></a> objects
+refer to process privileges and are reached through the <tt class="xref docutils literal"><span class="pre">principal()</span></tt>
+function, or through the <tt class="xref docutils literal"><span class="pre">Privileges</span></tt> attribute of a <tt class="xref docutils literal"><span class="pre">Token</span></tt>.</p>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="security.security">
+<tt class="descname">security</tt><big>(</big><em>obj=&lt;Unset&gt;</em>, <em>obj_type=&lt;Unset&gt;</em>, <em>options=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#security.security" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object representing the security attributes
+of a named object (eg a file, registry key) or a kernel object (eg a process,
+a pipe). With no parameters, an empty <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object is returned which can then be
+set up with appropriate attributes and applied to other objects via its
+<tt class="xref docutils literal"><span class="pre">to_object()</span></tt> method. <tt class="xref xref docutils literal"><span class="pre">None</span></tt> and an existing <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> 
+object are passed through unchanged. A <tt class="xref docutils literal"><span class="pre">PySECURITY_DESCRIPTOR</span></tt> is
+converted to the corresponding <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object. A pywin32 <tt class="xref docutils literal"><span class="pre">PyHANDLE</span></tt>,
+representing a kernel object finds the security attributes for that object.
+Finally, a string finds the security attributes for the object of that name.</p>
+<p>The most common use is to pass a filename. The <tt class="xref docutils literal"><span class="pre">from_object()</span></tt> method
+assumes that an unqualified string represents a file. If it represents
+something else, you need to specify its type in the <cite>obj_type</cite> parameter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">security</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">security</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="s">&quot;c:/windows&quot;</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>obj</em> &#8211; any of <tt class="xref xref docutils literal"><span class="pre">None</span></tt>, a <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object, a pywin32 <tt class="xref docutils literal"><span class="pre">PyHANDLE</span></tt>,
+a pywin32 <tt class="xref docutils literal"><span class="pre">PySECURITY_DESCRIPTOR</span></tt>, or a string</li>
+<li><em>obj_type</em> &#8211; an <a title="security.SE_OBJECT_TYPE" class="reference internal" href="#security.SE_OBJECT_TYPE"><tt class="xref docutils literal"><span class="pre">SE_OBJECT_TYPE</span></tt></a> [<tt class="xref docutils literal"><span class="pre">file_object</span></tt>]</li>
+<li><em>options</em> &#8211; anything acccepted by <tt class="xref docutils literal"><span class="pre">_options()</span></tt> [<tt class="xref docutils literal"><span class="pre">DEFAULT_OPTIONS</span></tt>]</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="security.impersonate">
+<tt class="descname">impersonate</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="headerlink" href="#security.impersonate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context-manager which impersonates a user with a password
+and then reverts to the current user:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+<span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">security</span>
+<span class="k">with</span> <span class="n">security</span><span class="o">.</span><span class="n">impersonate</span> <span class="p">(</span><span class="s">&quot;Administrator&quot;</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">):</span>
+  <span class="k">print</span> <span class="n">security</span><span class="o">.</span><span class="n">me</span> <span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A <a title="accounts.Principal" class="reference external" href="accounts.html#accounts.Principal"><tt class="xref docutils literal"><span class="pre">accounts.Principal</span></tt></a> object is its own context manager
+although it&#8217;s not then possible to pass in a password.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>user</em> &#8211; any valid username</li>
+<li><em>password</em> &#8211; username for that user; if not specified, user will be prompted</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="security.change_privileges">
+<tt class="descname">change_privileges</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="headerlink" href="#security.change_privileges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context manager which temporarily enables/disables privs within the 
+current token, reverting when done to the previous situation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+<span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">security</span><span class="p">,</span> <span class="n">fs</span>
+
+<span class="n">test</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span> <span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">)</span>
+<span class="n">test</span><span class="o">.</span><span class="n">touch</span> <span class="p">()</span>
+<span class="k">with</span> <span class="n">security</span><span class="o">.</span><span class="n">change_privileges</span> <span class="p">([</span><span class="s">&quot;restore&quot;</span><span class="p">]):</span>
+  <span class="k">with</span> <span class="n">test</span><span class="o">.</span><span class="n">security</span> <span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">s</span><span class="o">.</span><span class="n">owner</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">security</span><span class="o">.</span><span class="n">principal</span> <span class="p">(</span><span class="s">&quot;Administrator&quot;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">s</span><span class="o">.</span><span class="n">owner</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>enable_privs</em> &#8211; list of privileges to enable; each priv is anything accepted by <tt class="xref docutils literal"><span class="pre">privilege()</span></tt></li>
+<li><em>disable_privs</em> &#8211; list of privileges to disable; each priv is anything accepted by <tt class="xref docutils literal"><span class="pre">privilege()</span></tt></li>
+<li><em>_token</em> &#8211; (internal) a token to use if not the current one</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">yields re-privileged token object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="security.Security">
+<em class="property">
+class </em><tt class="descname">Security</tt><big>(</big><em>control=&lt;Unset&gt;</em>, <em>owner=&lt;Unset&gt;</em>, <em>group=&lt;Unset&gt;</em>, <em>dacl=&lt;Unset&gt;</em>, <em>sacl=&lt;Unset&gt;</em>, <em>inherit_handle=True</em>, <em>originating_object=&lt;Unset&gt;</em>, <em>originating_object_type=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#security.Security" title="Permalink to this definition">¶</a></dt>
+<dd><p>The heart of the <tt class="xref docutils literal"><span class="pre">security</span></tt> module, this class represents the security
+descriptor of a file, kernel object or any other securable object. It&#8217;s most
+commonly instantiated from an object&#8217;s security method (eg <cite>fs.File.security</cite>)
+or by means of the <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security()</span></tt></a> function which can take the name or handle
+of an object and return a corresponding <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object.</p>
+<p>Key attributes are:</p>
+<ul class="simple">
+<li>owner - a <tt class="xref docutils literal"><span class="pre">Principal</span></tt> object representing the object owner</li>
+<li>group - a <tt class="xref docutils literal"><span class="pre">Principal</span></tt> object representing the object group</li>
+<li>dacl - a <tt class="xref docutils literal"><span class="pre">security.DACL</span></tt> object representing the DACL</li>
+<li>sacl - an <tt class="xref docutils literal"><span class="pre">security.SACL</span></tt> object representing the SACL</li>
+</ul>
+<p>of which group and sacl are less likely to be used (group hardly at all).
+These attributes are carefully-handled properties of the <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a>
+object and are intended to make it very easy to manipulate the ACLs and
+ACEs of the Windows security model. The owner and group accept assignments
+of anything accepted by <tt class="xref docutils literal"><span class="pre">principal()</span></tt> while the ACL attributes accept
+anything accepted by <tt class="xref docutils literal"><span class="pre">acl()</span></tt>, in particular a list of <tt class="xref docutils literal"><span class="pre">ACE</span></tt>
+entries, themselves anything accepted by <tt class="xref docutils literal"><span class="pre">ace()</span></tt>. So a very simple
+way to add the local administrator to the DACL with full control is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">security</span>
+<span class="k">with</span> <span class="n">security</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="s">&quot;c:/temp/blah.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">dacl</span><span class="o">.</span><span class="n">append</span> <span class="p">((</span><span class="s">&quot;Administrator&quot;</span><span class="p">,</span> <span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>or to give only the logged-on user rights to a particular file
+while explicitly denying the local administrator:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">security</span>
+<span class="k">with</span> <span class="n">security</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="s">&quot;c:/temp/secret.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">dacl</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="n">security</span><span class="o">.</span><span class="n">me</span> <span class="p">(),</span> <span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&quot;Administrator&quot;</span><span class="p">,</span> <span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;DENY&quot;</span><span class="p">)</span>
+  <span class="p">]</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">break_inheritance</span> <span class="p">(</span><span class="n">copy_first</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>By default, only Owner and Group
+information is populated (although this can easily by changed by passing
+other options when creating the object). And only those objects which are
+populated, or explicitly requested will be updated when the security information
+is written back to the underlying object or handle.</p>
+<p>A <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object is its own context handler and this is the most
+straightforward way to update security information, although the <a title="security.Security.to_object" class="reference internal" href="#security.Security.to_object"><tt class="xref docutils literal"><span class="pre">Security.to_object()</span></tt></a>
+method will let you write the security information back to any arbitrary object,
+including the one it came from.</p>
+<p>For the purposes of serialisation, the standard SDDL format is used for
+strings and can be round-tripped between <tt class="xref docutils literal"><span class="pre">as_string()</span></tt> and <a title="security.Security.from_string" class="reference internal" href="#security.Security.from_string"><tt class="xref docutils literal"><span class="pre">from_string()</span></tt></a>.</p>
+<p>automethod:: _options</p>
+<dl class="attribute">
+<dt id="security.Security.OPTIONS">
+<tt class="descname">OPTIONS</tt><a class="headerlink" href="#security.Security.OPTIONS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping between characters and security info:</p>
+<ul class="simple">
+<li>O - Owner</li>
+<li>G - Group</li>
+<li>D - DACL</li>
+<li>S - SACL</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="security.Security.break_inheritance">
+<tt class="descname">break_inheritance</tt><big>(</big><em>copy_first=True</em>, <em>break_dacl=True</em>, <em>break_sacl=True</em><big>)</big><a class="headerlink" href="#security.Security.break_inheritance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cause this security object to start a new thread of inheritance. By
+default, assume that DACL &amp; SACL inheritance are both to be broken and
+that existing permissions are to be retained, although uninherited.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>copy_first</em> &#8211; whether to retain existing permissions [True]</li>
+<li><em>break_dacl</em> &#8211; whether to break DACL inheritance [True]</li>
+<li><em>break_sacl</em> &#8211; whether to break SACL inheritance [True]</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><cite>self</cite></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="security.Security.from_object">
+<em class="property">
+classmethod </em><tt class="descname">from_object</tt><big>(</big><em>obj</em>, <em>object_type=&lt;Unset&gt;</em>, <em>options=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#security.Security.from_object" title="Permalink to this definition">¶</a></dt>
+<dd>Constructs a <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object from a PyHANDLE or an object name.
+Almost never called directly; use <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security()</span></tt></a>.</dd></dl>
+
+<dl class="classmethod">
+<dt id="security.Security.from_security_descriptor">
+<em class="property">
+classmethod </em><tt class="descname">from_security_descriptor</tt><big>(</big><em>sd</em>, <em>inherit_handle=True</em>, <em>originating_object=&lt;Unset&gt;</em>, <em>originating_object_type=&lt;Unset&gt;</em>, <em>options=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#security.Security.from_security_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd>Constructs a <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object from a PySECURITY_DESCRIPTOR object.
+Almost never called directly; use <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security()</span></tt></a> unless you need some
+slightly special handling with inherited handles.</dd></dl>
+
+<dl class="classmethod">
+<dt id="security.Security.from_string">
+<em class="property">
+classmethod </em><tt class="descname">from_string</tt><big>(</big><em>sddl</em>, <em>options=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#security.Security.from_string" title="Permalink to this definition">¶</a></dt>
+<dd>Constructs a <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object from an SDDL string.
+Useful for round-tripping, since the <tt class="xref docutils literal"><span class="pre">__str__()</span></tt> method produces
+an SDDL string.</dd></dl>
+
+<dl class="method">
+<dt id="security.Security.restore_inheritance">
+<tt class="descname">restore_inheritance</tt><big>(</big><em>copy_back=True</em>, <em>restore_dacl=True</em>, <em>restore_sacl=True</em><big>)</big><a class="headerlink" href="#security.Security.restore_inheritance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cause this security object to regain its inhertance from its parents.
+By default, assume that DACL &amp; SACL inheritance are both to be recovered and
+that existing permissions are to be copied back in.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>copy_back</em> &#8211; whether to copy back inherited permissions [True]</li>
+<li><em>restore_dacl</em> &#8211; whether to restore DACL inheritance [True]</li>
+<li><em>restore_sacl</em> &#8211; whether to restore SACL inheritance [True]</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><cite>self</cite></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="security.Security.to_object">
+<tt class="descname">to_object</tt><big>(</big><em>obj=&lt;Unset&gt;</em>, <em>object_type=&lt;Unset&gt;</em>, <em>options=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#security.Security.to_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the current state of the object as the security settings
+on a Windows object, typically a file. This is most often called
+implicitly when the <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object is used as a context
+manager, but can be called explicitly, especially to copy one object&#8217;s
+security to another:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">security</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">security</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="s">&quot;filea&quot;</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">to_object</span> <span class="p">(</span><span class="s">&quot;fileb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>obj</em> &#8211; (optional) object or object name to write security to if this <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object
+wasn&#8217;t created from an object in the first place.</li>
+<li><em>object_type</em> &#8211; an <a title="security.SE_OBJECT_TYPE" class="reference internal" href="#security.SE_OBJECT_TYPE"><tt class="xref docutils literal"><span class="pre">SE_OBJECT_TYPE</span></tt></a> [<tt class="xref docutils literal"><span class="pre">file_object</span></tt>]</li>
+<li><em>options</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">_options()</span></tt></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="security.Privilege">
+<em class="property">
+class </em><tt class="descname">Privilege</tt><big>(</big><em>luid</em>, <em>attributes=0</em><big>)</big><a class="headerlink" href="#security.Privilege" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="security.SE_OBJECT_TYPE">
+<tt class="descname">SE_OBJECT_TYPE</tt><a class="headerlink" href="#security.SE_OBJECT_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Types of object which can be secured</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="8%" />
+<col width="49%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>UNKNOWN_OBJECT_TYPE</td>
+<td>0x00</td>
+<td>SE_UNKNOWN_OBJECT_TYPE</td>
+</tr>
+<tr><td>FILE_OBJECT</td>
+<td>0x01</td>
+<td>SE_FILE_OBJECT</td>
+</tr>
+<tr><td>SERVICE</td>
+<td>0x02</td>
+<td>SE_SERVICE</td>
+</tr>
+<tr><td>PRINTER</td>
+<td>0x03</td>
+<td>SE_PRINTER</td>
+</tr>
+<tr><td>REGISTRY_KEY</td>
+<td>0x04</td>
+<td>SE_REGISTRY_KEY</td>
+</tr>
+<tr><td>LMSHARE</td>
+<td>0x05</td>
+<td>SE_LMSHARE</td>
+</tr>
+<tr><td>KERNEL_OBJECT</td>
+<td>0x06</td>
+<td>SE_KERNEL_OBJECT</td>
+</tr>
+<tr><td>WINDOW_OBJECT</td>
+<td>0x07</td>
+<td>SE_WINDOW_OBJECT</td>
+</tr>
+<tr><td>DS_OBJECT</td>
+<td>0x08</td>
+<td>SE_DS_OBJECT</td>
+</tr>
+<tr><td>DS_OBJECT_ALL</td>
+<td>0x09</td>
+<td>SE_DS_OBJECT_ALL</td>
+</tr>
+<tr><td>PROVIDER_DEFINED_OBJECT</td>
+<td>0x0A</td>
+<td>SE_PROVIDER_DEFINED_OBJECT</td>
+</tr>
+<tr><td>WMIGUID_OBJECT</td>
+<td>0x0B</td>
+<td>SE_WMIGUID_OBJECT</td>
+</tr>
+<tr><td>REGISTRY_WOW64_32KEY</td>
+<td>0x0C</td>
+<td>SE_REGISTRY_WOW64_32KEY</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="data">
+<dt id="security.SECURITY_INFORMATION">
+<tt class="descname">SECURITY_INFORMATION</tt><a class="headerlink" href="#security.SECURITY_INFORMATION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Information held with a security descriptor body</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="16%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>OWNER</td>
+<td>0x00000001</td>
+<td>OWNER_SECURITY_INFORMATION</td>
+</tr>
+<tr><td>GROUP</td>
+<td>0x00000002</td>
+<td>GROUP_SECURITY_INFORMATION</td>
+</tr>
+<tr><td>DACL</td>
+<td>0x00000004</td>
+<td>DACL_SECURITY_INFORMATION</td>
+</tr>
+<tr><td>SACL</td>
+<td>0x00000008</td>
+<td>SACL_SECURITY_INFORMATION</td>
+</tr>
+<tr><td>LABEL</td>
+<td>0x00000010</td>
+<td>LABEL_SECURITY_INFORMATION</td>
+</tr>
+<tr><td>UNPROTECTED_SACL</td>
+<td>0x10000000</td>
+<td>UNPROTECTED_SACL_SECURITY_INFORMATION</td>
+</tr>
+<tr><td>UNPROTECTED_DACL</td>
+<td>0x20000000</td>
+<td>UNPROTECTED_DACL_SECURITY_INFORMATION</td>
+</tr>
+<tr><td>PROTECTED_SACL</td>
+<td>0x40000000</td>
+<td>PROTECTED_SACL_SECURITY_INFORMATION</td>
+</tr>
+<tr><td>PROTECTED_DACL</td>
+<td>0x80000000</td>
+<td>PROTECTED_DACL_SECURITY_INFORMATION</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="data">
+<dt id="security.SD_CONTROL">
+<tt class="descname">SD_CONTROL</tt><a class="headerlink" href="#security.SD_CONTROL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Information held with a security descriptor header</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="40%" />
+<col width="13%" />
+<col width="47%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>OWNER_DEFAULTED</td>
+<td>0x0001</td>
+<td>SE_OWNER_DEFAULTED</td>
+</tr>
+<tr><td>GROUP_DEFAULTED</td>
+<td>0x0002</td>
+<td>SE_GROUP_DEFAULTED</td>
+</tr>
+<tr><td>DACL_PRESENT</td>
+<td>0x0004</td>
+<td>SE_DACL_PRESENT</td>
+</tr>
+<tr><td>DACL_DEFAULTED</td>
+<td>0x0008</td>
+<td>SE_DACL_DEFAULTED</td>
+</tr>
+<tr><td>SACL_PRESENT</td>
+<td>0x0010</td>
+<td>SE_SACL_PRESENT</td>
+</tr>
+<tr><td>SACL_DEFAULTED</td>
+<td>0x0020</td>
+<td>SE_SACL_DEFAULTED</td>
+</tr>
+<tr><td>DACL_AUTO_INHERITED</td>
+<td>0x0400</td>
+<td>SE_DACL_AUTO_INHERITED</td>
+</tr>
+<tr><td>SACL_AUTO_INHERITED</td>
+<td>0x0800</td>
+<td>SE_SACL_AUTO_INHERITED</td>
+</tr>
+<tr><td>DACL_PROTECTED</td>
+<td>0x1000</td>
+<td>SE_DACL_PROTECTED</td>
+</tr>
+<tr><td>SACL_PROTECTED</td>
+<td>0x2000</td>
+<td>SE_SACL_PROTECTED</td>
+</tr>
+<tr><td>SELF_RELATIVE</td>
+<td>0x8000</td>
+<td>SE_SELF_RELATIVE</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="security.x_security">
+<em class="property">
+exception </em><tt class="descname">x_security</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#security.x_security" title="Permalink to this definition">¶</a></dt>
+<dd>Base for security-related exceptions</dd></dl>
+
+<dl class="exception">
+<dt id="security.x_value_not_set">
+<em class="property">
+exception </em><tt class="descname">x_value_not_set</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#security.x_value_not_set" title="Permalink to this definition">¶</a></dt>
+<dd>Raised if an attempt is made to read a security value which hasn&#8217;t been set</dd></dl>
+
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="cookbook/security.html"><em>Using the security module</em></a></dt>
+<dd>Cookbook examples of using the security module</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="contents.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href=""><tt class="docutils literal"><span class="pre">security</span></tt></a><ul>
+<li><a class="reference external" href="#functions">Functions</a></li>
+<li><a class="reference external" href="#classes">Classes</a></li>
+<li><a class="reference external" href="#constants">Constants</a></li>
+<li><a class="reference external" href="#exceptions">Exceptions</a></li>
+<li><a class="reference external" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="registry.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="misc.html"
+                                  title="next chapter">Miscellaneous</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/security.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="Miscellaneous"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="registry.html" title="registry – Registry"
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

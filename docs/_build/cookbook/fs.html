@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using the fs module &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="../_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="../index.html" />
+    <link rel="up" title="Cookbook" href="../cookbook.html" />
+    <link rel="next" title="Using the registry module" href="registry.html" />
+    <link rel="prev" title="Using the event_logs module" href="event_logs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="registry.html" title="Using the registry module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="event_logs.html" title="Using the event_logs module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../contents.html">WinSys v0.3dev documentation</a> &raquo;</li>
+          <li><a href="../cookbook.html" accesskey="U">Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-the-fs-module">
+<h1>Using the fs module<a class="headerlink" href="#using-the-fs-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="take-ownership-of-a-file">
+<h2>Take ownership of a file<a class="headerlink" href="#take-ownership-of-a-file" title="Permalink to this headline">¶</a></h2>
+<p>Take ownership of a file to which you have no other access.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+<span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">security</span><span class="p">,</span> <span class="n">fs</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span> <span class="p">(</span><span class="s">&quot;c:/temp/tim.txt&quot;</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">security</span><span class="o">.</span><span class="n">change_privileges</span> <span class="p">([</span><span class="n">security</span><span class="o">.</span><span class="n">PRIVILEGE</span><span class="o">.</span><span class="n">TAKE_OWNERSHIP</span><span class="p">]):</span>
+  <span class="n">f</span><span class="o">.</span><span class="n">take_ownership</span> <span class="p">()</span>
+
+<span class="k">assert</span> <span class="n">f</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="s">&quot;O&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span> <span class="o">==</span> <span class="n">security</span><span class="o">.</span><span class="n">me</span> <span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>The <a title="fs.Entry.take_ownership" class="reference external" href="../fs_entry.html#fs.Entry.take_ownership"><tt class="xref docutils literal"><span class="pre">Entry.take_ownership()</span></tt></a> method assumes that you have no existing
+access to the object, so does not attempt to read its security at all
+since this would probably fail. If you do not even have permission
+to set the owner entry in the security descriptor you need to enable
+the SeTakeOwnership privilege in your token. Best practice is to
+enable privileges for only as long as you need them, so the <tt class="xref docutils literal"><span class="pre">security.changed_privileges()</span></tt>
+is a context manager which reverses the privilege changes once it exits.</p>
+</div>
+<div class="section" id="find-the-sizes-of-top-level-directories">
+<h2>Find the sizes of top-level directories<a class="headerlink" href="#find-the-sizes-of-top-level-directories" title="Permalink to this headline">¶</a></h2>
+<p>For a given root directory, find the total size taken by all the
+files in each of its top-level subdirectories, and display them
+in descending order of size.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">utils</span>
+
+<span class="p">[</span><span class="n">root</span><span class="p">]</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span>
+  <span class="s">&quot;Find top-level sizes&quot;</span><span class="p">,</span>
+  <span class="p">(</span><span class="s">&quot;Start from&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">get_folder</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">sizes</span> <span class="o">=</span> <span class="nb">dict</span> <span class="p">(</span>
+  <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="nb">sum</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">flat</span> <span class="p">()))</span> 
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">dir</span> <span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">dirs</span> <span class="p">()</span>
+<span class="p">)</span>
+<span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="n">sorted</span> <span class="p">(</span><span class="n">sizes</span><span class="o">.</span><span class="n">items</span> <span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span> <span class="p">(</span><span class="mf">1</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+  <span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;=&gt;&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_as_mb</span> <span class="p">(</span><span class="n">size</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>The <a title="dialogs.dialog" class="reference external" href="../dialogs.html#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialogs.dialog()</span></tt></a> function sets up a simple dialog box
+requesting the name of the root directory (offering a push-button
+for a standard selection dialog). Then the <a title="fs.Dir.dirs" class="reference external" href="../fs_dir.html#fs.Dir.dirs"><tt class="xref docutils literal"><span class="pre">Dir.dirs()</span></tt></a> method
+iterates over all subdirectories of its directory, and <a title="fs.Dir.flat" class="reference external" href="../fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a>
+iterates over all the files underneath a directory from which we can
+fetch their (compressed) size and sum them all up.</p>
+<p>The rest is mostly standard Python gimmickry with sorting dictionaries
+etc. <tt class="xref docutils literal"><span class="pre">utils.size_as_mb()</span></tt> provides a more human-readable
+version of a number of bytes.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../contents.html">
+              <img class="logo" src="../_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="../contents.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Using the fs module</a><ul>
+<li><a class="reference external" href="#take-ownership-of-a-file">Take ownership of a file</a></li>
+<li><a class="reference external" href="#find-the-sizes-of-top-level-directories">Find the sizes of top-level directories</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="event_logs.html"
+                                  title="previous chapter">Using the event_logs module</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="registry.html"
+                                  title="next chapter">Using the registry module</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/cookbook/fs.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="registry.html" title="Using the registry module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="event_logs.html" title="Using the event_logs module"
+             >previous</a> |</li>
+        <li><a href="../contents.html">WinSys v0.3dev documentation</a> &raquo;</li>
+          <li><a href="../cookbook.html" >Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

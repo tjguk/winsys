@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ipc – Interprocess Communication &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="index.html" />
+    <link rel="next" title="Mailslots" href="mailslots.html" />
+    <link rel="prev" title="The Dir class" href="fs_dir.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="mailslots.html" title="Mailslots"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fs_dir.html" title="The Dir class"
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-ipc">
+<h1><tt class="xref docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication<a class="headerlink" href="#module-ipc" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The IPC module offers an interface to the various forms of interprocess
+communication available under windows: mailslots, events, named pipes,
+mutexes, sempahores and waitable timers. At least, that&#8217;s the plan.
+At the time of writing, only mailslots and events are in there. But
+the rest are definitely on the way.</p>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="ipc.x_ipc">
+<em class="property">
+exception </em><tt class="descname">x_ipc</tt><a class="headerlink" href="#ipc.x_ipc" title="Permalink to this definition">¶</a></dt>
+<dd>Base of all exceptions in this module; subclass of <a title="core.x_winsys" class="reference external" href="core.html#core.x_winsys"><tt class="xref docutils literal"><span class="pre">core.x_winsys</span></tt></a></dd></dl>
+
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="ipc.mailslot">
+<tt class="descname">mailslot</tt><big>(</big><em>mailslot</em><span class="optional">[</span>, <em>message_size=0</em>, <em>timeout_ms=-1</em><span class="optional">]</span><big>)</big> &rarr; Mailslot object<a class="headerlink" href="#ipc.mailslot" title="Permalink to this definition">¶</a></dt>
+<dd>Factory function to return a <a title="ipc.Mailslot" class="reference external" href="mailslots.html#ipc.Mailslot"><tt class="xref docutils literal"><span class="pre">Mailslot</span></tt></a> object with the given
+name, number of messages and timeout in milliseconds. If <tt class="docutils literal"><span class="pre">name</span></tt>
+is not an absolute mailslot name (looking like <tt class="docutils literal"><span class="pre">\\...\mailslot\...</span></tt>)
+it is assumed to be a local mailslot and is prefixed with
+<tt class="docutils literal"><span class="pre">\\.\mailslot\</span></tt>. If <tt class="docutils literal"><span class="pre">name</span></tt> is None, None is returned and the other
+parameters are ignored. If <tt class="docutils literal"><span class="pre">name</span></tt> is a <tt class="docutils literal"><span class="pre">Mailslot</span></tt> instance, it is returned
+unaltered and the remaining parameters are ignored.</dd></dl>
+
+<dl class="function">
+<dt id="ipc.event">
+<tt class="descname">event</tt><big>(</big><em>event</em><span class="optional">[</span>, <em>initially_set=0</em>, <em>needs_manual_reset=0</em>, <em>security=None</em><span class="optional">]</span><big>)</big> &rarr; Event object<a class="headerlink" href="#ipc.event" title="Permalink to this definition">¶</a></dt>
+<dd>Factory function to return a <a title="ipc.Event" class="reference external" href="events.html#ipc.Event"><tt class="xref docutils literal"><span class="pre">Event</span></tt></a> object with the given
+name and flags. If <tt class="docutils literal"><span class="pre">event</span></tt> is None, None is returned and the remaining
+parameters are ignored. If <tt class="docutils literal"><span class="pre">event</span></tt> is an <tt class="docutils literal"><span class="pre">Event</span></tt> instance, it is returned
+unaltered and the remaining parameters are ignored.</dd></dl>
+
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="mailslots.html">Mailslots</a></li>
+<li class="toctree-l1"><a class="reference external" href="events.html">Events</a></li>
+</ul>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://msdn.microsoft.com/en-us/library/ms686353(VS.85).aspx">Synchronisation</a></dt>
+<dd>Documentation on microsoft.com for synchronisation objects</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="to-do">
+<h2>To Do<a class="headerlink" href="#to-do" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Named Pipes</li>
+<li>Waitable Timers</li>
+<li>Mutexes</li>
+<li>Waits</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="contents.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href=""><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a><ul>
+<li><a class="reference external" href="#introduction">Introduction</a></li>
+<li><a class="reference external" href="#exceptions">Exceptions</a></li>
+<li><a class="reference external" href="#functions">Functions</a></li>
+<li><a class="reference external" href="#classes">Classes</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#references">References</a></li>
+<li><a class="reference external" href="#to-do">To Do</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="fs_dir.html"
+                                  title="previous chapter">The Dir class</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="mailslots.html"
+                                  title="next chapter">Mailslots</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/ipc.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mailslots.html" title="Mailslots"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fs_dir.html" title="The Dir class"
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,589 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dialogs – Dialog boxes &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="index.html" />
+    <link rel="next" title="event_logs – Event Logs" href="event_logs.html" />
+    <link rel="prev" title="accounts – Users, Groups, SIDs &c." href="accounts.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="event_logs.html" title="event_logs – Event Logs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="accounts.html" title="accounts – Users, Groups, SIDs &c."
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-dialogs">
+<h1><tt class="xref docutils literal"><span class="pre">dialogs</span></tt> &#8211; Dialog boxes<a class="headerlink" href="#module-dialogs" title="Permalink to this headline">¶</a></h1>
+<p>Provides for simple dialog boxes, doing just enough to return input
+from the user using edit controls, dropdown lists and checkboxes. Most
+interaction is via the <a title="dialogs.dialog" class="reference internal" href="#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialog()</span></tt></a>, <a title="dialogs.progress_dialog" class="reference internal" href="#dialogs.progress_dialog"><tt class="xref docutils literal"><span class="pre">progress_dialog()</span></tt></a> or
+<a title="dialogs.info_dialog" class="reference internal" href="#dialogs.info_dialog"><tt class="xref docutils literal"><span class="pre">info_dialog()</span></tt></a> functions. This example offers the user a drop-down 
+list of installed Python directories, a text box to enter a size threshold and a 
+checkbox to indicate whether to email the result:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">registry</span>
+<span class="n">SIZE_THRESHOLD_MB</span> <span class="o">=</span> <span class="s">&quot;100&quot;</span>
+<span class="n">PYTHONREG</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\python\pythoncore&quot;</span><span class="p">)</span>
+<span class="n">version</span><span class="p">,</span> <span class="n">size_threshold_mb</span><span class="p">,</span> <span class="n">email_result</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span>
+  <span class="s">&quot;Find big files in Python&quot;</span><span class="p">,</span>
+  <span class="p">(</span><span class="s">&quot;Version&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">InstallPath</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">PYTHONREG</span><span class="o">.</span><span class="n">keys</span> <span class="p">()]),</span>
+  <span class="p">(</span><span class="s">&quot;Bigger than (Mb)&quot;</span><span class="p">,</span> <span class="n">SIZE_THRESHOLD_MB</span><span class="p">),</span>
+  <span class="p">(</span><span class="s">&quot;Email?&quot;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>All dialogs are resizable horizontally but not vertically. All
+edit boxes (fields with a default which is a string) accept file-drops,
+eg from Explorer.</p>
+<p>The standard dialog (from <a title="dialogs.dialog" class="reference internal" href="#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialog()</span></tt></a>) is modal and returns a tuple
+of values as soon as [Ok] is pressed or an empty list if [Cancel] is pressed.
+The progress dialog (from <a title="dialogs.progress_dialog" class="reference internal" href="#dialogs.progress_dialog"><tt class="xref docutils literal"><span class="pre">progress_dialog()</span></tt></a>) is also modal, but
+passes the tuple of values to a callback which yields update strings which
+are then displayed in the status box on the dialog. When the callback
+function completes, the dialog returns the tuple of values to the caller.
+<a title="dialogs.info_dialog" class="reference internal" href="#dialogs.info_dialog"><tt class="xref docutils literal"><span class="pre">info_dialog()</span></tt></a> is intended to be used for, eg, displaying a
+traceback or other bulky text for which a message box might be awkward.
+It displays multiline text in a readonly edit control which can be
+scrolled and select-copied.</p>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dialogs.dialog">
+<tt class="descname">dialog</tt><big>(</big><em>title</em>, <em>*fields</em><big>)</big><a class="headerlink" href="#dialogs.dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortcut function to populate and run a dialog, returning
+the button pressed and values saved. After the title, the
+function expects a series of 2-tuples where the first item
+is the field label and the second is the default value. This
+default value determines the type of ui element as follows:</p>
+<ul class="simple">
+<li>list - a drop down list in the order given</li>
+<li>bool - a checkbox</li>
+<li>string - an edit control</li>
+</ul>
+<p>A third item may be present in the tuple where the second item
+is a string. This is a callback function. If this is present and
+is not None, a small button will be added to the right of the
+corresponding edit control which, when pressed, will call the
+callback which must return a string to be inserted in the edit
+control, or None if no change is to be made. This is intended 
+to throw up, eg, a file-browse dialog. A useful default is
+available as <a title="dialogs.get_filename" class="reference internal" href="#dialogs.get_filename"><tt class="xref docutils literal"><span class="pre">get_filename()</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>title</em> &#8211; any string to use as the title of the dialog</li>
+<li><em>fields</em> &#8211; series of 2-tuples consisting of a name and a default value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the values entered by the user in the order of <cite>fields</cite></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dialogs.progress_dialog">
+<tt class="descname">progress_dialog</tt><big>(</big><em>title</em>, <em>progress_callback</em>, <em>*fields</em><big>)</big><a class="headerlink" href="#dialogs.progress_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populate and run a dialog with a progress 
+callback which yields messages. Fields are the same as for
+<a title="dialogs.dialog" class="reference internal" href="#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialog()</span></tt></a> but the second parameter is a function which
+takes the value list as parameters and yields strings as updates.
+The strings will be displayed in a static control on the dialog
+while the [Ok] button is disabled until the callback completes, 
+at which point the [Ok] button is enabled again and the tuple
+of values is returned to the caller.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The progress callback runs inside a thread so any necessary
+thread-specific preparation must happen, eg invoking
+pythoncom.CoInitialize.</p>
+</div>
+<p>This example takes a directory from the user and finds the total
+size of each of its subdirectories, showing the name of each one
+as it is searched. Finally, it uses <tt class="xref docutils literal"><span class="pre">utils.size_as_mb()</span></tt> to
+display a human-redable version of each directory size:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">utils</span>
+
+<span class="n">sizes</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">def</span> <span class="nf">sizer</span> <span class="p">(</span><span class="n">root</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">dir</span> <span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">dirs</span> <span class="p">():</span>
+    <span class="k">yield</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">sizes</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">flat</span> <span class="p">())</span>
+
+<span class="n">dialogs</span><span class="o">.</span><span class="n">progress_dialog</span> <span class="p">(</span>
+  <span class="s">&quot;Sizer&quot;</span><span class="p">,</span> 
+  <span class="n">sizer</span><span class="p">,</span>
+  <span class="p">(</span><span class="s">&quot;Root&quot;</span><span class="p">,</span> <span class="s">&quot;c:/temp&quot;</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">get_folder</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="n">sorted</span> <span class="p">(</span><span class="n">sizes</span><span class="o">.</span><span class="n">items</span> <span class="p">()):</span>
+  <span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;=&gt;&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_as_mb</span> <span class="p">(</span><span class="n">size</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>title</em> &#8211; any string to use as the title of the dialog</li>
+<li><em>progress_callback</em> &#8211; a function accepting values as per <cite>fields</cite> and yielding progress as strings</li>
+<li><em>fields</em> &#8211; series of 2-tuples consisting of a name and a default value</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the values entered by the user in the order of <cite>fields</cite></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dialogs.info_dialog">
+<tt class="descname">info_dialog</tt><big>(</big><em>title</em>, <em>text</em>, <em>hwnd=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#dialogs.info_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dialog with no fields which simply displays information
+in a read-only multiline edit box. The text can be arbitrarily big
+but the dialog will only adjust vertically up to a certain point.
+After that the user may scroll with the keyboard. The text can be
+selected and copied:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span>
+<span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;LICENSE.txt&quot;</span><span class="p">)</span>
+<span class="n">dialogs</span><span class="o">.</span><span class="n">info_dialog</span> <span class="p">(</span><span class="s">&quot;LICENSE.txt&quot;</span><span class="p">,</span> <span class="nb">open</span> <span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="o">.</span><span class="n">read</span> <span class="p">())</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>title</em> &#8211; any string to use as the title of the dialog</li>
+<li><em>info</em> &#8211; any (possibly multiline) string to display in the body of the dialog</li>
+<li><em>parent_hwnd</em> &#8211; optional window handle</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dialogs.get_filename">
+<tt class="descname">get_filename</tt><big>(</big><em>hwnd=None</em>, <em>start_folder=None</em><big>)</big><a class="headerlink" href="#dialogs.get_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quick interface to the shell&#8217;s browse-for-folder dialog,
+optionally starting in a particular folder and allowing file
+and share selection.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">At present this interacts badly with TortoiseHg, causing the
+interpreter to stack dump.</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="dialogs.BaseDialog">
+<em class="property">
+class </em><tt class="descname">BaseDialog</tt><big>(</big><em>title</em>, <em>parent_hwnd=0</em><big>)</big><a class="headerlink" href="#dialogs.BaseDialog" title="Permalink to this definition">¶</a></dt>
+<dd>Basic template for a dialog with one or more fields plus
+[Ok] and [Cancel] buttons. A simple spacing / sizing algorithm
+is used. Most of the work is done inside <tt class="xref docutils literal"><span class="pre">_get_dialog_template()</span></tt>
+which examines the incoming fields and tries to place them according
+to their various options.</dd></dl>
+
+<dl class="class">
+<dt id="dialogs.Dialog">
+<em class="property">
+class </em><tt class="descname">Dialog</tt><big>(</big><em>title</em>, <em>fields</em>, <em>progress_callback=&lt;Unset&gt;</em>, <em>parent_hwnd=0</em><big>)</big><a class="headerlink" href="#dialogs.Dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>A general-purpose dialog class for collecting arbitrary information in
+text strings and handing it back to the user. Only Ok &amp; Cancel buttons are
+allowed, and all the fields are considered to be strings. The list of
+fields is of the form: [(label, default), ...] and the values are saved
+in the same order.</p>
+<dl class="method">
+<dt id="dialogs.Dialog.OnCallback">
+<tt class="descname">OnCallback</tt><big>(</big><em>hwnd</em>, <em>field_id</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnCallback" title="Permalink to this definition">¶</a></dt>
+<dd>If the user pressed a callback button associated with a text
+field, find the field and call its callback with the dialog window
+and the field&#8217;s current value. If anything is returned, put that
+value back into the field.</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.Dialog.OnCancel">
+<tt class="descname">OnCancel</tt><big>(</big><em>hwnd</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnCancel" title="Permalink to this definition">¶</a></dt>
+<dd>If the user presses cancel check to see whether we&#8217;re running within
+a progress thread. If so, set the cancel event and wait for the thread
+to catch up. Either way, close the dialog with a cancelled state.</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.Dialog.OnCommand">
+<tt class="descname">OnCommand</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnCommand" title="Permalink to this definition">¶</a></dt>
+<dd>Handle button presses: OK, Cancel and the callback buttons
+which are optional for text fields</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.Dialog.OnInitDialog">
+<tt class="descname">OnInitDialog</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnInitDialog" title="Permalink to this definition">¶</a></dt>
+<dd>Attempt to position the dialog box more or less in
+the middle of its parent (possibly the desktop). Then
+force a resize of the dialog controls which should take
+into account the different label lengths and the dialog&#8217;s
+new size.</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.Dialog.OnMinMaxInfo">
+<tt class="descname">OnMinMaxInfo</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnMinMaxInfo" title="Permalink to this definition">¶</a></dt>
+<dd>Prevent the dialog from resizing vertically by extracting
+the window&#8217;s current size and using the minmaxinfo message
+to set the maximum &amp; minimum window heights to be its current height.</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.Dialog.OnOk">
+<tt class="descname">OnOk</tt><big>(</big><em>hwnd</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnOk" title="Permalink to this definition">¶</a></dt>
+<dd>When OK is pressed, if this isn&#8217;t a progress dialog then simply
+gather the results and return. If this is a progress dialog then
+start a thread to handle progress via the progress iterator.</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.Dialog.OnProgressComplete">
+<tt class="descname">OnProgressComplete</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnProgressComplete" title="Permalink to this definition">¶</a></dt>
+<dd>Respond to the a message signalling that all processing is
+now complete by re-enabling the ok button, disabling cancel,
+and setting focus to the ok so a return or space will close
+the dialog.</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.Dialog.OnProgressMessage">
+<tt class="descname">OnProgressMessage</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnProgressMessage" title="Permalink to this definition">¶</a></dt>
+<dd>Respond to a progress update from within the progress
+thread. LParam will be a pointer to a string containing
+a utf8-encoded string which is to be displayed in the
+dialog&#8217;s progress static.</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.Dialog.OnSize">
+<tt class="descname">OnSize</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnSize" title="Permalink to this definition">¶</a></dt>
+<dd>If the dialog box is resized, force a corresponding resize
+of the controls</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.Dialog.corners">
+<tt class="descname">corners</tt><big>(</big><em>l</em>, <em>t</em>, <em>r</em>, <em>b</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.corners" title="Permalink to this definition">¶</a></dt>
+<dd>Designed to be subclassed (eg by <a title="dialogs.InfoDialog" class="reference internal" href="#dialogs.InfoDialog"><tt class="xref docutils literal"><span class="pre">InfoDialog</span></tt></a>). By
+default simply returns the values unchanged.</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.Dialog.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#dialogs.Dialog.run" title="Permalink to this definition">¶</a></dt>
+<dd>The heart of the dialog box functionality. The call to DialogBoxIndirect
+kicks off the dialog&#8217;s message loop, finally returning via the EndDialog call
+in OnCommand</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dialogs.InfoDialog">
+<em class="property">
+class </em><tt class="descname">InfoDialog</tt><big>(</big><em>title</em>, <em>info</em>, <em>parent_hwnd=0</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="dialogs.InfoDialog.corners">
+<tt class="descname">corners</tt><big>(</big><em>l</em>, <em>t</em>, <em>r</em>, <em>b</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.corners" title="Permalink to this definition">¶</a></dt>
+<dd>Called when the dialog is first initialised: estimate how wide
+the dialog should be according to the longest line of text</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="dialogs.BIF">
+<tt class="descname">BIF</tt><a class="headerlink" href="#dialogs.BIF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Styles for browsing for a folder</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="39%" />
+<col width="13%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>RETURNONLYFSDIRS</td>
+<td>0x0001</td>
+<td>BIF_RETURNONLYFSDIRS</td>
+</tr>
+<tr><td>DONTGOBELOWDOMAIN</td>
+<td>0x0002</td>
+<td>BIF_DONTGOBELOWDOMAIN</td>
+</tr>
+<tr><td>STATUSTEXT</td>
+<td>0x0004</td>
+<td>BIF_STATUSTEXT</td>
+</tr>
+<tr><td>RETURNFSANCESTORS</td>
+<td>0x0008</td>
+<td>BIF_RETURNFSANCESTORS</td>
+</tr>
+<tr><td>EDITBOX</td>
+<td>0x0010</td>
+<td>BIF_EDITBOX</td>
+</tr>
+<tr><td>VALIDATE</td>
+<td>0x0020</td>
+<td>BIF_VALIDATE</td>
+</tr>
+<tr><td>NEWDIALOGSTYLE</td>
+<td>0x0040</td>
+<td>BIF_NEWDIALOGSTYLE</td>
+</tr>
+<tr><td>USENEWUI</td>
+<td>0x0050</td>
+<td>USENEWUI</td>
+</tr>
+<tr><td>BROWSEINCLUDEURLS</td>
+<td>0x0080</td>
+<td>BIF_BROWSEINCLUDEURLS</td>
+</tr>
+<tr><td>UAHINT</td>
+<td>0x0100</td>
+<td>BIF_UAHINT</td>
+</tr>
+<tr><td>NONEWFOLDERBUTTON</td>
+<td>0x0200</td>
+<td>BIF_NONEWFOLDERBUTTON</td>
+</tr>
+<tr><td>NOTRANSLATETARGETS</td>
+<td>0x0400</td>
+<td>BIF_NOTRANSLATETARGETS</td>
+</tr>
+<tr><td>BROWSEFORCOMPUTER</td>
+<td>0x1000</td>
+<td>BIF_BROWSEFORCOMPUTER</td>
+</tr>
+<tr><td>BROWSEFORPRINTER</td>
+<td>0x2000</td>
+<td>BIF_BROWSEFORPRINTER</td>
+</tr>
+<tr><td>BROWSEINCLUDEFILES</td>
+<td>0x4000</td>
+<td>BIF_BROWSEINCLUDEFILES</td>
+</tr>
+<tr><td>SHAREABLE</td>
+<td>0x8000</td>
+<td>BIF_SHAREABLE</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="data">
+<dt id="dialogs.BFFM">
+<tt class="descname">BFFM</tt><a class="headerlink" href="#dialogs.BFFM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Part of the browse-for-folder shell mechanism</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="15%" />
+<col width="49%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>INITIALIZED</td>
+<td>0x0001</td>
+<td>BFFM_INITIALIZED</td>
+</tr>
+<tr><td>SELCHANGED</td>
+<td>0x0002</td>
+<td>BFFM_SELCHANGED</td>
+</tr>
+<tr><td>VALIDATEFAILEDA</td>
+<td>0x0003</td>
+<td>BFFM_VALIDATEFAILEDA</td>
+</tr>
+<tr><td>VALIDATEFAILED</td>
+<td>0x0003</td>
+<td>BFFM_VALIDATEFAILEDA</td>
+</tr>
+<tr><td>VALIDATEFAILEDW</td>
+<td>0x0004</td>
+<td>BFFM_VALIDATEFAILEDW</td>
+</tr>
+<tr><td>SETSTATUSTEXTA</td>
+<td>0x0464</td>
+<td>BFFM_SETSTATUSTEXTA</td>
+</tr>
+<tr><td>SETSTATUSTEXT</td>
+<td>0x0464</td>
+<td>BFFM_SETSTATUSTEXTA</td>
+</tr>
+<tr><td>ENABLEOK</td>
+<td>0x0465</td>
+<td>BFFM_ENABLEOK</td>
+</tr>
+<tr><td>SETSELECTION</td>
+<td>0x0466</td>
+<td>BFFM_SETSELECTIONA</td>
+</tr>
+<tr><td>SETSELECTIONA</td>
+<td>0x0466</td>
+<td>BFFM_SETSELECTIONA</td>
+</tr>
+<tr><td>SETSELECTIONW</td>
+<td>0x0467</td>
+<td>BFFM_SETSELECTIONW</td>
+</tr>
+<tr><td>SETSTATUSTEXTW</td>
+<td>0x0468</td>
+<td>BFFM_SETSTATUSTEXTW</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="dialogs.x_dialogs">
+<em class="property">
+exception </em><tt class="descname">x_dialogs</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#dialogs.x_dialogs" title="Permalink to this definition">¶</a></dt>
+<dd>Base for dialog-related exceptions</dd></dl>
+
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="cookbook/dialogs.html"><em>Using the dialogs module</em></a></dt>
+<dd>Cookbook examples of using the accounts module</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="contents.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href=""><tt class="docutils literal"><span class="pre">dialogs</span></tt> &#8211; Dialog boxes</a><ul>
+<li><a class="reference external" href="#functions">Functions</a></li>
+<li><a class="reference external" href="#classes">Classes</a></li>
+<li><a class="reference external" href="#constants">Constants</a></li>
+<li><a class="reference external" href="#exceptions">Exceptions</a></li>
+<li><a class="reference external" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="accounts.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">accounts</span></tt> &#8211; Users, Groups, SIDs &amp;c.</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="event_logs.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">event_logs</span></tt> &#8211; Event Logs</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/dialogs.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="event_logs.html" title="event_logs – Event Logs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="accounts.html" title="accounts – Users, Groups, SIDs &c."
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

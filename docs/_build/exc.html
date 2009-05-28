@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>exc – Exceptions &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="index.html" />
+    <link rel="next" title="accounts – Users, Groups, SIDs &c." href="accounts.html" />
+    <link rel="prev" title="constants" href="constants.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="accounts.html" title="accounts – Users, Groups, SIDs &c."
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="constants.html" title="constants"
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-exc">
+<h1><tt class="xref docutils literal"><span class="pre">exc</span></tt> &#8211; Exceptions<a class="headerlink" href="#module-exc" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="exc.x_winsys">
+<em class="property">
+exception </em><tt class="descname">x_winsys</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#exc.x_winsys" title="Permalink to this definition">¶</a></dt>
+<dd>Base for all WinSys exception. Subclasses pywintypes.error so that
+except pywintypes.error clauses can be used to catch all relevant exceptions.
+Note that the __init__ is specified so that exception invocations can pass
+just an error message by keyword.</dd></dl>
+
+<dl class="exception">
+<dt id="exc.x_access_denied">
+<em class="property">
+exception </em><tt class="descname">x_access_denied</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#exc.x_access_denied" title="Permalink to this definition">¶</a></dt>
+<dd>General purpose access-denied exception</dd></dl>
+
+<dl class="exception">
+<dt id="exc.x_not_found">
+<em class="property">
+exception </em><tt class="descname">x_not_found</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#exc.x_not_found" title="Permalink to this definition">¶</a></dt>
+<dd>General purpose not-found exception</dd></dl>
+
+<dl class="exception">
+<dt id="exc.x_invalid_handle">
+<em class="property">
+exception </em><tt class="descname">x_invalid_handle</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#exc.x_invalid_handle" title="Permalink to this definition">¶</a></dt>
+<dd>General purpose invalid-handle exception</dd></dl>
+
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="exc.wrapper">
+<tt class="descname">wrapper</tt><big>(</big><em>winerror_map</em>, <em>default_exception=&lt;class 'exc.x_winsys'&gt;</em><big>)</big><a class="headerlink" href="#exc.wrapper" title="Permalink to this definition">¶</a></dt>
+<dd>Used by each module to map specific windows error codes onto
+Python exceptions. Always includes a default which is raised if
+no specific exception is found.</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="contents.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href=""><tt class="docutils literal"><span class="pre">exc</span></tt> &#8211; Exceptions</a><ul>
+<li><a class="reference external" href="#exceptions">Exceptions</a></li>
+<li><a class="reference external" href="#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="constants.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">constants</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="accounts.html"
+                                  title="next chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">accounts</span></tt> &#8211; Users, Groups, SIDs &amp;c.</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/exc.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="accounts.html" title="accounts – Users, Groups, SIDs &c."
+             >next</a> |</li>
+        <li class="right" >
+          <a href="constants.html" title="constants"
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

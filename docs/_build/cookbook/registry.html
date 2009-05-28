@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using the registry module &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="../_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="../index.html" />
+    <link rel="up" title="Cookbook" href="../cookbook.html" />
+    <link rel="next" title="Using the security module" href="security.html" />
+    <link rel="prev" title="Using the fs module" href="fs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="security.html" title="Using the security module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fs.html" title="Using the fs module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../contents.html">WinSys v0.3dev documentation</a> &raquo;</li>
+          <li><a href="../cookbook.html" accesskey="U">Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-the-registry-module">
+<h1>Using the registry module<a class="headerlink" href="#using-the-registry-module" title="Permalink to this headline">¶</a></h1>
+<p>The examples here all refer to the <a title="Pythonic access to the registry" class="reference external" href="../registry.html#module-registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a> module.</p>
+<div class="section" id="copy-one-registry-key-to-another">
+<span id="id1"></span><h2>Copy one registry key to another<a class="headerlink" href="#copy-one-registry-key-to-another" title="Permalink to this headline">¶</a></h2>
+<p>Copy an existing registry key to a new one and
+set the new key&#8217;s security so that only the current user has
+change rights and all other users have read-only. Finally, display
+the details of the new top-level key, including its security.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+<span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span><span class="p">,</span> <span class="n">accounts</span>
+
+<span class="n">new_key</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">copy</span> <span class="p">(</span><span class="s">r&quot;HKLM\Software\Python&quot;</span><span class="p">,</span> <span class="s">r&quot;HKCU\Software\WinsysPython&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">new_key</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="s">&quot;D&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">sec</span><span class="p">:</span>
+  <span class="n">sec</span><span class="o">.</span><span class="n">break_inheritance</span> <span class="p">(</span><span class="n">copy_first</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+  <span class="n">sec</span><span class="o">.</span><span class="n">dacl</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="n">accounts</span><span class="o">.</span><span class="n">me</span> <span class="p">(),</span> <span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&quot;Authenticated Users&quot;</span><span class="p">,</span> <span class="s">&quot;R&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">)</span>
+  <span class="p">]</span>
+
+<span class="n">new_key</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<div class="section" id="discussion">
+<h3>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h3>
+<p>The functions in the <a title="Pythonic access to the registry" class="reference external" href="../registry.html#module-registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a> module hand off any references
+to a registry key to the <a title="registry.registry" class="reference external" href="../registry.html#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a> function which is
+as accepting as possible. Here, we&#8217;re referring to the local machine
+(there&#8217;s no server-style \\ prefix in either moniker) and using
+the HKLM/HKCU shortcut styles. In fact the code would work equally
+well if a remote machine were to specified on either side, assuming
+that the necessary permissions were in place.</p>
+<p>The <a title="registry.Registry.security" class="reference external" href="../registry.html#registry.Registry.security"><tt class="xref docutils literal"><span class="pre">Registry.security()</span></tt></a> method acts as a context
+manager, allowing a series of changes to the registry key&#8217;s
+security descriptor. Here we are breaking the inheritance which
+the new key has inherited automatically, without copying the
+existing permissions over first. Then we add a new DACL with
+just two permissions: allowing the logged-on user full control;
+and allowing all authenticated users read access. The 3-tuples
+are passed to the <tt class="xref docutils literal"><span class="pre">security.ace()</span></tt> function.</p>
+<p>Finally, to demonstrate that the security has been applied, we
+call the registry key&#8217;s <tt class="xref docutils literal"><span class="pre">Registry.dump()</span></tt> method
+which produces useful information about the key and its security
+in a readable format.</p>
+</div>
+</div>
+<div class="section" id="find-a-string-in-the-registry">
+<h2>Find a string in the registry<a class="headerlink" href="#find-a-string-in-the-registry" title="Permalink to this headline">¶</a></h2>
+<p>Search the registry under a particular root and find a value which
+contains the searched-for string. Output the registry key, the value
+name and the value itself.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">registry</span>
+
+<span class="n">root</span><span class="p">,</span> <span class="n">term</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span>
+  <span class="s">&quot;Search the Registry&quot;</span><span class="p">,</span>
+  <span class="p">(</span><span class="s">&quot;Root&quot;</span><span class="p">,</span> <span class="n">registry</span><span class="o">.</span><span class="n">REGISTRY_HIVE</span><span class="o">.</span><span class="n">keys</span> <span class="p">()),</span>
+  <span class="p">(</span><span class="s">&quot;Term&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="n">root</span><span class="p">)</span>
+<span class="n">term</span> <span class="o">=</span> <span class="n">term</span><span class="o">.</span><span class="n">lower</span> <span class="p">()</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">subkeys</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">walk</span> <span class="p">(</span><span class="n">ignore_access_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="nb">str</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span> <span class="p">():</span>
+      <span class="k">print</span> <span class="n">key</span><span class="o">.</span><span class="n">moniker</span><span class="o">.</span><span class="n">encode</span> <span class="p">(</span><span class="s">&quot;utf8&quot;</span><span class="p">)</span>
+      <span class="k">print</span> <span class="n">name</span><span class="o">.</span><span class="n">encode</span> <span class="p">(</span><span class="s">&quot;utf8&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s">&quot;(Default)&quot;</span>
+      <span class="k">print</span> <span class="nb">unicode</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span> <span class="p">(</span><span class="s">&quot;utf8&quot;</span><span class="p">)</span>
+      <span class="k">print</span>
+</pre></div>
+</td></tr></table></div>
+<div class="section" id="id2">
+<h3>Discussion<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>We use <a title="dialogs.dialog" class="reference external" href="../dialogs.html#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialogs.dialog()</span></tt></a> to select the root key and
+the string to search for. We then walk the registry from that
+key downwards, skipping over any keys or values to which we
+do not have access. When we find a value which matches our
+search term, we output the key name, value label and the value
+which matched.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../contents.html">
+              <img class="logo" src="../_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="../contents.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Using the registry module</a><ul>
+<li><a class="reference external" href="#copy-one-registry-key-to-another">Copy one registry key to another</a><ul>
+<li><a class="reference external" href="#discussion">Discussion</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#find-a-string-in-the-registry">Find a string in the registry</a><ul>
+<li><a class="reference external" href="#id2">Discussion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="fs.html"
+                                  title="previous chapter">Using the fs module</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="security.html"
+                                  title="next chapter">Using the security module</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/cookbook/registry.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="security.html" title="Using the security module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fs.html" title="Using the fs module"
+             >previous</a> |</li>
+        <li><a href="../contents.html">WinSys v0.3dev documentation</a> &raquo;</li>
+          <li><a href="../cookbook.html" >Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

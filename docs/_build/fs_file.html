@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The File class &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="index.html" />
+    <link rel="up" title="fs – Files, Directories, &c." href="fs.html" />
+    <link rel="next" title="The Dir class" href="fs_dir.html" />
+    <link rel="prev" title="The Entry class" href="fs_entry.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="fs_dir.html" title="The Dir class"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fs_entry.html" title="The Entry class"
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li>
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-file-class">
+<h1>The File class<a class="headerlink" href="#the-file-class" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="fs.File">
+<em class="property">
+class </em><tt class="descname">File</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.File" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="fs.File.copy">
+<tt class="descname">copy</tt><big>(</big><em>other</em>, <em>callback=None</em>, <em>callback_data=None</em><big>)</big><a class="headerlink" href="#fs.File.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy this file to another file or directory. If other is
+a directory, this file is copied into it, otherwise this file
+is copied over it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></li>
+<li><em>callback</em> &#8211; function receiving total size, total so far, callback_data</li>
+<li><em>callback_data</em> &#8211; passed to callback</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a title="fs.File" class="reference internal" href="#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object representing other</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.File.create">
+<tt class="descname">create</tt><big>(</big><em>security=None</em><big>)</big><a class="headerlink" href="#fs.File.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create this file optionally with specific security. If the
+file already exists it will not be overwritten.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>security</em> &#8211; a <a title="security.Security" class="reference external" href="security.html#security.Security"><tt class="xref docutils literal"><span class="pre">security.Security</span></tt></a> object</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">this object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.File.delete">
+<tt class="descname">delete</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.File.delete" title="Permalink to this definition">¶</a></dt>
+<dd>Delete this file</dd></dl>
+
+<dl class="method">
+<dt id="fs.File.equal_contents">
+<tt class="descname">equal_contents</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#fs.File.equal_contents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this file equal in contents to another? Uses the stdlib
+filecmp function which bales out as soon as it can.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">True if the contents match, False otherwise</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.File.hard_link_from">
+<tt class="descname">hard_link_from</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#fs.File.hard_link_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create this file as a hard link from other</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other</em> &#8211; anything accepted by <a title="fs.file" class="reference external" href="fs.html#fs.file"><tt class="xref docutils literal"><span class="pre">file()</span></tt></a></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">this <a title="fs.File" class="reference internal" href="#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.File.hard_link_to">
+<tt class="descname">hard_link_to</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#fs.File.hard_link_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create other as a hard link to this file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other</em> &#8211; anything accepted by <a title="fs.file" class="reference external" href="fs.html#fs.file"><tt class="xref docutils literal"><span class="pre">file()</span></tt></a></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><a title="fs.File" class="reference internal" href="#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object corresponding to other</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.File.open">
+<tt class="descname">open</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.File.open" title="Permalink to this definition">¶</a></dt>
+<dd>Use the <cite>codecs.open</cite> function to open this file as a Python file
+object. Positional and keyword arguments are passed straight through to
+the codecs function.</dd></dl>
+
+<dl class="method">
+<dt id="fs.File.touch">
+<tt class="descname">touch</tt><big>(</big><em>security=None</em><big>)</big><a class="headerlink" href="#fs.File.touch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create this file optionally with specific security. If the
+file already exists it will not be overwritten.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>security</em> &#8211; a <a title="security.Security" class="reference external" href="security.html#security.Security"><tt class="xref docutils literal"><span class="pre">security.Security</span></tt></a> object</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">this object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.File.zip">
+<tt class="descname">zip</tt><big>(</big><em>zip_filename=&lt;Unset&gt;</em>, <em>mode='w'</em>, <em>compression=8</em><big>)</big><a class="headerlink" href="#fs.File.zip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zip the file up into a zipfile. By default, the zipfile will have the
+name of the file with &#8220;.zip&#8221; appended and will be a sibling of the file.
+Also by default a new zipfile will be created, overwriting any existing one, and
+standard compression will be used. The filename will be stored without any directory
+information.</p>
+<p>A different zipfile can be specific as the zip_filename parameter, and this
+can be appended to (if it exists) by specifying &#8220;a&#8221; as the mode param.</p>
+<p>The created / appended zip file is returned.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="fs_entry.html"
+                                  title="previous chapter">The Entry class</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="fs_dir.html"
+                                  title="next chapter">The Dir class</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/fs_file.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fs_dir.html" title="The Dir class"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fs_entry.html" title="The Entry class"
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li>
+          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

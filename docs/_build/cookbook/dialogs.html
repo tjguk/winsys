@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using the dialogs module &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="../_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="../index.html" />
+    <link rel="up" title="Cookbook" href="../cookbook.html" />
+    <link rel="next" title="Using the event_logs module" href="event_logs.html" />
+    <link rel="prev" title="Using the constants module" href="constants.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="event_logs.html" title="Using the event_logs module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="constants.html" title="Using the constants module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../contents.html">WinSys v0.3dev documentation</a> &raquo;</li>
+          <li><a href="../cookbook.html" accesskey="U">Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-the-dialogs-module">
+<h1>Using the dialogs module<a class="headerlink" href="#using-the-dialogs-module" title="Permalink to this headline">¶</a></h1>
+<p>The examples here all refer to the <a title="Dialog boxes" class="reference external" href="../dialogs.html#module-dialogs"><tt class="xref docutils literal"><span class="pre">dialogs</span></tt></a> module.</p>
+<div class="section" id="ask-the-user-for-input">
+<h2>Ask the user for input<a class="headerlink" href="#ask-the-user-for-input" title="Permalink to this headline">¶</a></h2>
+<p>This is the simplest kind of dialog box: a one-line edit
+control with [Ok] and [Cancel].</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
+2
+3</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span><span class="s">&quot;What is your name?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">))</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="prompt-for-a-filename-to-open">
+<h2>Prompt for a filename to open<a class="headerlink" href="#prompt-for-a-filename-to-open" title="Permalink to this headline">¶</a></h2>
+<p>Ask the user for a filename, check that the file exists,
+and then use os.startfile to open the file. Allow the
+user to type the filename in, drag-and-drop a file from
+Explorer, or select from a dialog box.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">fs</span>
+
+<span class="n">DEFAULT</span> <span class="o">=</span> <span class="s">&quot;temp.csv&quot;</span>
+<span class="n">filename</span><span class="p">,</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span>
+  <span class="s">&quot;Open a filename&quot;</span><span class="p">,</span>
+  <span class="p">(</span><span class="s">&quot;Filename&quot;</span><span class="p">,</span> <span class="n">DEFAULT</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">get_filename</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span> <span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+  <span class="k">raise</span> <span class="ne">RuntimeError</span> <span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> does not exist&quot;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="n">os</span><span class="o">.</span><span class="n">startfile</span> <span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<div class="section" id="discussion">
+<h3>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h3>
+<p>All edit controls accept files drag/dropped from Explorer.
+In addition, by specifying a third field for the &#8220;Filename&#8221;
+input, we can call out to another dialog box to select the
+file. Here we use the one supplied by winsys, but the only
+requirement for the callback is that it return a string or
+None to indicate no change.</p>
+<p>A <a title="fs.Entry" class="reference external" href="../fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">fs.Entry</span></tt></a> object evaluates to True if the file
+it represents exists on the file system.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../contents.html">
+              <img class="logo" src="../_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="../contents.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Using the dialogs module</a><ul>
+<li><a class="reference external" href="#ask-the-user-for-input">Ask the user for input</a></li>
+<li><a class="reference external" href="#prompt-for-a-filename-to-open">Prompt for a filename to open</a><ul>
+<li><a class="reference external" href="#discussion">Discussion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="constants.html"
+                                  title="previous chapter">Using the constants module</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="event_logs.html"
+                                  title="next chapter">Using the event_logs module</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/cookbook/dialogs.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="event_logs.html" title="Using the event_logs module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="constants.html" title="Using the constants module"
+             >previous</a> |</li>
+        <li><a href="../contents.html">WinSys v0.3dev documentation</a> &raquo;</li>
+          <li><a href="../cookbook.html" >Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

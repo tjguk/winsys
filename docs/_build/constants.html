@@ -1,0 +1,462 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>constants &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="index.html" />
+    <link rel="next" title="exc – Exceptions" href="exc.html" />
+    <link rel="prev" title="core – Core objects" href="core.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="exc.html" title="exc – Exceptions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="core.html" title="core – Core objects"
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-constants">
+<h1><tt class="xref docutils literal"><span class="pre">constants</span></tt><a class="headerlink" href="#module-constants" title="Permalink to this headline">¶</a></h1>
+<p>Provide unified access to the different sets of constants used by
+the winsys module. Some of them are provided by modules within the
+pywin32 package. Others belong to those sets but are not present in
+the modules. Still others are not present at all within pywin32 and
+are added here manually.</p>
+<p>The constants are grouped together into <a title="constants.Constants" class="reference internal" href="#constants.Constants"><tt class="xref docutils literal"><span class="pre">Constants</span></tt></a> classes
+which combine the effect of being a namespace and also providing
+functions to list the constant name or names given a value, which
+is useful when displaying Win32 structures.</p>
+<p>For useful documentation, each <a title="constants.Constants" class="reference internal" href="#constants.Constants"><tt class="xref docutils literal"><span class="pre">Constants</span></tt></a> generates a readable
+docstring tabulating its names &amp; values.</p>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="constants.Constants">
+<em class="property">
+class </em><tt class="descname">Constants</tt><big>(</big><em>dict_initialiser={}</em><big>)</big><a class="headerlink" href="#constants.Constants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide a dict-like interface for a group of related
+constants. These can come from a module or other namespace according
+to a wildcard name, or can be added as a list of (unrelated) names from 
+a namespace or can simply be a raw dictionary of name-value pairs:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">win32con</span>
+<span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">constants</span>
+<span class="n">COMPRESSION_ENGINE</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span>
+  <span class="s">&quot;COMPRESSION_ENGINE_*&quot;</span><span class="p">,</span> 
+  <span class="n">namespace</span><span class="o">=</span><span class="n">win32con</span>
+<span class="p">)</span>
+<span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">update</span> <span class="p">(</span><span class="nb">dict</span> <span class="p">(</span>
+  <span class="n">EXTRA_VALUE</span> <span class="o">=</span> <span class="mf">5</span>
+<span class="p">))</span>
+<span class="k">print</span> <span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">MAXIMUM</span>
+<span class="k">print</span> <span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">__doc__</span>
+</pre></div>
+</div>
+<p>The convention is to name the set of constants after the common
+prefix of the constant names, as in the example above, but it&#8217;s
+just a convention. The pattern parameter to the various factory
+functions will be used to rename the constants on the way in,
+but it can be empty.</p>
+<p>The constants can be accessed as attributes or as items. In addition,
+passing a name or a value to the <tt class="xref docutils literal"><span class="pre">constant()</span></tt> method will return
+the value. This is done automatically by most functions which expect
+a parameter based on one of these constants sets.</p>
+<p>To retrieve the name or names corresponding to a value, use the
+<a title="constants.Constants.name_from_value" class="reference internal" href="#constants.Constants.name_from_value"><tt class="xref docutils literal"><span class="pre">name_from_value()</span></tt></a> or <a title="constants.Constants.names_from_value" class="reference internal" href="#constants.Constants.names_from_value"><tt class="xref docutils literal"><span class="pre">names_from_value()</span></tt></a> function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">win32con</span>
+<span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">constants</span>
+<span class="n">ACE_TYPES</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span>
+  <span class="s">&quot;*_ACE_TYPE&quot;</span><span class="p">,</span>
+  <span class="n">namespace</span><span class="o">=</span><span class="n">win32con</span>
+<span class="p">)</span>
+<span class="k">print</span> <span class="n">ACE_TYPES</span><span class="o">.</span><span class="n">name_from_value</span> <span class="p">(</span><span class="n">ACE_TYPES</span><span class="o">.</span><span class="n">ACCESS_ALLOWED</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="classmethod">
+<dt id="constants.Constants.from_dict">
+<em class="property">
+classmethod </em><tt class="descname">from_dict</tt><big>(</big><em>d</em>, <em>pattern=None</em><big>)</big><a class="headerlink" href="#constants.Constants.from_dict" title="Permalink to this definition">¶</a></dt>
+<dd>Factory method to return a class instance from a dictionary-like set of values.
+If a pattern is passed in, use the distinguished part of the name (the part
+which matches the wildcard) as the key name.</dd></dl>
+
+<dl class="classmethod">
+<dt id="constants.Constants.from_list">
+<em class="property">
+classmethod </em><tt class="descname">from_list</tt><big>(</big><em>keys</em>, <em>namespace</em>, <em>pattern=None</em><big>)</big><a class="headerlink" href="#constants.Constants.from_list" title="Permalink to this definition">¶</a></dt>
+<dd>Factory method to return a class instance from a list-like set of values
+within a namespace. Hands off to the from_dict factory.</dd></dl>
+
+<dl class="classmethod">
+<dt id="constants.Constants.from_pattern">
+<em class="property">
+classmethod </em><tt class="descname">from_pattern</tt><big>(</big><em>pattern=u'*'</em>, <em>excluded=</em><span class="optional">[</span><span class="optional">]</span>, <em>namespace=&lt;module 'win32con' from 'C:Python26libsite-packageswin32libwin32con.pyc'&gt;</em><big>)</big><a class="headerlink" href="#constants.Constants.from_pattern" title="Permalink to this definition">¶</a></dt>
+<dd>Factory method to return a class instance from a wildcard name pattern. This is
+the most common method of constructing a list of constants by passing in, eg,
+FILE_ATTRIBUTE_* and the win32file module as the namespace.</dd></dl>
+
+<dl class="method">
+<dt id="constants.Constants.name_from_value">
+<tt class="descname">name_from_value</tt><big>(</big><em>value</em>, <em>default=&lt;Unset&gt;</em>, <em>patterns=</em><span class="optional">[</span>, <em>u'*'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#constants.Constants.name_from_value" title="Permalink to this definition">¶</a></dt>
+<dd>Find the one name in the set of constants (optionally qualified by pattern)
+which matches value.</dd></dl>
+
+<dl class="method">
+<dt id="constants.Constants.names">
+<tt class="descname">names</tt><big>(</big><em>patterns=</em><span class="optional">[</span>, <em>u'*'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#constants.Constants.names" title="Permalink to this definition">¶</a></dt>
+<dd>From a list of patterns, return the matching names from the
+list of constants. A single string is considered as though a
+list of one.</dd></dl>
+
+<dl class="method">
+<dt id="constants.Constants.names_from_value">
+<tt class="descname">names_from_value</tt><big>(</big><em>value</em>, <em>patterns=</em><span class="optional">[</span>, <em>u'*'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#constants.Constants.names_from_value" title="Permalink to this definition">¶</a></dt>
+<dd>From a number representing the or-ing of several integer values,
+work out which of the constants make up the number using the pattern
+to filter the &#8220;classes&#8221; or constants present in the dataset.</dd></dl>
+
+<dl class="method">
+<dt id="constants.Constants.update">
+<tt class="descname">update</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#constants.Constants.update" title="Permalink to this definition">¶</a></dt>
+<dd>Act as a dict for updates so that several constant sets may
+be merged into one.</dd></dl>
+
+<dl class="method">
+<dt id="constants.Constants.values_from_value">
+<tt class="descname">values_from_value</tt><big>(</big><em>value</em>, <em>patterns=</em><span class="optional">[</span>, <em>'*'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#constants.Constants.values_from_value" title="Permalink to this definition">¶</a></dt>
+<dd>Return the list of values which make up the combined value</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>Constants<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="constants.GENERAL">
+<tt class="descname">GENERAL</tt><a class="headerlink" href="#constants.GENERAL" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="25%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>MAXIMUM_ALLOWED</td>
+<td>0x02000000</td>
+<td>MAXIMUM_ALLOWED</td>
+</tr>
+<tr><td>INFINITE</td>
+<td>0xFFFFFFFF</td>
+<td>INFINITE</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="data">
+<dt id="constants.TOKEN_FLAG">
+<tt class="descname">TOKEN_FLAG</tt><a class="headerlink" href="#constants.TOKEN_FLAG" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="17%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>ASSIGN_PRIMARY</td>
+<td>0x000001</td>
+<td>TOKEN_ASSIGN_PRIMARY</td>
+</tr>
+<tr><td>DUPLICATE</td>
+<td>0x000002</td>
+<td>TOKEN_DUPLICATE</td>
+</tr>
+<tr><td>IMPERSONATE</td>
+<td>0x000004</td>
+<td>TOKEN_IMPERSONATE</td>
+</tr>
+<tr><td>SOURCE_LENGTH</td>
+<td>0x000008</td>
+<td>TOKEN_SOURCE_LENGTH</td>
+</tr>
+<tr><td>QUERY</td>
+<td>0x000008</td>
+<td>TOKEN_SOURCE_LENGTH</td>
+</tr>
+<tr><td>QUERY_SOURCE</td>
+<td>0x000010</td>
+<td>TOKEN_QUERY_SOURCE</td>
+</tr>
+<tr><td>ADJUST_PRIVILEGES</td>
+<td>0x000020</td>
+<td>TOKEN_ADJUST_PRIVILEGES</td>
+</tr>
+<tr><td>ADJUST_GROUPS</td>
+<td>0x000040</td>
+<td>TOKEN_ADJUST_GROUPS</td>
+</tr>
+<tr><td>ADJUST_DEFAULT</td>
+<td>0x000080</td>
+<td>TOKEN_ADJUST_DEFAULT</td>
+</tr>
+<tr><td>EXECUTE</td>
+<td>0x020000</td>
+<td>TOKEN_EXECUTE</td>
+</tr>
+<tr><td>READ</td>
+<td>0x020008</td>
+<td>TOKEN_READ</td>
+</tr>
+<tr><td>WRITE</td>
+<td>0x0200E0</td>
+<td>TOKEN_WRITE</td>
+</tr>
+<tr><td>ALL_ACCESS</td>
+<td>0x0F00FF</td>
+<td>TOKEN_ALL_ACCESS</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="data">
+<dt id="constants.ACCESS">
+<tt class="descname">ACCESS</tt><a class="headerlink" href="#constants.ACCESS" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="41%" />
+<col width="19%" />
+<col width="41%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>DELETE</td>
+<td>0x00010000</td>
+<td>DELETE</td>
+</tr>
+<tr><td>READ_CONTROL</td>
+<td>0x00020000</td>
+<td>READ_CONTROL</td>
+</tr>
+<tr><td>WRITE_DAC</td>
+<td>0x00040000</td>
+<td>WRITE_DAC</td>
+</tr>
+<tr><td>WRITE_OWNER</td>
+<td>0x00080000</td>
+<td>WRITE_OWNER</td>
+</tr>
+<tr><td>SYNCHRONIZE</td>
+<td>0x00100000</td>
+<td>SYNCHRONIZE</td>
+</tr>
+<tr><td>ACCESS_SYSTEM_SECURITY</td>
+<td>0x01000000</td>
+<td>ACCESS_SYSTEM_SECURITY</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="data">
+<dt id="constants.GENERIC_ACCESS">
+<tt class="descname">GENERIC_ACCESS</tt><a class="headerlink" href="#constants.GENERIC_ACCESS" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="31%" />
+<col width="47%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>ALL</td>
+<td>0x10000000</td>
+<td>GENERIC_ALL</td>
+</tr>
+<tr><td>EXECUTE</td>
+<td>0x20000000</td>
+<td>GENERIC_EXECUTE</td>
+</tr>
+<tr><td>WRITE</td>
+<td>0x40000000</td>
+<td>GENERIC_WRITE</td>
+</tr>
+<tr><td>READ</td>
+<td>0x80000000</td>
+<td>GENERIC_READ</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="data">
+<dt id="constants.STANDARD_ACCESS">
+<tt class="descname">STANDARD_ACCESS</tt><a class="headerlink" href="#constants.STANDARD_ACCESS" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="42%" />
+<col width="16%" />
+<col width="42%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>STANDARD_RIGHTS_WRITE</td>
+<td>0x020000</td>
+<td>STANDARD_RIGHTS_WRITE</td>
+</tr>
+<tr><td>STANDARD_RIGHTS_READ</td>
+<td>0x020000</td>
+<td>STANDARD_RIGHTS_WRITE</td>
+</tr>
+<tr><td>SYNCHRONIZE</td>
+<td>0x100000</td>
+<td>SYNCHRONIZE</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="cookbook/constants.html"><em>Using the constants module</em></a></dt>
+<dd>Cookbook examples of using the constants module</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="contents.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href=""><tt class="docutils literal"><span class="pre">constants</span></tt></a><ul>
+<li><a class="reference external" href="#classes">Classes</a></li>
+<li><a class="reference external" href="#id1">Constants</a></li>
+<li><a class="reference external" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="core.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">core</span></tt> &#8211; Core objects</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="exc.html"
+                                  title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">exc</span></tt> &#8211; Exceptions</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/constants.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="exc.html" title="exc – Exceptions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="core.html" title="core – Core objects"
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

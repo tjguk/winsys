@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>About WinSys &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="index.html" />
+    <link rel="next" title="core – Core objects" href="core.html" />
+    <link rel="prev" title="WinSys - Python tools for the Windows Administrator" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="core.html" title="core – Core objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="WinSys - Python tools for the Windows Administrator"
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="about-winsys">
+<span id="id1"></span><h1>About WinSys<a class="headerlink" href="#about-winsys" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference external" href="http://msdn.microsoft.com/en-us/library/default.aspx">Windows API</a>
+offers the would-be system administrator a plethora of
+low-level tools to secure files, log changes, investigate problems and
+do whatever else might be needed to a Windows system. The <a class="reference external" href="https://sourceforge.net/projects/pywin32/">pywin32 extensions
+for Windows</a> offer an enormous
+amount of that functionality to the Python user. And the builtin
+<a class="reference external" href="http://docs.python.org/library/ctypes.html">ctypes library</a> allows you to
+fill in the gaps.</p>
+<p>But it&#8217;s all quite low-level and the examples are mostly in C. And all you
+want to do is take ownership of a bunch of files, move them to an archive
+area and compress them there. And you want to do that for the home folder of
+every user who&#8217;s left the company. And you want to do that every Sunday
+morning.</p>
+<p>Enter WinSys: the Python Windows Administrator&#8217;s Toolkit. A collection
+of modules with a consistent approach, wrapping the Windows API
+calls already exposed by pywin32, adding some with ctypes, and giving them
+all a pythonic feel. There&#8217;s nothing here you couldn&#8217;t do yourself with
+10 minutes and a copy of the pywin32 and SDK docs. But it&#8217;s all here already,
+and with a more Pythonish feel about it.</p>
+<div class="section" id="design-principles">
+<h2>Design Principles<a class="headerlink" href="#design-principles" title="Permalink to this headline">¶</a></h2>
+<p>The following principles have directed the design of the modules
+and packages wherever possible:</p>
+<ul class="simple">
+<li>Make ad-hoc use possible and easy (and even attractive)</li>
+<li>Provide sensible defaults for the common cases, always allowing for more complex scenarios</li>
+<li>Put all constants into one place, grouping them according to their API usage</li>
+<li>Use the pywin32 functionality where available, supplementing it with ctypes where needed</li>
+<li>Assume a recent version of Python (2.5 at least)</li>
+<li>Make good use of context managers (with-statements)</li>
+<li>Have each object able to dump its contents and that of its children cleanly</li>
+<li>Maintain an object approach, but provide convenient module-level functions</li>
+<li>Have useful factory functions for classes, robustly accepting string or object parameters</li>
+</ul>
+</div>
+<div class="section" id="common-features">
+<h2>Common Features<a class="headerlink" href="#common-features" title="Permalink to this headline">¶</a></h2>
+<p>Most of the objects in winsys subclass the <a title="core._WinSysObject" class="reference external" href="core.html#core._WinSysObject"><tt class="xref docutils literal"><span class="pre">core._WinSysObject</span></tt></a> class which
+offers sensible defaults and defines common functionality such as a dump function.
+In addition, the following features are common to many of the modules:</p>
+<div class="section" id="pythonic-naming">
+<h3>Pythonic Naming<a class="headerlink" href="#pythonic-naming" title="Permalink to this headline">¶</a></h3>
+<p>This is mildly contentious, but the same naming convention has been used
+throughout, following the <tt class="docutils literal"><span class="pre">lowercase_with_underscores</span></tt> convention widely
+adopted in the Python community. The most widespread exception to this is
+in the <a title="Constants" class="reference external" href="constants.html#module-constants"><tt class="xref docutils literal"><span class="pre">constants</span></tt></a> module, where Windows constants retain their
+<tt class="docutils literal"><span class="pre">UPPERCASE_WITH_UNDERSCORES</span></tt> names.</p>
+</div>
+<div class="section" id="module-level-functions">
+<h3>Module-level Functions<a class="headerlink" href="#module-level-functions" title="Permalink to this headline">¶</a></h3>
+<p>While a lot of use has been made of Python classes to wrap the function-driven
+Windows API, a lot of the functionality has been exposed as module-level
+convenience functions. So, for example, in the <a title="Files, Directories, &amp;c." class="reference external" href="fs.html#module-fs"><tt class="xref docutils literal"><span class="pre">fs</span></tt></a> module, the <tt class="xref docutils literal"><span class="pre">File</span></tt>
+class offers a <tt class="xref docutils literal"><span class="pre">File.copy()</span></tt> method, but the same functionality is exposed
+at the module level as <a title="fs.copy" class="reference external" href="fs.html#fs.copy"><tt class="xref docutils literal"><span class="pre">fs.copy()</span></tt></a>. That way, you don&#8217;t have to instantiate
+one or more objects simply for the purpose of a single operation.</p>
+</div>
+<div class="section" id="factory-functions">
+<h3>Factory Functions<a class="headerlink" href="#factory-functions" title="Permalink to this headline">¶</a></h3>
+<p>Most of the classes have a corresponding factory function (usually with
+the same name in lower case) which tries to be more accepting in what
+its parameters are and to convert them to what&#8217;s needed by the class&#8217;s
+own <tt class="docutils literal"><span class="pre">__init__</span></tt> method. So, for example, the <tt class="xref docutils literal"><span class="pre">Principal</span></tt> class whose
+initialiser expects a PySID structure has a corresponding <tt class="xref docutils literal"><span class="pre">principal()</span></tt>
+function which will take a Sid or a user or group name or None or an existing
+<tt class="xref docutils literal"><span class="pre">Principal</span></tt> object.</p>
+</div>
+<div class="section" id="dump">
+<h3>Dump<a class="headerlink" href="#dump" title="Permalink to this headline">¶</a></h3>
+<p>Each object derived from <a title="core._WinSysObject" class="reference external" href="core.html#core._WinSysObject"><tt class="xref docutils literal"><span class="pre">core._WinSysObject</span></tt></a> has a dump method which
+is intended to display its internal structures, possibly recursively where
+some of the structures are themselves WinSys objects. This is intended more
+for ad-hoc use in the interpreter where it&#8217;s convenient to see, eg, the
+security structure which has been loaded from a file.</p>
+</div>
+<div class="section" id="iterators-generators">
+<h3>Iterators &amp; Generators<a class="headerlink" href="#iterators-generators" title="Permalink to this headline">¶</a></h3>
+<p>Where possible and meaningful, lazy iterators have been used, often
+implemented by generators. This started in the <a title="Files, Directories, &amp;c." class="reference external" href="fs.html#module-fs"><tt class="xref docutils literal"><span class="pre">fs</span></tt></a> module where
+thousands of files were being queried for information, but the approach
+has generally been adopted across the package.</p>
+</div>
+<div class="section" id="context-managers">
+<h3>Context Managers<a class="headerlink" href="#context-managers" title="Permalink to this headline">¶</a></h3>
+<p>Where it makes sense, context managers have been used, either by means
+of the contextlib contextmanager decorator or by defining an object as
+its own context manager by means of <tt class="docutils literal"><span class="pre">__enter__</span></tt> and <tt class="docutils literal"><span class="pre">__exit__</span></tt> methods.
+Examples of context-managed objects include the <a title="ipc.Mailslot" class="reference external" href="mailslots.html#ipc.Mailslot"><tt class="xref docutils literal"><span class="pre">ipc.Mailslot</span></tt></a> and
+<a title="security.Security" class="reference external" href="security.html#security.Security"><tt class="xref docutils literal"><span class="pre">security.Security</span></tt></a> objects. Examples of decorated functions include
+the <a title="security.change_privileges" class="reference external" href="security.html#security.change_privileges"><tt class="xref docutils literal"><span class="pre">security.change_privileges()</span></tt></a> and <a title="security.impersonate" class="reference external" href="security.html#security.impersonate"><tt class="xref docutils literal"><span class="pre">security.impersonate()</span></tt></a> functions.</p>
+</div>
+</div>
+<div class="section" id="todo">
+<h2>ToDo<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
+<p>Obviously, there&#8217;s loads to do. The Windows API is vast; even the amount of
+it exposed by pywin32 far exceeds my immediate needs and the time at my
+disposal. The implementation of this package has been driven largely by the
+very specific needs of our Windows sysadmins in their day-to-day work. My
+intention is to carry on wrapping Windows functionality in a similar way,
+but if anyone has particular needs, or can provide functionality to add in,
+let&#8217;s hear about it.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="contents.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">About WinSys</a><ul>
+<li><a class="reference external" href="#design-principles">Design Principles</a></li>
+<li><a class="reference external" href="#common-features">Common Features</a><ul>
+<li><a class="reference external" href="#pythonic-naming">Pythonic Naming</a></li>
+<li><a class="reference external" href="#module-level-functions">Module-level Functions</a></li>
+<li><a class="reference external" href="#factory-functions">Factory Functions</a></li>
+<li><a class="reference external" href="#dump">Dump</a></li>
+<li><a class="reference external" href="#iterators-generators">Iterators &amp; Generators</a></li>
+<li><a class="reference external" href="#context-managers">Context Managers</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#todo">ToDo</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="index.html"
+                                  title="previous chapter">WinSys - Python tools for the Windows Administrator</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="core.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">core</span></tt> &#8211; Core objects</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/about.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="core.html" title="core – Core objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="WinSys - Python tools for the Windows Administrator"
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

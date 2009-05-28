@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WinSys - Python tools for the Windows Administrator &mdash; WinSys v0.3dev documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.3dev documentation" href="" />
+    <link rel="next" title="About WinSys" href="about.html" />
+    <link rel="prev" title="Contents" href="contents.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="about.html" title="About WinSys"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="contents.html" title="Contents"
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="winsys-python-tools-for-the-windows-administrator">
+<h1>WinSys - Python tools for the Windows Administrator<a class="headerlink" href="#winsys-python-tools-for-the-windows-administrator" title="Permalink to this headline">¶</a></h1>
+<p><em>We read MSDN so you don&#8217;t have to</em></p>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>WinSys is a Python package which wraps aspects of the Windows API to make
+them more Pythonic and usable by Windows administrators directly
+from the interpreter or as part of a wider set of applications.
+It targets recent versions of Python and reasonably recent versions of Windows
+although it&#8217;s not yet up speed on Vista &amp; x64.</p>
+<p>It is unashamedly platform-specific: no hint of a concession towards more
+Unix-like operating systems.  You can read about the design
+philosophy and decisions in <a class="reference external" href="about.html#about-winsys"><em>About WinSys</em></a>. If you want to see some
+examples, have a look in the <a class="reference external" href="cookbook.html#cookbook"><em>Cookbook</em></a>. Or visit the <a class="reference external" href="contents.html#contents"><em>Contents</em></a>
+for an overview.</p>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Copy a registry key from HKLM to HKCU and set its permissions so that
+only the current user has change access while everyone else gets read.
+Then dump the details of the new top-level key, including its security.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+<span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span><span class="p">,</span> <span class="n">accounts</span>
+
+<span class="n">new_key</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">copy</span> <span class="p">(</span><span class="s">r&quot;HKLM\Software\Python&quot;</span><span class="p">,</span> <span class="s">r&quot;HKCU\Software\WinsysPython&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">new_key</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="s">&quot;D&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">sec</span><span class="p">:</span>
+  <span class="n">sec</span><span class="o">.</span><span class="n">break_inheritance</span> <span class="p">(</span><span class="n">copy_first</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+  <span class="n">sec</span><span class="o">.</span><span class="n">dacl</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="n">accounts</span><span class="o">.</span><span class="n">me</span> <span class="p">(),</span> <span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&quot;Authenticated Users&quot;</span><span class="p">,</span> <span class="s">&quot;R&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">)</span>
+  <span class="p">]</span>
+
+<span class="n">new_key</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>This example makes use of the <a title="Pythonic access to the registry" class="reference external" href="registry.html#module-registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a>, <a title="User accounts, SIDs &amp;c." class="reference external" href="accounts.html#module-accounts"><tt class="xref docutils literal"><span class="pre">accounts</span></tt></a> and <a title="Security functions" class="reference external" href="security.html#module-security"><tt class="xref docutils literal"><span class="pre">security</span></tt></a> modules.
+You can see <a class="reference external" href="cookbook/registry.html#copy-one-registry-key-to-another"><em>discussion</em></a> of this example and more in the <a class="reference external" href="cookbook.html#cookbook"><em>Cookbook</em></a>.</p>
+</div>
+<div class="section" id="download">
+<h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">easy_install:</p>
+<div class="highlight-python"><pre>easy_install winsys</pre>
+</div>
+</li>
+<li><p class="first">Zipped archive:</p>
+<div class="highlight-python"><pre>wget http://blah.blah/winsys-x.y.z.zip
+unzip winsys-x.y.z.zip
+python setup.py install</pre>
+</div>
+</li>
+<li><p class="first">Subversion trunk:</p>
+<div class="highlight-python"><pre>svn co http://svn.timgolden.me.uk/winsys winsys</pre>
+</div>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="contents.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">WinSys - Python tools for the Windows Administrator</a><ul>
+<li><a class="reference external" href="#introduction">Introduction</a></li>
+<li><a class="reference external" href="#example">Example</a></li>
+<li><a class="reference external" href="#download">Download</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="contents.html"
+                                  title="previous chapter">Contents</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="about.html"
+                                  title="next chapter">About WinSys</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/index.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="about.html" title="About WinSys"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="contents.html" title="Contents"
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.3dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>
