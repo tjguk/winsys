@@ -58,4 +58,9 @@ Download
 * Subversion trunk::
 
     svn co http://winsys.googlecode.com/svn/trunk winsys
+    
+  and then either add that directory into sys.path (I use a .pth
+  file but whatever works for you) or run setup.py install from
+  there. I don't do setuptools, so you can't do setup.py develop
+  unless you tweak the setup.py code.
 

@@ -121,6 +121,10 @@ python setup.py install</pre>
 <li><p class="first">Subversion trunk:</p>
 <div class="highlight-python"><pre>svn co http://winsys.googlecode.com/svn/trunk winsys</pre>
 </div>
+<p>and then either add that directory into sys.path (I use a .pth
+file but whatever works for you) or run setup.py install from
+there. I don&#8217;t do setuptools, so you can&#8217;t do setup.py develop
+unless you tweak the setup.py code.</p>
 </li>
 </ul>
 </div>
