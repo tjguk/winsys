@@ -43,13 +43,20 @@ Download
 
     easy_install winsys
 
-* Zipped archive:: 
+* MSI installers & Zipped archives:: 
   
-    wget http://blah.blah/winsys-x.y.z.zip
+    http://timgolden.me.uk/python/downloads/winsys/
+    
+  and then::
+    
+    winsys-x.y.z.msi
+    
+  or::
+    
     unzip winsys-x.y.z.zip
     python setup.py install
 
 * Subversion trunk::
 
-    svn co http://svn.timgolden.me.uk/winsys winsys
+    svn co http://winsys.googlecode.com/svn/trunk winsys
 
