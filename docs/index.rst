@@ -22,6 +22,14 @@ philosophy and decisions in :ref:`about-winsys`. If you want to see some
 examples, have a look in the :ref:`cookbook`. Or visit the :ref:`contents`
 for an overview.
 
+WinSys is developed as an Open Source project and the project home,
+together with issues list and browseable source code is at:
+
+  http://code.google.com/p/winsys/
+  
+If you're interested in helping with the project let me know and I'll
+add you to the project members list.
+
 Example
 -------
 
