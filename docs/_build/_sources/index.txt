@@ -45,8 +45,7 @@ Download
 
 * MSI installers & Zipped archives:: 
   
-    http://timgolden.me.uk/python/downloads/winsys/
-    
+  Visit http://timgolden.me.uk/python/downloads/winsys/
   and then::
     
     winsys-x.y.z.msi
