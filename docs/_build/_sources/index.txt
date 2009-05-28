@@ -2,8 +2,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-WinSys - Python tools for the Windows Administrator
-===================================================
+BETA: WinSys - Python tools for the Windows Administrator
+=========================================================
 
 *We read MSDN so you don't have to*
 
@@ -41,9 +41,9 @@ Download
 
 * easy_install:: 
 
-    easy_install winsys
+    FIXME: NOT YET -- easy_install winsys
 
-* MSI installers & Zipped archives:: 
+* MSI installers & Zipped archives
   
   Visit http://timgolden.me.uk/python/downloads/winsys/
   and then::

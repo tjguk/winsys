@@ -1,6 +1,6 @@
 # Sphinx inventory version 1
 # Project: WinSys
-# Version: 0.3
+# Version: 0.4
 core mod core.html
 fs mod fs.html
 dialogs mod dialogs.html
@@ -67,8 +67,8 @@ dialogs.BFFM data dialogs.html
 security.x_security exception security.html
 security.Security.from_string classmethod security.html
 registry.Registry.values method registry.html
+fs.x_invalid_name exception fs.html
 accounts.Principal.logon method accounts.html
-core.x_invalid_handle exception core.html
 fs.mounts function fs.html
 fs.Dir.flat method fs_dir.html
 event_logs._EventLogEntry.event_id attribute event_logs.html
@@ -106,7 +106,7 @@ dialogs.Dialog.OnSize method dialogs.html
 ipc.Mailslot.close method mailslots.html
 fs.File.create method fs_file.html
 accounts.User.create classmethod accounts.html
-fs.zip function fs.html
+fs.Entry.ancestors method fs_entry.html
 dialogs.Dialog.OnProgressComplete method dialogs.html
 registry.Registry.security method registry.html
 fs.glob function fs.html
@@ -119,12 +119,13 @@ accounts.CREDUI_FLAGS data accounts.html
 accounts.USER_PRIV data accounts.html
 security.Privilege class security.html
 fs.FilePath.absolute method fs_filepath.html
+security.security function security.html
 fs.delete function fs.html
 fs.Dir.dirs method fs_dir.html
 constants.Constants.from_pattern classmethod constants.html
 constants.STANDARD_ACCESS data constants.html
 registry.REGISTRY_ACCESS data registry.html
-fs.x_invalid_name exception fs.html
+fs.normalised function fs.html
 fs.Dir.compress method fs_dir.html
 fs.file function fs.html
 fs.Entry.uncompress method fs_entry.html
@@ -145,7 +146,7 @@ dialogs.x_dialogs exception dialogs.html
 registry.Registry.from_string classmethod registry.html
 fs.Dir.mkdir method fs_dir.html
 ipc.Mailslot.empty method mailslots.html
-security.Security.from_security_descriptor classmethod security.html
+fs.zip function fs.html
 exc.x_access_denied exception exc.html
 fs.attributes function fs.html
 dialogs.Dialog.corners method dialogs.html
@@ -193,7 +194,7 @@ fs.File.hard_link_to method fs_file.html
 event_logs.EventLog.__getitem__ method event_logs.html
 registry.Registry.del_value method registry.html
 fs.volume function fs.html
-security.security function security.html
+ipc.Mailslot.get method mailslots.html
 ipc.Mailslot.put method mailslots.html
 fs.Entry class fs_entry.html
 event_logs.event_sources function event_logs.html
@@ -214,22 +215,22 @@ security.Security.restore_inheritance method security.html
 event_logs._EventLogEntry.source_name attribute event_logs.html
 ipc.x_mailslot_empty exception mailslots.html
 registry.x_registry exception registry.html
-dialogs.Dialog class dialogs.html
+security.Security.from_security_descriptor classmethod security.html
 fs.listdir function fs.html
+event_logs.x_event_logs exception event_logs.html
 security.impersonate function security.html
 fs.Dir class fs_dir.html
-event_logs.x_event_logs exception event_logs.html
+event_logs.EventLog.file attribute event_logs.html
 constants.Constants class constants.html
 fs.flat function fs.html
 accounts.WELL_KNOWN_SID data accounts.html
-fs.normalised function fs.html
-ipc.Mailslot.get method mailslots.html
+fs.Dir.copy method fs_dir.html
 ipc.Event.clear method events.html
 fs.FilePath.from_parts classmethod fs_filepath.html
 core.x_not_found exception core.html
 fs.Entry.query_encryption_users method fs_entry.html
 logging_handlers.MailslotHandler class logging_handlers.html
-fs.Dir.copy method fs_dir.html
+core.x_invalid_handle exception core.html
 dialogs.get_filename function dialogs.html
 fs.move function fs.html
 ipc.x_ipc exception ipc.html
@@ -243,7 +244,6 @@ fs.Dir.rmdir method fs_dir.html
 accounts.UF data accounts.html
 ipc.mailslot function ipc.html
 security.Security class security.html
-event_logs.EventLog.file attribute event_logs.html
 event_logs._EventLogEntry.record_number attribute event_logs.html
 ipc.Event.pulse method events.html
 accounts.FILTER data accounts.html
@@ -254,6 +254,7 @@ fs.FilePath class fs_filepath.html
 core.x_access_denied exception core.html
 fs.entry function fs.html
 accounts.Principal.impersonate method accounts.html
+dialogs.Dialog class dialogs.html
 event_logs.EventLog.clear method event_logs.html
 registry.Registry.set_value method registry.html
 dialogs.BIF data dialogs.html
@@ -279,6 +280,5 @@ accounts.user function accounts.html
 dialogs.Dialog.OnCancel method dialogs.html
 fs.File class fs_file.html
 registry.Registry.get_value method registry.html
-fs.Entry.ancestors method fs_entry.html
 constants.Constants.from_list classmethod constants.html
 event_logs.EventLog.retention attribute event_logs.html
