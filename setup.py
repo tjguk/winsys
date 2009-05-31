@@ -6,8 +6,8 @@ if __name__ == '__main__':
   setup (
       name='WinSys',
       version=winsys.__version__,
-      url='http://svn.timgolden.me.uk/winsys',
-      download_url='http://timgolden.me.uk/python/downloads',
+      url='http://code.google.com/p/winsys',
+      download_url='http://timgolden.me.uk/python/downloads/winsys',
       license='MIT',
       author='Tim Golden',
       author_email='mail@timgolden.me.uk',
@@ -22,5 +22,5 @@ if __name__ == '__main__':
           'Topic :: Utilities',
       ],
       platforms='win32',
-      packages=['winsys'],
+      packages=['winsys', 'winsys.test', 'winsys._security', 'winsys.extras'],
   )
