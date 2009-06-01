@@ -615,28 +615,31 @@ def change_privileges (enable_privs=[], disable_privs=[], _token=core.UNSET):
   _token.change_privileges (old_enabled_privs, old_disabled_privs)
 
 def runas (user, password, command_line):
-  raise NotImplementedError
-  with change_privileges ([PRIVILEGE.ASSIGNPRIMARYTOKEN, PRIVILEGE.INCREASE_QUOTA]):
-    with principal (user).impersonate (password, logon_type=LOGON.LOGON_INTERACTIVE) as hToken:
-      token (hToken).dump ()
-      hDuplicateToken = wrapped (
-        win32security.DuplicateTokenEx,
-        hToken,
-        win32security.SecurityImpersonation,
-        constants.GENERAL.MAXIMUM_ALLOWED,
-        win32security.TokenPrimary,
-        None
-      )
-      return wrapped (
-        win32process.CreateProcessAsUser, 
-        hDuplicateToken, 
-        None, 
-        command_line,
-        None,
-        None,
-        1,
-        0,
-        None,
-        None,
-        win32process.STARTUPINFO ()
-      )
+  with change_privileges (["tcb"]):
+    hLogon = principal (user).logon (password, logon_type=LOGON.LOGON_INTERACTIVE)
+    #~ token (hToken).dump ()
+.    hDuplicateToken = wrapped (
+      win32security.DuplicateTokenEx,
+      hLogon,
+      win32security.SecurityImpersonation,
+      constants.GENERAL.MAXIMUM_ALLOWED,
+      win32security.TokenPrimary,
+      None
+    )
+    startupinfo = win32process.STARTUPINFO()
+    startupinfo.dwFlags = win32process.STARTF_USESHOWWINDOW
+    startupinfo.wShowWindow = win32con.SW_SHOW
+    startupinfo.lpDesktop = 'winsta0\default'
+    return wrapped (
+      win32process.CreateProcessAsUser, 
+      hLogon,
+      None, 
+      command_line,
+      None,
+      None,
+      1,
+      0,
+      None,
+      None,
+      startupinfo
+    )
