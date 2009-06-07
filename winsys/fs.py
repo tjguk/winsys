@@ -1005,6 +1005,7 @@ class Entry (core._WinSysObject):
       flags
     )
     return file (target_filepath)
+  rename = move
     
   def take_control (self, principal=core.UNSET):
     """Give the logged-on user full control to a file. This may
@@ -1053,12 +1054,14 @@ class File (Entry):
   ##   Their ids (inodes) are equal
   ##   Their contents are equal
   ##
-  def open (self, *args, **kwargs):
+  def open (self, mode, **kwargs):
     ur"""Use the `codecs.open` function to open this file as a Python file
     object. Positional and keyword arguments are passed straight through to
     the codecs function.
     """
-    return codecs.open (self.filepath, *args, **kwargs)
+    hFile = handle (self.filepath, mode.lower ().startswith ("w"))
+    fd = wrapped (win32file._open_osfhandle, hFile, )
+    return os.fdopen (fd)
 
   def delete (self):
     ur"""Delete this file"""

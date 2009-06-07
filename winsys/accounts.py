@@ -22,11 +22,13 @@ import win32con
 import win32security
 import win32api
 import win32cred
+import win32event
 import win32net
 import win32netcon
 import winerror
 
 from winsys import constants, core, exc, utils
+from winsys import _advapi32
 
 __all__ = ['LOGON', 'EXTENDED_NAME', 'x_accounts', 'principal', 'Principal', 'User', 'Group', 'me']
 
@@ -198,6 +200,22 @@ class Principal (core._WinSysObject):
       wrapped (win32security.ConvertSidToStringSid, self.sid)
     ), level)
 
+  def get_password (self):
+      flags = 0
+      flags |= CREDUI_FLAGS.GENERIC_CREDENTIALS
+      flags |= CREDUI_FLAGS.DO_NOT_PERSIST
+      _, password, _ = wrapped (
+        win32cred.CredUIPromptForCredentials,
+        self.domain, 
+        0, 
+        self.name, 
+        None,
+        True, 
+        flags, 
+        {}
+      )
+      return password
+  
   def logon (self, password=core.UNSET, logon_type=core.UNSET):
     u"""Log on as an authenticated user, returning that
     user's token. This is used by security.impersonate
@@ -216,19 +234,7 @@ class Principal (core._WinSysObject):
     else:
       logon_type = LOGON.constant (logon_type)
     if password is core.UNSET:
-      flags = 0
-      flags |= CREDUI_FLAGS.GENERIC_CREDENTIALS
-      flags |= CREDUI_FLAGS.DO_NOT_PERSIST
-      _, password, _ = wrapped (
-        win32cred.CredUIPromptForCredentials,
-        self.domain, 
-        0, 
-        self.name, 
-        None,
-        False, 
-        flags, 
-        {}
-      )
+      password = self.get_password ()
     hUser = wrapped (
       win32security.LogonUser,
       self.name,
@@ -381,6 +387,29 @@ class User (Principal):
     """
     return group (other_group).remove (self)
     
+  def runas (self, command_line, password=core.UNSET, load_profile=False):
+    ur"""Run a command logged on as this user
+    
+    :param command_line: command line to run, quoted as necessary
+    :param password: password; if not supplied, standard Windows prompt
+    :param with_profile: if True, HKEY_CURRENT_USER is loaded [False]
+    """
+    if not password:
+      password = self.get_password ()
+    logon_flags = 0
+    if load_profile: logon_flags |= _advapi32.LOGON_FLAGS.WITH_PROFILE
+    process_info = _advapi32.CreateProcessWithLogonW (
+      username=self.name, 
+      domain=self.domain,
+      password=password,
+      command_line=command_line,
+      logon_flags=logon_flags
+    )
+    #
+    # Wait for up to 20 secs
+    #
+    #~ if wrapped (win32event.WaitForInputIdle, process_info.hProcess, 10000) == win32event.WAIT_TIMEOUT:
+      #~ raise x_accounts (errctx="runas", errmsg="runas process not created with 10 secs")
   
 class Group (Principal):
   
