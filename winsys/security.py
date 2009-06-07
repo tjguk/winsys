@@ -178,6 +178,26 @@ class Security (core._WinSysObject):
     originating_object=core.UNSET,
     originating_object_type=core.UNSET
   ):
+    ur"""Create a new :class:`Security` object from its component pieces,
+    all optional. You won't often need to call this as you can do most
+    useful things via the :func:`security` function, but to create a simple
+    security descriptor for immediate use, you can instantiate it directly.
+    
+    None of the parameters need be specified; with the exceptions of
+    `originating_object` and `originating_object_type`, you can set
+    each one later, directly or indirectly.
+    
+    :param control: any combination of :const:`SD_CONTROL`. Most commonly set,
+                    if at all, to "dacl_protected"
+    :param owner: anything accepted by :func:`principal`
+    :param group: anything accepted by :func:`principal`
+    :param dacl: anything accepted by :func:`dacl`
+    :param sacl: anything accepted by :func:`sacl`
+    :param inherit_handle: whether this handle is inherited by child processes
+    :param originating_object: name or handle of the object this security currently applies to, if any
+    :param originating_object_type: one of :const:`SE_OBJECT_TYPE` referring to the type of object
+                                    this security currently applies to, if any.
+    """
     core._WinSysObject.__init__ (self)
     if control is core.UNSET: control = self.DEFAULT_CONTROL
     self._control = control
@@ -320,7 +340,7 @@ class Security (core._WinSysObject):
       return False
       
   @classmethod
-  def _options (cls, options):
+  def security_options (cls, options):
     ur"""Accept either an integer representing a bitmask combination
     or :const:`SECURITY_INFORMATION` values; or a string whose
     characters map, via :const:`OPTIONS` to the same values.
@@ -349,7 +369,7 @@ class Security (core._WinSysObject):
     :param obj: (optional) object or object name to write security to if this :class:`Security` object
                 wasn't created from an object in the first place.
     :param object_type:  an :const:`SE_OBJECT_TYPE` [:const:`file_object`]
-    :param options: anything accepted by :meth:`_options`
+    :param options: anything accepted by :classmeth:`security_options`
     """
     obj = obj or self._originating_object
     if not obj:
@@ -381,7 +401,7 @@ class Security (core._WinSysObject):
           options |= SECURITY_INFORMATION.PROTECTED_SACL
     
     else:
-      options = self._options (options)
+      options = self.security_options (options)
 
     sa = self.pyobject ()
     if isinstance (obj, PyHANDLE):
@@ -447,7 +467,7 @@ class Security (core._WinSysObject):
     if object_type is core.UNSET: object_type = SE_OBJECT_TYPE.FILE_OBJECT
     if options is core.UNSET: options = cls.DEFAULT_OPTIONS
     
-    options = cls._options (options)
+    options = cls.security_options (options)
     if isinstance (obj, PyHANDLE):
       sd = wrapped (win32security.GetSecurityInfo, obj, object_type, options)
     else:
@@ -474,7 +494,7 @@ class Security (core._WinSysObject):
     """
     if options is core.UNSET: options = self.DEFAULT_OPTIONS
     
-    options = cls._options (options)
+    options = cls.security_options (options)
     control, revision = sd.GetSecurityDescriptorControl ()
     owner = sd.GetSecurityDescriptorOwner () if SECURITY_INFORMATION.OWNER & options else core.UNSET
     group = sd.GetSecurityDescriptorGroup () if SECURITY_INFORMATION.GROUP & options else core.UNSET
@@ -547,7 +567,7 @@ def security (obj=core.UNSET, obj_type=core.UNSET, options=core.UNSET):
   :param obj: any of :const:`None`, a :class:`Security` object, a pywin32 :const:`PyHANDLE`,
               a pywin32 :const:`PySECURITY_DESCRIPTOR`, or a string
   :param obj_type: an :const:`SE_OBJECT_TYPE` [:const:`file_object`]
-  :param options: anything acccepted by :meth:`_options` [:const:`DEFAULT_OPTIONS`]
+  :param options: anything acccepted by :meth:`security_options` [:const:`DEFAULT_OPTIONS`]
   :returns: a :class:`Security` object
   """
   if obj is None:

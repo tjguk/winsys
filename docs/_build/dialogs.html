@@ -156,7 +156,7 @@ display a human-redable version of each directory size:</p>
   <span class="p">(</span><span class="s">&quot;Root&quot;</span><span class="p">,</span> <span class="s">&quot;c:/temp&quot;</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">get_folder</span><span class="p">)</span>
 <span class="p">)</span>
 
-<span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="n">sorted</span> <span class="p">(</span><span class="n">sizes</span><span class="o">.</span><span class="n">items</span> <span class="p">()):</span>
+<span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">sorted</span> <span class="p">(</span><span class="n">sizes</span><span class="o">.</span><span class="n">items</span> <span class="p">()):</span>
   <span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;=&gt;&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_as_mb</span> <span class="p">(</span><span class="n">size</span><span class="p">)</span>
 </pre></div>
 </div>

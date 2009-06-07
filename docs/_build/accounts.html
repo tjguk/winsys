@@ -358,6 +358,25 @@ a <a title="accounts.User" class="reference internal" href="#accounts.User"><tt 
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="accounts.User.runas">
+<tt class="descname">runas</tt><big>(</big><em>command_line</em>, <em>password=&lt;Unset&gt;</em>, <em>load_profile=False</em><big>)</big><a class="headerlink" href="#accounts.User.runas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a command logged on as this user</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>command_line</em> &#8211; command line to run, quoted as necessary</li>
+<li><em>password</em> &#8211; password; if not supplied, standard Windows prompt</li>
+<li><em>with_profile</em> &#8211; if True, HKEY_CURRENT_USER is loaded [False]</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -490,99 +509,6 @@ class </em><tt class="descname">Group</tt><big>(</big><em>sid</em>, <em>system=N
 <tr><td>DnsDomain</td>
 <td>0x0C</td>
 <td>NameDnsDomain</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="data">
-<dt id="accounts.CREDUI_FLAGS">
-<tt class="descname">CREDUI_FLAGS</tt><a class="headerlink" href="#accounts.CREDUI_FLAGS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Options for username prompt UI</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="36%" />
-<col width="11%" />
-<col width="53%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>INCORRECT_PASSWORD</td>
-<td>0x000001</td>
-<td>CREDUI_FLAGS_INCORRECT_PASSWORD</td>
-</tr>
-<tr><td>DO_NOT_PERSIST</td>
-<td>0x000002</td>
-<td>CREDUI_FLAGS_DO_NOT_PERSIST</td>
-</tr>
-<tr><td>REQUEST_ADMINISTRATOR</td>
-<td>0x000004</td>
-<td>CREDUI_FLAGS_REQUEST_ADMINISTRATOR</td>
-</tr>
-<tr><td>EXCLUDE_CERTIFICATES</td>
-<td>0x000008</td>
-<td>CREDUI_FLAGS_EXCLUDE_CERTIFICATES</td>
-</tr>
-<tr><td>REQUIRE_CERTIFICATE</td>
-<td>0x000010</td>
-<td>CREDUI_FLAGS_REQUIRE_CERTIFICATE</td>
-</tr>
-<tr><td>SHOW_SAVE_CHECK_BOX</td>
-<td>0x000040</td>
-<td>CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX</td>
-</tr>
-<tr><td>ALWAYS_SHOW_UI</td>
-<td>0x000080</td>
-<td>CREDUI_FLAGS_ALWAYS_SHOW_UI</td>
-</tr>
-<tr><td>REQUIRE_SMARTCARD</td>
-<td>0x000100</td>
-<td>CREDUI_FLAGS_REQUIRE_SMARTCARD</td>
-</tr>
-<tr><td>PASSWORD_ONLY_OK</td>
-<td>0x000200</td>
-<td>CREDUI_FLAGS_PASSWORD_ONLY_OK</td>
-</tr>
-<tr><td>VALIDATE_USERNAME</td>
-<td>0x000400</td>
-<td>CREDUI_FLAGS_VALIDATE_USERNAME</td>
-</tr>
-<tr><td>COMPLETE_USERNAME</td>
-<td>0x000800</td>
-<td>CREDUI_FLAGS_COMPLETE_USERNAME</td>
-</tr>
-<tr><td>PERSIST</td>
-<td>0x001000</td>
-<td>CREDUI_FLAGS_PERSIST</td>
-</tr>
-<tr><td>SERVER_CREDENTIAL</td>
-<td>0x004000</td>
-<td>CREDUI_FLAGS_SERVER_CREDENTIAL</td>
-</tr>
-<tr><td>EXPECT_CONFIRMATION</td>
-<td>0x020000</td>
-<td>CREDUI_FLAGS_EXPECT_CONFIRMATION</td>
-</tr>
-<tr><td>GENERIC_CREDENTIALS</td>
-<td>0x040000</td>
-<td>CREDUI_FLAGS_GENERIC_CREDENTIALS</td>
-</tr>
-<tr><td>USERNAME_TARGET_CREDENTIALS</td>
-<td>0x080000</td>
-<td>CREDUI_FLAGS_USERNAME_TARGET_CREDENTIALS</td>
-</tr>
-<tr><td>KEEP_USERNAME</td>
-<td>0x100000</td>
-<td>CREDUI_FLAGS_KEEP_USERNAME</td>
-</tr>
-<tr><td>PROMPT_VALID</td>
-<td>0x1E5FDF</td>
-<td>CREDUI_FLAGS_PROMPT_VALID</td>
 </tr>
 </tbody>
 </table>

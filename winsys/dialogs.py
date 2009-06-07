@@ -39,6 +39,8 @@ import pythoncom
 import win32com.server.policy
 import win32api
 import win32con
+import win32cred
+import win32event
 from win32com.shell import shell, shellcon
 import win32ui
 import struct
@@ -46,7 +48,7 @@ import threading
 import traceback
 import uuid
 
-from winsys import core, constants, exc, ipc, utils
+from winsys import core, constants, exc, utils
 
 BIF = constants.Constants.from_dict (dict (
   BIF_RETURNONLYFSDIRS   = 0x0001,
@@ -69,6 +71,12 @@ BIF.update (dict (USENEWUI = BIF.NEWDIALOGSTYLE | BIF.EDITBOX))
 BIF.doc ("Styles for browsing for a folder")
 BFFM = constants.Constants.from_pattern (u"BFFM_*", namespace=shellcon)
 BFFM.doc ("Part of the browse-for-folder shell mechanism")
+
+CREDUI_FLAGS = constants.Constants.from_pattern (u"CREDUI_FLAGS_*", namespace=win32cred)
+CREDUI_FLAGS.doc ("Options for username prompt UI")
+CRED_FLAGS = constants.Constants.from_pattern (u"CRED_FLAGS_*", namespace=win32cred)
+CRED_TYPE = constants.Constants.from_pattern (u"CRED_TYPE_*", namespace=win32cred)
+CRED_TI = constants.Constants.from_pattern (u"CRED_TI_*", namespace=win32cred)
 
 class x_dialogs (exc.x_winsys):
   "Base for dialog-related exceptions"
@@ -356,7 +364,7 @@ class Dialog (BaseDialog):
       raise RuntimeError ("Must pass at least one field")
     self.results = []
     self.progress_thread = core.UNSET
-    self.progress_cancelled = ipc.event ()
+    self.progress_cancelled = win32event.CreateEvent (None, 0, 0, None)
     
   def run (self):
     ur"""The heart of the dialog box functionality. The call to DialogBoxIndirect
@@ -635,7 +643,7 @@ class Dialog (BaseDialog):
       """
       try:
         for message in iterator:
-          if cancelled:
+          if wrapped (win32event.WaitForSingleObject, cancelled, 0) != win32event.WAIT_TIMEOUT:
             self._progress_complete ("User cancelled")
             break
           else:
@@ -688,7 +696,7 @@ class Dialog (BaseDialog):
     """
     self.results = []
     if self.progress_thread:
-      self.progress_cancelled.set ()
+      win32event.SetEvent (self.progress_cancelled),
       self._set_item (self._progress_id, "Cancelling...")
       self.progress_thread.join ()
     wrapped (win32gui.EndDialog, hwnd, win32con.IDCANCEL)
@@ -905,3 +913,18 @@ class InfoDialog (Dialog):
     finally:
       wrapped (win32gui.ReleaseDC, self.hwnd, hDC)
 
+def get_password (name="", domain=""):
+  flags = 0
+  flags |= CREDUI_FLAGS.GENERIC_CREDENTIALS
+  flags |= CREDUI_FLAGS.DO_NOT_PERSIST
+  _, password, _ = wrapped (
+    win32cred.CredUIPromptForCredentials,
+    domain, 
+    0, 
+    name, 
+    None,
+    True, 
+    flags, 
+    {}
+  )
+  return password

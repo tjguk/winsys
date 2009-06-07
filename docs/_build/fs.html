@@ -21,7 +21,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
-    <link rel="next" title="The FilePath class" href="fs_filepath.html" />
+    <link rel="next" title="The Drive class" href="fs_drive_vol.html" />
     <link rel="prev" title="event_logs – Event Logs" href="event_logs.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
         <li class="right" >
-          <a href="fs_filepath.html" title="The FilePath class"
+          <a href="fs_drive_vol.html" title="The Drive class"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="event_logs.html" title="event_logs – Event Logs"
@@ -124,7 +124,7 @@ represents it.</dd></dl>
 <dl class="function">
 <dt id="fs.drive">
 <tt class="descname">drive</tt><big>(</big><em>drive</em><big>)</big><a class="headerlink" href="#fs.drive" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <tt class="xref docutils literal"><span class="pre">Drive</span></tt> object representing drive</p>
+<dd><p>Return a <a title="fs.Drive" class="reference external" href="fs_drive_vol.html#fs.Drive"><tt class="xref docutils literal"><span class="pre">Drive</span></tt></a> object representing drive</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="44%" />
@@ -139,11 +139,11 @@ represents it.</dd></dl>
 <tr><td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
 <td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
 </tr>
-<tr><td>an <tt class="xref docutils literal"><span class="pre">Drive</span></tt> or subclass object</td>
+<tr><td>an <a title="fs.Drive" class="reference external" href="fs_drive_vol.html#fs.Drive"><tt class="xref docutils literal"><span class="pre">Drive</span></tt></a> or subclass object</td>
 <td>the same object</td>
 </tr>
 <tr><td>a drive letter</td>
-<td>a <tt class="xref docutils literal"><span class="pre">Drive</span></tt> object</td>
+<td>a <a title="fs.Drive" class="reference external" href="fs_drive_vol.html#fs.Drive"><tt class="xref docutils literal"><span class="pre">Drive</span></tt></a> object</td>
 </tr>
 </tbody>
 </table>
@@ -152,7 +152,7 @@ represents it.</dd></dl>
 <dl class="function">
 <dt id="fs.volume">
 <tt class="descname">volume</tt><big>(</big><em>volume</em><big>)</big><a class="headerlink" href="#fs.volume" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <tt class="xref docutils literal"><span class="pre">Volume</span></tt> object corresponding to volume</p>
+<dd><p>Return a <a title="fs.Volume" class="reference external" href="fs_drive_vol.html#fs.Volume"><tt class="xref docutils literal"><span class="pre">Volume</span></tt></a> object corresponding to volume</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="44%" />
@@ -167,14 +167,14 @@ represents it.</dd></dl>
 <tr><td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
 <td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
 </tr>
-<tr><td>an <tt class="xref docutils literal"><span class="pre">Volume</span></tt> or subclass object</td>
+<tr><td>an <a title="fs.Volume" class="reference external" href="fs_drive_vol.html#fs.Volume"><tt class="xref docutils literal"><span class="pre">Volume</span></tt></a> or subclass object</td>
 <td>the same object</td>
 </tr>
 <tr><td>a volume name \\?\Volume...</td>
-<td>a <tt class="xref docutils literal"><span class="pre">Volume</span></tt> object representing that volume</td>
+<td>a <a title="fs.Volume" class="reference external" href="fs_drive_vol.html#fs.Volume"><tt class="xref docutils literal"><span class="pre">Volume</span></tt></a> object representing that volume</td>
 </tr>
 <tr><td>a directory name</td>
-<td>a <tt class="xref docutils literal"><span class="pre">Volume</span></tt> object representing the volume
+<td>a <a title="fs.Volume" class="reference external" href="fs_drive_vol.html#fs.Volume"><tt class="xref docutils literal"><span class="pre">Volume</span></tt></a> object representing the volume
 at that mountpoint</td>
 </tr>
 </tbody>
@@ -464,7 +464,7 @@ path represents a directory.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
 <span class="n">filepath</span> <span class="o">=</span> <span class="s">&quot;c:/temp/abc.txt&quot;</span>
 <span class="n">parts</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">get_parts</span> <span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">parts</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mf">1</span><span class="p">:])</span> <span class="o">==</span> <span class="n">filepath</span>
+<span class="k">assert</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">==</span> <span class="n">filepath</span>
 </pre></div>
 </div>
 <p>The exception is when a root (UNC or volume) is given without
@@ -606,20 +606,20 @@ of filepath, implemented via <tt class="xref docutils literal"><span class="pre"
 <dl class="function">
 <dt id="fs.drives">
 <tt class="descname">drives</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.drives" title="Permalink to this definition">¶</a></dt>
-<dd>Iterate over all the drive letters in the system, yielding a <tt class="xref docutils literal"><span class="pre">Drive</span></tt> object
+<dd>Iterate over all the drive letters in the system, yielding a <a title="fs.Drive" class="reference external" href="fs_drive_vol.html#fs.Drive"><tt class="xref docutils literal"><span class="pre">Drive</span></tt></a> object
 representing each one.</dd></dl>
 
 <dl class="function">
 <dt id="fs.volumes">
 <tt class="descname">volumes</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.volumes" title="Permalink to this definition">¶</a></dt>
-<dd>Iterate over all the volumes in the system, yielding a <tt class="xref docutils literal"><span class="pre">Volume</span></tt> object
+<dd>Iterate over all the volumes in the system, yielding a <a title="fs.Volume" class="reference external" href="fs_drive_vol.html#fs.Volume"><tt class="xref docutils literal"><span class="pre">Volume</span></tt></a> object
 representing each one.</dd></dl>
 
 <dl class="function">
 <dt id="fs.mounts">
 <tt class="descname">mounts</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.mounts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over all mounted volume mountpoints in the system, yielding a
-(<a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a>, <tt class="xref docutils literal"><span class="pre">Volume</span></tt>) pair for each one, eg:</p>
+(<a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a>, <a title="fs.Volume" class="reference external" href="fs_drive_vol.html#fs.Volume"><tt class="xref docutils literal"><span class="pre">Volume</span></tt></a>) pair for each one, eg:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
 <span class="n">drive_volumes</span> <span class="o">=</span> <span class="nb">dict</span> <span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">mounts</span> <span class="p">())</span>
 </pre></div>
@@ -631,7 +631,7 @@ representing each one.</dd></dl>
 <tt class="descname">watch</tt><big>(</big><em>root</em>, <em>subdirs=False</em>, <em>watch_for=287</em>, <em>buffer_size=8192</em><big>)</big><a class="headerlink" href="#fs.watch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an iterator which returns a file change on every iteration.
 The file change comes in the form: action, old_filename, new_filename.
-action is one of the <tt class="xref docutils literal"><span class="pre">FILE_ACTION</span></tt> constants, while the filenames
+action is one of the <a title="fs.FILE_ACTION" class="reference external" href="fs_constants.html#fs.FILE_ACTION"><tt class="xref docutils literal"><span class="pre">FILE_ACTION</span></tt></a> constants, while the filenames
 speak for themselves. The filenames will be the same if the file has been
 updated. If the file is new, old_filename will be None; if it has been
 deleted, new_filename will be None; if it has been renamed, they will
@@ -668,6 +668,8 @@ access, item access and the &#8220;in&#8221; operator:</p>
 </dd></dl>
 
 <ul>
+<li class="toctree-l1"><a class="reference external" href="fs_drive_vol.html">The Drive class</a></li>
+<li class="toctree-l1"><a class="reference external" href="fs_drive_vol.html#the-volume-class">The Volume class</a></li>
 <li class="toctree-l1"><a class="reference external" href="fs_filepath.html">The FilePath class</a></li>
 <li class="toctree-l1"><a class="reference external" href="fs_entry.html">The Entry class</a></li>
 <li class="toctree-l1"><a class="reference external" href="fs_file.html">The File class</a></li>
@@ -676,7 +678,8 @@ access, item access and the &#8220;in&#8221; operator:</p>
 </div>
 <div class="section" id="constants">
 <h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
+<ul>
+<li class="toctree-l1"><a class="reference external" href="fs_constants.html">fs Constants</a></li>
 </ul>
 </div>
 <div class="section" id="exceptions">
@@ -766,8 +769,8 @@ exception </em><tt class="descname">x_not_ready</tt><big>(</big><em>errno=None</
             <p class="topless"><a href="event_logs.html"
                                   title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">event_logs</span></tt> &#8211; Event Logs</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="fs_filepath.html"
-                                  title="next chapter">The FilePath class</a></p>
+            <p class="topless"><a href="fs_drive_vol.html"
+                                  title="next chapter">The Drive class</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="_sources/fs.txt"
@@ -800,7 +803,7 @@ exception </em><tt class="descname">x_not_ready</tt><big>(</big><em>errno=None</
           <a href="modindex.html" title="Global Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="fs_filepath.html" title="The FilePath class"
+          <a href="fs_drive_vol.html" title="The Drive class"
              >next</a> |</li>
         <li class="right" >
           <a href="event_logs.html" title="event_logs – Event Logs"

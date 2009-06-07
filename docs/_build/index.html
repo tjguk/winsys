@@ -76,7 +76,7 @@ add you to the project members list.</p>
 <p>Copy a registry key from HKLM to HKCU and set its permissions so that
 only the current user has change access while everyone else gets read.
 Then dump the details of the new top-level key, including its security.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -88,7 +88,7 @@ Then dump the details of the new top-level key, including its security.</p>
 10
 11
 12
-13</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+13</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span><span class="p">,</span> <span class="n">accounts</span>
 
 <span class="n">new_key</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">copy</span> <span class="p">(</span><span class="s">r&quot;HKLM\Software\Python&quot;</span><span class="p">,</span> <span class="s">r&quot;HKCU\Software\WinsysPython&quot;</span><span class="p">)</span>

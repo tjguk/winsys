@@ -57,9 +57,9 @@
 <div class="section" id="get-the-logged-on-user-s-account">
 <h2>Get the logged-on user&#8217;s account<a class="headerlink" href="#get-the-logged-on-user-s-account" title="Permalink to this headline">¶</a></h2>
 <p>Get the account for the logged-on user.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
-3</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
 
 <span class="k">print</span> <span class="n">accounts</span><span class="o">.</span><span class="n">me</span> <span class="p">()</span>
 </pre></div>
@@ -74,7 +74,7 @@
 <p>Temporarily switch the current process to use another user&#8217;s identity. Create
 a file as that other user and then check that the file was created with that
 owner. (Assumes the existence of a &#8220;python&#8221; user).</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -86,11 +86,11 @@ owner. (Assumes the existence of a &#8220;python&#8221; user).</p>
 10
 11
 12
-13</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+13</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
 <span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span><span class="p">,</span> <span class="n">security</span>
 
-<span class="n">username</span> <span class="o">=</span> <span class="nb">str</span> <span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid1</span> <span class="p">())[:</span><span class="mf">8</span><span class="p">]</span>
+<span class="n">username</span> <span class="o">=</span> <span class="nb">str</span> <span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid1</span> <span class="p">())[:</span><span class="mi">8</span><span class="p">]</span>
 <span class="n">user</span> <span class="o">=</span> <span class="n">accounts</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">create</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
   <span class="k">with</span> <span class="n">user</span><span class="p">:</span>
@@ -122,10 +122,10 @@ privs.</p>
 <div class="section" id="create-a-local-user">
 <h2>Create a local user<a class="headerlink" href="#create-a-local-user" title="Permalink to this headline">¶</a></h2>
 <p>Create a new local user with minimum permissions and a password.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
-4</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
 
 <span class="n">python</span> <span class="o">=</span> <span class="n">accounts</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">create</span> <span class="p">(</span><span class="s">&quot;python&quot;</span><span class="p">,</span> <span class="s">&quot;Pa55w0rd&quot;</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">python</span>
@@ -143,9 +143,9 @@ the <a title="accounts.Group" class="reference external" href="../accounts.html#
 <div class="section" id="delete-a-local-user">
 <h2>Delete a local user<a class="headerlink" href="#delete-a-local-user" title="Permalink to this headline">¶</a></h2>
 <p>Delete an existing local user</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
-3</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
 
 <span class="n">accounts</span><span class="o">.</span><span class="n">principal</span> <span class="p">(</span><span class="s">&quot;python&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span> <span class="p">()</span>
 </pre></div>

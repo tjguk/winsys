@@ -29,7 +29,6 @@ Constants
 ---------
 ..  autodata:: LOGON
 ..  autodata:: EXTENDED_NAME
-..  autodata:: CREDUI_FLAGS
 ..  autodata:: WELL_KNOWN_SID
 ..  autodata:: USER_PRIV
 ..  autodata:: UF

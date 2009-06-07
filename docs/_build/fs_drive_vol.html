@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Drive class &mdash; WinSys v0.4dev documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
+    <link rel="up" title="fs – Files, Directories, &c." href="fs.html" />
+    <link rel="next" title="The FilePath class" href="fs_filepath.html" />
+    <link rel="prev" title="fs – Files, Directories, &c." href="fs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="fs_filepath.html" title="The FilePath class"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fs.html" title="fs – Files, Directories, &c."
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-drive-class">
+<h1>The Drive class<a class="headerlink" href="#the-drive-class" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="fs.Drive">
+<em class="property">
+class </em><tt class="descname">Drive</tt><big>(</big><em>drive</em><big>)</big><a class="headerlink" href="#fs.Drive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps a drive litter, offering access to its <a title="fs.volume" class="reference external" href="fs.html#fs.volume"><tt class="xref docutils literal"><span class="pre">volume()</span></tt></a> 
+and the ability to <a title="fs.mount" class="reference external" href="fs.html#fs.mount"><tt class="xref docutils literal"><span class="pre">mount()</span></tt></a> or <a title="fs.dismount" class="reference external" href="fs.html#fs.dismount"><tt class="xref docutils literal"><span class="pre">dismount()</span></tt></a> it on a particular 
+volume.</p>
+<dl class="method">
+<dt id="fs.Drive.dismount">
+<tt class="descname">dismount</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Drive.dismount" title="Permalink to this definition">¶</a></dt>
+<dd>Dismount this drive from its volume</dd></dl>
+
+<dl class="method">
+<dt id="fs.Drive.mount">
+<tt class="descname">mount</tt><big>(</big><em>vol</em><big>)</big><a class="headerlink" href="#fs.Drive.mount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mount the specified volume in this drive.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>vol</em> &#8211; anything accepted by <a title="fs.volume" class="reference external" href="fs.html#fs.volume"><tt class="xref docutils literal"><span class="pre">volume()</span></tt></a></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.Drive.root">
+<tt class="descname">root</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Drive.root" title="Permalink to this definition">¶</a></dt>
+<dd>Return a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">fs.Dir</span></tt></a> object corresponding to the
+root directory of this drive.</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="the-volume-class">
+<h1>The Volume class<a class="headerlink" href="#the-volume-class" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="fs.Volume">
+<em class="property">
+class </em><tt class="descname">Volume</tt><big>(</big><em>volume</em><big>)</big><a class="headerlink" href="#fs.Volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps a filesystem volume, giving access to useful
+information such as the filesystem and a list of drives
+mounted on it. Also offers the ability to mount or dismount.</p>
+<p>Attributes:</p>
+<ul class="simple">
+<li>label</li>
+<li>serial_number</li>
+<li>maximum_component_length</li>
+<li>flags - combination of <a title="fs.VOLUME_FLAG" class="reference external" href="fs_constants.html#fs.VOLUME_FLAG"><tt class="xref docutils literal"><span class="pre">VOLUME_FLAG</span></tt></a></li>
+<li>file_system_name</li>
+<li>mounts</li>
+</ul>
+<dl class="method">
+<dt id="fs.Volume.dismount">
+<tt class="descname">dismount</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.Volume.dismount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dismount this volume from a particular filepath</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference external" href="fs.html#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.Volume.mount">
+<tt class="descname">mount</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.Volume.mount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mount this volume on a particular filepath</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference external" href="fs.html#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="contents.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">The Drive class</a></li>
+<li><a class="reference external" href="#the-volume-class">The Volume class</a></li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="fs.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="fs_filepath.html"
+                                  title="next chapter">The FilePath class</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/fs_drive_vol.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fs_filepath.html" title="The FilePath class"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fs.html" title="fs – Files, Directories, &c."
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

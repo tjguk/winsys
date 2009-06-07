@@ -60,7 +60,7 @@
 set the new key&#8217;s security so that only the current user has
 change rights and all other users have read-only. Finally, display
 the details of the new top-level key, including its security.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -72,7 +72,7 @@ the details of the new top-level key, including its security.</p>
 10
 11
 12
-13</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+13</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span><span class="p">,</span> <span class="n">accounts</span>
 
 <span class="n">new_key</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">copy</span> <span class="p">(</span><span class="s">r&quot;HKLM\Software\Python&quot;</span><span class="p">,</span> <span class="s">r&quot;HKCU\Software\WinsysPython&quot;</span><span class="p">)</span>
@@ -115,7 +115,7 @@ in a readable format.</p>
 <p>Search the registry under a particular root and find a value which
 contains the searched-for string. Output the registry key, the value
 name and the value itself.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -131,7 +131,7 @@ name and the value itself.</p>
 14
 15
 16
-17</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">registry</span>
+17</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">registry</span>
 
 <span class="n">root</span><span class="p">,</span> <span class="n">term</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span>
   <span class="s">&quot;Search the Registry&quot;</span><span class="p">,</span>

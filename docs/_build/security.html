@@ -96,7 +96,7 @@ something else, you need to specify its type in the <cite>obj_type</cite> parame
 <li><em>obj</em> &#8211; any of <tt class="xref xref docutils literal"><span class="pre">None</span></tt>, a <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object, a pywin32 <tt class="xref docutils literal"><span class="pre">PyHANDLE</span></tt>,
 a pywin32 <tt class="xref docutils literal"><span class="pre">PySECURITY_DESCRIPTOR</span></tt>, or a string</li>
 <li><em>obj_type</em> &#8211; an <a title="security.SE_OBJECT_TYPE" class="reference internal" href="#security.SE_OBJECT_TYPE"><tt class="xref docutils literal"><span class="pre">SE_OBJECT_TYPE</span></tt></a> [<tt class="xref docutils literal"><span class="pre">file_object</span></tt>]</li>
-<li><em>options</em> &#8211; anything acccepted by <tt class="xref docutils literal"><span class="pre">_options()</span></tt> [<tt class="xref docutils literal"><span class="pre">DEFAULT_OPTIONS</span></tt>]</li>
+<li><em>options</em> &#8211; anything acccepted by <tt class="xref docutils literal"><span class="pre">security_options()</span></tt> [<tt class="xref docutils literal"><span class="pre">DEFAULT_OPTIONS</span></tt>]</li>
 </ul>
 </td>
 </tr>
@@ -310,6 +310,21 @@ that existing permissions are to be copied back in.</p>
 </table>
 </dd></dl>
 
+<dl class="classmethod">
+<dt id="security.Security.security_options">
+<em class="property">
+classmethod </em><tt class="descname">security_options</tt><big>(</big><em>options</em><big>)</big><a class="headerlink" href="#security.Security.security_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accept either an integer representing a bitmask combination
+or <a title="security.SECURITY_INFORMATION" class="reference internal" href="#security.SECURITY_INFORMATION"><tt class="xref docutils literal"><span class="pre">SECURITY_INFORMATION</span></tt></a> values; or a string whose
+characters map, via <a title="security.Security.OPTIONS" class="reference internal" href="#security.Security.OPTIONS"><tt class="xref docutils literal"><span class="pre">OPTIONS</span></tt></a> to the same values.
+The following have the same result:</p>
+<ul class="simple">
+<li>SECURITY_INFORMATION.OWNER | SECURITY_INFORMATION.DACL</li>
+<li>&#8220;OD&#8221;</li>
+<li>0x05</li>
+</ul>
+</dd></dl>
+
 <dl class="method">
 <dt id="security.Security.to_object">
 <tt class="descname">to_object</tt><big>(</big><em>obj=&lt;Unset&gt;</em>, <em>object_type=&lt;Unset&gt;</em>, <em>options=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#security.Security.to_object" title="Permalink to this definition">¶</a></dt>
@@ -331,7 +346,7 @@ security to another:</p>
 <li><em>obj</em> &#8211; (optional) object or object name to write security to if this <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object
 wasn&#8217;t created from an object in the first place.</li>
 <li><em>object_type</em> &#8211; an <a title="security.SE_OBJECT_TYPE" class="reference internal" href="#security.SE_OBJECT_TYPE"><tt class="xref docutils literal"><span class="pre">SE_OBJECT_TYPE</span></tt></a> [<tt class="xref docutils literal"><span class="pre">file_object</span></tt>]</li>
-<li><em>options</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">_options()</span></tt></li>
+<li><em>options</em> &#8211; anything accepted by <a href="#id1"><span class="problematic" id="id2">:classmeth:`security_options`</span></a></li>
 </ul>
 </td>
 </tr>
@@ -596,7 +611,7 @@ exception </em><tt class="descname">x_value_not_set</tt><big>(</big><em>errno=No
 
             <h4>Previous topic</h4>
             <p class="topless"><a href="registry.html"
-                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a></p>
+                                  title="previous chapter"><tt class="docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a></p>
             <h4>Next topic</h4>
             <p class="topless"><a href="misc.html"
                                   title="next chapter">Miscellaneous</a></p>

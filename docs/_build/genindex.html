@@ -103,7 +103,9 @@
   <dd><dl>
     <dt><a href="fs_entry.html#fs.Entry.compress">(Entry method)</a></dt>
   </dl></dd>
+<dt><a href="fs_constants.html#fs.COMPRESSION_FORMAT">COMPRESSION_FORMAT (in module fs)</a></dt>
 <dt><a href="event_logs.html#event_logs._EventLogEntry.computer_name">computer_name (_EventLogEntry attribute)</a></dt>
+<dt><a href="constants.html#constants.Constants.constant">constant() (Constants method)</a></dt>
 <dt><a href="constants.html#constants.Constants">Constants (class in constants)</a></dt>
 <dt><a href="constants.html#module-constants">constants (module)</a></dt>
 <dt><a href="fs_dir.html#fs.Dir.copy">copy() (Dir method)</a></dt>
@@ -127,7 +129,6 @@
     <dt><a href="registry.html#registry.create">(in module registry)</a></dt>
   </dl></dd>
 <dt><a href="registry.html#registry.create_moniker">create_moniker() (in module registry)</a></dt>
-<dt><a href="accounts.html#accounts.CREDUI_FLAGS">CREDUI_FLAGS (in module accounts)</a></dt>
 </dl></td></tr></table>
 
 <h2 id="D">D</h2>
@@ -147,9 +148,9 @@
     <dt><a href="registry.html#registry.delete">(in module registry)</a></dt>
   </dl></dd>
 <dt><a href="dialogs.html#dialogs.Dialog">Dialog (class in dialogs)</a></dt>
-<dt><a href="dialogs.html#dialogs.dialog">dialog() (in module dialogs)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="dialogs.html#dialogs.dialog">dialog() (in module dialogs)</a></dt>
 <dt><a href="dialogs.html#module-dialogs">dialogs (module)</a></dt>
-<dt><a href="fs_dir.html#fs.Dir">Dir (class in fs)</a></dt>
+<dt><a href="fs_dir.html#fs.Dir">Dir (class in fs)</a></dt></dl></td><td width="33%" valign="top"><dl>
 <dt><a href="fs_dir.html#fs.Dir.dir">dir() (Dir method)</a></dt>
   <dd><dl>
     <dt><a href="fs.html#fs.dir">(in module fs)</a></dt>
@@ -157,9 +158,13 @@
 <dt><a href="fs_dir.html#fs.Dir.dirs">dirs() (Dir method)</a></dt>
 <dt><a href="fs_dir.html#fs.Dir.dismount">dismount() (Dir method)</a></dt>
   <dd><dl>
+    <dt><a href="fs_drive_vol.html#fs.Drive.dismount">(Drive method)</a></dt>
+    <dt><a href="fs_drive_vol.html#fs.Volume.dismount">(Volume method)</a></dt>
     <dt><a href="fs.html#fs.dismount">(in module fs)</a></dt>
   </dl></dd>
+<dt><a href="fs_drive_vol.html#fs.Drive">Drive (class in fs)</a></dt>
 <dt><a href="fs.html#fs.drive">drive() (in module fs)</a></dt>
+<dt><a href="fs_constants.html#fs.DRIVE_TYPE">DRIVE_TYPE (in module fs)</a></dt>
 <dt><a href="fs.html#fs.drives">drives() (in module fs)</a></dt>
 <dt><a href="core.html#core._WinSysObject.dumped">dumped() (_WinSysObject method)</a></dt>
 </dl></td></tr></table>
@@ -204,6 +209,13 @@
   <dd><dl>
     <dt><a href="fs.html#fs.file">(in module fs)</a></dt>
   </dl></dd>
+<dt><a href="fs_constants.html#fs.FILE_ACCESS">FILE_ACCESS (in module fs)</a></dt>
+<dt><a href="fs_constants.html#fs.FILE_ACTION">FILE_ACTION (in module fs)</a></dt>
+<dt><a href="fs_constants.html#fs.FILE_ATTRIBUTE">FILE_ATTRIBUTE (in module fs)</a></dt>
+<dt><a href="fs_constants.html#fs.FILE_CREATION">FILE_CREATION (in module fs)</a></dt>
+<dt><a href="fs_constants.html#fs.FILE_FLAG">FILE_FLAG (in module fs)</a></dt>
+<dt><a href="fs_constants.html#fs.FILE_NOTIFY_CHANGE">FILE_NOTIFY_CHANGE (in module fs)</a></dt>
+<dt><a href="fs_constants.html#fs.FILE_SHARE">FILE_SHARE (in module fs)</a></dt>
 <dt><a href="fs_filepath.html#fs.FilePath">FilePath (class in fs)</a></dt>
 <dt><a href="fs_dir.html#fs.Dir.files">files() (Dir method)</a></dt>
 <dt><a href="accounts.html#accounts.FILTER">FILTER (in module accounts)</a></dt>
@@ -212,9 +224,9 @@
     <dt><a href="registry.html#registry.Registry.flat">(Registry method)</a></dt>
     <dt><a href="fs.html#fs.flat">(in module fs)</a></dt>
     <dt><a href="registry.html#registry.flat">(in module registry)</a></dt>
-  </dl></dd>
+  </dl></dd></dl></td><td width="33%" valign="top"><dl>
 <dt><a href="constants.html#constants.Constants.from_dict">from_dict() (constants.Constants class method)</a></dt>
-<dt><a href="constants.html#constants.Constants.from_list">from_list() (constants.Constants class method)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="constants.html#constants.Constants.from_list">from_list() (constants.Constants class method)</a></dt>
 <dt><a href="security.html#security.Security.from_object">from_object() (security.Security class method)</a></dt>
 <dt><a href="fs_filepath.html#fs.FilePath.from_parts">from_parts() (fs.FilePath class method)</a></dt>
 <dt><a href="constants.html#constants.Constants.from_pattern">from_pattern() (constants.Constants class method)</a></dt>
@@ -227,6 +239,7 @@
   </dl></dd>
 <dt><a href="accounts.html#accounts.Principal.from_well_known">from_well_known() (accounts.Principal class method)</a></dt>
 <dt><a href="fs.html#module-fs">fs (module)</a></dt>
+<dt><a href="fs_constants.html#fs.FSCTL">FSCTL (in module fs)</a></dt>
 <dt><a href="mailslots.html#ipc.Mailslot.full">full() (Mailslot method)</a></dt>
 </dl></td></tr></table>
 
@@ -321,17 +334,20 @@
 <dt><a href="fs_dir.html#fs.Dir.mkdir">mkdir() (Dir method)</a></dt>
   <dd><dl>
     <dt><a href="fs.html#fs.mkdir">(in module fs)</a></dt>
-  </dl></dd></dl></td><td width="33%" valign="top"><dl>
+  </dl></dd>
 <dt><a href="fs_dir.html#fs.Dir.mount">mount() (Dir method)</a></dt>
   <dd><dl>
+    <dt><a href="fs_drive_vol.html#fs.Drive.mount">(Drive method)</a></dt>
+    <dt><a href="fs_drive_vol.html#fs.Volume.mount">(Volume method)</a></dt>
     <dt><a href="fs.html#fs.mount">(in module fs)</a></dt>
-  </dl></dd>
+  </dl></dd></dl></td><td width="33%" valign="top"><dl>
 <dt><a href="fs_dir.html#fs.Dir.mounted_by">mounted_by() (Dir method)</a></dt>
 <dt><a href="fs.html#fs.mounts">mounts() (in module fs)</a></dt>
 <dt><a href="fs_entry.html#fs.Entry.move">move() (Entry method)</a></dt>
   <dd><dl>
     <dt><a href="fs.html#fs.move">(in module fs)</a></dt>
   </dl></dd>
+<dt><a href="fs_constants.html#fs.MOVEFILE">MOVEFILE (in module fs)</a></dt>
 </dl></td></tr></table>
 
 <h2 id="N">N</h2>
@@ -374,6 +390,7 @@
 <dt><a href="accounts.html#accounts.Principal">Principal (class in accounts)</a></dt>
 <dt><a href="accounts.html#accounts.principal">principal() (in module accounts)</a></dt>
 <dt><a href="security.html#security.Privilege">Privilege (class in security)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="fs_constants.html#fs.PROGRESS">PROGRESS (in module fs)</a></dt>
 <dt><a href="dialogs.html#dialogs.progress_dialog">progress_dialog() (in module dialogs)</a></dt>
 <dt><a href="events.html#ipc.Event.pulse">pulse() (Event method)</a></dt>
 <dt><a href="mailslots.html#ipc.Mailslot.put">put() (Mailslot method)</a></dt>
@@ -407,6 +424,7 @@
     <dt><a href="fs_filepath.html#fs.FilePath.relative_to">(FilePath method)</a></dt>
     <dt><a href="fs.html#fs.relative_to">(in module fs)</a></dt>
   </dl></dd></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="fs_entry.html#fs.Entry.rename">rename() (Entry method)</a></dt>
 <dt><a href="events.html#ipc.Event.reset">reset() (Event method)</a></dt>
 <dt><a href="security.html#security.Security.restore_inheritance">restore_inheritance() (Security method)</a></dt>
 <dt><a href="event_logs.html#event_logs.EventLog.retention">retention (EventLog attribute)</a></dt>
@@ -414,7 +432,9 @@
   <dd><dl>
     <dt><a href="fs.html#fs.rmdir">(in module fs)</a></dt>
   </dl></dd>
+<dt><a href="fs_drive_vol.html#fs.Drive.root">root() (Drive method)</a></dt>
 <dt><a href="dialogs.html#dialogs.Dialog.run">run() (Dialog method)</a></dt>
+<dt><a href="accounts.html#accounts.User.runas">runas() (User method)</a></dt>
 </dl></td></tr></table>
 
 <h2 id="S">S</h2>
@@ -431,6 +451,7 @@
     <dt><a href="security.html#security.security">(in module security)</a></dt>
   </dl></dd>
 <dt><a href="security.html#security.SECURITY_INFORMATION">SECURITY_INFORMATION (in module security)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="security.html#security.Security.security_options">security_options() (security.Security class method)</a></dt>
 <dt><a href="events.html#ipc.Event.set">set() (Event method)</a></dt>
 <dt><a href="registry.html#registry.Registry.set_value">set_value() (Registry method)</a></dt>
 <dt><a href="event_logs.html#event_logs._EventLogEntry.sid">sid (_EventLogEntry attribute)</a></dt>
@@ -478,8 +499,10 @@
   <dd><dl>
     <dt><a href="registry.html#registry.Registry.values">(Registry method)</a></dt>
   </dl></dd>
-<dt><a href="constants.html#constants.Constants.values_from_value">values_from_value() (Constants method)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="constants.html#constants.Constants.values_from_value">values_from_value() (Constants method)</a></dt>
+<dt><a href="fs_drive_vol.html#fs.Volume">Volume (class in fs)</a></dt></dl></td><td width="33%" valign="top"><dl>
 <dt><a href="fs.html#fs.volume">volume() (in module fs)</a></dt>
+<dt><a href="fs_constants.html#fs.VOLUME_FLAG">VOLUME_FLAG (in module fs)</a></dt>
 <dt><a href="fs.html#fs.volumes">volumes() (in module fs)</a></dt>
 </dl></td></tr></table>
 

@@ -114,6 +114,11 @@ a {
     text-decoration: none;
 }
 
+a:visited {
+    color: #355f7c;
+    text-decoration: none;
+}
+
 a:hover {
     text-decoration: underline;
 }

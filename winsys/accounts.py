@@ -28,7 +28,7 @@ import win32netcon
 import winerror
 
 from winsys import constants, core, exc, utils
-from winsys import _advapi32
+from winsys import _advapi32, dialogs
 
 __all__ = ['LOGON', 'EXTENDED_NAME', 'x_accounts', 'principal', 'Principal', 'User', 'Group', 'me']
 
@@ -36,11 +36,6 @@ LOGON = constants.Constants.from_pattern (u"LOGON32_*", namespace=win32security)
 LOGON.doc ("Types of logon used by LogonUser and related APIs")
 EXTENDED_NAME = constants.Constants.from_pattern (u"Name*", namespace=win32con)
 EXTENDED_NAME.doc ("Extended display formats for usernames")
-CREDUI_FLAGS = constants.Constants.from_pattern (u"CREDUI_FLAGS_*", namespace=win32cred)
-CREDUI_FLAGS.doc ("Options for username prompt UI")
-CRED_FLAGS = constants.Constants.from_pattern (u"CRED_FLAGS_*", namespace=win32cred)
-CRED_TYPE = constants.Constants.from_pattern (u"CRED_TYPE_*", namespace=win32cred)
-CRED_TI = constants.Constants.from_pattern (u"CRED_TI_*", namespace=win32cred)
 WELL_KNOWN_SID = constants.Constants.from_pattern (u"Win*Sid", namespace=win32security)
 WELL_KNOWN_SID.doc ("Well-known SIDs common to all computers")
 USER_PRIV = constants.Constants.from_list ([u"USER_PRIV_GUEST", u"USER_PRIV_USER", u"USER_PRIV_ADMIN"], pattern="USER_PRIV_*", namespace=win32netcon)
@@ -200,22 +195,6 @@ class Principal (core._WinSysObject):
       wrapped (win32security.ConvertSidToStringSid, self.sid)
     ), level)
 
-  def get_password (self):
-      flags = 0
-      flags |= CREDUI_FLAGS.GENERIC_CREDENTIALS
-      flags |= CREDUI_FLAGS.DO_NOT_PERSIST
-      _, password, _ = wrapped (
-        win32cred.CredUIPromptForCredentials,
-        self.domain, 
-        0, 
-        self.name, 
-        None,
-        True, 
-        flags, 
-        {}
-      )
-      return password
-  
   def logon (self, password=core.UNSET, logon_type=core.UNSET):
     u"""Log on as an authenticated user, returning that
     user's token. This is used by security.impersonate
@@ -234,7 +213,7 @@ class Principal (core._WinSysObject):
     else:
       logon_type = LOGON.constant (logon_type)
     if password is core.UNSET:
-      password = self.get_password ()
+      password = dialogs.get_password (self.name, self.domain)
     hUser = wrapped (
       win32security.LogonUser,
       self.name,
@@ -395,7 +374,7 @@ class User (Principal):
     :param with_profile: if True, HKEY_CURRENT_USER is loaded [False]
     """
     if not password:
-      password = self.get_password ()
+      password = dialogs.get_password (self.name, self.domain)
     logon_flags = 0
     if load_profile: logon_flags |= _advapi32.LOGON_FLAGS.WITH_PROFILE
     process_info = _advapi32.CreateProcessWithLogonW (

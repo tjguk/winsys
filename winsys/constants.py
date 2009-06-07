@@ -151,11 +151,24 @@ class Constants (object):
     return attribute in self.keys ()
   
   def constant (self, value):
+    """From a value, which may be a string or an integer, determine
+    the corresponding value in this set of constants. If the value
+    is a number, it is passed straight back out. If not, it is
+    assumed to be a pipe-delimited list of strings, each corresponding
+    to one of the constants in this set of constants. The list may --
+    and commonly will -- contain only one element::
+    
+      from winsys.security import SD_CONTROL
+    
+      print SD_CONTROL.constant ("dacl_protected | sacl_protected")
+      print SD_CONTROL.DACL_PROTECTED | SD_CONTROL.SACL_PROTECTED
+      print SD_CONTROL.constant (12288)
+    """
     if value is None: return None
     try:
       return int (value)
     except ValueError:
-      return self[unicode (value).upper ()]
+      return reduce (operator.or_, (self[unicode (v.strip ().upper ())] for v in value.split ("|")))
   
   def update (self, other):
     u"""Act as a dict for updates so that several constant sets may
