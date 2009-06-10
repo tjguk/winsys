@@ -320,58 +320,70 @@ def CreateShortcut (Path, Target, Arguments = "", StartIn = "", Icon = ("",0), D
   persist = sh.QueryInterface (pythoncom.IID_IPersistFile)
   persist.Save (Path, 1)
 
-def property_dict (property_set_storage, fmtid):
-  properties = {}
-  try:
-    property_storage = property_set_storage.Open (fmtid, STGM.READ | STGM.SHARE_EXCLUSIVE)
-  except pythoncom.com_error, error:
-    if error.strerror == 'STG_E_FILENOTFOUND':
-      return {}
-    else:
-      raise
-      
-  for name, property_id, vartype in property_storage:
-    if name is None:
-      property_names = PROPERTIES.get (fmtid, constants.Constants ())
-      name = property_names.name_from_value (property_id, unicode (hex (property_id)))
+class PropertySet (core._WinSysObject):
+  
+  def __init__ (self, property_set_storage, fmtid):
+    self.property_set_storage = property_set_storage
+    self.fmtid = fmtid
+    
+  def as_string (self):
+    return FMTID.name_from_value (self.fmtid)
+  
+  def as_dict (self):
     try:
-      for value in property_storage.ReadMultiple ([property_id]):
-        properties[name] = value
-    #
-    # There are certain values we can't read; they
-    # raise type errors from within the pythoncom
-    # implementation, thumbnail
-    #
-    except TypeError:
-      properties[name] = None
-  return properties
+      property_storage = self.property_set_storage.Open (self.fmtid, STGM.READ | STGM.SHARE_EXCLUSIVE)
+    except pythoncom.com_error, error:
+      if error.strerror == 'STG_E_FILENOTFOUND':
+        return {}
+      else:
+        raise
+    
+    properties = {}
+    for name, property_id, vartype in property_storage:
+      if name is None:
+        property_names = PROPERTIES.get (self.fmtid, constants.Constants ())
+        name = property_names.name_from_value (property_id, unicode (hex (property_id)))
+      try:
+        for value in property_storage.ReadMultiple ([property_id]):
+          properties[name] = value
+      #
+      # There are certain values we can't read; they
+      # raise type errors from within the pythoncom
+      # implementation, thumbnail
+      #
+      except TypeError:
+        properties[name] = None
+    return properties
 
-def property_sets (filepath):
-  pidl, flags = shell.SHILCreateFromPath (os.path.abspath (filepath), 0)
-  property_set_storage = shell.SHGetDesktopFolder ().BindToStorage (pidl, None, pythoncom.IID_IPropertySetStorage)
-  for fmtid, clsid, flags, ctime, mtime, atime in property_set_storage:
-    yield FMTID.name_from_value (fmtid, unicode (fmtid)), property_dict (property_set_storage, fmtid)
-    if fmtid == FMTID.DocSummaryInformation:
-      fmtid = pythoncom.FMTID_UserDefinedProperties
-      user_defined_properties = property_dict (property_set_storage, fmtid)
-      if user_defined_properties:
-        yield FMTID.name_from_value (fmtid, unicode (fmtid)), user_defined_properties
+  def __getattr__ (self, attr):
+    return self.as_dict ()[attr]
+  
+  def keys (self):
+    return self.as_dict ().keys ()
+  
+  def values (self):
+    return self.as_dict ().values ()
+    
+  def items (self):
+    return self.as_dict ().items ()
 
-def convert (fmtid=pythoncom.FMTID_SummaryInformation):
-  """http://msdn.microsoft.com/en-us/library/aa380052(VS.85).aspx"""
-  fmtid = binascii.unhexlify ("".join ("6D748DE2-8D38-4CC3-AC60-F009B057C557".split ("-")))
-  chars = u"ABCDEFGHIJKLMNOPQRSTUVWXYZ012345"
-  l = []
-  for v in reversed (buffer (fmtid)):
-    l.extend (1 if ((1 << j) & ord (v)) else 0 for j in reversed (range (8)))
-  l.extend ([0, 0])
-  print [hex (ord (i)) for i in buffer (fmtid)]
-  print l
-
-  for i in range (len (l) / 5):
-    sublist = l[5*i:5*(i+1)]
-    number = sum (i * (1 << n) for (n, i) in enumerate (reversed (sublist)))
-    print sublist, number, chars[number]
+class Properties (core._WinSysObject):
+  
+  def __init__ (self, filepath):
+    self._pidl, _ = shell.SHILCreateFromPath (os.path.abspath (unicode (filepath)), 0)
+    self._pss = shell.SHGetDesktopFolder ().BindToStorage (self._pidl, None, pythoncom.IID_IPropertySetStorage)
+    
+  def property_set (self, fmtid):
+    return PropertySet (self._pss, FMTID.constant (fmtid))
+  __getattr__ = property_set
+  __getitem__ = property_set
+  
+  def __iter__ (self):
+    for fmtid, clsid, flags, ctime, mtime, atime in self._pss:
+      yield self.property_set (fmtid)
+      if fmtid == FMTID.DocSummaryInformation:
+        fmtid = pythoncom.FMTID_UserDefinedProperties
+        yield self.property_set (fmtid)
 
 desktop = shell.SHGetDesktopFolder ()
 PyIShellFolder = type (desktop)

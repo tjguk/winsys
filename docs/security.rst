@@ -18,8 +18,6 @@ Classes
 ..  autoclass:: Security
     :members:
     
-    automethod:: _options
-    
 ..  autoclass:: Privilege
     :members:
 

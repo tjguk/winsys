@@ -38,7 +38,5 @@ def set_environment (**kwargs):
 
 def get_environment ():
   return dict (
-    (label, value) for
-      (label, value, type) in
-      registry.registry (r"HKCU\Environment").values ()
+    registry.registry (r"HKCU\Environment").values ()
   )

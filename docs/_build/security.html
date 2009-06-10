@@ -226,7 +226,6 @@ method will let you write the security information back to any arbitrary object,
 including the one it came from.</p>
 <p>For the purposes of serialisation, the standard SDDL format is used for
 strings and can be round-tripped between <tt class="xref docutils literal"><span class="pre">as_string()</span></tt> and <a title="security.Security.from_string" class="reference internal" href="#security.Security.from_string"><tt class="xref docutils literal"><span class="pre">from_string()</span></tt></a>.</p>
-<p>automethod:: _options</p>
 <dl class="attribute">
 <dt id="security.Security.OPTIONS">
 <tt class="descname">OPTIONS</tt><a class="headerlink" href="#security.Security.OPTIONS" title="Permalink to this definition">¶</a></dt>
@@ -346,7 +345,7 @@ security to another:</p>
 <li><em>obj</em> &#8211; (optional) object or object name to write security to if this <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object
 wasn&#8217;t created from an object in the first place.</li>
 <li><em>object_type</em> &#8211; an <a title="security.SE_OBJECT_TYPE" class="reference internal" href="#security.SE_OBJECT_TYPE"><tt class="xref docutils literal"><span class="pre">SE_OBJECT_TYPE</span></tt></a> [<tt class="xref docutils literal"><span class="pre">file_object</span></tt>]</li>
-<li><em>options</em> &#8211; anything accepted by <a href="#id1"><span class="problematic" id="id2">:classmeth:`security_options`</span></a></li>
+<li><em>options</em> &#8211; anything accepted by <a title="security.Security.security_options" class="reference internal" href="#security.Security.security_options"><tt class="xref docutils literal"><span class="pre">security_options()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -611,7 +610,7 @@ exception </em><tt class="descname">x_value_not_set</tt><big>(</big><em>errno=No
 
             <h4>Previous topic</h4>
             <p class="topless"><a href="registry.html"
-                                  title="previous chapter"><tt class="docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a></p>
+                                  title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a></p>
             <h4>Next topic</h4>
             <p class="topless"><a href="misc.html"
                                   title="next chapter">Miscellaneous</a></p>

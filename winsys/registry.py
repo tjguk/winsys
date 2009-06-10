@@ -622,7 +622,12 @@ def create (root, subkey="", sec=None):
   """Create a key and apply specific security to it, returning the
   key created. Note that a colon in the key name is treated as part
   of the name not as a value indicator. Any parts of the path not
-  already existing will be created as needed.
+  already existing will be created as needed::
+  
+    from winsys import registry, security
+    sec = security.Security (dacl=[("", "F", "ALLOW")])
+    registry.create (r"hklm\software\winsys\test", sec=sec)
+    registry.registry (r"hklm\software\winsys\test").dump ()
   
   :param root: anything accepted by :func:`registry`
   :param subkey: anything accepted by :meth:`Registry.get_key`
@@ -631,7 +636,6 @@ def create (root, subkey="", sec=None):
   """
   key = registry (root, accept_value=False).get_key (subkey)
   computer0, root0, path0, value0 = _parse_moniker (key.moniker, accept_value=False)
-  security_attributes = sec.pyobject () if sec else None
   
   parts = path0.split (sep)
   for i, part in enumerate (parts):
@@ -642,10 +646,10 @@ def create (root, subkey="", sec=None):
       hRoot = root
     wrapped (
       win32api.RegCreateKeyEx, 
-      hRoot, 
-      path, 
-      Registry._access (Registry.DEFAULT_ACCESS), 
-      security_attributes
+      Key=hRoot, 
+      SubKey=path,
+      samDesired=Registry._access (Registry.DEFAULT_ACCESS), 
+      SecurityAttributes=sec.pyobject () if sec else None
     )
   
   return key

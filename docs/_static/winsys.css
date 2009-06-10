@@ -101,3 +101,10 @@ div.fulltoc li {
 div.body tt {
   font-size : 1em;
 }
+
+dl dt {
+  text-align : left;
+}
+dl em {
+  font-style : normal;
+}

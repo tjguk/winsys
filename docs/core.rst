@@ -57,6 +57,11 @@ Classes
         generally to stack attribute values into a list of strings which is
         then passed to :func:`utils.dumped` to fill in the curly brackets.
 
+    ..  method:: dump
+    
+        Calls the underlying :meth:`dumped` implementation to provide a
+        convenient representation of the object's data.
+
 Logging Functions
 -----------------
 

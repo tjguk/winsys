@@ -1,13 +1,18 @@
 from __future__ import with_statement
 import uuid
-from winsys import accounts, security
+from winsys import accounts, security, fs
 
-username = str (uuid.uuid1 ())[:8]
+username = filename = str (uuid.uuid1 ())[:8]
 user = accounts.User.create (username, "password")
+f = fs.file (filename)
+assert (not f)
+
+assert accounts.me () != user
 try:
   with user:
-    open ("temp.txt", "w").close ()
-
-  assert security.security ("temp.txt").owner == user
+    assert accounts.me () == user
+    f.touch ()
+    assert f.security ().owner == user
+    f.delete ()
 finally:
   user.delete ()

@@ -33,7 +33,7 @@ def from_pattern (pattern, name):
   else:
     return re.search (pattern.replace ("*", r"(\w+)"), name).group (1)
 
-class Constants (object):
+class Constants (core._WinSysObject):
   ur"""Provide a dict-like interface for a group of related
   constants. These can come from a module or other namespace according
   to a wildcard name, or can be added as a list of (unrelated) names from 
@@ -49,7 +49,7 @@ class Constants (object):
       EXTRA_VALUE = 5
     ))
     print COMPRESSION_ENGINE.MAXIMUM
-    print COMPRESSION_ENGINE.__doc__
+    COMPRESSION_ENGINE.dump ()
     
   The convention is to name the set of constants after the common
   prefix of the constant names, as in the example above, but it's
@@ -144,31 +144,42 @@ class Constants (object):
     self.preamble = preamble
     self.reset_doc ()
 
-  def dump (self):
-    print self.__doc__
+  def dumped (self, level=None):
+    return self.__doc__
   
   def __contains__ (self, attribute):
-    return attribute in self.keys ()
+    return attribute in self._dict
   
   def constant (self, value):
     """From a value, which may be a string or an integer, determine
     the corresponding value in this set of constants. If the value
     is a number, it is passed straight back out. If not, it is
-    assumed to be a pipe-delimited list of strings, each corresponding
-    to one of the constants in this set of constants. The list may --
-    and commonly will -- contain only one element::
+    assumed to be a single string or a list of strings, each string
+    corresponding to one of the constants in this set of constants:: 
     
       from winsys.security import SD_CONTROL
     
-      print SD_CONTROL.constant ("dacl_protected | sacl_protected")
+      print SD_CONTROL.constant (["dacl_protected", "sacl_protected"])
       print SD_CONTROL.DACL_PROTECTED | SD_CONTROL.SACL_PROTECTED
       print SD_CONTROL.constant (12288)
+      
+    ..  note::
+        No attempt is made to verify that the number passed in represents
+        a combination of the constants in this set.  
     """
-    if value is None: return None
-    try:
-      return int (value)
-    except ValueError:
-      return reduce (operator.or_, (self[unicode (v.strip ().upper ())] for v in value.split ("|")))
+    if value is None: 
+      return None
+    elif isinstance (value, list):
+      return reduce (operator.or_, (self[unicode (v.strip ().upper ())] for v in value))
+    elif value in self._key_dict:
+      return value
+    elif isinstance (value, int):
+      return value
+    elif isinstance (value, basestring):
+      if value in self._dict:
+        return self._dict[value]
+      else:
+        return self[value.strip ().upper ()]
   
   def update (self, other):
     u"""Act as a dict for updates so that several constant sets may

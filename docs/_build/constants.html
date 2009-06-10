@@ -82,7 +82,7 @@ a namespace or can simply be a raw dictionary of name-value pairs:</p>
   <span class="n">EXTRA_VALUE</span> <span class="o">=</span> <span class="mi">5</span>
 <span class="p">))</span>
 <span class="k">print</span> <span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">MAXIMUM</span>
-<span class="k">print</span> <span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">__doc__</span>
+<span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
 </pre></div>
 </div>
 <p>The convention is to name the set of constants after the common
@@ -111,15 +111,19 @@ a parameter based on one of these constants sets.</p>
 <dd><p>From a value, which may be a string or an integer, determine
 the corresponding value in this set of constants. If the value
 is a number, it is passed straight back out. If not, it is
-assumed to be a pipe-delimited list of strings, each corresponding
-to one of the constants in this set of constants. The list may &#8211;
-and commonly will &#8211; contain only one element:</p>
+assumed to be a single string or a list of strings, each string
+corresponding to one of the constants in this set of constants:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys.security</span> <span class="kn">import</span> <span class="n">SD_CONTROL</span>
 
-<span class="k">print</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span> <span class="p">(</span><span class="s">&quot;dacl_protected | sacl_protected&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span> <span class="p">([</span><span class="s">&quot;dacl_protected&quot;</span><span class="p">,</span> <span class="s">&quot;sacl_protected&quot;</span><span class="p">])</span>
 <span class="k">print</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PROTECTED</span> <span class="o">|</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PROTECTED</span>
 <span class="k">print</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span> <span class="p">(</span><span class="mi">12288</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">No attempt is made to verify that the number passed in represents
+a combination of the constants in this set.</p>
 </div>
 </dd></dl>
 

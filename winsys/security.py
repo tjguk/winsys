@@ -200,7 +200,7 @@ class Security (core._WinSysObject):
     """
     core._WinSysObject.__init__ (self)
     if control is core.UNSET: control = self.DEFAULT_CONTROL
-    self._control = control
+    self._control = SD_CONTROL.constant (control)
     self._owner = core.UNSET
     self._group = core.UNSET
     self._dacl = core.UNSET
@@ -369,7 +369,7 @@ class Security (core._WinSysObject):
     :param obj: (optional) object or object name to write security to if this :class:`Security` object
                 wasn't created from an object in the first place.
     :param object_type:  an :const:`SE_OBJECT_TYPE` [:const:`file_object`]
-    :param options: anything accepted by :classmeth:`security_options`
+    :param options: anything accepted by :meth:`security_options`
     """
     obj = obj or self._originating_object
     if not obj:

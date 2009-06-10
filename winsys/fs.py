@@ -13,6 +13,7 @@ import contextlib
 import datetime
 import filecmp
 import fnmatch
+import msvcrt
 import operator
 import re
 import struct
@@ -242,22 +243,26 @@ def normalised (filepath):
     abspath = os.path.abspath (filepath)
     return (u"\\\\?\\" + abspath) + (sep if is_dir and not abspath.endswith (sep) else "")
 
-def handle (filepath, write=False):
+def handle (filepath, write=False, attributes=None, sec=None):
   ur"""Return a file handle either for querying
   (the default case) or for writing -- including writing directories
   
   :param filepath: anything whose unicode representation is a valid file path
   :param write: is the handle to be used for writing [True]
+  :param attributes: anything accepted by :const:`FILE_ATTRIBUTE`
   :return: an open file handle for reading or writing, including directories
   """
+  attributes = FILE_ATTRIBUTE.constant (attributes)
+  if attributes is None:
+    attributes = FILE_ATTRIBUTE.NORMAL | FILE_FLAG.BACKUP_SEMANTICS
   return wrapped (
     win32file.CreateFile,
     normalised (filepath),
     (FILE_ACCESS.READ | FILE_ACCESS.WRITE) if write else 0,
     (FILE_SHARE.READ | FILE_SHARE.WRITE) if write else FILE_SHARE.READ,
-    None,
-    FILE_CREATION.OPEN_EXISTING,
-    FILE_ATTRIBUTE.NORMAL | FILE_FLAG.BACKUP_SEMANTICS,
+    sec,
+    FILE_CREATION.OPEN_ALWAYS if write else FILE_CREATION.OPEN_EXISTING,
+    attributes,
     None
   )
 
@@ -495,11 +500,12 @@ class _Attributes (core._WinSysObject):
     assert (attributes[fs.FILE_ATTRIBUTE.DIRECTORY])
     assert ("directory" in attributes)
   """  
-  def __init__ (self, flags=0):
+  def __init__ (self, flags=0, const=FILE_ATTRIBUTE):
+    self.const = const
     self.flags = flags
       
   def __getitem__ (self, item):
-    return bool (self.flags & FILE_ATTRIBUTE.constant (item))
+    return bool (self.flags & self.const.constant (item))
   __getattr__ = __getitem__
   __contains__ = __getitem__
   
@@ -508,7 +514,7 @@ class _Attributes (core._WinSysObject):
   
   def dumped (self, level=0):
     return utils.dumped (
-      u"\n".join (u"%s => %s" % (k, bool (self.flags & v)) for k, v in sorted (FILE_ATTRIBUTE.items ())),
+      u"\n".join (u"%s => %s" % (k, bool (self.flags & v)) for k, v in sorted (self.const.items ())),
       level
     )
 
@@ -607,7 +613,7 @@ class Volume (core._WinSysObject):
   maximum_component_length = property (_get_maximum_component_length)
   
   def _get_flags (self):
-    return self._get_info ()[3]
+    return _Attributes (self._get_info ()[3], VOLUME_FLAG)
   flags = property (_get_flags)
   
   def _get_file_system_name (self):
@@ -626,7 +632,7 @@ class Volume (core._WinSysObject):
     if self.serial_number is not None:
       output.append (u"serial_number: %08x" % self.serial_number)
     output.append (u"maximum_component_length: %s" % self.maximum_component_length)
-    output.append (u"flags (VOLUME_FLAG):\n%s" % utils.dumped_flags (self.flags, VOLUME_FLAG, level))
+    output.append (u"flags (VOLUME_FLAG):\n%s" % self.flags.dumped (level))
     output.append (u"file_system_name: %s" % self.file_system_name)
     return utils.dumped (u"\n".join (output), level)
     
@@ -970,14 +976,14 @@ class Entry (core._WinSysObject):
     wrapped (win32file.DecryptFile (self._filepath))
     return self
   
-  def query_encryption_users (self):
+  def encryption_users (self):
     ur"""FIXME: Need to work out how to create certificates for this
     """
-    return [
-      (principal (sid), hashblob, info) 
+    return (
+      (security.principal (sid), hashblob, info) 
         for (sid, hashblob, info) 
         in wrapped (win32file.QueryUsersOnEncryptedFile, self._filepath)
-    ]
+    )
   
   def move (self, other, callback=None, callback_data=None, clobber=False):
     ur"""Move this entry to the file/directory represented by other.
@@ -1054,14 +1060,26 @@ class File (Entry):
   ##   Their ids (inodes) are equal
   ##   Their contents are equal
   ##
-  def open (self, mode, **kwargs):
+  def open (self, mode="r", attributes=None, sec=None):
     ur"""Use the `codecs.open` function to open this file as a Python file
     object. Positional and keyword arguments are passed straight through to
     the codecs function.
+    
+    :param mode: any of the usual Python modes
+    :param attributes: anything accepted by :const:`FILE_ATTRIBUTE`
+    :param sec: anything accepted by :func:`Security.security`
     """
-    hFile = handle (self.filepath, mode.lower ().startswith ("w"))
-    fd = wrapped (win32file._open_osfhandle, hFile, )
-    return os.fdopen (fd)
+    mode = mode.lower () if mode else "r"
+    self.hFile = handle (self.filepath, "r" not in mode, sec)
+    flags = 0
+    if "t" in mode or "b" not in mode: 
+      flags |= os.O_TEXT
+    if "r" in mode: 
+      flags |= os.O_RDONLY
+    elif "a" in mode or "w" in mode:
+      flags |= os.O_APPEND
+    self.fd = msvcrt.open_osfhandle (self.hFile, flags)
+    return os.fdopen (self.fd, mode)
 
   def delete (self):
     ur"""Delete this file"""

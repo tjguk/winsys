@@ -1,2 +1,2 @@
-python -c "from winsys import test; test.run ()"
+python -c "from winsys import tests; tests.run ()"
 pause
