@@ -126,6 +126,9 @@ corresponding user:</p>
 <p>Note, though, that this will prompt for a password using the
 Win32 password UI. To logon with a password, use the <a title="accounts.Principal.impersonate" class="reference internal" href="#accounts.Principal.impersonate"><tt class="xref docutils literal"><span class="pre">impersonate()</span></tt></a>
 context-managed function. TODO: allow password to be set securely.</p>
+<p>Initialise a Principal from and (optionally) a system name. The sid
+must be a PySID and the system name, if present must be a security
+authority, eg a machine or a domain.</p>
 <dl class="classmethod">
 <dt id="accounts.Principal.from_sid">
 <em class="property">
@@ -274,7 +277,10 @@ logged-on user</dd></dl>
 <dt id="accounts.User">
 <em class="property">
 class </em><tt class="descname">User</tt><big>(</big><em>sid</em>, <em>system=None</em><big>)</big><a class="headerlink" href="#accounts.User" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="classmethod">
+<dd><p>Initialise a Principal from and (optionally) a system name. The sid
+must be a PySID and the system name, if present must be a security
+authority, eg a machine or a domain.</p>
+<dl class="classmethod">
 <dt id="accounts.User.create">
 <em class="property">
 classmethod </em><tt class="descname">create</tt><big>(</big><em>username</em>, <em>password</em>, <em>system=None</em><big>)</big><a class="headerlink" href="#accounts.User.create" title="Permalink to this definition">¶</a></dt>
@@ -383,7 +389,9 @@ a <a title="accounts.User" class="reference internal" href="#accounts.User"><tt 
 <dt id="accounts.Group">
 <em class="property">
 class </em><tt class="descname">Group</tt><big>(</big><em>sid</em>, <em>system=None</em><big>)</big><a class="headerlink" href="#accounts.Group" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd>Initialise a Principal from and (optionally) a system name. The sid
+must be a PySID and the system name, if present must be a security
+authority, eg a machine or a domain.</dd></dl>
 
 </div>
 <div class="section" id="constants">

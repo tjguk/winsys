@@ -79,7 +79,7 @@ a namespace or can simply be a raw dictionary of name-value pairs:</p>
   <span class="n">namespace</span><span class="o">=</span><span class="n">win32con</span>
 <span class="p">)</span>
 <span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">update</span> <span class="p">(</span><span class="nb">dict</span> <span class="p">(</span>
-  <span class="n">EXTRA_VALUE</span> <span class="o">=</span> <span class="mi">5</span>
+  <span class="n">EXTRA_VALUE</span> <span class="o">=</span> <span class="mf">5</span>
 <span class="p">))</span>
 <span class="k">print</span> <span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">MAXIMUM</span>
 <span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
@@ -105,6 +105,14 @@ a parameter based on one of these constants sets.</p>
 <span class="k">print</span> <span class="n">ACE_TYPES</span><span class="o">.</span><span class="n">name_from_value</span> <span class="p">(</span><span class="n">ACE_TYPES</span><span class="o">.</span><span class="n">ACCESS_ALLOWED</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>Build an internal structure from a dictionary-like
+set of initial values.</p>
+<dl class="method">
+<dt id="constants.Constants.as_string">
+<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#constants.Constants.as_string" title="Permalink to this definition">¶</a></dt>
+<dd>Produce a readable version of the data, used by
+__str__.</dd></dl>
+
 <dl class="method">
 <dt id="constants.Constants.constant">
 <tt class="descname">constant</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#constants.Constants.constant" title="Permalink to this definition">¶</a></dt>
@@ -117,7 +125,7 @@ corresponding to one of the constants in this set of constants:</p>
 
 <span class="k">print</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span> <span class="p">([</span><span class="s">&quot;dacl_protected&quot;</span><span class="p">,</span> <span class="s">&quot;sacl_protected&quot;</span><span class="p">])</span>
 <span class="k">print</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PROTECTED</span> <span class="o">|</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PROTECTED</span>
-<span class="k">print</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span> <span class="p">(</span><span class="mi">12288</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span> <span class="p">(</span><span class="mf">12288</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -126,6 +134,21 @@ corresponding to one of the constants in this set of constants:</p>
 a combination of the constants in this set.</p>
 </div>
 </dd></dl>
+
+<dl class="method">
+<dt id="constants.Constants.doc">
+<tt class="descname">doc</tt><big>(</big><em>preamble</em><big>)</big><a class="headerlink" href="#constants.Constants.doc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="constants.Constants.dump">
+<tt class="descname">dump</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#constants.Constants.dump" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="constants.Constants.dumped">
+<tt class="descname">dumped</tt><big>(</big><em>level=None</em><big>)</big><a class="headerlink" href="#constants.Constants.dumped" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="classmethod">
 <dt id="constants.Constants.from_dict">
@@ -145,10 +168,25 @@ within a namespace. Hands off to the from_dict factory.</dd></dl>
 <dl class="classmethod">
 <dt id="constants.Constants.from_pattern">
 <em class="property">
-classmethod </em><tt class="descname">from_pattern</tt><big>(</big><em>pattern=u'*'</em>, <em>excluded=</em><span class="optional">[</span><span class="optional">]</span>, <em>namespace=&lt;module 'win32con' from 'c:python26libsite-packageswin32libwin32con.pyc'&gt;</em><big>)</big><a class="headerlink" href="#constants.Constants.from_pattern" title="Permalink to this definition">¶</a></dt>
+classmethod </em><tt class="descname">from_pattern</tt><big>(</big><em>pattern=u'*'</em>, <em>excluded=</em><span class="optional">[</span><span class="optional">]</span>, <em>namespace=&lt;module 'win32con' from 'C:Python26libsite-packageswin32libwin32con.pyc'&gt;</em><big>)</big><a class="headerlink" href="#constants.Constants.from_pattern" title="Permalink to this definition">¶</a></dt>
 <dd>Factory method to return a class instance from a wildcard name pattern. This is
 the most common method of constructing a list of constants by passing in, eg,
 FILE_ATTRIBUTE_* and the win32file module as the namespace.</dd></dl>
+
+<dl class="method">
+<dt id="constants.Constants.init">
+<tt class="descname">init</tt><big>(</big><em>dict_initialiser</em><big>)</big><a class="headerlink" href="#constants.Constants.init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="constants.Constants.items">
+<tt class="descname">items</tt><big>(</big><big>)</big><a class="headerlink" href="#constants.Constants.items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="constants.Constants.keys">
+<tt class="descname">keys</tt><big>(</big><big>)</big><a class="headerlink" href="#constants.Constants.keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.name_from_value">
@@ -171,10 +209,20 @@ work out which of the constants make up the number using the pattern
 to filter the &#8220;classes&#8221; or constants present in the dataset.</dd></dl>
 
 <dl class="method">
+<dt id="constants.Constants.reset_doc">
+<tt class="descname">reset_doc</tt><big>(</big><big>)</big><a class="headerlink" href="#constants.Constants.reset_doc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="constants.Constants.update">
 <tt class="descname">update</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#constants.Constants.update" title="Permalink to this definition">¶</a></dt>
 <dd>Act as a dict for updates so that several constant sets may
 be merged into one.</dd></dl>
+
+<dl class="method">
+<dt id="constants.Constants.values">
+<tt class="descname">values</tt><big>(</big><big>)</big><a class="headerlink" href="#constants.Constants.values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.values_from_value">
@@ -432,7 +480,7 @@ be merged into one.</dd></dl>
 
             <h4>Previous topic</h4>
             <p class="topless"><a href="core.html"
-                                  title="previous chapter"><tt class="docutils literal"><span class="pre">core</span></tt> &#8211; Core objects</a></p>
+                                  title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">core</span></tt> &#8211; Core objects</a></p>
             <h4>Next topic</h4>
             <p class="topless"><a href="exc.html"
                                   title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">exc</span></tt> &#8211; Exceptions</a></p>

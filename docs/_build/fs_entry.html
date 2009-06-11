@@ -89,6 +89,11 @@ altho&#8217; it&#8217;s possible to do so.</p>
 corresponding to each one.</dd></dl>
 
 <dl class="method">
+<dt id="fs.Entry.as_string">
+<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.as_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="fs.Entry.compress">
 <tt class="descname">compress</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.compress" title="Permalink to this definition">¶</a></dt>
 <dd>Compress this entry; if it is a file, it will be compressed, if it
@@ -101,8 +106,23 @@ be compressed automatically.</dd></dl>
 <dd>FIXME: Need to work out how to create certificates for this</dd></dl>
 
 <dl class="method">
+<dt id="fs.Entry.dump">
+<tt class="descname">dump</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#fs.Entry.dump" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fs.Entry.dumped">
+<tt class="descname">dumped</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#fs.Entry.dumped" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="fs.Entry.encrypt">
 <tt class="descname">encrypt</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.encrypt" title="Permalink to this definition">¶</a></dt>
+<dd>FIXME: Need to work out how to create certificates for this</dd></dl>
+
+<dl class="method">
+<dt id="fs.Entry.encryption_users">
+<tt class="descname">encryption_users</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.encryption_users" title="Permalink to this definition">¶</a></dt>
 <dd>FIXME: Need to work out how to create certificates for this</dd></dl>
 
 <dl class="method">
@@ -155,11 +175,6 @@ this entry is in.</p>
 </tbody>
 </table>
 </dd></dl>
-
-<dl class="method">
-<dt id="fs.Entry.query_encryption_users">
-<tt class="descname">query_encryption_users</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.query_encryption_users" title="Permalink to this definition">¶</a></dt>
-<dd>FIXME: Need to work out how to create certificates for this</dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.relative_to">
@@ -259,6 +274,121 @@ the ACL.</p>
 <dd>Uncompress this entry; if it is a file, it will be uncompressed, if it
 is a directory it will be marked so that any new files added to it will
 not be compressed automatically.</dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.accessed_at">
+<tt class="descname">accessed_at</tt><a class="headerlink" href="#fs.Entry.accessed_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.archive">
+<tt class="descname">archive</tt><a class="headerlink" href="#fs.Entry.archive" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.attributes">
+<tt class="descname">attributes</tt><a class="headerlink" href="#fs.Entry.attributes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.compressed">
+<tt class="descname">compressed</tt><a class="headerlink" href="#fs.Entry.compressed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.created_at">
+<tt class="descname">created_at</tt><a class="headerlink" href="#fs.Entry.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.directory">
+<tt class="descname">directory</tt><a class="headerlink" href="#fs.Entry.directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.encrypted">
+<tt class="descname">encrypted</tt><a class="headerlink" href="#fs.Entry.encrypted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.filepath">
+<tt class="descname">filepath</tt><a class="headerlink" href="#fs.Entry.filepath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.hidden">
+<tt class="descname">hidden</tt><a class="headerlink" href="#fs.Entry.hidden" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.id">
+<tt class="descname">id</tt><a class="headerlink" href="#fs.Entry.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.n_links">
+<tt class="descname">n_links</tt><a class="headerlink" href="#fs.Entry.n_links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.not_content_indexed">
+<tt class="descname">not_content_indexed</tt><a class="headerlink" href="#fs.Entry.not_content_indexed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.offline">
+<tt class="descname">offline</tt><a class="headerlink" href="#fs.Entry.offline" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.readable">
+<tt class="descname">readable</tt><a class="headerlink" href="#fs.Entry.readable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.readonly">
+<tt class="descname">readonly</tt><a class="headerlink" href="#fs.Entry.readonly" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.reparse_point">
+<tt class="descname">reparse_point</tt><a class="headerlink" href="#fs.Entry.reparse_point" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.size">
+<tt class="descname">size</tt><a class="headerlink" href="#fs.Entry.size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.sparse_file">
+<tt class="descname">sparse_file</tt><a class="headerlink" href="#fs.Entry.sparse_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.system">
+<tt class="descname">system</tt><a class="headerlink" href="#fs.Entry.system" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.temporary">
+<tt class="descname">temporary</tt><a class="headerlink" href="#fs.Entry.temporary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.uncompressed_size">
+<tt class="descname">uncompressed_size</tt><a class="headerlink" href="#fs.Entry.uncompressed_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.virtual">
+<tt class="descname">virtual</tt><a class="headerlink" href="#fs.Entry.virtual" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.written_at">
+<tt class="descname">written_at</tt><a class="headerlink" href="#fs.Entry.written_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

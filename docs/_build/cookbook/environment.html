@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using the security module &mdash; WinSys v0.4dev documentation</title>
+    <title>Using the environment module &mdash; WinSys v0.4dev documentation</title>
     <link rel="stylesheet" href="../_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -22,7 +22,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="WinSys v0.4dev documentation" href="../index.html" />
     <link rel="up" title="Cookbook" href="../cookbook.html" />
-    <link rel="prev" title="Using the registry module" href="registry.html" /> 
+    <link rel="next" title="Using the event_logs module" href="event_logs.html" />
+    <link rel="prev" title="Using the dialogs module" href="dialogs.html" /> 
   </head>
   <body>
     <div class="related">
@@ -35,7 +36,10 @@
           <a href="../modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
         <li class="right" >
-          <a href="registry.html" title="Using the registry module"
+          <a href="event_logs.html" title="Using the event_logs module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dialogs.html" title="Using the dialogs module"
              accesskey="P">previous</a> |</li>
         <li><a href="../contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
           <li><a href="../cookbook.html" accesskey="U">Cookbook</a> &raquo;</li> 
@@ -47,21 +51,16 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="using-the-security-module">
-<h1>Using the security module<a class="headerlink" href="#using-the-security-module" title="Permalink to this headline">¶</a></h1>
-<p>The examples here all refer to the <a title="Security functions" class="reference external" href="../security.html#module-security"><tt class="xref docutils literal"><span class="pre">security</span></tt></a> module.</p>
-<div class="section" id="dump-the-security-on-a-specific-file">
-<h2>Dump the security on a specific file<a class="headerlink" href="#dump-the-security-on-a-specific-file" title="Permalink to this headline">¶</a></h2>
-<p>List details of the security which applies to a specific file.
-This is most interesting in an ad-hoc situation when you&#8217;re
-trying to assess things using the interpreter.</p>
+  <div class="section" id="using-the-environment-module">
+<h1>Using the environment module<a class="headerlink" href="#using-the-environment-module" title="Permalink to this headline">¶</a></h1>
+<p>The examples here all refer to the <a title="Pythonic access to the environment block" class="reference external" href="../environment.html#module-environment"><tt class="xref docutils literal"><span class="pre">environment</span></tt></a> module.</p>
+<div class="section" id="dump-the-current-process-environment">
+<h2>Dump the current process environment<a class="headerlink" href="#dump-the-current-process-environment" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
 2
-3
-4</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">security</span>
+3</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">environment</span>
 
-<span class="p">[</span><span class="n">filename</span><span class="p">]</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span><span class="s">&quot;Choose file&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s">&quot;Filename&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">))</span>
-<span class="n">security</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
+<span class="n">environment</span><span class="o">.</span><span class="n">Process</span> <span class="p">()</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
 </pre></div>
 </td></tr></table></div>
 </div>
@@ -78,18 +77,21 @@ trying to assess things using the interpreter.</p>
             </a></p>
             <h3><a href="../contents.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="">Using the security module</a><ul>
-<li><a class="reference external" href="#dump-the-security-on-a-specific-file">Dump the security on a specific file</a></li>
+<li><a class="reference external" href="">Using the environment module</a><ul>
+<li><a class="reference external" href="#dump-the-current-process-environment">Dump the current process environment</a></li>
 </ul>
 </li>
 </ul>
 
             <h4>Previous topic</h4>
-            <p class="topless"><a href="registry.html"
-                                  title="previous chapter">Using the registry module</a></p>
+            <p class="topless"><a href="dialogs.html"
+                                  title="previous chapter">Using the dialogs module</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="event_logs.html"
+                                  title="next chapter">Using the event_logs module</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="../_sources/cookbook/security.txt"
+              <li><a href="../_sources/cookbook/environment.txt"
                      rel="nofollow">Show Source</a></li>
             </ul>
           <div id="searchbox" style="display: none">
@@ -119,7 +121,10 @@ trying to assess things using the interpreter.</p>
           <a href="../modindex.html" title="Global Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="registry.html" title="Using the registry module"
+          <a href="event_logs.html" title="Using the event_logs module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dialogs.html" title="Using the dialogs module"
              >previous</a> |</li>
         <li><a href="../contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
           <li><a href="../cookbook.html" >Cookbook</a> &raquo;</li> 

@@ -285,7 +285,7 @@ as an iterable. To iterate over the records in the log, oldest first:</p>
 <p>Implement the reverse iterator protocol so the event log can be iterated
 over in reverse, ie latest first:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">event_logs</span>
-<span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="nb">reversed</span> <span class="p">(</span><span class="n">event_logs</span><span class="o">.</span><span class="n">event_log</span> <span class="p">(</span><span class="s">&quot;Application&quot;</span><span class="p">)):</span>
+<span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">reversed</span> <span class="p">(</span><span class="n">event_logs</span><span class="o">.</span><span class="n">event_log</span> <span class="p">(</span><span class="s">&quot;Application&quot;</span><span class="p">)):</span>
   <span class="k">print</span> <span class="n">record</span>
 </pre></div>
 </div>
@@ -301,8 +301,8 @@ used to find the first or last records:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">event_logs</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">event_logs</span><span class="o">.</span><span class="n">event_log</span> <span class="p">(</span><span class="s">&quot;Application&quot;</span><span class="p">)</span>
 
-<span class="k">print</span> <span class="s">&quot;Oldest record:&quot;</span><span class="p">,</span> <span class="n">app</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="k">print</span> <span class="s">&quot;Latest record:&quot;</span><span class="p">,</span> <span class="n">app</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&quot;Oldest record:&quot;</span><span class="p">,</span> <span class="n">app</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&quot;Latest record:&quot;</span><span class="p">,</span> <span class="n">app</span><span class="p">[</span><span class="o">-</span><span class="mf">1</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>At present, slices are not supported.</p>

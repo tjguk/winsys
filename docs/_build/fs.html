@@ -304,7 +304,7 @@ from root. Implemented via <a title="fs.Dir.flat" class="reference external" hre
 <dl class="function">
 <dt id="fs.move">
 <tt class="descname">move</tt><big>(</big><em>source_filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.move" title="Permalink to this definition">¶</a></dt>
-<dd><p>Move one <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object to another, implemented via <tt class="xref docutils literal"><span class="pre">File.move()</span></tt> or <tt class="xref docutils literal"><span class="pre">Dir.move()</span></tt></p>
+<dd><p>Move one <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object to another, implemented via <a title="fs.File.move" class="reference external" href="fs_file.html#fs.File.move"><tt class="xref docutils literal"><span class="pre">File.move()</span></tt></a> or <a title="fs.Dir.move" class="reference external" href="fs_dir.html#fs.Dir.move"><tt class="xref docutils literal"><span class="pre">Dir.move()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -464,7 +464,7 @@ path represents a directory.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
 <span class="n">filepath</span> <span class="o">=</span> <span class="s">&quot;c:/temp/abc.txt&quot;</span>
 <span class="n">parts</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">get_parts</span> <span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">==</span> <span class="n">filepath</span>
+<span class="k">assert</span> <span class="n">parts</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mf">1</span><span class="p">:])</span> <span class="o">==</span> <span class="n">filepath</span>
 </pre></div>
 </div>
 <p>The exception is when a root (UNC or volume) is given without
@@ -482,7 +482,7 @@ issues with maximum path length and the like.</dd></dl>
 
 <dl class="function">
 <dt id="fs.handle">
-<tt class="descname">handle</tt><big>(</big><em>filepath</em>, <em>write=False</em><big>)</big><a class="headerlink" href="#fs.handle" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle</tt><big>(</big><em>filepath</em>, <em>write=False</em>, <em>attributes=None</em>, <em>sec=None</em><big>)</big><a class="headerlink" href="#fs.handle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a file handle either for querying
 (the default case) or for writing &#8211; including writing directories</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -492,6 +492,7 @@ issues with maximum path length and the like.</dd></dl>
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><em>filepath</em> &#8211; anything whose unicode representation is a valid file path</li>
 <li><em>write</em> &#8211; is the handle to be used for writing [True]</li>
+<li><em>attributes</em> &#8211; anything accepted by <a title="fs.FILE_ATTRIBUTE" class="reference external" href="fs_constants.html#fs.FILE_ATTRIBUTE"><tt class="xref docutils literal"><span class="pre">FILE_ATTRIBUTE</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -555,7 +556,7 @@ are normalised first.</p>
 <dt id="fs.attributes">
 <tt class="descname">attributes</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an <tt class="xref docutils literal"><span class="pre">Attributes</span></tt> object representing the file attributes
-of filepath, implemented via <tt class="xref docutils literal"><span class="pre">Entry.attributes()</span></tt></p>
+of filepath, implemented via <a title="fs.Entry.attributes" class="reference external" href="fs_entry.html#fs.Entry.attributes"><tt class="xref docutils literal"><span class="pre">Entry.attributes()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -654,7 +655,7 @@ be different:</p>
 <dl class="class">
 <dt id="fs._Attributes">
 <em class="property">
-class </em><tt class="descname">_Attributes</tt><big>(</big><em>flags=0</em><big>)</big><a class="headerlink" href="#fs._Attributes" title="Permalink to this definition">¶</a></dt>
+class </em><tt class="descname">_Attributes</tt><big>(</big><em>flags=0</em>, <em>const=&lt;Constants: {'TEMPORARY': 256</em>, <em>'OFFLINE': 4096</em>, <em>'NORMAL': 128</em>, <em>'ENCRYPTED': 16384</em>, <em>'SYSTEM': 4</em>, <em>'VIRTUAL': 65536</em>, <em>'NOT_CONTENT_INDEXES': 8192</em>, <em>'READONLY': 1</em>, <em>'COMPRESSED': 2048</em>, <em>'DIRECTORY': 16</em>, <em>'HIDDEN': 2</em>, <em>'SPARSE_FILE': 512</em>, <em>'ARCHIVE': 32</em>, <em>'REPARSE_POINT': 1024}&gt;</em><big>)</big><a class="headerlink" href="#fs._Attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple class wrapper for the list of file attributes
 (readonly, hidden, &amp;c.) It can be accessed by attribute
 access, item access and the &#8220;in&#8221; operator:</p>
@@ -767,7 +768,7 @@ exception </em><tt class="descname">x_not_ready</tt><big>(</big><em>errno=None</
 
             <h4>Previous topic</h4>
             <p class="topless"><a href="event_logs.html"
-                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">event_logs</span></tt> &#8211; Event Logs</a></p>
+                                  title="previous chapter"><tt class="docutils literal"><span class="pre">event_logs</span></tt> &#8211; Event Logs</a></p>
             <h4>Next topic</h4>
             <p class="topless"><a href="fs_drive_vol.html"
                                   title="next chapter">The Drive class</a></p>

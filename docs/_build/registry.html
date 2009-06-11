@@ -238,7 +238,13 @@ to remove one of its subkeys:</p>
 <dd><p>Create a key and apply specific security to it, returning the
 key created. Note that a colon in the key name is treated as part
 of the name not as a value indicator. Any parts of the path not
-already existing will be created as needed.</p>
+already existing will be created as needed:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span><span class="p">,</span> <span class="n">security</span>
+<span class="n">sec</span> <span class="o">=</span> <span class="n">security</span><span class="o">.</span><span class="n">Security</span> <span class="p">(</span><span class="n">dacl</span><span class="o">=</span><span class="p">[(</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">)])</span>
+<span class="n">registry</span><span class="o">.</span><span class="n">create</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys     est&quot;</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span>
+<span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys   est&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
+</pre></div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -358,8 +364,8 @@ otherwise it will delete a key of that name. This is equivalent to
 calling <a title="registry.Registry.del_value" class="reference internal" href="#registry.Registry.del_value"><tt class="xref docutils literal"><span class="pre">del_value()</span></tt></a> or <a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete()</span></tt></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="n">python</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;HKLM\Software\Python&quot;</span><span class="p">)</span>
-<span class="n">python</span><span class="o">.</span><span class="n">testing</span> <span class="o">=</span> <span class="mi">4</span>
-<span class="n">python</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;testing&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+<span class="n">python</span><span class="o">.</span><span class="n">testing</span> <span class="o">=</span> <span class="mf">4</span>
+<span class="n">python</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;testing&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mf">4</span>
 <span class="n">python</span><span class="o">.</span><span class="n">testing</span> <span class="o">==</span> <span class="n">python</span><span class="p">[</span><span class="s">&#39;testing&#39;</span><span class="p">]</span>
 <span class="k">del</span> <span class="n">python</span><span class="o">.</span><span class="n">testing</span>
 </pre></div>
@@ -371,8 +377,8 @@ calling <a title="registry.Registry.del_value" class="reference internal" href="
 <a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete()</span></tt></a> function.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="n">winsys</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">create</span> <span class="p">()</span>
-<span class="n">winsys</span><span class="o">.</span><span class="n">test_value</span> <span class="o">=</span> <span class="mi">4</span>
-<span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys:test_value&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+<span class="n">winsys</span><span class="o">.</span><span class="n">test_value</span> <span class="o">=</span> <span class="mf">4</span>
+<span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys:test_value&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mf">4</span>
 <span class="n">registry</span><span class="o">.</span><span class="n">delete</span> <span class="p">(</span><span class="n">winsys</span><span class="p">)</span>
 <span class="c"># or winsys.delete ()</span>
 <span class="c"># or registry.registry (r&quot;hklm\software&quot;).delete (&quot;winsys&quot;)</span>
@@ -394,21 +400,6 @@ calling <a title="registry.Registry.del_value" class="reference internal" href="
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="registry.Registry.ACCESS">
-<tt class="descname">ACCESS</tt><a class="headerlink" href="#registry.Registry.ACCESS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mapping between characters and access rights:</p>
-<ul class="simple">
-<li>Q - Query</li>
-<li>D - Delete</li>
-<li>R - Read</li>
-<li>W - Write</li>
-<li>C - Change (R|W)</li>
-<li>F - Full Control</li>
-<li>S - Security</li>
-</ul>
 </dd></dl>
 
 <dl class="method">
@@ -439,7 +430,13 @@ target doesn&#8217;t already exist it will be created.</p>
 <dd><p>Create a key and apply specific security to it, returning the
 key created. Note that a colon in the key name is treated as part
 of the name not as a value indicator. Any parts of the path not
-already existing will be created as needed.</p>
+already existing will be created as needed:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span><span class="p">,</span> <span class="n">security</span>
+<span class="n">sec</span> <span class="o">=</span> <span class="n">security</span><span class="o">.</span><span class="n">Security</span> <span class="p">(</span><span class="n">dacl</span><span class="o">=</span><span class="p">[(</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">)])</span>
+<span class="n">registry</span><span class="o">.</span><span class="n">create</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys     est&quot;</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span>
+<span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys   est&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
+</pre></div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -688,6 +685,21 @@ themselves generators.</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="registry.Registry.ACCESS">
+<tt class="descname">ACCESS</tt><a class="headerlink" href="#registry.Registry.ACCESS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping between characters and access rights:</p>
+<ul class="simple">
+<li>Q - Query</li>
+<li>D - Delete</li>
+<li>R - Read</li>
+<li>W - Write</li>
+<li>C - Change (R|W)</li>
+<li>F - Full Control</li>
+<li>S - Security</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
@@ -976,7 +988,7 @@ exception </em><tt class="descname">x_moniker_no_root</tt><big>(</big><em>errno=
                                   title="previous chapter">Events</a></p>
             <h4>Next topic</h4>
             <p class="topless"><a href="security.html"
-                                  title="next chapter"><tt class="docutils literal"><span class="pre">security</span></tt></a></p>
+                                  title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">security</span></tt></a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="_sources/registry.txt"

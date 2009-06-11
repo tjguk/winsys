@@ -11,6 +11,8 @@ Classes
 -------
 ..  autoclass:: Constants
     :members:
+    :undoc-members:
+    :inherited-members:
 
 Constants
 ---------

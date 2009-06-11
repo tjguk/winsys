@@ -14,3 +14,4 @@ Sections
 ..  toctree::
 
     logging_handlers
+    environment

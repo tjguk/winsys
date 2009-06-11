@@ -225,18 +225,38 @@ straightforward way to update security information, although the <a title="secur
 method will let you write the security information back to any arbitrary object,
 including the one it came from.</p>
 <p>For the purposes of serialisation, the standard SDDL format is used for
-strings and can be round-tripped between <tt class="xref docutils literal"><span class="pre">as_string()</span></tt> and <a title="security.Security.from_string" class="reference internal" href="#security.Security.from_string"><tt class="xref docutils literal"><span class="pre">from_string()</span></tt></a>.</p>
-<dl class="attribute">
-<dt id="security.Security.OPTIONS">
-<tt class="descname">OPTIONS</tt><a class="headerlink" href="#security.Security.OPTIONS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mapping between characters and security info:</p>
-<ul class="simple">
-<li>O - Owner</li>
-<li>G - Group</li>
-<li>D - DACL</li>
-<li>S - SACL</li>
+strings and can be round-tripped between <a title="security.Security.as_string" class="reference internal" href="#security.Security.as_string"><tt class="xref docutils literal"><span class="pre">as_string()</span></tt></a> and <a title="security.Security.from_string" class="reference internal" href="#security.Security.from_string"><tt class="xref docutils literal"><span class="pre">from_string()</span></tt></a>.</p>
+<p>Create a new <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object from its component pieces,
+all optional. You won&#8217;t often need to call this as you can do most
+useful things via the <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security()</span></tt></a> function, but to create a simple
+security descriptor for immediate use, you can instantiate it directly.</p>
+<p>None of the parameters need be specified; with the exceptions of
+<cite>originating_object</cite> and <cite>originating_object_type</cite>, you can set
+each one later, directly or indirectly.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>control</em> &#8211; any combination of <a title="security.SD_CONTROL" class="reference internal" href="#security.SD_CONTROL"><tt class="xref docutils literal"><span class="pre">SD_CONTROL</span></tt></a>. Most commonly set,
+if at all, to &#8220;dacl_protected&#8221;</li>
+<li><em>owner</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal()</span></tt></li>
+<li><em>group</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal()</span></tt></li>
+<li><em>dacl</em> &#8211; anything accepted by <a title="security.Security.dacl" class="reference internal" href="#security.Security.dacl"><tt class="xref docutils literal"><span class="pre">dacl()</span></tt></a></li>
+<li><em>sacl</em> &#8211; anything accepted by <a title="security.Security.sacl" class="reference internal" href="#security.Security.sacl"><tt class="xref docutils literal"><span class="pre">sacl()</span></tt></a></li>
+<li><em>inherit_handle</em> &#8211; whether this handle is inherited by child processes</li>
+<li><em>originating_object</em> &#8211; name or handle of the object this security currently applies to, if any</li>
+<li><em>originating_object_type</em> &#8211; one of <a title="security.SE_OBJECT_TYPE" class="reference internal" href="#security.SE_OBJECT_TYPE"><tt class="xref docutils literal"><span class="pre">SE_OBJECT_TYPE</span></tt></a> referring to the type of object
+this security currently applies to, if any.</li>
 </ul>
-</dd></dl>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="security.Security.as_string">
+<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#security.Security.as_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="security.Security.break_inheritance">
@@ -262,6 +282,16 @@ that existing permissions are to be retained, although uninherited.</p>
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="security.Security.dump">
+<tt class="descname">dump</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#security.Security.dump" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="security.Security.dumped">
+<tt class="descname">dumped</tt><big>(</big><em>level</em><big>)</big><a class="headerlink" href="#security.Security.dumped" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="classmethod">
 <dt id="security.Security.from_object">
 <em class="property">
@@ -284,6 +314,11 @@ classmethod </em><tt class="descname">from_string</tt><big>(</big><em>sddl</em>,
 <dd>Constructs a <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object from an SDDL string.
 Useful for round-tripping, since the <tt class="xref docutils literal"><span class="pre">__str__()</span></tt> method produces
 an SDDL string.</dd></dl>
+
+<dl class="method">
+<dt id="security.Security.pyobject">
+<tt class="descname">pyobject</tt><big>(</big><em>include_inherited=False</em><big>)</big><a class="headerlink" href="#security.Security.pyobject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="security.Security.restore_inheritance">
@@ -353,13 +388,78 @@ wasn&#8217;t created from an object in the first place.</li>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="security.Security.OPTIONS">
+<tt class="descname">OPTIONS</tt><a class="headerlink" href="#security.Security.OPTIONS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping between characters and security info:</p>
+<ul class="simple">
+<li>O - Owner</li>
+<li>G - Group</li>
+<li>D - DACL</li>
+<li>S - SACL</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="security.Security.dacl">
+<tt class="descname">dacl</tt><a class="headerlink" href="#security.Security.dacl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="security.Security.group">
+<tt class="descname">group</tt><a class="headerlink" href="#security.Security.group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="security.Security.owner">
+<tt class="descname">owner</tt><a class="headerlink" href="#security.Security.owner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="security.Security.sacl">
+<tt class="descname">sacl</tt><a class="headerlink" href="#security.Security.sacl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="security.Privilege">
 <em class="property">
 class </em><tt class="descname">Privilege</tt><big>(</big><em>luid</em>, <em>attributes=0</em><big>)</big><a class="headerlink" href="#security.Privilege" title="Permalink to this definition">¶</a></dt>
+<dd><p>luid is one of the PRIVILEGE_NAME constants
+attributes is the result of or-ing the different PRIVILEGE_ATTRIBUTE items you want</p>
+<dl class="method">
+<dt id="security.Privilege.as_string">
+<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#security.Privilege.as_string" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="security.Privilege.dump">
+<tt class="descname">dump</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#security.Privilege.dump" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="security.Privilege.dumped">
+<tt class="descname">dumped</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#security.Privilege.dumped" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="security.Privilege.from_string">
+<em class="property">
+classmethod </em><tt class="descname">from_string</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#security.Privilege.from_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="security.Privilege.pyobject">
+<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="headerlink" href="#security.Privilege.pyobject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="security.Privilege.enabled">
+<tt class="descname">enabled</tt><a class="headerlink" href="#security.Privilege.enabled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
 
 </div>
 <div class="section" id="constants">
@@ -610,7 +710,7 @@ exception </em><tt class="descname">x_value_not_set</tt><big>(</big><em>errno=No
 
             <h4>Previous topic</h4>
             <p class="topless"><a href="registry.html"
-                                  title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a></p>
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a></p>
             <h4>Next topic</h4>
             <p class="topless"><a href="misc.html"
                                   title="next chapter">Miscellaneous</a></p>

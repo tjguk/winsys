@@ -72,7 +72,7 @@ div.sphinxsidebar a {
 }
 
 a {
-	color : green;
+	color : blue;
 }
 
 div.body > li {
@@ -107,4 +107,20 @@ dl dt {
 }
 dl em {
   font-style : normal;
+}
+
+@media print {
+    div.document,
+    div.documentwrapper,
+    div.bodywrapper {
+        margin: 0;
+        width: 100%;
+    }
+
+    div.sphinxsidebar,
+    div.related,
+    div.footer,
+    #top-link {
+        display: none;
+    }
 }

@@ -17,9 +17,13 @@ Classes
 -------
 ..  autoclass:: Security
     :members:
+    :undoc-members:
+    :inherited-members:
     
 ..  autoclass:: Privilege
     :members:
+    :undoc-members:
+    :inherited-members:
 
 Constants
 ---------

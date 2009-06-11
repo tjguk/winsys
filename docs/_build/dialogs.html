@@ -156,7 +156,7 @@ display a human-redable version of each directory size:</p>
   <span class="p">(</span><span class="s">&quot;Root&quot;</span><span class="p">,</span> <span class="s">&quot;c:/temp&quot;</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">get_folder</span><span class="p">)</span>
 <span class="p">)</span>
 
-<span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">sorted</span> <span class="p">(</span><span class="n">sizes</span><span class="o">.</span><span class="n">items</span> <span class="p">()):</span>
+<span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="n">sorted</span> <span class="p">(</span><span class="n">sizes</span><span class="o">.</span><span class="n">items</span> <span class="p">()):</span>
   <span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;=&gt;&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_as_mb</span> <span class="p">(</span><span class="n">size</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -227,11 +227,14 @@ interpreter to stack dump.</p>
 <dt id="dialogs.BaseDialog">
 <em class="property">
 class </em><tt class="descname">BaseDialog</tt><big>(</big><em>title</em>, <em>parent_hwnd=0</em><big>)</big><a class="headerlink" href="#dialogs.BaseDialog" title="Permalink to this definition">¶</a></dt>
-<dd>Basic template for a dialog with one or more fields plus
+<dd><p>Basic template for a dialog with one or more fields plus
 [Ok] and [Cancel] buttons. A simple spacing / sizing algorithm
 is used. Most of the work is done inside <tt class="xref docutils literal"><span class="pre">_get_dialog_template()</span></tt>
 which examines the incoming fields and tries to place them according
-to their various options.</dd></dl>
+to their various options.</p>
+<p>Initialise the dialog with a title and a list of fields of
+the form [(label, default), ...].</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="dialogs.Dialog">
@@ -242,6 +245,8 @@ text strings and handing it back to the user. Only Ok &amp; Cancel buttons are
 allowed, and all the fields are considered to be strings. The list of
 fields is of the form: [(label, default), ...] and the values are saved
 in the same order.</p>
+<p>Initialise the dialog with a title and a list of fields of
+the form [(label, default), ...].</p>
 <dl class="method">
 <dt id="dialogs.Dialog.OnCallback">
 <tt class="descname">OnCallback</tt><big>(</big><em>hwnd</em>, <em>field_id</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnCallback" title="Permalink to this definition">¶</a></dt>
@@ -328,10 +333,81 @@ in OnCommand</dd></dl>
 <em class="property">
 class </em><tt class="descname">InfoDialog</tt><big>(</big><em>title</em>, <em>info</em>, <em>parent_hwnd=0</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
+<dt id="dialogs.InfoDialog.OnCallback">
+<tt class="descname">OnCallback</tt><big>(</big><em>hwnd</em>, <em>field_id</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.OnCallback" title="Permalink to this definition">¶</a></dt>
+<dd>If the user pressed a callback button associated with a text
+field, find the field and call its callback with the dialog window
+and the field&#8217;s current value. If anything is returned, put that
+value back into the field.</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.InfoDialog.OnCancel">
+<tt class="descname">OnCancel</tt><big>(</big><em>hwnd</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.OnCancel" title="Permalink to this definition">¶</a></dt>
+<dd>If the user presses cancel check to see whether we&#8217;re running within
+a progress thread. If so, set the cancel event and wait for the thread
+to catch up. Either way, close the dialog with a cancelled state.</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.InfoDialog.OnCommand">
+<tt class="descname">OnCommand</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.OnCommand" title="Permalink to this definition">¶</a></dt>
+<dd>Handle button presses: OK, Cancel and the callback buttons
+which are optional for text fields</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.InfoDialog.OnInitDialog">
+<tt class="descname">OnInitDialog</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.OnInitDialog" title="Permalink to this definition">¶</a></dt>
+<dd>Attempt to position the dialog box more or less in
+the middle of its parent (possibly the desktop). Then
+force a resize of the dialog controls which should take
+into account the different label lengths and the dialog&#8217;s
+new size.</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.InfoDialog.OnMinMaxInfo">
+<tt class="descname">OnMinMaxInfo</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.OnMinMaxInfo" title="Permalink to this definition">¶</a></dt>
+<dd>Prevent the dialog from resizing vertically by extracting
+the window&#8217;s current size and using the minmaxinfo message
+to set the maximum &amp; minimum window heights to be its current height.</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.InfoDialog.OnOk">
+<tt class="descname">OnOk</tt><big>(</big><em>hwnd</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.OnOk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dialogs.InfoDialog.OnProgressComplete">
+<tt class="descname">OnProgressComplete</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.OnProgressComplete" title="Permalink to this definition">¶</a></dt>
+<dd>Respond to the a message signalling that all processing is
+now complete by re-enabling the ok button, disabling cancel,
+and setting focus to the ok so a return or space will close
+the dialog.</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.InfoDialog.OnProgressMessage">
+<tt class="descname">OnProgressMessage</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.OnProgressMessage" title="Permalink to this definition">¶</a></dt>
+<dd>Respond to a progress update from within the progress
+thread. LParam will be a pointer to a string containing
+a utf8-encoded string which is to be displayed in the
+dialog&#8217;s progress static.</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.InfoDialog.OnSize">
+<tt class="descname">OnSize</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.OnSize" title="Permalink to this definition">¶</a></dt>
+<dd>If the dialog box is resized, force a corresponding resize
+of the controls</dd></dl>
+
+<dl class="method">
 <dt id="dialogs.InfoDialog.corners">
 <tt class="descname">corners</tt><big>(</big><em>l</em>, <em>t</em>, <em>r</em>, <em>b</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.corners" title="Permalink to this definition">¶</a></dt>
 <dd>Called when the dialog is first initialised: estimate how wide
 the dialog should be according to the longest line of text</dd></dl>
+
+<dl class="method">
+<dt id="dialogs.InfoDialog.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.run" title="Permalink to this definition">¶</a></dt>
+<dd>The heart of the dialog box functionality. The call to DialogBoxIndirect
+kicks off the dialog&#8217;s message loop, finally returning via the EndDialog call
+in OnCommand</dd></dl>
 
 </dd></dl>
 
