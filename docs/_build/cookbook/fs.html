@@ -56,14 +56,14 @@
 <div class="section" id="take-ownership-of-a-file">
 <h2>Take ownership of a file<a class="headerlink" href="#take-ownership-of-a-file" title="Permalink to this headline">¶</a></h2>
 <p>Take ownership of a file to which you have no other access.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
 4
 5
 6
 7
-8</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+8</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">security</span><span class="p">,</span> <span class="n">fs</span>
 
 <span class="n">f</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span> <span class="p">(</span><span class="s">&quot;c:/temp/tim.txt&quot;</span><span class="p">)</span>
@@ -86,7 +86,7 @@ is a context manager which reverses the privilege changes once it exits.</p>
 <p>For a given root directory, find the total size taken by all the
 files in each of its top-level subdirectories, and display them
 in descending order of size.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -99,7 +99,7 @@ in descending order of size.</p>
 11
 12
 13
-14</pre></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">operator</span>
+14</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">operator</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">utils</span>
 
 <span class="p">[</span><span class="n">root</span><span class="p">]</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span>
@@ -111,7 +111,7 @@ in descending order of size.</p>
   <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="nb">sum</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">flat</span> <span class="p">()))</span> 
     <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">dir</span> <span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">dirs</span> <span class="p">()</span>
 <span class="p">)</span>
-<span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="n">sorted</span> <span class="p">(</span><span class="n">sizes</span><span class="o">.</span><span class="n">items</span> <span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span> <span class="p">(</span><span class="mf">1</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">sorted</span> <span class="p">(</span><span class="n">sizes</span><span class="o">.</span><span class="n">items</span> <span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span> <span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
   <span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;=&gt;&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_as_mb</span> <span class="p">(</span><span class="n">size</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>

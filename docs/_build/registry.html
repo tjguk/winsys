@@ -364,8 +364,8 @@ otherwise it will delete a key of that name. This is equivalent to
 calling <a title="registry.Registry.del_value" class="reference internal" href="#registry.Registry.del_value"><tt class="xref docutils literal"><span class="pre">del_value()</span></tt></a> or <a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete()</span></tt></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="n">python</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;HKLM\Software\Python&quot;</span><span class="p">)</span>
-<span class="n">python</span><span class="o">.</span><span class="n">testing</span> <span class="o">=</span> <span class="mf">4</span>
-<span class="n">python</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;testing&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mf">4</span>
+<span class="n">python</span><span class="o">.</span><span class="n">testing</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">python</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;testing&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
 <span class="n">python</span><span class="o">.</span><span class="n">testing</span> <span class="o">==</span> <span class="n">python</span><span class="p">[</span><span class="s">&#39;testing&#39;</span><span class="p">]</span>
 <span class="k">del</span> <span class="n">python</span><span class="o">.</span><span class="n">testing</span>
 </pre></div>
@@ -377,8 +377,8 @@ calling <a title="registry.Registry.del_value" class="reference internal" href="
 <a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete()</span></tt></a> function.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="n">winsys</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">create</span> <span class="p">()</span>
-<span class="n">winsys</span><span class="o">.</span><span class="n">test_value</span> <span class="o">=</span> <span class="mf">4</span>
-<span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys:test_value&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mf">4</span>
+<span class="n">winsys</span><span class="o">.</span><span class="n">test_value</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys:test_value&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
 <span class="n">registry</span><span class="o">.</span><span class="n">delete</span> <span class="p">(</span><span class="n">winsys</span><span class="p">)</span>
 <span class="c"># or winsys.delete ()</span>
 <span class="c"># or registry.registry (r&quot;hklm\software&quot;).delete (&quot;winsys&quot;)</span>

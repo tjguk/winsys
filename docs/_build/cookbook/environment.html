@@ -56,13 +56,71 @@
 <p>The examples here all refer to the <a title="Pythonic access to the environment block" class="reference external" href="../environment.html#module-environment"><tt class="xref docutils literal"><span class="pre">environment</span></tt></a> module.</p>
 <div class="section" id="dump-the-current-process-environment">
 <h2>Dump the current process environment<a class="headerlink" href="#dump-the-current-process-environment" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
-3</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">environment</span>
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">environment</span>
 
 <span class="n">environment</span><span class="o">.</span><span class="n">Process</span> <span class="p">()</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
 </pre></div>
 </td></tr></table></div>
+</div>
+<div class="section" id="remove-all-python-installations-from-the-path">
+<h2>Remove all Python installations from the PATH<a class="headerlink" href="#remove-all-python-installations-from-the-path" title="Permalink to this headline">¶</a></h2>
+<p>Prior, say, to installing a new version Python, make sure
+that no existing Python installations remain on the PATH.
+PATH is made up of the system PATH env var plus the user
+PATH.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span><span class="p">,</span> <span class="n">environment</span>
+
+<span class="k">def</span> <span class="nf">munge_path</span> <span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">python_paths</span><span class="p">):</span>
+  <span class="c">#env[&#39;PATH&#39;] = </span>
+  <span class="k">print</span> <span class="s">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span>
+    <span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">env</span><span class="p">[</span><span class="s">&#39;PATH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span> <span class="p">(</span><span class="s">&quot;;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span> <span class="p">(</span>
+      <span class="n">p</span><span class="o">.</span><span class="n">lower</span> <span class="p">()</span><span class="o">.</span><span class="n">startswith</span> <span class="p">(</span><span class="n">py</span><span class="p">)</span> <span class="k">for</span> <span class="n">py</span> <span class="ow">in</span> <span class="n">python_paths</span>
+    <span class="p">)</span>
+  <span class="p">)</span>
+
+<span class="n">py</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\python\pythoncore&quot;</span><span class="p">)</span>
+<span class="n">py_paths</span> <span class="o">=</span> <span class="nb">set</span> <span class="p">(</span><span class="n">version</span><span class="o">.</span><span class="n">InstallPath</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span> <span class="p">(</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span> <span class="p">()</span> <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">py</span><span class="p">)</span>
+<span class="n">py</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hkcu\software\python\pythoncore&quot;</span><span class="p">)</span>
+<span class="n">py_paths</span><span class="o">.</span><span class="n">update</span> <span class="p">(</span><span class="n">version</span><span class="o">.</span><span class="n">InstallPath</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span> <span class="p">(</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span> <span class="p">()</span> <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">py</span><span class="p">)</span>
+
+<span class="n">munge_path</span> <span class="p">(</span><span class="n">environment</span><span class="o">.</span><span class="n">user</span> <span class="p">(),</span> <span class="n">py_paths</span><span class="p">)</span>
+<span class="n">munge_path</span> <span class="p">(</span><span class="n">environment</span><span class="o">.</span><span class="n">system</span> <span class="p">(),</span> <span class="n">py_paths</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>The Python installations are listed in the registry under the
+SoftwarePython key in HKLM and HKCU. That key has one subkey for
+each version installed and the subkey holds its installation
+directory in the default value of the InstallPath key.</p>
+<p>We collect the unique list of installation directories and
+filter the user and system PATH env vars in turn by including
+only those paths which are not part of a Python installation.</p>
+<p>We have to allow for case differences between the PATH and the
+installation directories, and for the fact that some of the
+install dirs have a trailing backslash while some don&#8217;t.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For the purposes of not endangering your PATH, the critical
+line which actually updates the PATH is commented out and
+the would-be result is shown instead.</p>
+</div>
 </div>
 </div>
 
@@ -79,6 +137,7 @@
             <ul>
 <li><a class="reference external" href="">Using the environment module</a><ul>
 <li><a class="reference external" href="#dump-the-current-process-environment">Dump the current process environment</a></li>
+<li><a class="reference external" href="#remove-all-python-installations-from-the-path">Remove all Python installations from the PATH</a></li>
 </ul>
 </li>
 </ul>
