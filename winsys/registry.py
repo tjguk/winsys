@@ -712,6 +712,7 @@ def hkcu ():
 
 Registry.values = values
 Registry.keys = keys
+Registry.__iter__ = keys
 Registry.delete = delete
 Registry.create = create
 Registry.walk = walk
