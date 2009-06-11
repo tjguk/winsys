@@ -471,6 +471,8 @@ class Registry (core._WinSysObject):
       hRoot = root
     
     try:
+      if computer:
+        moniker = r"\\%s\%s" % (computer, moniker)
       return wrapped (win32api.RegOpenKeyEx, hRoot, path, 0, cls._access (access)), moniker, value
     except exc.x_not_found:
       return None, moniker, value
