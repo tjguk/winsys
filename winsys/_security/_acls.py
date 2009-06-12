@@ -80,6 +80,14 @@ class ACL (core._WinSysObject):
     ace.inherited = False
     self._list.append (ace)
 
+  def extend (self, _aces):
+    """Extend the ACL by adding ACE-type objects"""
+    for _ace in _aces:
+      ace = self._ACE.ace (_ace)
+      ace.inherited = False
+      self._list.append (ace)
+  __iadd__ = extend
+
   def __getitem__ (self, index):
     return self._list[index]
 

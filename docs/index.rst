@@ -14,7 +14,7 @@ WinSys is a Python package which wraps aspects of the Windows API to make
 them more Pythonic and usable by Windows administrators directly
 from the interpreter or as part of a wider set of applications.
 It targets recent versions of Python and reasonably recent versions of Windows
-although it's not yet up speed on Vista & x64.
+although it's not yet up speed on Vista/W7 & x64.
 
 It is unashamedly platform-specific: no hint of a concession towards more
 Unix-like operating systems.  You can read about the design
