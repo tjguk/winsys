@@ -22,5 +22,5 @@ if __name__ == '__main__':
           'Topic :: Utilities',
       ],
       platforms='win32',
-      packages=['winsys', 'winsys.test', 'winsys._security', 'winsys.extras'],
+      packages=['winsys', 'winsys.tests', 'winsys._security', 'winsys.extras'],
   )

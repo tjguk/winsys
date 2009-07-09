@@ -1,4 +1,5 @@
 # -*- coding: iso-8859-1 -*-
+from __future__ import with_statement
 import os, sys
 import contextlib
 import re
