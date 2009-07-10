@@ -55,7 +55,10 @@ class _EventLogEntry (core._WinSysObject):
     self.event_id = event_log_entry.EventID
     self.event_type = event_log_entry.EventType
     self.event_category = event_log_entry.EventCategory
-    self.sid = accounts.principal (event_log_entry.Sid)
+    try:
+      self.sid = accounts.principal (event_log_entry.Sid)
+    except accounts.x_accounts:
+      self.sid = None
     self.computer_name = event_log_entry.ComputerName
     self.source_name = event_log_entry.SourceName
     self.data = event_log_entry.Data

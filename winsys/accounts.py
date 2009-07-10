@@ -122,11 +122,11 @@ _domain = None
 def domain (system=None):
   global _domain
   if _domain is None:
-    _domain = win32net.NetWkstaGetInfo (system, 100)['langroup']
+    _domain = wrapped (win32net.NetWkstaGetInfo, system, 100)['langroup']
   return _domain
 
 def domain_controller (domain=None):
-  return win32net.NetGetAnyDCName (None, domain)
+  return wrapped (win32net.NetGetAnyDCName, None, domain)
   
 def users (system=None):
   ur"""Convenience function to yield each of the local users
@@ -166,6 +166,8 @@ class Principal (core._WinSysObject):
     except exc.x_not_found:
       self.name = str (self.sid)
       self.domain = self.type = None
+    if self.system is None:
+      self.system = domain_controller (self.domain)
 
   def __hash__ (self):
     return hash (str (self.sid))
@@ -430,7 +432,7 @@ class GlobalGroup (Group):
     :returns: :class:`Principal` for `member`
     """
     member = principal (member)
-    wrapped (win32net.NetGroupAddUser, self.system, self.name, 0, [dict (sid=member.sid)])
+    wrapped (win32net.NetGroupAddUser, self.system, self.name, r"%s\%s" % (member.domain, member.name))
     return member
     
   def remove (self, member):
@@ -441,7 +443,7 @@ class GlobalGroup (Group):
     :returns: :class:`Principal` for `member`
     """
     member = principal (member)
-    wrapped (win32net.NetGroupDelUser, self.system, self.name, "%s\\%s" % (member.domain, member.name))
+    wrapped (win32net.NetGroupDelUser, self.system, self.name, r"%s\%s" % (member.domain, member.name))
     return member
     
   def __iter__ (self):
@@ -452,11 +454,9 @@ class GlobalGroup (Group):
     """
     resume = 0
     while True:
-      print "system", self.system
-      print "name", self.name
-      users, total, resume = wrapped (win32net.NetGroupGetUsers, self.system, self.name, 0, resume)
-      for user in users:
-        yield user (member['sid'])
+      members, total, resume = wrapped (win32net.NetGroupGetUsers, self.system, self.name, 1, resume)
+      for member in members:
+        yield principal (member['name'])
       if resume == 0: break
 
 class LocalGroup (Group):
