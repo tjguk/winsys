@@ -50,6 +50,8 @@ import uuid
 
 from winsys import core, constants, exc, utils
 
+DESKTOP = wrapped (win32gui.GetDesktopWindow)
+
 BIF = constants.Constants.from_dict (dict (
   BIF_RETURNONLYFSDIRS   = 0x0001,
   BIF_DONTGOBELOWDOMAIN  = 0x0002,
@@ -438,7 +440,7 @@ class Dialog (BaseDialog):
       id = self.IDC_FIELD_BASE + i
       self._set_item (id, default)
     
-    parent = self.parent_hwnd or wrapped (win32gui.GetDesktopWindow)
+    parent = self.parent_hwnd or DESKTOP
     l, t, r, b = self.corners (*wrapped (win32gui.GetWindowRect, self.hwnd))
     r = min (r, l + self.MAX_W)
     
@@ -845,7 +847,7 @@ def get_folder (hwnd=None, start_folder=None):
   try:
     pidl, display_name, image_list = wrapped (
       shell.SHBrowseForFolder,
-      hwnd or win32gui.GetDesktopWindow (),
+      hwnd or DESKTOP,
       None,
       "Select a file or folder",
       BIF.USENEWUI | BIF.SHAREABLE,
@@ -894,7 +896,9 @@ def get_filename (hwnd=None, start_folder=None):
 
 class InfoDialog (Dialog):
 
-  def __init__ (self, title, info, parent_hwnd=0):
+  def __init__ (self, title, info, parent_hwnd=core.UNSET):
+    if parent_hwnd is core.UNSET:
+      parent_hwnd = DESKTOP
     self.info = str (info).replace ("\r\n", "\n").replace ("\n", "\r\n")
     Dialog.__init__ (self, title, [(None, self.info, None)], parent_hwnd=parent_hwnd)
     self.BUTTONS = [("Ok", win32con.IDOK)]
