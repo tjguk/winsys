@@ -50,8 +50,6 @@ import uuid
 
 from winsys import core, constants, exc, utils
 
-DESKTOP = wrapped (win32gui.GetDesktopWindow)
-
 BIF = constants.Constants.from_dict (dict (
   BIF_RETURNONLYFSDIRS   = 0x0001,
   BIF_DONTGOBELOWDOMAIN  = 0x0002,
@@ -86,6 +84,8 @@ class x_dialogs (exc.x_winsys):
 WINERROR_MAP = {
 }
 wrapped = exc.wrapper (WINERROR_MAP, x_dialogs)
+
+DESKTOP = wrapped (win32gui.GetDesktopWindow)
 
 ENCODING = "UTF-8"
 
