@@ -376,6 +376,15 @@ class FilePath (unicode):
       output.append (u"parent: %s" % self.parent)
     return utils.dumped (u"\n".join (output), level)
 
+  def __repr__ (self):
+    return u'<%s %s>' % (self.__class__.__name__, self)
+  
+  def __add__ (self, other):
+    return self.__class__ (os.path.join (unicode (self), unicode (other)))
+  
+  def __radd__ (self, other):
+    return self.__class__ (os.path.join (unicode (other), unicode (self)))
+  
   def _get_parts (self):
     if self._parts is None:
       self._parts = get_parts (self)
@@ -436,15 +445,6 @@ class FilePath (unicode):
     return self._ext
   ext = property (_get_ext)
   
-  def __repr__ (self):
-    return u'<%s %s>' % (self.__class__.__name__, self)
-  
-  def __add__ (self, other):
-    return self.__class__ (os.path.join (unicode (self), unicode (other)))
-  
-  def __radd__ (self, other):
-    return self.__class__ (os.path.join (unicode (other), unicode (self)))
-  
   def relative_to (self, other):
     """Return this filepath as relative to another. cf :func:`utils.relative_to`
     """
@@ -456,7 +456,7 @@ class FilePath (unicode):
     """
     return self.__class__ (os.path.abspath (self))
 
-  def changed (self, root=None, path=None, filename=None, base=None, ext=None):
+  def changed (self, root=None, path=None, filename=None, base=None, infix=None, ext=None):
     """Return a new :class:`FilePath` with one or more parts changed. This is particularly
     convenient for, say, changing the extension of a file or producing a version on
     another path, eg::
@@ -469,8 +469,8 @@ class FilePath (unicode):
     """
     if root and path:
       raise x_fs (None, "FilePath.changed", "You cannot change root *and* path")
-    elif filename and (base or ext):
-      raise x_fs (None, "FilePath.changed", "You cannot change filename *and* base or ext")
+    elif filename and (base or ext or infix):
+      raise x_fs (None, "FilePath.changed", "You cannot change filename *and* base or ext or infix")
       
     if ext: ext = "." + ext.lstrip (".")
     parts = self.parts
@@ -478,6 +478,8 @@ class FilePath (unicode):
     _base, _ext = os.path.splitext (_filename)
     if not (base or ext):
       base, ext = os.path.splitext (filename or _filename)
+    if infix:
+      base += infix
     return self.__class__.from_parts (root or parts[0], path or sep.join (parts[1:-1]), base or _base, ext or _ext)
 
   @classmethod
@@ -680,15 +682,21 @@ class Entry (core._WinSysObject):
   
   def __init__ (self, filepath):
     if isinstance (filepath, FilePath):
-      self.name = filepath.filename
-      self._real_filepath = filepath
-      self._filepath = unicode (filepath)
+      utils._set (self, "name", filepath.filename)
+      utils._set (self, "_real_filepath", filepath)
+      utils._set (self, "_filepath", unicode (filepath))
     else:
       pieces = get_parts (filepath)
-      self.name = pieces[-1] or pieces[-2]
-      self._real_filepath = None
-      self._filepath = pieces[0] + sep.join (pieces[1:])
+      utils._set (self, "name", pieces[-1] or pieces[-2])
+      utils._set (self, "_real_filepath", None)
+      utils._set (self, "_filepath", pieces[0] + sep.join (pieces[1:]))
 
+  #
+  # Core functionality from parent class
+  #
+  def as_string (self):
+    return self._filepath.encode ("utf8")
+  
   def dumped (self, level=0):
     output = []
     output.append (unicode (self.filepath))
@@ -713,6 +721,45 @@ class Entry (core._WinSysObject):
       output.append ("Security:\n" + s.dumped (level))
     return utils.dumped ("\n".join (output), level)
   
+  #
+  # Magic methods in alphabetical order
+  #
+  def __add__ (self, other):
+    return os.path.join (self._filepath, unicode (other))
+
+  def __eq__ (self, other):
+    return self._filepath.lower () == unicode (other).lower ()
+    
+  def __getattr__ (self, attr):
+    try:
+      return getattr (self.filepath, attr)
+    except AttributeError:
+      return self.attributes[FILE_ATTRIBUTE.constant (attr)]
+      
+  def __setattr__ (self, attr, value):
+    try:
+      self._set_file_attribute (attr, value)
+    except AttributeError:
+      setattr (self.filepath, attr, value)
+    
+  def __lt__ (self, other):
+    return self._filepath.lower () < unicode (other).lower ()
+    
+  def __nonzero__ (self):
+    ur"""Determine whether the file exists (at least from
+    the POV of the current user) on the filesystem so that
+    it can be checked with if fs.entry ("..."):
+    """
+    return (wrapped (win32file.GetFileAttributesW, normalised (self._filepath)) != -1)
+  __bool__ = __nonzero__
+  
+  def __unicode__ (self):
+    return self._filepath
+    
+  def _get_file_attribute (self, file_attribute):
+    file_attribute = FILE_ATTRIBUTE.constant (file_attribute)
+    return self.attributes[file_attribute]
+    
   def _get_readable (self):
     try:
       with Handle (self._filepath): pass
@@ -728,7 +775,7 @@ class Entry (core._WinSysObject):
   #
   def _get_filepath (self):
     if self._real_filepath is None:
-      self._real_filepath = FilePath (self._filepath)
+      utils._set (self, "_real_filepath", FilePath (self._filepath))
     return self._real_filepath
   filepath = property (_get_filepath)
   
@@ -784,7 +831,10 @@ class Entry (core._WinSysObject):
   n_links = property (_get_n_links)
 
   def _set_file_attribute (self, key, value):
-    attr = FILE_ATTRIBUTE[key.upper ()]
+    try:
+      attr = FILE_ATTRIBUTE.constant (key)
+    except KeyError:
+      raise AttributeError (key)
     if value:
       wrapped (win32file.SetFileAttributesW, normalised (self._filepath), self.attributes.flags | attr)
     else:
@@ -862,25 +912,8 @@ class Entry (core._WinSysObject):
     return self.attributes.virtual
   virtual = property (_get_virtual)
   
-  def as_string (self):
-    return self._filepath.encode ("utf8")
-  
-  def __unicode__ (self):
-    return self._filepath
-    
-  def __eq__ (self, other):
-    return self._filepath.lower () == unicode (other).lower ()
-    
-  def __lt__ (self, other):
-    return self._filepath.lower () < unicode (other).lower ()
-
-  def __nonzero__ (self):
-    ur"""Determine whether the file exists (at least from
-    the POV of the current user) on the filesystem so that
-    it can be checked with if fs.entry ("..."):
-    """
-    return (wrapped (win32file.GetFileAttributesW, normalised (self._filepath)) != -1)
-  __bool__ = __nonzero__
+  def relative_to (self, other):
+    return entry (self.filepath.relative_to (unicode (other)))
   
   def like (self, pattern):
     ur"""Return true if this filename's name (not the path) matches
@@ -892,13 +925,6 @@ class Entry (core._WinSysObject):
           print f
     """
     return fnmatch.fnmatch (self.name, pattern)
-  
-  def relative_to (self, other):
-    ur"""Return the part of this entry's filepath which extends beyond
-    other's. eg if this is 'c:/temp/abc.txt' and other is 'c:/temp/'
-    then return 'abc.txt'. cf :meth:`FilePath.relative_to`
-    """
-    return self.filepath.relative_to (other)
   
   def parent (self):
     ur"""Return the :class:`Dir` object which represents the directory
@@ -1303,6 +1329,7 @@ class Dir (Entry):
     Implemented via :func:`files`
     """
     return files (os.path.join (self._filepath, pattern), *args, **kwargs)
+  __iter__ = entries
     
   def file (self, name):
     ur"""Return a :class:`File` object representing a file called name inside

@@ -119,13 +119,17 @@ class ACL (core._WinSysObject):
     return acl
     
   def break_inheritance (self, copy_first):
+    print "About to break_inheritance for %s with _list %s and copy_first %s" % (self.__class__, self._list, copy_first)
     if self._list is not None:
       self._original_list = [a for a in self._list if a.inherited]
       if copy_first:
+        print "Copy first"
         for ace in self._list:
           ace.inherited = False
       else:
+        print "Not Copy first"
         self._list = [a for a in (self._list or []) if not a.inherited]
+      print "After: _list", self._list
     self.inherited = False
 
   def restore_inheritance (self, copy_back):
