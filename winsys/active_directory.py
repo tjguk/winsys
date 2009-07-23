@@ -1,4 +1,6 @@
 import os, sys
+import re
+
 import pythoncom
 import win32com.client
 from win32com.adsi import adsi, adsicon
@@ -32,7 +34,8 @@ SCOPE = constants.Constants.from_pattern (u"ADS_SCOPE_*", namespace=adsicon)
 SCOPE.doc ("Scope for searching AD trees")
 
 WINERROR_MAP = {
-  adsicon.E_ADS_COLUMN_NOT_SET : exc.x_not_found
+  adsicon.E_ADS_COLUMN_NOT_SET : exc.x_not_found,
+  0x8000500D : AttributeError
 }
 wrapped = exc.wrapper (WINERROR_MAP, x_active_directory)
 
@@ -54,11 +57,13 @@ def escaped (s):
 class IADs (core._WinSysObject):
 
   def __init__ (self, obj, interface=adsi.IID_IADs):
-    self._obj = obj.QueryInterface (interface)
-    self._enumerator = None
+    self._obj = wrapped (obj.QueryInterface, interface)
 
   def __getattr__ (self, attr):
-    return getattr (self._obj, attr)
+    try:
+      return getattr (self._obj, attr)
+    except AttributeError:
+      return wrapped (self._obj.Get, attr)
 
   def __getitem__ (self, item):
     return self.__class__.from_object (
@@ -118,9 +123,13 @@ class IADs (core._WinSysObject):
     ur"""Mimic os.walk, iterating over each container and the items within
     in. Each iteration yields:
 
-      container, (generator for container), (generator for items)
+      container, (iterator for items)
+
+    Since all AD items are effectively containers, don't bother producing
+    a separate iterator for them.
 
     :param depthfirst: Whether to use breadth-first (the default) or depth-first traversal
+    :returns: yield container, (iterator for items)
     """
     top = self
     containers, items = [], []
@@ -143,6 +152,11 @@ class IADsOU (IADs):
     IADs.__init__ (self, obj)
 
 class IADsUser (IADs):
+
+  def __init__ (self, obj):
+    IADs.__init__ (self, obj)
+
+class IADsGroup (IADs):
 
   def __init__ (self, obj):
     IADs.__init__ (self, obj)
@@ -171,10 +185,13 @@ def ldap_moniker (root=None, server=None, username=None, password=None):
       adsicon.ADS_SECURE_AUTHENTICATION | adsicon.ADS_SERVER_BIND | adsicon.ADS_FAST_BIND,
       adsi.IID_IADs
     ).Get ("defaultNamingContext")
+  prefix, rest = re.match ("(\w+://)?(.*)", root).groups ()
+  if not prefix:
+    prefix = "LDAP://"
   if server:
-    return "LDAP://%s/%s" % (server, root)
+    return "%s%s/%s" % (prefix, server, root)
   else:
-    return "LDAP://%s" % root
+    return "%s%s" % (prefix, root)
 
 def search (filter, columns=["distinguishedName"], root=None, server=None, username=None, password=None):
 
@@ -273,7 +290,12 @@ def find_all_users (root=None, server=None, username=None, password=None):
     root=None, server=None, username=None, password=None
   )
 
+def find_all_namespaces ():
+  for i in win32com.client.GetObject ("ADs:"):
+    yield i.ADsPath
+
 CLASS_MAP = {
   "organizationalUnit" : IADsOU,
-  "user" : IADsUser
+  "user" : IADsUser,
+  "group" : IADsGroup,
 }
