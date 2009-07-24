@@ -94,7 +94,7 @@ class IADs (core._WinSysObject):
 
   @classmethod
   def from_object (cls, obj):
-    klass = CLASS_MAP.get (obj.QueryInterface (adsi.IID_IADs).Class, cls)
+    klass = CLASS_MAP.get (obj.QueryInterface (adsi.IID_IADs).Class.lower (), cls)
     return klass (obj)
 
   def __iter__ (self):
@@ -160,6 +160,13 @@ class IADsGroup (IADs):
 
   def __init__ (self, obj):
     IADs.__init__ (self, obj)
+
+class GC (IADs):
+
+  def __iter__ (self):
+    for domain in IADs.__iter__ (self):
+      print domain
+      yield ad ("LDAP://" + domain.Name)
 
 def ad (obj=core.UNSET, username=None, password=None, interface=adsi.IID_IADs):
 
@@ -293,6 +300,9 @@ def find_all_users (root=None, server=None, username=None, password=None):
 def find_all_namespaces ():
   for i in win32com.client.GetObject ("ADs:"):
     yield i.ADsPath
+
+def gc ():
+  return ad ("GC:")
 
 CLASS_MAP = {
   "organizationalUnit" : IADsOU,
