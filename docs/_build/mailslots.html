@@ -63,7 +63,7 @@ exception </em><tt class="descname">x_mailslot_invalid_use</tt><a class="headerl
 <dt id="ipc.x_mailslot_empty">
 <em class="property">
 exception </em><tt class="descname">x_mailslot_empty</tt><a class="headerlink" href="#ipc.x_mailslot_empty" title="Permalink to this definition">¶</a></dt>
-<dd>Raised when a call to <a title="ipc.Mailslot.get" class="reference internal" href="#ipc.Mailslot.get"><tt class="xref docutils literal"><span class="pre">Mailslot.get()</span></tt></a> times out with nothing in the mailslot.</dd></dl>
+<dd>Raised when a call to <a title="ipc.Mailslot.get" class="reference internal" href="#ipc.Mailslot.get"><tt class="xref docutils literal"><span class="pre">Mailslot.get</span></tt></a> times out with nothing in the mailslot.</dd></dl>
 
 <dl class="class">
 <dt id="ipc.Mailslot">
@@ -82,7 +82,7 @@ is used for readers and writers; the first use (a put or a get) freezes
 the object&#8217;s use and from that point on only that same use is allowed.
 A <tt class="xref docutils literal"><span class="pre">x_ipc_invalid_use</span></tt> is raised if any other use is attempted.</p>
 <p>Although this class can be instantiated directly, it is expected that
-the <a title="ipc.mailslot" class="reference external" href="ipc.html#ipc.mailslot"><tt class="xref docutils literal"><span class="pre">mailslot()</span></tt></a> function will be used, which can offer a slight
+the <a title="ipc.mailslot" class="reference external" href="ipc.html#ipc.mailslot"><tt class="xref docutils literal"><span class="pre">mailslot</span></tt></a> function will be used, which can offer a slight
 ease of use in common naming situations.</p>
 <p>A Mailslot is its own iterator and its own context manager so a common
 usage for a reading mailslot might be:</p>
@@ -131,7 +131,7 @@ arrive if block is True, waiting no longer than timeout_ms.
 <dl class="method">
 <dt id="ipc.Mailslot.get_nowait">
 <tt class="descname">get_nowait</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mailslot.get_nowait" title="Permalink to this definition">¶</a></dt>
-<dd>Shortcut for <tt class="xref docutils literal"><span class="pre">get</span> <span class="pre">(False,</span> <span class="pre">0)()</span></tt>
+<dd>Shortcut for <tt class="xref docutils literal"><span class="pre">get</span> <span class="pre">(False,</span> <span class="pre">0)</span></tt>
 <strong>NB This will freeze the mailslot as a reader</strong></dd></dl>
 
 <dl class="method">

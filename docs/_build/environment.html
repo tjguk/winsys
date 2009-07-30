@@ -64,9 +64,9 @@ variable, some of which are generated automatically by the
 system to reflect the user&#8217;s profile location and home drive etc.</p>
 <p>All three environments are available as a dictalike class whose
 interface matches the <a title="environment.Env" class="reference internal" href="#environment.Env"><tt class="xref docutils literal"><span class="pre">Env</span></tt></a> base class. Each environment
-object quacks like a dict in respect of item access, <a title="environment.Env.get" class="reference internal" href="#environment.Env.get"><tt class="xref docutils literal"><span class="pre">Env.get()</span></tt></a>,
-<a title="environment.Env.keys" class="reference internal" href="#environment.Env.keys"><tt class="xref docutils literal"><span class="pre">Env.keys()</span></tt></a>, <a title="environment.Env.items" class="reference internal" href="#environment.Env.items"><tt class="xref docutils literal"><span class="pre">Env.items()</span></tt></a> and <a title="environment.Env.update" class="reference internal" href="#environment.Env.update"><tt class="xref docutils literal"><span class="pre">Env.update()</span></tt></a> methods 
-and the system and user objects supply an additional <a title="environment.Persistent.broadcast" class="reference internal" href="#environment.Persistent.broadcast"><tt class="xref docutils literal"><span class="pre">Persistent.broadcast()</span></tt></a> 
+object quacks like a dict in respect of item access, <a title="environment.Env.get" class="reference internal" href="#environment.Env.get"><tt class="xref docutils literal"><span class="pre">Env.get</span></tt></a>,
+<a title="environment.Env.keys" class="reference internal" href="#environment.Env.keys"><tt class="xref docutils literal"><span class="pre">Env.keys</span></tt></a>, <a title="environment.Env.items" class="reference internal" href="#environment.Env.items"><tt class="xref docutils literal"><span class="pre">Env.items</span></tt></a> and <a title="environment.Env.update" class="reference internal" href="#environment.Env.update"><tt class="xref docutils literal"><span class="pre">Env.update</span></tt></a> methods 
+and the system and user objects supply an additional <a title="environment.Persistent.broadcast" class="reference internal" href="#environment.Persistent.broadcast"><tt class="xref docutils literal"><span class="pre">Persistent.broadcast</span></tt></a> 
 method which sends a message to top-level windows, such as the shell, to 
 indicate that the environment has changed.</p>
 <div class="section" id="functions">
@@ -110,7 +110,7 @@ environment for the logged-on user.</p>
 class </em><tt class="descname">Env</tt><a class="headerlink" href="#environment.Env" title="Permalink to this definition">¶</a></dt>
 <dd><p>Semi-abstract base class for all environment classes. Outlines
 a dict-like interface which relies on subclasses to implement simple
-<tt class="xref docutils literal"><span class="pre">_get()</span></tt> and <tt class="xref docutils literal"><span class="pre">_items()</span></tt> methods.</p>
+<tt class="xref docutils literal"><span class="pre">_get</span></tt> and <tt class="xref docutils literal"><span class="pre">_items</span></tt> methods.</p>
 <dl class="method">
 <dt id="environment.Env.as_string">
 <tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#environment.Env.as_string" title="Permalink to this definition">¶</a></dt>
@@ -198,7 +198,7 @@ class </em><tt class="descname">Persistent</tt><big>(</big><em>root</em><big>)</
 <dd><p>Represent persistent (registry-based) environment variables. These
 are held at system and at user level, the latter overriding the former
 when an process environment is put together. Don&#8217;t instantiate this
-class directly: use the <a title="environment.user" class="reference internal" href="#environment.user"><tt class="xref docutils literal"><span class="pre">user()</span></tt></a> and <a title="environment.system" class="reference internal" href="#environment.system"><tt class="xref docutils literal"><span class="pre">system()</span></tt></a> functions.</p>
+class directly: use the <a title="environment.user" class="reference internal" href="#environment.user"><tt class="xref docutils literal"><span class="pre">user</span></tt></a> and <a title="environment.system" class="reference internal" href="#environment.system"><tt class="xref docutils literal"><span class="pre">system</span></tt></a> functions.</p>
 <dl class="method">
 <dt id="environment.Persistent.as_string">
 <tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#environment.Persistent.as_string" title="Permalink to this definition">¶</a></dt>
@@ -294,7 +294,7 @@ another environment:</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference external" href="cookbook/environment.html"><em>Using the environment module</em></a></dt>
+<dt><tt class="xref docutils literal"><span class="pre">cookbook/environment</span></tt></dt>
 <dd>Cookbook examples of using the environment module</dd>
 </dl>
 </div>

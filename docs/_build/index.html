@@ -58,12 +58,12 @@
 them more Pythonic and usable by Windows administrators directly
 from the interpreter or as part of a wider set of applications.
 It targets recent versions of Python and reasonably recent versions of Windows
-although it&#8217;s not yet up speed on Vista &amp; x64.</p>
+although it&#8217;s not yet up speed on Vista/W7 &amp; x64.</p>
 <p>It is unashamedly platform-specific: no hint of a concession towards more
 Unix-like operating systems.  You can read about the design
-philosophy and decisions in <a class="reference external" href="about.html#about-winsys"><em>About WinSys</em></a>. If you want to see some
-examples, have a look in the <a class="reference external" href="cookbook.html#cookbook"><em>Cookbook</em></a>. Or visit the <a class="reference external" href="contents.html#contents"><em>Contents</em></a>
-for an overview.</p>
+philosophy and decisions in <em class="xref">about-winsys</em>. If you want to see some
+examples, have a look in the <em class="xref">cookbook</em>. Or visit the <em class="xref">why-winsys</em>
+page for a rationale.</p>
 <p>WinSys is developed as an Open Source project and the project home,
 together with issues list and browseable source code is at:</p>
 <blockquote>
@@ -76,7 +76,7 @@ add you to the project members list.</p>
 <p>Copy a registry key from HKLM to HKCU and set its permissions so that
 only the current user has change access while everyone else gets read.
 Then dump the details of the new top-level key, including its security.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
  2
  3
  4
@@ -88,23 +88,31 @@ Then dump the details of the new top-level key, including its security.</p>
 10
 11
 12
-13</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+13
+14
+15
+16
+17</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span><span class="p">,</span> <span class="n">accounts</span>
 
-<span class="n">new_key</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">copy</span> <span class="p">(</span><span class="s">r&quot;HKLM\Software\Python&quot;</span><span class="p">,</span> <span class="s">r&quot;HKCU\Software\WinsysPython&quot;</span><span class="p">)</span>
+<span class="n">new_key</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">copy</span> <span class="p">(</span><span class="s">r&quot;HKLM\Software\Python&quot;</span><span class="p">,</span> <span class="s">r&quot;HKLM\Software\WinsysPython&quot;</span><span class="p">)</span>
 
-<span class="k">with</span> <span class="n">new_key</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="s">&quot;D&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">sec</span><span class="p">:</span>
-  <span class="n">sec</span><span class="o">.</span><span class="n">break_inheritance</span> <span class="p">(</span><span class="n">copy_first</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-  <span class="n">sec</span><span class="o">.</span><span class="n">dacl</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="n">accounts</span><span class="o">.</span><span class="n">me</span> <span class="p">(),</span> <span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s">&quot;Authenticated Users&quot;</span><span class="p">,</span> <span class="s">&quot;R&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">)</span>
-  <span class="p">]</span>
+<span class="k">try</span><span class="p">:</span>
+  <span class="k">with</span> <span class="n">new_key</span><span class="o">.</span><span class="n">security</span> <span class="p">()</span> <span class="k">as</span> <span class="n">sec</span><span class="p">:</span>
+    <span class="n">sec</span><span class="o">.</span><span class="n">break_inheritance</span> <span class="p">(</span><span class="n">copy_first</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">sec</span><span class="o">.</span><span class="n">dacl</span> <span class="o">+=</span> <span class="p">[</span>
+      <span class="p">(</span><span class="s">&quot;Users&quot;</span><span class="p">,</span> <span class="s">&quot;R&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">),</span>
+      <span class="p">(</span><span class="n">accounts</span><span class="o">.</span><span class="n">me</span> <span class="p">(),</span> <span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">),</span>
+    <span class="p">]</span>
+    <span class="n">sec</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
 
-<span class="n">new_key</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
+<span class="k">finally</span><span class="p">:</span>
+  <span class="k">print</span> <span class="s">&quot;***&quot;</span>
+  <span class="n">new_key</span><span class="o">.</span><span class="n">security</span> <span class="p">()</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
 </pre></div>
 </td></tr></table></div>
 <p>This example makes use of the <a title="Pythonic access to the registry" class="reference external" href="registry.html#module-registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a>, <a title="User accounts, SIDs &amp;c." class="reference external" href="accounts.html#module-accounts"><tt class="xref docutils literal"><span class="pre">accounts</span></tt></a> and <a title="Security functions" class="reference external" href="security.html#module-security"><tt class="xref docutils literal"><span class="pre">security</span></tt></a> modules.
-You can see <a class="reference external" href="cookbook/registry.html#copy-one-registry-key-to-another"><em>discussion</em></a> of this example and more in the <a class="reference external" href="cookbook.html#cookbook"><em>Cookbook</em></a>.</p>
+You can see <em class="xref">discussion</em> of this example and more in the <em class="xref">cookbook</em>.</p>
 </div>
 <div class="section" id="download">
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>

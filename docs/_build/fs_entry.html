@@ -148,7 +148,7 @@ If other is a directory, self is copied into it (not over it)</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></li>
+<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry</span></tt></a></li>
 <li><em>callback</em> &#8211; a function which will receive a total size &amp; total transferred</li>
 <li><em>callback_data</em> &#8211; passed as extra data to callback</li>
 <li><em>clobber</em> &#8211; whether to overwrite the other file if it exists</li>
@@ -179,9 +179,7 @@ this entry is in.</p>
 <dl class="method">
 <dt id="fs.Entry.relative_to">
 <tt class="descname">relative_to</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#fs.Entry.relative_to" title="Permalink to this definition">¶</a></dt>
-<dd>Return the part of this entry&#8217;s filepath which extends beyond
-other&#8217;s. eg if this is &#8216;c:/temp/abc.txt&#8217; and other is &#8216;c:/temp/&#8217;
-then return &#8216;abc.txt&#8217;. cf <a title="fs.FilePath.relative_to" class="reference external" href="fs_filepath.html#fs.FilePath.relative_to"><tt class="xref docutils literal"><span class="pre">FilePath.relative_to()</span></tt></a></dd></dl>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.rename">
@@ -193,7 +191,7 @@ If other is a directory, self is copied into it (not over it)</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></li>
+<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry</span></tt></a></li>
 <li><em>callback</em> &#8211; a function which will receive a total size &amp; total transferred</li>
 <li><em>callback_data</em> &#8211; passed as extra data to callback</li>
 <li><em>clobber</em> &#8211; whether to overwrite the other file if it exists</li>
@@ -225,7 +223,7 @@ manager so a common pattern is:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>options</em> &#8211; cf <a title="security.security" class="reference external" href="security.html#security.security"><tt class="xref docutils literal"><span class="pre">security.security()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>options</em> &#8211; cf <a title="security.security" class="reference external" href="security.html#security.security"><tt class="xref docutils literal"><span class="pre">security.security</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -235,13 +233,13 @@ manager so a common pattern is:</p>
 <dt id="fs.Entry.take_control">
 <tt class="descname">take_control</tt><big>(</big><em>principal=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#fs.Entry.take_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Give the logged-on user full control to a file. This may
-need to be preceded by a call to <a title="fs.Entry.take_ownership" class="reference internal" href="#fs.Entry.take_ownership"><tt class="xref docutils literal"><span class="pre">take_ownership()</span></tt></a> so that the
+need to be preceded by a call to <a title="fs.Entry.take_ownership" class="reference internal" href="#fs.Entry.take_ownership"><tt class="xref docutils literal"><span class="pre">take_ownership</span></tt></a> so that the
 user gains WRITE_DAC permissions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>principal</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal()</span></tt> [logged-on user]</td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>principal</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal</span></tt> [logged-on user]</td>
 </tr>
 </tbody>
 </table>
@@ -262,7 +260,7 @@ the ACL.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>principal</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal()</span></tt> [logged-on user]</td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>principal</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal</span></tt> [logged-on user]</td>
 </tr>
 </tbody>
 </table>

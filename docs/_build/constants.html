@@ -79,7 +79,7 @@ a namespace or can simply be a raw dictionary of name-value pairs:</p>
   <span class="n">namespace</span><span class="o">=</span><span class="n">win32con</span>
 <span class="p">)</span>
 <span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">update</span> <span class="p">(</span><span class="nb">dict</span> <span class="p">(</span>
-  <span class="n">EXTRA_VALUE</span> <span class="o">=</span> <span class="mi">5</span>
+  <span class="n">EXTRA_VALUE</span> <span class="o">=</span> <span class="mf">5</span>
 <span class="p">))</span>
 <span class="k">print</span> <span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">MAXIMUM</span>
 <span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
@@ -91,11 +91,11 @@ just a convention. The pattern parameter to the various factory
 functions will be used to rename the constants on the way in,
 but it can be empty.</p>
 <p>The constants can be accessed as attributes or as items. In addition,
-passing a name or a value to the <a title="constants.Constants.constant" class="reference internal" href="#constants.Constants.constant"><tt class="xref docutils literal"><span class="pre">constant()</span></tt></a> method will return
+passing a name or a value to the <a title="constants.Constants.constant" class="reference internal" href="#constants.Constants.constant"><tt class="xref docutils literal"><span class="pre">constant</span></tt></a> method will return
 the value. This is done automatically by most functions which expect
 a parameter based on one of these constants sets.</p>
 <p>To retrieve the name or names corresponding to a value, use the
-<a title="constants.Constants.name_from_value" class="reference internal" href="#constants.Constants.name_from_value"><tt class="xref docutils literal"><span class="pre">name_from_value()</span></tt></a> or <a title="constants.Constants.names_from_value" class="reference internal" href="#constants.Constants.names_from_value"><tt class="xref docutils literal"><span class="pre">names_from_value()</span></tt></a> function:</p>
+<a title="constants.Constants.name_from_value" class="reference internal" href="#constants.Constants.name_from_value"><tt class="xref docutils literal"><span class="pre">name_from_value</span></tt></a> or <a title="constants.Constants.names_from_value" class="reference internal" href="#constants.Constants.names_from_value"><tt class="xref docutils literal"><span class="pre">names_from_value</span></tt></a> function:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">win32con</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">constants</span>
 <span class="n">ACE_TYPES</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span>
@@ -125,7 +125,7 @@ corresponding to one of the constants in this set of constants:</p>
 
 <span class="k">print</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span> <span class="p">([</span><span class="s">&quot;dacl_protected&quot;</span><span class="p">,</span> <span class="s">&quot;sacl_protected&quot;</span><span class="p">])</span>
 <span class="k">print</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PROTECTED</span> <span class="o">|</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PROTECTED</span>
-<span class="k">print</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span> <span class="p">(</span><span class="mi">12288</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span> <span class="p">(</span><span class="mf">12288</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -168,7 +168,7 @@ within a namespace. Hands off to the from_dict factory.</dd></dl>
 <dl class="classmethod">
 <dt id="constants.Constants.from_pattern">
 <em class="property">
-classmethod </em><tt class="descname">from_pattern</tt><big>(</big><em>pattern=u'*'</em>, <em>excluded=</em><span class="optional">[</span><span class="optional">]</span>, <em>namespace=&lt;module 'win32con' from 'c:python26libsite-packageswin32libwin32con.pyc'&gt;</em><big>)</big><a class="headerlink" href="#constants.Constants.from_pattern" title="Permalink to this definition">¶</a></dt>
+classmethod </em><tt class="descname">from_pattern</tt><big>(</big><em>pattern=u'*'</em>, <em>excluded=</em><span class="optional">[</span><span class="optional">]</span>, <em>namespace=&lt;module 'win32con' from 'C:Python26libsite-packageswin32libwin32con.pyc'&gt;</em><big>)</big><a class="headerlink" href="#constants.Constants.from_pattern" title="Permalink to this definition">¶</a></dt>
 <dd>Factory method to return a class instance from a wildcard name pattern. This is
 the most common method of constructing a list of constants by passing in, eg,
 FILE_ATTRIBUTE_* and the win32file module as the namespace.</dd></dl>
@@ -452,7 +452,7 @@ be merged into one.</dd></dl>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference external" href="cookbook/constants.html"><em>Using the constants module</em></a></dt>
+<dt><tt class="xref docutils literal"><span class="pre">cookbook/constants</span></tt></dt>
 <dd>Cookbook examples of using the constants module</dd>
 </dl>
 </div>

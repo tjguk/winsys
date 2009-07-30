@@ -69,14 +69,14 @@ an event source handle.</p>
 <p>In reality, it&#8217;s perfectly possible to log an event against an event source
 which doesn&#8217;t exist. You&#8217;ll get a bit of boilerplate text in the event
 message saying that something couldn&#8217;t be found, but the event will log.
-This module allows creation of simple event sources, via the <a title="event_logs.EventSource.create" class="reference internal" href="#event_logs.EventSource.create"><tt class="xref docutils literal"><span class="pre">EventSource.create()</span></tt></a>
+This module allows creation of simple event sources, via the <a title="event_logs.EventSource.create" class="reference internal" href="#event_logs.EventSource.create"><tt class="xref docutils literal"><span class="pre">EventSource.create</span></tt></a>
 method and at present forces an event source to exist before a record can
 be logged against it.</p>
 <div class="section" id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
-<p>Of these functions, the two you&#8217;re most likely to need are: <a title="event_logs.event_log" class="reference internal" href="#event_logs.event_log"><tt class="xref docutils literal"><span class="pre">event_log()</span></tt></a>,
+<p>Of these functions, the two you&#8217;re most likely to need are: <a title="event_logs.event_log" class="reference internal" href="#event_logs.event_log"><tt class="xref docutils literal"><span class="pre">event_log</span></tt></a>,
 which returns an <a title="event_logs.EventLog" class="reference internal" href="#event_logs.EventLog"><tt class="xref docutils literal"><span class="pre">EventLog</span></tt></a> corresponding to the named log,
-which you can then iterate over; and <a title="event_logs.log_event" class="reference internal" href="#event_logs.log_event"><tt class="xref docutils literal"><span class="pre">log_event()</span></tt></a>, which logs an event
+which you can then iterate over; and <a title="event_logs.log_event" class="reference internal" href="#event_logs.log_event"><tt class="xref docutils literal"><span class="pre">log_event</span></tt></a>, which logs an event
 against a named source.</p>
 <dl class="function">
 <dt id="event_logs.event_logs">
@@ -129,13 +129,13 @@ source does not exist.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>source</em> &#8211; anything accepted by <a title="event_logs.event_source" class="reference internal" href="#event_logs.event_source"><tt class="xref docutils literal"><span class="pre">event_source()</span></tt></a></li>
+<li><em>source</em> &#8211; anything accepted by <a title="event_logs.event_source" class="reference internal" href="#event_logs.event_source"><tt class="xref docutils literal"><span class="pre">event_source</span></tt></a></li>
 <li><em>type</em> &#8211; an <a title="event_logs.EVENTLOG_TYPE" class="reference internal" href="#event_logs.EVENTLOG_TYPE"><tt class="xref docutils literal"><span class="pre">EVENTLOG_TYPE</span></tt></a></li>
 <li><em>message</em> &#8211; a string or list of strings</li>
 <li><em>data</em> &#8211; a bytestring</li>
 <li><em>id</em> &#8211; a number corresponding to the event message</li>
 <li><em>category</em> &#8211; a number relevant to the event source</li>
-<li><em>principal</em> &#8211; anything which <a title="accounts.principal" class="reference external" href="accounts.html#accounts.principal"><tt class="xref docutils literal"><span class="pre">accounts.principal()</span></tt></a> accepts [logged-on user]</li>
+<li><em>principal</em> &#8211; anything which <a title="accounts.principal" class="reference external" href="accounts.html#accounts.principal"><tt class="xref docutils literal"><span class="pre">accounts.principal</span></tt></a> accepts [logged-on user]</li>
 </ul>
 </td>
 </tr>
@@ -238,7 +238,7 @@ the log in the usual way. It should be noted that this uses iteration,
 forward or reverse as needed, so is not going to be that efficient
 except to find a few records at either end.</p>
 <p>Instances of this class are expected to be accessed via the 
-<a title="event_logs.event_log" class="reference internal" href="#event_logs.event_log"><tt class="xref docutils literal"><span class="pre">event_log()</span></tt></a> function.</p>
+<a title="event_logs.event_log" class="reference internal" href="#event_logs.event_log"><tt class="xref docutils literal"><span class="pre">event_log</span></tt></a> function.</p>
 <dl class="attribute">
 <dt id="event_logs.EventLog.file">
 <tt class="descname">file</tt><a class="headerlink" href="#event_logs.EventLog.file" title="Permalink to this definition">¶</a></dt>
@@ -276,7 +276,7 @@ as an iterable. To iterate over the records in the log, oldest first:</p>
   <span class="k">print</span> <span class="n">record</span>
 </pre></div>
 </div>
-<p>cf <a title="event_logs.EventLog.__reversed__" class="reference internal" href="#event_logs.EventLog.__reversed__"><tt class="xref docutils literal"><span class="pre">__reversed__()</span></tt></a> for iterating in reverse order.</p>
+<p>cf <a title="event_logs.EventLog.__reversed__" class="reference internal" href="#event_logs.EventLog.__reversed__"><tt class="xref docutils literal"><span class="pre">__reversed__</span></tt></a> for iterating in reverse order.</p>
 <dl class="method">
 <dt id="event_logs.EventLog.__reversed__">
 <tt class="descname">__reversed__</tt><big>(</big><big>)</big><a class="headerlink" href="#event_logs.EventLog.__reversed__" title="Permalink to this definition">¶</a></dt>
@@ -285,7 +285,7 @@ as an iterable. To iterate over the records in the log, oldest first:</p>
 <p>Implement the reverse iterator protocol so the event log can be iterated
 over in reverse, ie latest first:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">event_logs</span>
-<span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="nb">reversed</span> <span class="p">(</span><span class="n">event_logs</span><span class="o">.</span><span class="n">event_log</span> <span class="p">(</span><span class="s">&quot;Application&quot;</span><span class="p">)):</span>
+<span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">reversed</span> <span class="p">(</span><span class="n">event_logs</span><span class="o">.</span><span class="n">event_log</span> <span class="p">(</span><span class="s">&quot;Application&quot;</span><span class="p">)):</span>
   <span class="k">print</span> <span class="n">record</span>
 </pre></div>
 </div>
@@ -301,8 +301,8 @@ used to find the first or last records:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">event_logs</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">event_logs</span><span class="o">.</span><span class="n">event_log</span> <span class="p">(</span><span class="s">&quot;Application&quot;</span><span class="p">)</span>
 
-<span class="k">print</span> <span class="s">&quot;Oldest record:&quot;</span><span class="p">,</span> <span class="n">app</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="k">print</span> <span class="s">&quot;Latest record:&quot;</span><span class="p">,</span> <span class="n">app</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&quot;Oldest record:&quot;</span><span class="p">,</span> <span class="n">app</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&quot;Latest record:&quot;</span><span class="p">,</span> <span class="n">app</span><span class="p">[</span><span class="o">-</span><span class="mf">1</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>At present, slices are not supported.</p>
@@ -315,7 +315,7 @@ using the built-in functionality.</dd></dl>
 <dl class="method">
 <dt id="event_logs.EventLog.log_event">
 <tt class="descname">log_event</tt><big>(</big><em>source</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#event_logs.EventLog.log_event" title="Permalink to this definition">¶</a></dt>
-<dd>Pass-through for <a title="event_logs.log_event" class="reference internal" href="#event_logs.log_event"><tt class="xref docutils literal"><span class="pre">log_event()</span></tt></a></dd></dl>
+<dd>Pass-through for <a title="event_logs.log_event" class="reference internal" href="#event_logs.log_event"><tt class="xref docutils literal"><span class="pre">log_event</span></tt></a></dd></dl>
 
 <dl class="method">
 <dt id="event_logs.EventLog.watcher">
@@ -340,11 +340,11 @@ with a bunch of message ids in it. In practice, you can log an event with an
 unregistered event source and it will work quite happily although the event
 viewer won&#8217;t be able to pick up the full message, only the inserted strings
 and the added data.</p>
-<p>Implemented here mostly for internal use in the <a title="event_logs.log_event" class="reference internal" href="#event_logs.log_event"><tt class="xref docutils literal"><span class="pre">log_event()</span></tt></a> function. NB We&#8217;re
+<p>Implemented here mostly for internal use in the <a title="event_logs.log_event" class="reference internal" href="#event_logs.log_event"><tt class="xref docutils literal"><span class="pre">log_event</span></tt></a> function. NB We&#8217;re
 using the convenience functions offered by win32evtlogutil, which make use of
 defaults built in to the win32event.pyd file. In the future we may implement
 our own .DLL builder.</p>
-<p>Instances of this class are expected to be accessed via the <a title="event_logs.event_source" class="reference internal" href="#event_logs.event_source"><tt class="xref docutils literal"><span class="pre">event_source()</span></tt></a>
+<p>Instances of this class are expected to be accessed via the <a title="event_logs.event_source" class="reference internal" href="#event_logs.event_source"><tt class="xref docutils literal"><span class="pre">event_source</span></tt></a>
 module-level function.</p>
 <dl class="attribute">
 <dt id="event_logs.EventSource.event_message_file">
@@ -390,7 +390,7 @@ event source.</dd></dl>
 <dl class="method">
 <dt id="event_logs.EventSource.log_event">
 <tt class="descname">log_event</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#event_logs.EventSource.log_event" title="Permalink to this definition">¶</a></dt>
-<dd>Pass-through to module-level <a title="event_logs.log_event" class="reference internal" href="#event_logs.log_event"><tt class="xref docutils literal"><span class="pre">log_event()</span></tt></a></dd></dl>
+<dd>Pass-through to module-level <a title="event_logs.log_event" class="reference internal" href="#event_logs.log_event"><tt class="xref docutils literal"><span class="pre">log_event</span></tt></a></dd></dl>
 
 </dd></dl>
 
@@ -492,7 +492,7 @@ exception </em><tt class="descname">x_event_logs</tt><big>(</big><em>errno=None<
 <dl class="last docutils">
 <dt><a class="reference external" href="http://msdn.microsoft.com/en-us/library/FIXME.aspx">Event Logs</a></dt>
 <dd>Documentation on microsoft.com for event logs</dd>
-<dt><a class="reference external" href="cookbook/event_logs.html"><em>Using the event_logs module</em></a></dt>
+<dt><tt class="xref docutils literal"><span class="pre">cookbook/event_logs</span></tt></dt>
 <dd>Cookbook examples of using the eventlogs module</dd>
 </dl>
 </div>

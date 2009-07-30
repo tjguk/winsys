@@ -60,11 +60,11 @@ session a Token which contains the rights associated with that
 session plus certain Privileges, such as the ability to take
 ownership of any object or to access security-related data.</p>
 <p>ACLs and ACEs are managed through the <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object,
-accessed mostly by means of the <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security()</span></tt></a> function, or
-the <a title="fs.Entry.security" class="reference external" href="fs_entry.html#fs.Entry.security"><tt class="xref docutils literal"><span class="pre">fs.Entry.security()</span></tt></a> method on external classes. Security
+accessed mostly by means of the <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security</span></tt></a> function, or
+the <a title="fs.Entry.security" class="reference external" href="fs_entry.html#fs.Entry.security"><tt class="xref docutils literal"><span class="pre">fs.Entry.security</span></tt></a> method on external classes. Security
 principals are represented by <tt class="xref docutils literal"><span class="pre">Principal</span></tt> objects, accessed
-via the <tt class="xref docutils literal"><span class="pre">principal()</span></tt> function. <a title="security.Privilege" class="reference internal" href="#security.Privilege"><tt class="xref docutils literal"><span class="pre">Privilege</span></tt></a> objects
-refer to process privileges and are reached through the <tt class="xref docutils literal"><span class="pre">principal()</span></tt>
+via the <tt class="xref docutils literal"><span class="pre">principal</span></tt> function. <a title="security.Privilege" class="reference internal" href="#security.Privilege"><tt class="xref docutils literal"><span class="pre">Privilege</span></tt></a> objects
+refer to process privileges and are reached through the <tt class="xref docutils literal"><span class="pre">principal</span></tt>
 function, or through the <tt class="xref docutils literal"><span class="pre">Privileges</span></tt> attribute of a <tt class="xref docutils literal"><span class="pre">Token</span></tt>.</p>
 <div class="section" id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
@@ -75,12 +75,12 @@ function, or through the <tt class="xref docutils literal"><span class="pre">Pri
 of a named object (eg a file, registry key) or a kernel object (eg a process,
 a pipe). With no parameters, an empty <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object is returned which can then be
 set up with appropriate attributes and applied to other objects via its
-<tt class="xref docutils literal"><span class="pre">to_object()</span></tt> method. <tt class="xref xref docutils literal"><span class="pre">None</span></tt> and an existing <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> 
+<tt class="xref docutils literal"><span class="pre">to_object</span></tt> method. <tt class="xref xref docutils literal"><span class="pre">None</span></tt> and an existing <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> 
 object are passed through unchanged. A <tt class="xref docutils literal"><span class="pre">PySECURITY_DESCRIPTOR</span></tt> is
 converted to the corresponding <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object. A pywin32 <tt class="xref docutils literal"><span class="pre">PyHANDLE</span></tt>,
 representing a kernel object finds the security attributes for that object.
 Finally, a string finds the security attributes for the object of that name.</p>
-<p>The most common use is to pass a filename. The <tt class="xref docutils literal"><span class="pre">from_object()</span></tt> method
+<p>The most common use is to pass a filename. The <tt class="xref docutils literal"><span class="pre">from_object</span></tt> method
 assumes that an unqualified string represents a file. If it represents
 something else, you need to specify its type in the <cite>obj_type</cite> parameter:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">security</span>
@@ -96,7 +96,7 @@ something else, you need to specify its type in the <cite>obj_type</cite> parame
 <li><em>obj</em> &#8211; any of <tt class="xref xref docutils literal"><span class="pre">None</span></tt>, a <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object, a pywin32 <tt class="xref docutils literal"><span class="pre">PyHANDLE</span></tt>,
 a pywin32 <tt class="xref docutils literal"><span class="pre">PySECURITY_DESCRIPTOR</span></tt>, or a string</li>
 <li><em>obj_type</em> &#8211; an <a title="security.SE_OBJECT_TYPE" class="reference internal" href="#security.SE_OBJECT_TYPE"><tt class="xref docutils literal"><span class="pre">SE_OBJECT_TYPE</span></tt></a> [<tt class="xref docutils literal"><span class="pre">file_object</span></tt>]</li>
-<li><em>options</em> &#8211; anything acccepted by <tt class="xref docutils literal"><span class="pre">security_options()</span></tt> [<tt class="xref docutils literal"><span class="pre">DEFAULT_OPTIONS</span></tt>]</li>
+<li><em>options</em> &#8211; anything acccepted by <tt class="xref docutils literal"><span class="pre">security_options</span></tt> [<tt class="xref docutils literal"><span class="pre">DEFAULT_OPTIONS</span></tt>]</li>
 </ul>
 </td>
 </tr>
@@ -159,8 +159,8 @@ current token, reverting when done to the previous situation:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>enable_privs</em> &#8211; list of privileges to enable; each priv is anything accepted by <tt class="xref docutils literal"><span class="pre">privilege()</span></tt></li>
-<li><em>disable_privs</em> &#8211; list of privileges to disable; each priv is anything accepted by <tt class="xref docutils literal"><span class="pre">privilege()</span></tt></li>
+<li><em>enable_privs</em> &#8211; list of privileges to enable; each priv is anything accepted by <tt class="xref docutils literal"><span class="pre">privilege</span></tt></li>
+<li><em>disable_privs</em> &#8211; list of privileges to disable; each priv is anything accepted by <tt class="xref docutils literal"><span class="pre">privilege</span></tt></li>
 <li><em>_token</em> &#8211; (internal) a token to use if not the current one</li>
 </ul>
 </td>
@@ -182,7 +182,7 @@ class </em><tt class="descname">Security</tt><big>(</big><em>control=&lt;Unset&g
 <dd><p>The heart of the <tt class="xref docutils literal"><span class="pre">security</span></tt> module, this class represents the security
 descriptor of a file, kernel object or any other securable object. It&#8217;s most
 commonly instantiated from an object&#8217;s security method (eg <cite>fs.File.security</cite>)
-or by means of the <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security()</span></tt></a> function which can take the name or handle
+or by means of the <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security</span></tt></a> function which can take the name or handle
 of an object and return a corresponding <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object.</p>
 <p>Key attributes are:</p>
 <ul class="simple">
@@ -195,9 +195,9 @@ of an object and return a corresponding <a title="security.Security" class="refe
 These attributes are carefully-handled properties of the <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a>
 object and are intended to make it very easy to manipulate the ACLs and
 ACEs of the Windows security model. The owner and group accept assignments
-of anything accepted by <tt class="xref docutils literal"><span class="pre">principal()</span></tt> while the ACL attributes accept
-anything accepted by <tt class="xref docutils literal"><span class="pre">acl()</span></tt>, in particular a list of <tt class="xref docutils literal"><span class="pre">ACE</span></tt>
-entries, themselves anything accepted by <tt class="xref docutils literal"><span class="pre">ace()</span></tt>. So a very simple
+of anything accepted by <tt class="xref docutils literal"><span class="pre">principal</span></tt> while the ACL attributes accept
+anything accepted by <tt class="xref docutils literal"><span class="pre">acl</span></tt>, in particular a list of <tt class="xref docutils literal"><span class="pre">ACE</span></tt>
+entries, themselves anything accepted by <tt class="xref docutils literal"><span class="pre">ace</span></tt>. So a very simple
 way to add the local administrator to the DACL with full control is:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">security</span>
 <span class="k">with</span> <span class="n">security</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="s">&quot;c:/temp/blah.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
@@ -221,14 +221,14 @@ other options when creating the object). And only those objects which are
 populated, or explicitly requested will be updated when the security information
 is written back to the underlying object or handle.</p>
 <p>A <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object is its own context handler and this is the most
-straightforward way to update security information, although the <a title="security.Security.to_object" class="reference internal" href="#security.Security.to_object"><tt class="xref docutils literal"><span class="pre">Security.to_object()</span></tt></a>
+straightforward way to update security information, although the <a title="security.Security.to_object" class="reference internal" href="#security.Security.to_object"><tt class="xref docutils literal"><span class="pre">Security.to_object</span></tt></a>
 method will let you write the security information back to any arbitrary object,
 including the one it came from.</p>
 <p>For the purposes of serialisation, the standard SDDL format is used for
-strings and can be round-tripped between <a title="security.Security.as_string" class="reference internal" href="#security.Security.as_string"><tt class="xref docutils literal"><span class="pre">as_string()</span></tt></a> and <a title="security.Security.from_string" class="reference internal" href="#security.Security.from_string"><tt class="xref docutils literal"><span class="pre">from_string()</span></tt></a>.</p>
+strings and can be round-tripped between <a title="security.Security.as_string" class="reference internal" href="#security.Security.as_string"><tt class="xref docutils literal"><span class="pre">as_string</span></tt></a> and <a title="security.Security.from_string" class="reference internal" href="#security.Security.from_string"><tt class="xref docutils literal"><span class="pre">from_string</span></tt></a>.</p>
 <p>Create a new <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object from its component pieces,
 all optional. You won&#8217;t often need to call this as you can do most
-useful things via the <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security()</span></tt></a> function, but to create a simple
+useful things via the <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security</span></tt></a> function, but to create a simple
 security descriptor for immediate use, you can instantiate it directly.</p>
 <p>None of the parameters need be specified; with the exceptions of
 <cite>originating_object</cite> and <cite>originating_object_type</cite>, you can set
@@ -240,10 +240,10 @@ each one later, directly or indirectly.</p>
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><em>control</em> &#8211; any combination of <a title="security.SD_CONTROL" class="reference internal" href="#security.SD_CONTROL"><tt class="xref docutils literal"><span class="pre">SD_CONTROL</span></tt></a>. Most commonly set,
 if at all, to &#8220;dacl_protected&#8221;</li>
-<li><em>owner</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal()</span></tt></li>
-<li><em>group</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal()</span></tt></li>
-<li><em>dacl</em> &#8211; anything accepted by <a title="security.Security.dacl" class="reference internal" href="#security.Security.dacl"><tt class="xref docutils literal"><span class="pre">dacl()</span></tt></a></li>
-<li><em>sacl</em> &#8211; anything accepted by <a title="security.Security.sacl" class="reference internal" href="#security.Security.sacl"><tt class="xref docutils literal"><span class="pre">sacl()</span></tt></a></li>
+<li><em>owner</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal</span></tt></li>
+<li><em>group</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal</span></tt></li>
+<li><em>dacl</em> &#8211; anything accepted by <a title="security.Security.dacl" class="reference internal" href="#security.Security.dacl"><tt class="xref docutils literal"><span class="pre">dacl</span></tt></a></li>
+<li><em>sacl</em> &#8211; anything accepted by <a title="security.Security.sacl" class="reference internal" href="#security.Security.sacl"><tt class="xref docutils literal"><span class="pre">sacl</span></tt></a></li>
 <li><em>inherit_handle</em> &#8211; whether this handle is inherited by child processes</li>
 <li><em>originating_object</em> &#8211; name or handle of the object this security currently applies to, if any</li>
 <li><em>originating_object_type</em> &#8211; one of <a title="security.SE_OBJECT_TYPE" class="reference internal" href="#security.SE_OBJECT_TYPE"><tt class="xref docutils literal"><span class="pre">SE_OBJECT_TYPE</span></tt></a> referring to the type of object
@@ -297,14 +297,14 @@ that existing permissions are to be retained, although uninherited.</p>
 <em class="property">
 classmethod </em><tt class="descname">from_object</tt><big>(</big><em>obj</em>, <em>object_type=&lt;Unset&gt;</em>, <em>options=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#security.Security.from_object" title="Permalink to this definition">¶</a></dt>
 <dd>Constructs a <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object from a PyHANDLE or an object name.
-Almost never called directly; use <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security()</span></tt></a>.</dd></dl>
+Almost never called directly; use <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security</span></tt></a>.</dd></dl>
 
 <dl class="classmethod">
 <dt id="security.Security.from_security_descriptor">
 <em class="property">
 classmethod </em><tt class="descname">from_security_descriptor</tt><big>(</big><em>sd</em>, <em>inherit_handle=True</em>, <em>originating_object=&lt;Unset&gt;</em>, <em>originating_object_type=&lt;Unset&gt;</em>, <em>options=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#security.Security.from_security_descriptor" title="Permalink to this definition">¶</a></dt>
 <dd>Constructs a <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object from a PySECURITY_DESCRIPTOR object.
-Almost never called directly; use <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security()</span></tt></a> unless you need some
+Almost never called directly; use <a title="security.security" class="reference internal" href="#security.security"><tt class="xref docutils literal"><span class="pre">security</span></tt></a> unless you need some
 slightly special handling with inherited handles.</dd></dl>
 
 <dl class="classmethod">
@@ -312,7 +312,7 @@ slightly special handling with inherited handles.</dd></dl>
 <em class="property">
 classmethod </em><tt class="descname">from_string</tt><big>(</big><em>sddl</em>, <em>options=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#security.Security.from_string" title="Permalink to this definition">¶</a></dt>
 <dd>Constructs a <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object from an SDDL string.
-Useful for round-tripping, since the <tt class="xref docutils literal"><span class="pre">__str__()</span></tt> method produces
+Useful for round-tripping, since the <tt class="xref docutils literal"><span class="pre">__str__</span></tt> method produces
 an SDDL string.</dd></dl>
 
 <dl class="method">
@@ -380,7 +380,7 @@ security to another:</p>
 <li><em>obj</em> &#8211; (optional) object or object name to write security to if this <a title="security.Security" class="reference internal" href="#security.Security"><tt class="xref docutils literal"><span class="pre">Security</span></tt></a> object
 wasn&#8217;t created from an object in the first place.</li>
 <li><em>object_type</em> &#8211; an <a title="security.SE_OBJECT_TYPE" class="reference internal" href="#security.SE_OBJECT_TYPE"><tt class="xref docutils literal"><span class="pre">SE_OBJECT_TYPE</span></tt></a> [<tt class="xref docutils literal"><span class="pre">file_object</span></tt>]</li>
-<li><em>options</em> &#8211; anything accepted by <a title="security.Security.security_options" class="reference internal" href="#security.Security.security_options"><tt class="xref docutils literal"><span class="pre">security_options()</span></tt></a></li>
+<li><em>options</em> &#8211; anything accepted by <a title="security.Security.security_options" class="reference internal" href="#security.Security.security_options"><tt class="xref docutils literal"><span class="pre">security_options</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -680,7 +680,7 @@ exception </em><tt class="descname">x_value_not_set</tt><big>(</big><em>errno=No
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference external" href="cookbook/security.html"><em>Using the security module</em></a></dt>
+<dt><tt class="xref docutils literal"><span class="pre">cookbook/security</span></tt></dt>
 <dd>Cookbook examples of using the security module</dd>
 </dl>
 </div>

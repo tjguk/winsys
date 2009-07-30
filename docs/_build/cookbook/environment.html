@@ -56,9 +56,9 @@
 <p>The examples here all refer to the <a title="Pythonic access to the environment block" class="reference external" href="../environment.html#module-environment"><tt class="xref docutils literal"><span class="pre">environment</span></tt></a> module.</p>
 <div class="section" id="dump-the-current-process-environment">
 <h2>Dump the current process environment<a class="headerlink" href="#dump-the-current-process-environment" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
 2
-3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">environment</span>
+3</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">environment</span>
 
 <span class="n">environment</span><span class="o">.</span><span class="n">Process</span> <span class="p">()</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
 </pre></div>
@@ -70,7 +70,7 @@
 that no existing Python installations remain on the PATH.
 PATH is made up of the system PATH env var plus the user
 PATH.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
  2
  3
  4
@@ -86,18 +86,18 @@ PATH.</p>
 14
 15
 16
-17</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span><span class="p">,</span> <span class="n">environment</span>
+17</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span><span class="p">,</span> <span class="n">environment</span>
 
 <span class="k">def</span> <span class="nf">munge_path</span> <span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">python_paths</span><span class="p">):</span>
   <span class="c">#env[&#39;PATH&#39;] = </span>
   <span class="k">print</span> <span class="s">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span>
-    <span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">env</span><span class="p">[</span><span class="s">&#39;PATH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span> <span class="p">(</span><span class="s">&quot;;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span> <span class="p">(</span>
+    <span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">env</span><span class="p">[</span><span class="s">&#39;PATH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span> <span class="p">(</span><span class="s">&quot;;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">any</span> <span class="p">(</span>
       <span class="n">p</span><span class="o">.</span><span class="n">lower</span> <span class="p">()</span><span class="o">.</span><span class="n">startswith</span> <span class="p">(</span><span class="n">py</span><span class="p">)</span> <span class="k">for</span> <span class="n">py</span> <span class="ow">in</span> <span class="n">python_paths</span>
     <span class="p">)</span>
   <span class="p">)</span>
 
 <span class="n">py</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\python\pythoncore&quot;</span><span class="p">)</span>
-<span class="n">py_paths</span> <span class="o">=</span> <span class="nb">set</span> <span class="p">(</span><span class="n">version</span><span class="o">.</span><span class="n">InstallPath</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span> <span class="p">(</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span> <span class="p">()</span> <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">py</span><span class="p">)</span>
+<span class="n">py_paths</span> <span class="o">=</span> <span class="n">set</span> <span class="p">(</span><span class="n">version</span><span class="o">.</span><span class="n">InstallPath</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span> <span class="p">(</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span> <span class="p">()</span> <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">py</span><span class="p">)</span>
 <span class="n">py</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hkcu\software\python\pythoncore&quot;</span><span class="p">)</span>
 <span class="n">py_paths</span><span class="o">.</span><span class="n">update</span> <span class="p">(</span><span class="n">version</span><span class="o">.</span><span class="n">InstallPath</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span> <span class="p">(</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span> <span class="p">()</span> <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">py</span><span class="p">)</span>
 

@@ -63,11 +63,11 @@ The most common configuration is given by the defaults: anonymous,
 not set initially, and automatically reset once set (ie only set for long
 enough to release any waiting threads and then reset. A common
 variant is a named event which can then be referred to easily by other
-processes without having to pass handles around. This is why the <a title="ipc.event" class="reference external" href="ipc.html#ipc.event"><tt class="xref docutils literal"><span class="pre">ipc.event()</span></tt></a>
+processes without having to pass handles around. This is why the <a title="ipc.event" class="reference external" href="ipc.html#ipc.event"><tt class="xref docutils literal"><span class="pre">ipc.event</span></tt></a>
 function reverses the order of parameters and takes the name first.</p>
 <p>The Event class mimics Python&#8217;s Event objects which are in any case very
 close to the semantics of the underlying Windows object. For that reason,
-although <a title="ipc.Event.clear" class="reference internal" href="#ipc.Event.clear"><tt class="xref docutils literal"><span class="pre">clear()</span></tt></a> is used to reset the event, <a title="ipc.Event.reset" class="reference internal" href="#ipc.Event.reset"><tt class="xref docutils literal"><span class="pre">reset()</span></tt></a> is also
+although <a title="ipc.Event.clear" class="reference internal" href="#ipc.Event.clear"><tt class="xref docutils literal"><span class="pre">clear</span></tt></a> is used to reset the event, <a title="ipc.Event.reset" class="reference internal" href="#ipc.Event.reset"><tt class="xref docutils literal"><span class="pre">reset</span></tt></a> is also
 provided as an alias, matching the Windows API.</p>
 <dl class="method">
 <dt id="ipc.Event.pulse">
@@ -87,7 +87,7 @@ provided as an alias, matching the Windows API.</p>
 <dl class="method">
 <dt id="ipc.Event.reset">
 <tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.reset" title="Permalink to this definition">¶</a></dt>
-<dd>Alias for <a title="ipc.Event.clear" class="reference internal" href="#ipc.Event.clear"><tt class="xref docutils literal"><span class="pre">clear()</span></tt></a></dd></dl>
+<dd>Alias for <a title="ipc.Event.clear" class="reference internal" href="#ipc.Event.clear"><tt class="xref docutils literal"><span class="pre">clear</span></tt></a></dd></dl>
 
 <dl class="method">
 <dt id="ipc.Event.wait">

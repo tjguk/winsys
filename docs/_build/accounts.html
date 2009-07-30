@@ -58,8 +58,8 @@ represented by a string S-a-b-cd-efg... where each of the segments represents
 an aspect of the security authorities involved. (A computer, a domain etc.).
 Certain of the SIDs are considered well-known such as the AuthenticatedUsers
 account on each machine which will always have the same SID.</p>
-<p>Most of the access to this module will be via the <a title="accounts.principal" class="reference internal" href="#accounts.principal"><tt class="xref docutils literal"><span class="pre">principal()</span></tt></a> 
-or <a title="accounts.me" class="reference internal" href="#accounts.me"><tt class="xref docutils literal"><span class="pre">me()</span></tt></a> functions. Although the module is designed to be used
+<p>Most of the access to this module will be via the <a title="accounts.principal" class="reference internal" href="#accounts.principal"><tt class="xref docutils literal"><span class="pre">principal</span></tt></a> 
+or <a title="accounts.me" class="reference internal" href="#accounts.me"><tt class="xref docutils literal"><span class="pre">me</span></tt></a> functions. Although the module is designed to be used
 standalone, it is imported directly into the <a title="Security functions" class="reference external" href="security.html#module-security"><tt class="xref docutils literal"><span class="pre">security</span></tt></a> module&#8217;s
 namespace so its functionality can also be accessed from there.</p>
 <div class="section" id="functions">
@@ -124,7 +124,7 @@ corresponding user:</p>
 </pre></div>
 </div>
 <p>Note, though, that this will prompt for a password using the
-Win32 password UI. To logon with a password, use the <a title="accounts.Principal.impersonate" class="reference internal" href="#accounts.Principal.impersonate"><tt class="xref docutils literal"><span class="pre">impersonate()</span></tt></a>
+Win32 password UI. To logon with a password, use the <a title="accounts.Principal.impersonate" class="reference internal" href="#accounts.Principal.impersonate"><tt class="xref docutils literal"><span class="pre">impersonate</span></tt></a>
 context-managed function. TODO: allow password to be set securely.</p>
 <p>Initialise a Principal from and (optionally) a system name. The sid
 must be a PySID and the system name, if present must be a security
@@ -185,7 +185,7 @@ classmethod </em><tt class="descname">from_well_known</tt><big>(</big><em>well_k
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><em>well_known</em> &#8211; one of the <a title="accounts.WELL_KNOWN_SID" class="reference internal" href="#accounts.WELL_KNOWN_SID"><tt class="xref docutils literal"><span class="pre">WELL_KNOWN_SID</span></tt></a></li>
-<li><em>domain</em> &#8211; anything accepted by <a title="accounts.principal" class="reference internal" href="#accounts.principal"><tt class="xref docutils literal"><span class="pre">principal()</span></tt></a> and corresponding to a domain</li>
+<li><em>domain</em> &#8211; anything accepted by <a title="accounts.principal" class="reference internal" href="#accounts.principal"><tt class="xref docutils literal"><span class="pre">principal</span></tt></a> and corresponding to a domain</li>
 </ul>
 </td>
 </tr>
@@ -340,7 +340,7 @@ a <a title="accounts.User" class="reference internal" href="#accounts.User"><tt 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other_group</em> &#8211; anything accepted by <a title="accounts.group" class="reference internal" href="#accounts.group"><tt class="xref docutils literal"><span class="pre">group()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other_group</em> &#8211; anything accepted by <a title="accounts.group" class="reference internal" href="#accounts.group"><tt class="xref docutils literal"><span class="pre">group</span></tt></a></td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body">self</td>
 </tr>
@@ -356,7 +356,7 @@ a <a title="accounts.User" class="reference internal" href="#accounts.User"><tt 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other_group</em> &#8211; anything accepted by <a title="accounts.group" class="reference internal" href="#accounts.group"><tt class="xref docutils literal"><span class="pre">group()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other_group</em> &#8211; anything accepted by <a title="accounts.group" class="reference internal" href="#accounts.group"><tt class="xref docutils literal"><span class="pre">group</span></tt></a></td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body">self</td>
 </tr>
@@ -1082,7 +1082,7 @@ exception </em><tt class="descname">x_accounts</tt><big>(</big><em>errno=None</e
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference external" href="cookbook/accounts.html"><em>Using the accounts module</em></a></dt>
+<dt><tt class="xref docutils literal"><span class="pre">cookbook/accounts</span></tt></dt>
 <dd>Cookbook examples of using the accounts module</dd>
 </dl>
 </div>

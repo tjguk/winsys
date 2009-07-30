@@ -59,7 +59,7 @@
 <p>Log an information event against a WinSys event source,
 creating it if does not already exist. Once the event is written, remove
 the event source.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
  2
  3
  4
@@ -69,7 +69,7 @@ the event source.</p>
  8
  9
 10
-11</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">event_logs</span>
+11</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">event_logs</span>
 
 <span class="k">try</span><span class="p">:</span>
   <span class="n">source</span> <span class="o">=</span> <span class="n">event_logs</span><span class="o">.</span><span class="n">event_source</span> <span class="p">(</span><span class="s">&quot;WinSys&quot;</span><span class="p">)</span>
@@ -105,7 +105,7 @@ probably best to use that.</p>
 <h2>List the 10 most recent records in each event log<a class="headerlink" href="#list-the-10-most-recent-records-in-each-event-log" title="Permalink to this headline">¶</a></h2>
 <p>Go through each event log on the system and list the 10 most recent
 events.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
 2
 3
 4
@@ -113,12 +113,12 @@ events.</p>
 6
 7
 8
-9</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">event_logs</span>
+9</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">event_logs</span>
 
 <span class="k">for</span> <span class="n">log</span> <span class="ow">in</span> <span class="n">event_logs</span><span class="o">.</span><span class="n">event_logs</span> <span class="p">():</span>
   <span class="k">print</span> <span class="n">log</span>
-  <span class="k">for</span> <span class="n">n_event</span><span class="p">,</span> <span class="n">event</span> <span class="ow">in</span> <span class="nb">enumerate</span> <span class="p">(</span><span class="nb">reversed</span> <span class="p">(</span><span class="n">log</span><span class="p">)):</span>
-    <span class="k">if</span> <span class="n">n_event</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span> <span class="k">break</span>
+  <span class="k">for</span> <span class="n">n_event</span><span class="p">,</span> <span class="n">event</span> <span class="ow">in</span> <span class="nb">enumerate</span> <span class="p">(</span><span class="n">reversed</span> <span class="p">(</span><span class="n">log</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">n_event</span> <span class="o">==</span> <span class="mf">10</span><span class="p">:</span> <span class="k">break</span>
     <span class="k">print</span> <span class="n">event</span><span class="o">.</span><span class="n">time_generated</span><span class="p">,</span> <span class="n">event</span>
 
   <span class="k">print</span>
@@ -128,9 +128,9 @@ events.</p>
 <h3>Discussion<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>By default, iterating over an event log starts oldest first. To pick up
 the most recent records, we reverse the iterator. This makes use of the
-<a title="event_logs.EventLog.__reversed__" class="reference external" href="../event_logs.html#event_logs.EventLog.__reversed__"><tt class="xref docutils literal"><span class="pre">EventLog.__reversed__()</span></tt></a> magic method which starts a reverse iterator. Without that,
+<a title="event_logs.EventLog.__reversed__" class="reference external" href="../event_logs.html#event_logs.EventLog.__reversed__"><tt class="xref docutils literal"><span class="pre">EventLog.__reversed__</span></tt></a> magic method which starts a reverse iterator. Without that,
 the implementation would fall back to a __getitem__-based sequence
-solution, asking for [-1] and then [-2] and so on. Since our <a title="event_logs.EventLog.__getitem__" class="reference external" href="../event_logs.html#event_logs.EventLog.__getitem__"><tt class="xref docutils literal"><span class="pre">EventLog.__getitem__()</span></tt></a>
+solution, asking for [-1] and then [-2] and so on. Since our <a title="event_logs.EventLog.__getitem__" class="reference external" href="../event_logs.html#event_logs.EventLog.__getitem__"><tt class="xref docutils literal"><span class="pre">EventLog.__getitem__</span></tt></a>
 implementation actually iterates anyway, this would be a less-than-optimal
 solution.</p>
 <p>The standard __str__ for an event log record shows the record number,
@@ -142,7 +142,7 @@ the source and the event type. We add here the record&#8217;s timestamp.</p>
 <p>Go through the a remote System event log and write to CSV the
 record number, id and message for records matching a particular
 event source and type.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
  2
  3
  4
@@ -163,7 +163,7 @@ event source and type.</p>
 19
 20
 21
-22</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+22</pre></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">event_logs</span><span class="p">,</span> <span class="n">dialogs</span>
 
@@ -192,14 +192,14 @@ event source and type.</p>
 <p>We use the winsys <tt class="xref docutils literal"><span class="pre">dialogs.dialog</span></tt> module convenience function to request
 the name of the remote computer and the source and event type from the user.
 It would be possible to pick out the list of event sources for a computer
-(using the <a title="event_logs.event_sources" class="reference external" href="../event_logs.html#event_logs.event_sources"><tt class="xref docutils literal"><span class="pre">event_sources()</span></tt></a> function), but there&#8217;s no mechanism
+(using the <a title="event_logs.event_sources" class="reference external" href="../event_logs.html#event_logs.event_sources"><tt class="xref docutils literal"><span class="pre">event_sources</span></tt></a> function), but there&#8217;s no mechanism
 within the dialogs module for updating one field on the basis of another, so
 we could only pre-populate with the valid list for one particular computer.</p>
-<p>The module-level convenience function <a title="event_logs.event_log" class="reference external" href="../event_logs.html#event_logs.event_log"><tt class="xref docutils literal"><span class="pre">event_log()</span></tt></a> returns an
+<p>The module-level convenience function <a title="event_logs.event_log" class="reference external" href="../event_logs.html#event_logs.event_log"><tt class="xref docutils literal"><span class="pre">event_log</span></tt></a> returns an
 instance of an <a title="event_logs.EventLog" class="reference external" href="../event_logs.html#event_logs.EventLog"><tt class="xref docutils literal"><span class="pre">EventLog</span></tt></a> matching the computer and event log name in the
 UNC-style moniker. The standard iterator goes from the oldest first forwards.
 If we wanted to see the records in reverse chronological order, we&#8217;d use the
-reversed builtin to invoke the class&#8217;s <a title="event_logs.EventLog.__reversed__" class="reference external" href="../event_logs.html#event_logs.EventLog.__reversed__"><tt class="xref docutils literal"><span class="pre">EventLog.__reversed__()</span></tt></a>
+reversed builtin to invoke the class&#8217;s <a title="event_logs.EventLog.__reversed__" class="reference external" href="../event_logs.html#event_logs.EventLog.__reversed__"><tt class="xref docutils literal"><span class="pre">EventLog.__reversed__</span></tt></a>
 method.</p>
 </div>
 </div>

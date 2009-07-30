@@ -59,7 +59,7 @@
 all starting with FILE_ATTRIBUTES. Many of these are defined
 in the win32file module. Some were added more recently and
 have be added specifically.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
  2
  3
  4
@@ -76,7 +76,7 @@ have be added specifically.</p>
 15
 16
 17
-18</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">win32file</span>
+18</pre></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">win32file</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">constants</span>
 
 <span class="c">#</span>
@@ -89,8 +89,8 @@ have be added specifically.</p>
 <span class="c"># Add extra file attributes added since win32file</span>
 <span class="c">#</span>
 <span class="n">extras</span> <span class="o">=</span> <span class="nb">dict</span> <span class="p">(</span>
-  <span class="n">SPARSE_FILE</span> <span class="o">=</span> <span class="mh">0x00000200</span><span class="p">,</span>
-  <span class="n">REPARSE_POINT</span> <span class="o">=</span> <span class="mh">0x00000400</span> 
+  <span class="n">SPARSE_FILE</span> <span class="o">=</span> <span class="mf">0</span><span class="n">x00000200</span><span class="p">,</span>
+  <span class="n">REPARSE_POINT</span> <span class="o">=</span> <span class="mf">0</span><span class="n">x00000400</span> 
 <span class="p">)</span>
 <span class="n">FILE_ATTRIBUTE</span><span class="o">.</span><span class="n">update</span> <span class="p">(</span><span class="n">extras</span><span class="p">)</span>
 <span class="n">FILE_ATTRIBUTE</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
@@ -103,9 +103,9 @@ is by pulling in all constants following a naming pattern from one
 of the pywin32 modules. In this case, this leaves some useful
 constants undefined so we add them in by creating a dictionary
 with their values, and then passing that to the original object&#8217;s
-<a title="constants.Constants.update" class="reference external" href="../constants.html#constants.Constants.update"><tt class="xref docutils literal"><span class="pre">Constants.update()</span></tt></a> function which accepts any dictionary-like
+<a title="constants.Constants.update" class="reference external" href="../constants.html#constants.Constants.update"><tt class="xref docutils literal"><span class="pre">Constants.update</span></tt></a> function which accepts any dictionary-like
 object.</p>
-<p>Like all winsys objects, the constants objects have a <a title="core._WinSysObject.dump" class="reference external" href="../core.html#core._WinSysObject.dump"><tt class="xref docutils literal"><span class="pre">core._WinSysObject.dump()</span></tt></a>
+<p>Like all winsys objects, the constants objects have a <a title="core._WinSysObject.dump" class="reference external" href="../core.html#core._WinSysObject.dump"><tt class="xref docutils literal"><span class="pre">core._WinSysObject.dump</span></tt></a>
 method which provides a readable display of its values.</p>
 </div>
 </div>
@@ -115,11 +115,11 @@ method which provides a readable display of its values.</p>
 It represents a set of access flags, named in the <a title="fs.FILE_ACCESS" class="reference external" href="../fs_constants.html#fs.FILE_ACCESS"><tt class="xref docutils literal"><span class="pre">fs.FILE_ACCESS</span></tt></a>
 constants. Look at each ACE in turn and indicate the trustee and the
 set of operations permtted.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
 2
 3
 4
-5</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">sys</span>
+5</pre></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span><span class="p">,</span> <span class="n">security</span>
 
 <span class="k">for</span> <span class="n">dace</span> <span class="ow">in</span> <span class="n">security</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">)</span><span class="o">.</span><span class="n">dacl</span><span class="p">:</span>
@@ -128,7 +128,7 @@ set of operations permtted.</p>
 </td></tr></table></div>
 <div class="section" id="id1">
 <h3>Discussion<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<p>The <a title="constants.Constants.names_from_value" class="reference external" href="../constants.html#constants.Constants.names_from_value"><tt class="xref docutils literal"><span class="pre">Constants.names_from_value()</span></tt></a> method returns the list of
+<p>The <a title="constants.Constants.names_from_value" class="reference external" href="../constants.html#constants.Constants.names_from_value"><tt class="xref docutils literal"><span class="pre">Constants.names_from_value</span></tt></a> method returns the list of
 constant names corresponding to the single value by comparing their
 bitmasks. No check is made to see whether any bits are left &#8220;unclaimed&#8221;
 nor whether any flags overlap partly or wholly (ie are synonyms).</p>
