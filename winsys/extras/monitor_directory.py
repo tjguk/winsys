@@ -9,6 +9,7 @@ import os, sys
 import cgi
 import datetime
 import operator
+import socket
 import threading
 import time
 import traceback
@@ -23,7 +24,7 @@ from winsys import core, fs, misc
 print "Logging to", core.log_filepath
 
 def deltastamp (delta):
-  
+
   def pluralise (base, n):
     if n > 1:
       return "%d %ss" % (n, base)
@@ -34,7 +35,7 @@ def deltastamp (delta):
     output_format = "%s ago"
   else:
     output_format = "in %s"
-  
+
   days = delta.days
   if days <> 0:
     wks, days = divmod (days, 7)
@@ -80,7 +81,7 @@ def watch_files (path, size_threshold_mb, results, stop_event):
   size_threshold = size_threshold_mb * 1024 * 1024
   BUFFER_SIZE = 8192
   MAX_BUFFER_SIZE = 1024 * 1024
-  
+
   #
   # The double loop is because the watcher process
   # can fall over with an internal which is (I think)
@@ -91,7 +92,7 @@ def watch_files (path, size_threshold_mb, results, stop_event):
   buffer_size = BUFFER_SIZE
   while True:
     watcher = fs.watch (path, True, buffer_size=buffer_size)
-    
+
     while True:
       if stop_event.isSet (): break
       try:
@@ -111,22 +112,22 @@ def watch_files (path, size_threshold_mb, results, stop_event):
           pass
         buffer_size = min (2 * buffer_size, MAX_BUFFER_SIZE)
         print "Tripped up on a RuntimeError. Trying with buffer of", buffer_size
-        
+
 class Path (object):
   """Keep track of the files and changes under a particular
   path tree. No attempt is made to optimise the cases where
   one tree is contained within another.
-  
+
   When the Path is started, it kicks of two threads: one to
   do a complete scan; the other to monitor changes. Both
   write back to the same results queue which is the basis
   for the set of files which will be sorted and presented
   on the webpage.
-  
+
   For manageability, the files are pulled off the queue a
   chunk at a time (by default 1000).
   """
-  
+
   def __init__ (self, path, size_threshold_mb, n_files_at_a_time):
     self._path = path
     self._size_threshold_mb = size_threshold_mb
@@ -134,21 +135,21 @@ class Path (object):
     self._changes = Queue.Queue ()
     self._stop_event = threading.Event ()
     self._files = set ()
-    
+
     self.file_getter = threading.Thread (
-      target=get_files, 
+      target=get_files,
       args=(path, size_threshold_mb, self._changes, self._stop_event)
     )
     self.file_getter.setDaemon (1)
     self.file_getter.start ()
-    
+
     self.file_watcher = threading.Thread (
       target=watch_files,
       args=(path, size_threshold_mb, self._changes, self._stop_event)
     )
     self.file_watcher.setDaemon (1)
     self.file_watcher.start ()
-    
+
   def __str__ (self):
     return "<Path: %s (%d files above %d Mb)>" % (self._path, len (self._files), self._size_threshold_mb)
   __repr__ = __str__
@@ -169,10 +170,10 @@ class Path (object):
       except Queue.Empty:
         break
     return self._files
-    
+
   def finish (self):
     self._stop_event.set ()
-    
+
   def status (self):
     status = []
     if self.file_getter.isAlive ():
@@ -180,14 +181,14 @@ class Path (object):
     if self.file_watcher.isAlive ():
       status.append ("Monitoring")
     return " & ".join (status)
-    
+
 class App (object):
   """The controlling WSGI app. On each request, it looks up the
   path handler which corresponds to the path form variable. It then
   pulls any new entries and displays them according to the user's
   parameters.
   """
-  
+
   PATH = ""
   N_FILES_AT_A_TIME = 1000
   SIZE_THRESHOLD_MB = 100
@@ -196,12 +197,12 @@ class App (object):
   HIGHLIGHT_DAYS = 0
   HIGHLIGHT_HRS = 12
   HIGHLIGHT_MINS = 0
-  
+
   def __init__ (self):
     self._paths_lock = threading.Lock ()
     self.paths = {}
     self._paths_accessed = {}
-  
+
   def doc (self, files, status, form):
     path = form.get ("path", self.PATH)
     top_n_files = int (form.get ("top_n_files", self.TOP_N_FILES) or 0)
@@ -216,7 +217,7 @@ class App (object):
       title = cgi.escape ("Top %d files on %s over %dMb - %s" % (min (len (files), self.TOP_N_FILES), path, size_threshold_mb, status))
     else:
       title = cgi.escape ("Top files on %s over %dMb - %s" % (path, size_threshold_mb, status))
-    
+
     doc = []
     doc.append (u"<html><head><title>%s</title>" % title)
     doc.append (u"""<style>
@@ -242,12 +243,12 @@ class App (object):
     <span class="label">for files over</span>&nbsp;<input type="text" name="size_threshold_mb" value="%(size_threshold_mb)s" size="5" maxlength="5" />Mb
     <span class="label">showing the top</span>&nbsp;<input type="text" name="top_n_files" value="%(top_n_files)s" size="3" maxlength="3" /> files
     <span class="label">refreshing every</span>&nbsp;<input type="text" name="refresh_secs" value="%(refresh_secs)s" size="3" maxlength="3" /> secs
-    <span class="label">highlighting the last&nbsp;</span>&nbsp;<input type="text" name="highlight_days" value="%(highlight_days)s" size="3" maxlength="3" /> days 
-      </span>&nbsp;<input type="text" name="highlight_hrs" value="%(highlight_hrs)s" size="3" maxlength="3" /> hrs 
+    <span class="label">highlighting the last&nbsp;</span>&nbsp;<input type="text" name="highlight_days" value="%(highlight_days)s" size="3" maxlength="3" /> days
+      </span>&nbsp;<input type="text" name="highlight_hrs" value="%(highlight_hrs)s" size="3" maxlength="3" /> hrs
       </span>&nbsp;<input type="text" name="highlight_mins" value="%(highlight_mins)s" size="3" maxlength="3" /> mins
     <input type="submit" value="Refresh" />
     </form><hr>""" % locals ())
-    
+
     now = datetime.datetime.now ()
     if path:
       doc.append (u"<h1>%s</h1>" % title)
@@ -260,15 +261,15 @@ class App (object):
             u'<tr class="%s %s"><td class="filename">%s</td><td class="size">%5.2f</td><td class="updated">%s</td>' % (
               "odd" if i % 2 else "even",
               "highlight" if ((now - max (f.written_at, f.created_at)) <= highlight_delta) else "",
-              f.filepath.relative_to (path).lstrip (fs.seps), 
-              f.size / 1024.0 / 1024.0, 
+              f.filepath.relative_to (path).lstrip (fs.seps),
+              f.size / 1024.0 / 1024.0,
               max (f.written_at, f.created_at)
             )
           )
         except fs.exc.x_winsys:
           pass
       doc.append (u"</table>")
-    
+
     doc.append (u"</body></html>")
     return doc
 
@@ -293,7 +294,7 @@ class App (object):
         self._paths_accessed[path] = datetime.datetime.now ()
         files = sorted (path_handler.updated (), key=operator.attrgetter ("size"), reverse=True)
         status = path_handler.status ()
-        
+
         #
         # If any path hasn't been queried for at least
         # three minutes, close the thread down and delete
@@ -307,11 +308,11 @@ class App (object):
               path_handler.finish ()
               del self.paths[path]
               del self._paths_accessed[path]
-    
+
     else:
       files = []
     return self.doc (files, status, form)
- 
+
   def __call__ (self, environ, start_response):
     """Only attempt to handle the root URI. If a refresh interval
     is requested (the default) then send a header which forces
@@ -329,10 +330,10 @@ class App (object):
         headers.append (("Refresh", "%s" % refresh_secs))
       start_response ("200 OK", headers)
       return (d.encode ("utf8") + "\n" for d in self.handler (form))
-    else:      
+    else:
       start_response ("404 Not Found", [("Content-Type", "text/plain")])
       return []
-      
+
   def finish (self):
     for path_handler in self.paths.values ():
       path_handler.finish ()
@@ -340,11 +341,12 @@ class App (object):
 if __name__ == '__main__':
   misc.set_console_title ("Monitor Directory")
   PORT = 8000
+  HOSTNAME = socket.getfqdn ()
   threading.Timer (
-    2.0, 
-    lambda: os.startfile ("http://localhost:%s" % PORT)
+    2.0,
+    lambda: os.startfile ("http://%s:%s" % (HOSTNAME, PORT))
   ).start ()
-  
+
   app = App ()
   try:
     make_server ('', PORT, app).serve_forever ()
