@@ -66,8 +66,7 @@ docstring tabulating its names &amp; values.</p>
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="constants.Constants">
-<em class="property">
-class </em><tt class="descname">Constants</tt><big>(</big><em>dict_initialiser={}</em><big>)</big><a class="headerlink" href="#constants.Constants" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Constants</tt><big>(</big><em>dict_initialiser={}</em><big>)</big><a class="headerlink" href="#constants.Constants" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide a dict-like interface for a group of related
 constants. These can come from a module or other namespace according
 to a wildcard name, or can be added as a list of (unrelated) names from 
@@ -91,11 +90,11 @@ just a convention. The pattern parameter to the various factory
 functions will be used to rename the constants on the way in,
 but it can be empty.</p>
 <p>The constants can be accessed as attributes or as items. In addition,
-passing a name or a value to the <a title="constants.Constants.constant" class="reference internal" href="#constants.Constants.constant"><tt class="xref docutils literal"><span class="pre">constant</span></tt></a> method will return
+passing a name or a value to the <a title="constants.Constants.constant" class="reference internal" href="#constants.Constants.constant"><tt class="xref docutils literal"><span class="pre">constant()</span></tt></a> method will return
 the value. This is done automatically by most functions which expect
 a parameter based on one of these constants sets.</p>
 <p>To retrieve the name or names corresponding to a value, use the
-<a title="constants.Constants.name_from_value" class="reference internal" href="#constants.Constants.name_from_value"><tt class="xref docutils literal"><span class="pre">name_from_value</span></tt></a> or <a title="constants.Constants.names_from_value" class="reference internal" href="#constants.Constants.names_from_value"><tt class="xref docutils literal"><span class="pre">names_from_value</span></tt></a> function:</p>
+<a title="constants.Constants.name_from_value" class="reference internal" href="#constants.Constants.name_from_value"><tt class="xref docutils literal"><span class="pre">name_from_value()</span></tt></a> or <a title="constants.Constants.names_from_value" class="reference internal" href="#constants.Constants.names_from_value"><tt class="xref docutils literal"><span class="pre">names_from_value()</span></tt></a> function:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">win32con</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">constants</span>
 <span class="n">ACE_TYPES</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span>
@@ -152,23 +151,20 @@ a combination of the constants in this set.</p>
 
 <dl class="classmethod">
 <dt id="constants.Constants.from_dict">
-<em class="property">
-classmethod </em><tt class="descname">from_dict</tt><big>(</big><em>d</em>, <em>pattern=None</em><big>)</big><a class="headerlink" href="#constants.Constants.from_dict" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">from_dict</tt><big>(</big><em>d</em>, <em>pattern=None</em><big>)</big><a class="headerlink" href="#constants.Constants.from_dict" title="Permalink to this definition">¶</a></dt>
 <dd>Factory method to return a class instance from a dictionary-like set of values.
 If a pattern is passed in, use the distinguished part of the name (the part
 which matches the wildcard) as the key name.</dd></dl>
 
 <dl class="classmethod">
 <dt id="constants.Constants.from_list">
-<em class="property">
-classmethod </em><tt class="descname">from_list</tt><big>(</big><em>keys</em>, <em>namespace</em>, <em>pattern=None</em><big>)</big><a class="headerlink" href="#constants.Constants.from_list" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">from_list</tt><big>(</big><em>keys</em>, <em>namespace</em>, <em>pattern=None</em><big>)</big><a class="headerlink" href="#constants.Constants.from_list" title="Permalink to this definition">¶</a></dt>
 <dd>Factory method to return a class instance from a list-like set of values
 within a namespace. Hands off to the from_dict factory.</dd></dl>
 
 <dl class="classmethod">
 <dt id="constants.Constants.from_pattern">
-<em class="property">
-classmethod </em><tt class="descname">from_pattern</tt><big>(</big><em>pattern=u'*'</em>, <em>excluded=</em><span class="optional">[</span><span class="optional">]</span>, <em>namespace=&lt;module 'win32con' from 'C:Python26libsite-packageswin32libwin32con.pyc'&gt;</em><big>)</big><a class="headerlink" href="#constants.Constants.from_pattern" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">from_pattern</tt><big>(</big><em>pattern=u'*'</em>, <em>excluded=</em><span class="optional">[</span><span class="optional">]</span>, <em>namespace=&lt;module 'win32con' from 'C:Python26libsite-packageswin32libwin32con.pyc'&gt;</em><big>)</big><a class="headerlink" href="#constants.Constants.from_pattern" title="Permalink to this definition">¶</a></dt>
 <dd>Factory method to return a class instance from a wildcard name pattern. This is
 the most common method of constructing a list of constants by passing in, eg,
 FILE_ATTRIBUTE_* and the win32file module as the namespace.</dd></dl>
@@ -452,7 +448,7 @@ be merged into one.</dd></dl>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><tt class="xref docutils literal"><span class="pre">cookbook/constants</span></tt></dt>
+<dt><a class="reference external" href="cookbook/constants.html"><em>Using the constants module</em></a></dt>
 <dd>Cookbook examples of using the constants module</dd>
 </dl>
 </div>

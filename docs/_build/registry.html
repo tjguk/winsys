@@ -71,7 +71,7 @@ implements the idea of a registry moniker which has the form:
 <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;HKCU\Control Panel\Desktop&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The key function here is <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a> which is a factory 
+<p>The key function here is <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a> which is a factory 
 returning a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object which contains
 most of the useful functionality in the module. However, the same
 functionality is replicated at module level in many cases for
@@ -139,7 +139,7 @@ for, eg, populating a dictionary:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
+<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
 <li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
 <li><em>_want_types</em> &#8211; (internal) used when, eg, copying keys exactly</li>
 </ul>
@@ -161,7 +161,7 @@ for, eg, populating a dictionary:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
+<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
 <li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
 </ul>
 </td>
@@ -183,8 +183,8 @@ target doesn&#8217;t already exist it will be created.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>from_key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
-<li><em>to_key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
+<li><em>from_key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><em>to_key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -220,8 +220,8 @@ to remove one of its subkeys:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
-<li><em>subkey</em> &#8211; anything accepted by <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">Registry.get_key</span></tt></a></li>
+<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><em>subkey</em> &#8211; anything accepted by <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">Registry.get_key()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -250,8 +250,8 @@ already existing will be created as needed:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
-<li><em>subkey</em> &#8211; anything accepted by <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">Registry.get_key</span></tt></a></li>
+<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><em>subkey</em> &#8211; anything accepted by <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">Registry.get_key()</span></tt></a></li>
 <li><em>sec</em> &#8211; a <a title="security.Security" class="reference external" href="security.html#security.Security"><tt class="xref docutils literal"><span class="pre">security.Security</span></tt></a> instance or None</li>
 </ul>
 </td>
@@ -274,7 +274,7 @@ themselves generators.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
+<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
 <li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
 <li><em>_want_types</em> &#8211; (internal) indicates whether value types are returned as well as values</li>
 </ul>
@@ -296,7 +296,7 @@ themselves generators.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
+<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
 <li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
 </ul>
 </td>
@@ -316,7 +316,7 @@ themselves generators.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body">a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object representing the parent of key</td>
 </tr>
@@ -331,8 +331,7 @@ themselves generators.</p>
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="registry.Registry">
-<em class="property">
-class </em><tt class="descname">Registry</tt><big>(</big><em>moniker</em>, <em>access=u'F'</em><big>)</big><a class="headerlink" href="#registry.Registry" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Registry</tt><big>(</big><em>moniker</em>, <em>access=u'F'</em><big>)</big><a class="headerlink" href="#registry.Registry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent a registry key (including one of the roots) giving
 access to its subkeys and values as well as its security and walking
 its subtrees. The key is True if it exists, False otherwise.</p>
@@ -353,15 +352,15 @@ the subkey of that name:</p>
 </li>
 <li><p class="first">Getting an attribute of a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object will return a value
 if one exists, a key otherwise (or will raise AttributeError). For a key
-name this is the same as calling <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">get_key</span></tt></a> or adding the key name
-as above. For a value name, this is the same as calling <a title="registry.Registry.get_value" class="reference internal" href="#registry.Registry.get_value"><tt class="xref docutils literal"><span class="pre">get_value</span></tt></a></p>
+name this is the same as calling <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">get_key()</span></tt></a> or adding the key name
+as above. For a value name, this is the same as calling <a title="registry.Registry.get_value" class="reference internal" href="#registry.Registry.get_value"><tt class="xref docutils literal"><span class="pre">get_value()</span></tt></a></p>
 </li>
 <li><p class="first">Setting an attribute always writes a value, even if a key of that
-name already exists. This is equivalent to calling <a title="registry.Registry.set_value" class="reference internal" href="#registry.Registry.set_value"><tt class="xref docutils literal"><span class="pre">set_value</span></tt></a>.</p>
+name already exists. This is equivalent to calling <a title="registry.Registry.set_value" class="reference internal" href="#registry.Registry.set_value"><tt class="xref docutils literal"><span class="pre">set_value()</span></tt></a>.</p>
 </li>
 <li><p class="first">Deleting an attribute will attempts to delete a value if one exists,
 otherwise it will delete a key of that name. This is equivalent to 
-calling <a title="registry.Registry.del_value" class="reference internal" href="#registry.Registry.del_value"><tt class="xref docutils literal"><span class="pre">del_value</span></tt></a> or <a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete</span></tt></a>.</p>
+calling <a title="registry.Registry.del_value" class="reference internal" href="#registry.Registry.del_value"><tt class="xref docutils literal"><span class="pre">del_value()</span></tt></a> or <a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete()</span></tt></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="n">python</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;HKLM\Software\Python&quot;</span><span class="p">)</span>
 <span class="n">python</span><span class="o">.</span><span class="n">testing</span> <span class="o">=</span> <span class="mf">4</span>
@@ -371,10 +370,10 @@ calling <a title="registry.Registry.del_value" class="reference internal" href="
 </pre></div>
 </div>
 </li>
-<li><p class="first">To create a key, call <a title="registry.create" class="reference internal" href="#registry.create"><tt class="xref docutils literal"><span class="pre">create</span></tt></a> or the module-level <a title="registry.create" class="reference internal" href="#registry.create"><tt class="xref docutils literal"><span class="pre">create</span></tt></a> function.</p>
+<li><p class="first">To create a key, call <a title="registry.create" class="reference internal" href="#registry.create"><tt class="xref docutils literal"><span class="pre">create()</span></tt></a> or the module-level <a title="registry.create" class="reference internal" href="#registry.create"><tt class="xref docutils literal"><span class="pre">create()</span></tt></a> function.</p>
 </li>
-<li><p class="first">To delete a key, call its <a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete</span></tt></a> method or the module level
-<a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete</span></tt></a> function.</p>
+<li><p class="first">To delete a key, call its <a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete()</span></tt></a> method or the module level
+<a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete()</span></tt></a> function.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="n">winsys</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">create</span> <span class="p">()</span>
 <span class="n">winsys</span><span class="o">.</span><span class="n">test_value</span> <span class="o">=</span> <span class="mf">4</span>
@@ -412,8 +411,8 @@ target doesn&#8217;t already exist it will be created.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>from_key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
-<li><em>to_key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
+<li><em>from_key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><em>to_key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -442,8 +441,8 @@ already existing will be created as needed:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
-<li><em>subkey</em> &#8211; anything accepted by <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">Registry.get_key</span></tt></a></li>
+<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><em>subkey</em> &#8211; anything accepted by <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">Registry.get_key()</span></tt></a></li>
 <li><em>sec</em> &#8211; a <a title="security.Security" class="reference external" href="security.html#security.Security"><tt class="xref docutils literal"><span class="pre">security.Security</span></tt></a> instance or None</li>
 </ul>
 </td>
@@ -485,8 +484,8 @@ to remove one of its subkeys:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
-<li><em>subkey</em> &#8211; anything accepted by <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">Registry.get_key</span></tt></a></li>
+<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><em>subkey</em> &#8211; anything accepted by <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">Registry.get_key()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -506,7 +505,7 @@ to remove one of its subkeys:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
+<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
 <li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
 </ul>
 </td>
@@ -520,10 +519,9 @@ to remove one of its subkeys:</p>
 
 <dl class="classmethod">
 <dt id="registry.Registry.from_string">
-<em class="property">
-classmethod </em><tt class="descname">from_string</tt><big>(</big><em>string</em>, <em>access=u'F'</em>, <em>accept_value=True</em><big>)</big><a class="headerlink" href="#registry.Registry.from_string" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">from_string</tt><big>(</big><em>string</em>, <em>access=u'F'</em>, <em>accept_value=True</em><big>)</big><a class="headerlink" href="#registry.Registry.from_string" title="Permalink to this definition">¶</a></dt>
 <dd>Treat the string param as a moniker return either a key
-or a value. This is mostly used via the <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a> function.</dd></dl>
+or a value. This is mostly used via the <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a> function.</dd></dl>
 
 <dl class="method">
 <dt id="registry.Registry.get_key">
@@ -558,7 +556,7 @@ or a value. This is mostly used via the <a title="registry.registry" class="refe
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
+<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
 <li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
 </ul>
 </td>
@@ -578,7 +576,7 @@ or a value. This is mostly used via the <a title="registry.registry" class="refe
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body">a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object representing the parent of key</td>
 </tr>
@@ -606,7 +604,7 @@ access requirements.</p>
 <dl class="method">
 <dt id="registry.Registry.security">
 <tt class="descname">security</tt><big>(</big><em>options=u'OD'</em><big>)</big><a class="headerlink" href="#registry.Registry.security" title="Permalink to this definition">¶</a></dt>
-<dd><p>For a security request, hand off to the <a title="security.Security.from_object" class="reference external" href="security.html#security.Security.from_object"><tt class="xref docutils literal"><span class="pre">from_object</span></tt></a> method
+<dd><p>For a security request, hand off to the <a title="security.Security.from_object" class="reference external" href="security.html#security.Security.from_object"><tt class="xref docutils literal"><span class="pre">from_object()</span></tt></a> method
 of the <a title="security.Security" class="reference external" href="security.html#security.Security"><tt class="xref docutils literal"><span class="pre">security.Security</span></tt></a> object, specifying a registry key as the object type.
 Most commonly used as a context manager for security operations:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
@@ -650,7 +648,7 @@ for, eg, populating a dictionary:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
+<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
 <li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
 <li><em>_want_types</em> &#8211; (internal) used when, eg, copying keys exactly</li>
 </ul>
@@ -674,7 +672,7 @@ themselves generators.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a></li>
+<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
 <li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
 <li><em>_want_types</em> &#8211; (internal) indicates whether value types are returned as well as values</li>
 </ul>
@@ -919,26 +917,22 @@ themselves generators.</p>
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
 <dt id="registry.x_registry">
-<em class="property">
-exception </em><tt class="descname">x_registry</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#registry.x_registry" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descname">x_registry</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#registry.x_registry" title="Permalink to this definition">¶</a></dt>
 <dd>Base exception for all registry exceptions</dd></dl>
 
 <dl class="exception">
 <dt id="registry.x_moniker">
-<em class="property">
-exception </em><tt class="descname">x_moniker</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#registry.x_moniker" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descname">x_moniker</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#registry.x_moniker" title="Permalink to this definition">¶</a></dt>
 <dd>Base exception for problems with monikers</dd></dl>
 
 <dl class="exception">
 <dt id="registry.x_moniker_ill_formed">
-<em class="property">
-exception </em><tt class="descname">x_moniker_ill_formed</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#registry.x_moniker_ill_formed" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descname">x_moniker_ill_formed</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#registry.x_moniker_ill_formed" title="Permalink to this definition">¶</a></dt>
 <dd>Raised when a moniker does not match the correct format</dd></dl>
 
 <dl class="exception">
 <dt id="registry.x_moniker_no_root">
-<em class="property">
-exception </em><tt class="descname">x_moniker_no_root</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#registry.x_moniker_no_root" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descname">x_moniker_no_root</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#registry.x_moniker_no_root" title="Permalink to this definition">¶</a></dt>
 <dd>Raised when a moniker has no Hive in the first or second position</dd></dl>
 
 </div>
@@ -947,7 +941,7 @@ exception </em><tt class="descname">x_moniker_no_root</tt><big>(</big><em>errno=
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><tt class="xref docutils literal"><span class="pre">cookbook/registry</span></tt></dt>
+<dt><a class="reference external" href="cookbook/registry.html"><em>Using the registry module</em></a></dt>
 <dd>Cookbook examples of using the registry module</dd>
 </dl>
 </div>

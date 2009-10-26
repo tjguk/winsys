@@ -55,8 +55,7 @@
 <h1>The File class<a class="headerlink" href="#the-file-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fs.File">
-<em class="property">
-class </em><tt class="descname">File</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.File" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">File</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.File" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">fs.Entry</span></tt></a></p>
 <dl class="method">
 <dt id="fs.File.ancestors">
@@ -87,7 +86,7 @@ is copied over it.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry</span></tt></a></li>
+<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></li>
 <li><em>callback</em> &#8211; function receiving total size, total so far, callback_data</li>
 <li><em>callback_data</em> &#8211; passed to callback</li>
 </ul>
@@ -156,7 +155,7 @@ filecmp function which bales out as soon as it can.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body">True if the contents match, False otherwise</td>
 </tr>
@@ -172,7 +171,7 @@ filecmp function which bales out as soon as it can.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other</em> &#8211; anything accepted by <a title="fs.file" class="reference external" href="fs.html#fs.file"><tt class="xref docutils literal"><span class="pre">file</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other</em> &#8211; anything accepted by <a title="fs.file" class="reference external" href="fs.html#fs.file"><tt class="xref docutils literal"><span class="pre">file()</span></tt></a></td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body">this <a title="fs.File" class="reference internal" href="#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object</td>
 </tr>
@@ -188,7 +187,7 @@ filecmp function which bales out as soon as it can.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other</em> &#8211; anything accepted by <a title="fs.file" class="reference external" href="fs.html#fs.file"><tt class="xref docutils literal"><span class="pre">file</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other</em> &#8211; anything accepted by <a title="fs.file" class="reference external" href="fs.html#fs.file"><tt class="xref docutils literal"><span class="pre">file()</span></tt></a></td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body"><a title="fs.File" class="reference internal" href="#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object corresponding to other</td>
 </tr>
@@ -219,7 +218,7 @@ If other is a directory, self is copied into it (not over it)</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry</span></tt></a></li>
+<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></li>
 <li><em>callback</em> &#8211; a function which will receive a total size &amp; total transferred</li>
 <li><em>callback_data</em> &#8211; passed as extra data to callback</li>
 <li><em>clobber</em> &#8211; whether to overwrite the other file if it exists</li>
@@ -243,7 +242,7 @@ the codecs function.</p>
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><em>mode</em> &#8211; any of the usual Python modes</li>
 <li><em>attributes</em> &#8211; anything accepted by <a title="fs.FILE_ATTRIBUTE" class="reference external" href="fs_constants.html#fs.FILE_ATTRIBUTE"><tt class="xref docutils literal"><span class="pre">FILE_ATTRIBUTE</span></tt></a></li>
-<li><em>sec</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">Security.security</span></tt></li>
+<li><em>sec</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">Security.security()</span></tt></li>
 </ul>
 </td>
 </tr>
@@ -283,7 +282,7 @@ If other is a directory, self is copied into it (not over it)</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry</span></tt></a></li>
+<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></li>
 <li><em>callback</em> &#8211; a function which will receive a total size &amp; total transferred</li>
 <li><em>callback_data</em> &#8211; passed as extra data to callback</li>
 <li><em>clobber</em> &#8211; whether to overwrite the other file if it exists</li>
@@ -315,7 +314,7 @@ manager so a common pattern is:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>options</em> &#8211; cf <a title="security.security" class="reference external" href="security.html#security.security"><tt class="xref docutils literal"><span class="pre">security.security</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>options</em> &#8211; cf <a title="security.security" class="reference external" href="security.html#security.security"><tt class="xref docutils literal"><span class="pre">security.security()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -325,13 +324,13 @@ manager so a common pattern is:</p>
 <dt id="fs.File.take_control">
 <tt class="descname">take_control</tt><big>(</big><em>principal=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#fs.File.take_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Give the logged-on user full control to a file. This may
-need to be preceded by a call to <a title="fs.File.take_ownership" class="reference internal" href="#fs.File.take_ownership"><tt class="xref docutils literal"><span class="pre">take_ownership</span></tt></a> so that the
+need to be preceded by a call to <a title="fs.File.take_ownership" class="reference internal" href="#fs.File.take_ownership"><tt class="xref docutils literal"><span class="pre">take_ownership()</span></tt></a> so that the
 user gains WRITE_DAC permissions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>principal</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal</span></tt> [logged-on user]</td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>principal</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal()</span></tt> [logged-on user]</td>
 </tr>
 </tbody>
 </table>
@@ -352,7 +351,7 @@ the ACL.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>principal</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal</span></tt> [logged-on user]</td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>principal</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal()</span></tt> [logged-on user]</td>
 </tr>
 </tbody>
 </table>

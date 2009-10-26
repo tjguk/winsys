@@ -55,10 +55,9 @@
 <h1>The Drive class<a class="headerlink" href="#the-drive-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fs.Drive">
-<em class="property">
-class </em><tt class="descname">Drive</tt><big>(</big><em>drive</em><big>)</big><a class="headerlink" href="#fs.Drive" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wraps a drive litter, offering access to its <a title="fs.volume" class="reference external" href="fs.html#fs.volume"><tt class="xref docutils literal"><span class="pre">volume</span></tt></a> 
-and the ability to <a title="fs.mount" class="reference external" href="fs.html#fs.mount"><tt class="xref docutils literal"><span class="pre">mount</span></tt></a> or <a title="fs.dismount" class="reference external" href="fs.html#fs.dismount"><tt class="xref docutils literal"><span class="pre">dismount</span></tt></a> it on a particular 
+<em class="property">class </em><tt class="descname">Drive</tt><big>(</big><em>drive</em><big>)</big><a class="headerlink" href="#fs.Drive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps a drive litter, offering access to its <a title="fs.volume" class="reference external" href="fs.html#fs.volume"><tt class="xref docutils literal"><span class="pre">volume()</span></tt></a>
+and the ability to <a title="fs.mount" class="reference external" href="fs.html#fs.mount"><tt class="xref docutils literal"><span class="pre">mount()</span></tt></a> or <a title="fs.dismount" class="reference external" href="fs.html#fs.dismount"><tt class="xref docutils literal"><span class="pre">dismount()</span></tt></a> it on a particular
 volume.</p>
 <dl class="method">
 <dt id="fs.Drive.dismount">
@@ -73,7 +72,7 @@ volume.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>vol</em> &#8211; anything accepted by <a title="fs.volume" class="reference external" href="fs.html#fs.volume"><tt class="xref docutils literal"><span class="pre">volume</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>vol</em> &#8211; anything accepted by <a title="fs.volume" class="reference external" href="fs.html#fs.volume"><tt class="xref docutils literal"><span class="pre">volume()</span></tt></a></td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body">self</td>
 </tr>
@@ -94,8 +93,7 @@ root directory of this drive.</dd></dl>
 <h1>The Volume class<a class="headerlink" href="#the-volume-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fs.Volume">
-<em class="property">
-class </em><tt class="descname">Volume</tt><big>(</big><em>volume</em><big>)</big><a class="headerlink" href="#fs.Volume" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Volume</tt><big>(</big><em>volume</em><big>)</big><a class="headerlink" href="#fs.Volume" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wraps a filesystem volume, giving access to useful
 information such as the filesystem and a list of drives
 mounted on it. Also offers the ability to mount or dismount.</p>
@@ -116,7 +114,7 @@ mounted on it. Also offers the ability to mount or dismount.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference external" href="fs.html#fs.dir"><tt class="xref docutils literal"><span class="pre">dir</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference external" href="fs.html#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -130,7 +128,7 @@ mounted on it. Also offers the ability to mount or dismount.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference external" href="fs.html#fs.dir"><tt class="xref docutils literal"><span class="pre">dir</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference external" href="fs.html#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></td>
 </tr>
 </tbody>
 </table>

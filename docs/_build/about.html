@@ -104,8 +104,8 @@ in the <a title="Constants" class="reference external" href="constants.html#modu
 <p>While a lot of use has been made of Python classes to wrap the function-driven
 Windows API, a lot of the functionality has been exposed as module-level
 convenience functions. So, for example, in the <a title="Files, Directories, &amp;c." class="reference external" href="fs.html#module-fs"><tt class="xref docutils literal"><span class="pre">fs</span></tt></a> module, the <tt class="xref docutils literal"><span class="pre">File</span></tt>
-class offers a <tt class="xref docutils literal"><span class="pre">File.copy</span></tt> method, but the same functionality is exposed
-at the module level as <a title="fs.copy" class="reference external" href="fs.html#fs.copy"><tt class="xref docutils literal"><span class="pre">fs.copy</span></tt></a>. That way, you don&#8217;t have to instantiate
+class offers a <tt class="xref docutils literal"><span class="pre">File.copy()</span></tt> method, but the same functionality is exposed
+at the module level as <a title="fs.copy" class="reference external" href="fs.html#fs.copy"><tt class="xref docutils literal"><span class="pre">fs.copy()</span></tt></a>. That way, you don&#8217;t have to instantiate
 one or more objects simply for the purpose of a single operation.</p>
 </div>
 <div class="section" id="factory-functions">
@@ -114,7 +114,7 @@ one or more objects simply for the purpose of a single operation.</p>
 the same name in lower case) which tries to be more accepting in what
 its parameters are and to convert them to what&#8217;s needed by the class&#8217;s
 own <tt class="docutils literal"><span class="pre">__init__</span></tt> method. So, for example, the <tt class="xref docutils literal"><span class="pre">Principal</span></tt> class whose
-initialiser expects a PySID structure has a corresponding <tt class="xref docutils literal"><span class="pre">principal</span></tt>
+initialiser expects a PySID structure has a corresponding <tt class="xref docutils literal"><span class="pre">principal()</span></tt>
 function which will take a Sid or a user or group name or None or an existing
 <tt class="xref docutils literal"><span class="pre">Principal</span></tt> object.</p>
 </div>
@@ -140,7 +140,7 @@ of the contextlib contextmanager decorator or by defining an object as
 its own context manager by means of <tt class="docutils literal"><span class="pre">__enter__</span></tt> and <tt class="docutils literal"><span class="pre">__exit__</span></tt> methods.
 Examples of context-managed objects include the <a title="ipc.Mailslot" class="reference external" href="mailslots.html#ipc.Mailslot"><tt class="xref docutils literal"><span class="pre">ipc.Mailslot</span></tt></a> and
 <a title="security.Security" class="reference external" href="security.html#security.Security"><tt class="xref docutils literal"><span class="pre">security.Security</span></tt></a> objects. Examples of decorated functions include
-the <a title="security.change_privileges" class="reference external" href="security.html#security.change_privileges"><tt class="xref docutils literal"><span class="pre">security.change_privileges</span></tt></a> and <a title="security.impersonate" class="reference external" href="security.html#security.impersonate"><tt class="xref docutils literal"><span class="pre">security.impersonate</span></tt></a> functions.</p>
+the <a title="security.change_privileges" class="reference external" href="security.html#security.change_privileges"><tt class="xref docutils literal"><span class="pre">security.change_privileges()</span></tt></a> and <a title="security.impersonate" class="reference external" href="security.html#security.impersonate"><tt class="xref docutils literal"><span class="pre">security.impersonate()</span></tt></a> functions.</p>
 </div>
 </div>
 <div class="section" id="todo">

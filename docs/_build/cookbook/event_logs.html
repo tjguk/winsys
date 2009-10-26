@@ -128,9 +128,9 @@ events.</p>
 <h3>Discussion<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>By default, iterating over an event log starts oldest first. To pick up
 the most recent records, we reverse the iterator. This makes use of the
-<a title="event_logs.EventLog.__reversed__" class="reference external" href="../event_logs.html#event_logs.EventLog.__reversed__"><tt class="xref docutils literal"><span class="pre">EventLog.__reversed__</span></tt></a> magic method which starts a reverse iterator. Without that,
+<a title="event_logs.EventLog.__reversed__" class="reference external" href="../event_logs.html#event_logs.EventLog.__reversed__"><tt class="xref docutils literal"><span class="pre">EventLog.__reversed__()</span></tt></a> magic method which starts a reverse iterator. Without that,
 the implementation would fall back to a __getitem__-based sequence
-solution, asking for [-1] and then [-2] and so on. Since our <a title="event_logs.EventLog.__getitem__" class="reference external" href="../event_logs.html#event_logs.EventLog.__getitem__"><tt class="xref docutils literal"><span class="pre">EventLog.__getitem__</span></tt></a>
+solution, asking for [-1] and then [-2] and so on. Since our <a title="event_logs.EventLog.__getitem__" class="reference external" href="../event_logs.html#event_logs.EventLog.__getitem__"><tt class="xref docutils literal"><span class="pre">EventLog.__getitem__()</span></tt></a>
 implementation actually iterates anyway, this would be a less-than-optimal
 solution.</p>
 <p>The standard __str__ for an event log record shows the record number,
@@ -192,14 +192,14 @@ event source and type.</p>
 <p>We use the winsys <tt class="xref docutils literal"><span class="pre">dialogs.dialog</span></tt> module convenience function to request
 the name of the remote computer and the source and event type from the user.
 It would be possible to pick out the list of event sources for a computer
-(using the <a title="event_logs.event_sources" class="reference external" href="../event_logs.html#event_logs.event_sources"><tt class="xref docutils literal"><span class="pre">event_sources</span></tt></a> function), but there&#8217;s no mechanism
+(using the <a title="event_logs.event_sources" class="reference external" href="../event_logs.html#event_logs.event_sources"><tt class="xref docutils literal"><span class="pre">event_sources()</span></tt></a> function), but there&#8217;s no mechanism
 within the dialogs module for updating one field on the basis of another, so
 we could only pre-populate with the valid list for one particular computer.</p>
-<p>The module-level convenience function <a title="event_logs.event_log" class="reference external" href="../event_logs.html#event_logs.event_log"><tt class="xref docutils literal"><span class="pre">event_log</span></tt></a> returns an
+<p>The module-level convenience function <a title="event_logs.event_log" class="reference external" href="../event_logs.html#event_logs.event_log"><tt class="xref docutils literal"><span class="pre">event_log()</span></tt></a> returns an
 instance of an <a title="event_logs.EventLog" class="reference external" href="../event_logs.html#event_logs.EventLog"><tt class="xref docutils literal"><span class="pre">EventLog</span></tt></a> matching the computer and event log name in the
 UNC-style moniker. The standard iterator goes from the oldest first forwards.
 If we wanted to see the records in reverse chronological order, we&#8217;d use the
-reversed builtin to invoke the class&#8217;s <a title="event_logs.EventLog.__reversed__" class="reference external" href="../event_logs.html#event_logs.EventLog.__reversed__"><tt class="xref docutils literal"><span class="pre">EventLog.__reversed__</span></tt></a>
+reversed builtin to invoke the class&#8217;s <a title="event_logs.EventLog.__reversed__" class="reference external" href="../event_logs.html#event_logs.EventLog.__reversed__"><tt class="xref docutils literal"><span class="pre">EventLog.__reversed__()</span></tt></a>
 method.</p>
 </div>
 </div>

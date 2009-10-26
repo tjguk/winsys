@@ -98,22 +98,22 @@ the details of the new top-level key, including its security.</p>
 <div class="section" id="discussion">
 <h3>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h3>
 <p>The functions in the <a title="Pythonic access to the registry" class="reference external" href="../registry.html#module-registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a> module hand off any references
-to a registry key to the <a title="registry.registry" class="reference external" href="../registry.html#registry.registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a> function which is
+to a registry key to the <a title="registry.registry" class="reference external" href="../registry.html#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a> function which is
 as accepting as possible. Here, we&#8217;re referring to the local machine
 (there&#8217;s no server-style \\ prefix in either moniker) and using
 the HKLM/HKCU shortcut styles. In fact the code would work equally
 well if a remote machine were to specified on either side, assuming
 that the necessary permissions were in place.</p>
-<p>The <a title="registry.Registry.security" class="reference external" href="../registry.html#registry.Registry.security"><tt class="xref docutils literal"><span class="pre">Registry.security</span></tt></a> method acts as a context
+<p>The <a title="registry.Registry.security" class="reference external" href="../registry.html#registry.Registry.security"><tt class="xref docutils literal"><span class="pre">Registry.security()</span></tt></a> method acts as a context
 manager, allowing a series of changes to the registry key&#8217;s
 security descriptor. Here we are breaking the inheritance which
 the new key has inherited automatically, without copying the
 existing permissions over first. Then we add a new DACL with
 just two permissions: allowing the logged-on user full control;
 and allowing all authenticated users read access. The 3-tuples
-are passed to the <tt class="xref docutils literal"><span class="pre">security.ace</span></tt> function.</p>
+are passed to the <tt class="xref docutils literal"><span class="pre">security.ace()</span></tt> function.</p>
 <p>Finally, to demonstrate that the security has been applied, we
-call the registry key&#8217;s <tt class="xref docutils literal"><span class="pre">Registry.dump</span></tt> method
+call the registry key&#8217;s <tt class="xref docutils literal"><span class="pre">Registry.dump()</span></tt> method
 which produces useful information about the key and its security
 in a readable format.</p>
 </div>
@@ -160,7 +160,7 @@ name and the value itself.</p>
 </td></tr></table></div>
 <div class="section" id="id2">
 <h3>Discussion<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>We use <a title="dialogs.dialog" class="reference external" href="../dialogs.html#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialogs.dialog</span></tt></a> to select the root key and
+<p>We use <a title="dialogs.dialog" class="reference external" href="../dialogs.html#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialogs.dialog()</span></tt></a> to select the root key and
 the string to search for. We then walk the registry from that
 key downwards, skipping over any keys or values to which we
 do not have access. When we find a value which matches our

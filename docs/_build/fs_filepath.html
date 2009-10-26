@@ -55,8 +55,7 @@
 <h1>The FilePath class<a class="headerlink" href="#the-filepath-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fs.FilePath">
-<em class="property">
-class </em><tt class="descname">FilePath</tt><big>(</big><em>filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.FilePath" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">FilePath</tt><big>(</big><em>filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.FilePath" title="Permalink to this definition">¶</a></dt>
 <dd><p>A unicode subclass which knows about path structures on Windows.
 The path itself need not exist on any filesystem, but it has to match
 the rules which would make it possible.</p>
@@ -66,7 +65,7 @@ to each other or to other unicode strings which will use os.path.join
 semantics.</p>
 <p>A FilePath offers quick access to the different parts of the path:</p>
 <ul class="simple">
-<li>parts - a list of the components (cf <a title="fs.get_parts" class="reference external" href="fs.html#fs.get_parts"><tt class="xref docutils literal"><span class="pre">fs.get_parts</span></tt></a>)</li>
+<li>parts - a list of the components (cf <a title="fs.get_parts" class="reference external" href="fs.html#fs.get_parts"><tt class="xref docutils literal"><span class="pre">fs.get_parts()</span></tt></a>)</li>
 <li>root - the drive or UNC server/share ending in a backslash unless a drive-relative path</li>
 <li>filename - final component (may be blank if the path looks like a directory)</li>
 <li>name - same as filename unless blank in which case second-last component</li>
@@ -177,7 +176,7 @@ semantics.</p>
 <dt id="fs.FilePath.absolute">
 <tt class="descname">absolute</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.FilePath.absolute" title="Permalink to this definition">¶</a></dt>
 <dd>Return an absolute version of the current FilePath, whether
-relative or not. Use <tt class="xref docutils literal"><span class="pre">os.path.abspath</span></tt> semantics.</dd></dl>
+relative or not. Use <tt class="xref docutils literal"><span class="pre">os.path.abspath()</span></tt> semantics.</dd></dl>
 
 <dl class="method">
 <dt id="fs.FilePath.changed">
@@ -195,15 +194,14 @@ for f in fs.flat (shell.special_folder ("personal"), "*.doc"):
 
 <dl class="classmethod">
 <dt id="fs.FilePath.from_parts">
-<em class="property">
-classmethod </em><tt class="descname">from_parts</tt><big>(</big><em>root</em>, <em>path</em>, <em>base</em>, <em>ext</em><big>)</big><a class="headerlink" href="#fs.FilePath.from_parts" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">from_parts</tt><big>(</big><em>root</em>, <em>path</em>, <em>base</em>, <em>ext</em><big>)</big><a class="headerlink" href="#fs.FilePath.from_parts" title="Permalink to this definition">¶</a></dt>
 <dd>Recreate a filepath from its constituent parts. No real validation is done;
 it is assumed that the parameters are valid parts of a filepath.</dd></dl>
 
 <dl class="method">
 <dt id="fs.FilePath.relative_to">
 <tt class="descname">relative_to</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#fs.FilePath.relative_to" title="Permalink to this definition">¶</a></dt>
-<dd>Return this filepath as relative to another. cf <tt class="xref docutils literal"><span class="pre">utils.relative_to</span></tt></dd></dl>
+<dd>Return this filepath as relative to another. cf <tt class="xref docutils literal"><span class="pre">utils.relative_to()</span></tt></dd></dl>
 
 </dd></dl>
 

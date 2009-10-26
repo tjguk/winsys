@@ -73,8 +73,7 @@ they can start up and close down at will to see the current progress.</p>
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="logging_handlers.MailslotHandler">
-<em class="property">
-class </em><tt class="descname">MailslotHandler</tt><big>(</big><em>mailslot_name : string</em><big>)</big><a class="headerlink" href="#logging_handlers.MailslotHandler" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">MailslotHandler</tt><big>(</big><em>mailslot_name : string</em><big>)</big><a class="headerlink" href="#logging_handlers.MailslotHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up a handler going to the named mailslot. Note that the usual
 possibilities obtain for mailslot names: an unqualified name must exist
 on the local machine; a computer or domain-qualified name will broadcast
@@ -86,8 +85,7 @@ prompt to shut down. (Although that&#8217;s obviously in the hands of the receiv
 
 <dl class="class">
 <dt id="logging_handlers.PermanentMailslotHandler">
-<em class="property">
-class </em><tt class="descname">PermanentMailslotHandler</tt><big>(</big><em>mailslot_name : string</em><big>)</big><a class="headerlink" href="#logging_handlers.PermanentMailslotHandler" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">PermanentMailslotHandler</tt><big>(</big><em>mailslot_name : string</em><big>)</big><a class="headerlink" href="#logging_handlers.PermanentMailslotHandler" title="Permalink to this definition">¶</a></dt>
 <dd>Subclass the MailslotHandler and override the close function so that it
 doesn&#8217;t send the shutdown token to the receiving mailslot(s).</dd></dl>
 

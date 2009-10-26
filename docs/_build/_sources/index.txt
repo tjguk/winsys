@@ -26,7 +26,7 @@ WinSys is developed as an Open Source project and the project home,
 together with issues list and browseable source code is at:
 
   http://code.google.com/p/winsys/
-  
+
 If you're interested in helping with the project let me know and I'll
 add you to the project members list.
 
@@ -41,34 +41,39 @@ Then dump the details of the new top-level key, including its security.
     :language: python
     :linenos:
 
-This example makes use of the :mod:`registry`, :mod:`accounts` and :mod:`security` modules. 
+This example makes use of the :mod:`registry`, :mod:`accounts` and :mod:`security` modules.
 You can see :ref:`discussion <copy-one-registry-key-to-another>` of this example and more in the :ref:`cookbook`.
 
 Download
 --------
 
-* easy_install:: 
+* easy_install::
 
     FIXME: NOT YET -- easy_install winsys
 
 * MSI installers & Zipped archives
-  
+
   Visit http://timgolden.me.uk/python/downloads/winsys/
   and then::
-    
+
     winsys-x.y.z.msi
-    
+
   or::
-    
+
     unzip winsys-x.y.z.zip
     python setup.py install
 
 * Subversion trunk::
 
     svn co http://winsys.googlecode.com/svn/trunk winsys
-    
+
   and then either add that directory into sys.path (I use a .pth
   file but whatever works for you) or run setup.py install from
   there. I don't do setuptools, so you can't do setup.py develop
   unless you tweak the setup.py code.
 
+Copyright & License
+-------------------
+
+winsys is Copyright Tim Golden 2009 and is licensed under the
+(GPL-compatible) MIT License: http://www.opensource.org/licenses/mit-license.php

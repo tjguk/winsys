@@ -378,7 +378,7 @@ img.math {
     vertical-align: middle;
 }
 
-div.math p {
+div.body div.math p {
     text-align: center;
 }
 
@@ -392,7 +392,7 @@ span.eqno {
     div.document,
     div.documentwrapper,
     div.bodywrapper {
-        margin: 0;
+        margin: 0 !important;
         width: 100%;
     }
 

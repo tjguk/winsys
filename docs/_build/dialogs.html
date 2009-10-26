@@ -53,9 +53,9 @@
 <h1><tt class="xref docutils literal"><span class="pre">dialogs</span></tt> &#8211; Dialog boxes<a class="headerlink" href="#module-dialogs" title="Permalink to this headline">¶</a></h1>
 <p>Provides for simple dialog boxes, doing just enough to return input
 from the user using edit controls, dropdown lists and checkboxes. Most
-interaction is via the <a title="dialogs.dialog" class="reference internal" href="#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialog</span></tt></a>, <a title="dialogs.progress_dialog" class="reference internal" href="#dialogs.progress_dialog"><tt class="xref docutils literal"><span class="pre">progress_dialog</span></tt></a> or
-<a title="dialogs.info_dialog" class="reference internal" href="#dialogs.info_dialog"><tt class="xref docutils literal"><span class="pre">info_dialog</span></tt></a> functions. This example offers the user a drop-down 
-list of installed Python directories, a text box to enter a size threshold and a 
+interaction is via the <a title="dialogs.dialog" class="reference internal" href="#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialog()</span></tt></a>, <a title="dialogs.progress_dialog" class="reference internal" href="#dialogs.progress_dialog"><tt class="xref docutils literal"><span class="pre">progress_dialog()</span></tt></a> or
+<a title="dialogs.info_dialog" class="reference internal" href="#dialogs.info_dialog"><tt class="xref docutils literal"><span class="pre">info_dialog()</span></tt></a> functions. This example offers the user a drop-down
+list of installed Python directories, a text box to enter a size threshold and a
 checkbox to indicate whether to email the result:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">registry</span>
 <span class="n">SIZE_THRESHOLD_MB</span> <span class="o">=</span> <span class="s">&quot;100&quot;</span>
@@ -71,13 +71,13 @@ checkbox to indicate whether to email the result:</p>
 <p>All dialogs are resizable horizontally but not vertically. All
 edit boxes (fields with a default which is a string) accept file-drops,
 eg from Explorer.</p>
-<p>The standard dialog (from <a title="dialogs.dialog" class="reference internal" href="#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialog</span></tt></a>) is modal and returns a tuple
+<p>The standard dialog (from <a title="dialogs.dialog" class="reference internal" href="#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialog()</span></tt></a>) is modal and returns a tuple
 of values as soon as [Ok] is pressed or an empty list if [Cancel] is pressed.
-The progress dialog (from <a title="dialogs.progress_dialog" class="reference internal" href="#dialogs.progress_dialog"><tt class="xref docutils literal"><span class="pre">progress_dialog</span></tt></a>) is also modal, but
+The progress dialog (from <a title="dialogs.progress_dialog" class="reference internal" href="#dialogs.progress_dialog"><tt class="xref docutils literal"><span class="pre">progress_dialog()</span></tt></a>) is also modal, but
 passes the tuple of values to a callback which yields update strings which
 are then displayed in the status box on the dialog. When the callback
 function completes, the dialog returns the tuple of values to the caller.
-<a title="dialogs.info_dialog" class="reference internal" href="#dialogs.info_dialog"><tt class="xref docutils literal"><span class="pre">info_dialog</span></tt></a> is intended to be used for, eg, displaying a
+<a title="dialogs.info_dialog" class="reference internal" href="#dialogs.info_dialog"><tt class="xref docutils literal"><span class="pre">info_dialog()</span></tt></a> is intended to be used for, eg, displaying a
 traceback or other bulky text for which a message box might be awkward.
 It displays multiline text in a readonly edit control which can be
 scrolled and select-copied.</p>
@@ -101,9 +101,9 @@ is a string. This is a callback function. If this is present and
 is not None, a small button will be added to the right of the
 corresponding edit control which, when pressed, will call the
 callback which must return a string to be inserted in the edit
-control, or None if no change is to be made. This is intended 
+control, or None if no change is to be made. This is intended
 to throw up, eg, a file-browse dialog. A useful default is
-available as <a title="dialogs.get_filename" class="reference internal" href="#dialogs.get_filename"><tt class="xref docutils literal"><span class="pre">get_filename</span></tt></a>.</p>
+available as <a title="dialogs.get_filename" class="reference internal" href="#dialogs.get_filename"><tt class="xref docutils literal"><span class="pre">get_filename()</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -124,12 +124,12 @@ available as <a title="dialogs.get_filename" class="reference internal" href="#d
 <dl class="function">
 <dt id="dialogs.progress_dialog">
 <tt class="descname">progress_dialog</tt><big>(</big><em>title</em>, <em>progress_callback</em>, <em>*fields</em><big>)</big><a class="headerlink" href="#dialogs.progress_dialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Populate and run a dialog with a progress 
+<dd><p>Populate and run a dialog with a progress
 callback which yields messages. Fields are the same as for
-<a title="dialogs.dialog" class="reference internal" href="#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialog</span></tt></a> but the second parameter is a function which
+<a title="dialogs.dialog" class="reference internal" href="#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialog()</span></tt></a> but the second parameter is a function which
 takes the value list as parameters and yields strings as updates.
 The strings will be displayed in a static control on the dialog
-while the [Ok] button is disabled until the callback completes, 
+while the [Ok] button is disabled until the callback completes,
 at which point the [Ok] button is enabled again and the tuple
 of values is returned to the caller.</p>
 <div class="admonition note">
@@ -140,7 +140,7 @@ pythoncom.CoInitialize.</p>
 </div>
 <p>This example takes a directory from the user and finds the total
 size of each of its subdirectories, showing the name of each one
-as it is searched. Finally, it uses <tt class="xref docutils literal"><span class="pre">utils.size_as_mb</span></tt> to
+as it is searched. Finally, it uses <tt class="xref docutils literal"><span class="pre">utils.size_as_mb()</span></tt> to
 display a human-redable version of each directory size:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">utils</span>
 
@@ -151,7 +151,7 @@ display a human-redable version of each directory size:</p>
     <span class="n">sizes</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">flat</span> <span class="p">())</span>
 
 <span class="n">dialogs</span><span class="o">.</span><span class="n">progress_dialog</span> <span class="p">(</span>
-  <span class="s">&quot;Sizer&quot;</span><span class="p">,</span> 
+  <span class="s">&quot;Sizer&quot;</span><span class="p">,</span>
   <span class="n">sizer</span><span class="p">,</span>
   <span class="p">(</span><span class="s">&quot;Root&quot;</span><span class="p">,</span> <span class="s">&quot;c:/temp&quot;</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">get_folder</span><span class="p">)</span>
 <span class="p">)</span>
@@ -225,11 +225,10 @@ interpreter to stack dump.</p>
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="dialogs.BaseDialog">
-<em class="property">
-class </em><tt class="descname">BaseDialog</tt><big>(</big><em>title</em>, <em>parent_hwnd=0</em><big>)</big><a class="headerlink" href="#dialogs.BaseDialog" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">BaseDialog</tt><big>(</big><em>title</em>, <em>parent_hwnd=0</em><big>)</big><a class="headerlink" href="#dialogs.BaseDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basic template for a dialog with one or more fields plus
 [Ok] and [Cancel] buttons. A simple spacing / sizing algorithm
-is used. Most of the work is done inside <tt class="xref docutils literal"><span class="pre">_get_dialog_template</span></tt>
+is used. Most of the work is done inside <tt class="xref docutils literal"><span class="pre">_get_dialog_template()</span></tt>
 which examines the incoming fields and tries to place them according
 to their various options.</p>
 <p>Initialise the dialog with a title and a list of fields of
@@ -238,8 +237,7 @@ the form [(label, default), ...].</p>
 
 <dl class="class">
 <dt id="dialogs.Dialog">
-<em class="property">
-class </em><tt class="descname">Dialog</tt><big>(</big><em>title</em>, <em>fields</em>, <em>progress_callback=&lt;Unset&gt;</em>, <em>parent_hwnd=0</em><big>)</big><a class="headerlink" href="#dialogs.Dialog" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Dialog</tt><big>(</big><em>title</em>, <em>fields</em>, <em>progress_callback=&lt;Unset&gt;</em>, <em>parent_hwnd=0</em><big>)</big><a class="headerlink" href="#dialogs.Dialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>A general-purpose dialog class for collecting arbitrary information in
 text strings and handing it back to the user. Only Ok &amp; Cancel buttons are
 allowed, and all the fields are considered to be strings. The list of
@@ -330,8 +328,7 @@ in OnCommand</dd></dl>
 
 <dl class="class">
 <dt id="dialogs.InfoDialog">
-<em class="property">
-class </em><tt class="descname">InfoDialog</tt><big>(</big><em>title</em>, <em>info</em>, <em>parent_hwnd=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">InfoDialog</tt><big>(</big><em>title</em>, <em>info</em>, <em>parent_hwnd=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="dialogs.InfoDialog.OnCallback">
 <tt class="descname">OnCallback</tt><big>(</big><em>hwnd</em>, <em>field_id</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.OnCallback" title="Permalink to this definition">¶</a></dt>
@@ -573,8 +570,7 @@ in OnCommand</dd></dl>
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
 <dt id="dialogs.x_dialogs">
-<em class="property">
-exception </em><tt class="descname">x_dialogs</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#dialogs.x_dialogs" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descname">x_dialogs</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#dialogs.x_dialogs" title="Permalink to this definition">¶</a></dt>
 <dd>Base for dialog-related exceptions</dd></dl>
 
 </div>
@@ -583,7 +579,7 @@ exception </em><tt class="descname">x_dialogs</tt><big>(</big><em>errno=None</em
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><tt class="xref docutils literal"><span class="pre">cookbook/dialogs</span></tt></dt>
+<dt><a class="reference external" href="cookbook/dialogs.html"><em>Using the dialogs module</em></a></dt>
 <dd>Cookbook examples of using the accounts module</dd>
 </dl>
 </div>

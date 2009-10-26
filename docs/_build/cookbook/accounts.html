@@ -119,7 +119,7 @@ for several cases.</p>
 <p>Since we&#8217;re using the <a title="accounts.Principal" class="reference external" href="../accounts.html#accounts.Principal"><tt class="xref docutils literal"><span class="pre">Principal</span></tt></a> class itself as a context manager,
 no password can be passed in, so the program automatically pops up a
 standard Windows password UI with the username filled in. To pass a
-password in automatically, use the <a title="accounts.Principal.impersonate" class="reference external" href="../accounts.html#accounts.Principal.impersonate"><tt class="xref docutils literal"><span class="pre">Principal.impersonate</span></tt></a> method
+password in automatically, use the <a title="accounts.Principal.impersonate" class="reference external" href="../accounts.html#accounts.Principal.impersonate"><tt class="xref docutils literal"><span class="pre">Principal.impersonate()</span></tt></a> method
 which accepts a password and a logon type.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -146,7 +146,7 @@ privs.</p>
 <p>The new user will have no logon script, no home directory and will not be
 in the Users group. (This last means that it will not show up on the
 quick-logon screen in XP etc.). The same approach can be used for creating
-a local group, except that the <tt class="xref docutils literal"><span class="pre">Group.create</span></tt> method should be called on
+a local group, except that the <tt class="xref docutils literal"><span class="pre">Group.create()</span></tt> method should be called on
 the <a title="accounts.Group" class="reference external" href="../accounts.html#accounts.Group"><tt class="xref docutils literal"><span class="pre">Group</span></tt></a> class instead.</p>
 </div>
 </div>

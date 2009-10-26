@@ -54,12 +54,12 @@
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The fs module makes it easy to work with files, directories, drives, volumes and paths within the Windows filesystems.
-The most common entry-point is to use <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry</span></tt></a> to return a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> or <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object, although you
-can use <a title="fs.file" class="reference internal" href="#fs.file"><tt class="xref docutils literal"><span class="pre">file</span></tt></a> or <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir</span></tt></a> directly. Instances of these classes need not exist on any filesystem &#8211; in fact
+The most common entry-point is to use <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a> to return a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> or <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object, although you
+can use <a title="fs.file" class="reference internal" href="#fs.file"><tt class="xref docutils literal"><span class="pre">file()</span></tt></a> or <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a> directly. Instances of these classes need not exist on any filesystem &#8211; in fact
 they equate to True or False according to the existence or not of a corresponding filesystem object. But they can
 be the source or target of all the usual filesystem operations. In common with other modules in this package,
-functionality is provided at the module level as well as at the class level, so you can, eg, call <a title="fs.File.copy" class="reference external" href="fs_file.html#fs.File.copy"><tt class="xref docutils literal"><span class="pre">File.copy</span></tt></a>
-or <a title="fs.copy" class="reference internal" href="#fs.copy"><tt class="xref docutils literal"><span class="pre">copy</span></tt></a> to copy a file to another location.</p>
+functionality is provided at the module level as well as at the class level, so you can, eg, call <a title="fs.File.copy" class="reference external" href="fs_file.html#fs.File.copy"><tt class="xref docutils literal"><span class="pre">File.copy()</span></tt></a>
+or <a title="fs.copy" class="reference internal" href="#fs.copy"><tt class="xref docutils literal"><span class="pre">copy()</span></tt></a> to copy a file to another location.</p>
 <p>An important part of the module is the <a title="fs.FilePath" class="reference external" href="fs_filepath.html#fs.FilePath"><tt class="xref docutils literal"><span class="pre">FilePath</span></tt></a> class which eases manipulation of filesystem paths and is
 at the same time a subclass of unicode, so is accepted in system calls where strings are expected.</p>
 </div>
@@ -196,8 +196,8 @@ optionally ignoring access errors.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>d</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir</span></tt></a></li>
-<li><em>ignore_access_errors</em> &#8211; passed to <tt class="xref docutils literal"><span class="pre">files</span></tt></li>
+<li><em>d</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
+<li><em>ignore_access_errors</em> &#8211; passed to <tt class="xref docutils literal"><span class="pre">files()</span></tt></li>
 </ul>
 </td>
 </tr>
@@ -218,8 +218,8 @@ optionally ignoring access errors.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>pattern</em> &#8211; passed to <tt class="xref docutils literal"><span class="pre">files</span></tt></li>
-<li><em>ignore_access_errors</em> &#8211; passed to <tt class="xref docutils literal"><span class="pre">files</span></tt></li>
+<li><em>pattern</em> &#8211; passed to <tt class="xref docutils literal"><span class="pre">files()</span></tt></li>
+<li><em>ignore_access_errors</em> &#8211; passed to <tt class="xref docutils literal"><span class="pre">files()</span></tt></li>
 </ul>
 </td>
 </tr>
@@ -233,7 +233,7 @@ optionally ignoring access errors.</p>
 <dl class="function">
 <dt id="fs.mkdir">
 <tt class="descname">mkdir</tt><big>(</big><em>dirpath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.mkdir" title="Permalink to this definition">¶</a></dt>
-<dd>Mimic os.mkdir, implemented via <a title="fs.Dir.create" class="reference external" href="fs_dir.html#fs.Dir.create"><tt class="xref docutils literal"><span class="pre">Dir.create</span></tt></a></dd></dl>
+<dd>Mimic os.mkdir, implemented via <a title="fs.Dir.create" class="reference external" href="fs_dir.html#fs.Dir.create"><tt class="xref docutils literal"><span class="pre">Dir.create()</span></tt></a></dd></dl>
 
 <dl class="function">
 <dt id="fs.rmdir">
@@ -244,8 +244,8 @@ optionally ignoring access errors.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir</span></tt></a></li>
-<li><em>recursive</em> &#8211; passed to <a title="fs.Dir.delete" class="reference external" href="fs_dir.html#fs.Dir.delete"><tt class="xref docutils literal"><span class="pre">Dir.delete</span></tt></a></li>
+<li><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
+<li><em>recursive</em> &#8211; passed to <a title="fs.Dir.delete" class="reference external" href="fs_dir.html#fs.Dir.delete"><tt class="xref docutils literal"><span class="pre">Dir.delete()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -263,13 +263,13 @@ access errors.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir</span></tt></a></li>
-<li><em>depthfirst</em> &#8211; passed to <a title="fs.Dir.walk" class="reference external" href="fs_dir.html#fs.Dir.walk"><tt class="xref docutils literal"><span class="pre">Dir.walk</span></tt></a></li>
-<li><em>ignore_access_errors</em> &#8211; passed to <a title="fs.Dir.walk" class="reference external" href="fs_dir.html#fs.Dir.walk"><tt class="xref docutils literal"><span class="pre">Dir.walk</span></tt></a></li>
+<li><em>root</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
+<li><em>depthfirst</em> &#8211; passed to <a title="fs.Dir.walk" class="reference external" href="fs_dir.html#fs.Dir.walk"><tt class="xref docutils literal"><span class="pre">Dir.walk()</span></tt></a></li>
+<li><em>ignore_access_errors</em> &#8211; passed to <a title="fs.Dir.walk" class="reference external" href="fs_dir.html#fs.Dir.walk"><tt class="xref docutils literal"><span class="pre">Dir.walk()</span></tt></a></li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">as <a title="fs.Dir.walk" class="reference external" href="fs_dir.html#fs.Dir.walk"><tt class="xref docutils literal"><span class="pre">Dir.walk</span></tt></a></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">as <a title="fs.Dir.walk" class="reference external" href="fs_dir.html#fs.Dir.walk"><tt class="xref docutils literal"><span class="pre">Dir.walk()</span></tt></a></p>
 </td>
 </tr>
 </tbody>
@@ -280,21 +280,21 @@ access errors.</p>
 <dt id="fs.flat">
 <tt class="descname">flat</tt><big>(</big><em>root</em>, <em>pattern='*'</em>, <em>includedirs=False</em>, <em>depthfirst=False</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.flat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over a flattened version of the directory tree starting
-from root. Implemented via <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat</span></tt></a>.</p>
+from root. Implemented via <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir</span></tt></a></li>
-<li><em>pattern</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat</span></tt></a></li>
-<li><em>includedirs</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat</span></tt></a></li>
-<li><em>depthfirst</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat</span></tt></a></li>
-<li><em>ignore_access_errors</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat</span></tt></a></li>
+<li><em>root</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
+<li><em>pattern</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
+<li><em>includedirs</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
+<li><em>depthfirst</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
+<li><em>ignore_access_errors</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">as <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat</span></tt></a></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">as <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></p>
 </td>
 </tr>
 </tbody>
@@ -304,12 +304,12 @@ from root. Implemented via <a title="fs.Dir.flat" class="reference external" hre
 <dl class="function">
 <dt id="fs.move">
 <tt class="descname">move</tt><big>(</big><em>source_filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.move" title="Permalink to this definition">¶</a></dt>
-<dd><p>Move one <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object to another, implemented via <a title="fs.File.move" class="reference external" href="fs_file.html#fs.File.move"><tt class="xref docutils literal"><span class="pre">File.move</span></tt></a> or <a title="fs.Dir.move" class="reference external" href="fs_dir.html#fs.Dir.move"><tt class="xref docutils literal"><span class="pre">Dir.move</span></tt></a></p>
+<dd><p>Move one <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object to another, implemented via <a title="fs.File.move" class="reference external" href="fs_file.html#fs.File.move"><tt class="xref docutils literal"><span class="pre">File.move()</span></tt></a> or <a title="fs.Dir.move" class="reference external" href="fs_dir.html#fs.Dir.move"><tt class="xref docutils literal"><span class="pre">Dir.move()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>source_filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>source_filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -318,12 +318,12 @@ from root. Implemented via <a title="fs.Dir.flat" class="reference external" hre
 <dl class="function">
 <dt id="fs.copy">
 <tt class="descname">copy</tt><big>(</big><em>source_filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.copy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copy one <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object to another, implemented via <a title="fs.File.copy" class="reference external" href="fs_file.html#fs.File.copy"><tt class="xref docutils literal"><span class="pre">File.copy</span></tt></a> or <a title="fs.Dir.copy" class="reference external" href="fs_dir.html#fs.Dir.copy"><tt class="xref docutils literal"><span class="pre">Dir.copy</span></tt></a></p>
+<dd><p>Copy one <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object to another, implemented via <a title="fs.File.copy" class="reference external" href="fs_file.html#fs.File.copy"><tt class="xref docutils literal"><span class="pre">File.copy()</span></tt></a> or <a title="fs.Dir.copy" class="reference external" href="fs_dir.html#fs.Dir.copy"><tt class="xref docutils literal"><span class="pre">Dir.copy()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>source_filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>source_filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -332,12 +332,12 @@ from root. Implemented via <a title="fs.Dir.flat" class="reference external" hre
 <dl class="function">
 <dt id="fs.delete">
 <tt class="descname">delete</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deletes a <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object, implemented via <a title="fs.File.delete" class="reference external" href="fs_file.html#fs.File.delete"><tt class="xref docutils literal"><span class="pre">File.delete</span></tt></a> or <a title="fs.Dir.delete" class="reference external" href="fs_dir.html#fs.Dir.delete"><tt class="xref docutils literal"><span class="pre">Dir.delete</span></tt></a></p>
+<dd><p>Deletes a <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object, implemented via <a title="fs.File.delete" class="reference external" href="fs_file.html#fs.File.delete"><tt class="xref docutils literal"><span class="pre">File.delete()</span></tt></a> or <a title="fs.Dir.delete" class="reference external" href="fs_dir.html#fs.Dir.delete"><tt class="xref docutils literal"><span class="pre">Dir.delete()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -351,7 +351,7 @@ from root. Implemented via <a title="fs.Dir.flat" class="reference external" hre
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="xref xref docutils literal"><span class="pre">True</span></tt> if filepath exists, <tt class="xref xref docutils literal"><span class="pre">False</span></tt> otherwise</td>
 </tr>
@@ -362,12 +362,12 @@ from root. Implemented via <a title="fs.Dir.flat" class="reference external" hre
 <dl class="function">
 <dt id="fs.zip">
 <tt class="descname">zip</tt><big>(</big><em>filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.zip" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create and return a zip archive of filepath, implemented via <a title="fs.File.zip" class="reference external" href="fs_file.html#fs.File.zip"><tt class="xref docutils literal"><span class="pre">File.zip</span></tt></a> or <a title="fs.Dir.zip" class="reference external" href="fs_dir.html#fs.Dir.zip"><tt class="xref docutils literal"><span class="pre">Dir.zip</span></tt></a></p>
+<dd><p>Create and return a zip archive of filepath, implemented via <a title="fs.File.zip" class="reference external" href="fs_file.html#fs.File.zip"><tt class="xref docutils literal"><span class="pre">File.zip()</span></tt></a> or <a title="fs.Dir.zip" class="reference external" href="fs_dir.html#fs.Dir.zip"><tt class="xref docutils literal"><span class="pre">Dir.zip()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -377,12 +377,12 @@ from root. Implemented via <a title="fs.Dir.flat" class="reference external" hre
 <dt id="fs.touch">
 <tt class="descname">touch</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.touch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update a file&#8217;s modification time, creating it if it
-does not exist, implemented via <a title="fs.File.create" class="reference external" href="fs_file.html#fs.File.create"><tt class="xref docutils literal"><span class="pre">File.create</span></tt></a></p>
+does not exist, implemented via <a title="fs.File.create" class="reference external" href="fs_file.html#fs.File.create"><tt class="xref docutils literal"><span class="pre">File.create()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.file" class="reference internal" href="#fs.file"><tt class="xref docutils literal"><span class="pre">file</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.file" class="reference internal" href="#fs.file"><tt class="xref docutils literal"><span class="pre">file()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -456,7 +456,7 @@ known path leaders:</p>
 <p>The upshot is that the first item in the list returned is
 always the root (including trailing slash except for the special
 case of the format &lt;drive&gt;:&lt;path&gt; representing the current directory
-on &lt;drive&gt;) if the path is absolute, an empty string if it is relative. 
+on &lt;drive&gt;) if the path is absolute, an empty string if it is relative.
 All other items before the last one represent the directories along
 the way. The last item is the filename, empty if the whole
 path represents a directory.</p>
@@ -556,12 +556,12 @@ are normalised first.</p>
 <dt id="fs.attributes">
 <tt class="descname">attributes</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an <tt class="xref docutils literal"><span class="pre">Attributes</span></tt> object representing the file attributes
-of filepath, implemented via <a title="fs.Entry.attributes" class="reference external" href="fs_entry.html#fs.Entry.attributes"><tt class="xref docutils literal"><span class="pre">Entry.attributes</span></tt></a></p>
+of filepath, implemented via <a title="fs.Entry.attributes" class="reference external" href="fs_entry.html#fs.Entry.attributes"><tt class="xref docutils literal"><span class="pre">Entry.attributes()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body">an <tt class="xref docutils literal"><span class="pre">Attributes</span></tt> object</td>
 </tr>
@@ -575,14 +575,14 @@ of filepath, implemented via <a title="fs.Entry.attributes" class="reference ext
 <dl class="function">
 <dt id="fs.mount">
 <tt class="descname">mount</tt><big>(</big><em>filepath</em>, <em>vol</em><big>)</big><a class="headerlink" href="#fs.mount" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mount vol at filepath, implemented via <a title="fs.Dir.mount" class="reference external" href="fs_dir.html#fs.Dir.mount"><tt class="xref docutils literal"><span class="pre">Dir.mount</span></tt></a></p>
+<dd><p>Mount vol at filepath, implemented via <a title="fs.Dir.mount" class="reference external" href="fs_dir.html#fs.Dir.mount"><tt class="xref docutils literal"><span class="pre">Dir.mount()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir</span></tt></a></li>
-<li><em>vol</em> &#8211; passed to <a title="fs.Dir.mount" class="reference external" href="fs_dir.html#fs.Dir.mount"><tt class="xref docutils literal"><span class="pre">Dir.mount</span></tt></a></li>
+<li><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
+<li><em>vol</em> &#8211; passed to <a title="fs.Dir.mount" class="reference external" href="fs_dir.html#fs.Dir.mount"><tt class="xref docutils literal"><span class="pre">Dir.mount()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -593,12 +593,12 @@ of filepath, implemented via <a title="fs.Entry.attributes" class="reference ext
 <dl class="function">
 <dt id="fs.dismount">
 <tt class="descname">dismount</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.dismount" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dismount the volume at filepath, implemented via <a title="fs.Dir.dismount" class="reference external" href="fs_dir.html#fs.Dir.dismount"><tt class="xref docutils literal"><span class="pre">Dir.dismount</span></tt></a></p>
+<dd><p>Dismount the volume at filepath, implemented via <a title="fs.Dir.dismount" class="reference external" href="fs_dir.html#fs.Dir.dismount"><tt class="xref docutils literal"><span class="pre">Dir.dismount()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -654,8 +654,7 @@ be different:</p>
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="fs._Attributes">
-<em class="property">
-class </em><tt class="descname">_Attributes</tt><big>(</big><em>flags=0</em>, <em>const=&lt;Constants: {'TEMPORARY': 256</em>, <em>'OFFLINE': 4096</em>, <em>'NORMAL': 128</em>, <em>'ENCRYPTED': 16384</em>, <em>'SYSTEM': 4</em>, <em>'VIRTUAL': 65536</em>, <em>'NOT_CONTENT_INDEXES': 8192</em>, <em>'READONLY': 1</em>, <em>'COMPRESSED': 2048</em>, <em>'DIRECTORY': 16</em>, <em>'HIDDEN': 2</em>, <em>'SPARSE_FILE': 512</em>, <em>'ARCHIVE': 32</em>, <em>'REPARSE_POINT': 1024}&gt;</em><big>)</big><a class="headerlink" href="#fs._Attributes" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">_Attributes</tt><big>(</big><em>flags=0</em>, <em>const=&lt;Constants: {'TEMPORARY': 256</em>, <em>'OFFLINE': 4096</em>, <em>'NORMAL': 128</em>, <em>'ENCRYPTED': 16384</em>, <em>'SYSTEM': 4</em>, <em>'VIRTUAL': 65536</em>, <em>'NOT_CONTENT_INDEXES': 8192</em>, <em>'READONLY': 1</em>, <em>'COMPRESSED': 2048</em>, <em>'DIRECTORY': 16</em>, <em>'HIDDEN': 2</em>, <em>'SPARSE_FILE': 512</em>, <em>'ARCHIVE': 32</em>, <em>'REPARSE_POINT': 1024}&gt;</em><big>)</big><a class="headerlink" href="#fs._Attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple class wrapper for the list of file attributes
 (readonly, hidden, &amp;c.) It can be accessed by attribute
 access, item access and the &#8220;in&#8221; operator:</p>
@@ -687,38 +686,32 @@ access, item access and the &#8220;in&#8221; operator:</p>
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
 <dt id="fs.x_fs">
-<em class="property">
-exception </em><tt class="descname">x_fs</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_fs" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descname">x_fs</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_fs" title="Permalink to this definition">¶</a></dt>
 <dd>Base for all fs-related exceptions</dd></dl>
 
 <dl class="exception">
 <dt id="fs.x_no_such_file">
-<em class="property">
-exception </em><tt class="descname">x_no_such_file</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_no_such_file" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descname">x_no_such_file</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_no_such_file" title="Permalink to this definition">¶</a></dt>
 <dd>Raised when a file could not be found</dd></dl>
 
 <dl class="exception">
 <dt id="fs.x_too_many_files">
-<em class="property">
-exception </em><tt class="descname">x_too_many_files</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_too_many_files" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descname">x_too_many_files</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_too_many_files" title="Permalink to this definition">¶</a></dt>
 <dd>Raised when more than one file matches a name</dd></dl>
 
 <dl class="exception">
 <dt id="fs.x_invalid_name">
-<em class="property">
-exception </em><tt class="descname">x_invalid_name</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_invalid_name" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descname">x_invalid_name</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_invalid_name" title="Permalink to this definition">¶</a></dt>
 <dd>Raised when a filename contains invalid characters</dd></dl>
 
 <dl class="exception">
 <dt id="fs.x_no_certificate">
-<em class="property">
-exception </em><tt class="descname">x_no_certificate</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_no_certificate" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descname">x_no_certificate</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_no_certificate" title="Permalink to this definition">¶</a></dt>
 <dd>Raised when encryption is attempted without a certificate</dd></dl>
 
 <dl class="exception">
 <dt id="fs.x_not_ready">
-<em class="property">
-exception </em><tt class="descname">x_not_ready</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_not_ready" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descname">x_not_ready</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_not_ready" title="Permalink to this definition">¶</a></dt>
 <dd>Raised when a device is not ready</dd></dl>
 
 </div>
@@ -727,7 +720,7 @@ exception </em><tt class="descname">x_not_ready</tt><big>(</big><em>errno=None</
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><tt class="xref docutils literal"><span class="pre">cookbook/fs</span></tt></dt>
+<dt><a class="reference external" href="cookbook/fs.html"><em>Using the fs module</em></a></dt>
 <dd>Cookbook examples of using the fs module</dd>
 </dl>
 </div>
