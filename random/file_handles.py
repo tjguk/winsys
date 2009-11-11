@@ -15,8 +15,6 @@ import win32file
 import win32security
 import winerror
 
-#~ import wmi
-
 UCHAR = c_ubyte
 PVOID = c_void_p
 
@@ -102,14 +100,14 @@ class FILE_NAME_INFORMATION (Structure):
     ("FileName", WCHAR * filename_size),
   ]
 
-def get_handles ():  
+def get_handles ():
   system_handle_information = SYSTEM_HANDLE_INFORMATION ()
   size = DWORD (sizeof (system_handle_information))
   while True:
     result = ntdll.ZwQuerySystemInformation (
-      SystemHandleInformation, 
+      SystemHandleInformation,
       byref (system_handle_information),
-      size, 
+      size,
       byref (size)
     )
     result = signed_to_unsigned (result)
@@ -122,7 +120,7 @@ def get_handles ():
       raise x_file_handles ("ZwQuerySystemInformation", hex (result))
 
   pHandles = cast (
-    system_handle_information.Handles, 
+    system_handle_information.Handles,
     POINTER (SYSTEM_HANDLE_TABLE_ENTRY_INFO * system_handle_information.NumberOfHandles)
   )
   for handle in pHandles.contents:
@@ -133,7 +131,12 @@ def get_process_handle (pid, handle):
     hProcess = win32api.OpenProcess (win32con.PROCESS_DUP_HANDLE, 0, pid)
     return win32api.DuplicateHandle (hProcess, handle, CURRENT_PROCESS, 0, 0, win32con.DUPLICATE_SAME_ACCESS)
   except win32api.error, (errno, errctx, errmsg):
-    if errno in (winerror.ERROR_ACCESS_DENIED, winerror.ERROR_INVALID_PARAMETER, winerror.ERROR_INVALID_HANDLE):
+    if errno in (
+      winerror.ERROR_ACCESS_DENIED,
+      winerror.ERROR_INVALID_PARAMETER,
+      winerror.ERROR_INVALID_HANDLE,
+      winerror.ERROR_NOT_SUPPORTED
+    ):
       return None
     else:
       raise
@@ -197,11 +200,11 @@ def main ():
     t = threading.Thread (target=get_object_info, args=(requests, results))
     t.setDaemon (True)
     t.start ()
-  
+
   public_object_type_information = PUBLIC_OBJECT_TYPE_INFORMATION ()
   object_name_information = OBJECT_NAME_INFORMATION ()
   this_pid = os.getpid ()
-  
+
   for pid, handle in get_handles ():
     if pid == this_pid:
       continue
@@ -216,7 +219,7 @@ def main ():
       yield results.get (True, 2)
     except Queue.Empty:
       break
-    
+
 def filepath_from_devicepath (devicepath):
   if devicepath is None: return None
   devicepath = devicepath.lower ()
@@ -235,7 +238,7 @@ if __name__ == '__main__':
   #~ win32security.AdjustTokenPrivileges (
     #~ hToken, False, [(se_debug, win32security.SE_PRIVILEGE_ENABLED)]
   #~ )
-  
+
   try:
     for pid, type, devicepath in main ():
       print pid, type, filepath_from_devicepath (devicepath)
