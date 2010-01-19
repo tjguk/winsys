@@ -670,7 +670,16 @@ class Dialog (BaseDialog):
     for i, (field, default_value, callback) in enumerate (self.fields):
       value = self._get_item (self.IDC_FIELD_BASE + i)
       if isinstance (default_value, datetime.date):
-        value = datetime.datetime.strptime (value, "%d %b %Y").date ()
+        try:
+          value = datetime.datetime.strptime (value, "%d %b %Y").date ()
+        except ValueError:
+          win32api.MessageBox (
+            hwnd,
+            "Dates must look like:\n%s" % datetime.date.today ().strftime ("%d %b %Y").lstrip ("0"),
+            "Invalid Date"
+          )
+          return
+
       self.results.append (value)
 
     #
