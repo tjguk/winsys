@@ -177,7 +177,10 @@ def ad (obj=core.UNSET, username=None, password=None, interface=adsi.IID_IADs):
   elif isinstance (obj, IADs):
     return obj
   elif isinstance (obj, basestring):
-    return IADs.from_string (obj, username, password, interface)
+    moniker = obj
+    if not moniker.upper ().startswith ("LDAP://"):
+      moniker = "LDAP://" + moniker
+    return IADs.from_string (moniker, username, password, interface)
   else:
     return IADs.from_object (obj)
 
@@ -251,7 +254,7 @@ def _and (*args):
 def _or (*args):
   return "(|%s)" % "".join ("(%s)" % s for s in args)
 
-def find_user (name, root_path=None, server=None, username=None, password=None):
+def find_user (name, root_path=None, server=None, username=None, password=None, columns=["*"]):
   name = escaped (name)
   for user in search (
     _and (
@@ -271,31 +274,46 @@ def find_user (name, root_path=None, server=None, username=None, password=None):
   ):
     return user
 
-def find_group (name, root_path=None, server=None, username=None, password=None):
+def find_group (name, root_path=None, server=None, username=None, password=None, columns=["*"]):
   name = escaped (name)
   for group in search (
-    _and ("objectClass=group", _or ("sAMAccountName=" + name, "displayName=" + name, "cn=" + name)),
-    ["distinguishedName", "sAMAccountName", "displayName", "member"],
-    root_path,
-    server,
-    username,
-    password
+    filter=_and (
+      "objectClass=group",
+      _or (
+        "sAMAccountName=" + name,
+        "displayName=" + name,
+        "cn=" + name
+      )
+    ),
+    columns=columns,
+    root=root_path, server=server, username=username, password=password
   ):
     return group
 
-def find_active_users (root=None, server=None, username=None, password=None):
+def find_active_users (root=None, server=None, username=None, password=None, columns=["*"]):
   return search (
-    filter=_and ("objectClass=user", "objectCategory=person", "!memberOf=CN=non intranet,OU=IT Other,OU=IT,OU=Camden,DC=gb,DC=vo,DC=local", "!userAccountControl:1.2.840.113556.1.4.803:=2", "displayName=*"),
-    columns=["distinguishedName", "sAMAccountName", "displayName", "memberOf", "physicalDeliveryOfficeName", "title", "telephoneNumber", "homePhone", "department"],
+    filter=_and (
+      "objectClass=user",
+      "objectCategory=person",
+      "!memberOf=CN=non intranet,OU=IT Other,OU=IT,OU=Camden,DC=gb,DC=vo,DC=local",
+      "!userAccountControl:1.2.840.113556.1.4.803:=2",
+      "displayName=*"
+    ),
+    columns=columns,
     root=None, server=None, username=None, password=None
   )
 
 def find_all_users (root=None, server=None, username=None, password=None):
-  return search (
-    filter=_and ("objectClass=user", "objectCategory=person", "displayName=*"),
-    columns=["distinguishedName", "sAMAccountName", "displayName", "memberOf", "physicalDeliveryOfficeName", "title", "telephoneNumber", "homePhone", "department"],
+  for user in search (
+    filter=_and (
+      "objectClass=user",
+      "objectCategory=person",
+      "displayName=*"
+    ),
+    columns=["distinguishedName"],
     root=None, server=None, username=None, password=None
-  )
+  ):
+    yield ad (user.distinguishedName)
 
 def find_all_namespaces ():
   for i in win32com.client.GetObject ("ADs:"):
