@@ -18,6 +18,7 @@ and the system and user objects supply an additional :meth:`Persistent.broadcast
 method which sends a message to top-level windows, such as the shell, to 
 indicate that the environment has changed.
 """
+import os, sys
 import win32api
 import win32profile
 import win32gui
@@ -33,6 +34,75 @@ WINERROR_MAP = {
   winerror.ERROR_ENVVAR_NOT_FOUND : exc.x_not_found,
 }
 wrapped = exc.wrapper (WINERROR_MAP, x_environment)
+
+class _DelimitedText (list):
+  
+  def __init__ (self, env, key, delimiter=u";", initialiser=[]):
+    super (_DelimitedText, self).__init__ (initialiser or env[key].split (delimiter))
+    self.env = env
+    self.key = key
+    self.delimiter = unicode (delimiter)
+  
+  def _update (self):
+    self.env[self.key] = self.delimiter.join (self)
+
+  def __delitem__ (self, *args):
+    super (_DelimitedText, self).__delitem__ (*args)
+    self._update ()
+  
+  def __delslice__ (self, *args):
+    super (_DelimitedText, self).__delslice__ (*args)
+    self._update ()
+  
+  def __iadd__ (self, iterator):
+    super (_DelimitedText, self).__iadd__ (self.munge_item (unicode (i)) for i in iterator)
+    self._update ()
+    return self
+  
+  def __setitem__ (self, index, item):
+    super (_DelimitedText, self).__setitem__ (index, self.munge_item (unicode (item)))
+    self._update ()
+  
+  def __setslice__ (self, index0, index1, iterator):
+    super (_DelimitedText, self).__setitem__ (index0, index1, (self.munge_item (unicode (item)) for item in iterator))
+    self._update ()
+  
+  def append (self, item):
+    super (_DelimitedText, self).append (self.munge_item (unicode (item)))
+    self._update ()
+    
+  def extend (self, item):
+    super (_DelimitedText, self).extend (self.munge_item (unicode (item)))
+    self._update ()
+  
+  def insert (self, index, item):
+    super (_DelimitedText, self).insert (index, self.munge_item (unicode (object)))
+    self._update ()
+  
+  def pop (self, index=-1):
+    result = super (_DelimitedText, self).pop (index)
+    self._update ()
+    return result
+  
+  def remove (self, item):
+    super (_DelimitedText, self).remove (self.munge_item (unicode (item)))
+    self._update ()
+  
+  def reverse (self):
+    super (_DelimitedText, self).reverse ()
+    self._update ()
+  
+  def sort (self):
+    super (_DelimitedText, self).sort ()
+    self._update ()
+  
+  def munge_item (self, item):
+    return item
+
+class _DelimitedPath (_DelimitedText):
+  
+  def munge_item (self, item):
+    return os.path.normpath (item).rstrip ("\\")
 
 class Env (core._WinSysObject):
   ur"""Semi-abstract base class for all environment classes. Outlines
@@ -57,7 +127,7 @@ class Env (core._WinSysObject):
     """
     raise NotImplementedError
     
-  def __delitem__ (self, item, value):
+  def __delitem__ (self, item):
     ur"""Remove an item from the environment::
     
       from winsys import environment
@@ -88,6 +158,14 @@ class Env (core._WinSysObject):
         in self._items ()
     )
     
+  def _get_path (self):
+    return _DelimitedPath (self, "PATH")
+  def _set_path (self, iterator):
+    self['PATH'] = ";".join (_DelimitedPath (self, "PATH", initialiser=iterator))
+  def _del_path (self):
+    del self['PATH']
+  path = property (_get_path, _set_path, _del_path)
+  
   def get (self, item, default=None, expand=True):
     """Return an environment value if it exists, otherwise
     `[default]`. This is the only way to get an unexpanded
