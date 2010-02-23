@@ -3,7 +3,8 @@ import re
 
 import pythoncom
 import win32com.client
-from win32com.adsi import adsi, adsicon
+from win32com import adsi
+from win32com.adsi import adsicon
 
 from winsys import constants, core, exc, utils
 
@@ -24,6 +25,62 @@ from winsys import constants, core, exc, utils
 Special chars (must be substituted): *()\NUL/
 
 """
+
+class _Schema (object):
+
+  class _Proxy (object):
+
+    def __init__ (self, name):
+      self.name = name
+
+    def __str__ (self):
+      return self.name
+
+    def __eq__ (self, other):
+      return u"%s=%s" % (self, other)
+
+    def __ne__ (self, other):
+      return u"!%s=%s" % (self, other)
+
+    def __lt__ (self, other):
+      return u"%s<%s" % (self, other)
+
+    def __gt__ (self, other):
+      return u"%s>%s" % (self, other)
+
+    def __le__ (self, other):
+      return u"%s<=%s" % (self, other)
+
+    def __ge__ (self, other):
+      return u"%s>=%s" % (self, other)
+
+    def __and__ (self, other):
+      return u"%s:1.2.840.113556.1.4.803:=%d" % (self, other)
+
+    def __or__ (self, other):
+      return u"%s:1.2.840.113556.1.4.804:=%d" % (self, other)
+
+    def __invert__ (self):
+      return u"!%s" % self
+
+    def approx (self, other):
+      return u"%s~=%s" % (self, other)
+
+    def is_in (self, other):
+      return u"%s:1.2.840.113556.1.4.1941:%s" % (self, other)
+
+    def nand (self, other):
+      return u"!%s" % (self & other)
+
+    def nor (self, other):
+      return u"!%s" % (self | other)
+
+  def __getattr__ (self, name):
+    return self._Proxy (name)
+
+schema = _Schema ()
+
+schemas = {}
 
 class x_active_directory (exc.x_winsys):
   "Base for all AD-related exceptions"
@@ -82,13 +139,12 @@ class IADs (core._WinSysObject):
     return self._obj.ADsPath
 
   @classmethod
-  def from_string (cls, moniker, username=None, password=None, interface=adsi.IID_IADs):
+  def from_string (cls, moniker, username=None, password=None): ## adsi.IID_IADs):
     return cls.from_object (
       adsi.ADsOpenObject (
         moniker,
         username, password,
-        adsicon.ADS_SECURE_AUTHENTICATION | adsicon.ADS_SERVER_BIND | adsicon.ADS_FAST_BIND,
-        interface
+        adsicon.ADS_SECURE_AUTHENTICATION | adsicon.ADS_SERVER_BIND | adsicon.ADS_FAST_BIND
       )
     )
 
@@ -165,11 +221,9 @@ class GC (IADs):
 
   def __iter__ (self):
     for domain in IADs.__iter__ (self):
-      print domain
       yield ad ("LDAP://" + domain.Name)
 
-def ad (obj=core.UNSET, username=None, password=None, interface=adsi.IID_IADs):
-
+def ad (obj=core.UNSET, username=None, password=None, interface=None): ### adsi.IID_IADs):
   if obj is core.UNSET:
     return IADs.from_string (ldap_moniker (username=username, password=password), username, password)
   elif obj is None:
@@ -180,7 +234,7 @@ def ad (obj=core.UNSET, username=None, password=None, interface=adsi.IID_IADs):
     moniker = obj
     if not moniker.upper ().startswith ("LDAP://"):
       moniker = "LDAP://" + moniker
-    return IADs.from_string (moniker, username, password, interface)
+    return IADs.from_string (moniker, username, password) ## , interface)
   else:
     return IADs.from_object (obj)
 
@@ -192,8 +246,7 @@ def ldap_moniker (root=None, server=None, username=None, password=None):
     root = adsi.ADsOpenObject (
       ldap_moniker ("rootDSE", server),
       username, password,
-      adsicon.ADS_SECURE_AUTHENTICATION | adsicon.ADS_SERVER_BIND | adsicon.ADS_FAST_BIND,
-      adsi.IID_IADs
+      adsicon.ADS_SECURE_AUTHENTICATION | adsicon.ADS_SERVER_BIND | adsicon.ADS_FAST_BIND
     ).Get ("defaultNamingContext")
   prefix, rest = re.match ("(\w+://)?(.*)", root).groups ()
   if not prefix:
@@ -204,6 +257,8 @@ def ldap_moniker (root=None, server=None, username=None, password=None):
     return "%s%s" % (prefix, root)
 
 def search (filter, columns=["distinguishedName"], root=None, server=None, username=None, password=None):
+
+  print "filter:", filter
 
   def get_column_value (hSearch, column):
     #
@@ -266,13 +321,14 @@ def find_user (name, root_path=None, server=None, username=None, password=None, 
         "cn=" + name
       )
     ),
-    ["distinguishedName", "sAMAccountName", "displayName", "memberOf", "physicalDeliveryOfficeName", "title", "telephoneNumber", "homePhone"],
+    ["distinguishedName"],
     root_path,
     server,
     username,
     password
   ):
-    return user
+    return user.distinguishedName
+    #~ return ad (user.distinguishedName)
 
 def find_group (name, root_path=None, server=None, username=None, password=None, columns=["*"]):
   name = escaped (name)
@@ -290,20 +346,21 @@ def find_group (name, root_path=None, server=None, username=None, password=None,
   ):
     return group
 
-def find_active_users (root=None, server=None, username=None, password=None, columns=["*"]):
+def find_active_users (root=None, server=None, username=None, password=None, columns=["*"], factory=ad):
   return search (
     filter=_and (
-      "objectClass=user",
-      "objectCategory=person",
-      "!memberOf=CN=non intranet,OU=IT Other,OU=IT,OU=Camden,DC=gb,DC=vo,DC=local",
-      "!userAccountControl:1.2.840.113556.1.4.803:=2",
-      "displayName=*"
+      schema.objectClass=="user",
+      schema.objectCategory=="person",
+      schema.memberOf!="CN=non intranet,OU=IT Other,OU=IT,OU=Camden,DC=gb,DC=vo,DC=local",
+      schema.AccountDisabled,
+      #~ schema.userAccountControl.nand (2),
+      schema.displayName=="*"
     ),
-    columns=columns,
+    columns=['distinguishedName'],
     root=None, server=None, username=None, password=None
   )
 
-def find_all_users (root=None, server=None, username=None, password=None):
+def find_all_users (root=None, server=None, username=None, password=None, factory=ad):
   for user in search (
     filter=_and (
       "objectClass=user",
@@ -313,11 +370,15 @@ def find_all_users (root=None, server=None, username=None, password=None):
     columns=["distinguishedName"],
     root=None, server=None, username=None, password=None
   ):
-    yield ad (user.distinguishedName)
+    yield factory (user.distinguishedName)
 
 def find_all_namespaces ():
   for i in win32com.client.GetObject ("ADs:"):
     yield i.ADsPath
+
+def find (**kwargs):
+  for entry in search (filter=_and (*["%s=%s" % item for item in kwargs.items ()])):
+    return ad ("LDAP://" + entry.distinguishedName)
 
 def gc ():
   return ad ("GC:")
