@@ -344,8 +344,8 @@ class FilePath (unicode):
   c:a.txt             c:         a.txt     a.txt               c:          x_fs       a     .txt
   =================== ========== ========= ========= ========= =========== ========== ===== ====
   """
-  def __new__ (meta, filepath, *args, **kwargs):
-    return unicode.__new__ (meta, filepath.lower (), *args, **kwargs)
+  def __new__ (meta, filepath):
+    return unicode.__new__ (meta, filepath.lower ())
 
   def __init__ (self, filepath, *args, **kwargs):
     self._parts = None
@@ -456,7 +456,7 @@ class FilePath (unicode):
     """
     return self.__class__ (os.path.abspath (self))
   abspath = absolute
-  
+
   def changed (self, root=None, path=None, filename=None, base=None, infix=None, ext=None):
     """Return a new :class:`FilePath` with one or more parts changed. This is particularly
     convenient for, say, changing the extension of a file or producing a version on
@@ -680,6 +680,27 @@ class Entry (FilePath, core._WinSysObject):
   * Entries are True according to their existence on a filesystem
   * The str representation is the filepath utf8-encoded; unicode is the filepath itself
   """
+  def __new__ (
+    meta,
+    filepath,
+    file_info=core.UNSET
+  ):
+    fp = FilePath.__new__ (meta, filepath)
+    if file_info is core.UNSET:
+      fp._attributes = core.UNSET
+      fp._created_at = core.UNSET
+      fp._accessed_at = core.UNSET
+      fp._written_at = core.UNSET
+      fp._size = core.UNSET
+      fp._reparse_tag = core.UNSET
+    else:
+      fp._attributes = file_info[0]
+      fp._created_at = utils.from_pytime (file_info[1])
+      fp._accessed_at = utils.from_pytime (file_info[2])
+      fp._written_at = utils.from_pytime (file_info[3])
+      fp._size = utils._longword (file_info[5], file_info[4])
+      fp._reparse_tag = file_info[6]
+    return fp
 
   #
   # Core functionality from parent class
@@ -739,8 +760,14 @@ class Entry (FilePath, core._WinSysObject):
       return True
   readable = property (_get_readable)
 
+  def get_created_at (self):
+    self._created_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self)[1])
+    return self._created_at
   def _get_created_at (self):
-    return utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self)[1])
+    if self._created_at is core.UNSET:
+      return self.get_created_at ()
+    else:
+      return self._created_at
   def _set_created_at (self, created_at, handle=None):
     with Handle (handle or self, True) as handle:
       created_at = pywintypes.Time (time.mktime (created_at.timetuple ()))
@@ -1483,7 +1510,7 @@ def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False, factor
   # in that directory
   #
   if pattern == '.':
-    yield Dir (".")
+    yield factory (".")
     raise StopIteration
 
   try:
@@ -1507,16 +1534,12 @@ def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False, factor
   dirpath = parts[0] + sep.join (parts[1:-1])
   while True:
     try:
-      f = iterator.next ()
-      filename = f[8]
-      if filename not in ignore:
-        if factory is core.UNSET:
-          if f[0] & FILE_ATTRIBUTE.DIRECTORY:
-            yield Dir (os.path.join (dirpath, filename))
-          else:
-            yield File (os.path.join (dirpath, filename))
-        else:
-          yield factory (os.path.join (dirpath, filename))
+      file_info = iterator.next ()
+      filepath = os.path.join (dirpath, file_info[8])
+      if factory is core.UNSET:
+        yield entry (filepath, file_info)
+      else:
+        yield factory (filepath)
     except StopIteration:
       break
     except exc.x_access_denied:
@@ -1534,7 +1557,10 @@ def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False, factor
       core.warn ("Ignored no-such-file on first iteration of %s", pattern)
       raise StopIteration
 
-def entry (filepath, ignore_access_errors=False):
+def entry (
+  filepath,
+  file_info=core.UNSET
+):
   ur"""Return a :class:`File` or :class:`Dir` object representing this
   filepath.
 
@@ -1566,22 +1592,25 @@ def entry (filepath, ignore_access_errors=False):
     return filepath
   else:
     filepath = unicode (filepath)
-    attributes = wrapped (win32file.GetFileAttributesW, filepath)
+    if file_info is core.UNSET:
+      attributes = wrapped (win32file.GetFileAttributesW, filepath)
+    else:
+      attributes = file_info[0]
     if attributes == -1:
       return _guess (filepath)
     elif attributes & FILE_ATTRIBUTE.DIRECTORY:
-      return Dir (filepath)
+      return Dir (filepath, file_info)
     else:
-      return File (filepath)
+      return File (filepath, file_info)
 
-def file (filepath, ignore_access_errors=False):
+def file (filepath):
   ur"""Return a :class:`File` object representing this filepath on
   the filepath. If filepath is already a :class:`File` object, return
   it unchanged otherwise ensure that the filepath doesn't point to
   an existing directory and return a :class:`File` object which
   represents it.
   """
-  f = entry (filepath, ignore_access_errors=ignore_access_errors)
+  f = entry (filepath)
   if isinstance (f, File):
     return f
   elif isinstance (f, Dir) and f:
@@ -1589,7 +1618,7 @@ def file (filepath, ignore_access_errors=False):
   else:
     return File (filepath)
 
-def dir (filepath, ignore_access_errors=False):
+def dir (filepath):
   ur"""Return a :class:`Dir` object representing this filepath on
   the filepath. If filepath is already a :class:`Dir` object, return
   it unchanged otherwise ensure that the filepath doesn't point to
