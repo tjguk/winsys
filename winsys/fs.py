@@ -712,7 +712,6 @@ class Entry (FilePath, core._WinSysObject):
     output = []
     output.append (unicode (self))
     output.append (super (FilePath, self).dumped (level))
-    #~ output.append (self.filepath.dumped (level))
     output.append ("readable: %s" % self.readable)
     if self.readable:
       output.append ("id: %s" % self.id)
@@ -732,6 +731,12 @@ class Entry (FilePath, core._WinSysObject):
     else:
       output.append ("Security:\n" + s.dumped (level))
     return utils.dumped ("\n".join (output), level)
+
+  def __add__ (self, other):
+    return entry (os.path.join (unicode (self), unicode (other)))
+
+  def __radd__ (self, other):
+    return entry (os.path.join (unicode (other), unicode (self)))
 
   def __getattr__ (self, attr):
     try:
@@ -774,16 +779,28 @@ class Entry (FilePath, core._WinSysObject):
       wrapped (win32file.SetFileTime, handle, created_at, None, None)
   created_at = property (_get_created_at, _set_created_at)
 
+  def get_accessed_at (self):
+    self._accessed_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self)[3])
+    return self._accessed_at
   def _get_accessed_at (self):
-    return utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self)[2])
+    if self._accessed_at is core.UNSET:
+      return self.get_accessed_at ()
+    else:
+      return self._accessed_at
   def _set_accessed_at (self, accessed_at, handle=None):
     with Handle (handle or self, True) as handle:
       accessed_at = pywintypes.Time (time.mktime (accessed_at.timetuple ()))
       wrapped (win32file.SetFileTime, handle, None, accessed_at, None)
   accessed_at = property (_get_accessed_at, _set_accessed_at)
 
+  def get_written_at (self):
+    self._written_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self)[2])
+    return self._written_at
   def _get_written_at (self):
-    return utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self)[3])
+    if self._written_at is core.UNSET:
+      return self.get_written_at ()
+    else:
+      return self._written_at
   def _set_written_at (self, written_at, handle=None):
     with Handle (handle or self, True) as handle:
       written_at = pywintypes.Time (time.mktime (written_at.timetuple ()))
@@ -795,12 +812,24 @@ class Entry (FilePath, core._WinSysObject):
       return wrapped (win32file.GetFileSize, handle)
   uncompressed_size = property (_get_uncompressed_size)
 
+  def get_size (self):
+    self._size = _kernel32.GetCompressedFileSize (normalised (self))
+    return self._size
   def _get_size (self):
-    return _kernel32.GetCompressedFileSize (normalised (self))
+    if self._size is core.UNSET:
+      return self.get_size ()
+    else:
+      return self._size
   size = property (_get_size)
 
+  def get_attributes (self):
+    self._attributes = _Attributes (wrapped (win32file.GetFileAttributesExW, normalised (self))[0])
+    return self._attributes
   def _get_attributes (self):
-    return _Attributes (wrapped (win32file.GetFileAttributesExW, normalised (self))[0])
+    if self._attributes is core.UNSET:
+      return self.get_attributes ()
+    else:
+      return self.attributes
   attributes = property (_get_attributes)
 
   def _get_id (self):
@@ -855,7 +884,7 @@ class Entry (FilePath, core._WinSysObject):
     return self.attributes.normal
   def _set_normal (self, value):
     wrapped (win32file.SetFileAttributesW, normalised (self), FILE_ATTRIBUTE.NORMAL)
-  hidden = property (_get_hidden, _set_hidden)
+  normal = property (_get_normal, _set_normal)
 
   def _get_not_content_indexed (self):
     return self.attributes.not_content_indexed
@@ -1206,8 +1235,8 @@ class File (Entry):
 
 class Dir (Entry):
 
-  def __init__ (self, filepath, *args, **kwargs):
-    Entry.__init__ (self, filepath.rstrip (seps) + sep, *args, **kwargs)
+  def __new__ (meta, filepath, *args, **kwargs):
+    return Entry.__new__ (meta, filepath.rstrip (seps) + sep, *args, **kwargs)
 
   def compress (self, apply_to_contents=True, callback=None):
     ur"""Flag this directory so that any new files are automatically
@@ -1316,20 +1345,20 @@ class Dir (Entry):
     ur"""Iterate over all entries -- files & directories -- in this directory.
     Implemented via :func:`files`
     """
-    return files (os.path.join (self, pattern), *args, **kwargs)
+    return files (self + pattern, *args, **kwargs)
   __iter__ = entries
 
   def file (self, name):
     ur"""Return a :class:`File` object representing a file called name inside
     this directory.
     """
-    return file (os.path.join (self, name))
+    return file (self + name)
 
   def dir (self, name):
     ur"""Return a :class:`Dir` object representing a Directory called name inside
     this directory.
     """
-    return dir (os.path.join (self, name))
+    return dir (self + name)
 
   def files (self, pattern=u"*", *args, **kwargs):
     ur"""Iterate over all files in this directory which match pattern, yielding
@@ -1535,7 +1564,10 @@ def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False, factor
   while True:
     try:
       file_info = iterator.next ()
-      filepath = os.path.join (dirpath, file_info[8])
+      filename = file_info[8]
+      if filename in ignore:
+        continue
+      filepath = os.path.join (dirpath, filename)
       if factory is core.UNSET:
         yield entry (filepath, file_info)
       else:
@@ -1625,7 +1657,7 @@ def dir (filepath):
   an existing file and return a :class:`Dir` object which
   represents it.
   """
-  f = entry (filepath, ignore_access_errors=ignore_access_errors)
+  f = entry (filepath)
   if isinstance (f, Dir):
     return f
   elif isinstance (f, File) and f:
