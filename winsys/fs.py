@@ -345,18 +345,17 @@ class FilePath (unicode):
   =================== ========== ========= ========= ========= =========== ========== ===== ====
   """
   def __new__ (meta, filepath):
-    return unicode.__new__ (meta, filepath.lower ())
-
-  def __init__ (self, filepath, *args, **kwargs):
-    self._parts = None
-    self._root = None
-    self._filename = None
-    self._name = None
-    self._dirname= None
-    self._path = None
-    self._parent = None
-    self._base = None
-    self._ext = None
+    fp = unicode.__new__ (meta, os.path.normpath (filepath.lower ()))
+    fp._parts = None
+    fp._root = None
+    fp._filename = None
+    fp._name = None
+    fp._dirname= None
+    fp._path = None
+    fp._parent = None
+    fp._base = None
+    fp._ext = None
+    return fp
 
   def dump (self, level=0):
     print self.dumped (level=level)
@@ -376,14 +375,23 @@ class FilePath (unicode):
       output.append (u"parent: %s" % self.parent)
     return utils.dumped (u"\n".join (output), level)
 
+  @classmethod
+  def factory (cls, filepath):
+    return cls (filepath)
+  
+  def __getattr__ (self, attr):
+    def _ospath_wrapper (*args, **kwargs):
+      return getattr (os.path, attr) (self, *args, **kwargs)
+    return _ospath_wrapper
+  
   def __repr__ (self):
     return u'<%s %s>' % (self.__class__.__name__, self)
 
   def __add__ (self, other):
-    return self.__class__ (os.path.join (unicode (self), unicode (other)))
+    return self.__class__.factory (os.path.join (unicode (self), unicode (other)))
 
   def __radd__ (self, other):
-    return self.__class__ (os.path.join (unicode (other), unicode (self)))
+    return self.__class__.factory (os.path.join (unicode (other), unicode (self)))
 
   def _get_parts (self):
     if self._parts is None:
@@ -393,7 +401,7 @@ class FilePath (unicode):
 
   def _get_root (self):
     if self._root is None:
-      self._root = self.__class__ (self.parts[0])
+      self._root = self.__class__.factory (self.parts[0])
     return self._root
   root = property (_get_root)
 
@@ -411,7 +419,7 @@ class FilePath (unicode):
 
   def _get_path (self):
     if self._path is None:
-      self._path = self.__class__ (self.root + self.dirname)
+      self._path = self.__class__.factory (self.root + self.dirname)
     return self._path
   path = property (_get_path)
 
@@ -421,7 +429,7 @@ class FilePath (unicode):
     if self._parent is None:
       parent_dir = [p for p in self.parts if p][:-1]
       if parent_dir:
-        self._parent = self.__class__ (parent_dir[0] + sep.join (parent_dir[1:]))
+        self._parent = self.__class__.factory (parent_dir[0] + sep.join (parent_dir[1:]))
       else:
         self._parent = None
     return self._parent
@@ -454,8 +462,8 @@ class FilePath (unicode):
     """Return an absolute version of the current FilePath, whether
     relative or not. Use :func:`os.path.abspath` semantics.
     """
-    return self.__class__ (os.path.abspath (self))
-  abspath = absolute
+    return self.__class__.factory (os.path.abspath (self))
+  #~ abspath = absolute
 
   def changed (self, root=None, path=None, filename=None, base=None, infix=None, ext=None):
     """Return a new :class:`FilePath` with one or more parts changed. This is particularly
@@ -738,12 +746,6 @@ class Entry (FilePath, core._WinSysObject):
   def __radd__ (self, other):
     return entry (os.path.join (unicode (other), unicode (self)))
 
-  def __getattr__ (self, attr):
-    try:
-      return self.attributes[FILE_ATTRIBUTE.constant (attr)]
-    except KeyError:
-      raise AttributeError (attr)
-
   def __nonzero__ (self):
     ur"""Determine whether the file exists (at least from
     the POV of the current user) on the filesystem so that
@@ -752,6 +754,10 @@ class Entry (FilePath, core._WinSysObject):
     return (wrapped (win32file.GetFileAttributesW, normalised (self)) != -1)
   __bool__ = __nonzero__
 
+  @classmethod
+  def factory (cls, filepath):
+    return entry (filepath)
+    
   def _get_file_attribute (self, file_attribute):
     file_attribute = FILE_ATTRIBUTE.constant (file_attribute)
     return self.attributes[file_attribute]
@@ -812,8 +818,10 @@ class Entry (FilePath, core._WinSysObject):
       return wrapped (win32file.GetFileSize, handle)
   uncompressed_size = property (_get_uncompressed_size)
 
+  def _get_total_size (self):
+    return _kernel32.GetCompressedFileSize (normalised (self))
   def get_size (self):
-    self._size = _kernel32.GetCompressedFileSize (normalised (self))
+    self._size = self._get_total_size ()
     return self._size
   def _get_size (self):
     if self._size is core.UNSET:
@@ -942,7 +950,11 @@ class Entry (FilePath, core._WinSysObject):
     """
     return fnmatch.fnmatch (self.name, pattern)
 
-  def parent (self):
+  def _get_parent (self):
+    print "_get_parent"
+    return super (Entry, self)._get_parent ()
+  
+  def __parent (self):
     ur"""Return the :class:`Dir` object which represents the directory
     this entry is in.
 
@@ -950,8 +962,8 @@ class Entry (FilePath, core._WinSysObject):
     :raises: :exc:`x_no_such_file` if no parent exists (eg because this is a drive root)
     """
     filepath_parent = super (Entry, self).parent
-    if parent:
-      return Dir (parent)
+    if filepath_parent:
+      return Dir (filepath_parent)
     else:
       raise x_no_such_file (None, u"Entry.parent", u"%s has no parent" % self)
 
@@ -1236,8 +1248,18 @@ class File (Entry):
 class Dir (Entry):
 
   def __new__ (meta, filepath, *args, **kwargs):
-    return Entry.__new__ (meta, filepath.rstrip (seps) + sep, *args, **kwargs)
+    entry = Entry.__new__ (meta, filepath.rstrip (seps) + sep, *args, **kwargs)
+    #
+    # Although we can't know the size of a directory from a
+    # file iteration, it will return 0 return than UNSET.
+    # reset here and special-case later.
+    #
+    entry._size = core.UNSET
+    return entry
 
+  def _get_total_size (self):
+    return sum (f.size for f in self.flat ())
+  
   def compress (self, apply_to_contents=True, callback=None):
     ur"""Flag this directory so that any new files are automatically
     compressed. If apply_to_contents is True, iterate over all subdirectories
@@ -1527,7 +1549,7 @@ class Dir (Entry):
   rmdir = delete
   mkdir = create
 
-def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False, factory=core.UNSET):
+def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
   ur"""Iterate over files and directories matching pattern, which can include
   a path. Calls win32file.FindFilesIterator under the covers, which uses
   FindFirstFile / FindNextFile.
@@ -1539,7 +1561,7 @@ def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False, factor
   # in that directory
   #
   if pattern == '.':
-    yield factory (".")
+    yield Dir (".")
     raise StopIteration
 
   try:
@@ -1568,10 +1590,7 @@ def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False, factor
       if filename in ignore:
         continue
       filepath = os.path.join (dirpath, filename)
-      if factory is core.UNSET:
-        yield entry (filepath, file_info)
-      else:
-        yield factory (filepath)
+      yield entry (filepath, file_info)
     except StopIteration:
       break
     except exc.x_access_denied:
@@ -1665,7 +1684,7 @@ def dir (filepath):
   else:
     return Dir (filepath)
 
-def glob (pattern, ignore_access_errors=False, factory=filepath):
+def glob (pattern, ignore_access_errors=False):
   ur"""Mimic the built-in glob.glob functionality as a generator,
   optionally ignoring access errors.
 
@@ -1673,9 +1692,9 @@ def glob (pattern, ignore_access_errors=False, factory=filepath):
   :param ignore_access_errors: passed to :func:`files`
   :returns: yields a :class:`FilePath` object for each matching file
   """
-  return files (pattern, ignore_access_errors=False, factory=factory)
+  return files (pattern, ignore_access_errors=False)
 
-def listdir (d, ignore_access_errors=False, factory=filepath):
+def listdir (d, ignore_access_errors=False):
   ur"""Mimic the built-in os.list functionality as a generator,
   optionally ignoring access errors.
 
@@ -1683,11 +1702,7 @@ def listdir (d, ignore_access_errors=False, factory=filepath):
   :param ignore_access_errors: passed to :func:`files`
   :returns: yield the name of each file in directory d
   """
-  pattern = dir (d) + u"*"
-  try:
-    return (f.name for f in files (pattern, ignore_access_errors=ignore_access_errors, factory=factory))
-  except win32file.error:
-    return []
+  return files (dir (d) + u"*", ignore_access_errors=ignore_access_errors)
 
 def walk (root, depthfirst=False, ignore_access_errors=False):
   ur"""Walk the directory tree starting from root, optionally ignoring
@@ -1698,8 +1713,7 @@ def walk (root, depthfirst=False, ignore_access_errors=False):
   :param ignore_access_errors: passed to :meth:`Dir.walk`
   :returns: as :meth:`Dir.walk`
   """
-  for w in dir (root).walk (depthfirst, ignore_access_errors):
-    yield w
+  return dir (root).walk (depthfirst, ignore_access_errors)
 
 def flat (root, pattern="*", includedirs=False, depthfirst=False, ignore_access_errors=False):
   ur"""Iterate over a flattened version of the directory tree starting
@@ -1712,8 +1726,12 @@ def flat (root, pattern="*", includedirs=False, depthfirst=False, ignore_access_
   :param ignore_access_errors: passed to :meth:`Dir.flat`
   :returns: as :meth:`Dir.flat`
   """
-  for f in dir (root).flat (pattern, includedirs=includedirs, ignore_access_errors=ignore_access_errors):
-    yield f
+  return dir (root).flat (
+    pattern, 
+    includedirs=includedirs, 
+    depthfirst=depthfirst, 
+    ignore_access_errors=ignore_access_errors
+  )
 
 def progress_wrapper (callback):
 
