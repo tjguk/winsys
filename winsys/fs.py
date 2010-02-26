@@ -1685,7 +1685,7 @@ def listdir (d, ignore_access_errors=False, factory=filepath):
   """
   pattern = dir (d) + u"*"
   try:
-    return (f.name for f in files (pattern, ignore_access_errors=ignore_access_errors, factory=filepath))
+    return (f.name for f in files (pattern, ignore_access_errors=ignore_access_errors, factory=factory))
   except win32file.error:
     return []
 
