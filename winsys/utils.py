@@ -57,7 +57,7 @@ def secs_as_string (secs):
 def size_as_mb (n_bytes):
   """Convert a size in bytes to a human-readable form as follows:
   
-  If < kb return the number unchanges
+  If < kb return the number unchanged
   If >= kb and < mb return number of kb
   If >= mb and < gb return number of mb
   Otherwise return number of gb

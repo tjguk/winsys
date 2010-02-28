@@ -166,8 +166,8 @@ class Principal (core._WinSysObject):
     except exc.x_not_found:
       self.name = str (self.sid)
       self.domain = self.type = None
-    if self.system is None:
-      self.system = domain_controller (self.domain)
+    #~ if self.system is None:
+      #~ self.system = domain_controller (self.domain)
 
   def __hash__ (self):
     return hash (str (self.sid))

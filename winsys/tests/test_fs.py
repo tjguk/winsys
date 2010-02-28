@@ -94,6 +94,7 @@ def test_dir_copy_to_new_dir ():
   target_name = uuid.uuid1 ().hex
   source = os.path.join (TEST_ROOT, "a")
   target = os.path.join (TEST_ROOT, target_name)
+  assert os.path.isdir (source)
   assert not os.path.isdir (target)
   fs.copy (source, target)
   assert dirs_are_equal (source, target)
