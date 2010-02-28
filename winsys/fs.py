@@ -74,9 +74,9 @@ FILE_ACCESS.update (constants.GENERIC_ACCESS)
 FILE_ACCESS.update (constants.ACCESS)
 FILE_ACCESS.doc ("File-specific access rights")
 FILE_SHARE = constants.Constants.from_pattern (u"FILE_SHARE_*", namespace=win32file)
-FILE_SHARE.doc ("Ways of sharing a file for reading, writing, &c.")
+FILE_SHARE.doc (u"Ways of sharing a file for reading, writing, &c.")
 FILE_NOTIFY_CHANGE = constants.Constants.from_pattern (u"FILE_NOTIFY_CHANGE_*", namespace=win32con)
-FILE_NOTIFY_CHANGE.doc ("Notification types to watch for when a file changes")
+FILE_NOTIFY_CHANGE.doc (u"Notification types to watch for when a file changes")
 FILE_ACTION = constants.Constants.from_dict (dict (
   ADDED = 1,
   REMOVED = 2,
@@ -84,7 +84,7 @@ FILE_ACTION = constants.Constants.from_dict (dict (
   RENAMED_OLD_NAME = 4,
   RENAMED_NEW_NAME = 5
 ))
-FILE_ACTION.doc ("Results of a file change")
+FILE_ACTION.doc (u"Results of a file change")
 FILE_ATTRIBUTE = constants.Constants.from_pattern (u"FILE_ATTRIBUTE_*", namespace=win32file)
 FILE_ATTRIBUTE.update (dict (
   ENCRYPTED=0x00004000,
@@ -93,13 +93,13 @@ FILE_ATTRIBUTE.update (dict (
   VIRTUAL=0x00010000,
   NOT_CONTENT_INDEXES=0x00002000,
 ))
-FILE_ATTRIBUTE.doc ("Attributes applying to any file")
+FILE_ATTRIBUTE.doc (u"Attributes applying to any file")
 PROGRESS = constants.Constants.from_pattern (u"PROGRESS_*", namespace=win32file)
-PROGRESS.doc ("States within a file move/copy progress")
+PROGRESS.doc (u"States within a file move/copy progress")
 MOVEFILE = constants.Constants.from_pattern (u"MOVEFILE_*", namespace=win32file)
-MOVEFILE.doc ("Options when moving a file")
+MOVEFILE.doc (u"Options when moving a file")
 FILE_FLAG = constants.Constants.from_pattern (u"FILE_FLAG_*", namespace=win32con)
-FILE_FLAG.doc ("File flags")
+FILE_FLAG.doc (u"File flags")
 FILE_CREATION = constants.Constants.from_list ([
   u"CREATE_ALWAYS",
   u"CREATE_NEW",
@@ -107,7 +107,7 @@ FILE_CREATION = constants.Constants.from_list ([
   u"OPEN_EXISTING",
   u"TRUNCATE_EXISTING"
 ], namespace=win32con)
-FILE_CREATION.doc ("Options when creating a file")
+FILE_CREATION.doc (u"Options when creating a file")
 VOLUME_FLAG = constants.Constants.from_dict (dict (
   FILE_CASE_SENSITIVE_SEARCH      = 0x00000001,
   FILE_CASE_PRESERVED_NAMES       = 0x00000002,
@@ -126,17 +126,17 @@ VOLUME_FLAG = constants.Constants.from_dict (dict (
   FILE_SEQUENTIAL_WRITE_ONCE      = 0x00100000,
   FILE_SUPPORTS_TRANSACTIONS      = 0x00200000
 ), pattern=u"FILE_*")
-VOLUME_FLAG.doc ("Characteristics of a volume")
+VOLUME_FLAG.doc (u"Characteristics of a volume")
 DRIVE_TYPE = constants.Constants.from_pattern (u"DRIVE_*", namespace=win32file)
-DRIVE_TYPE.doc ("Types of drive")
+DRIVE_TYPE.doc (u"Types of drive")
 COMPRESSION_FORMAT = constants.Constants.from_dict (dict (
   NONE = 0x0000,
   DEFAULT = 0x0001,
   LZNT1 = 0x0002
 ))
-COMPRESSION_FORMAT.doc ("Ways in which a file can be compressed")
+COMPRESSION_FORMAT.doc (u"Ways in which a file can be compressed")
 FSCTL = constants.Constants.from_pattern (u"FSCTL_*", namespace=winioctlcon)
-FSCTL.doc ("Types of fsctl operation")
+FSCTL.doc (u"Types of fsctl operation")
 
 PyHANDLE = pywintypes.HANDLEType
 
@@ -174,10 +174,10 @@ def get_parts (filepath):
   ============================= ======================================
   c:/                           ["c:\\", ""]
   c:/t                          ["c:\\", "t"]
-  c:/t/                         ["c:\\", "t", ""]
+  c:/t/                         ["c:\\", "t"]
   c:/t/test.txt                 ["c:\\", "t", "test.txt"]
   c:/t/s/test.txt               ["c:\\", "t", "s", "test.txt"]
-  c:test.txt                    ["c:\\", "", "test.txt"]
+  c:test.txt                    ["c:", "test.txt"]
   s/test.txt                    ["", "s", "test.txt"]
   \\\\server\\share             ["\\\\server\\share\\", ""]
   \\\\server\\share\\a.txt      ["\\\\server\\share\\", "a.txt"]
@@ -187,12 +187,12 @@ def get_parts (filepath):
   ============================= ======================================
 
   The upshot is that the first item in the list returned is
-  always the root (including trailing slash except for the special
-  case of the format <drive>:<path> representing the current directory
-  on <drive>) if the path is absolute, an empty string if it is relative.
+  always the root, one of: a slash-terminated drive/volume/share
+  for an absolute path; an empty string for a relative path; or
+  a drive-colon for a drive-relative path.
+  
   All other items before the last one represent the directories along
-  the way. The last item is the filename, empty if the whole
-  path represents a directory.
+  the way. The last item is the filename or directory name.
 
   The original filepath can usually be reconstructed as::
 
@@ -202,17 +202,15 @@ def get_parts (filepath):
     assert parts[0] + "\\".join (parts[1:]) == filepath
 
   The exception is when a root (UNC or volume) is given without
-  a trailing slash. This is added in.
-
-  Note that if the path does not end with a slash, the directory
-  name itself is considered the filename. This is by design.
+  a trailing slash. This is added in. Or if a directory is given
+  with a trailing slash. This is stripped off.
   """
   filepath = filepath.replace ("/", sep)
   prefix_match = re.match (PREFIX, filepath)
 
   if prefix_match:
     prefix = prefix_match.group (1)
-    rest = filepath[len (prefix):]
+    rest = filepath[len (prefix):].rstrip (sep)
     #
     # Special-case the un-rooted drive letter
     # so that paths of the form <drive>:<path>
@@ -308,7 +306,7 @@ def relative_to (filepath1, filepath2):
   # filepath2 must always be a directory; filepath1 may
   # be a file or a directory.
   #
-  return utils.relative_to (normalised (filepath1), normalised (filepath2.rstrip (seps) + sep))
+  return utils.relative_to (filepath1, filepath2.rstrip (seps) + sep)
 
 class FilePath (unicode):
   ur"""A unicode subclass which knows about path structures on Windows.
@@ -324,28 +322,30 @@ class FilePath (unicode):
 
   * parts - a list of the components (cf :func:`fs.get_parts`)
   * root - the drive or UNC server/share ending in a backslash unless a drive-relative path
-  * filename - final component (may be blank if the path looks like a directory)
-  * name - same as filename unless blank in which case second-last component
+  * filename - final component 
+  * name - same as filename (convenience)
   * dirname - all path components before the last
   * path - combination of root and dirname
-  * parent - combination of root and all path components before second penultimate
+  * parent - combination of root and all path components before second penultimate; raises
+    an exception is FilePath is relative.
   * base - base part of filename (ie the piece before the dot)
   * ext - ext part of filename (ie the dot and the piece after)
 
-  =================== ========== ========= ========= ========= =========== ========== ===== ====
-  Path                root       filename  name      dirname   path        parent     base  ext
-  =================== ========== ========= ========= ========= =========== ========== ===== ====
-  \\\\a\\b\\c\\d.txt  \\\\a\\b\\ d.txt     d.txt     \\c       \\\\a\\b\\c \\\\a\\b   d     .txt
-  c:\\boot.ini        c:\\       boot.ini  boot.ini  \\        c:\\        c:\\       boot  .ini
-  boot.ini                       boot.ini  boot.ini                        x_fs       boot  .ini
-  c:\\t               c:\\       t         t         \\        c:\\        c:\\       t
-  c:\\t\\             c:\\                 t         \\        c:\\        c:\\       t
-  c:\\t\\a.txt        c:\\       a.txt     a.txt     \\t       c:\\t       c:\\t      a     .txt
-  c:a.txt             c:         a.txt     a.txt               c:          x_fs       a     .txt
+  =================== ========== ========= ========= ========= =========== ==========  ===== ====
+  Path                root       filename  name      dirname   path        parent      base  ext
+  =================== ========== ========= ========= ========= =========== ==========  ===== ====
+  \\\\a\\b\\c\\d.txt  \\\\a\\b\\ d.txt     d.txt     c         \\\\a\\b\\c \\\\a\\b\\c d     .txt
+  c:\\boot.ini        c:\\       boot.ini  boot.ini  _         c:\\        c:\\        boot  .ini
+  boot.ini            _          boot.ini  boot.ini  _         _           x_fs        boot  .ini
+  c:\\t               c:\\       t         t         _         c:\\        c:\\        t     _
+  c:\\t\\             c:\\       t         t         _         c:\\        c:\\        t     _
+  c:\\t\\a.txt        c:\\       a.txt     a.txt     t         c:\\t       c:\\t       a     .txt
+  c:a.txt             c:         a.txt     a.txt     _         c:          x_fs        a     .txt
+  a.txt               _          a.txt     a.txt     _         _           x_fs        a     .txt
   =================== ========== ========= ========= ========= =========== ========== ===== ====
   """
   def __new__ (meta, filepath):
-    fp = unicode.__new__ (meta, os.path.normpath (filepath.lower ()))
+    fp = unicode.__new__ (meta, filepath.lower ().replace ("/", sep))
     fp._parts = None
     fp._root = None
     fp._filename = None
@@ -378,11 +378,6 @@ class FilePath (unicode):
   @classmethod
   def factory (cls, filepath):
     return cls (filepath)
-  
-  def __getattr__ (self, attr):
-    def _ospath_wrapper (*args, **kwargs):
-      return getattr (os.path, attr) (self, *args, **kwargs)
-    return _ospath_wrapper
   
   def __repr__ (self):
     return u'<%s %s>' % (self.__class__.__name__, self)
@@ -424,7 +419,7 @@ class FilePath (unicode):
   path = property (_get_path)
 
   def _get_parent (self):
-    if not self.root:
+    if self.is_relative ():
       raise x_fs (None, "FilePath.parent", "Cannot find parent for relative path")
     if self._parent is None:
       parent_dir = [p for p in self.parts if p][:-1]
@@ -453,17 +448,20 @@ class FilePath (unicode):
     return self._ext
   ext = property (_get_ext)
 
+  def is_relative (self):
+    return not self.root.endswith (sep)
+  
   def relative_to (self, other):
     """Return this filepath as relative to another. cf :func:`utils.relative_to`
     """
-    return relative_to (self, unicode (other))
+    return self.__class__.factory (relative_to (self, unicode (other)))
 
   def absolute (self):
     """Return an absolute version of the current FilePath, whether
     relative or not. Use :func:`os.path.abspath` semantics.
     """
     return self.__class__.factory (os.path.abspath (self))
-  #~ abspath = absolute
+  abspath = absolute
 
   def changed (self, root=None, path=None, filename=None, base=None, infix=None, ext=None):
     """Return a new :class:`FilePath` with one or more parts changed. This is particularly
@@ -496,7 +494,7 @@ class FilePath (unicode):
     ur"""Recreate a filepath from its constituent parts. No real validation is done;
     it is assumed that the parameters are valid parts of a filepath.
     """
-    return cls (root + sep.join (os.path.normpath (path).split (os.sep) + [base+ext]))
+    return cls (root + sep.join (os.path._normpath (path).split (os.sep) + [base+ext]))
 
 filepath = FilePath
 
@@ -683,18 +681,19 @@ class Entry (FilePath, core._WinSysObject):
 
   Common functionality:
 
-  * *No* caching is done: all attributes etc. are checked on the filesystem every time
-  * Entries compare (eq, lt, etc.) according to their full filepath
+  * For performance reasons, initial cacheing is done if a _file_info structure
+    is passed in. This will usually happen as a result of the :meth:`files` method
+    which returns data from the WIN32_FIND_DATA structure. This populates initial
+    values for size, the date fields, and the attributes.
+  * Entries compare (eq, lt, etc.) according to their full filepath. To do a
+    content-wise comparison, use :meth:`equal_contents`.
   * Entries are True according to their existence on a filesystem
   * The str representation is the filepath utf8-encoded; unicode is the filepath itself
   """
-  def __new__ (
-    meta,
-    filepath,
-    file_info=core.UNSET
-  ):
+  def __new__ (meta, filepath, _file_info=core.UNSET):
     fp = FilePath.__new__ (meta, filepath)
-    if file_info is core.UNSET:
+    fp._normpath = normalised (fp)
+    if _file_info is core.UNSET:
       fp._attributes = core.UNSET
       fp._created_at = core.UNSET
       fp._accessed_at = core.UNSET
@@ -702,24 +701,21 @@ class Entry (FilePath, core._WinSysObject):
       fp._size = core.UNSET
       fp._reparse_tag = core.UNSET
     else:
-      fp._attributes = file_info[0]
-      fp._created_at = utils.from_pytime (file_info[1])
-      fp._accessed_at = utils.from_pytime (file_info[2])
-      fp._written_at = utils.from_pytime (file_info[3])
-      fp._size = utils._longword (file_info[5], file_info[4])
-      fp._reparse_tag = file_info[6]
+      fp._attributes = _Attributes (_file_info[0])
+      fp._created_at = utils.from_pytime (_file_info[1])
+      fp._accessed_at = utils.from_pytime (_file_info[2])
+      fp._written_at = utils.from_pytime (_file_info[3])
+      fp._size = utils._longword (_file_info[5], _file_info[4])
+      fp._reparse_tag = _file_info[6]
     return fp
 
-  #
-  # Core functionality from parent class
-  #
   def as_string (self):
     return self.encode ("utf8")
 
   def dumped (self, level=0):
     output = []
-    output.append (unicode (self))
-    output.append (super (FilePath, self).dumped (level))
+    output.append (self)
+    output.append (super (Entry, self).dumped (level))
     output.append ("readable: %s" % self.readable)
     if self.readable:
       output.append ("id: %s" % self.id)
@@ -738,31 +734,36 @@ class Entry (FilePath, core._WinSysObject):
         pass
     else:
       output.append ("Security:\n" + s.dumped (level))
+    if self.attributes.directory:
+      vol = self.mounted_by ()
+      if vol:
+        output.append ("Mount point for:")
+        output.append (vol.dumped (level))
     return utils.dumped ("\n".join (output), level)
 
   def __add__ (self, other):
-    return entry (os.path.join (unicode (self), unicode (other)))
+    return entry (super (Entry, self).__add__ (other))
 
   def __radd__ (self, other):
-    return entry (os.path.join (unicode (other), unicode (self)))
+    return entry (super (Entry, self).__radd__ (other))
 
   def __nonzero__ (self):
     ur"""Determine whether the file exists (at least from
     the POV of the current user) on the filesystem so that
     it can be checked with if fs.entry ("..."):
     """
-    return (wrapped (win32file.GetFileAttributesW, normalised (self)) != -1)
+    return (wrapped (win32file.GetFileAttributesW, self._normpath) != -1)
   __bool__ = __nonzero__
 
   @classmethod
   def factory (cls, filepath):
     return entry (filepath)
     
-  def _get_file_attribute (self, file_attribute):
-    file_attribute = FILE_ATTRIBUTE.constant (file_attribute)
-    return self.attributes[file_attribute]
-
   def _get_readable (self):
+    #
+    # Check whether the user has at least enough
+    # permissions to open the file for reading.
+    #
     try:
       with Handle (self): pass
     except:
@@ -772,7 +773,7 @@ class Entry (FilePath, core._WinSysObject):
   readable = property (_get_readable)
 
   def get_created_at (self):
-    self._created_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self)[1])
+    self._created_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self._normpath)[1])
     return self._created_at
   def _get_created_at (self):
     if self._created_at is core.UNSET:
@@ -780,13 +781,13 @@ class Entry (FilePath, core._WinSysObject):
     else:
       return self._created_at
   def _set_created_at (self, created_at, handle=None):
-    with Handle (handle or self, True) as handle:
+    with Handle (handle or self.normapth, True) as handle:
       created_at = pywintypes.Time (time.mktime (created_at.timetuple ()))
       wrapped (win32file.SetFileTime, handle, created_at, None, None)
   created_at = property (_get_created_at, _set_created_at)
 
   def get_accessed_at (self):
-    self._accessed_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self)[3])
+    self._accessed_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self._normpath)[3])
     return self._accessed_at
   def _get_accessed_at (self):
     if self._accessed_at is core.UNSET:
@@ -800,7 +801,7 @@ class Entry (FilePath, core._WinSysObject):
   accessed_at = property (_get_accessed_at, _set_accessed_at)
 
   def get_written_at (self):
-    self._written_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self)[2])
+    self._written_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self._normpath)[2])
     return self._written_at
   def _get_written_at (self):
     if self._written_at is core.UNSET:
@@ -818,10 +819,8 @@ class Entry (FilePath, core._WinSysObject):
       return wrapped (win32file.GetFileSize, handle)
   uncompressed_size = property (_get_uncompressed_size)
 
-  def _get_total_size (self):
-    return _kernel32.GetCompressedFileSize (normalised (self))
   def get_size (self):
-    self._size = self._get_total_size ()
+    self._size = wrapped (_kernel32.GetCompressedFileSize, self._normpath)
     return self._size
   def _get_size (self):
     if self._size is core.UNSET:
@@ -831,13 +830,13 @@ class Entry (FilePath, core._WinSysObject):
   size = property (_get_size)
 
   def get_attributes (self):
-    self._attributes = _Attributes (wrapped (win32file.GetFileAttributesExW, normalised (self))[0])
+    self._attributes = _Attributes (wrapped (win32file.GetFileAttributesExW, self._normpath)[0])
     return self._attributes
   def _get_attributes (self):
     if self._attributes is core.UNSET:
       return self.get_attributes ()
     else:
-      return self.attributes
+      return self._attributes
   attributes = property (_get_attributes)
 
   def _get_id (self):
@@ -845,7 +844,7 @@ class Entry (FilePath, core._WinSysObject):
       file_information = wrapped (win32file.GetFileInformationByHandle, hFile)
       volume_serial_number = file_information[4]
       index_lo, index_hi = file_information[8:10]
-      return volume_serial_number + (utils._longword (index_lo, index_hi) * 2 << 31)
+      return volume_serial_number + (utils._longword (index_hi, index_lo) * 2 << 31)
   id = property (_get_id)
 
   def _get_n_links (self):
@@ -936,9 +935,6 @@ class Entry (FilePath, core._WinSysObject):
     return self.attributes.virtual
   virtual = property (_get_virtual)
 
-  def relative_to (self, other):
-    return entry (self.relative_to (unicode (other)))
-
   def like (self, pattern):
     ur"""Return true if this filename's name (not the path) matches
     `pattern` according to `fnmatch`, eg::
@@ -950,34 +946,13 @@ class Entry (FilePath, core._WinSysObject):
     """
     return fnmatch.fnmatch (self.name, pattern)
 
-  def _get_parent (self):
-    print "_get_parent"
-    return super (Entry, self)._get_parent ()
-  
-  def __parent (self):
-    ur"""Return the :class:`Dir` object which represents the directory
-    this entry is in.
-
-    :returns: :class:`Dir`
-    :raises: :exc:`x_no_such_file` if no parent exists (eg because this is a drive root)
-    """
-    filepath_parent = super (Entry, self).parent
-    if filepath_parent:
-      return Dir (filepath_parent)
-    else:
-      raise x_no_such_file (None, u"Entry.parent", u"%s has no parent" % self)
-
   def ancestors (self):
     ur"""Iterate over this entry's ancestors, yielding the :class:`Dir` object
     corresponding to each one.
     """
-    try:
-      parent = self.parent ()
-    except x_no_such_file:
-      raise StopIteration
-    else:
-      yield parent
-      for ancestor in parent.ancestors ():
+    if self.parent:
+      yield self.parent
+      for ancestor in self.parent.ancestors ():
         yield ancestor
 
   def security (self, options=security.Security.DEFAULT_OPTIONS):
@@ -1022,13 +997,13 @@ class Entry (FilePath, core._WinSysObject):
   def encrypt (self):
     ur"""FIXME: Need to work out how to create certificates for this
     """
-    wrapped (win32file.EncryptFile, self)
+    wrapped (win32file.EncryptFile, self._normpath)
     return self
 
   def decrypt (self):
     ur"""FIXME: Need to work out how to create certificates for this
     """
-    wrapped (win32file.DecryptFile (self))
+    wrapped (win32file.DecryptFile, self._normpath)
     return self
 
   def encryption_users (self):
@@ -1037,12 +1012,12 @@ class Entry (FilePath, core._WinSysObject):
     return (
       (security.principal (sid), hashblob, info)
         for (sid, hashblob, info)
-        in wrapped (win32file.QueryUsersOnEncryptedFile, self)
+        in wrapped (win32file.QueryUsersOnEncryptedFile, self._normpath)
     )
 
   def move (self, other, callback=None, callback_data=None, clobber=False):
     ur"""Move this entry to the file/directory represented by other.
-    If other is a directory, self is copied into it (not over it)
+    If other is a directory, self 
 
     :param other: anything accepted by :func:`entry`
     :param callback: a function which will receive a total size & total transferred
@@ -1059,7 +1034,7 @@ class Entry (FilePath, core._WinSysObject):
       flags |= MOVEFILE.REPLACE_EXISTING
     wrapped (
       win32file.MoveFileWithProgress,
-      self,
+      self._normpath,
       normalised (target_filepath),
       progress_wrapper (callback),
       callback_data,
@@ -1138,7 +1113,7 @@ class File (Entry):
 
   def delete (self):
     ur"""Delete this file"""
-    wrapped (win32file.DeleteFileW, self)
+    wrapped (win32file.DeleteFileW, self._normpath)
     return self
 
   def copy (self, other, callback=None, callback_data=None):
@@ -1158,8 +1133,8 @@ class File (Entry):
       target_filepath = other_file
     wrapped (
       win32file.CopyFileEx,
-      self,
-      target_filepath,
+      self._normpath,
+      normalised (target_filepath),
       progress_wrapper (callback),
       callback_data
     )
@@ -1184,8 +1159,8 @@ class File (Entry):
     other = file (other)
     wrapped (
       win32file.CreateHardLink,
-      normalised (other),
-      normalised (self)
+      other._normpath,
+      self._normpath
     )
     return other
 
@@ -1198,8 +1173,8 @@ class File (Entry):
     other = file (other)
     wrapped (
       win32file.CreateHardLink,
-      normalised (self),
-      normalised (other)
+      self._normpath,
+      other._normpath
     )
     return self
 
@@ -1212,7 +1187,7 @@ class File (Entry):
     """
     wrapped (
       win32file.CreateFile,
-      self,
+      self._normpath,
       FILE_ACCESS.WRITE,
       0,
       None if security is None else security.pyobject (),
@@ -1248,18 +1223,11 @@ class File (Entry):
 class Dir (Entry):
 
   def __new__ (meta, filepath, *args, **kwargs):
-    entry = Entry.__new__ (meta, filepath.rstrip (seps) + sep, *args, **kwargs)
     #
-    # Although we can't know the size of a directory from a
-    # file iteration, it will return 0 return than UNSET.
-    # reset here and special-case later.
+    # Ensure that a directory always ends in a backslash
     #
-    entry._size = core.UNSET
-    return entry
+    return Entry.__new__ (meta, filepath.rstrip (seps) + sep, *args, **kwargs)
 
-  def _get_total_size (self):
-    return sum (f.size for f in self.flat ())
-  
   def compress (self, apply_to_contents=True, callback=None):
     ur"""Flag this directory so that any new files are automatically
     compressed. If apply_to_contents is True, iterate over all subdirectories
@@ -1327,11 +1295,11 @@ class Dir (Entry):
     return self
 
   def disable_encryption (self):
-    wrapped (win32security.EncryptionDisable, self, True)
+    wrapped (win32security.EncryptionDisable, self._normpath, True)
     return self
 
   def enable_encryption (self):
-    wrapped (win32security.EncryptionDisable, self, False)
+    wrapped (win32security.EncryptionDisable, self._normpath, False)
     return self
 
   def create (self, security_descriptor=None):
@@ -1461,19 +1429,21 @@ class Dir (Entry):
     for f in self.flat (includedirs=True):
       raise x_fs (errctx="Dir.mount", errmsg=u"You can't mount to a non-empty directory")
     else:
-      wrapped (win32file.SetVolumeMountPoint, self, volume (vol).name)
+      wrapped (win32file.SetVolumeMountPoint, self._normpath, volume (vol).name)
       return self
 
   def dismount (self):
     ur"""Dismount whatever volume is mounted at this directory
     """
-    wrapped (win32file.DeleteVolumeMountPoint, self)
+    wrapped (win32file.DeleteVolumeMountPoint, self._normpath)
     return self
 
   def copy (self, target_filepath, callback=None, callback_data=None):
     ur"""Copy this directory to another, which must be a directory if it
-    exists. If it does exist, this directory will be copied inside it; if
-    it does not exist, this directory will be copied over it.
+    exists. If it does exist, this directory's contents will be copied 
+    inside it; if it does not exist, this directory will become it.
+    NB To copy this directory inside another, set the `target_filepath`
+    to `other_directory + self.name`.
 
     :param target_filepath: anything accepted by :func:`entry`
     :param callback: cf :meth:`File.copy`
@@ -1503,13 +1473,13 @@ class Dir (Entry):
     :returns: this directory
     """
     if recursive:
-      for dirpath, dirs, files in self.walk (depthfirst=True, includedirs=True):
+      for dirpath, dirs, files in self.walk (depthfirst=True):
         for d in dirs:
           d.delete (recursive=True)
         for f in files:
           f.delete ()
 
-    wrapped (win32file.RemoveDirectory, self)
+    wrapped (win32file.RemoveDirectory, self._normpath)
     return self
 
   def watch (self, *args, **kwargs):
@@ -1608,10 +1578,7 @@ def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
       core.warn ("Ignored no-such-file on first iteration of %s", pattern)
       raise StopIteration
 
-def entry (
-  filepath,
-  file_info=core.UNSET
-):
+def entry (filepath, _file_info=core.UNSET):
   ur"""Return a :class:`File` or :class:`Dir` object representing this
   filepath.
 
@@ -1631,11 +1598,10 @@ def entry (
     guess whether it's intended to be a dir or a file
     by looking for a trailing slash.
     """
-    parts = get_parts (filepath)
-    if parts[-1]:
-      return File (filepath)
-    else:
+    if filepath.endswith (sep):
       return Dir (filepath)
+    else:
+      return File (filepath)
 
   if filepath is None:
     return None
@@ -1643,16 +1609,16 @@ def entry (
     return filepath
   else:
     filepath = unicode (filepath)
-    if file_info is core.UNSET:
-      attributes = wrapped (win32file.GetFileAttributesW, filepath)
+    if _file_info is core.UNSET:
+      attributes = wrapped (win32file.GetFileAttributesW, normalised (filepath))
     else:
-      attributes = file_info[0]
+      attributes = _file_info[0]
     if attributes == -1:
       return _guess (filepath)
     elif attributes & FILE_ATTRIBUTE.DIRECTORY:
-      return Dir (filepath, file_info)
+      return Dir (filepath, _file_info)
     else:
-      return File (filepath, file_info)
+      return File (filepath, _file_info)
 
 def file (filepath):
   ur"""Return a :class:`File` object representing this filepath on
@@ -1713,7 +1679,7 @@ def walk (root, depthfirst=False, ignore_access_errors=False):
   :param ignore_access_errors: passed to :meth:`Dir.walk`
   :returns: as :meth:`Dir.walk`
   """
-  return dir (root).walk (depthfirst, ignore_access_errors)
+  return dir (root).walk (depthfirst=depthfirst, ignore_access_errors=ignore_access_errors)
 
 def flat (root, pattern="*", includedirs=False, depthfirst=False, ignore_access_errors=False):
   ur"""Iterate over a flattened version of the directory tree starting
