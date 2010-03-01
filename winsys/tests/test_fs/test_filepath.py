@@ -115,6 +115,71 @@ def test_filepath ():
         )
 
 #
+# Concatenation
+#
+left = [r"c:\\", r"c:\temp", r"c:\temp\abc.txt", "temp"]
+right = ["abc", r"c:\temp", r"\abc", "abc"]
+def test_add ():
+  for l in left:
+    for r in right:
+      assert_equals (fs.filepath (l) + r, os.path.join (l, r))
+
+def test_radd ():
+  for l in left:
+    for r in right:
+      assert_equals (l + fs.filepath (r), os.path.join (l, r))
+
+def test_is_relative ():
+  for path, result in [
+    ("c:/", False),
+    ("c:/temp/abc.txt", False),
+    ("temp", True),
+    ("c:temp", True),
+    (r"\\server\share", False),
+    (r"\\server\share\d1", False)
+  ]:
+    assert_equals (fs.filepath (path).is_relative (), result)
+    
+def test_absolute ():
+  for path in ["c:/temp", "temp", "c:temp", r"\\server\share\d1"]:
+    assert_equals (fs.filepath (path).absolute ().lower (), os.path.abspath (path).lower ())
+
+#
+# The .changed method returns a version of the filepath
+# with one or more of its components changed. Certain
+# combinations are pointless and raise an exception.
+#
+@raises (fs.x_fs)
+def test_changed_filename_and_base ():
+  fs.filepath (".").changed (filename="test.txt", base="test")
+  
+@raises (fs.x_fs)
+def test_changed_filename_and_ext ():
+  fs.filepath (".").changed (filename="test.txt", ext=".txt")
+
+@raises (fs.x_fs)
+def test_changed_filename_and_infix ():
+  fs.filepath (".").changed (filename="test.txt", infix="-test-")
+
+def test_changed_root ():
+  assert_equals (fs.filepath ("c:\\temp\\abc.txt").changed (root="d:\\"), "d:\\temp\\abc.txt")
+
+def test_changed_dirname ():
+  assert_equals (fs.filepath ("c:\\temp\\abc.txt").changed (dirname="temp2"), "c:\\temp2\\abc.txt")
+
+def test_changed_filename ():
+  assert_equals (fs.filepath ("c:\\temp\\abc.txt").changed (filename="def.ghi"), "c:\\temp\\def.ghi")
+
+def test_changed_base ():
+  assert_equals (fs.filepath ("c:\\temp\\abc.txt").changed (base="def"), "c:\\temp\\def.txt")
+
+def test_changed_infix ():
+  assert_equals (fs.filepath ("c:\\temp\\abc.txt").changed (infix=".infix"), "c:\\temp\\abc.infix.txt")
+
+def test_changed_ext ():
+  assert_equals (fs.filepath ("c:\\temp\\abc.txt").changed (ext=".ext"), "c:\\temp\\abc.ext")
+
+#
 # dumps
 #
 def test_dump_absolute ():

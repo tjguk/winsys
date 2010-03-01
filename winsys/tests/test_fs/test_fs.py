@@ -50,12 +50,6 @@ def setup ():
   global TEST_ROOT
   TEST_ROOT = tempfile.mkdtemp ()
   print TEST_ROOT
-  mkdir ("a")
-  touch ("a/a.txt")
-  mkdir ("a/b")
-  touch ("a/b/b.txt")
-  mkdir ("a/b/c")
-  touch ("a/b/c/c.txt")
   
 def teardown ():
   rmdirs (TEST_ROOT)
@@ -72,28 +66,12 @@ def test_FileTempAttributes():
   TempFile=tempfile.NamedTemporaryFile()
   assert win32file.GetFileAttributesW(TempFile.name)==fs.entry(TempFile.name).attributes.flags
 
-def test_DriveName():
-  assert fs.Drive("C:").name == u"C:\\"
-
-def test_DriveNameBack():
-  assert fs.Drive("C:\\").name ==u"C:\\"
-
-def test_DriveNameForward():
-  assert fs.Drive("C:/").name==u"C:\\"
-
-def test_DriveType():
-  assert fs.Drive("C:").type==win32file.GetDriveTypeW("C:")
-
-def test_Drive_as_String():
- assert unicode (fs.Drive("C:"))==u'Drive C:\\'
- 
-def test_DriveRoot():
-  assert fs.Drive("C:").root() == fs.dir (u"C:\\")
-  
 def test_dir_copy_to_new_dir ():
+  source_name = uuid.uuid1 ().hex
   target_name = uuid.uuid1 ().hex
-  source = os.path.join (TEST_ROOT, "a")
+  source = os.path.join (TEST_ROOT, source_name)
   target = os.path.join (TEST_ROOT, target_name)
+  os.mkdir (source)
   assert os.path.isdir (source)
   assert not os.path.isdir (target)
   fs.copy (source, target)
