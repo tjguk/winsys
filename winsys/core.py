@@ -19,16 +19,13 @@ class _WinSysObject (object):
 
   def __str__ (self):
     return self.as_string ()
-    
+
   def __repr__ (self):
     return "<%s: %s>" % (self.__class__.__name__, self.as_string ())
-    
-  def __unicode__ (self):
-    return unicode (self.as_string ())
-    
+
   def __hash__ (self):
     return hash (self.as_string ())
-  
+
   #
   # Each object should provide a useful override for the
   # dumped function, possibly recursing into its own
@@ -37,10 +34,10 @@ class _WinSysObject (object):
   #
   def dumped (self, level=0):
     return utils.dumped (self.as_string (), level)
-  
+
   def dump (self, level=0):
     print self.dumped (level)
-    
+
   #
   # Fill-in functions to ensure that a complete
   # sortability is maintained. These may be
@@ -49,18 +46,18 @@ class _WinSysObject (object):
   #
   def __ne__ (self, other):
     return not self == other
-    
+
   def __gt__ (self, other):
     return not (self == other) and not (self < other)
-  
+
   def __ge__ (self, other):
     return self > other or self == other
 
   def __le__ (self, other):
     return self < other or self == other
-    
 
-class Unset (object): 
+
+class Unset (object):
   def __repr__ (self):
     return "<Unset>"
   def __nonzero__ (self):
@@ -69,7 +66,7 @@ class Unset (object):
 UNSET = Unset ()
 
 #
-# Create a logger without any handlers. 
+# Create a logger without any handlers.
 #
 _logger = logging.getLogger (u"winsys")
 debug = _logger.debug
@@ -81,7 +78,7 @@ exception = _logger.exception
 
 def add_logging_handler (handler):
   _logger.addHandler (handler)
-  
+
 def remove_logging_handler (handler):
   _logger.removeHandler (handler)
 

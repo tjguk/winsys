@@ -629,7 +629,7 @@ class Volume (core._WinSysObject):
   file_system_name = property (_get_file_system_name)
 
   def _get_mounts (self):
-    return (fs.dir (m) for m in wrapped (win32file.GetVolumePathNamesForVolumeName, self.name))
+    return (dir (m) for m in wrapped (win32file.GetVolumePathNamesForVolumeName, self.name))
   mounts = property (_get_mounts)
 
   def dumped (self, level):
