@@ -12,7 +12,7 @@ def _test_parts (path, result, skip_rejoin=False):
   parts = fs.get_parts (path)
   assert parts == result
   assert parts == fs.get_parts (path.replace ("\\", "/"))
-  if not skip_rejoin: 
+  if not skip_rejoin:
     assert parts[0] + fs.sep.join (parts[1:]) == path
 
 #
@@ -109,8 +109,8 @@ def test_filepath ():
         if result == "_":
           result = ""
         assert_equals (
-          result, 
-          getattr (fp, test_item), 
+          result,
+          getattr (fp, test_item),
           "Path: %s; Part %s; expected: %s; result: %s" % (path, test_item, result, getattr (fp, test_item))
         )
 
@@ -139,7 +139,7 @@ def test_is_relative ():
     (r"\\server\share\d1", False)
   ]:
     assert_equals (fs.filepath (path).is_relative (), result)
-    
+
 def test_absolute ():
   for path in ["c:/temp", "temp", "c:temp", r"\\server\share\d1"]:
     assert_equals (fs.filepath (path).absolute ().lower (), os.path.abspath (path).lower ())
@@ -152,7 +152,7 @@ def test_absolute ():
 @raises (fs.x_fs)
 def test_changed_filename_and_base ():
   fs.filepath (".").changed (filename="test.txt", base="test")
-  
+
 @raises (fs.x_fs)
 def test_changed_filename_and_ext ():
   fs.filepath (".").changed (filename="test.txt", ext=".txt")
@@ -190,5 +190,5 @@ def test_dump_relative ():
 
 if __name__ == "__main__":
   import nose
-  nose.runmodule (exit=False) 
-  raw_input ("Press enter...")
+  nose.runmodule (exit=False)
+  if sys.stdout.isatty (): raw_input ("Press enter...")

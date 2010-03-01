@@ -62,28 +62,28 @@ def test_Token_unimpersonate ():
 def test_Token_change_privileges_enable ():
   for disabled_priv, status in win32security.GetTokenInformation (token0, win32security.TokenPrivileges):
     if not status & win32security.SE_PRIVILEGE_ENABLED: break
-  
+
   was_enabled, was_disabled = _tokens.Token (token0).change_privileges (enable_privs=[disabled_priv])
-  
+
   for priv, status in win32security.GetTokenInformation (token0, win32security.TokenPrivileges):
     if priv == disabled_priv:
       assert status & win32security.SE_PRIVILEGE_ENABLED
-  
+
   _tokens.Token (token0).change_privileges (was_enabled, was_disabled)
 
 def test_Token_change_privileges_disable ():
   for enabled_priv , status in win32security.GetTokenInformation (token0, win32security.TokenPrivileges):
     if status & win32security.SE_PRIVILEGE_ENABLED: break
-  
+
   was_enabled, was_disabled = _tokens.Token (token0).change_privileges (disable_privs=[enabled_priv])
-  
+
   for priv, status in win32security.GetTokenInformation (token0, win32security.TokenPrivileges):
     if priv == enabled_priv:
       assert not status & win32security.SE_PRIVILEGE_ENABLED
-  
+
   _tokens.Token (token0).change_privileges (was_enabled, was_disabled)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
   import nose
-  nose.runmodule (exit=False) 
-  raw_input ("Press enter...")
+  nose.runmodule (exit=False)
+  if sys.stdout.isatty (): raw_input ("Press enter...")

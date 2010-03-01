@@ -43,7 +43,7 @@ def test_ACL_iterated ():
   #
   acl = _acls.acl ([("Everyone", "R", "Allow"), ("Administrators", "F", "Deny")])
   assert list (acl) == [
-    _aces.dace (("Administrators", "F", "Deny")), 
+    _aces.dace (("Administrators", "F", "Deny")),
     _aces.dace (("Everyone", "R", "Allow"))
   ]
 
@@ -51,7 +51,7 @@ def test_ACL_append ():
   acl = _acls.acl ([("Everyone", "R", "Allow")])
   acl.append (("Administrators", "F", "Deny"))
   assert list (acl) == [
-    _aces.dace (("Administrators", "F", "Deny")), 
+    _aces.dace (("Administrators", "F", "Deny")),
     _aces.dace (("Everyone", "R", "Allow"))
   ]
 
@@ -72,7 +72,7 @@ def test_ACL_delitem ():
   acl = _acls.acl ([("Everyone", "R", "Allow"), ("Administrators", "F", "Deny")])
   del acl[0]
   assert list (acl) == [
-    _aces.dace (("Administrators", "F", "Deny")), 
+    _aces.dace (("Administrators", "F", "Deny")),
   ]
 
 def test_ACL_len ():
@@ -100,7 +100,7 @@ def test_DACL_private ():
   acl = _acls.DACL.private ()
   assert list (acl) == [(me, "F", "ALLOW")]
 
-if __name__ == '__main__':
+if __name__ == "__main__":
   import nose
-  nose.runmodule (exit=False) 
-  raw_input ("Press enter...")
+  nose.runmodule (exit=False)
+  if sys.stdout.isatty (): raw_input ("Press enter...")

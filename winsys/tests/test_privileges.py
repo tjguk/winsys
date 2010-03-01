@@ -80,8 +80,8 @@ def test_Privilege_context ():
   with _privileges.privilege (luid) as p:
     assert bool (_token_privs ()[luid])
   assert not bool (_token_privs ()[luid])
-  
-if __name__ == '__main__':
+
+if __name__ == "__main__":
   import nose
-  nose.runmodule (exit=False) 
-  raw_input ("Press enter...")
+  nose.runmodule (exit=False)
+  if sys.stdout.isatty (): raw_input ("Press enter...")

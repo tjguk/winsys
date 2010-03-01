@@ -1,13 +1,13 @@
 from winsys import core
 
 class C (core._WinSysObject):
-  
+
   def __init__ (self, x):
     self.x = x
-    
+
   def __eq__ (self, other):
     return self.x == other.x
-    
+
   def __lt__ (self, other):
     return self.x < other.x
 
@@ -37,7 +37,7 @@ def test_gt ():
 def test_hash ():
   assert set ([C (0), C (1), C (1), C (2)]) == set ([C (0), C (1), C (2)])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
   import nose
-  nose.runmodule (exit=False) 
-  raw_input ("Press enter...")
+  nose.runmodule (exit=False)
+  if sys.stdout.isatty (): raw_input ("Press enter...")

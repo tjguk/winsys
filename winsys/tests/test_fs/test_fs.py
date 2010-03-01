@@ -11,18 +11,18 @@ import win32file
 #
 def touch (filepath):
   open (os.path.join (TEST_ROOT, filepath), "w").close ()
-  
+
 def mkdir (filepath):
   os.mkdir (os.path.join (TEST_ROOT, filepath))
-  
+
 def rmdirs (filepath):
   shutil.rmtree (os.path.join (TEST_ROOT, filepath))
-  
+
 def dirs_are_equal (dir1, dir2):
   #
   # Make sure of same directory depth
   #
-  if len (list (os.walk (dir1))) != len (list (os.walk (dir2))): 
+  if len (list (os.walk (dir1))) != len (list (os.walk (dir2))):
     return False
   #
   # Make sure of directory contents
@@ -30,7 +30,7 @@ def dirs_are_equal (dir1, dir2):
   for (path1, dirs1, files1), (path2, dirs2, files2) in zip (
     os.walk (dir1), os.walk (dir2)
   ):
-    if set (dirs1) != set (dirs2): 
+    if set (dirs1) != set (dirs2):
       return False
     if set (files1) != set (files2):
       return False
@@ -38,7 +38,7 @@ def dirs_are_equal (dir1, dir2):
       return False
   else:
     return True
-    
+
 def files_are_equal (f1, f2):
   if win32file.GetFileAttributesW (f1) != win32file.GetFileAttributesW (f2):
     return False
@@ -50,7 +50,7 @@ def setup ():
   global TEST_ROOT
   TEST_ROOT = tempfile.mkdtemp ()
   print TEST_ROOT
-  
+
 def teardown ():
   rmdirs (TEST_ROOT)
 
@@ -76,9 +76,8 @@ def test_dir_copy_to_new_dir ():
   assert not os.path.isdir (target)
   fs.copy (source, target)
   assert dirs_are_equal (source, target)
-  
+
 if __name__ == "__main__":
   import nose
-  nose.runmodule (exit=False) 
-  raw_input ("Press enter...")
-  
+  nose.runmodule (exit=False)
+  if sys.stdout.isatty (): raw_input ("Press enter...")

@@ -22,18 +22,18 @@ def test_principal_Principal ():
 def test_principal_string ():
   everyone, domain, type = win32security.LookupAccountName (None, "Everyone")
   assert accounts.principal ("Everyone") == everyone
-  
+
 @raises (accounts.exc.x_not_found)
 def test_principal_invalid ():
   accounts.principal (object)
-  
+
 def text_context ():
   assert win32api.GetUserName () <> "alice"
   with accounts.principal ("alice").impersonate ("Passw0rd"):
     assert win32api.GetUserName () == "alice"
   assert win32api.GetUserName () <> "alice"
-  
-if __name__ == '__main__':
+
+if __name__ == "__main__":
   import nose
-  nose.runmodule (exit=False) 
-  raw_input ("Press enter...")
+  nose.runmodule (exit=False)
+  if sys.stdout.isatty (): raw_input ("Press enter...")

@@ -25,11 +25,11 @@ def setup ():
   sacl = win32security.ACL ()
   sacl.AddAuditAccessAce (win32security.ACL_REVISION_DS, ntsecuritycon.FILE_READ_DATA, everyone, 1, 1)
   win32security.SetNamedSecurityInfo (
-    filename, win32security.SE_FILE_OBJECT, 
-    win32security.DACL_SECURITY_INFORMATION | win32security.SACL_SECURITY_INFORMATION, 
+    filename, win32security.SE_FILE_OBJECT,
+    win32security.DACL_SECURITY_INFORMATION | win32security.SACL_SECURITY_INFORMATION,
     None, None, dacl, sacl
   )
-  
+
 def teardown ():
   os.close (filehandle)
   os.unlink (filename)
@@ -60,7 +60,7 @@ def test_dace_tuple1 ():
   assert dace1.flags == _aces.ACE.FLAGS
   assert dace1.object_type is core.UNSET
   assert dace1.inherited_object_type is core.UNSET
-  
+
 def test_dace_tuple2 ():
   dace2 = _aces.dace ((accounts.principal ("Everyone"), "F", "ALLOW"))
   assert dace2.type == win32security.ACCESS_ALLOWED_ACE_TYPE
@@ -114,7 +114,7 @@ def test_sace_tuple1 ():
   assert sace1.flags == _aces.ACE.FLAGS
   assert sace1.object_type is core.UNSET
   assert sace1.inherited_object_type is core.UNSET
-  
+
 def test_sace_tuple2 ():
   sace1 = _aces.sace ((accounts.principal ("Everyone"), "F", "FAILURE"))
   assert sace1.type == win32security.SYSTEM_AUDIT_ACE_TYPE
@@ -250,7 +250,7 @@ def test_ace_access_int ():
   assert ace._access_mask == ntsecuritycon.GENERIC_ALL
   ace.access = ntsecuritycon.GENERIC_READ
   assert ace._access_mask == ntsecuritycon.GENERIC_READ
-  
+
 def test_ace_access_string ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
   assert ace._access_mask == ntsecuritycon.GENERIC_ALL
@@ -265,7 +265,7 @@ def test_ace_trustee_principal ():
   assert ace._trustee == everyone
   ace.trustee = me
   assert ace._trustee == me
-  
+
 def test_ace_trustee_string ():
   ace = _aces.ACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE)
   assert ace._trustee == everyone
@@ -277,7 +277,7 @@ def test_ace_trustee_string ():
 #
 def test_ace_from_ace_dace ():
   sd = win32security.GetNamedSecurityInfo (
-    filename, win32security.SE_FILE_OBJECT, 
+    filename, win32security.SE_FILE_OBJECT,
     win32security.DACL_SECURITY_INFORMATION
   )
   dacl = sd.GetSecurityDescriptorDacl ()
@@ -290,7 +290,7 @@ def test_ace_from_ace_dace ():
 
 def test_ace_from_ace_sace ():
   sd = win32security.GetNamedSecurityInfo (
-    filename, win32security.SE_FILE_OBJECT, 
+    filename, win32security.SE_FILE_OBJECT,
     win32security.SACL_SECURITY_INFORMATION
   )
   sacl = sd.GetSecurityDescriptorSacl ()
@@ -326,7 +326,7 @@ def test_ace_set_trustee_inherited ():
 
 def test_ace_access_int ():
   assert _aces.ACE._access (1) == 1
-  
+
 def test_ace_access_string ():
   for k, v in _aces.ACE.ACCESS.items ():
     assert _aces.ACE._access (k) == v
@@ -353,7 +353,7 @@ def test_dace_as_tuple ():
   dace = _aces.DACE (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE)
   assert dace.as_tuple () == (everyone, ntsecuritycon.GENERIC_ALL, win32security.ACCESS_ALLOWED_ACE_TYPE, win32security.INHERITED_ACE)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
   import nose
-  nose.runmodule (exit=False) 
-  raw_input ("Press enter...")
+  nose.runmodule (exit=False)
+  if sys.stdout.isatty (): raw_input ("Press enter...")

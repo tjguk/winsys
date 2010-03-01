@@ -12,12 +12,12 @@ def test_getitem_text ():
   attributes = fs._Attributes (3, CONST)
   assert_true (attributes["a"])
   assert_false (attributes["c"])
-  
+
 def test_getitem_number ():
   attributes = fs._Attributes (3, CONST)
   assert_true (attributes[1])
   assert_false (attributes[4])
-  
+
 def test_getattr ():
   attributes = fs._Attributes (3, CONST)
   assert_true (attributes.a)
@@ -34,5 +34,5 @@ def test_string ():
 
 if __name__ == "__main__":
   import nose
-  nose.runmodule (exit=False) 
-  raw_input ("Press enter...")
+  nose.runmodule (exit=False)
+  if sys.stdout.isatty (): raw_input ("Press enter...")
