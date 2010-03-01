@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,7 +11,7 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    '#',
         VERSION:     '0.4dev',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
@@ -18,6 +19,7 @@
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
@@ -42,13 +44,12 @@
           <a href="fs.html" title="fs – Files, Directories, &c."
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
-        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="the-drive-class">
@@ -56,7 +57,7 @@
 <dl class="class">
 <dt id="fs.Drive">
 <em class="property">class </em><tt class="descname">Drive</tt><big>(</big><em>drive</em><big>)</big><a class="headerlink" href="#fs.Drive" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wraps a drive litter, offering access to its <a title="fs.volume" class="reference external" href="fs.html#fs.volume"><tt class="xref docutils literal"><span class="pre">volume()</span></tt></a>
+<dd><p>Wraps a drive letter, offering access to its <a title="fs.Drive.volume" class="reference internal" href="#fs.Drive.volume"><tt class="xref docutils literal"><span class="pre">Drive.volume</span></tt></a>
 and the ability to <a title="fs.mount" class="reference external" href="fs.html#fs.mount"><tt class="xref docutils literal"><span class="pre">mount()</span></tt></a> or <a title="fs.dismount" class="reference external" href="fs.html#fs.dismount"><tt class="xref docutils literal"><span class="pre">dismount()</span></tt></a> it on a particular
 volume.</p>
 <dl class="method">
@@ -80,11 +81,18 @@ volume.</p>
 </table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="fs.Drive.root">
-<tt class="descname">root</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Drive.root" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">root</tt><a class="headerlink" href="#fs.Drive.root" title="Permalink to this definition">¶</a></dt>
 <dd>Return a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">fs.Dir</span></tt></a> object corresponding to the
 root directory of this drive.</dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Drive.volume">
+<tt class="descname">volume</tt><a class="headerlink" href="#fs.Drive.volume" title="Permalink to this definition">¶</a></dt>
+<dd>Any volume currently mounted on this drive root. NB A drive
+can be referred to without a volume mounted, eg to call its <a title="fs.mount" class="reference external" href="fs.html#fs.mount"><tt class="xref docutils literal"><span class="pre">mount()</span></tt></a>
+method.</dd></dl>
 
 </dd></dl>
 
@@ -99,7 +107,7 @@ information such as the filesystem and a list of drives
 mounted on it. Also offers the ability to mount or dismount.</p>
 <p>Attributes:</p>
 <ul class="simple">
-<li>label</li>
+<li><a title="fs.Volume.label" class="reference internal" href="#fs.Volume.label"><tt class="xref docutils literal"><span class="pre">label</span></tt></a></li>
 <li>serial_number</li>
 <li>maximum_component_length</li>
 <li>flags - combination of <a title="fs.VOLUME_FLAG" class="reference external" href="fs_constants.html#fs.VOLUME_FLAG"><tt class="xref docutils literal"><span class="pre">VOLUME_FLAG</span></tt></a></li>
@@ -134,50 +142,48 @@ mounted on it. Also offers the ability to mount or dismount.</p>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="fs.Volume.file_system_name">
+<tt class="descname">file_system_name</tt><a class="headerlink" href="#fs.Volume.file_system_name" title="Permalink to this definition">¶</a></dt>
+<dd>The name of the file system present on this volume, eg NTFS</dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Volume.flags">
+<tt class="descname">flags</tt><a class="headerlink" href="#fs.Volume.flags" title="Permalink to this definition">¶</a></dt>
+<dd>An attribute set corresponding to some combination of <a title="fs.VOLUME_FLAG" class="reference external" href="fs_constants.html#fs.VOLUME_FLAG"><tt class="xref docutils literal"><span class="pre">VOLUME_FLAG</span></tt></a></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Volume.label">
+<tt class="descname">label</tt><a class="headerlink" href="#fs.Volume.label" title="Permalink to this definition">¶</a></dt>
+<dd>The user-assigned label set by the DOS LABEL command</dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Volume.maximum_component_length">
+<tt class="descname">maximum_component_length</tt><a class="headerlink" href="#fs.Volume.maximum_component_length" title="Permalink to this definition">¶</a></dt>
+<dd>The maximum length any one component of the file system
+name can reach. For NTFS this is 255, meaning that any one
+segment of of the path can be no longer than 255 chars.</dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Volume.mounts">
+<tt class="descname">mounts</tt><a class="headerlink" href="#fs.Volume.mounts" title="Permalink to this definition">¶</a></dt>
+<dd>An iterator of the <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> objects which mount this volume. NB Windows
+restrictions mean that more than one drive root directory can mount the same
+volume simultaneously. But it is possible for a volume to be mounted on, eg,
+e:and c:mountse at the same time.</dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Volume.serial_number">
+<tt class="descname">serial_number</tt><a class="headerlink" href="#fs.Volume.serial_number" title="Permalink to this definition">¶</a></dt>
+<dd>A software serial number, not the hardware serial
+number assigned by the device manufacturer.</dd></dl>
+
 </dd></dl>
 
 </div>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="contents.html">
-              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
-            </a></p>
-            <h3><a href="contents.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="">The Drive class</a></li>
-<li><a class="reference external" href="#the-volume-class">The Volume class</a></li>
-</ul>
-
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="fs.html"
-                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="fs_filepath.html"
-                                  title="next chapter">The FilePath class</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/fs_drive_vol.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
       </div>
       <div class="clearer"></div>
     </div>
@@ -197,7 +203,7 @@ mounted on it. Also offers the ability to mount or dismount.</p>
           <a href="fs.html" title="fs – Files, Directories, &c."
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

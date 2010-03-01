@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,7 +11,7 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    '#',
         VERSION:     '0.4dev',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
@@ -18,6 +19,7 @@
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
@@ -42,21 +44,21 @@
           <a href="fs_filepath.html" title="The FilePath class"
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
-        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="the-entry-class">
 <h1>The Entry class<a class="headerlink" href="#the-entry-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fs.Entry">
-<em class="property">class </em><tt class="descname">Entry</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.Entry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Heart of the fs module. This class is the parent of the
+<em class="property">class </em><tt class="descname">Entry</tt><a class="headerlink" href="#fs.Entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="fs.FilePath" class="reference external" href="fs_filepath.html#fs.FilePath"><tt class="xref docutils literal"><span class="pre">fs.FilePath</span></tt></a>, <tt class="xref docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
+<p>Heart of the fs module. This class is the parent of the
 <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> and <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> classes and contains all the
 functionality common to both. It is rarely instantiated itself,
 altho&#8217; it&#8217;s possible to do so.</p>
@@ -72,12 +74,16 @@ altho&#8217; it&#8217;s possible to do so.</p>
 <li>attributes</li>
 <li>id</li>
 <li>n_links</li>
-<li>attributes - an <tt class="xref docutils literal"><span class="pre">Attributes</span></tt> object representing combinations of <a title="fs.FILE_ATTRIBUTE" class="reference external" href="fs_constants.html#fs.FILE_ATTRIBUTE"><tt class="xref docutils literal"><span class="pre">FILE_ATTRIBUTE</span></tt></a></li>
+<li>attributes - an <a title="fs._Attributes" class="reference external" href="fs.html#fs._Attributes"><tt class="xref docutils literal"><span class="pre">_Attributes</span></tt></a> object representing combinations of <a title="fs.FILE_ATTRIBUTE" class="reference external" href="fs_constants.html#fs.FILE_ATTRIBUTE"><tt class="xref docutils literal"><span class="pre">FILE_ATTRIBUTE</span></tt></a></li>
 </ul>
 <p>Common functionality:</p>
 <ul class="simple">
-<li><em>No</em> caching is done: all attributes etc. are checked on the filesystem every time</li>
-<li>Entries compare (eq, lt, etc.) according to their full filepath</li>
+<li>For performance reasons, initial cacheing is done if a _file_info structure
+is passed in. This will usually happen as a result of the <tt class="xref docutils literal"><span class="pre">files()</span></tt> method
+which returns data from the WIN32_FIND_DATA structure. This populates initial
+values for size, the date fields, and the attributes.</li>
+<li>Entries compare (eq, lt, etc.) according to their full filepath. To do a
+content-wise comparison, use <tt class="xref docutils literal"><span class="pre">equal_contents()</span></tt>.</li>
 <li>Entries are True according to their existence on a filesystem</li>
 <li>The str representation is the filepath utf8-encoded; unicode is the filepath itself</li>
 </ul>
@@ -105,11 +111,6 @@ be compressed automatically.</dd></dl>
 <dd>FIXME: Need to work out how to create certificates for this</dd></dl>
 
 <dl class="method">
-<dt id="fs.Entry.dump">
-<tt class="descname">dump</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#fs.Entry.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="fs.Entry.dumped">
 <tt class="descname">dumped</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#fs.Entry.dumped" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -123,6 +124,36 @@ be compressed automatically.</dd></dl>
 <dt id="fs.Entry.encryption_users">
 <tt class="descname">encryption_users</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.encryption_users" title="Permalink to this definition">¶</a></dt>
 <dd>FIXME: Need to work out how to create certificates for this</dd></dl>
+
+<dl class="classmethod">
+<dt id="fs.Entry.factory">
+<em class="property">classmethod </em><tt class="descname">factory</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.Entry.factory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fs.Entry.get_accessed_at">
+<tt class="descname">get_accessed_at</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_accessed_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fs.Entry.get_attributes">
+<tt class="descname">get_attributes</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_attributes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fs.Entry.get_created_at">
+<tt class="descname">get_created_at</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fs.Entry.get_size">
+<tt class="descname">get_size</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fs.Entry.get_written_at">
+<tt class="descname">get_written_at</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_written_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.like">
@@ -141,7 +172,7 @@ be compressed automatically.</dd></dl>
 <dt id="fs.Entry.move">
 <tt class="descname">move</tt><big>(</big><em>other</em>, <em>callback=None</em>, <em>callback_data=None</em>, <em>clobber=False</em><big>)</big><a class="headerlink" href="#fs.Entry.move" title="Permalink to this definition">¶</a></dt>
 <dd><p>Move this entry to the file/directory represented by other.
-If other is a directory, self is copied into it (not over it)</p>
+If other is a directory, self</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -159,32 +190,10 @@ If other is a directory, self is copied into it (not over it)</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fs.Entry.parent">
-<tt class="descname">parent</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.parent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object which represents the directory
-this entry is in.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a></td>
-</tr>
-<tr class="field"><th class="field-name">Raises:</th><td class="field-body"><a title="fs.x_no_such_file" class="reference external" href="fs.html#fs.x_no_such_file"><tt class="xref docutils literal"><span class="pre">x_no_such_file</span></tt></a> if no parent exists (eg because this is a drive root)</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="fs.Entry.relative_to">
-<tt class="descname">relative_to</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#fs.Entry.relative_to" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="fs.Entry.rename">
 <tt class="descname">rename</tt><big>(</big><em>other</em>, <em>callback=None</em>, <em>callback_data=None</em>, <em>clobber=False</em><big>)</big><a class="headerlink" href="#fs.Entry.rename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Move this entry to the file/directory represented by other.
-If other is a directory, self is copied into it (not over it)</p>
+If other is a directory, self</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -308,11 +317,6 @@ not be compressed automatically.</dd></dl>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="fs.Entry.filepath">
-<tt class="descname">filepath</tt><a class="headerlink" href="#fs.Entry.filepath" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="fs.Entry.hidden">
 <tt class="descname">hidden</tt><a class="headerlink" href="#fs.Entry.hidden" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -325,6 +329,11 @@ not be compressed automatically.</dd></dl>
 <dl class="attribute">
 <dt id="fs.Entry.n_links">
 <tt class="descname">n_links</tt><a class="headerlink" href="#fs.Entry.n_links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fs.Entry.normal">
+<tt class="descname">normal</tt><a class="headerlink" href="#fs.Entry.normal" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -393,38 +402,6 @@ not be compressed automatically.</dd></dl>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="contents.html">
-              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
-            </a></p>
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="fs_filepath.html"
-                                  title="previous chapter">The FilePath class</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="fs_file.html"
-                                  title="next chapter">The File class</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/fs_entry.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
       </div>
       <div class="clearer"></div>
     </div>
@@ -444,7 +421,7 @@ not be compressed automatically.</dd></dl>
           <a href="fs_filepath.html" title="The FilePath class"
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" ><tt class="docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

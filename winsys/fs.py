@@ -331,9 +331,9 @@ class FilePath (unicode):
   * base - base part of filename (ie the piece before the dot)
   * ext - ext part of filename (ie the dot and the piece after)
 
-  =================== ========== ========= ========= ========= =========== ==========  ===== ====
+  =================== ========== ========= ========= ========= =========== =========== ===== ====
   Path                root       filename  name      dirname   path        parent      base  ext
-  =================== ========== ========= ========= ========= =========== ==========  ===== ====
+  =================== ========== ========= ========= ========= =========== =========== ===== ====
   \\\\a\\b\\c\\d.txt  \\\\a\\b\\ d.txt     d.txt     c         \\\\a\\b\\c \\\\a\\b\\c d     .txt
   c:\\boot.ini        c:\\       boot.ini  boot.ini  _         c:\\        c:\\        boot  .ini
   boot.ini            _          boot.ini  boot.ini  _         _           x_fs        boot  .ini
@@ -342,7 +342,7 @@ class FilePath (unicode):
   c:\\t\\a.txt        c:\\       a.txt     a.txt     t         c:\\t       c:\\t       a     .txt
   c:a.txt             c:         a.txt     a.txt     _         c:          x_fs        a     .txt
   a.txt               _          a.txt     a.txt     _         _           x_fs        a     .txt
-  =================== ========== ========= ========= ========= =========== ========== ===== ====
+  =================== ========== ========= ========= ========= =========== =========== ===== ====
   """
   def __new__ (meta, filepath):
     fp = unicode.__new__ (meta, filepath.lower ().replace ("/", sep))
@@ -526,7 +526,7 @@ class _Attributes (core._WinSysObject):
     )
 
 class Drive (core._WinSysObject):
-  ur"""Wraps a drive litter, offering access to its :meth:`volume`
+  ur"""Wraps a drive letter, offering access to its :attr:`Drive.volume`
   and the ability to :meth:`mount` or :meth:`dismount` it on a particular
   volume.
   """
@@ -546,6 +546,10 @@ class Drive (core._WinSysObject):
   root = property (_get_root)
 
   def _get_volume (self):
+    """Any volume currently mounted on this drive root. NB A drive
+    can be referred to without a volume mounted, eg to call its :meth:`mount`
+    method.
+    """
     try:
       return volume (self.name)
     except x_no_such_file:
@@ -583,7 +587,7 @@ class Volume (core._WinSysObject):
 
   Attributes:
 
-  * label
+  * :attr:`label`
   * serial_number
   * maximum_component_length
   * flags - combination of :const:`VOLUME_FLAG`
@@ -604,10 +608,15 @@ class Volume (core._WinSysObject):
       return [None, None, None, 0, None]
 
   def _get_label (self):
+    """The user-assigned label set by the DOS LABEL command
+    """
     return self._get_info ()[0]
   label = property (_get_label)
 
   def _get_serial_number (self):
+    ur"""A software serial number, not the hardware serial
+    number assigned by the device manufacturer.
+    """
     value = self._get_info ()[1]
     if value is None:
       return None
@@ -617,18 +626,29 @@ class Volume (core._WinSysObject):
   serial_number = property (_get_serial_number)
 
   def _get_maximum_component_length (self):
+    ur"""The maximum length any one component of the file system
+    name can reach. For NTFS this is 255, meaning that any one
+    segment of of the path can be no longer than 255 chars.
+    """
     return self._get_info ()[2]
   maximum_component_length = property (_get_maximum_component_length)
 
   def _get_flags (self):
+    ur"""An attribute set corresponding to some combination of :const:`VOLUME_FLAG`"""
     return _Attributes (self._get_info ()[3], VOLUME_FLAG)
   flags = property (_get_flags)
 
   def _get_file_system_name (self):
+    ur"""The name of the file system present on this volume, eg NTFS"""
     return self._get_info ()[4]
   file_system_name = property (_get_file_system_name)
 
   def _get_mounts (self):
+    ur"""An iterator of the :class:`Dir` objects which mount this volume. NB Windows
+    restrictions mean that more than one drive root directory can mount the same
+    volume simultaneously. But it is possible for a volume to be mounted on, eg,
+    e:\ and c:\mounts\e at the same time.
+    """
     return (dir (m) for m in wrapped (win32file.GetVolumePathNamesForVolumeName, self.name))
   mounts = property (_get_mounts)
 
@@ -676,7 +696,7 @@ class Entry (FilePath, core._WinSysObject):
   * attributes
   * id
   * n_links
-  * attributes - an :class:`Attributes` object representing combinations of :const:`FILE_ATTRIBUTE`
+  * attributes - an :class:`_Attributes` object representing combinations of :const:`FILE_ATTRIBUTE`
 
   Common functionality:
 

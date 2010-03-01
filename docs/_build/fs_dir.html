@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,7 +11,7 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    '#',
         VERSION:     '0.4dev',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
@@ -18,6 +19,7 @@
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
@@ -42,32 +44,20 @@
           <a href="fs_file.html" title="The File class"
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
-        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="the-dir-class">
 <h1>The Dir class<a class="headerlink" href="#the-dir-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fs.Dir">
-<em class="property">class </em><tt class="descname">Dir</tt><big>(</big><em>filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.Dir" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Dir</tt><a class="headerlink" href="#fs.Dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">fs.Entry</span></tt></a></p>
-<dl class="method">
-<dt id="fs.Dir.ancestors">
-<tt class="descname">ancestors</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Dir.ancestors" title="Permalink to this definition">¶</a></dt>
-<dd>Iterate over this entry&#8217;s ancestors, yielding the <a title="fs.Dir" class="reference internal" href="#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object
-corresponding to each one.</dd></dl>
-
-<dl class="method">
-<dt id="fs.Dir.as_string">
-<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Dir.as_string" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="fs.Dir.compress">
 <tt class="descname">compress</tt><big>(</big><em>apply_to_contents=True</em>, <em>callback=None</em><big>)</big><a class="headerlink" href="#fs.Dir.compress" title="Permalink to this definition">¶</a></dt>
@@ -96,8 +86,10 @@ and their files</li>
 <dt id="fs.Dir.copy">
 <tt class="descname">copy</tt><big>(</big><em>target_filepath</em>, <em>callback=None</em>, <em>callback_data=None</em><big>)</big><a class="headerlink" href="#fs.Dir.copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copy this directory to another, which must be a directory if it
-exists. If it does exist, this directory will be copied inside it; if
-it does not exist, this directory will be copied over it.</p>
+exists. If it does exist, this directory&#8217;s contents will be copied
+inside it; if it does not exist, this directory will become it.
+NB To copy this directory inside another, set the <cite>target_filepath</cite>
+to <cite>other_directory + self.name</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -180,16 +172,6 @@ a <a title="fs.Dir" class="reference internal" href="#fs.Dir"><tt class="xref do
 <dd>Dismount whatever volume is mounted at this directory</dd></dl>
 
 <dl class="method">
-<dt id="fs.Dir.dump">
-<tt class="descname">dump</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#fs.Dir.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="fs.Dir.dumped">
-<tt class="descname">dumped</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#fs.Dir.dumped" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="fs.Dir.enable_encryption">
 <tt class="descname">enable_encryption</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Dir.enable_encryption" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -198,11 +180,6 @@ a <a title="fs.Dir" class="reference internal" href="#fs.Dir"><tt class="xref do
 <dt id="fs.Dir.encrypt">
 <tt class="descname">encrypt</tt><big>(</big><em>apply_to_contents=True</em><big>)</big><a class="headerlink" href="#fs.Dir.encrypt" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="method">
-<dt id="fs.Dir.encryption_users">
-<tt class="descname">encryption_users</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Dir.encryption_users" title="Permalink to this definition">¶</a></dt>
-<dd>FIXME: Need to work out how to create certificates for this</dd></dl>
 
 <dl class="method">
 <dt id="fs.Dir.entries">
@@ -243,19 +220,6 @@ as well.</p>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="method">
-<dt id="fs.Dir.like">
-<tt class="descname">like</tt><big>(</big><em>pattern</em><big>)</big><a class="headerlink" href="#fs.Dir.like" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return true if this filename&#8217;s name (not the path) matches
-<cite>pattern</cite> according to <cite>fnmatch</cite>, eg:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
-<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">files</span> <span class="p">():</span>
-  <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">directory</span> <span class="ow">and</span> <span class="n">f</span><span class="o">.</span><span class="n">like</span> <span class="p">(</span><span class="s">&quot;test_*&quot;</span><span class="p">):</span>
-    <span class="k">print</span> <span class="n">f</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="method">
@@ -312,70 +276,6 @@ an exception is raised. eg:</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="fs.Dir.move">
-<tt class="descname">move</tt><big>(</big><em>other</em>, <em>callback=None</em>, <em>callback_data=None</em>, <em>clobber=False</em><big>)</big><a class="headerlink" href="#fs.Dir.move" title="Permalink to this definition">¶</a></dt>
-<dd><p>Move this entry to the file/directory represented by other.
-If other is a directory, self is copied into it (not over it)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></li>
-<li><em>callback</em> &#8211; a function which will receive a total size &amp; total transferred</li>
-<li><em>callback_data</em> &#8211; passed as extra data to callback</li>
-<li><em>clobber</em> &#8211; whether to overwrite the other file if it exists</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="fs.Dir.parent">
-<tt class="descname">parent</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Dir.parent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the <a title="fs.Dir" class="reference internal" href="#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object which represents the directory
-this entry is in.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><a title="fs.Dir" class="reference internal" href="#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a></td>
-</tr>
-<tr class="field"><th class="field-name">Raises:</th><td class="field-body"><a title="fs.x_no_such_file" class="reference external" href="fs.html#fs.x_no_such_file"><tt class="xref docutils literal"><span class="pre">x_no_such_file</span></tt></a> if no parent exists (eg because this is a drive root)</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="fs.Dir.relative_to">
-<tt class="descname">relative_to</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#fs.Dir.relative_to" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="fs.Dir.rename">
-<tt class="descname">rename</tt><big>(</big><em>other</em>, <em>callback=None</em>, <em>callback_data=None</em>, <em>clobber=False</em><big>)</big><a class="headerlink" href="#fs.Dir.rename" title="Permalink to this definition">¶</a></dt>
-<dd><p>Move this entry to the file/directory represented by other.
-If other is a directory, self is copied into it (not over it)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></li>
-<li><em>callback</em> &#8211; a function which will receive a total size &amp; total transferred</li>
-<li><em>callback_data</em> &#8211; passed as extra data to callback</li>
-<li><em>clobber</em> &#8211; whether to overwrite the other file if it exists</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="fs.Dir.rmdir">
 <tt class="descname">rmdir</tt><big>(</big><em>recursive=False</em><big>)</big><a class="headerlink" href="#fs.Dir.rmdir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete this directory, optionally including its children.</p>
@@ -386,70 +286,6 @@ If other is a directory, self is copied into it (not over it)</p>
 <tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>recursive</em> &#8211; whether to remove all subdirectories and files first</td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body">this directory</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="fs.Dir.security">
-<tt class="descname">security</tt><big>(</big><em>options=u'OD'</em><big>)</big><a class="headerlink" href="#fs.Dir.security" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <a title="security.Security" class="reference external" href="security.html#security.Security"><tt class="xref docutils literal"><span class="pre">security.Security</span></tt></a> object corresponding to this
-entry&#8217;s security attributes. Note that the returning object is a context
-manager so a common pattern is:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#</span>
-<span class="c"># Find all private key files and ensure that only</span>
-<span class="c"># the owner has any access.</span>
-<span class="c">#</span>
-<span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
-<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">flat</span> <span class="p">(</span><span class="s">&quot;*.ppk&quot;</span><span class="p">):</span>
-  <span class="k">with</span> <span class="n">f</span><span class="o">.</span><span class="n">security</span> <span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
-    <span class="n">s</span><span class="o">.</span><span class="n">break_inheritance</span> <span class="p">()</span>
-    <span class="n">s</span><span class="o">.</span><span class="n">dacl</span> <span class="o">=</span> <span class="p">[(</span><span class="n">s</span><span class="o">.</span><span class="n">owner</span><span class="p">,</span> <span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">)]</span>
-</pre></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>options</em> &#8211; cf <a title="security.security" class="reference external" href="security.html#security.security"><tt class="xref docutils literal"><span class="pre">security.security()</span></tt></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="fs.Dir.take_control">
-<tt class="descname">take_control</tt><big>(</big><em>principal=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#fs.Dir.take_control" title="Permalink to this definition">¶</a></dt>
-<dd><p>Give the logged-on user full control to a file. This may
-need to be preceded by a call to <a title="fs.Dir.take_ownership" class="reference internal" href="#fs.Dir.take_ownership"><tt class="xref docutils literal"><span class="pre">take_ownership()</span></tt></a> so that the
-user gains WRITE_DAC permissions.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>principal</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal()</span></tt> [logged-on user]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="fs.Dir.take_ownership">
-<tt class="descname">take_ownership</tt><big>(</big><em>principal=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#fs.Dir.take_ownership" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the new owner of the file to be the logged-on user.
-This is no more than a slight shortcut to the equivalent
-security operations.</p>
-<p>If you specify a principal (other than the logged-in user,
-the default) you may need to have enabled SE_RESTORE privilege.
-Even the logged-in user may need to have enabled SE_TAKE_OWNERSHIP
-if that user has not been granted the appropriate security by
-the ACL.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>principal</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal()</span></tt> [logged-on user]</td>
 </tr>
 </tbody>
 </table>
@@ -534,159 +370,12 @@ directory and its children. [directory.zip]</li>
 </table>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="fs.Dir.accessed_at">
-<tt class="descname">accessed_at</tt><a class="headerlink" href="#fs.Dir.accessed_at" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.archive">
-<tt class="descname">archive</tt><a class="headerlink" href="#fs.Dir.archive" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.attributes">
-<tt class="descname">attributes</tt><a class="headerlink" href="#fs.Dir.attributes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.compressed">
-<tt class="descname">compressed</tt><a class="headerlink" href="#fs.Dir.compressed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.created_at">
-<tt class="descname">created_at</tt><a class="headerlink" href="#fs.Dir.created_at" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.directory">
-<tt class="descname">directory</tt><a class="headerlink" href="#fs.Dir.directory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.encrypted">
-<tt class="descname">encrypted</tt><a class="headerlink" href="#fs.Dir.encrypted" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.filepath">
-<tt class="descname">filepath</tt><a class="headerlink" href="#fs.Dir.filepath" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.hidden">
-<tt class="descname">hidden</tt><a class="headerlink" href="#fs.Dir.hidden" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.id">
-<tt class="descname">id</tt><a class="headerlink" href="#fs.Dir.id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.n_links">
-<tt class="descname">n_links</tt><a class="headerlink" href="#fs.Dir.n_links" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.not_content_indexed">
-<tt class="descname">not_content_indexed</tt><a class="headerlink" href="#fs.Dir.not_content_indexed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.offline">
-<tt class="descname">offline</tt><a class="headerlink" href="#fs.Dir.offline" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.readable">
-<tt class="descname">readable</tt><a class="headerlink" href="#fs.Dir.readable" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.readonly">
-<tt class="descname">readonly</tt><a class="headerlink" href="#fs.Dir.readonly" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.reparse_point">
-<tt class="descname">reparse_point</tt><a class="headerlink" href="#fs.Dir.reparse_point" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.size">
-<tt class="descname">size</tt><a class="headerlink" href="#fs.Dir.size" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.sparse_file">
-<tt class="descname">sparse_file</tt><a class="headerlink" href="#fs.Dir.sparse_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.system">
-<tt class="descname">system</tt><a class="headerlink" href="#fs.Dir.system" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.temporary">
-<tt class="descname">temporary</tt><a class="headerlink" href="#fs.Dir.temporary" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.uncompressed_size">
-<tt class="descname">uncompressed_size</tt><a class="headerlink" href="#fs.Dir.uncompressed_size" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.virtual">
-<tt class="descname">virtual</tt><a class="headerlink" href="#fs.Dir.virtual" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="fs.Dir.written_at">
-<tt class="descname">written_at</tt><a class="headerlink" href="#fs.Dir.written_at" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </div>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="contents.html">
-              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
-            </a></p>
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="fs_file.html"
-                                  title="previous chapter">The File class</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="fs_constants.html"
-                                  title="next chapter">fs Constants</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/fs_dir.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
       </div>
       <div class="clearer"></div>
     </div>
@@ -706,7 +395,7 @@ directory and its children. [directory.zip]</li>
           <a href="fs_file.html" title="The File class"
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" ><tt class="docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

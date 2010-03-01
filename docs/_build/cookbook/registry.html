@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -18,6 +19,7 @@
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="WinSys v0.4dev documentation" href="../index.html" />
@@ -48,7 +50,6 @@
 
     <div class="document">
       <div class="documentwrapper">
-        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="using-the-registry-module">
@@ -60,7 +61,7 @@
 set the new key&#8217;s security so that only the current user has
 change rights and all other users have read-only. Finally, display
 the details of the new top-level key, including its security.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -76,7 +77,7 @@ the details of the new top-level key, including its security.</p>
 14
 15
 16
-17</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+17</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span><span class="p">,</span> <span class="n">accounts</span>
 
 <span class="n">new_key</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">copy</span> <span class="p">(</span><span class="s">r&quot;HKLM\Software\Python&quot;</span><span class="p">,</span> <span class="s">r&quot;HKLM\Software\WinsysPython&quot;</span><span class="p">)</span>
@@ -123,7 +124,7 @@ in a readable format.</p>
 <p>Search the registry under a particular root and find a value which
 contains the searched-for string. Output the registry key, the value
 name and the value itself.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -139,7 +140,7 @@ name and the value itself.</p>
 14
 15
 16
-17</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">registry</span>
+17</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">registry</span>
 
 <span class="n">root</span><span class="p">,</span> <span class="n">term</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span>
   <span class="s">&quot;Search the Registry&quot;</span><span class="p">,</span>
@@ -172,53 +173,6 @@ which matched.</p>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../contents.html">
-              <img class="logo" src="../_static/cpython2.png" alt="Logo"/>
-            </a></p>
-            <h3><a href="../contents.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="">Using the registry module</a><ul>
-<li><a class="reference external" href="#copy-one-registry-key-to-another">Copy one registry key to another</a><ul>
-<li><a class="reference external" href="#discussion">Discussion</a></li>
-</ul>
-</li>
-<li><a class="reference external" href="#find-a-string-in-the-registry">Find a string in the registry</a><ul>
-<li><a class="reference external" href="#id2">Discussion</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="fs.html"
-                                  title="previous chapter">Using the fs module</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="security.html"
-                                  title="next chapter">Using the security module</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/cookbook/registry.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
       </div>
       <div class="clearer"></div>
     </div>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,7 +11,7 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    '#',
         VERSION:     '0.4dev',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
@@ -18,6 +19,7 @@
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
@@ -46,11 +48,10 @@
 
     <div class="document">
       <div class="documentwrapper">
-        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="module-registry">
-<h1><tt class="xref docutils literal"><span class="pre">registry</span></tt> &#8211; Registry<a class="headerlink" href="#module-registry" title="Permalink to this headline">¶</a></h1>
+<h1><a title="Pythonic access to the registry" class="reference external" href="#module-registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a> &#8211; Registry<a class="headerlink" href="#module-registry" title="Permalink to this headline">¶</a></h1>
 <p>The registry consists of a series of roots from each of which descends
 a tree of keys and values. Each key has an anonymous (default) value
 and optionally a set of named values, each of which has a particular
@@ -363,8 +364,8 @@ otherwise it will delete a key of that name. This is equivalent to
 calling <a title="registry.Registry.del_value" class="reference internal" href="#registry.Registry.del_value"><tt class="xref docutils literal"><span class="pre">del_value()</span></tt></a> or <a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete()</span></tt></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="n">python</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;HKLM\Software\Python&quot;</span><span class="p">)</span>
-<span class="n">python</span><span class="o">.</span><span class="n">testing</span> <span class="o">=</span> <span class="mf">4</span>
-<span class="n">python</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;testing&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mf">4</span>
+<span class="n">python</span><span class="o">.</span><span class="n">testing</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">python</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;testing&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
 <span class="n">python</span><span class="o">.</span><span class="n">testing</span> <span class="o">==</span> <span class="n">python</span><span class="p">[</span><span class="s">&#39;testing&#39;</span><span class="p">]</span>
 <span class="k">del</span> <span class="n">python</span><span class="o">.</span><span class="n">testing</span>
 </pre></div>
@@ -376,8 +377,8 @@ calling <a title="registry.Registry.del_value" class="reference internal" href="
 <a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete()</span></tt></a> function.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="n">winsys</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">create</span> <span class="p">()</span>
-<span class="n">winsys</span><span class="o">.</span><span class="n">test_value</span> <span class="o">=</span> <span class="mf">4</span>
-<span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys:test_value&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mf">4</span>
+<span class="n">winsys</span><span class="o">.</span><span class="n">test_value</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys:test_value&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
 <span class="n">registry</span><span class="o">.</span><span class="n">delete</span> <span class="p">(</span><span class="n">winsys</span><span class="p">)</span>
 <span class="c"># or winsys.delete ()</span>
 <span class="c"># or registry.registry (r&quot;hklm\software&quot;).delete (&quot;winsys&quot;)</span>
@@ -957,51 +958,6 @@ themselves generators.</p>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="contents.html">
-              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
-            </a></p>
-            <h3><a href="contents.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href=""><tt class="docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a><ul>
-<li><a class="reference external" href="#functions">Functions</a></li>
-<li><a class="reference external" href="#classes">Classes</a></li>
-<li><a class="reference external" href="#constants">Constants</a></li>
-<li><a class="reference external" href="#exceptions">Exceptions</a></li>
-<li><a class="reference external" href="#references">References</a></li>
-<li><a class="reference external" href="#to-do">To Do</a></li>
-</ul>
-</li>
-</ul>
-
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="events.html"
-                                  title="previous chapter">Events</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="security.html"
-                                  title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">security</span></tt></a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/registry.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
       </div>
       <div class="clearer"></div>
     </div>

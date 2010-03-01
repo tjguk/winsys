@@ -5,3 +5,4 @@ The FilePath class
 
 ..  autoclass:: FilePath
     :members:
+    :show-inheritance:

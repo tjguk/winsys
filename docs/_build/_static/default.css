@@ -1,6 +1,12 @@
-/**
- * Sphinx stylesheet -- default theme
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/*
+ * default.css_t
+ * ~~~~~~~~~~~~~
+ *
+ * Sphinx stylesheet -- default theme.
+ *
+ * :copyright: Copyright 2007-2010 by the Sphinx team, see AUTHORS.
+ * :license: BSD, see LICENSE for details.
+ *
  */
 
 @import url("basic.css");
@@ -171,6 +177,18 @@ div.admonition p.admonition-title + p {
     display: inline;
 }
 
+div.admonition p {
+    margin-bottom: 5px;
+}
+
+div.admonition pre {
+    margin-bottom: 5px;
+}
+
+div.admonition ul, div.admonition ol {
+    margin-bottom: 5px;
+}
+
 div.note {
     background-color: #eee;
     border: 1px solid #ccc;
@@ -216,4 +234,12 @@ tt {
 
 th {
     background-color: #ede;
+}
+
+.warning tt {
+    background: #efc2c2;
+}
+
+.note tt {
+    background: #d6d6d6;
 }

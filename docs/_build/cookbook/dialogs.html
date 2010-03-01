@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -18,6 +19,7 @@
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="WinSys v0.4dev documentation" href="../index.html" />
@@ -48,7 +50,6 @@
 
     <div class="document">
       <div class="documentwrapper">
-        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="using-the-dialogs-module">
@@ -58,9 +59,9 @@
 <h2>Ask the user for input<a class="headerlink" href="#ask-the-user-for-input" title="Permalink to this headline">¶</a></h2>
 <p>This is the simplest kind of dialog box: a one-line edit
 control with [Ok] and [Cancel].</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
-3</pre></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span>
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span>
 
 <span class="n">name</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span><span class="s">&quot;What is your name?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">))</span>
 </pre></div>
@@ -72,7 +73,7 @@ control with [Ok] and [Cancel].</p>
 and then use os.startfile to open the file. Allow the
 user to type the filename in, drag-and-drop a file from
 Explorer, or select from a dialog box.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -84,7 +85,7 @@ Explorer, or select from a dialog box.</p>
 10
 11
 12
-13</pre></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+13</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">fs</span>
 
 <span class="n">DEFAULT</span> <span class="o">=</span> <span class="s">&quot;temp.csv&quot;</span>
@@ -115,50 +116,6 @@ it represents exists on the file system.</p>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../contents.html">
-              <img class="logo" src="../_static/cpython2.png" alt="Logo"/>
-            </a></p>
-            <h3><a href="../contents.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="">Using the dialogs module</a><ul>
-<li><a class="reference external" href="#ask-the-user-for-input">Ask the user for input</a></li>
-<li><a class="reference external" href="#prompt-for-a-filename-to-open">Prompt for a filename to open</a><ul>
-<li><a class="reference external" href="#discussion">Discussion</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="constants.html"
-                                  title="previous chapter">Using the constants module</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="environment.html"
-                                  title="next chapter">Using the environment module</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/cookbook/dialogs.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
       </div>
       <div class="clearer"></div>
     </div>

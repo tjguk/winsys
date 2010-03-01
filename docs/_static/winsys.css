@@ -109,6 +109,10 @@ dl em {
   font-style : normal;
 }
 
+table.field-list th {
+  background-color : inherit;
+}
+
 @media print {
     div.document,
     div.documentwrapper,

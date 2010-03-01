@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,7 +11,7 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    '#',
         VERSION:     '0.4dev',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
@@ -18,6 +19,7 @@
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
@@ -42,21 +44,21 @@
           <a href="fs_drive_vol.html" title="The Drive class"
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
-        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="the-filepath-class">
 <h1>The FilePath class<a class="headerlink" href="#the-filepath-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fs.FilePath">
-<em class="property">class </em><tt class="descname">FilePath</tt><big>(</big><em>filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.FilePath" title="Permalink to this definition">¶</a></dt>
-<dd><p>A unicode subclass which knows about path structures on Windows.
+<em class="property">class </em><tt class="descname">FilePath</tt><a class="headerlink" href="#fs.FilePath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref docutils literal"><span class="pre">unicode</span></tt></p>
+<p>A unicode subclass which knows about path structures on Windows.
 The path itself need not exist on any filesystem, but it has to match
 the rules which would make it possible.</p>
 <p>FilePaths can be absolute or relative. The only difference is that
@@ -67,23 +69,24 @@ semantics.</p>
 <ul class="simple">
 <li>parts - a list of the components (cf <a title="fs.get_parts" class="reference external" href="fs.html#fs.get_parts"><tt class="xref docutils literal"><span class="pre">fs.get_parts()</span></tt></a>)</li>
 <li>root - the drive or UNC server/share ending in a backslash unless a drive-relative path</li>
-<li>filename - final component (may be blank if the path looks like a directory)</li>
-<li>name - same as filename unless blank in which case second-last component</li>
+<li>filename - final component</li>
+<li>name - same as filename (convenience)</li>
 <li>dirname - all path components before the last</li>
 <li>path - combination of root and dirname</li>
-<li>parent - combination of root and all path components before second penultimate</li>
+<li>parent - combination of root and all path components before second penultimate; raises
+an exception is FilePath is relative.</li>
 <li>base - base part of filename (ie the piece before the dot)</li>
 <li>ext - ext part of filename (ie the dot and the piece after)</li>
 </ul>
 <table border="1" class="docutils">
 <colgroup>
 <col width="22%" />
-<col width="12%" />
+<col width="11%" />
 <col width="10%" />
 <col width="10%" />
 <col width="10%" />
 <col width="13%" />
-<col width="12%" />
+<col width="13%" />
 <col width="6%" />
 <col width="5%" />
 </colgroup>
@@ -104,9 +107,9 @@ semantics.</p>
 <td>\\a\b\</td>
 <td>d.txt</td>
 <td>d.txt</td>
-<td>\c</td>
+<td>c</td>
 <td>\\a\b\c</td>
-<td>\\a\b</td>
+<td>\\a\b\c</td>
 <td>d</td>
 <td>.txt</td>
 </tr>
@@ -114,18 +117,18 @@ semantics.</p>
 <td>c:\</td>
 <td>boot.ini</td>
 <td>boot.ini</td>
-<td>\</td>
+<td>_</td>
 <td>c:\</td>
 <td>c:\</td>
 <td>boot</td>
 <td>.ini</td>
 </tr>
 <tr><td>boot.ini</td>
-<td>&nbsp;</td>
+<td>_</td>
 <td>boot.ini</td>
 <td>boot.ini</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>_</td>
+<td>_</td>
 <td>x_fs</td>
 <td>boot</td>
 <td>.ini</td>
@@ -134,27 +137,27 @@ semantics.</p>
 <td>c:\</td>
 <td>t</td>
 <td>t</td>
-<td>\</td>
+<td>_</td>
 <td>c:\</td>
 <td>c:\</td>
 <td>t</td>
-<td>&nbsp;</td>
+<td>_</td>
 </tr>
 <tr><td>c:\t\</td>
 <td>c:\</td>
-<td>&nbsp;</td>
 <td>t</td>
-<td>\</td>
+<td>t</td>
+<td>_</td>
 <td>c:\</td>
 <td>c:\</td>
 <td>t</td>
-<td>&nbsp;</td>
+<td>_</td>
 </tr>
 <tr><td>c:\t\a.txt</td>
 <td>c:\</td>
 <td>a.txt</td>
 <td>a.txt</td>
-<td>\t</td>
+<td>t</td>
 <td>c:\t</td>
 <td>c:\t</td>
 <td>a</td>
@@ -164,8 +167,18 @@ semantics.</p>
 <td>c:</td>
 <td>a.txt</td>
 <td>a.txt</td>
-<td>&nbsp;</td>
+<td>_</td>
 <td>c:</td>
+<td>x_fs</td>
+<td>a</td>
+<td>.txt</td>
+</tr>
+<tr><td>a.txt</td>
+<td>_</td>
+<td>a.txt</td>
+<td>a.txt</td>
+<td>_</td>
+<td>_</td>
 <td>x_fs</td>
 <td>a</td>
 <td>.txt</td>
@@ -179,8 +192,14 @@ semantics.</p>
 relative or not. Use <tt class="xref docutils literal"><span class="pre">os.path.abspath()</span></tt> semantics.</dd></dl>
 
 <dl class="method">
+<dt id="fs.FilePath.abspath">
+<tt class="descname">abspath</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.FilePath.abspath" title="Permalink to this definition">¶</a></dt>
+<dd>Return an absolute version of the current FilePath, whether
+relative or not. Use <tt class="xref docutils literal"><span class="pre">os.path.abspath()</span></tt> semantics.</dd></dl>
+
+<dl class="method">
 <dt id="fs.FilePath.changed">
-<tt class="descname">changed</tt><big>(</big><em>root=None</em>, <em>path=None</em>, <em>filename=None</em>, <em>base=None</em>, <em>infix=None</em>, <em>ext=None</em><big>)</big><a class="headerlink" href="#fs.FilePath.changed" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">changed</tt><big>(</big><em>root=None</em>, <em>dirname=None</em>, <em>filename=None</em>, <em>base=None</em>, <em>infix=None</em>, <em>ext=None</em><big>)</big><a class="headerlink" href="#fs.FilePath.changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a new <a title="fs.FilePath" class="reference internal" href="#fs.FilePath"><tt class="xref docutils literal"><span class="pre">FilePath</span></tt></a> with one or more parts changed. This is particularly
 convenient for, say, changing the extension of a file or producing a version on
 another path, eg:</p>
@@ -188,13 +207,13 @@ another path, eg:</p>
 
 BACKUP_DRIVE = "D:\"
 for f in fs.flat (shell.special_folder ("personal"), "*.doc"):
-  f.copy (f.filepath.changed (root=BACKUP_DRIVE))</pre>
+  f.copy (f.changed (root=BACKUP_DRIVE))</pre>
 </div>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="fs.FilePath.from_parts">
-<em class="property">classmethod </em><tt class="descname">from_parts</tt><big>(</big><em>root</em>, <em>path</em>, <em>base</em>, <em>ext</em><big>)</big><a class="headerlink" href="#fs.FilePath.from_parts" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">from_parts</tt><big>(</big><em>root</em>, <em>dirname</em>, <em>base</em>, <em>ext</em><big>)</big><a class="headerlink" href="#fs.FilePath.from_parts" title="Permalink to this definition">¶</a></dt>
 <dd>Recreate a filepath from its constituent parts. No real validation is done;
 it is assumed that the parameters are valid parts of a filepath.</dd></dl>
 
@@ -209,38 +228,6 @@ it is assumed that the parameters are valid parts of a filepath.</dd></dl>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="contents.html">
-              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
-            </a></p>
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="fs_drive_vol.html"
-                                  title="previous chapter">The Drive class</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="fs_entry.html"
-                                  title="next chapter">The Entry class</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/fs_filepath.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
       </div>
       <div class="clearer"></div>
     </div>
@@ -260,7 +247,7 @@ it is assumed that the parameters are valid parts of a filepath.</dd></dl>
           <a href="fs_drive_vol.html" title="The Drive class"
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

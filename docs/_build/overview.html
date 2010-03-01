@@ -1,0 +1,107 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>An Overview of WinSys &mdash; WinSys v0.4dev documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '0.4dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body">
+            
+  <div class="section" id="an-overview-of-winsys">
+<h1>An Overview of WinSys<a class="headerlink" href="#an-overview-of-winsys" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="raison-d-etre">
+<h2>Raison d&#8217;Être<a class="headerlink" href="#raison-d-etre" title="Permalink to this headline">¶</a></h2>
+<p>Python plus the pywin32 extensions together make an excellent toolkit for
+many Windows sysadmin tasks, whether lightweight and <em>ad hoc</em> or regular and substantial.
+One of the obstacles, though, is that the Python core library is at best
+neutered by cross-platform constraints, and at worst simply unfriendly
+towards Windows. Another is that the pywin32 extensions, representing
+goodness-knows how many man years of development work, are underdocumented
+and sometimes quite daunting. You need two levels understanding to make
+best use of them: a knowledge of the underlying API which they&#8217;re wrapping,
+and a knowledge of how much the wrapping mechanism has done for you and
+how much you have to do for yourself.</p>
+<p>For years, in support of our Windows sysadmins, and to help posters on
+the python and python-win32 mailing lists, I&#8217;ve been putting together
+examples, modules, lightweight wrappers and explanations to achieve
+concrete tasks using Python on a Windows platform. It&#8217;s frustrating,
+especially to someone who&#8217;s used to the high-level nature of Python,
+to have to post up 17 lines of code to achieve programatically a
+one-line concept. Equally frustrating is the experience of doing a
+GetFirst-While-GetNext dance instead of the familiar Python iteration.</p>
+<p>Enter WinSys: the Python toolkit for Windows administration tasks.
+There&#8217;s nothing here you couldn&#8217;t do for yourself in a few minutes
+with the pywin32 docs and an internet connection to MSDN. But it&#8217;s
+all a bit more Pythonic. And it&#8217;s got a fairly consistent approach.
+And the constants are a bit more friendly. And you can fairly well
+mix and match with raw pywin32 or even ctypes if you need to.</p>
+</div>
+<div class="section" id="what-s-on-offer">
+<h2>What&#8217;s On Offer?<a class="headerlink" href="#what-s-on-offer" title="Permalink to this headline">¶</a></h2>
+<p>The intention is to expand the areas on offer pretty much on-demand.
+Two key modules which aren&#8217;t included here yet but which continue
+to be maintained externally are my own WMI and active_directory modules.
+Both are long overdue for an overhaul. The latter has a number of
+(more competent) rivals while the former stands more or less alone
+but is in need of a bit of a shakedown.</p>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+    </div>
+  </body>
+</html>

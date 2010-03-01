@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,7 +11,7 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    '#',
         VERSION:     '0.4dev',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
@@ -18,6 +19,7 @@
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
@@ -46,11 +48,10 @@
 
     <div class="document">
       <div class="documentwrapper">
-        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="module-fs">
-<h1><tt class="xref docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.<a class="headerlink" href="#module-fs" title="Permalink to this headline">¶</a></h1>
+<h1><a title="Files, Directories, &amp;c." class="reference external" href="#module-fs"><tt class="xref docutils literal"><span class="pre">fs</span></tt></a> &#8211; Files, Directories, &amp;c.<a class="headerlink" href="#module-fs" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The fs module makes it easy to work with files, directories, drives, volumes and paths within the Windows filesystems.
@@ -69,7 +70,7 @@ at the same time a subclass of unicode, so is accepted in system calls where str
 <h3>Factories<a class="headerlink" href="#factories" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="fs.entry">
-<tt class="descname">entry</tt><big>(</big><em>filepath</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.entry" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">entry</tt><big>(</big><em>filepath</em>, <em>_file_info=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#fs.entry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> or <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object representing this
 filepath.</p>
 <table border="1" class="docutils">
@@ -89,13 +90,13 @@ filepath.</p>
 <tr><td>an <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> or subclass object</td>
 <td>the same object</td>
 </tr>
-<tr><td>an existing file</td>
+<tr><td>an existing file name</td>
 <td>a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object representing that file</td>
 </tr>
-<tr><td>an existing directory</td>
+<tr><td>an existing directory name</td>
 <td>a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object representing that directory</td>
 </tr>
-<tr><td>a file which doesn&#8217;t exist</td>
+<tr><td>a file name which doesn&#8217;t exist</td>
 <td>a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> if filepath ends with \,
 <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> otherwise</td>
 </tr>
@@ -105,7 +106,7 @@ filepath.</p>
 
 <dl class="function">
 <dt id="fs.file">
-<tt class="descname">file</tt><big>(</big><em>filepath</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.file" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">file</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.file" title="Permalink to this definition">¶</a></dt>
 <dd>Return a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object representing this filepath on
 the filepath. If filepath is already a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object, return
 it unchanged otherwise ensure that the filepath doesn&#8217;t point to
@@ -114,7 +115,7 @@ represents it.</dd></dl>
 
 <dl class="function">
 <dt id="fs.dir">
-<tt class="descname">dir</tt><big>(</big><em>filepath</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.dir" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dir</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.dir" title="Permalink to this definition">¶</a></dt>
 <dd>Return a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object representing this filepath on
 the filepath. If filepath is already a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object, return
 it unchanged otherwise ensure that the filepath doesn&#8217;t point to
@@ -304,7 +305,7 @@ from root. Implemented via <a title="fs.Dir.flat" class="reference external" hre
 <dl class="function">
 <dt id="fs.move">
 <tt class="descname">move</tt><big>(</big><em>source_filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.move" title="Permalink to this definition">¶</a></dt>
-<dd><p>Move one <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object to another, implemented via <a title="fs.File.move" class="reference external" href="fs_file.html#fs.File.move"><tt class="xref docutils literal"><span class="pre">File.move()</span></tt></a> or <a title="fs.Dir.move" class="reference external" href="fs_dir.html#fs.Dir.move"><tt class="xref docutils literal"><span class="pre">Dir.move()</span></tt></a></p>
+<dd><p>Move one <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object to another, implemented via <tt class="xref docutils literal"><span class="pre">File.move()</span></tt> or <tt class="xref docutils literal"><span class="pre">Dir.move()</span></tt></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -422,7 +423,7 @@ known path leaders:</p>
 <td>[&#8220;c:\&#8221;, &#8220;t&#8221;]</td>
 </tr>
 <tr><td>c:/t/</td>
-<td>[&#8220;c:\&#8221;, &#8220;t&#8221;, &#8220;&#8221;]</td>
+<td>[&#8220;c:\&#8221;, &#8220;t&#8221;]</td>
 </tr>
 <tr><td>c:/t/test.txt</td>
 <td>[&#8220;c:\&#8221;, &#8220;t&#8221;, &#8220;test.txt&#8221;]</td>
@@ -431,7 +432,7 @@ known path leaders:</p>
 <td>[&#8220;c:\&#8221;, &#8220;t&#8221;, &#8220;s&#8221;, &#8220;test.txt&#8221;]</td>
 </tr>
 <tr><td>c:test.txt</td>
-<td>[&#8220;c:\&#8221;, &#8220;&#8221;, &#8220;test.txt&#8221;]</td>
+<td>[&#8220;c:&#8221;, &#8220;test.txt&#8221;]</td>
 </tr>
 <tr><td>s/test.txt</td>
 <td>[&#8220;&#8221;, &#8220;s&#8221;, &#8220;test.txt&#8221;]</td>
@@ -454,23 +455,21 @@ known path leaders:</p>
 </tbody>
 </table>
 <p>The upshot is that the first item in the list returned is
-always the root (including trailing slash except for the special
-case of the format &lt;drive&gt;:&lt;path&gt; representing the current directory
-on &lt;drive&gt;) if the path is absolute, an empty string if it is relative.
-All other items before the last one represent the directories along
-the way. The last item is the filename, empty if the whole
-path represents a directory.</p>
+always the root, one of: a slash-terminated drive/volume/share
+for an absolute path; an empty string for a relative path; or
+a drive-colon for a drive-relative path.</p>
+<p>All other items before the last one represent the directories along
+the way. The last item is the filename or directory name.</p>
 <p>The original filepath can usually be reconstructed as:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
 <span class="n">filepath</span> <span class="o">=</span> <span class="s">&quot;c:/temp/abc.txt&quot;</span>
 <span class="n">parts</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">get_parts</span> <span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">parts</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mf">1</span><span class="p">:])</span> <span class="o">==</span> <span class="n">filepath</span>
+<span class="k">assert</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">==</span> <span class="n">filepath</span>
 </pre></div>
 </div>
 <p>The exception is when a root (UNC or volume) is given without
-a trailing slash. This is added in.</p>
-<p>Note that if the path does not end with a slash, the directory
-name itself is considered the filename. This is by design.</p>
+a trailing slash. This is added in. Or if a directory is given
+with a trailing slash. This is stripped off.</p>
 </dd></dl>
 
 <dl class="function">
@@ -667,6 +666,7 @@ access, item access and the &#8220;in&#8221; operator:</p>
 </div>
 </dd></dl>
 
+<div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference external" href="fs_drive_vol.html">The Drive class</a></li>
 <li class="toctree-l1"><a class="reference external" href="fs_drive_vol.html#the-volume-class">The Volume class</a></li>
@@ -676,11 +676,14 @@ access, item access and the &#8220;in&#8221; operator:</p>
 <li class="toctree-l1"><a class="reference external" href="fs_dir.html">The Dir class</a></li>
 </ul>
 </div>
+</div>
 <div class="section" id="constants">
 <h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference external" href="fs_constants.html">fs Constants</a></li>
 </ul>
+</div>
 </div>
 <div class="section" id="exceptions">
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
@@ -729,61 +732,6 @@ access, item access and the &#8220;in&#8221; operator:</p>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="contents.html">
-              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
-            </a></p>
-            <h3><a href="contents.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href=""><tt class="docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a><ul>
-<li><a class="reference external" href="#introduction">Introduction</a></li>
-<li><a class="reference external" href="#functions">Functions</a><ul>
-<li><a class="reference external" href="#factories">Factories</a></li>
-<li><a class="reference external" href="#stdlib-extras">stdlib Extras</a></li>
-<li><a class="reference external" href="#helpers">Helpers</a></li>
-<li><a class="reference external" href="#additional-filesystem-operations">Additional Filesystem Operations</a></li>
-</ul>
-</li>
-<li><a class="reference external" href="#classes">Classes</a><ul>
-</ul>
-</li>
-<li><a class="reference external" href="#constants">Constants</a><ul>
-</ul>
-</li>
-<li><a class="reference external" href="#exceptions">Exceptions</a></li>
-<li><a class="reference external" href="#references">References</a></li>
-</ul>
-</li>
-</ul>
-
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="event_logs.html"
-                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">event_logs</span></tt> &#8211; Event Logs</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="fs_drive_vol.html"
-                                  title="next chapter">The Drive class</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/fs.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
       </div>
       <div class="clearer"></div>
     </div>
