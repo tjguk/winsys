@@ -190,7 +190,7 @@ def get_parts (filepath):
   always the root, one of: a slash-terminated drive/volume/share
   for an absolute path; an empty string for a relative path; or
   a drive-colon for a drive-relative path.
-  
+
   All other items before the last one represent the directories along
   the way. The last item is the filename or directory name.
 
@@ -322,7 +322,7 @@ class FilePath (unicode):
 
   * parts - a list of the components (cf :func:`fs.get_parts`)
   * root - the drive or UNC server/share ending in a backslash unless a drive-relative path
-  * filename - final component 
+  * filename - final component
   * name - same as filename (convenience)
   * dirname - all path components before the last
   * path - combination of root and dirname
@@ -378,7 +378,7 @@ class FilePath (unicode):
   @classmethod
   def factory (cls, filepath):
     return cls (filepath)
-  
+
   def __repr__ (self):
     return u'<%s %s>' % (self.__class__.__name__, self)
 
@@ -450,7 +450,7 @@ class FilePath (unicode):
 
   def is_relative (self):
     return not self.root.endswith (sep)
-  
+
   def relative_to (self, other):
     """Return this filepath as relative to another. cf :func:`utils.relative_to`
     """
@@ -532,17 +532,18 @@ class Drive (core._WinSysObject):
   """
 
   def __init__ (self, drive):
-    self.name = drive.rstrip (seps).rstrip (":") + ":" + sep
+    self.name = drive.lower ().rstrip (seps).rstrip (":") + ":" + sep
     self.type = wrapped (win32file.GetDriveTypeW, self.name)
 
   def as_string (self):
     return "Drive %s" % self.name
 
-  def root (self):
+  def _get_root (self):
     ur"""Return a :class:`fs.Dir` object corresponding to the
     root directory of this drive.
     """
     return Dir (self.name)
+  root = property (_get_root)
 
   def _get_volume (self):
     try:
@@ -756,7 +757,7 @@ class Entry (FilePath, core._WinSysObject):
   @classmethod
   def factory (cls, filepath):
     return entry (filepath)
-    
+
   def _get_readable (self):
     #
     # Check whether the user has at least enough
@@ -1015,7 +1016,7 @@ class Entry (FilePath, core._WinSysObject):
 
   def move (self, other, callback=None, callback_data=None, clobber=False):
     ur"""Move this entry to the file/directory represented by other.
-    If other is a directory, self 
+    If other is a directory, self
 
     :param other: anything accepted by :func:`entry`
     :param callback: a function which will receive a total size & total transferred
@@ -1428,8 +1429,8 @@ class Dir (Entry):
       raise x_fs (errctx="Dir.mount", errmsg=u"You can't mount to a non-empty directory")
     for m in vol.mounts:
       if not m.dirname:
-        raise x_fs (errctx="Dir.mount", errmsg=u"Volume %s already has a drive letter %s" % (vol, m.root))        
-      
+        raise x_fs (errctx="Dir.mount", errmsg=u"Volume %s already has a drive letter %s" % (vol, m.root))
+
     wrapped (win32file.SetVolumeMountPoint, self, volume (vol).name)
     return self
 
@@ -1441,7 +1442,7 @@ class Dir (Entry):
 
   def copy (self, target_filepath, callback=None, callback_data=None):
     ur"""Copy this directory to another, which must be a directory if it
-    exists. If it does exist, this directory's contents will be copied 
+    exists. If it does exist, this directory's contents will be copied
     inside it; if it does not exist, this directory will become it.
     NB To copy this directory inside another, set the `target_filepath`
     to `other_directory + self.name`.
@@ -1694,9 +1695,9 @@ def flat (root, pattern="*", includedirs=False, depthfirst=False, ignore_access_
   :returns: as :meth:`Dir.flat`
   """
   return dir (root).flat (
-    pattern, 
-    includedirs=includedirs, 
-    depthfirst=depthfirst, 
+    pattern,
+    includedirs=includedirs,
+    depthfirst=depthfirst,
     ignore_access_errors=ignore_access_errors
   )
 
