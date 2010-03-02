@@ -203,7 +203,7 @@ def ldap_moniker (root=None, server=None, username=None, password=None):
   else:
     return "%s%s" % (prefix, root)
 
-def search (filter, columns=["distinguishedName"], root=None, server=None, username=None, password=None):
+def _search (filter, root=None, server=None, username=None, password=None):
 
   def get_column_value (hSearch, column):
     #
