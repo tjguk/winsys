@@ -1022,7 +1022,7 @@ class Entry (FilePath, core._WinSysObject):
   def unencrypt (self):
     ur"""FIXME: Need to work out how to create certificates for this
     """
-    wrapped (win32file.unencryptFile, self._normpath)
+    wrapped (win32file.DecryptFile, self._normpath)
     return self
 
   def encryption_users (self):
@@ -1682,7 +1682,7 @@ def dir (filepath):
   else:
     return Dir (filepath)
 
-def glob (pattern, ignore_access_errors=False):
+def glob (pattern):
   ur"""Mimic the built-in glob.glob functionality as a generator,
   optionally ignoring access errors.
 
@@ -1690,9 +1690,9 @@ def glob (pattern, ignore_access_errors=False):
   :param ignore_access_errors: passed to :func:`files`
   :returns: yields a :class:`FilePath` object for each matching file
   """
-  return files (pattern, ignore_access_errors=False)
+  return files (pattern)
 
-def listdir (d, ignore_access_errors=False):
+def listdir (d):
   ur"""Mimic the built-in os.list functionality as a generator,
   optionally ignoring access errors.
 
@@ -1700,7 +1700,7 @@ def listdir (d, ignore_access_errors=False):
   :param ignore_access_errors: passed to :func:`files`
   :returns: yield the name of each file in directory d
   """
-  return (f.name for f in files (dir (d) + u"*", ignore_access_errors=ignore_access_errors))
+  return (f.name for f in files (dir (d) + u"*"))
 
 def walk (root, depthfirst=False, ignore_access_errors=False):
   ur"""Walk the directory tree starting from root, optionally ignoring
