@@ -307,7 +307,7 @@ class Security (core._WinSysObject):
 
   def _get_dacl (self):
     if self._dacl is core.UNSET:
-      raise x_value_not_set (errctx=u"Security._get_dacl", errmsg=u"No DACL has been set for this Security object")
+      raise x_value_not_set (errctx=u"Security.dacl", errmsg=u"No DACL has been set for this Security object")
     return self._dacl
   def _set_dacl (self, dacl):
     if dacl is core.UNSET:

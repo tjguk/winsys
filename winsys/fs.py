@@ -1019,10 +1019,10 @@ class Entry (FilePath, core._WinSysObject):
     wrapped (win32file.EncryptFile, self._normpath)
     return self
 
-  def decrypt (self):
+  def unencrypt (self):
     ur"""FIXME: Need to work out how to create certificates for this
     """
-    wrapped (win32file.DecryptFile, self._normpath)
+    wrapped (win32file.unencryptFile, self._normpath)
     return self
 
   def encryption_users (self):
@@ -1302,14 +1302,14 @@ class Dir (Entry):
 
     return self
 
-  def decrypt (self, apply_to_contents=True):
-    Entry.decrypt (self)
+  def unencrypt (self, apply_to_contents=True):
+    Entry.unencrypt (self)
     if apply_to_contents:
       for dirpath, dirs, files in self.walk ():
         for dir in dirs:
-          dir.decrypt (False)
+          dir.unencrypt (False)
         for file in files:
-          file.decrypt ()
+          file.unencrypt ()
 
     return self
 
@@ -1414,6 +1414,7 @@ class Dir (Entry):
     :depthfirst: as for :meth:`Dir.walk`
     :ignore_access_errors: as for :meth:`Dir.walk`
     """
+    patterns = pattern.split ("|")
     walker = self.walk (
       depthfirst=depthfirst,
       ignore_access_errors=ignore_access_errors
@@ -1421,11 +1422,15 @@ class Dir (Entry):
     for dirpath, dirs, files in walker:
       if includedirs:
         for dir in dirs:
-          if dir.like (pattern):
-            yield dir
+          for pattern in patterns:
+            if dir.like (pattern):
+              yield dir
+              break
       for file in files:
-        if file.like (pattern):
-          yield file
+        for pattern in patterns:
+          if file.like (pattern):
+            yield file
+            break
 
   def mounted_by (self):
     ur"""Return the volume mounted on this directory, or None.
@@ -1546,6 +1551,11 @@ def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
   a path. Calls win32file.FindFilesIterator under the covers, which uses
   FindFirstFile / FindNextFile.
   """
+  for p in pattern.split ("|"):
+    for f in _files (p, ignore=ignore, ignore_access_errors=ignore_access_errors):
+      yield f
+  
+def _files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
   #
   # special-case ".": FindFilesIterator treats a directory
   # name as an invitation to return only that directory.
@@ -1690,7 +1700,7 @@ def listdir (d, ignore_access_errors=False):
   :param ignore_access_errors: passed to :func:`files`
   :returns: yield the name of each file in directory d
   """
-  return files (dir (d) + u"*", ignore_access_errors=ignore_access_errors)
+  return (f.name for f in files (dir (d) + u"*", ignore_access_errors=ignore_access_errors))
 
 def walk (root, depthfirst=False, ignore_access_errors=False):
   ur"""Walk the directory tree starting from root, optionally ignoring
@@ -1770,11 +1780,11 @@ def rmdir (filepath, recursive=False):
   return dir (filepath).delete (recursive=recursive)
 
 def attributes (filepath):
-  ur"""Return an :class:`Attributes` object representing the file attributes
+  ur"""Return an :class:`_Attributes` object representing the file attributes
   of filepath, implemented via :meth:`Entry.attributes`
 
   :param filepath: anything accepted by :func:`entry`
-  :returns: an :class:`Attributes` object
+  :returns: an :class:`_Attributes` object
   """
   return entry (filepath).attributes
 

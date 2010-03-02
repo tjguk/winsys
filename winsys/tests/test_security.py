@@ -86,11 +86,6 @@ def setup ():
     win32security.SACL_SECURITY_INFORMATION,
     None, None, None, sacl
   )
-  #~ open (TEST_FILE, "w").close ()
-  #~ os.mkdir (TEST1_DIR)
-  #~ open (TEST1_FILE, "w").close ()
-  #~ os.mkdir (TEST2_DIR)
-  #~ open (TEST2_FILE, "w").close ()
 
 def restore_access (filepath):
   win32security.SetNamedSecurityInfo (
