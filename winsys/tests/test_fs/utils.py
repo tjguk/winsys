@@ -1,6 +1,7 @@
 from winsys import fs
 import os
 import filecmp
+import glob
 import shutil
 import tempfile
 import uuid
@@ -68,3 +69,9 @@ def restore_access (filepath):
 
 def attributes (filepath):
   return win32file.GetFileAttributesW (filepath)
+
+def files_in (filepath):
+  return set (f for f in glob.glob (os.path.join (filepath, "*")) if os.path.isfile (f))
+
+def dirs_in (filepath):
+  return set (f + "\\" for f in glob.glob (os.path.join (filepath, "*")) if os.path.isdir (f))

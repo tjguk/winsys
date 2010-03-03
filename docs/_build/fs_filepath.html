@@ -44,12 +44,13 @@
           <a href="fs_drive_vol.html" title="The Drive class"
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
+        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="the-filepath-class">
@@ -58,7 +59,7 @@
 <dt id="fs.FilePath">
 <em class="property">class </em><tt class="descname">FilePath</tt><a class="headerlink" href="#fs.FilePath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref docutils literal"><span class="pre">unicode</span></tt></p>
-<p>A unicode subclass which knows about path structures on Windows.
+<p>A unicode subtype which knows about path structures on Windows.
 The path itself need not exist on any filesystem, but it has to match
 the rules which would make it possible.</p>
 <p>FilePaths can be absolute or relative. The only difference is that
@@ -212,10 +213,22 @@ for f in fs.flat (shell.special_folder ("personal"), "*.doc"):
 </dd></dl>
 
 <dl class="classmethod">
+<dt id="fs.FilePath.factory">
+<em class="property">classmethod </em><tt class="descname">factory</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.FilePath.factory" title="Permalink to this definition">¶</a></dt>
+<dd>Designed to be redefined in a subclass so that the <tt class="xref docutils literal"><span class="pre">__add__()</span></tt> and <tt class="xref docutils literal"><span class="pre">__radd__()</span></tt>
+methods can return the appropriate type.</dd></dl>
+
+<dl class="classmethod">
 <dt id="fs.FilePath.from_parts">
 <em class="property">classmethod </em><tt class="descname">from_parts</tt><big>(</big><em>root</em>, <em>dirname</em>, <em>base</em>, <em>ext</em><big>)</big><a class="headerlink" href="#fs.FilePath.from_parts" title="Permalink to this definition">¶</a></dt>
 <dd>Recreate a filepath from its constituent parts. No real validation is done;
 it is assumed that the parameters are valid parts of a filepath.</dd></dl>
+
+<dl class="method">
+<dt id="fs.FilePath.is_relative">
+<tt class="descname">is_relative</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.FilePath.is_relative" title="Permalink to this definition">¶</a></dt>
+<dd>A filepath is relative if it has no root or if its
+root is a drive letter only (without a directory backslash).</dd></dl>
 
 <dl class="method">
 <dt id="fs.FilePath.relative_to">
@@ -228,6 +241,38 @@ it is assumed that the parameters are valid parts of a filepath.</dd></dl>
 
 
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fs_drive_vol.html"
+                        title="previous chapter">The Drive class</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fs_entry.html"
+                        title="next chapter">The Entry class</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/fs_filepath.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
       </div>
       <div class="clearer"></div>
     </div>
@@ -247,7 +292,7 @@ it is assumed that the parameters are valid parts of a filepath.</dd></dl>
           <a href="fs_drive_vol.html" title="The Drive class"
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

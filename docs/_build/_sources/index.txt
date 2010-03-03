@@ -1,7 +1,3 @@
-.. WinSys documentation master file, created by sphinx-quickstart on Fri Oct 31 15:35:06 2008.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 BETA: WinSys - Python tools for the Windows Administrator
 =========================================================
 
@@ -14,7 +10,7 @@ WinSys is a Python package which wraps aspects of the Windows API to make
 them more Pythonic and usable by Windows administrators directly
 from the interpreter or as part of a wider set of applications.
 It targets recent versions of Python and reasonably recent versions of Windows
-although it's not yet up speed on Vista/W7 & x64.
+although it's not yet up to speed on Vista/W7 & x64.
 
 It is unashamedly platform-specific: no hint of a concession towards more
 Unix-like operating systems.  You can read about the design

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Miscellaneous &mdash; WinSys v0.4dev documentation</title>
+    <title>Modules &mdash; WinSys v0.4dev documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
-    <link rel="next" title="logging_handlers – Additional Logging Handlers" href="logging_handlers.html" />
-    <link rel="prev" title="security" href="security.html" /> 
+    <link rel="next" title="core – Core objects" href="core.html" />
+    <link rel="prev" title="About WinSys" href="about.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,10 +37,10 @@
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
         <li class="right" >
-          <a href="logging_handlers.html" title="logging_handlers – Additional Logging Handlers"
+          <a href="core.html" title="core – Core objects"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="security.html" title="security"
+          <a href="about.html" title="About WinSys"
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
       </ul>
@@ -51,31 +51,30 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="miscellaneous">
-<h1>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>Various of the modules offered by winsys don&#8217;t fit neatly into
-any one area. These include the <a title="Additional handlers for the builtin logging module" class="reference external" href="logging_handlers.html#module-logging_handlers"><tt class="xref docutils literal"><span class="pre">logging_handlers</span></tt></a>, based on the
-<tt class="xref docutils literal"><span class="pre">Mailslot</span></tt> class.</p>
+  <div class="section" id="modules">
+<h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="accounts">
+<h2><a title="User accounts, SIDs &amp;c." class="reference external" href="accounts.html#module-accounts"><tt class="xref docutils literal"><span class="pre">accounts</span></tt></a><a class="headerlink" href="#accounts" title="Permalink to this headline">¶</a></h2>
+<p>View and manage local and user groups. Acts mainly as a support module for</p>
 </div>
-<div class="section" id="sections">
-<h2>Sections<a class="headerlink" href="#sections" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference external" href="logging_handlers.html"><tt class="docutils literal"><span class="pre">logging_handlers</span></tt> &#8211; Additional Logging Handlers</a><ul>
-<li class="toctree-l2"><a class="reference external" href="logging_handlers.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference external" href="logging_handlers.html#classes">Classes</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="environment.html"><tt class="docutils literal"><span class="pre">environment</span></tt> &#8211; Environment Block</a><ul>
-<li class="toctree-l2"><a class="reference external" href="environment.html#functions">Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="environment.html#classes">Classes</a></li>
-<li class="toctree-l2"><a class="reference external" href="environment.html#references">References</a></li>
-</ul>
-</li>
-</ul>
+<div class="section" id="dialogs">
+<h2>dialogs<a class="headerlink" href="#dialogs" title="Permalink to this headline">¶</a></h2>
+<p>Create simple autosized data-entry dialogs with defaults. Create modeless dialogs
+with callbacks. Create info dialogs for displaying moderate quantities
+of text. Drag and drop from Explorer into entry fields.</p>
 </div>
+<div class="section" id="fs">
+<h2>fs<a class="headerlink" href="#fs" title="Permalink to this headline">¶</a></h2>
+<p>Access the file system using Win32 API and exposing Win32-specific attributes and
+functionality. List the files and directories in one directory or in an entire tree.
+Zip directories or files. Query or set security on file system entries, including
+taking ownership of an entire tree. Compress and encrypt files and directories.</p>
+</div>
+<div class="section" id="security">
+<h2>security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h2>
+<p>Construct and apply Windows security objects. Add allow and deny aces to an
+acl. Break inheritance on existing security. Impersonate another account.
+Enable privileges for the duration of a process.</p>
 </div>
 </div>
 
@@ -90,24 +89,24 @@ any one area. These include the <a title="Additional handlers for the builtin lo
             </a></p>
   <h3><a href="contents.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference external" href="#">Miscellaneous</a><ul>
-<li><a class="reference external" href="#introduction">Introduction</a></li>
-<li><a class="reference external" href="#sections">Sections</a><ul>
-</ul>
-</li>
+<li><a class="reference external" href="#">Modules</a><ul>
+<li><a class="reference external" href="#accounts"><tt class="docutils literal"><span class="pre">accounts</span></tt></a></li>
+<li><a class="reference external" href="#dialogs">dialogs</a></li>
+<li><a class="reference external" href="#fs">fs</a></li>
+<li><a class="reference external" href="#security">security</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="security.html"
-                        title="previous chapter"><tt class="docutils literal"><span class="pre">security</span></tt></a></p>
+  <p class="topless"><a href="about.html"
+                        title="previous chapter">About WinSys</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="logging_handlers.html"
-                        title="next chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">logging_handlers</span></tt> &#8211; Additional Logging Handlers</a></p>
+  <p class="topless"><a href="core.html"
+                        title="next chapter"><tt class="docutils literal"><span class="pre">core</span></tt> &#8211; Core objects</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/misc.txt"
+    <li><a href="_sources/modules.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -137,10 +136,10 @@ any one area. These include the <a title="Additional handlers for the builtin lo
           <a href="modindex.html" title="Global Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="logging_handlers.html" title="logging_handlers – Additional Logging Handlers"
+          <a href="core.html" title="core – Core objects"
              >next</a> |</li>
         <li class="right" >
-          <a href="security.html" title="security"
+          <a href="about.html" title="About WinSys"
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
       </ul>

@@ -50,6 +50,7 @@
 
     <div class="document">
       <div class="documentwrapper">
+        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="the-file-class">
@@ -102,20 +103,33 @@ file already exists it will not be overwritten.</p>
 <dl class="method">
 <dt id="fs.File.delete">
 <tt class="descname">delete</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.File.delete" title="Permalink to this definition">¶</a></dt>
-<dd>Delete this file</dd></dl>
-
-<dl class="method">
-<dt id="fs.File.equal_contents">
-<tt class="descname">equal_contents</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#fs.File.equal_contents" title="Permalink to this definition">¶</a></dt>
-<dd><p>Is this file equal in contents to another? Uses the stdlib
-filecmp function which bales out as soon as it can.</p>
+<dd><p>Delete this file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">self</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">True if the contents match, False otherwise</td>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="fs.File.equals">
+<tt class="descname">equals</tt><big>(</big><em>other</em>, <em>compare_contents=False</em><big>)</big><a class="headerlink" href="#fs.File.equals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this file equal in size, dates and attributes to another.
+if <cite>compare_contents</cite> is True, use filecmp to compare the contents
+of the files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other</em> &#8211; anything accepted by <a title="fs.file" class="reference external" href="fs.html#fs.file"><tt class="xref docutils literal"><span class="pre">file()</span></tt></a></td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Compare_contents:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">True to compare contents, False otherwise</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">True if the files are equal in size, modification date, attributes and contents</td>
 </tr>
 </tbody>
 </table>
@@ -156,7 +170,7 @@ filecmp function which bales out as soon as it can.</p>
 <dl class="method">
 <dt id="fs.File.open">
 <tt class="descname">open</tt><big>(</big><em>mode='r'</em>, <em>attributes=None</em>, <em>sec=None</em><big>)</big><a class="headerlink" href="#fs.File.open" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use the <cite>codecs.open</cite> function to open this file as a Python file
+<dd><p>EXPERIMENTAL: Use the <cite>codecs.open</cite> function to open this file as a Python file
 object. Positional and keyword arguments are passed straight through to
 the codecs function.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -201,7 +215,23 @@ standard compression will be used. The filename will be stored without any direc
 information.</p>
 <p>A different zipfile can be specific as the zip_filename parameter, and this
 can be appended to (if it exists) by specifying &#8220;a&#8221; as the mode param.</p>
-<p>The created / appended zip file is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>zip_filename</em> &#8211; The name of the resulting zipfile [this file with the extension changed to .zip]</li>
+<li><em>mode</em> &#8211; mode (usually &#8220;w&#8221;) to pass to the zipfile constructor</li>
+<li><em>compression</em> &#8211; compression level (usually DEFLATED)</li>
+<li><em>allow_zip64</em> &#8211; passed to the zipfile constructor to allow &gt; 2Gb files</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="fs.File" class="reference internal" href="#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object corresponding to the zipfile created</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -210,6 +240,38 @@ can be appended to (if it exists) by specifying &#8220;a&#8221; as the mode para
 
 
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fs_entry.html"
+                        title="previous chapter">The Entry class</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fs_dir.html"
+                        title="next chapter">The Dir class</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/fs_file.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
       </div>
       <div class="clearer"></div>
     </div>

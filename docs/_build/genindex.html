@@ -40,6 +40,7 @@
 
     <div class="document">
       <div class="documentwrapper">
+        <div class="bodywrapper">
           <div class="body">
             
 
@@ -158,10 +159,6 @@
   <td width="33%" valign="top"><dl>
     <dt><a href="security.html#security.Security.dacl">dacl (Security attribute)</a></dt>
     <dt><a href="event_logs.html#event_logs._EventLogEntry.data">data (_EventLogEntry attribute)</a></dt>
-    <dt><a href="fs_dir.html#fs.Dir.decrypt">decrypt() (Dir method)</a></dt>
-    <dd><dl>
-      <dt><a href="fs_entry.html#fs.Entry.decrypt">(Entry method)</a></dt>
-  </dl></dd>
     <dt><a href="registry.html#registry.Registry.del_value">del_value() (Registry method)</a></dt>
     <dt><a href="fs_dir.html#fs.Dir.delete">delete() (Dir method)</a></dt>
     <dd><dl>
@@ -233,7 +230,7 @@
     <dt><a href="fs.html#fs.entry">entry() (in module fs)</a></dt>
     <dt><a href="environment.html#environment.Env">Env (class in environment)</a></dt>
     <dt><a href="environment.html#module-environment">environment (module)</a></dt>
-    <dt><a href="fs_file.html#fs.File.equal_contents">equal_contents() (File method)</a></dt>
+    <dt><a href="fs_file.html#fs.File.equals">equals() (File method)</a></dt>
     <dt><a href="events.html#ipc.Event">Event (class in ipc)</a></dt>
     <dt><a href="ipc.html#ipc.event">event() (in module ipc)</a></dt>
     <dt><a href="event_logs.html#event_logs._EventLogEntry.event_category">event_category (_EventLogEntry attribute)</a></dt>
@@ -265,6 +262,9 @@
 <table width="100%" class="indextable genindextable"><tr>
   <td width="33%" valign="top"><dl>
     <dt><a href="fs_entry.html#fs.Entry.factory">factory() (fs.Entry class method)</a></dt>
+    <dd><dl>
+      <dt><a href="fs_filepath.html#fs.FilePath.factory">(fs.FilePath class method)</a></dt>
+  </dl></dd>
     <dt><a href="fs_file.html#fs.File">File (class in fs)</a></dt>
     <dt><a href="event_logs.html#event_logs.EventLog.file">file (EventLog attribute)</a></dt>
     <dt><a href="fs_dir.html#fs.Dir.file">file() (Dir method)</a></dt>
@@ -364,10 +364,11 @@
   </dl></dd>
     <dt><a href="dialogs.html#dialogs.info_dialog">info_dialog() (in module dialogs)</a></dt>
     <dt><a href="dialogs.html#dialogs.InfoDialog">InfoDialog (class in dialogs)</a></dt>
+    <dt><a href="constants.html#constants.Constants.init">init() (Constants method)</a></dt>
 </dl></td>
   <td width="33%" valign="top"><dl>
-    <dt><a href="constants.html#constants.Constants.init">init() (Constants method)</a></dt>
     <dt><a href="ipc.html#module-ipc">ipc (module)</a></dt>
+    <dt><a href="fs_filepath.html#fs.FilePath.is_relative">is_relative() (FilePath method)</a></dt>
     <dt><a href="events.html#ipc.Event.isSet">isSet() (Event method)</a></dt>
     <dt><a href="constants.html#constants.Constants.items">items() (Constants method)</a></dt>
     <dd><dl>
@@ -650,13 +651,17 @@
       <dt><a href="fs_entry.html#fs.Entry.uncompress">(Entry method)</a></dt>
   </dl></dd>
     <dt><a href="fs_entry.html#fs.Entry.uncompressed_size">uncompressed_size (Entry attribute)</a></dt>
+    <dt><a href="fs_dir.html#fs.Dir.unencrypt">unencrypt() (Dir method)</a></dt>
+    <dd><dl>
+      <dt><a href="fs_entry.html#fs.Entry.unencrypt">(Entry method)</a></dt>
+  </dl></dd>
+</dl></td>
+  <td width="33%" valign="top"><dl>
     <dt><a href="constants.html#constants.Constants.update">update() (Constants method)</a></dt>
     <dd><dl>
       <dt><a href="environment.html#environment.Env.update">(Env method)</a></dt>
       <dt><a href="environment.html#environment.Persistent.update">(Persistent method)</a></dt>
   </dl></dd>
-</dl></td>
-  <td width="33%" valign="top"><dl>
     <dt><a href="accounts.html#accounts.User">User (class in accounts)</a></dt>
     <dt><a href="accounts.html#accounts.user">user() (in module accounts)</a></dt>
     <dd><dl>
@@ -753,6 +758,30 @@
 
 
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+
+   
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
       </div>
       <div class="clearer"></div>
     </div>

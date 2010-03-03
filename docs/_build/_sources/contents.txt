@@ -8,6 +8,7 @@ Contents
 
     index
     about
+    modules
     core
     constants
     exc

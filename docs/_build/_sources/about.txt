@@ -62,8 +62,8 @@ Module-level Functions
 
 While a lot of use has been made of Python classes to wrap the function-driven
 Windows API, a lot of the functionality has been exposed as module-level
-convenience functions. So, for example, in the :mod:`fs` module, the :class:`File`
-class offers a :meth:`File.copy` method, but the same functionality is exposed
+convenience functions. So, for example, in the :mod:`fs` module, the :class:`fs.File`
+class offers a :meth:`fs.File.copy` method, but the same functionality is exposed
 at the module level as :func:`fs.copy`. That way, you don't have to instantiate
 one or more objects simply for the purpose of a single operation.
 
