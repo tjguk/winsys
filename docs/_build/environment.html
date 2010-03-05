@@ -211,11 +211,11 @@ __str__.</dd></dl>
 
 <dl class="staticmethod">
 <dt id="environment.Persistent.broadcast">
-<em class="property">static </em><tt class="descname">broadcast</tt><big>(</big><big>)</big><a class="headerlink" href="#environment.Persistent.broadcast" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">broadcast</tt><big>(</big><em>timeout_ms=2000</em><big>)</big><a class="headerlink" href="#environment.Persistent.broadcast" title="Permalink to this definition">¶</a></dt>
 <dd>Broadcast a message to all top-level windows informing them that
 an environment change has occurred. The message must be sent, not posted,
-and times out after two seconds since some top-level windows handle this
-badly.</dd></dl>
+and times out after <cite>timeout_ms</cite> ms since some top-level windows handle this
+badly. NB This is a static method.</dd></dl>
 
 <dl class="method">
 <dt id="environment.Persistent.dump">

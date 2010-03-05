@@ -36,6 +36,12 @@ WINERROR_MAP = {
 wrapped = exc.wrapper (WINERROR_MAP, x_environment)
 
 class _DelimitedText (list):
+  ur""""Helper class for values such as PATH and PATHEXT which are
+  consistently semicolon-delimited text but which can helpfully
+  be treated as a list of individual values. Subclasseed from
+  list, it keeps track of the delimited list while exposing
+  the more familiar Pythonesque list interface.
+  """
   
   def __init__ (self, env, key, delimiter=u";", initialiser=[]):
     super (_DelimitedText, self).__init__ (initialiser or env[key].split (delimiter))
@@ -100,6 +106,9 @@ class _DelimitedText (list):
     return item
 
 class _DelimitedPath (_DelimitedText):
+  ur"""Subclass of delimited text to ensure that valid filesystem paths
+  are stored in the env var
+  """
   
   def munge_item (self, item):
     return os.path.normpath (item).rstrip ("\\")
@@ -204,6 +213,13 @@ class Env (core._WinSysObject):
     return wrapped (win32api.ExpandEnvironmentStrings, unicode (item))
   
 class Process (Env):
+  """The environment corresponding to the current process. This is visible
+  only to the current process and its children (assuming the environment block
+  is passed). Any changes you make here apply only for the lifetime of this
+  process and do not affect the permanent user or system environment. See
+  the :func:`system` and :func:`user` functions for ways to update the
+  environment permanently.
+  """
   def __init__ (self):
     super (Process, self).__init__ ()
     
@@ -240,16 +256,16 @@ class Persistent (Env):
   """
   
   @staticmethod
-  def broadcast ():
+  def broadcast (timeout_ms=2000):
     ur"""Broadcast a message to all top-level windows informing them that
     an environment change has occurred. The message must be sent, not posted,
-    and times out after two seconds since some top-level windows handle this
-    badly.
+    and times out after `timeout_ms` ms since some top-level windows handle this
+    badly. NB This is a static method.
     """
     win32gui.SendMessageTimeout (
       win32con.HWND_BROADCAST, win32con.WM_SETTINGCHANGE, 
       0, "Environment", 
-      win32con.SMTO_ABORTIFHUNG, 2000
+      win32con.SMTO_ABORTIFHUNG, timeout_ms
     )
 
   def __init__ (self, root):
