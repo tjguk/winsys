@@ -1001,7 +1001,7 @@ class Entry (FilePath, core._WinSysObject):
       for f in fs.files ():
         if f.directory and f.like ("test_*"):
           print f
-          
+
     :param pattern: an `fnmatch` pattern
     :returns: True if this file matches `pattern`
     """
@@ -1010,7 +1010,7 @@ class Entry (FilePath, core._WinSysObject):
   def ancestors (self):
     ur"""Iterate over this entry's ancestors, yielding the :class:`Dir` object
     corresponding to each one.
-    
+
     :returns: yield a :class:`Dir` object for each ancestor
     """
     if self.parent:
@@ -1042,7 +1042,7 @@ class Entry (FilePath, core._WinSysObject):
     ur"""Compress this entry; if it is a file, it will be compressed, if it
     is a directory it will be marked so that any new files added to it will
     be compressed automatically.
-    
+
     :returns: self
     """
     with Handle (self, True) as hFile:
@@ -1054,7 +1054,7 @@ class Entry (FilePath, core._WinSysObject):
     ur"""Uncompress this entry; if it is a file, it will be uncompressed, if it
     is a directory it will be marked so that any new files added to it will
     not be compressed automatically.
-    
+
     :returns: self
     """
     with Handle (self, True) as hFile:
@@ -1064,7 +1064,7 @@ class Entry (FilePath, core._WinSysObject):
 
   def encrypt (self):
     ur"""FIXME: Need to work out how to create certificates for this
-    
+
     :returns: self
     """
     wrapped (win32file.EncryptFile, self._normpath)
@@ -1186,7 +1186,7 @@ class File (Entry):
 
   def delete (self):
     ur"""Delete this file
-    
+
     :returns: self
     """
     wrapped (win32file.DeleteFileW, self._normpath)
@@ -1220,10 +1220,10 @@ class File (Entry):
     ur"""Is this file equal in size, dates and attributes to another.
     if `compare_contents` is True, use filecmp to compare the contents
     of the files.
-    
+
     :param other: anything accepted by :func:`file`
     :compare_contents: True to compare contents, False otherwise
-    :returns: True if the files are equal in size, modification date, attributes and contents    
+    :returns: True if the files are equal in size, modification date, attributes and contents
     """
     other = entry (other)
     if self.size != other.size:
@@ -1236,7 +1236,7 @@ class File (Entry):
       if not filecmp.cmp (f1, f2, False):
         return False
     return True
-  
+
   def hard_link_to (self, other):
     ur"""Create other as a hard link to this file.
 
@@ -1425,7 +1425,7 @@ class Dir (Entry):
   def entries (self, pattern=u"*", *args, **kwargs):
     ur"""Iterate over all entries -- files & directories -- in this directory.
     Implemented via :func:`files`
-    
+
     :pattern: a |-separated list of wildcards to match
     """
     return files (self + pattern, *args, **kwargs)
@@ -1446,7 +1446,7 @@ class Dir (Entry):
   def files (self, pattern=u"*", *args, **kwargs):
     ur"""Iterate over all files in this directory which match pattern, yielding
     a :class:`File` object for each one. Implemented via :meth:`Dir.entries`.
-    
+
     :pattern: a |-separated list of wildcards to match
     """
     return (f for f in self.entries (pattern, *args, **kwargs) if isinstance (f, File))
@@ -1454,7 +1454,7 @@ class Dir (Entry):
   def dirs (self, pattern=u"*", *args, **kwargs):
     ur"""Iterate over all directories in this directory which match pattern, yielding
     a :class:`Dir` object for each one. Implemented via :meth:`Dir.entries`.
-    
+
     :pattern: a |-separated list of wildcards to match
     """
     return (f for f in self.entries (pattern, *args, **kwargs) if isinstance (f, Dir))
@@ -1540,7 +1540,7 @@ class Dir (Entry):
 
   def dismount (self):
     ur"""Dismount whatever volume is mounted at this directory
-    
+
     :returns: this :class:`Dir`
     """
     wrapped (win32file.DeleteVolumeMountPoint, self._normpath)
@@ -1631,13 +1631,13 @@ def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
   ur"""Iterate over files and directories matching pattern, which can include
   a path. Calls win32file.FindFilesIterator under the covers, which uses
   FindFirstFile / FindNextFile.
-  
+
   :pattern: A string with one or more wildcard patterns, pipe-separated
   """
   for p in pattern.split ("|"):
     for f in _files (p, ignore=ignore, ignore_access_errors=ignore_access_errors):
       yield f
-  
+
 def _files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
   #
   # special-case ".": FindFilesIterator treats a directory
@@ -1700,7 +1700,7 @@ def entry (filepath, _file_info=core.UNSET):
   ======================================= ==================================================
   filepath                                Result
   ======================================= ==================================================
-  :const:`None`                           :const:`None`
+  :const:`None` or ""                     :const:`None`
   an :class:`Entry` or subclass object    the same object
   an existing file name                   a :class:`File` object representing that file
   an existing directory name              a :class:`Dir` object representing that directory
@@ -1718,7 +1718,7 @@ def entry (filepath, _file_info=core.UNSET):
     else:
       return File (filepath)
 
-  if filepath is None:
+  if filepath is None or filepath == "":
     return None
   elif isinstance (filepath, Entry):
     return filepath
