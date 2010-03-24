@@ -40,7 +40,6 @@
 
     <div class="document">
       <div class="documentwrapper">
-        <div class="bodywrapper">
           <div class="body">
             
 
@@ -151,6 +150,7 @@
   </dl></dd>
     <dt><a href="registry.html#registry.create_moniker">create_moniker() (in module registry)</a></dt>
     <dt><a href="fs_entry.html#fs.Entry.created_at">created_at (Entry attribute)</a></dt>
+    <dt><a href="shell.html#shell.CSIDL">CSIDL (in module shell)</a></dt>
 </dl></td>
 </tr></table>
 
@@ -291,6 +291,7 @@
       <dt><a href="fs.html#fs.flat">(in module fs)</a></dt>
       <dt><a href="registry.html#registry.flat">(in module registry)</a></dt>
   </dl></dd>
+    <dt><a href="shell.html#shell.FMTID">FMTID (in module shell)</a></dt>
     <dt><a href="constants.html#constants.Constants.from_dict">from_dict() (constants.Constants class method)</a></dt>
     <dt><a href="constants.html#constants.Constants.from_list">from_list() (constants.Constants class method)</a></dt>
     <dt><a href="security.html#security.Security.from_object">from_object() (security.Security class method)</a></dt>
@@ -529,14 +530,20 @@
   </dl></dd>
     <dt><a href="logging_handlers.html#logging_handlers.PermanentMailslotHandler">PermanentMailslotHandler (class in logging_handlers)</a></dt>
     <dt><a href="environment.html#environment.Persistent">Persistent (class in environment)</a></dt>
+    <dt><a href="shell.html#shell.PID_VOLUME">PID_VOLUME (in module shell)</a></dt>
+    <dt><a href="shell.html#shell.PIDASI">PIDASI (in module shell)</a></dt>
+    <dt><a href="shell.html#shell.PIDDSI">PIDDSI (in module shell)</a></dt>
+    <dt><a href="shell.html#shell.PIDMSI">PIDMSI (in module shell)</a></dt>
+    <dt><a href="shell.html#shell.PIDSI">PIDSI (in module shell)</a></dt>
     <dt><a href="accounts.html#accounts.Principal">Principal (class in accounts)</a></dt>
-    <dt><a href="accounts.html#accounts.principal">principal() (in module accounts)</a></dt>
-    <dt><a href="security.html#security.Privilege">Privilege (class in security)</a></dt>
 </dl></td>
   <td width="33%" valign="top"><dl>
+    <dt><a href="accounts.html#accounts.principal">principal() (in module accounts)</a></dt>
+    <dt><a href="security.html#security.Privilege">Privilege (class in security)</a></dt>
     <dt><a href="environment.html#environment.process">process() (in module environment)</a></dt>
     <dt><a href="fs_constants.html#fs.PROGRESS">PROGRESS (in module fs)</a></dt>
     <dt><a href="dialogs.html#dialogs.progress_dialog">progress_dialog() (in module dialogs)</a></dt>
+    <dt><a href="shell.html#shell.properties">properties() (in module shell)</a></dt>
     <dt><a href="events.html#ipc.Event.pulse">pulse() (Event method)</a></dt>
     <dt><a href="mailslots.html#ipc.Mailslot.put">put() (Mailslot method)</a></dt>
     <dt><a href="accounts.html#accounts.Principal.pyobject">pyobject() (Principal method)</a></dt>
@@ -609,15 +616,23 @@
     <dt><a href="security.html#security.Security.security_options">security_options() (security.Security class method)</a></dt>
     <dt><a href="fs_drive_vol.html#fs.Volume.serial_number">serial_number (Volume attribute)</a></dt>
     <dt><a href="events.html#ipc.Event.set">set() (Event method)</a></dt>
+    <dt><a href="registry.html#registry.Registry.set_value">set_value() (Registry method)</a></dt>
+    <dt><a href="shell.html#shell.SHCONTF">SHCONTF (in module shell)</a></dt>
+    <dt><a href="shell.html#module-shell">shell (module)</a></dt>
+    <dt><a href="shell.html#shell.SHGDN">SHGDN (in module shell)</a></dt>
 </dl></td>
   <td width="33%" valign="top"><dl>
-    <dt><a href="registry.html#registry.Registry.set_value">set_value() (Registry method)</a></dt>
+    <dt><a href="shell.html#shell.Shortcut">Shortcut (class in shell)</a></dt>
+    <dt><a href="shell.html#shell.shortcut">shortcut() (in module shell)</a></dt>
     <dt><a href="event_logs.html#event_logs._EventLogEntry.sid">sid (_EventLogEntry attribute)</a></dt>
     <dt><a href="accounts.html#accounts.SID_NAME_USE">SID_NAME_USE (in module accounts)</a></dt>
     <dt><a href="fs_entry.html#fs.Entry.size">size (Entry attribute)</a></dt>
+    <dt><a href="shell.html#shell.SLGP">SLGP (in module shell)</a></dt>
     <dt><a href="event_logs.html#event_logs._EventLogEntry.source_name">source_name (_EventLogEntry attribute)</a></dt>
     <dt><a href="fs_entry.html#fs.Entry.sparse_file">sparse_file (Entry attribute)</a></dt>
     <dt><a href="constants.html#constants.STANDARD_ACCESS">STANDARD_ACCESS (in module constants)</a></dt>
+    <dt><a href="shell.html#shell.STGFMT">STGFMT (in module shell)</a></dt>
+    <dt><a href="shell.html#shell.STGM">STGM (in module shell)</a></dt>
     <dt><a href="fs_entry.html#fs.Entry.system">system (Entry attribute)</a></dt>
     <dt><a href="environment.html#environment.system">system() (in module environment)</a></dt>
 </dl></td>
@@ -728,9 +743,9 @@
     <dt><a href="mailslots.html#ipc.x_mailslot_empty">x_mailslot_empty</a></dt>
     <dt><a href="mailslots.html#ipc.x_mailslot_invalid_use">x_mailslot_invalid_use</a></dt>
     <dt><a href="registry.html#registry.x_moniker">x_moniker</a></dt>
+    <dt><a href="registry.html#registry.x_moniker_ill_formed">x_moniker_ill_formed</a></dt>
 </dl></td>
   <td width="33%" valign="top"><dl>
-    <dt><a href="registry.html#registry.x_moniker_ill_formed">x_moniker_ill_formed</a></dt>
     <dt><a href="registry.html#registry.x_moniker_no_root">x_moniker_no_root</a></dt>
     <dt><a href="fs.html#fs.x_no_certificate">x_no_certificate</a></dt>
     <dt><a href="fs.html#fs.x_no_such_file">x_no_such_file</a></dt>
@@ -738,6 +753,7 @@
     <dt><a href="fs.html#fs.x_not_ready">x_not_ready</a></dt>
     <dt><a href="registry.html#registry.x_registry">x_registry</a></dt>
     <dt><a href="security.html#security.x_security">x_security</a></dt>
+    <dt><a href="shell.html#shell.x_shell">x_shell</a></dt>
     <dt><a href="fs.html#fs.x_too_many_files">x_too_many_files</a></dt>
     <dt><a href="security.html#security.x_value_not_set">x_value_not_set</a></dt>
     <dt><a href="core.html#core.x_winsys">x_winsys</a>, <a href="exc.html#exc.x_winsys">[1]</a></dt>
@@ -758,30 +774,6 @@
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="contents.html">
-              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
-            </a></p>
-
-   
-
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
       </div>
       <div class="clearer"></div>
     </div>

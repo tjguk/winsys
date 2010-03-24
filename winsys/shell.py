@@ -1,4 +1,14 @@
 # -*- coding: iso-8859-1 -*-
+ur"""Wrappers around standard functionality from the semi-independent Windows Shell
+subsystem which powers the desktop, shortcuts, special folders, property sheets &c.
+
+Implemented so far:
+
+* Shortcuts: use the :func:`shortcut` function to edit or create desktop shortcuts
+* [EXPERIMENTAL] Properties: use the :func:`properties` function to expose property sheet data
+* Standard folders: commonly-accessed shell folders are exposed at module level, eg :func:`desktop`,
+  :func:`startup`, :func:`recent`
+"""
 import os, sys
 import binascii
 
@@ -45,17 +55,11 @@ wrapped = exc.wrapper (WINERROR_MAP, x_shell)
 #  support it, so I added this workaround.
 #
 def get_path (folder_id):
-  return shell.SHGetPathFromIDList (shell.SHGetSpecialFolderLocation (0, folder_id))
+  return fs.entry (shell.SHGetPathFromIDList (shell.SHGetSpecialFolderLocation (0, folder_id)))
 
 def desktop (common=0):
   u"What folder is equivalent to the current desktop?"
   return get_path ((shellcon.CSIDL_DESKTOP, shellcon.CSIDL_COMMON_DESKTOPDIRECTORY)[common])
-
-def common_desktop ():
-#
-# Only here because already used in code
-#
-  return desktop (common=1)
 
 def special_folder (folder_id):
   return shell.SHGetSpecialFolderPath (None, CSIDL.constant (folder_id), 0)
@@ -281,9 +285,9 @@ class Shortcut (core._WinSysObject):
       setattr (self, k, v)
 
   def as_string (self):
-    return self.filepath or "-unsaved-"
+    return ("-> %s" % self.path) or "-unsaved-"
 
-  def dumped (self, level):
+  def dumped (self, level=0):
     output = []
     output.append (self.as_string ())
     output.append ("")
@@ -436,7 +440,7 @@ class PropertySet (core._WinSysObject):
 class Properties (core._WinSysObject):
 
   def __init__ (self, filepath):
-    self._pidl, _ = shell.SHILCreateFromPath (os.path.abspath (unicode (filepath)), 0)
+    self._pidl, _ = shell.SHILCreateFromPath (os.path.abspath (filepath), 0)
     self._pss = shell.SHGetDesktopFolder ().BindToStorage (self._pidl, None, pythoncom.IID_IPropertySetStorage)
 
   def property_set (self, fmtid):
@@ -450,6 +454,21 @@ class Properties (core._WinSysObject):
       if fmtid == FMTID.DocSummaryInformation:
         fmtid = pythoncom.FMTID_UserDefinedProperties
         yield self.property_set (fmtid)
+
+  def dumped (self, level=0):
+    output = []
+    for ps in self:
+      output.append ("%s:\n%s" % (FMTID.name_from_value (ps.fmtid), utils.dumped_dict (ps.as_dict (), level)))
+    return utils.dumped (u"\n".join (output), level)
+
+def properties (source):
+
+  if source is None:
+    return None
+  elif isinstance (source, Properties):
+    return source
+  else:
+    return Properties (source)
 
 desktop = shell.SHGetDesktopFolder ()
 PyIShellFolder = type (desktop)
