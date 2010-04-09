@@ -29,7 +29,7 @@ DEFAULT_LOG_NAME = "Application"
 
 class x_event_logs (exc.x_winsys):
   "Base exception for eventlog-specific exceptions"
-  
+
 WINERROR_MAP = {
   winerror.ERROR_ACCESS_DENIED : exc.x_access_denied
 }
@@ -41,11 +41,11 @@ class _EventLogEntry (core._WinSysObject):
   of their TitleCase counterparts and are converted to Python data types
   where appropriate, eg time_written is a datetime value and sid is
   an :class:`accounts.Principal` instance.
-  
+
   Two _EventLogEntry instances compare equal if they have the same
   record number on the same event log on the same computer.
   """
-  
+
   def __init__ (self, event_log_name, event_log_entry):
     self._event_log_name = event_log_name
     self._event_log_entry = event_log_entry
@@ -63,16 +63,16 @@ class _EventLogEntry (core._WinSysObject):
     self.source_name = event_log_entry.SourceName
     self.data = event_log_entry.Data
     self._message = None
-    
+
   def as_string (self):
-    return "%d - %s (%s)" % (self.record_number, self.source_name, EVENTLOG_TYPE.name_from_value (self.event_type))
-    
+    return "%d - %s (%s)" % (self.record_number, self.source_name, EVENTLOG_TYPE.name_from_value (self.event_type, "<Unknown>"))
+
   def __eq__ (self, other):
     return \
       self.computer_name == other.computer_name and \
       self._event_log_name == other._event_log_name and \
       self.record_number == other.record_number
-  
+
   def dumped (self, level=0):
     output = []
     output.append (u"record_number: %s" % self.record_number)
@@ -87,7 +87,7 @@ class _EventLogEntry (core._WinSysObject):
     output.append (u"data: %s" % repr (self.data))
     output.append (u"message: %s" % self.message)
     return utils.dumped (u"\n".join (output), level)
-  
+
   def _get_message (self):
     if self._message is None:
       self._message = wrapped (win32evtlogutil.SafeFormatMessage, self._event_log_entry, self._event_log_name)
@@ -95,26 +95,26 @@ class _EventLogEntry (core._WinSysObject):
   message = property (_get_message)
 
 class EventLog (core._WinSysObject):
-  
+
   """An Event Log is a sequential database managed through API calls
   with a number of different Event Sources, against which events can
   be logged. The log can be read backwards (using the reversed () builtin)
-  or forwards but only sequentially. 
+  or forwards but only sequentially.
   (We simulate random access by reading sequentially until a record is hit).
-  
+
   You can use the builtin len () to determine the current size of
   this log (which may or may not correspond to the maximum record
   number). Item access is possible from either end by subscripting
   the log in the usual way. It should be noted that this uses iteration,
   forward or reverse as needed, so is not going to be that efficient
   except to find a few records at either end.
-  
-  Instances of this class are expected to be accessed via the 
+
+  Instances of this class are expected to be accessed via the
   :func:`event_log` function.
   """
-  
+
   REG_ROOT = r"\\%s\HKLM\SYSTEM\CurrentControlSet\Services\Eventlog"
-  
+
   def __init__ (self, computer, name):
     core._WinSysObject.__init__ (self)
     self.computer = computer or "."
@@ -134,10 +134,10 @@ class EventLog (core._WinSysObject):
       self.retention = values.get ("Retention")
       self.sources = values.get ("Sources")
     self._handle = wrapped (win32evtlog.OpenEventLog, self.computer, self.name)
-    
+
   def as_string (self):
     return r"%s\%s" % (self.computer, self.name)
-      
+
   def dumped (self, level=0):
     output = []
     output.append (u"auto_backup_log_files: %s" % self.auto_backup_log_files)
@@ -150,7 +150,7 @@ class EventLog (core._WinSysObject):
     output.append (u"retention: %s" % utils.secs_as_string (self.retention))
     output.append (u"sources: %s" % utils.dumped_list (self.sources, level))
     return utils.dumped (u"\n".join (output), level)
-  
+
   @contextlib.contextmanager
   def _temp_handle (self):
     """Internal, context-managed function to provide a working
@@ -160,22 +160,22 @@ class EventLog (core._WinSysObject):
     handle = wrapped (win32evtlog.OpenEventLog, self.computer, self.name)
     yield handle
     wrapped (win32evtlog.CloseEventLog, handle)
-  
+
   def clear (self, save_to_filename=None):
     """Clear the event log, optionally saving out to an opaque file first,
     using the built-in functionality.
     """
     wrapped (win32evtlog.ClearEventLog, self._handle, unicode (save_to_filename))
-    
+
   def __len__ (self):
     """Allow len () to return the number of records in the event log"""
     return wrapped (win32evtlog.GetNumberOfEventLogRecords, self._handle)
-  
+
   def __getitem__ (self, index):
     """Allow the event log to be accessed by numeric index. An index of
     zero represents the oldest available record; -1 represents the latest
     available record.
-    
+
     NB This is slow since it simply wraps an iterator in the appropriate
     direction. There is no way to find an arbitrary record in an event log.
     """
@@ -186,7 +186,7 @@ class EventLog (core._WinSysObject):
       else:
         record_number = wrapped (win32evtlog.GetOldestEventLogRecord, handle) + len (self) + index
         direction = EVENTLOG_READ.BACKWARDS
-      
+
       for entry in wrapped (
         win32evtlog.ReadEventLog,
         handle,
@@ -194,7 +194,7 @@ class EventLog (core._WinSysObject):
         record_number
       ):
         return _EventLogEntry (self, entry)
-  
+
   def _iterator (self, flags):
     """Internal function to open a handle over the event log and iterate
     in either direction.
@@ -207,27 +207,27 @@ class EventLog (core._WinSysObject):
             yield _EventLogEntry (self, entry)
         else:
           raise StopIteration
-  
+
   def __iter__ (self):
     """Return an iterator which traverses this event log lates record first"""
     return self._iterator (EVENTLOG_READ.FORWARDS | EVENTLOG_READ.SEQUENTIAL)
-        
+
   def __reversed__ (self):
     """Return an iterator which traverses this event log oldest record first"""
     return self._iterator (EVENTLOG_READ.BACKWARDS | EVENTLOG_READ.SEQUENTIAL)
-    
+
   def watcher (self):
-    """(EXPERIMENTAL) Unsure if this will be of any use. In principle, you can ask for an event 
-    to fire when a new record is written to this log. In practice, though, there's 
-    no way of determining which record was added and you have to do some housekeeping 
+    """(EXPERIMENTAL) Unsure if this will be of any use. In principle, you can ask for an event
+    to fire when a new record is written to this log. In practice, though, there's
+    no way of determining which record was added and you have to do some housekeeping
     and work out what changed.
-    
+
     Probably quite inefficient since it has to keep iterating backwards over the
     log every time to find the last record to match against. Does work, though.
     """
     TIMEOUT_SECS = 2
     hEvent = win32event.CreateEvent (None, 1, 0, None)
-    
+
     iterator = iter (self)
     last_record = self[-1]
     for i in iterator:
@@ -258,18 +258,18 @@ class EventSource (core._WinSysObject):
   unregistered event source and it will work quite happily although the event
   viewer won't be able to pick up the full message, only the inserted strings
   and the added data.
-  
+
   Implemented here mostly for internal use in the :func:`log_event` function. NB We're
   using the convenience functions offered by win32evtlogutil, which make use of
   defaults built in to the win32event.pyd file. In the future we may implement
   our own .DLL builder.
-  
+
   Instances of this class are expected to be accessed via the :func:`event_source`
   module-level function.
   """
-  
+
   _keys = ['CategoryCount', 'CategoryMessageFile', 'EventMessageFile', 'ParameterMessageFile', 'TypesSupported']
-  
+
   def __init__ (self, computer, log_name, source_name):
     core._WinSysObject.__init__ (self)
     self.computer = computer or "."
@@ -306,10 +306,10 @@ class EventSource (core._WinSysObject):
         self.types_supported, = struct.unpack ("L", types_supported)
       else:
         raise x_event_logs (None, None, "Can't determine types supported")
-    
+
   def as_string (self):
     return r"%s\%s\%s" % (self.computer, self.log_name, self.name)
-  
+
   def dumped (self, level=0):
     output = []
     output.append (self.as_string ())
@@ -319,15 +319,15 @@ class EventSource (core._WinSysObject):
     output.append ("parameter_message_file: %r" % self.parameter_message_file)
     output.append ("types_supported: %s" % EVENTLOG_TYPE.names_from_value (self.types_supported))
     return utils.dumped ("\n".join (output), level)
-    
+
   #
   # Context manager to allow a handle for this event source to
   # be passed to the ReportEvent function in log_event (qv).
   #
   def __enter__ (self):
-    self._handle = wrapped (win32evtlog.RegisterEventSource, self.computer, self.name) 
+    self._handle = wrapped (win32evtlog.RegisterEventSource, self.computer, self.name)
     return self._handle
-    
+
   def __exit__ (self, *exc_info):
     wrapped (win32evtlog.DeregisterEventSource, self._handle)
 
@@ -336,20 +336,20 @@ class EventSource (core._WinSysObject):
     """Call the convenience functions to add a simple event source to
     the registry against a named event log (usually Application).
     Return the event source so you can log against it.
-    
+
     :param name: name of the new event source
     :param log_name: name of the associated event log
     """
     win32evtlogutil.AddSourceToRegistry (appName=name, eventLogType=log_name)
     return cls ("", log_name, name)
-    
+
   def delete (self):
     """Remove an event source from the registry. NB There is no particular
     security at work here: it's perfectly possible to remove someone else's
     event source.
     """
     win32evtlogutil.RemoveSourceFromRegistry (appName=self.name, eventLogType=self.log_name)
-  
+
   def log_event (self, *args, **kwargs):
     """Pass-through to module-level :func:`log_event`"""
     log_event (self, *args, **kwargs)
@@ -367,7 +367,7 @@ def event_log (log):
   ur"""Convenience function to return an :class:`EventLog` object representing
   one of the existing event logs. Will raise :exc:`x_not_found` if the event
   log does not exist.
-  
+
   :param log: one of None, an :class:`EventLog` instance, or a [\\\\computer\\]name moniker
   """
   if log is None:
@@ -383,7 +383,7 @@ def event_sources (log_name=DEFAULT_LOG_NAME, computer="."):
   """
   for key in registry.registry (EventLog.REG_ROOT % computer).get_key (log_name).keys ():
     yield EventSource (computer, log_name, key.name)
-    
+
 def event_source (source):
   r"""Convenience function to return an :class:`EventSource` object representing
   one of the existing event sources. Will raise :exc:`exceptions.x_not_found` if the event
@@ -405,7 +405,7 @@ def event_source (source):
 
 def log_event (source, type="error", message=None, data=None, id=0, category=0, principal=core.UNSET):
   """Convenience function to log an event against an existing source.
-  
+
   :param source: anything accepted by :func:`event_source`
   :param type: an :data:`EVENTLOG_TYPE`
   :param message: a string or list of strings

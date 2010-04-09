@@ -699,6 +699,7 @@ class Dialog (BaseDialog):
         target=progress_thread,
         args=(progress_iterator, self.progress_cancelled)
       )
+      self.progress_thread.setDaemon (True)
       self.progress_thread.start ()
 
     #
