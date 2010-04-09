@@ -21,7 +21,7 @@ implements the idea of a registry moniker which has the form:
   #
   registry.registry (r"HKCU\Control Panel\Desktop")
 
-The key function here is :func:`registry` which is a factory 
+The key function here is :func:`registry` which is a factory
 returning a :class:`Registry` object which contains
 most of the useful functionality in the module. However, the same
 functionality is replicated at module level in many cases for
@@ -90,13 +90,13 @@ PyHANDLE = pywintypes.HANDLEType
 
 class x_registry (exc.x_winsys):
   "Base exception for all registry exceptions"
-  
+
 class x_moniker (x_registry):
   "Base exception for problems with monikers"
-  
+
 class x_moniker_ill_formed (x_moniker):
   "Raised when a moniker does not match the correct format"
-  
+
 class x_moniker_no_root (x_moniker):
   "Raised when a moniker has no Hive in the first or second position"
 
@@ -113,25 +113,25 @@ wrapped = exc.wrapper (WINERROR_MAP, x_registry)
 
 
 def _parse_moniker (moniker, accept_value=True):
-  r"""Take a registry moniker and return the computer, root key, subkey path and value label. 
+  r"""Take a registry moniker and return the computer, root key, subkey path and value label.
   NB: neither the computer nor the registry key need exist; they
   need simply to be of the right format. The slashes must be backslashes (since
   registry key names can contain forward slashes). accept_value is mostly used
   internally to indicate that a key search is going on, where a colon is to be
   considered part of the key name; if it is True, then the colon is to be
   considered a value separator.
-  
+
   The moniker must be of the form:
-  
+
     [\\computer\]HKEY[\subkey path][:value]
-  
+
   Valid monikers are:
     \\SVR01\HKEY_LOCAL_MACHINE\Software\Python:Version
     -> "SVR01", 0x80000002, "Software\Python", "Version"
-    
+
     HKEY_CURRENT_USER\Software
     -> "", 0x80000001, "Software", None
-    
+
     HKEY_CURRENT_USER\Software\Python:
     -> "", 0x80000001, "Software\Python", ""
   """
@@ -143,14 +143,14 @@ def _parse_moniker (moniker, accept_value=True):
   matcher = moniker_parser.match (moniker)
   if not matcher:
     raise x_moniker_ill_formed (errctx=u"_parse_moniker", errmsg=u"Ill-formed moniker: %s" % moniker)
-  
+
   if accept_value:
     computer, keypath, colon, value = matcher.groups ()
   else:
     computer, keypath = matcher.groups ()
     colon = value = None
   keys = keypath.split (sep)
-  
+
   root = path = None
 
   key0 = keys.pop (0)
@@ -158,7 +158,7 @@ def _parse_moniker (moniker, accept_value=True):
     root = REGISTRY_HIVE[key0.upper ()]
   except KeyError:
     root = None
-  
+
   if root is None and keys:
     key1 = keys.pop (0)
     try:
@@ -168,9 +168,9 @@ def _parse_moniker (moniker, accept_value=True):
 
   if root is None:
     raise x_moniker_no_root (errctx=u"_parse_moniker", errmsg=u"A registry hive must be the first or second segment in moniker")
-  
+
   path = sep.join (keys)
-  
+
   #
   # If a value is indicated (by a colon) but none is supplied,
   # use "" to indicate that the default value is requested.
@@ -183,7 +183,7 @@ def _parse_moniker (moniker, accept_value=True):
 def create_moniker (computer, root, path, value=None):
   """Return a valid registry moniker from component parts. Computer
   is optional but root and path must be specified.
-  
+
   :param computer: (optional) name of a remote computer or "." or :const:`None`
   :param root: name or value from REGISTRY_HIVE
   :param path: backslash-separated registry path
@@ -203,54 +203,54 @@ def create_moniker (computer, root, path, value=None):
     return moniker
 
 class Registry (core._WinSysObject):
-  ur"""  
+  ur"""
   Represent a registry key (including one of the roots) giving
   access to its subkeys and values as well as its security and walking
   its subtrees. The key is True if it exists, False otherwise.
-  
-  When access rights are supplied to any function, they can either be an 
-  integer representing a bitmask, or one or more letters corresponding to 
-  the :attr:`ACCESS` mapping. The default access is "F" indicating 
+
+  When access rights are supplied to any function, they can either be an
+  integer representing a bitmask, or one or more letters corresponding to
+  the :attr:`ACCESS` mapping. The default access is "F" indicating
   Full Control.
-  
+
   Note that addition and attribute / item getting and setting are overridden for convenience
   in accessing subkeys and values as follows:
-  
+
   * Adding a string to a :class:`Registry` object will result in a new object representing
     the subkey of that name::
-    
+
       from winsys import registry
       software = registry.registry (r"HKLM\Software")
       software + r"Python\Pythoncore" == registry.registry (r"HKLM\Software\Python\Pythoncore")
-      
+
   * Getting an attribute of a :class:`Registry` object will return a value
     if one exists, a key otherwise (or will raise AttributeError). For a key
     name this is the same as calling :meth:`get_key` or adding the key name
     as above. For a value name, this is the same as calling :meth:`get_value`
-    
+
   * Setting an attribute always writes a value, even if a key of that
     name already exists. This is equivalent to calling :meth:`set_value`.
-    
+
   * Deleting an attribute will attempts to delete a value if one exists,
-    otherwise it will delete a key of that name. This is equivalent to 
+    otherwise it will delete a key of that name. This is equivalent to
     calling :meth:`del_value` or :meth:`delete`.
-    
+
     ::
-    
+
       from winsys import registry
       python = registry.registry (r"HKLM\Software\Python")
       python.testing = 4
       python.get_value ("testing") == 4
       python.testing == python['testing']
       del python.testing
-      
+
   * To create a key, call :meth:`create` or the module-level :func:`create` function.
-  
+
   * To delete a key, call its :meth:`delete` method or the module level
     :func:`delete` function.
-    
+
     ::
-    
+
       from winsys import registry
       winsys = registry.registry (r"hklm\software\winsys").create ()
       winsys.test_value = 4
@@ -270,7 +270,7 @@ class Registry (core._WinSysObject):
     u"S" : constants.ACCESS.READ_CONTROL | constants.ACCESS.WRITE_DAC,
   }
   """Mapping between characters and access rights:
-  
+
   * Q - Query
   * D - Delete
   * R - Read
@@ -280,7 +280,7 @@ class Registry (core._WinSysObject):
   * S - Security
   """
   DEFAULT_ACCESS = u"F"
-  
+
   def __init__ (self, moniker, access=DEFAULT_ACCESS):
     core._WinSysObject.__init__ (self)
     utils._set (self, "hKey", None)
@@ -288,14 +288,14 @@ class Registry (core._WinSysObject):
     utils._set (self, "id", _parse_moniker (self.moniker.lower (), accept_value=False))
     utils._set (self, "access", self._access (access))
     utils._set (self, "name", moniker.split (sep)[-1] if moniker else "")
-    
+
   @classmethod
   def _access (cls, access):
     """Conversion function which returns an integer representing a security access
     bit pattern. Uses the class's ACCESS map to translate letters to integers.
     """
     if access is None:
-      return None      
+      return None
     try:
       return int (access)
     except ValueError:
@@ -303,10 +303,10 @@ class Registry (core._WinSysObject):
 
   def __eq__ (self, other):
     return self.id == other.id and self.access == other.access
-    
+
   def __add__ (self, path):
     """Allow a key to be added to an existing moniker.
-    
+
     :param path: can be a simple name or a backslash-separated relative path
     :returns: a :class:`Registry` object for the new path
     """
@@ -320,11 +320,11 @@ class Registry (core._WinSysObject):
       # by default.
       #
       return self
-  
+
   def pyobject (self):
     """Lazily return an internal registry key handle according to the instance's
     access requirements.
-    
+
     :raises: :exc:`x_not_found` if the registry path the key refers to does not exist
     """
     if self.hKey is None:
@@ -333,22 +333,22 @@ class Registry (core._WinSysObject):
       if self.hKey is None:
         raise exc.x_not_found (errctx=u"Registry.pyobject", errmsg=u"Registry path %s not found" % moniker)
     return self.hKey
-  
+
   def as_string (self):
     return self.moniker
-  
+
   def security (self, options=security.Security.DEFAULT_OPTIONS):
     """For a security request, hand off to the :meth:`~security.Security.from_object` method
     of the :class:`security.Security` object, specifying a registry key as the object type.
     Most commonly used as a context manager for security operations::
-    
+
       from winsys import registry
       with registry.registry (r"hklm\software\python").security () as s:
         print s.owner
     """
     return security.Security.from_object (
-      self.pyobject (), 
-      object_type=security.SE_OBJECT_TYPE.REGISTRY_KEY, 
+      self.pyobject (),
+      object_type=security.SE_OBJECT_TYPE.REGISTRY_KEY,
       options=options
     )
 
@@ -357,7 +357,7 @@ class Registry (core._WinSysObject):
     """
     hKey, _, _ = self._from_string (self.moniker, accept_value=False)
     return bool (hKey)
-  
+
   def dumped (self, level=0):
     output = []
     output.append (self.as_string ())
@@ -367,7 +367,7 @@ class Registry (core._WinSysObject):
       output.append (u"values:\n%s" % utils.dumped_dict (dict ((name or u"(Default)", repr (value)) for (name, value) in self.values (ignore_access_errors=True)), level))
       output.append (u"security:\n%s" % utils.dumped (self.security ().dumped (level), level))
     return utils.dumped ("\n".join (output), level)
-  
+
   def __getattr__ (self, attr):
     """Allow attribute access (key.value) by trying for a value
     first and then falling back to a key and finally raising
@@ -387,7 +387,7 @@ class Registry (core._WinSysObject):
     """
     self.set_value (attr, value)
   __setitem__ = __setattr__
-  
+
   def __delattr__ (self, attr):
     try:
       self.del_value (attr)
@@ -397,7 +397,7 @@ class Registry (core._WinSysObject):
       except exc.x_not_found:
         raise AttributeError
   __delitem__ = __delattr__
-    
+
   def get_value (self, name):
     """Return the key's value corresponding to name
     """
@@ -412,22 +412,22 @@ class Registry (core._WinSysObject):
 
   def get_key (self, name):
     """Return a Registry instance corresponding to the key's subkey name
-    
+
     :param name: a registry relative path (may be a single name or a backslash-separated path
     """
     return self + name
 
   def set_value (self, label, value, type=None):
     """Attempt to set one of the key's named values. If type is
-    None, then if the value already exists under the key its 
-    current type is assumed; otherwise a guess is made at 
+    None, then if the value already exists under the key its
+    current type is assumed; otherwise a guess is made at
     the datatype as follows:
-    
+
     * If the value is an int, use DWORD
     * If the value is a list, use MULTI_SZ
     * If the value has an even number of percent signs, use EXPAND_SZ
     * Otherwise, use REG_SZ
-    
+
     This is a very naive approach, and will falter if, for example,
     a string is passed which can be converted into a number, or a string
     with 2 percent signs which don't refer to an env var.
@@ -453,11 +453,11 @@ class Registry (core._WinSysObject):
       except exc.x_not_found:
         type = _guess_type (value)
     wrapped (win32api.RegSetValueEx, self.pyobject (), label, 0, type, value)
-    
+
   def del_value (self, label):
     """Removed the value identified by label from this registry key"""
     return wrapped (win32api.RegDeleteValue, self.pyobject (), label)
-    
+
   @classmethod
   def _from_string (cls, string, access=DEFAULT_ACCESS, accept_value=True):
     """Treat the string param as a moniker and return the corresponding
@@ -466,23 +466,24 @@ class Registry (core._WinSysObject):
     computer, root, path, value = _parse_moniker (string, accept_value=accept_value)
     moniker = REGISTRY_HIVE.name_from_value (root) + ((sep + path) if path else "")
     if computer:
-      hRoot = wrapped (win32api.RegConnectRegistry, computer, root)
+      hRoot = wrapped (win32api.RegConnectRegistry, None if computer == "." else computer, root)
     else:
       hRoot = root
-    
+
     try:
       if computer:
         moniker = r"\\%s\%s" % (computer, moniker)
       return wrapped (win32api.RegOpenKeyEx, hRoot, path, 0, cls._access (access)), moniker, value
     except exc.x_not_found:
       return None, moniker, value
-      
+
   @classmethod
   def from_string (cls, string, access=DEFAULT_ACCESS, accept_value=True):
     """Treat the string param as a moniker return either a key
     or a value. This is mostly used via the :func:`registry` function.
     """
     hKey, moniker, value = cls._from_string (string, access, accept_value)
+    print hKey, moniker, value
     if value is None:
       return cls (moniker, access)
     else:
@@ -490,9 +491,9 @@ class Registry (core._WinSysObject):
 
 def registry (root, access=Registry.DEFAULT_ACCESS, accept_value=True):
   """Factory function for the Registry class.
-  
+
   :param root: any of None, a Registry instance, or a moniker string
-  :param access: an integer bitmask or an :data:`Registry.ACCESS` string  
+  :param access: an integer bitmask or an :data:`Registry.ACCESS` string
   :returns: a :class:`Registry` object
   """
   if root is None:
@@ -507,12 +508,12 @@ def registry (root, access=Registry.DEFAULT_ACCESS, accept_value=True):
 def values (root, ignore_access_errors=False, _want_types=False):
   """Yield the values of a registry key as (name, value). This is convenient
   for, eg, populating a dictionary::
-  
+
     from winsys import registry
-  
+
     com3 = registry.registry (r"HKLM\Software\Microsoft\Com3")
     com3_values = dict (com3.values ())
-  
+
   :param root: anything accepted by :func:`registry`
   :param ignore_access_errors: if True, will keep on iterating even if access denied
   :param _want_types: (internal) used when, eg, copying keys exactly
@@ -526,7 +527,7 @@ def values (root, ignore_access_errors=False, _want_types=False):
       raise StopIteration
     else:
       raise
-      
+
   values = []
   i = 0
   while True:
@@ -545,7 +546,7 @@ def values (root, ignore_access_errors=False, _want_types=False):
 
 def keys (root, ignore_access_errors=False):
   """Yield the subkeys of a registry key as :class:`Registry` objects
-  
+
   :param root: anything accepted by :func:`registry`
   :param ignore_access_errors: if True, will keep on iterating even if access denied
   :returns: yield :class:`Registry` objects for each key under `root`
@@ -558,7 +559,7 @@ def keys (root, ignore_access_errors=False):
       raise StopIteration
     else:
       raise
-  
+
   try:
     for subname, reserved, subclass, written_at in wrapped (win32api.RegEnumKeyExW, hRoot):
       yield registry (root.moniker + sep + subname, accept_value=False)
@@ -571,7 +572,7 @@ def keys (root, ignore_access_errors=False):
 def copy (from_key, to_key):
   """Copy one registry key to another, returning the target. If the
   target doesn't already exist it will be created.
-  
+
   :param from_key: anything accepted by :func:`registry`
   :param to_key: anything accepted by :func:`registry`
   :returns: a :class:`Registry` object for `to_key`
@@ -585,20 +586,20 @@ def copy (from_key, to_key):
     target_root = registry (target.moniker + utils.relative_to (root.moniker, source.moniker), accept_value=False)
     for k in subkeys:
       target_key = registry (target.moniker + utils.relative_to (k.moniker, source.moniker), accept_value=False)
-      target_key.create ()    
+      target_key.create ()
     for name, value, type in subvalues:
       target_root.set_value (name, value, type)
-      
+
   return target
-  
+
 def delete (root, subkey=""):
   """Delete a registry key and all its subkeys
-  
+
   The common use for this will be to delete a key itself.
   The optional subkey param is useful when this is invoked
   as a method of a :class:`Registry` object and it's convenient
   to remove one of its subkeys::
-  
+
     from winsys import registry
     ws = registry.registry (r"hklm\software\winsys")
     ws.create ()
@@ -609,7 +610,7 @@ def delete (root, subkey=""):
     for subkey in ["winsys1", "winsys2", "winsys3"]:
       ws.delete (subkey)
     ws.delete ()
-  
+
   :param root: anything accepted by :func:`registry`
   :param subkey: anything accepted by :meth:`Registry.get_key`
   :returns: a :class:`Registry` object for `root`
@@ -625,12 +626,12 @@ def create (root, subkey="", sec=None):
   key created. Note that a colon in the key name is treated as part
   of the name not as a value indicator. Any parts of the path not
   already existing will be created as needed::
-  
+
     from winsys import registry, security
     sec = security.Security (dacl=[("", "F", "ALLOW")])
     registry.create (r"hklm\software\winsys\test", sec=sec)
     registry.registry (r"hklm\software\winsys\test").dump ()
-  
+
   :param root: anything accepted by :func:`registry`
   :param subkey: anything accepted by :meth:`Registry.get_key`
   :param sec: a :class:`security.Security` instance or None
@@ -638,7 +639,7 @@ def create (root, subkey="", sec=None):
   """
   key = registry (root, accept_value=False).get_key (subkey)
   computer0, root0, path0, value0 = _parse_moniker (key.moniker, accept_value=False)
-  
+
   parts = path0.split (sep)
   for i, part in enumerate (parts):
     computer, root, path, value = _parse_moniker (create_moniker (computer0, root0, sep.join (parts[:i+1])), accept_value=False)
@@ -647,20 +648,20 @@ def create (root, subkey="", sec=None):
     else:
       hRoot = root
     wrapped (
-      win32api.RegCreateKeyEx, 
-      Key=hRoot, 
+      win32api.RegCreateKeyEx,
+      Key=hRoot,
       SubKey=path,
-      samDesired=Registry._access (Registry.DEFAULT_ACCESS), 
+      samDesired=Registry._access (Registry.DEFAULT_ACCESS),
       SecurityAttributes=sec.pyobject () if sec else None
     )
-  
+
   return key
 
 def walk (root, ignore_access_errors=False, _want_types=False):
   """Mimic the os.walk functionality for the registry, starting at root and
   yielding (key, subkeys, values) for each key visited. subkeys and values are
   themselves generators.
-  
+
   :param root: anything accepted by :func:`registry`
   :param ignore_access_errors: if True, will keep on iterating even if access denied
   :param _want_types: (internal) indicates whether value types are returned as well as values
@@ -668,8 +669,8 @@ def walk (root, ignore_access_errors=False, _want_types=False):
   """
   root = registry (root, accept_value=False)
   yield (
-    root, 
-    root.keys (ignore_access_errors=ignore_access_errors), 
+    root,
+    root.keys (ignore_access_errors=ignore_access_errors),
     root.values (ignore_access_errors=ignore_access_errors, _want_types=_want_types)
   )
   for subkey in root.keys (ignore_access_errors=ignore_access_errors):
@@ -678,7 +679,7 @@ def walk (root, ignore_access_errors=False, _want_types=False):
 
 def flat (root, ignore_access_errors=False):
   """Yield a flattened version the tree rooted at root.
-  
+
   :param root: anything accepted by :func:`registry`
   :param ignore_access_errors: if True, will keep on iterating even if access denied
   :returns: yields `key` and then `value` items for each key under `root`
@@ -690,7 +691,7 @@ def flat (root, ignore_access_errors=False):
 
 def parent (key):
   """Return a registry key's parent key if it exists
-  
+
   :param key: anything accepted by :func:`registry`
   :returns: a :class:`Registry` object representing the parent of key
   :raises: :exc:`x_registry` if no parent exists (eg for a hive)
@@ -703,7 +704,7 @@ def parent (key):
     return registry (parent_moniker, key.access, accept_value=False)
   else:
     raise x_registry (errctx=u"parent", errmsg=u"%s has no parent" % key.moniker)
-      
+
 def hklm ():
   return registry ("hklm")
 

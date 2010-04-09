@@ -404,6 +404,6 @@ def test_Security_break_sacl_inheritance_copy ():
     assert sd.GetSecurityDescriptorSacl ().GetAceCount () == n_aces
 
 if __name__ == "__main__":
-  import nose
+  import nose, sys
   nose.runmodule (exit=False)
   if sys.stdout.isatty (): raw_input ("Press enter...")

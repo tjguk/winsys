@@ -84,6 +84,6 @@ def test_Token_change_privileges_disable ():
   _tokens.Token (token0).change_privileges (was_enabled, was_disabled)
 
 if __name__ == "__main__":
-  import nose
+  import nose, sys
   nose.runmodule (exit=False)
   if sys.stdout.isatty (): raw_input ("Press enter...")

@@ -1,3 +1,4 @@
+import sys
 from nose.tools import *
 import winerror
 import win32api
@@ -522,6 +523,6 @@ def test_Registry_from_string_value ():
   assert registry.Registry.from_string (TEST_KEY + ":winsys1") == registry.Registry.from_string (TEST_KEY).get_value ("winsys1")
 
 if __name__ == "__main__":
-  import nose
+  import nose, sys
   nose.runmodule (exit=False)
   if sys.stdout.isatty (): raw_input ("Press enter...")
