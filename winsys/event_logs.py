@@ -18,6 +18,7 @@ EVENTLOG_READ = constants.Constants.from_pattern (u"EVENTLOG_*_READ", namespace=
 EVENTLOG_READ.doc ("Ways of reading event logs")
 EVENTLOG_TYPE = constants.Constants.from_pattern (u"EVENTLOG_*_TYPE", namespace=win32evtlog)
 EVENTLOG_TYPE.update (dict (
+  EVENTLOG_SUCCESS = 0,
   AUDIT_FAILURE = win32evtlog.EVENTLOG_AUDIT_FAILURE,
   AUDIT_SUCCESS = win32evtlog.EVENTLOG_AUDIT_SUCCESS
 ))
@@ -121,7 +122,7 @@ class EventLog (core._WinSysObject):
     self.name = name
     key = registry.registry (self.REG_ROOT % self.computer).get_key (self.name)
     if not key:
-      raise x_not_found (None, "EventLog", r"\\%s\%s" % (self.computer, self.name))
+      raise exc.x_not_found (None, "EventLog", r"\\%s\%s" % (self.computer, self.name))
     else:
       values = dict (key.values ())
       self.auto_backup_log_files = values.get ("AutoBackupLogFiles")
@@ -165,7 +166,7 @@ class EventLog (core._WinSysObject):
     """Clear the event log, optionally saving out to an opaque file first,
     using the built-in functionality.
     """
-    wrapped (win32evtlog.ClearEventLog, self._handle, unicode (save_to_filename))
+    wrapped (win32evtlog.ClearEventLog, self._handle, unicode (save_to_filename) if save_to_filename else None)
 
   def __len__ (self):
     """Allow len () to return the number of records in the event log"""
@@ -234,14 +235,11 @@ class EventLog (core._WinSysObject):
       if i == last_record:
         break
 
-    print "last record", i
     with self._temp_handle () as handle:
       wrapped (win32evtlog.NotifyChangeEventLog, self._handle, hEvent)
       while True:
         if win32event.WaitForSingleObject (hEvent, 1000 * TIMEOUT_SECS) != win32event.WAIT_TIMEOUT:
-          print "not timedout"
           last_record = self[-1]
-          print "last_record", last_record
           for i in iterator:
             yield i
             if i == last_record:
@@ -277,10 +275,10 @@ class EventSource (core._WinSysObject):
     self.name = source_name
     key = registry.registry (r"%s\%s\%s" % (EventLog.REG_ROOT % self.computer, self.log_name, self.name))
     if not key:
-      raise x_not_found (None, "EventSource", r"\\%s\%s\%s" % (self.computer, self.log_name, self.name))
+      raise exc.x_not_found (None, "EventSource", r"\\%s\%s\%s" % (self.computer, self.log_name, self.name))
     self._handle = None
-    values = dict ((name, value) for (name, value, type) in key.values ())
-    types = dict ((name, type) for (name, value, type) in key.values ())
+    values = dict (key.values ())
+    types = dict ((name, type) for (name, value, type) in key.values (_want_types=True))
     self.category_count = values.get ("CategoryCount")
     self.category_message_file = values.get ("CategoryMessageFile")
     self.event_message_file = values.get ("EventMessageFile")
@@ -325,11 +323,13 @@ class EventSource (core._WinSysObject):
   # be passed to the ReportEvent function in log_event (qv).
   #
   def __enter__ (self):
+    print "About to register", self.computer, self.name
     self._handle = wrapped (win32evtlog.RegisterEventSource, self.computer, self.name)
     return self._handle
 
   def __exit__ (self, *exc_info):
     wrapped (win32evtlog.DeregisterEventSource, self._handle)
+    self._handle = None
 
   @classmethod
   def create (cls, name, log_name=DEFAULT_LOG_NAME):
@@ -340,7 +340,7 @@ class EventSource (core._WinSysObject):
     :param name: name of the new event source
     :param log_name: name of the associated event log
     """
-    win32evtlogutil.AddSourceToRegistry (appName=name, eventLogType=log_name)
+    wrapped (win32evtlogutil.AddSourceToRegistry, appName=name, eventLogType=log_name)
     return cls ("", log_name, name)
 
   def delete (self):
@@ -348,7 +348,7 @@ class EventSource (core._WinSysObject):
     security at work here: it's perfectly possible to remove someone else's
     event source.
     """
-    win32evtlogutil.RemoveSourceFromRegistry (appName=self.name, eventLogType=self.log_name)
+    wrapped (win32evtlogutil.RemoveSourceFromRegistry, appName=self.name, eventLogType=self.log_name)
 
   def log_event (self, *args, **kwargs):
     """Pass-through to module-level :func:`log_event`"""
@@ -375,8 +375,12 @@ def event_log (log):
   elif isinstance (log, EventLog):
     return log
   else:
-    computer, log_name = re.match (r"(?:\\\\([^\\]+)\\)?(.+)$", unicode (log), re.UNICODE).groups ()
-    return EventLog (computer, log_name)
+    match = re.match (r"(?:\\\\([^\\]+)\\)?(.+)$", unicode (log), re.UNICODE)
+    if match is None:
+      raise x_event_logs (errmsg=r"Event log must be of form [\\computer\]event_log")
+    else:
+      computer, log_name = match.groups ()
+      return EventLog (computer or ".", log_name)
 
 def event_sources (log_name=DEFAULT_LOG_NAME, computer="."):
   """Simple iterator over all the event sources for a named log
@@ -398,7 +402,7 @@ def event_source (source):
   else:
     match = re.match (r"(?:\\\\([^\\]+)\\)?(?:([^\\]+)\\)?(.+)$", source, re.UNICODE)
     if match is None:
-      raise x_event_logs (r"Event source must be of form [\\computer\]event_log\event_source")
+      raise x_event_logs (errmsg=r"Event source must be of form [\\computer\]event_log\event_source")
     else:
       computer, log_name, source_name = match.groups ()
       return EventSource (computer or ".", log_name or DEFAULT_LOG_NAME, source_name)
@@ -418,8 +422,12 @@ def log_event (source, type="error", message=None, data=None, id=0, category=0, 
   principal = accounts.me () if principal is core.UNSET else accounts.principal (principal)
   if isinstance (message, basestring):
     message = [message]
+  message = message or []
+
   with event_source (source) as hLog:
-    win32evtlog.ReportEvent (
+    print "log_event", (hLog, type, category, id, principal, message, data)
+    wrapped (
+      win32evtlog.ReportEvent,
       hLog,
       type,
       category,

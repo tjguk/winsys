@@ -483,7 +483,6 @@ class Registry (core._WinSysObject):
     or a value. This is mostly used via the :func:`registry` function.
     """
     hKey, moniker, value = cls._from_string (string, access, accept_value)
-    print hKey, moniker, value
     if value is None:
       return cls (moniker, access)
     else:
