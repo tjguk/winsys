@@ -252,7 +252,7 @@ class App (object):
     now = datetime.datetime.now ()
     if path:
       doc.append (u"<h1>%s</h1>" % title)
-      latest_filename = "\\".join (files[-1].filepath.parts[1:]) if files else "(no file yet)"
+      latest_filename = "\\".join (files[-1].parts[1:]) if files else "(no file yet)"
       doc.append (u'<p class="updated">Last updated %s</p>' % time.asctime ())
       doc.append (u'<table><thead><tr><td class="filename">Filename</td><td class="size">Size (Mb)</td><td class="updated">Updated</td></tr></thead>')
       for i, f in enumerate (files[:top_n_files]):
@@ -261,7 +261,7 @@ class App (object):
             u'<tr class="%s %s"><td class="filename">%s</td><td class="size">%5.2f</td><td class="updated">%s</td>' % (
               "odd" if i % 2 else "even",
               "highlight" if ((now - max (f.written_at, f.created_at)) <= highlight_delta) else "",
-              f.filepath.relative_to (path).lstrip (fs.seps),
+              f.relative_to (path).lstrip (fs.seps),
               f.size / 1024.0 / 1024.0,
               max (f.written_at, f.created_at)
             )
