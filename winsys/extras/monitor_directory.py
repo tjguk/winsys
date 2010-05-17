@@ -19,7 +19,7 @@ import urlparse
 from wsgiref.simple_server import make_server
 from wsgiref.util import shift_path_info
 
-#~ import error_handler
+import error_handler
 from winsys import core, fs, misc
 print "Logging to", core.log_filepath
 
@@ -74,6 +74,7 @@ def get_files (path, size_threshold_mb, results, stop_event):
     for tlf in top_level_folders:
       for f in tlf.flat (ignore_access_errors=True):
         if stop_event.isSet ():
+          print "stop event set"
           raise x_stop_exception
         try:
           if f.size > size_threshold:
