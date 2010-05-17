@@ -58,6 +58,9 @@ def deltastamp (delta):
 
   return output_format % output
 
+class x_stop_exception (Exception):
+  pass
+
 def get_files (path, size_threshold_mb, results, stop_event):
   """Intended to run inside a thread: scan the contents of
   a tree recursively, pushing every file which is at least
@@ -65,13 +68,20 @@ def get_files (path, size_threshold_mb, results, stop_event):
   if the stop_event is set.
   """
   size_threshold = size_threshold_mb * 1024 * 1024
-  for f in fs.flat (path, ignore_access_errors=True):
-    if stop_event.isSet (): break
-    try:
-      if f.size > size_threshold:
-        results.put (f)
-    except fs.exc.x_winsys:
-      continue
+  root = fs.dir (path)
+  top_level_folders = sorted (root.dirs (), key=operator.attrgetter ("written_at"), reverse=True)
+  try:
+    for tlf in top_level_folders:
+      for f in tlf.flat (ignore_access_errors=True):
+        if stop_event.isSet ():
+          raise x_stop_exception
+        try:
+          if f.size > size_threshold:
+            results.put (f)
+        except fs.exc.x_winsys:
+          continue
+  except x_stop_exception:
+    return
 
 def watch_files (path, size_threshold_mb, results, stop_event):
   """Intended to run inside a thread: monitor a directory tree
@@ -97,10 +107,11 @@ def watch_files (path, size_threshold_mb, results, stop_event):
       if stop_event.isSet (): break
       try:
         action, old_file, new_file = watcher.next ()
-        if old_file:
+        core.warn ("Monitored: %s - %s => %s" % (action, old_file, new_file))
+        if old_file is not None:
           if (not old_file) or (old_file and old_file.size > size_threshold):
             results.put (old_file)
-        if new_file and new_file <> old_file:
+        if new_file is not None and new_file <> old_file:
           if new_file and new_file.size > size_threshold:
             results.put (new_file)
       except fs.exc.x_winsys:
