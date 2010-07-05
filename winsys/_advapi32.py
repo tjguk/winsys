@@ -78,12 +78,12 @@ def CreateProcessWithLogonW (
   current_directory = None,
   startup_info = None
 ):
-  if username: username = unicode (username)
-  if domain: domain = unicode (domain)
-  if password: password = unicode (password)
-  if application_name: application_name = unicode (application_name)
-  command_line = ctypes.create_unicode_buffer (command_line or "")
-  if current_directory: current_directory = unicode (current_directory)
+  if username: username = str (username)
+  if domain: domain = str (domain)
+  if password: password = str (password)
+  if application_name: application_name = str (application_name)
+  command_line = ctypes.create_str_buffer (command_line or "")
+  if current_directory: current_directory = str (current_directory)
   if not startup_info:
     startup_info = STARTUPINFO ()
     startup_info.cb = ctypes.sizeof (STARTUPINFO)

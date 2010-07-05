@@ -314,7 +314,7 @@ class BaseDialog (object):
       elif field_type == "EDIT":
         field_styles |= win32con.WS_BORDER | win32con.ES_AUTOHSCROLL | win32con.ES_AUTOVSCROLL
         field_w = self.FIELD_W - ((self.CALLBACK_W) if callback else 0)
-        if "\r\n" in unicode (default_value):
+        if "\r\n" in str (default_value):
           field_styles |= win32con.ES_MULTILINE
           display_h = field_h = self.CONTROL_H * min (default_value.count ("\r\n"), 10)
         if sub_type == "READONLY":
@@ -346,7 +346,7 @@ class BaseDialog (object):
       dlg.append (["BUTTON", caption, id, (self.W - ((i + 1) * (self.GUTTER_W + self.BUTTON_W)), button_t, self.BUTTON_W, field_h), cs])
     control_t += field_h + self.GUTTER_H
 
-    dlg.insert (0, [self.title, (0, 0, self.W, control_t), style, None, (9, "Lucida Sans Unicode"), None, dlg_class_name])
+    dlg.insert (0, [self.title, (0, 0, self.W, control_t), style, None, (9, "Lucida Sans str"), None, dlg_class_name])
     return dlg
 
 class Dialog (BaseDialog):
@@ -534,7 +534,7 @@ class Dialog (BaseDialog):
     if class_name == "Edit":
       if isinstance (value, datetime.date):
         value = value.strftime ("%d %b %Y")
-      value = unicode (value).replace ("\r\n", "\n").replace ("\n", "\r\n")
+      value = str (value).replace ("\r\n", "\n").replace ("\n", "\r\n")
       wrapped (win32gui.SetDlgItemText, self.hwnd, item_id, value)
     elif class_name == "Button":
       #~ if styles & win32con.BS_CHECKBOX:
@@ -547,7 +547,7 @@ class Dialog (BaseDialog):
         SendMessage (item_hwnd, win32con.CB_ADDSTRING, 0, utils.string_as_pointer (str (item)))
       SendMessage (item_hwnd, win32con.CB_SETCURSEL, 0, 0)
     elif class_name == "Static":
-      wrapped (win32gui.SetDlgItemText, self.hwnd, item_id, unicode (value))
+      wrapped (win32gui.SetDlgItemText, self.hwnd, item_id, str (value))
     else:
       raise RuntimeError ("Unknown class: %s" % class_name)
 

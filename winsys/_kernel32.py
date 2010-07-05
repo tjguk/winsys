@@ -30,7 +30,7 @@ def FindFirstVolume ():
   none is found, raise x_kernel32. Otherwise return the
   search handle and the volume name.
   """
-  volume_name = ctypes.create_unicode_buffer (" " * VOLUME_NAME_LENGTH)
+  volume_name = ctypes.create_str_buffer (" " * VOLUME_NAME_LENGTH)
   hSearch = kernel32.FindFirstVolumeW (volume_name, VOLUME_NAME_LENGTH)
   if hSearch == win32file.INVALID_HANDLE_VALUE:
     return error (x_kernel32, "FindFirstVolume")
@@ -43,7 +43,7 @@ def FindNextVolume (hSearch):
   If there are no more in this set, close the handle and return
   None.
   """
-  volume_name = ctypes.create_unicode_buffer (" " * VOLUME_NAME_LENGTH)
+  volume_name = ctypes.create_str_buffer (" " * VOLUME_NAME_LENGTH)
   if kernel32.FindNextVolumeW (hSearch, volume_name, VOLUME_NAME_LENGTH) != 0:
     return volume_name.value
   else:
@@ -70,7 +70,7 @@ def FindFirstVolumeMountPoint (volume_name):
   If none is found, raise x_kernel32. Otherwise return the
   search handle and the volume mount point name.
   """
-  volume_mount_point_name = ctypes.create_unicode_buffer (" " * VOLUME_NAME_LENGTH)
+  volume_mount_point_name = ctypes.create_str_buffer (" " * VOLUME_NAME_LENGTH)
   hSearch = kernel32.FindFirstVolumeMountPointW (volume_name, volume_mount_point_name, VOLUME_NAME_LENGTH)
   if hSearch == win32file.INVALID_HANDLE_VALUE:
     return error (x_kernel32, "FindFirstVolumeMountPoint")
@@ -82,7 +82,7 @@ def FindNextVolumeMountPoint (hSearch):
   the set provided by a search handle returned by FindFirstVolumeMountPoint.
   If there are no more in this set, close the handle and return None.
   """
-  volume_mount_point_name = ctypes.create_unicode_buffer (" " * VOLUME_NAME_LENGTH)
+  volume_mount_point_name = ctypes.create_str_buffer (" " * VOLUME_NAME_LENGTH)
   if kernel32.FindNextVolumeMountPointW (hSearch, volume_mount_point_name, VOLUME_NAME_LENGTH) != 0:
     return volume_mount_point_name.value
   else:
@@ -104,11 +104,11 @@ def GetCompressedFileSize (filepath):
   return the compressed size, otherwise return the regular size.
 
   Altho' this function is already exposed by pywin32, there is a
-  bug in the implementation such that non-trivial unicode causes
+  bug in the implementation such that non-trivial str causes
   an error.
   """
   hi = wintypes.DWORD ()
-  lo = kernel32.GetCompressedFileSizeW (unicode (filepath), ctypes.byref (hi))
+  lo = kernel32.GetCompressedFileSizeW (str (filepath), ctypes.byref (hi))
   if lo == 0xffffffff and ctypes.GetLastError != winerror.NO_ERROR:
     return error (x_kernel32, "GetCompressedFileSize")
   else:

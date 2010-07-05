@@ -47,7 +47,7 @@ class _DelimitedText (list):
     super (_DelimitedText, self).__init__ (initialiser or env[key].split (delimiter))
     self.env = env
     self.key = key
-    self.delimiter = unicode (delimiter)
+    self.delimiter = str (delimiter)
 
   def _update (self):
     self.env[self.key] = self.delimiter.join (self)
@@ -61,28 +61,28 @@ class _DelimitedText (list):
     self._update ()
 
   def __iadd__ (self, iterator):
-    super (_DelimitedText, self).__iadd__ (self.munge_item (unicode (i)) for i in iterator)
+    super (_DelimitedText, self).__iadd__ (self.munge_item (str (i)) for i in iterator)
     self._update ()
     return self
 
   def __setitem__ (self, index, item):
-    super (_DelimitedText, self).__setitem__ (index, self.munge_item (unicode (item)))
+    super (_DelimitedText, self).__setitem__ (index, self.munge_item (str (item)))
     self._update ()
 
   def __setslice__ (self, index0, index1, iterator):
-    super (_DelimitedText, self).__setitem__ (index0, index1, (self.munge_item (unicode (item)) for item in iterator))
+    super (_DelimitedText, self).__setitem__ (index0, index1, (self.munge_item (str (item)) for item in iterator))
     self._update ()
 
   def append (self, item):
-    super (_DelimitedText, self).append (self.munge_item (unicode (item)))
+    super (_DelimitedText, self).append (self.munge_item (str (item)))
     self._update ()
 
   def extend (self, item):
-    super (_DelimitedText, self).extend (self.munge_item (unicode (item)))
+    super (_DelimitedText, self).extend (self.munge_item (str (item)))
     self._update ()
 
   def insert (self, index, item):
-    super (_DelimitedText, self).insert (index, self.munge_item (unicode (object)))
+    super (_DelimitedText, self).insert (index, self.munge_item (str (object)))
     self._update ()
 
   def pop (self, index=-1):
@@ -91,7 +91,7 @@ class _DelimitedText (list):
     return result
 
   def remove (self, item):
-    super (_DelimitedText, self).remove (self.munge_item (unicode (item)))
+    super (_DelimitedText, self).remove (self.munge_item (str (item)))
     self._update ()
 
   def reverse (self):
@@ -210,7 +210,7 @@ class Env (core._WinSysObject):
     expanded to their corresponding value. This is done automatically
     by the functions in this class unless you specify `expand=False`.
     """
-    return wrapped (win32api.ExpandEnvironmentStrings, unicode (item))
+    return wrapped (win32api.ExpandEnvironmentStrings, str (item))
 
 class Process (Env):
   """The environment corresponding to the current process. This is visible
@@ -237,13 +237,13 @@ class Process (Env):
     if value is None:
       raise KeyError
     else:
-      return unicode (value)
+      return str (value)
 
   def __setitem__ (self, item, value):
     if value is None:
       wrapped (win32api.SetEnvironmentVariable, item, None)
     else:
-      wrapped (win32api.SetEnvironmentVariable, item, unicode (value))
+      wrapped (win32api.SetEnvironmentVariable, item, str (value))
 
   def __delitem__ (self, item):
     wrapped (win32api.SetEnvironmentVariable, item, None)
@@ -274,7 +274,7 @@ class Persistent (Env):
 
   def _get (self, item):
     try:
-      return unicode (self.registry.get_value (item))
+      return str (self.registry.get_value (item))
     except exc.x_not_found:
       return None
 
@@ -292,7 +292,7 @@ class Persistent (Env):
       return value
 
   def __setitem__ (self, item, value):
-    self.registry.set_value (item, unicode (value))
+    self.registry.set_value (item, str (value))
 
   def __delitem__ (self, item):
     del self.registry[item]

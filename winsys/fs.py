@@ -400,7 +400,7 @@ class FilePath (str):
 
   def _get_root (self):
     if self._root is None:
-      self._root = self.__class__.factory (self.parts[0])
+      self._root = self.__class__.factory (self.parts[0]) or ""
     return self._root
   root = property (_get_root)
 

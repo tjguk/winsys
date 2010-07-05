@@ -412,7 +412,7 @@ class PropertySet (core._WinSysObject):
     for name, property_id, vartype in property_storage:
       if name is None:
         property_names = PROPERTIES.get (self.fmtid, constants.Constants ())
-        name = property_names.name_from_value (property_id, unicode (hex (property_id)))
+        name = property_names.name_from_value (property_id, str (hex (property_id)))
       try:
         for value in property_storage.ReadMultiple ([property_id]):
           properties[name] = value

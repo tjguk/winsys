@@ -312,7 +312,7 @@ def mailslot (mailslot, marshalled=True, message_size=0, timeout_ms=-1):
       serialiser = (marshal.dumps, marshal.loads)
     else:
       serialiser = (str, str)
-    if not re.match (r"\\\\[^\\]+\\mailslot\\", unicode (mailslot), re.UNICODE):
+    if not re.match (r"\\\\[^\\]+\\mailslot\\", str (mailslot), re.str):
       mailslot = r"\\.\mailslot\%s" % mailslot
     return Mailslot (mailslot, serialiser, message_size, timeout_ms)
 
