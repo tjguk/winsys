@@ -19,7 +19,7 @@ import urlparse
 from wsgiref.simple_server import make_server
 from wsgiref.util import shift_path_info
 
-#~ import error_handler
+import error_handler
 from winsys import core, fs, misc
 print "Logging to", core.log_filepath
 
@@ -58,6 +58,9 @@ def deltastamp (delta):
 
   return output_format % output
 
+class x_stop_exception (Exception):
+  pass
+
 def get_files (path, size_threshold_mb, results, stop_event):
   """Intended to run inside a thread: scan the contents of
   a tree recursively, pushing every file which is at least
@@ -65,13 +68,21 @@ def get_files (path, size_threshold_mb, results, stop_event):
   if the stop_event is set.
   """
   size_threshold = size_threshold_mb * 1024 * 1024
-  for f in fs.flat (path, ignore_access_errors=True):
-    if stop_event.isSet (): break
-    try:
-      if f.size > size_threshold:
-        results.put (f)
-    except fs.exc.x_winsys:
-      continue
+  root = fs.dir (path)
+  top_level_folders = sorted (root.dirs (), key=operator.attrgetter ("written_at"), reverse=True)
+  try:
+    for tlf in top_level_folders:
+      for f in tlf.flat (ignore_access_errors=True):
+        if stop_event.isSet ():
+          print "stop event set"
+          raise x_stop_exception
+        try:
+          if f.size > size_threshold:
+            results.put (f)
+        except fs.exc.x_winsys:
+          continue
+  except x_stop_exception:
+    return
 
 def watch_files (path, size_threshold_mb, results, stop_event):
   """Intended to run inside a thread: monitor a directory tree
@@ -97,10 +108,11 @@ def watch_files (path, size_threshold_mb, results, stop_event):
       if stop_event.isSet (): break
       try:
         action, old_file, new_file = watcher.next ()
-        if old_file:
+        core.warn ("Monitored: %s - %s => %s" % (action, old_file, new_file))
+        if old_file is not None:
           if (not old_file) or (old_file and old_file.size > size_threshold):
             results.put (old_file)
-        if new_file and new_file <> old_file:
+        if new_file is not None and new_file <> old_file:
           if new_file and new_file.size > size_threshold:
             results.put (new_file)
       except fs.exc.x_winsys:
@@ -252,7 +264,7 @@ class App (object):
     now = datetime.datetime.now ()
     if path:
       doc.append (u"<h1>%s</h1>" % title)
-      latest_filename = "\\".join (files[-1].filepath.parts[1:]) if files else "(no file yet)"
+      latest_filename = "\\".join (files[-1].parts[1:]) if files else "(no file yet)"
       doc.append (u'<p class="updated">Last updated %s</p>' % time.asctime ())
       doc.append (u'<table><thead><tr><td class="filename">Filename</td><td class="size">Size (Mb)</td><td class="updated">Updated</td></tr></thead>')
       for i, f in enumerate (files[:top_n_files]):
@@ -261,7 +273,7 @@ class App (object):
             u'<tr class="%s %s"><td class="filename">%s</td><td class="size">%5.2f</td><td class="updated">%s</td>' % (
               "odd" if i % 2 else "even",
               "highlight" if ((now - max (f.written_at, f.created_at)) <= highlight_delta) else "",
-              f.filepath.relative_to (path).lstrip (fs.seps),
+              f.relative_to (path).lstrip (fs.seps),
               f.size / 1024.0 / 1024.0,
               max (f.written_at, f.created_at)
             )
