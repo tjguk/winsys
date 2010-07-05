@@ -36,7 +36,7 @@ class _WinSysObject (object):
     return utils.dumped (self.as_string (), level)
 
   def dump (self, level=0):
-    print self.dumped (level)
+    sys.stdout.write (self.dumped (level))
 
   #
   # Fill-in functions to ensure that a complete
@@ -68,7 +68,7 @@ UNSET = Unset ()
 #
 # Create a logger without any handlers.
 #
-_logger = logging.getLogger (u"winsys")
+_logger = logging.getLogger ("winsys")
 debug = _logger.debug
 log = _logger.log
 info = _logger.info

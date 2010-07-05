@@ -23,7 +23,7 @@ def signed_to_unsigned (signed):
   return unsigned
 
 def mask_as_string (mask, length=32):
-  return "".join (u"01"[bool (mask & (1 << i))] for i in range (length)[::-1])
+  return "".join ("01"[bool (mask & (1 << i))] for i in range (length)[::-1])
 
 def mask_as_list (mask, length=32):
   return [i for i in range (length) if ((1 << i) & mask)]
@@ -36,7 +36,7 @@ def _set (obj, attr, value):
 
 def secs_as_string (secs):
   """Convert a number of seconds to dh'", eg
-  
+
   25 => 25"
   190 => 3'10"
   6800 => 1h53'20"
@@ -53,10 +53,10 @@ def secs_as_string (secs):
     "%d'" % minutes if minutes else "",
     '%d"' % seconds if seconds else ""
   ])
-  
+
 def size_as_mb (n_bytes):
   """Convert a size in bytes to a human-readable form as follows:
-  
+
   If < kb return the number unchanged
   If >= kb and < mb return number of kb
   If >= mb and < gb return number of mb
@@ -73,26 +73,26 @@ def size_as_mb (n_bytes):
     return "%3.2fkb" % (n_bytes / 1024.0)
   else:
     return "%d" % n_bytes
-  
+
 #
 # Support functions for dump functionality.
 #
 def indented (text, level, indent=2):
   """Take a multiline text and indent it as a block"""
-  return u"\n".join (u"%s%s" % (level * indent * u" ", s) for s in text.splitlines ())
+  return "\n".join ("%s%s" % (level * indent * " ", s) for s in text.splitlines ())
 
 def dumped (text, level, indent=2):
   """Put curly brackets round an indented text"""
-  return indented (u"{\n%s\n}" % indented (text, level+1, indent) or "None", level, indent)
+  return indented ("{\n%s\n}" % indented (text, level+1, indent) or "None", level, indent)
 
 def dumped_list (l, level, indent=2):
-  return dumped (u"\n".join (unicode (i)  for i in l), level, indent)
+  return dumped ("\n".join (unicode (i)  for i in l), level, indent)
 
 def dumped_dict (d, level, indent=2):
-  return dumped (u"\n".join (u"%s => %s" % (k, v) for (k, v) in d.items ()), level, indent)
+  return dumped ("\n".join ("%s => %s" % (k, v) for (k, v) in d.items ()), level, indent)
 
 def dumped_flags (f, lookups, level, indent=2):
-  return dumped (u"\n".join (lookups.names_from_value (f)) or u"None", level, indent)
+  return dumped ("\n".join (lookups.names_from_value (f)) or "None", level, indent)
 
 def pythonised (string):
   """Convert from initial caps to lowercase with underscores.
@@ -107,7 +107,7 @@ def string_as_pointer (string):
   """Convert a Python string to a LPSTR for the WinAPI"""
   address, length = win32gui.PyGetBufferAddressAndLen (buffer (string))
   return address
-  
+
 def pointer_as_string (pointer):
   """Convert a WinAPI LPSTR to a Python string"""
   return win32gui.PyGetString (pointer)
@@ -117,7 +117,7 @@ def relative_to (path1, path0):
   path from the beginning of a longer one off the same root.
   This is to assist in things like copying a directory or registry
   tree from one area to another.
-  
+
   NB This is used by the fs *and* registry modules so stays
   here in the global utils
   """
