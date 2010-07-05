@@ -13,8 +13,7 @@ from winsys import utils
 class _WinSysObject:
 
   def as_string (self):
-    """Produce a readable version of the data, used by
-    __str__.
+    """Produce a readable version of the data, used by __str__.
     """
     return self.__class__.__name__
 

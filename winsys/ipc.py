@@ -11,7 +11,7 @@ import win32file
 
 from winsys import constants, core, exc, fs, security, utils
 
-WAIT = constants.Constants.from_pattern (u"WAIT_*", namespace=win32event)
+WAIT = constants.Constants.from_pattern ("WAIT_*", namespace=win32event)
 WAIT.update (dict (INFINITE=win32event.INFINITE))
 
 PyHANDLE = pywintypes.HANDLEType
@@ -40,7 +40,7 @@ WINERROR_MAP = {
 wrapped = exc.wrapper (WINERROR_MAP, x_ipc)
 
 class Mailslot (core._WinSysObject):
-  ur"""A mailslot is a mechanism for passing small datasets (up to about
+  r"""A mailslot is a mechanism for passing small datasets (up to about
   400 bytes) between machines in the same network. For transport and
   name resolution it uses NetBIOS so you can't, for example, use a
   machine's IP address when specifying the location of a mailslot.
@@ -128,7 +128,7 @@ class Mailslot (core._WinSysObject):
 
   def _write_handle (self):
     if self._hRead is not None:
-      raise x_mailslot_invalid_use (core.UNSET, "Mailslot._write_handle", u"Cannot write to this mailslot; it is used for reading")
+      raise x_mailslot_invalid_use (core.UNSET, "Mailslot._write_handle", "Cannot write to this mailslot; it is used for reading")
     if self._hWrite is None:
       self._hWrite = wrapped (
         win32file.CreateFile,
@@ -312,8 +312,8 @@ def mailslot (mailslot, marshalled=True, message_size=0, timeout_ms=-1):
       serialiser = (marshal.dumps, marshal.loads)
     else:
       serialiser = (str, str)
-    if not re.match (ur"\\\\[^\\]+\\mailslot\\", unicode (mailslot), re.UNICODE):
-      mailslot = ur"\\.\mailslot\%s" % mailslot
+    if not re.match (r"\\\\[^\\]+\\mailslot\\", unicode (mailslot), re.UNICODE):
+      mailslot = r"\\.\mailslot\%s" % mailslot
     return Mailslot (mailslot, serialiser, message_size, timeout_ms)
 
 def event (name=None, initially_set=0, needs_manual_reset=0, security=None):
