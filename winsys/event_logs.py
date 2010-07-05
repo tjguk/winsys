@@ -420,7 +420,7 @@ def log_event (source, type="error", message=None, data=None, id=0, category=0, 
   """
   type = EVENTLOG_TYPE.constant (type)
   principal = accounts.me () if principal is core.UNSET else accounts.principal (principal)
-  if isinstance (message, basestring):
+  if isinstance (message, str):
     message = [message]
   message = message or []
 

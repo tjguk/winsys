@@ -126,13 +126,13 @@ def _file_operation (
   # with a backslash, so convert here.
   #
   source_path = source_path or u""
-  if isinstance (source_path, basestring):
+  if isinstance (source_path, str):
     source_path = os.path.abspath (source_path)
   else:
     source_path = [os.path.abspath (i) for i in source_path]
 
   target_path = target_path or ""
-  if isinstance (target_path, basestring):
+  if isinstance (target_path, str):
     target_path = os.path.abspath (target_path)
   else:
     target_path = [os.path.abspath (i) for i in target_path]
@@ -529,7 +529,7 @@ def shell_entry (shell_entry=core.UNSET):
     return ShellFolder ([], desktop)
   elif isinstance (ShellEntry, shell_entry):
     return shell_entry
-  elif isinstance (shell_entry, basestring):
+  elif isinstance (shell_entry, str):
     pidl, flags = shell.SHILCreateFromPath (os.path.abspath (shell_folder), SHCONTF.FOLDERS)
     if pidl is None:
       return ShellFolder (
@@ -547,7 +547,7 @@ def shell_folder (shell_folder=core.UNSET, parent=core.UNSET):
     return ShellFolder ([], desktop)
   elif isinstance (shell_folder, PyIShellFolder):
     return ShellFolder (shell_folder)
-  elif isinstance (shell_folder, basestring):
+  elif isinstance (shell_folder, str):
     pidl, flags = shell.SHILCreateFromPath (os.path.abspath (shell_folder), 0)
     if pidl is None:
       pidl = shell.SHGetFolderLocation (None, CSIDL.constant (shell_folder), None, 0)

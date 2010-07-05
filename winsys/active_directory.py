@@ -176,7 +176,7 @@ def ad (obj=core.UNSET, username=None, password=None, interface=adsi.IID_IADs):
     return None
   elif isinstance (obj, IADs):
     return obj
-  elif isinstance (obj, basestring):
+  elif isinstance (obj, str):
     moniker = obj
     if not moniker.upper ().startswith ("LDAP://"):
       moniker = "LDAP://" + moniker

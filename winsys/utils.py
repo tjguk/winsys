@@ -12,10 +12,7 @@ import winxpgui as win32gui
 # Small support functions
 #
 def from_pytime (pytime):
-  try:
-    return datetime.fromtimestamp (int (pytime))
-  except ValueError:
-    return None
+  return pytime
 
 def signed_to_unsigned (signed):
   """Convert a (possibly signed) long to unsigned hex"""

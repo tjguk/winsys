@@ -499,7 +499,7 @@ def registry (root, access=Registry.DEFAULT_ACCESS, accept_value=True):
     return None
   elif isinstance (root, Registry):
     return root
-  elif isinstance (root, basestring):
+  elif isinstance (root, str):
     return Registry.from_string (root, access=access, accept_value=accept_value)
   else:
     raise x_registry (errctx=u"registry", errmsg=u"root must be None, an existing key or a moniker")

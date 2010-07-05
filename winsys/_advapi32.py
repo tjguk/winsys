@@ -1,5 +1,5 @@
 # -*- coding: iso-8859-1 -*-
-u"""Provide functions unavailable via pywin32 which reside in kernel32.dll
+"""Provide functions unavailable via pywin32 which reside in kernel32.dll
 """
 import winerror
 from ctypes.wintypes import *
@@ -67,14 +67,14 @@ class STARTUPINFO(ctypes.Structure):
    ]
 
 def CreateProcessWithLogonW (
-  username = None, 
-  domain = None, 
-  password = None, 
-  logon_flags = 0, 
-  application_name = None, 
+  username = None,
+  domain = None,
+  password = None,
+  logon_flags = 0,
+  application_name = None,
   command_line = None,
-  creation_flags = 0, 
-  environment = None, 
+  creation_flags = 0,
+  environment = None,
   current_directory = None,
   startup_info = None
 ):
@@ -82,7 +82,7 @@ def CreateProcessWithLogonW (
   if domain: domain = unicode (domain)
   if password: password = unicode (password)
   if application_name: application_name = unicode (application_name)
-  command_line = ctypes.create_unicode_buffer (command_line or u"")
+  command_line = ctypes.create_unicode_buffer (command_line or "")
   if current_directory: current_directory = unicode (current_directory)
   if not startup_info:
     startup_info = STARTUPINFO ()
@@ -93,22 +93,22 @@ def CreateProcessWithLogonW (
     startup_info.dwFlags = 0
     startup_info.cbReserved2 = 0
     startup_info.lpReserved2 = 0
-  
+
   process_information = PROCESS_INFORMATION ()
   process_information.hProcess = INVALID_HANDLE_VALUE
   process_information.hThread = INVALID_HANDLE_VALUE
   process_information.dwProcessId = 0
   process_information.dwThreadId = 0
-  
+
   success = ctypes.windll.advapi32.CreateProcessWithLogonW (
-    username, 
-    domain, 
-    password, 
+    username,
+    domain,
+    password,
     logon_flags, application_name,
-    ctypes.byref (command_line), 
-    creation_flags, 
+    ctypes.byref (command_line),
+    creation_flags,
     environment,
-    current_directory, 
+    current_directory,
     ctypes.byref (startup_info),
     ctypes.byref (process_information)
   )
