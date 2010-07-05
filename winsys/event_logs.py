@@ -14,9 +14,9 @@ import pywintypes
 
 from winsys import accounts, constants, core, exc, registry, utils
 
-EVENTLOG_READ = constants.Constants.from_pattern (u"EVENTLOG_*_READ", namespace=win32evtlog)
+EVENTLOG_READ = constants.Constants.from_pattern ("EVENTLOG_*_READ", namespace=win32evtlog)
 EVENTLOG_READ.doc ("Ways of reading event logs")
-EVENTLOG_TYPE = constants.Constants.from_pattern (u"EVENTLOG_*_TYPE", namespace=win32evtlog)
+EVENTLOG_TYPE = constants.Constants.from_pattern ("EVENTLOG_*_TYPE", namespace=win32evtlog)
 EVENTLOG_TYPE.update (dict (
   EVENTLOG_SUCCESS = 0,
   AUDIT_FAILURE = win32evtlog.EVENTLOG_AUDIT_FAILURE,
@@ -74,20 +74,23 @@ class _EventLogEntry (core._WinSysObject):
       self._event_log_name == other._event_log_name and \
       self.record_number == other.record_number
 
+  def __hash__ (self):
+    return hash ((self.computer_name, self._event_log_name, self.record_number))
+
   def dumped (self, level=0):
     output = []
-    output.append (u"record_number: %s" % self.record_number)
-    output.append (u"time_generated: %s" % self.time_generated)
-    output.append (u"time_written: %s" % self.time_written)
-    output.append (u"event_id: %s" % self.event_id)
-    output.append (u"source_name: %s" % self.source_name)
-    output.append (u"event_type: %s" % EVENTLOG_TYPE.name_from_value (self.event_type))
-    output.append (u"event_category: %s" % self.event_category)
-    output.append (u"sid: %s" % self.sid)
-    output.append (u"computer_name: %s" % self.computer_name)
-    output.append (u"data: %s" % repr (self.data))
-    output.append (u"message: %s" % self.message)
-    return utils.dumped (u"\n".join (output), level)
+    output.append ("record_number: %s" % self.record_number)
+    output.append ("time_generated: %s" % self.time_generated)
+    output.append ("time_written: %s" % self.time_written)
+    output.append ("event_id: %s" % self.event_id)
+    output.append ("source_name: %s" % self.source_name)
+    output.append ("event_type: %s" % EVENTLOG_TYPE.name_from_value (self.event_type))
+    output.append ("event_category: %s" % self.event_category)
+    output.append ("sid: %s" % self.sid)
+    output.append ("computer_name: %s" % self.computer_name)
+    output.append ("data: %s" % repr (self.data))
+    output.append ("message: %s" % self.message)
+    return utils.dumped ("\n".join (output), level)
 
   def _get_message (self):
     if self._message is None:
@@ -141,16 +144,16 @@ class EventLog (core._WinSysObject):
 
   def dumped (self, level=0):
     output = []
-    output.append (u"auto_backup_log_files: %s" % self.auto_backup_log_files)
-    output.append (u"display_name_file: %s" % self.display_name_file)
-    output.append (u"display_name_id: %s" % self.display_name_id)
-    output.append (u"file: %s" % self.file)
-    output.append (u"max_size: %s" % utils.size_as_mb (self.max_size))
-    output.append (u"primary_module: %s" % self.primary_module)
-    output.append (u"restrict_guest_access: %s" % self.restrict_guest_access)
-    output.append (u"retention: %s" % utils.secs_as_string (self.retention))
-    output.append (u"sources: %s" % utils.dumped_list (self.sources, level))
-    return utils.dumped (u"\n".join (output), level)
+    output.append ("auto_backup_log_files: %s" % self.auto_backup_log_files)
+    output.append ("display_name_file: %s" % self.display_name_file)
+    output.append ("display_name_id: %s" % self.display_name_id)
+    output.append ("file: %s" % self.file)
+    output.append ("max_size: %s" % utils.size_as_mb (self.max_size))
+    output.append ("primary_module: %s" % self.primary_module)
+    output.append ("restrict_guest_access: %s" % self.restrict_guest_access)
+    output.append ("retention: %s" % utils.secs_as_string (self.retention))
+    output.append ("sources: %s" % utils.dumped_list (self.sources, level))
+    return utils.dumped ("\n".join (output), level)
 
   @contextlib.contextmanager
   def _temp_handle (self):
@@ -166,7 +169,7 @@ class EventLog (core._WinSysObject):
     """Clear the event log, optionally saving out to an opaque file first,
     using the built-in functionality.
     """
-    wrapped (win32evtlog.ClearEventLog, self._handle, unicode (save_to_filename) if save_to_filename else None)
+    wrapped (win32evtlog.ClearEventLog, self._handle, str (save_to_filename) if save_to_filename else None)
 
   def __len__ (self):
     """Allow len () to return the number of records in the event log"""
@@ -323,7 +326,6 @@ class EventSource (core._WinSysObject):
   # be passed to the ReportEvent function in log_event (qv).
   #
   def __enter__ (self):
-    print "About to register", self.computer, self.name
     self._handle = wrapped (win32evtlog.RegisterEventSource, self.computer, self.name)
     return self._handle
 
@@ -364,7 +366,7 @@ def event_logs (computer="."):
     yield EventLog (computer, key.name)
 
 def event_log (log):
-  ur"""Convenience function to return an :class:`EventLog` object representing
+  r"""Convenience function to return an :class:`EventLog` object representing
   one of the existing event logs. Will raise :exc:`x_not_found` if the event
   log does not exist.
 
@@ -375,7 +377,7 @@ def event_log (log):
   elif isinstance (log, EventLog):
     return log
   else:
-    match = re.match (r"(?:\\\\([^\\]+)\\)?(.+)$", unicode (log), re.UNICODE)
+    match = re.match (r"(?:\\\\([^\\]+)\\)?(.+)$", str (log), re.UNICODE)
     if match is None:
       raise x_event_logs (errmsg=r"Event log must be of form [\\computer\]event_log")
     else:
@@ -425,7 +427,6 @@ def log_event (source, type="error", message=None, data=None, id=0, category=0, 
   message = message or []
 
   with event_source (source) as hLog:
-    print "log_event", (hLog, type, category, id, principal, message, data)
     wrapped (
       win32evtlog.ReportEvent,
       hLog,

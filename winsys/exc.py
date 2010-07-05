@@ -41,16 +41,16 @@ def wrapper (winerror_map, default_exception=x_winsys):
     try:
       return function (*args, **kwargs)
     except pywintypes.com_error as error:
-      hresult_code, hresult_name, additional_info, parameter_in_error = error
+      hresult_code, hresult_name, additional_info, parameter_in_error = error.args
       exception_string = ["%08X - %s" % (utils.signed_to_unsigned (hresult_code), hresult_name.decode ("mbcs"))]
       if additional_info:
-        wcode, source_of_error, error_description, whlp_file, whlp_context, scode = additional_info
+        wcode, source_of_error, error_description, whlp_file, whlp_context, scode = additional_info.args
         exception_string.append ("  Error in: %s" % source_of_error.decode ("mbcs"))
         exception_string.append ("  %08X - %s" % (utils.signed_to_unsigned (scode), (error_description or "").decode ("mbcs").strip ()))
       exception = winerror_map.get (hresult_code, default_exception)
       raise exception (hresult_code, hresult_name, "\n".join (exception_string))
     except pywintypes.error as error:
-      errno, errctx, errmsg = error
+      errno, errctx, errmsg = error.args
       exception = winerror_map.get (errno, default_exception)
       raise exception (errno, errctx, errmsg)
     except (WindowsError, IOError) as error:

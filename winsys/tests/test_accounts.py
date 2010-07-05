@@ -1,39 +1,49 @@
-from __future__ import with_statement
 import os, sys
+import unittest
 
 import win32api
 import win32security
-from nose.tools import *
 
 from winsys import accounts
+from winsys.tests import utils
 
-def test_principal_None ():
-  assert accounts.principal (None) is None
+class TestAccounts (unittest.TestCase):
 
-def test_principal_sid ():
-  everyone, domain, type = win32security.LookupAccountName (None, "Everyone")
-  assert accounts.principal (everyone).pyobject () == everyone
+  def setUp (self):
+    utils.create_user ("alice", "Passw0rd")
+    utils.create_group ("winsys")
+    utils.add_user_to_group ("alice", "winsys")
 
-def test_principal_Principal ():
-  everyone, domain, type = win32security.LookupAccountName (None, "Everyone")
-  principal = accounts.Principal (everyone)
-  assert accounts.principal (principal) is principal
+  def tearDown (self):
+    utils.delete_user ("alice")
+    utils.delete_group ("winsys")
 
-def test_principal_string ():
-  everyone, domain, type = win32security.LookupAccountName (None, "Everyone")
-  assert accounts.principal ("Everyone") == everyone
+  def test_principal_None (self):
+    assert accounts.principal (None) is None
 
-@raises (accounts.exc.x_not_found)
-def test_principal_invalid ():
-  accounts.principal (object)
+  def test_principal_sid (self):
+    everyone, domain, type = win32security.LookupAccountName (None, "Everyone")
+    assert accounts.principal (everyone).pyobject () == everyone
 
-def text_context ():
-  assert win32api.GetUserName () <> "alice"
-  with accounts.principal ("alice").impersonate ("Passw0rd"):
-    assert win32api.GetUserName () == "alice"
-  assert win32api.GetUserName () <> "alice"
+  def test_principal_Principal (self):
+    everyone, domain, type = win32security.LookupAccountName (None, "Everyone")
+    principal = accounts.Principal (everyone)
+    assert accounts.principal (principal) is principal
+
+  def test_principal_string (self):
+    everyone, domain, type = win32security.LookupAccountName (None, "Everyone")
+    assert accounts.principal ("Everyone") == everyone
+
+  def test_principal_invalid (self):
+    with self.assertRaises (accounts.exc.x_not_found):
+      accounts.principal (object)
+
+  def text_context (self):
+    assert win32api.GetUserName () != "alice"
+    with accounts.principal ("alice").impersonate ("Passw0rd"):
+      assert win32api.GetUserName () == "alice"
+    assert win32api.GetUserName () != "alice"
 
 if __name__ == "__main__":
-  import nose
-  nose.runmodule (exit=False)
+  unittest.main ()
   if sys.stdout.isatty (): raw_input ("Press enter...")

@@ -102,7 +102,7 @@ class ACL (core._WinSysObject):
   def __len__ (self):
     return len (self._list or [])
 
-  def __nonzero__ (self):
+  def __bool__ (self):
     return bool (self._list)
 
   def as_string (self):

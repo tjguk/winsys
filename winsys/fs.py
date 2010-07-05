@@ -770,13 +770,12 @@ class Entry (FilePath, core._WinSysObject):
   def __radd__ (self, other):
     return entry (super (Entry, self).__radd__ (other))
 
-  def __nonzero__ (self):
+  def __bool__ (self):
     r"""Determine whether the file exists (at least from
     the POV of the current user) on the filesystem so that
     it can be checked with if fs.entry ("..."):
     """
     return (wrapped (win32file.GetFileAttributesW, self._normpath) != -1)
-  __bool__ = __nonzero__
 
   @classmethod
   def factory (cls, filepath):

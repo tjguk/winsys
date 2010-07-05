@@ -1,5 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 import os, sys
+import functools
 import operator
 
 import win32security
@@ -148,7 +149,7 @@ class ACE (core._WinSysObject):
       return int (access)
     except (ValueError, TypeError):
       try:
-        return reduce (operator.or_, (cls.ACCESS[a] for a in access.upper ()), 0)
+        return functools.reduce (operator.or_, (cls.ACCESS[a] for a in access.upper ()), 0)
       except KeyError:
         raise x_unknown_value (errctx="ACE._access", errmsg="%s is not a valid access string" % access)
 

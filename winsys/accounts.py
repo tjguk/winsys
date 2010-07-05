@@ -88,7 +88,7 @@ def principal (principal, cls=core.UNSET):
   elif isinstance (principal, cls):
     return principal
   else:
-    return cls.from_string (unicode (principal))
+    return cls.from_string (str (principal))
 
 def user (name):
   r"""If you know yo're after a user, use this. Particularly
@@ -239,11 +239,11 @@ class Principal (core._WinSysObject):
       string = wrapped (win32api.GetUserNameEx, win32con.NameSamCompatible)
     sid, domain, type = wrapped (
       win32security.LookupAccountName,
-      None if system is None else unicode (system),
-      unicode (string)
+      None if system is None else str (system),
+      str (string)
     )
     cls = cls.SID_NAME_USE_MAP.get (type, cls)
-    return cls (sid, None if system is None else unicode (system))
+    return cls (sid, None if system is None else str (system))
 
   @classmethod
   def from_sid (cls, sid, system=None):
@@ -256,13 +256,13 @@ class Principal (core._WinSysObject):
     try:
       name, domain, type = wrapped (
         win32security.LookupAccountSid,
-        None if system is None else unicode (system),
+        None if system is None else str (system),
         sid
       )
     except exc.x_not_found:
       name = domain = type = core.UNSET
     cls = cls.SID_NAME_USE_MAP.get (type, cls)
-    return cls (sid, None if system is None else unicode (system))
+    return cls (sid, None if system is None else str (system))
 
   @classmethod
   def from_well_known (cls, well_known, domain=None):

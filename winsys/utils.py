@@ -20,7 +20,7 @@ def signed_to_unsigned (signed):
   return unsigned
 
 def mask_as_string (mask, length=32):
-  return "".join ("01"[bool (mask & (1 << i))] for i in range (length)[::-1])
+  return "".join ("01"[bool (mask & (1 << i))] for i in reversed (range (length)))
 
 def mask_as_list (mask, length=32):
   return [i for i in range (length) if ((1 << i) & mask)]
@@ -83,7 +83,7 @@ def dumped (text, level, indent=2):
   return indented ("{\n%s\n}" % indented (text, level+1, indent) or "None", level, indent)
 
 def dumped_list (l, level, indent=2):
-  return dumped ("\n".join (unicode (i)  for i in l), level, indent)
+  return dumped ("\n".join (str (i)  for i in l), level, indent)
 
 def dumped_dict (d, level, indent=2):
   return dumped ("\n".join ("%s => %s" % (k, v) for (k, v) in d.items ()), level, indent)
@@ -118,8 +118,8 @@ def relative_to (path1, path0):
   NB This is used by the fs *and* registry modules so stays
   here in the global utils
   """
-  path1 = unicode (path1).lower ()
-  path0 = unicode (path0).lower ()
+  path1 = str (path1).lower ()
+  path0 = str (path0).lower ()
   if path1.startswith (path0):
     return path1[len (path0):]
   else:

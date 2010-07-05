@@ -9,7 +9,7 @@ import tempfile
 
 from winsys import utils
 
-class _WinSysObject (object):
+class _WinSysObject:
 
   def as_string (self):
     """Produce a readable version of the data, used by
@@ -60,7 +60,7 @@ class _WinSysObject (object):
 class Unset (object):
   def __repr__ (self):
     return "<Unset>"
-  def __nonzero__ (self):
+  def __bool__ (self):
     return False
 
 UNSET = Unset ()
