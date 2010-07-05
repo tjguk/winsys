@@ -18,13 +18,13 @@ def principal (account):
     return "<unknown>"
 
 class LogonSession (core._WinSysObject):
-  
+
   _MAP = {
-    u"UserName" : principal,
-    u"Sid" : principal,
-    u"LogonTime" : utils.from_pytime
+    "UserName" : principal,
+    "Sid" : principal,
+    "LogonTime" : utils.from_pytime
   }
-  
+
   def __init__ (self, session_id):
     core._WinSysObject.__init__ (self)
     self._session_id = session_id
@@ -36,27 +36,27 @@ class LogonSession (core._WinSysObject):
 
   def __getattr__ (self, attr):
     return self._session_info[attr]
-    
+
   def __dir__ (self):
     return self._session_info.keys ()
-    
+
   def as_string (self):
-    return u"Logon Session %(session_id)s for %(UserName)s" % self._session_info
-    
+    return "Logon Session %(session_id)s for %(UserName)s" % self._session_info
+
   def dumped (self, level):
     output = []
-    output.append (u"session_id: %s" % self._session_id)
-    output.append (u"UserName: %s" % self.UserName)
-    output.append (u"Sid: %s" % (self.Sid.sid if self.Sid else None))
-    output.append (u"LogonTime: %s" % self.LogonTime)
+    output.append ("session_id: %s" % self._session_id)
+    output.append ("UserName: %s" % self.UserName)
+    output.append ("Sid: %s" % (self.Sid.sid if self.Sid else None))
+    output.append ("LogonTime: %s" % self.LogonTime)
     return utils.dumped ("\n".join (output), level)
 
 class LSA (core._WinSysObject):
-  
+
   def __init__ (self, system_name=None):
     core._WinSysObject.__init__ (self)
     self._lsa = wrapped (win32security.LsaOpenPolicy, system_name, 0)
-  
+
   @staticmethod
   def logon_sessions ():
     for session_id in wrapped (win32security.LsaEnumerateLogonSessions):

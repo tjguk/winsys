@@ -18,7 +18,7 @@ def touch (filepath):
 
 def mktemp ():
   os.mkdir (TEST_ROOT)
-  
+
 def rmtemp ():
   shutil.rmtree (TEST_ROOT)
 
@@ -59,7 +59,7 @@ def files_are_equal (f1, f2):
 def deny_access (filepath):
   with fs.entry (filepath).security () as s:
     s.dacl.append (("", "F", "DENY"))
-  
+
 def restore_access (filepath):
   win32security.SetNamedSecurityInfo (
     filepath, win32security.SE_FILE_OBJECT,
@@ -75,3 +75,13 @@ def files_in (filepath):
 
 def dirs_in (filepath):
   return set (f + "\\" for f in glob.glob (os.path.join (filepath, "*")) if os.path.isdir (f))
+
+def can_encrypt ():
+  with tempfile.NamedTemporaryFile (delete=False) as f:
+    name = f.name
+  try:
+    fs.file (name).encrypt ()
+  except fs.x_no_certificate:
+    return False
+  else:
+    return True

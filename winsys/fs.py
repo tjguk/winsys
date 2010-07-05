@@ -2018,7 +2018,7 @@ class _DirWatcher (object):
   def __iter__ (self):
     return self
 
-  def next (self):
+  def __next__ (self):
     wrapped (
       win32file.ReadDirectoryChangesW,
       self.hDir,

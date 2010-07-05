@@ -4,6 +4,7 @@ little is expected to be here, only methods which are clearly common
 to all such as default implementations of __str__ and fill-in comparison
 functions to ensure total ordering.
 """
+import sys
 import logging
 import tempfile
 
@@ -36,7 +37,7 @@ class _WinSysObject:
     return utils.dumped (self.as_string (), level)
 
   def dump (self, level=0):
-    sys.stdout.write (self.dumped (level))
+    sys.stdout.write (self.dumped (level) + "\n")
 
   #
   # Fill-in functions to ensure that a complete

@@ -102,7 +102,7 @@ class Privilege (core._WinSysObject):
 
   @classmethod
   def from_string (cls, string):
-    return cls (wrapped (win32security.LookupPrivilegeValue, "", unicode (string)))
+    return cls (wrapped (win32security.LookupPrivilegeValue, "", str (string)))
 
   def __enter__ (self):
     self._previous_privs = wrapped (
@@ -125,13 +125,13 @@ def privilege (privilege):
   """Friendly constructor for the Privilege class"""
   if isinstance (privilege, Privilege):
     return privilege
-  elif isinstance (privilege, (long, int)):
+  elif isinstance (privilege, int):
     return Privilege (privilege)
   elif isinstance (privilege, tuple):
     return Privilege (*privilege)
   else:
-    privilege = unicode (privilege)
+    privilege = str (privilege)
     try:
       return Privilege.from_string (PRIVILEGE.constant (privilege))
     except KeyError:
-      return Privilege.from_string (unicode (privilege))
+      return Privilege.from_string (str (privilege))
