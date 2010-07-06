@@ -13,15 +13,16 @@ import socket
 import threading
 import time
 import traceback
-import Queue
+import queue
 import urllib
-import urlparse
+import urllib.parse as urlparse
 from wsgiref.simple_server import make_server
 from wsgiref.util import shift_path_info
+import win32timezone
 
 import error_handler
 from winsys import core, fs, misc
-print "Logging to", core.log_filepath
+print ("Logging to", core.log_filepath)
 
 def deltastamp (delta):
 
@@ -37,7 +38,7 @@ def deltastamp (delta):
     output_format = "in %s"
 
   days = delta.days
-  if days <> 0:
+  if days != 0:
     wks, days = divmod (days, 7)
     if wks > 0:
       if wks < 9:
@@ -74,7 +75,6 @@ def get_files (path, size_threshold_mb, results, stop_event):
     for tlf in top_level_folders:
       for f in tlf.flat (ignore_access_errors=True):
         if stop_event.isSet ():
-          print "stop event set"
           raise x_stop_exception
         try:
           if f.size > size_threshold:
@@ -107,12 +107,12 @@ def watch_files (path, size_threshold_mb, results, stop_event):
     while True:
       if stop_event.isSet (): break
       try:
-        action, old_file, new_file = watcher.next ()
+        action, old_file, new_file = next (watcher)
         core.warn ("Monitored: %s - %s => %s" % (action, old_file, new_file))
         if old_file is not None:
           if (not old_file) or (old_file and old_file.size > size_threshold):
             results.put (old_file)
-        if new_file is not None and new_file <> old_file:
+        if new_file is not None and new_file != old_file:
           if new_file and new_file.size > size_threshold:
             results.put (new_file)
       except fs.exc.x_winsys:
@@ -123,7 +123,7 @@ def watch_files (path, size_threshold_mb, results, stop_event):
         except:
           pass
         buffer_size = min (2 * buffer_size, MAX_BUFFER_SIZE)
-        print "Tripped up on a RuntimeError. Trying with buffer of", buffer_size
+        core.warn ("Tripped up on a RuntimeError. Trying with buffer of %d", buffer_size)
 
 class Path (object):
   """Keep track of the files and changes under a particular
@@ -144,7 +144,7 @@ class Path (object):
     self._path = path
     self._size_threshold_mb = size_threshold_mb
     self._n_files_at_a_time = n_files_at_a_time
-    self._changes = Queue.Queue ()
+    self._changes = queue.Queue ()
     self._stop_event = threading.Event ()
     self._files = set ()
 
@@ -179,7 +179,7 @@ class Path (object):
           self._files.add (f)
         else:
           self._files.discard (f)
-      except Queue.Empty:
+      except queue.Empty:
         break
     return self._files
 
@@ -231,8 +231,8 @@ class App (object):
       title = cgi.escape ("Top files on %s over %dMb - %s" % (path, size_threshold_mb, status))
 
     doc = []
-    doc.append (u"<html><head><title>%s</title>" % title)
-    doc.append (u"""<style>
+    doc.append ("<html><head><title>%s</title>" % title)
+    doc.append ("""<style>
     body {font-family : calibri, verdana, sans-serif;}
     h1 {font-size : 120%;}
     form#params {font-size : 120%;}
@@ -246,11 +246,11 @@ class App (object):
     table td {padding-right : 0.5em;}
     table td.filename {width : 72%;}
     </style>""")
-    doc.append (u"""<style media="print">
+    doc.append ("""<style media="print">
     form#params {display : none;}
     </style>""")
-    doc.append (u"</head><body>")
-    doc.append (u"""<form id="params" action="/" method="GET">
+    doc.append ("</head><body>")
+    doc.append ("""<form id="params" action="/" method="GET">
     <span class="label">Scan</span>&nbsp;<input type="text" name="path" value="%(path)s" size="20" maxlength="20" />&nbsp;
     <span class="label">for files over</span>&nbsp;<input type="text" name="size_threshold_mb" value="%(size_threshold_mb)s" size="5" maxlength="5" />Mb
     <span class="label">showing the top</span>&nbsp;<input type="text" name="top_n_files" value="%(top_n_files)s" size="3" maxlength="3" /> files
@@ -261,18 +261,18 @@ class App (object):
     <input type="submit" value="Refresh" />
     </form><hr>""" % locals ())
 
-    now = datetime.datetime.now ()
+    now = win32timezone.utcnow ()
     if path:
-      doc.append (u"<h1>%s</h1>" % title)
+      doc.append ("<h1>%s</h1>" % title)
       latest_filename = "\\".join (files[-1].parts[1:]) if files else "(no file yet)"
-      doc.append (u'<p class="updated">Last updated %s</p>' % time.asctime ())
-      doc.append (u'<table><thead><tr><td class="filename">Filename</td><td class="size">Size (Mb)</td><td class="updated">Updated</td></tr></thead>')
+      doc.append ('<p class="updated">Last updated %s</p>' % time.asctime ())
+      doc.append ('<table><thead><tr><td class="filename">Filename</td><td class="size">Size (Mb)</td><td class="updated">Updated</td></tr></thead>')
       for i, f in enumerate (files[:top_n_files]):
         try:
           doc.append (
-            u'<tr class="%s %s"><td class="filename">%s</td><td class="size">%5.2f</td><td class="updated">%s</td>' % (
+            '<tr class="%s %s"><td class="filename">%s</td><td class="size">%5.2f</td><td class="updated">%s</td>' % (
               "odd" if i % 2 else "even",
-              "highlight" if ((now - max (f.written_at, f.created_at)) <= highlight_delta) else "",
+              "highlight" if ((now - max (f.written_at.replace (tzinfo=None), f.created_at.replace (tzinfo=None))) <= highlight_delta) else "",
               f.relative_to (path).lstrip (fs.seps),
               f.size / 1024.0 / 1024.0,
               max (f.written_at, f.created_at)
@@ -280,9 +280,9 @@ class App (object):
           )
         except fs.exc.x_winsys:
           pass
-      doc.append (u"</table>")
+      doc.append ("</table>")
 
-    doc.append (u"</body></html>")
+    doc.append ("</body></html>")
     return doc
 
   def handler (self, form):
@@ -300,10 +300,10 @@ class App (object):
         if path not in self.paths:
           self.paths[path] = Path (path, size_threshold_mb, self.N_FILES_AT_A_TIME)
         path_handler = self.paths[path]
-        if path_handler._size_threshold_mb <> size_threshold_mb:
+        if path_handler._size_threshold_mb != size_threshold_mb:
           path_handler.finish ()
           path_handler = self.paths[path] = Path (path, size_threshold_mb, self.N_FILES_AT_A_TIME)
-        self._paths_accessed[path] = datetime.datetime.now ()
+        self._paths_accessed[path] = win32timezone.utcnow ()
         files = sorted (path_handler.updated (), key=operator.attrgetter ("size"), reverse=True)
         status = path_handler.status ()
 
@@ -314,7 +314,7 @@ class App (object):
         # be restarted as new.
         #
         for path, last_accessed in self._paths_accessed.items ():
-          if (datetime.datetime.now () - last_accessed).seconds > 180:
+          if (win32timezone.utcnow () - last_accessed).seconds > 180:
             path_handler = self.paths.get (path)
             if path_handler:
               path_handler.finish ()
@@ -332,7 +332,7 @@ class App (object):
     """
     path = shift_path_info (environ).rstrip ("/")
     if path == "":
-      form = dict ((k, v[0]) for (k, v) in cgi.parse_qs (environ['QUERY_STRING']).items () if v)
+      form = dict ((k, v[0]) for (k, v) in urllib.parse.parse_qs (environ['QUERY_STRING']).items () if v)
       if form.get ("path"):
         form['path'] = form['path'].rstrip ("\\") + "\\"
       refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
@@ -341,7 +341,7 @@ class App (object):
       if refresh_secs:
         headers.append (("Refresh", "%s" % refresh_secs))
       start_response ("200 OK", headers)
-      return (d.encode ("utf8") + "\n" for d in self.handler (form))
+      return (d.encode ("utf8") + b"\n" for d in self.handler (form))
     else:
       start_response ("404 Not Found", [("Content-Type", "text/plain")])
       return []
@@ -363,6 +363,6 @@ if __name__ == '__main__':
   try:
     make_server ('', PORT, app).serve_forever ()
   except KeyboardInterrupt:
-    print "Shutting down gracefully..."
+    print ("Shutting down gracefully...")
   finally:
     app.finish ()
