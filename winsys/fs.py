@@ -734,7 +734,7 @@ class Entry (FilePath, core._WinSysObject):
   def as_string (self):
     return self.encode ("utf8")
 
-  def dumped (self, level=0):
+  def dumped (self, level=0, show_security=False):
     output = []
     output.append (self)
     output.append (super (Entry, self).dumped (level))
@@ -749,19 +749,20 @@ class Entry (FilePath, core._WinSysObject):
       output.append ("size: %s" % self.size)
     output.append ("Attributes:")
     output.append (self.attributes.dumped (level))
-    try:
-      s = self.security ()
-    except win32file.error as error:
-      errno, errctx, errmsg = error
-      if errno == winerror.ERROR_ACCESS_DENIED:
-        pass
-    else:
-      output.append ("Security:\n" + s.dumped (level))
     if self.attributes.directory:
       vol = self.mounted_by ()
       if vol:
         output.append ("Mount point for:")
         output.append (vol.dumped (level))
+    if show_security:
+      try:
+        s = self.security ()
+      except win32file.error as error:
+        errno, errctx, errmsg = error
+        if errno == winerror.ERROR_ACCESS_DENIED:
+          pass
+      else:
+        output.append ("Security:\n" + s.dumped (level))
     return utils.dumped ("\n".join (output), level)
 
   def __add__ (self, other):

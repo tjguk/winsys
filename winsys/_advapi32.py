@@ -82,7 +82,7 @@ def CreateProcessWithLogonW (
   if domain: domain = str (domain)
   if password: password = str (password)
   if application_name: application_name = str (application_name)
-  command_line = ctypes.create_str_buffer (command_line or "")
+  command_line = ctypes.create_unicode_buffer (command_line or "")
   if current_directory: current_directory = str (current_directory)
   if not startup_info:
     startup_info = STARTUPINFO ()
