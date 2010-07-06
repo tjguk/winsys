@@ -272,7 +272,7 @@ class App (object):
           doc.append (
             '<tr class="%s %s"><td class="filename">%s</td><td class="size">%5.2f</td><td class="updated">%s</td>' % (
               "odd" if i % 2 else "even",
-              "highlight" if ((now - max (f.written_at.replace (tzinfo=None), f.created_at.replace (tzinfo=None))) <= highlight_delta) else "",
+              "highlight" if ((now - max (f.written_at, f.created_at)) <= highlight_delta) else "",
               f.relative_to (path).lstrip (fs.seps),
               f.size / 1024.0 / 1024.0,
               max (f.written_at, f.created_at)
