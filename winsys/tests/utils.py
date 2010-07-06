@@ -1,3 +1,7 @@
+import os, sys
+import contextlib
+import io
+
 import win32api
 import win32net
 import win32netcon
@@ -67,3 +71,10 @@ def change_priv (priv_name, enable=True):
       win32security.SE_PRIVILEGE_ENABLED if enable else 0
     )]
   )
+
+@contextlib.contextmanager
+def fake_stdout ():
+  _stdout, sys.stdout = sys.stdout, io.StringIO ()
+  yield sys.stdout
+  sys.stdout = _stdout
+

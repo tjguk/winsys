@@ -1,5 +1,6 @@
 import os
 import filecmp
+import io
 import shutil
 import tempfile
 import unittest
@@ -8,6 +9,7 @@ import uuid
 import win32file
 
 from winsys import fs
+from winsys.tests import utils
 
 def _test_parts (path, result, skip_rejoin=False):
   parts = fs.get_parts (path)
@@ -186,10 +188,12 @@ class TestFilepath (unittest.TestCase):
   # dumps
   #
   def test_dump_absolute (self):
-    fs.filepath (__file__).dump ()
+    with utils.fake_stdout ():
+      fs.filepath (__file__).dump ()
 
   def test_dump_relative (self):
-    fs.filepath ("@@").dump ()
+    with fake_stdout ():
+      fs.filepath ("@@").dump ()
 
 if __name__ == "__main__":
   unittest.main ()

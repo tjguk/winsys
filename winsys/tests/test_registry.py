@@ -1,6 +1,4 @@
 import sys
-import pprint
-print = pprint.pprint
 import unittest
 import uuid
 

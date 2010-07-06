@@ -1,8 +1,6 @@
 from winsys import fs
 import os, sys
 import glob
-import pprint
-print = pprint.pprint
 import tempfile
 import threading
 import uuid

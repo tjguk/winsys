@@ -85,3 +85,4 @@ def can_encrypt ():
     return False
   else:
     return True
+
