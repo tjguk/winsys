@@ -192,7 +192,7 @@ class TestFilepath (unittest.TestCase):
       fs.filepath (__file__).dump ()
 
   def test_dump_relative (self):
-    with fake_stdout ():
+    with utils.fake_stdout ():
       fs.filepath ("@@").dump ()
 
 if __name__ == "__main__":

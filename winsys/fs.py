@@ -1321,6 +1321,15 @@ class Dir (Entry):
     #
     return Entry.__new__ (meta, filepath.rstrip (seps) + sep, *args, **kwargs)
 
+  def is_empty (self):
+    r"""Returns True if this directory is empty, False otherwise. Will fail
+    if the directory does not yet exist.
+    """
+    for _ in self.files ():
+      return True
+    else:
+      return False
+
   def compress (self, apply_to_contents=True, callback=None):
     r"""Flag this directory so that any new files are automatically
     compressed. If apply_to_contents is True, iterate over all subdirectories

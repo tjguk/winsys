@@ -9,6 +9,7 @@ import win32file
 import win32security, ntsecuritycon
 
 TEST_ROOT = os.path.join (tempfile.gettempdir (), uuid.uuid1 ().hex)
+TEST_ROOT2 = os.path.join (tempfile.gettempdir (), uuid.uuid1 ().hex)
 
 #
 # Convenience functions
@@ -33,7 +34,7 @@ def dirs_are_equal (dir1, dir2):
   # Make sure of same directory depth
   #
   if len (list (os.walk (dir1))) != len (list (os.walk (dir2))):
-    return False
+    return False, "Lengths are different:\n\n%s\n\n%s" % (list (os.walk (dir1)), list (os.walk (dir2)))
   #
   # Make sure of directory contents
   #
@@ -41,13 +42,13 @@ def dirs_are_equal (dir1, dir2):
     os.walk (dir1), os.walk (dir2)
   ):
     if set (dirs1) != set (dirs2):
-      return False
+      return False, set (dirs1).symmetric_difference (dirs2)
     if set (files1) != set (files2):
-      return False
+      return False, set (files1).symmetric_difference (files2)
     if any (not files_are_equal (os.path.join (path1, f1), os.path.join (path2, f2)) for f1, f2 in zip (files1, files2)):
-      return False
+      return False, "Some files are not equal"
   else:
-    return True
+    return True, set ()
 
 def files_are_equal (f1, f2):
   if win32file.GetFileAttributesW (f1) != win32file.GetFileAttributesW (f2):

@@ -12,13 +12,13 @@ class TestFS (unittest.TestCase):
 
   filenames = ["%d" % i for i in range (5)]
 
-  def setup (self):
+  def setUp (self):
     utils.mktemp ()
     for filename in self.filenames:
       with open (os.path.join (utils.TEST_ROOT, filename), "w"):
         pass
 
-  def teardown (self):
+  def tearDown (self):
     utils.rmtemp ()
 
   def test_glob (self):
@@ -28,7 +28,9 @@ class TestFS (unittest.TestCase):
 
   def test_listdir (self):
     import os
-    self.assertEquals (list (fs.listdir (utils.TEST_ROOT)), os.listdir (utils.TEST_ROOT))
+    fs_version = list (fs.listdir (utils.TEST_ROOT))
+    os_version = os.listdir (utils.TEST_ROOT)
+    self.assertEquals (fs_version, os_version, "%s differs from %s" % (fs_version, os_version))
 
 #
 # All the other module-level functions are hand-offs

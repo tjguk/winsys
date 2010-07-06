@@ -220,7 +220,7 @@ class TestDir (unittest.TestCase):
     self.assertTrue (os.path.isdir (source))
     self.assertFalse (os.path.isdir (target))
     fs.copy (source, target)
-    self.assertTrue (utils.dirs_are_equal (source, target))
+    self.assertTrue (*utils.dirs_are_equal (source, target))
 
   def test_dir_copy_to_existing_dir (self):
     source_name = uuid.uuid1 ().hex
@@ -234,7 +234,7 @@ class TestDir (unittest.TestCase):
     self.assertTrue (os.path.isdir (source))
     self.assertTrue (os.path.isdir (target))
     fs.copy (source, target)
-    self.assertTrue (utils.dirs_are_equal (source, target))
+    self.assertTrue (*utils.dirs_are_equal (source, target))
 
   def test_dir_copy_with_callback (self):
     callback_result = []
@@ -252,7 +252,7 @@ class TestDir (unittest.TestCase):
     self.assertTrue (os.path.isdir (source))
     self.assertFalse (os.path.isdir (target))
     fs.copy (source, target, _callback, callback_data)
-    self.assertTrue (utils.dirs_are_equal (source, target))
+    self.assertTrue (*utils.dirs_are_equal (source, target))
     self.assertEquals (len (callback_result), 10)
     self.assertEquals (callback_result, [(0, 0, callback_data) for i in range (10)])
 
@@ -292,15 +292,13 @@ class TestDir (unittest.TestCase):
     import zipfile
     filepath = utils.TEST_ROOT
     zipped = fs.dir (filepath).zip ()
-    unzip_filepath = os.path.join (filepath, "unzip")
+    unzip_filepath = os.path.join (utils.TEST_ROOT2)
     os.mkdir (unzip_filepath)
     zipfile.ZipFile (zipped).extractall (unzip_filepath)
-    print  ("")
-    print (utils.files_in (filepath))
-    print (utils.files_in (unzip_filepath))
-    print (utils.dirs_in (filepath))
-    print (utils.dirs_in (unzip_filepath))
-    self.assertTrue (utils.dirs_are_equal (filepath, unzip_filepath))
+    self.assertEquals (
+      set (f.relative_to (filepath) for f in fs.flat (filepath)),
+      set (f.relative_to (unzip_filepath) for f in fs.flat (unzip_filepath))
+    )
 
 if __name__ == "__main__":
   unittest.main ()
