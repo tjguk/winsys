@@ -7,7 +7,7 @@ from win32com.adsi import adsi, adsicon
 
 from winsys import constants, core, exc, utils
 
-"""Useful info from MSDN & elsewhere:
+r"""Useful info from MSDN & elsewhere:
 
 =   Equal to
 ~=  Approx. equal to
@@ -22,15 +22,14 @@ from winsys import constants, core, exc, utils
 :1.2.840.113556.1.4.1941: matching rule in chain
 
 Special chars (must be substituted): *()\NUL/
-
 """
 
 class x_active_directory (exc.x_winsys):
   "Base for all AD-related exceptions"
 
-SEARCHPREF = constants.Constants.from_pattern (u"ADS_SEARCHPREF_*", namespace=adsicon)
+SEARCHPREF = constants.Constants.from_pattern ("ADS_SEARCHPREF_*", namespace=adsicon)
 SEARCHPREF.doc ("Preferences for searching AD")
-SCOPE = constants.Constants.from_pattern (u"ADS_SCOPE_*", namespace=adsicon)
+SCOPE = constants.Constants.from_pattern ("ADS_SCOPE_*", namespace=adsicon)
 SCOPE.doc ("Scope for searching AD trees")
 
 WINERROR_MAP = {
@@ -120,7 +119,7 @@ class IADs (core._WinSysObject):
         break
 
   def walk (self, depthfirst=False):
-    ur"""Mimic os.walk, iterating over each container and the items within
+    r"""Mimic os.walk, iterating over each container and the items within
     in. Each iteration yields:
 
       container, (iterator for items)
@@ -165,7 +164,6 @@ class GC (IADs):
 
   def __iter__ (self):
     for domain in IADs.__iter__ (self):
-      print domain
       yield ad ("LDAP://" + domain.Name)
 
 def ad (obj=core.UNSET, username=None, password=None, interface=adsi.IID_IADs):
@@ -219,8 +217,8 @@ def _search (filter, root=None, server=None, username=None, password=None):
       else:
         for value, type in column_values:
           return value
-    except adsi.error, details:
-      if details[0] == adsicon.E_ADS_COLUMN_NOT_SET:
+    except adsi.error as details:
+      if details.args[0] == adsicon.E_ADS_COLUMN_NOT_SET:
         return None
       else:
         raise

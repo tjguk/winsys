@@ -3,7 +3,7 @@ import glob
 import imp
 import unittest
 
-IGNORE_DIRECTORIES = {'.svn'}
+IGNORE_DIRECTORIES = {'.svn', "build", "dist"}
 
 def add_tests_from_directory (suite, directory):
   print ("Adding tests from ", directory)
@@ -20,8 +20,7 @@ def main (test_directory="."):
   suite = unittest.TestSuite ()
   add_tests_from_directory (suite, test_directory)
   for dirpath, dirnames, filenames in os.walk (test_directory):
-    for id in IGNORE_DIRECTORIES:
-      dirnames.remove (id)
+    dirnames[:] = [d for d in dirnames if d not in IGNORE_DIRECTORIES]
     for dirname in dirnames:
       add_tests_from_directory (suite, os.path.join (dirpath, dirname))
 

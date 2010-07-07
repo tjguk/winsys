@@ -1325,7 +1325,7 @@ class Dir (Entry):
     r"""Returns True if this directory is empty, False otherwise. Will fail
     if the directory does not yet exist.
     """
-    for _ in self.files ():
+    for _ in self:
       return True
     else:
       return False

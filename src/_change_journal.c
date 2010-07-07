@@ -480,7 +480,7 @@ DWORD ReasonMask = -1;
 DWORD ReturnOnlyOnClose = FALSE;
 DWORDLONG Timeout = 0;
 DWORDLONG BytesToWaitFor = 0;
-static char *kwlist[] = {"StartUsn", "ReasonMask", "ReturnOnlyOnClose", "Timeout", "BytesToWaitFor", NULL};
+static char *kwlist[] = {"start_usn", "reason_mask", "return_only_on_close", "timeout", "bytes_to_wait_for", NULL};
 
   if (self->handle == NULL) {
     PyErr_SetString (PyExc_RuntimeError, "No handle supplied");
@@ -654,7 +654,7 @@ static PyMethodDef usn_methods[] = {
 };
 static struct PyModuleDef usn_module = {
   PyModuleDef_HEAD_INIT,
-  "usn",
+  "_change_journal",
   "Docstring for ChangeJournal",
   -1,
   usn_methods

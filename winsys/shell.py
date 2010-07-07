@@ -146,10 +146,10 @@ def _file_operation (
   result, n_aborted = shell.SHFileOperation (
     (hWnd or 0, operation, source_path, target_path, flags, None, None)
   )
-  if result <> 0:
-    raise x_winshell, result
+  if result != 0:
+    raise x_winshell (result)
   elif n_aborted:
-    raise x_winshell, "%d operations were aborted by the user" % n_aborted
+    raise x_winshell ("%d operations were aborted by the user" % n_aborted)
 
 def copy_file (
   source_path,
@@ -402,7 +402,7 @@ class PropertySet (core._WinSysObject):
   def as_dict (self):
     try:
       property_storage = self.property_set_storage.Open (self.fmtid, STGM.READ | STGM.SHARE_EXCLUSIVE)
-    except pythoncom.com_error, error:
+    except pythoncom.com_error as error:
       if error.strerror == 'STG_E_FILENOTFOUND':
         return {}
       else:
