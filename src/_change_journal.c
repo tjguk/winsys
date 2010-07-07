@@ -395,25 +395,22 @@ PyObject *info;
 }
 
 static PyObject *
-ChangeJournal_create (ChangeJournal *self, PyObject *args)
+ChangeJournal_create (ChangeJournal *self, PyObject *args, PyObject *kwargs)
 {
-DWORDLONG MaximumSize = 0;
-DWORDLONG AllocationDelta = 0;
-
-CREATE_USN_JOURNAL_DATA create_journal_data;
+CREATE_USN_JOURNAL_DATA create_journal_data = {0, 0};
 DWORD n_bytes;
 BOOL is_ok;
+static char *kwlist[] = {"maximum_size", "allocation_delta", NULL};
 
   if (self->handle == NULL) {
     PyErr_SetString (PyExc_RuntimeError, "No handle supplied");
     return NULL;
-  }
+  };
 
-  if (!PyArg_ParseTuple (args, "|ii", &MaximumSize, &AllocationDelta))
+  if (!PyArg_ParseTupleAndKeywords (args, kwargs, "|ii", kwlist,
+                                    &create_journal_data.MaximumSize, &create_journal_data.AllocationDelta))
     return NULL;
 
-  create_journal_data.MaximumSize = MaximumSize;
-  create_journal_data.AllocationDelta = AllocationDelta;
   Py_BEGIN_ALLOW_THREADS
   is_ok = DeviceIoControl (
     self->handle,
@@ -508,7 +505,7 @@ static PyMemberDef ChangeJournal_members[] = {
 
 static PyMethodDef ChangeJournal_methods[] = {
   {"query", (PyCFunction)ChangeJournal_query, METH_NOARGS, ChangeJournal_query_doc},
-  {"create", (PyCFunction)ChangeJournal_create, METH_VARARGS, "Create the changelog"},
+  {"create", (PyCFunction)ChangeJournal_create, METH_VARARGS | METH_KEYWORDS, "Create the changelog"},
   {"delete", (PyCFunction)ChangeJournal_delete, METH_VARARGS, "Delete the changelog"},
   {"read", (PyCFunction)ChangeJournal_read, METH_VARARGS | METH_KEYWORDS, "Read the changelog"},
   {NULL}
