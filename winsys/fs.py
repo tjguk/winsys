@@ -34,7 +34,7 @@ import winioctlcon
 if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
   winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
-from winsys import constants, core, exc, security, utils, _kernel32
+from winsys import constants, core, exc, security, utils, _kernel32, _change_journal
 
 sep = str (os.sep)
 seps = "/\\"
@@ -657,6 +657,9 @@ class Volume (core._WinSysObject):
     """
     return (dir (m) for m in wrapped (win32file.GetVolumePathNamesForVolumeName, self.name))
   mounts = property (_get_mounts)
+
+  def change_journal (self):
+    return _change_journal.ChangeJournal (self.name.rstrip ("\\"))
 
   def dumped (self, level):
     output = []
