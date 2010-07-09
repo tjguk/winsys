@@ -39,12 +39,17 @@ PyObject *pylong;
 
   pylong = PyLong_FromLongLong (n);
   if (!pylong)
-    return FALSE;
+    goto failure;
   if (PyDict_SetItemString (dict, name, pylong) == -1)
-    return FALSE;
+    goto failure;
 
+success:
   Py_DECREF (pylong);
   return TRUE;
+
+failure:
+  Py_XDECREF (pylong):
+  return FALSE;
 }
 
 PyObject *
@@ -58,7 +63,7 @@ SYSTEMTIME systemtime, localtime;
 
   dict = PyDict_New ();
   if (dict == NULL)
-    return NULL;
+    goto failure;
 
   if (!add_n_to_dict (dict, "RecordLength", usn_record->RecordLength)) goto failure;
   if (!add_n_to_dict (dict, "MajorVersion", usn_record->MajorVersion)) goto failure;
@@ -84,6 +89,7 @@ SYSTEMTIME systemtime, localtime;
     goto failure;
   if (PyDict_SetItemString (dict, "TimeStamp", pytimestamp) == -1)
     goto failure;
+  Py_DECREF (pytimestamp);
 
   pyfilename = PyUnicode_FromWideChar (
     ((PBYTE)usn_record) + usn_record->FileNameOffset,
@@ -93,15 +99,14 @@ SYSTEMTIME systemtime, localtime;
     goto failure;
   if (PyDict_SetItemString (dict, "FileName", pyfilename) == -1)
     goto failure;
-
-  Py_DECREF (pytimestamp);
   Py_DECREF (pyfilename);
+
   return dict;
 
 failure:
   Py_XDECREF (pytimestamp);
   Py_XDECREF (pyfilename);
-  Py_DECREF (dict);
+  Py_XDECREF (dict);
   return NULL;
 }
 
@@ -137,7 +142,7 @@ JournalIterator *iterator;
   {
     iterator->handle = 0;
     iterator->buffer_needs_refresh = 0;
-    memset (iterator->buffer, 0, buffer_length);
+    ZeroMemory (iterator->buffer, buffer_length);
     iterator->n_bytes_read = 0;
     iterator->n_bytes_left = 0;
     iterator->buffer_needs_refresh = 1;
@@ -166,7 +171,7 @@ BOOL is_ok;
   {
     iterator->buffer_needs_refresh = 0;
     Py_BEGIN_ALLOW_THREADS
-    memset (iterator->buffer, 0, buffer_length);
+    ZeroMemory (iterator->buffer, buffer_length);
     is_ok = DeviceIoControl (
       iterator->handle,
       FSCTL_READ_USN_JOURNAL, // action
@@ -262,18 +267,18 @@ JournalIterator *iterator;
 USN_JOURNAL_DATA journal_data;
 
   iterator = PyObject_New (JournalIterator, &JournalIterator_Type);
-  if (iterator == NULL) {
+  if (iterator == NULL)
     return NULL;
-  }
+  PyINCREF (iterator);
 
   if (change_journal->handle == NULL) {
     PyErr_SetString (PyExc_RuntimeError, "No handle supplied");
-    return NULL;
+    goto failure;
   }
   iterator->handle = change_journal->handle;
 
   if (!query_change_journal (iterator->handle, &journal_data))
-    return NULL;
+    goto failure;
   iterator->read_journal_data.UsnJournalID = journal_data.UsnJournalID;
   iterator->read_journal_data.StartUsn = StartUsn;
   iterator->read_journal_data.ReasonMask = ReasonMask;
@@ -281,8 +286,11 @@ USN_JOURNAL_DATA journal_data;
   iterator->read_journal_data.Timeout = Timeout;
   iterator->read_journal_data.BytesToWaitFor = BytesToWaitFor;
 
-  Py_INCREF (iterator);
   return (PyObject *)iterator;
+
+failure:
+  Py_XDECREF (iterator);
+  return NULL;
 }
 
 static char ChangeJournal_doc[] =
@@ -302,6 +310,7 @@ ChangeJournal_new (PyTypeObject *type, PyObject *args, PyObject *kwds)
     self->volume_name = PyUnicode_FromString ("<Uninitialised>");
     if (!self->volume_name)
       return NULL;
+    PyINCREF (self->volume_name);
   }
 
   return (PyObject *)self;
@@ -359,7 +368,7 @@ ChangeJournal_iter (ChangeJournal *self)
 }
 
 static char ChangeJournal_query_doc[] =
-    "query () -> dictionary containing the fields from the USN_JOURNAL_DATA structure:\n"
+    "query () -> dictionary containing the fields from the USN_JOURNAL_DATA structure:\n\n"
     "  UsnJournalID - id for this journal; if this changes, the journal has been restarted\n"
     "  FirstUsn - first USN in this journal\n"
     "  NextUsn - the next USN which will be used\n"
@@ -377,21 +386,25 @@ PyObject *info;
 
   if (self->handle == NULL) {
     PyErr_SetString (PyExc_RuntimeError, "No handle supplied");
-    return NULL;
+    goto failure;
   }
 
   if (!query_change_journal (self->handle, &journal_data))
-    return NULL;
+    goto failure;
 
   info = PyDict_New ();
-  PyDict_SetItemString (info, "UsnJournalID", PyLong_FromLongLong (journal_data.UsnJournalID));
-  PyDict_SetItemString (info, "FirstUsn", PyLong_FromLongLong (journal_data.FirstUsn));
-  PyDict_SetItemString (info, "NextUsn", PyLong_FromLongLong (journal_data.NextUsn));
-  PyDict_SetItemString (info, "LowestValidUsn", PyLong_FromLongLong(journal_data.LowestValidUsn));
-  PyDict_SetItemString (info, "MaxUsn", PyLong_FromLongLong(journal_data.MaxUsn));
-  PyDict_SetItemString (info, "MaximumSize", PyLong_FromLongLong(journal_data.MaximumSize));
-  PyDict_SetItemString (info, "AllocationDelta", PyLong_FromLongLong(journal_data.AllocationDelta));
+  if (!add_n_to_dict (info, "UsnJournalID", journal_data.UsnJournalID)) goto failure;
+  if (!add_n_to_dict (info "FirstUsn", journal_data.FirstUsn)) goto failure
+  if (!add_n_to_dict (info "NextUsn", journal_data.NextUsn)) goto failure
+  if (!add_n_to_dict (info "LowestValidUsn", journal_data.LowestValidUsn)) goto failure
+  if (!add_n_to_dict (info "MaxUsn", journal_data.MaxUsn)) goto failure
+  if (!add_n_to_dict (info "MaximumSize", journal_data.MaximumSize)) goto failure
+  if (!add_n_to_dict (info "AllocationDelta", journal_data.AllocationDelta)) goto failure
   return info;
+
+failure:
+  Py_XDECREF (info);
+  return NULL;
 }
 
 static PyObject *
@@ -408,8 +421,9 @@ static char *kwlist[] = {"maximum_size", "allocation_delta", NULL};
   };
 
   if (!PyArg_ParseTupleAndKeywords (args, kwargs, "|ii", kwlist,
-                                    &create_journal_data.MaximumSize, &create_journal_data.AllocationDelta))
-    return NULL;
+                                    &create_journal_data.MaximumSize,
+                                    &create_journal_data.AllocationDelta))
+    goto failure;
 
   Py_BEGIN_ALLOW_THREADS
   is_ok = DeviceIoControl (
@@ -421,10 +435,14 @@ static char *kwlist[] = {"maximum_size", "allocation_delta", NULL};
   );
   Py_END_ALLOW_THREADS
   if (!is_ok) {
-    return PyErr_SetFromWindowsErr (GetLastError ());
+    PyErr_SetFromWindowsErr (GetLastError ());
+    goto failure;
   }
 
   Py_RETURN_NONE;
+
+failure:
+  return NULL;
 }
 
 static PyObject *
@@ -467,6 +485,9 @@ BOOL is_ok;
   }
 
   Py_RETURN_NONE;
+
+failure:
+  return NULL;
 };
 
 static PyObject *
