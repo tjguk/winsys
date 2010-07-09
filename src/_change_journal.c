@@ -43,12 +43,11 @@ PyObject *pylong;
   if (PyDict_SetItemString (dict, name, pylong) == -1)
     goto failure;
 
-success:
   Py_DECREF (pylong);
   return TRUE;
 
 failure:
-  Py_XDECREF (pylong):
+  Py_XDECREF (pylong);
   return FALSE;
 }
 
@@ -123,7 +122,8 @@ ChangeJournal journal iterator structures
 #define buffer_length 20480
 typedef struct {
   PyObject_HEAD
-  HANDLE handle;
+
+  ChangeJournal* change_journal;
   READ_USN_JOURNAL_DATA read_journal_data;
   BOOL buffer_needs_refresh;
   char buffer[buffer_length];
@@ -132,24 +132,11 @@ typedef struct {
   PUSN_RECORD usn_record;
 } JournalIterator;
 
-static PyObject *
-jit_new (PyTypeObject *type, PyObject *args, PyObject *kwds)
+static void
+jit_dealloc (JournalIterator *self)
 {
-JournalIterator *iterator;
-
-  iterator = (JournalIterator *)type->tp_alloc (type, 0);
-  if (iterator != NULL)
-  {
-    iterator->handle = 0;
-    iterator->buffer_needs_refresh = 0;
-    ZeroMemory (iterator->buffer, buffer_length);
-    iterator->n_bytes_read = 0;
-    iterator->n_bytes_left = 0;
-    iterator->buffer_needs_refresh = 1;
-    iterator->usn_record = NULL;
-  }
-
-  return (PyObject *)iterator;
+  Py_XDECREF (self->change_journal);
+  PyObject_Del(self);
 }
 
 static PyObject *
@@ -173,7 +160,7 @@ BOOL is_ok;
     Py_BEGIN_ALLOW_THREADS
     ZeroMemory (iterator->buffer, buffer_length);
     is_ok = DeviceIoControl (
-      iterator->handle,
+      iterator->change_journal->handle,
       FSCTL_READ_USN_JOURNAL, // action
       &iterator->read_journal_data, sizeof (iterator->read_journal_data), // in-buffer & size
       &iterator->buffer, buffer_length, &iterator->n_bytes_read,  // out buffer & size & bytes written
@@ -200,6 +187,12 @@ BOOL is_ok;
     }
   }
 
+  if (!iterator->usn_record)
+  {
+    PyErr_SetString (PyExc_RuntimeError, "No USN record");
+    return NULL;
+  }
+
   usn_dict = usn2dict (iterator->usn_record);
   if (!usn_dict)
     return NULL;
@@ -217,7 +210,7 @@ PyTypeObject JournalIterator_Type = {
   "JournalIterator",            /* tp_name */
   sizeof(JournalIterator),      /* tp_basicsize */
   0,                            /* tp_itemsize */
-  0,                            /* tp_dealloc */
+  jit_dealloc,                  /* tp_dealloc */
   0,                            /* tp_print */
   0,                            /* tp_getattr */
   0,                            /* tp_setattr */
@@ -250,7 +243,7 @@ PyTypeObject JournalIterator_Type = {
   0,                            /* tp_dictoffset */
   0,                            /* tp_init */
   0,                            /* tp_alloc */
-  jit_new,                      /* tp_new */
+  0,                      /* tp_new */
 };
 
 static PyObject*
@@ -268,16 +261,20 @@ USN_JOURNAL_DATA journal_data;
 
   iterator = PyObject_New (JournalIterator, &JournalIterator_Type);
   if (iterator == NULL)
-    return NULL;
-  PyINCREF (iterator);
+    goto failure;
 
+  if (!change_journal) {
+    PyErr_SetString (PyExc_RuntimeError, "No change journal supplied");
+    goto failure;
+  }
   if (change_journal->handle == NULL) {
     PyErr_SetString (PyExc_RuntimeError, "No handle supplied");
     goto failure;
   }
-  iterator->handle = change_journal->handle;
+  Py_INCREF (change_journal);
+  iterator->change_journal = change_journal;
 
-  if (!query_change_journal (iterator->handle, &journal_data))
+  if (!query_change_journal (iterator->change_journal->handle, &journal_data))
     goto failure;
   iterator->read_journal_data.UsnJournalID = journal_data.UsnJournalID;
   iterator->read_journal_data.StartUsn = StartUsn;
@@ -285,6 +282,8 @@ USN_JOURNAL_DATA journal_data;
   iterator->read_journal_data.ReturnOnlyOnClose = ReturnOnlyOnClose;
   iterator->read_journal_data.Timeout = Timeout;
   iterator->read_journal_data.BytesToWaitFor = BytesToWaitFor;
+
+  iterator->buffer_needs_refresh = 1;
 
   return (PyObject *)iterator;
 
@@ -301,7 +300,7 @@ static char ChangeJournal_doc[] =
 static PyObject *
 ChangeJournal_new (PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
-  ChangeJournal *self;
+ChangeJournal *self;
 
   self = (ChangeJournal *)type->tp_alloc (type, 0);
   if (self != NULL)
@@ -310,7 +309,7 @@ ChangeJournal_new (PyTypeObject *type, PyObject *args, PyObject *kwds)
     self->volume_name = PyUnicode_FromString ("<Uninitialised>");
     if (!self->volume_name)
       return NULL;
-    PyINCREF (self->volume_name);
+    Py_INCREF (self->volume_name);
   }
 
   return (PyObject *)self;
@@ -322,7 +321,7 @@ ChangeJournal_dealloc (ChangeJournal *self)
   if (self->handle != NULL)
     CloseHandle (self->handle);
   Py_XDECREF (self->volume_name);
-  Py_TYPE (self)->tp_free ((PyObject *)self);
+  PyObject_Del (self);
 }
 
 static int
@@ -394,12 +393,12 @@ PyObject *info;
 
   info = PyDict_New ();
   if (!add_n_to_dict (info, "UsnJournalID", journal_data.UsnJournalID)) goto failure;
-  if (!add_n_to_dict (info "FirstUsn", journal_data.FirstUsn)) goto failure
-  if (!add_n_to_dict (info "NextUsn", journal_data.NextUsn)) goto failure
-  if (!add_n_to_dict (info "LowestValidUsn", journal_data.LowestValidUsn)) goto failure
-  if (!add_n_to_dict (info "MaxUsn", journal_data.MaxUsn)) goto failure
-  if (!add_n_to_dict (info "MaximumSize", journal_data.MaximumSize)) goto failure
-  if (!add_n_to_dict (info "AllocationDelta", journal_data.AllocationDelta)) goto failure
+  if (!add_n_to_dict (info, "FirstUsn", journal_data.FirstUsn)) goto failure;
+  if (!add_n_to_dict (info, "NextUsn", journal_data.NextUsn)) goto failure;
+  if (!add_n_to_dict (info, "LowestValidUsn", journal_data.LowestValidUsn)) goto failure;
+  if (!add_n_to_dict (info, "MaxUsn", journal_data.MaxUsn)) goto failure;
+  if (!add_n_to_dict (info, "MaximumSize", journal_data.MaximumSize)) goto failure;
+  if (!add_n_to_dict (info, "AllocationDelta", journal_data.AllocationDelta)) goto failure;
   return info;
 
 failure:
@@ -446,7 +445,7 @@ failure:
 }
 
 static PyObject *
-ChangeJournal_delete (ChangeJournal *self, PyObject *args)
+ChangeJournal_delete (ChangeJournal *self, PyObject *args, PyObject *kwargs)
 {
 int DeleteNow = 1;
 int Notify = 0;
@@ -455,22 +454,24 @@ USN_JOURNAL_DATA journal_data;
 DELETE_USN_JOURNAL_DATA delete_journal_data;
 DWORD n_bytes;
 BOOL is_ok;
+static char *kwlist[] = {"DeleteNow", "Notify", NULL};
 
   if (self->handle == NULL) {
     PyErr_SetString (PyExc_RuntimeError, "No handle supplied");
-    return NULL;
+    goto failure;
   }
 
-  if (!PyArg_ParseTuple (args, "|ii", &DeleteNow, &Notify))
-    return NULL;
+  if (!PyArg_ParseTuple (args, kwargs, "|ii", kwlist, &DeleteNow, &Notify))
+    goto failure;
 
   if (!query_change_journal (self->handle, &journal_data))
-    return NULL;
-
+    goto failure;
   delete_journal_data.UsnJournalID = journal_data.UsnJournalID;
   delete_journal_data.DeleteFlags = 0;
-  if (DeleteNow) delete_journal_data.DeleteFlags |= USN_DELETE_FLAG_DELETE;
-  if (Notify) delete_journal_data.DeleteFlags |= USN_DELETE_FLAG_NOTIFY;
+  if (DeleteNow)
+    delete_journal_data.DeleteFlags |= USN_DELETE_FLAG_DELETE;
+  if (Notify)
+    delete_journal_data.DeleteFlags |= USN_DELETE_FLAG_NOTIFY;
   Py_BEGIN_ALLOW_THREADS
   is_ok = DeviceIoControl (
     self->handle,
@@ -481,7 +482,8 @@ BOOL is_ok;
   );
   Py_END_ALLOW_THREADS
   if (!is_ok) {
-    return PyErr_SetFromWindowsErr (GetLastError ());
+    PyErr_SetFromWindowsErr (GetLastError ());
+    goto failure;
   }
 
   Py_RETURN_NONE;
@@ -502,12 +504,13 @@ static char *kwlist[] = {"start_usn", "reason_mask", "return_only_on_close", "ti
 
   if (self->handle == NULL) {
     PyErr_SetString (PyExc_RuntimeError, "No handle supplied");
-    return NULL;
+    goto failure;
   }
 
   if (!PyArg_ParseTupleAndKeywords (args, kwargs, "|iiiii", kwlist,
-                                    &StartUsn, &ReasonMask, &ReturnOnlyOnClose, &Timeout, &BytesToWaitFor))
-    return NULL;
+                                    &StartUsn, &ReasonMask, &ReturnOnlyOnClose,
+                                    &Timeout, &BytesToWaitFor))
+    goto failure;
 
   return journal_iterator (
     self,
@@ -517,6 +520,9 @@ static char *kwlist[] = {"start_usn", "reason_mask", "return_only_on_close", "ti
     Timeout,
     BytesToWaitFor
   );
+
+failure:
+  return NULL;
 }
 
 static PyMemberDef ChangeJournal_members[] = {
@@ -570,7 +576,7 @@ static PyTypeObject ChangeJournalType = {
     0,                     /* tp_dictoffset */
     ChangeJournal_init,    /* tp_init */
     0,                     /* tp_alloc */
-    PyType_GenericNew      /* tp_new */
+    ChangeJournal_new      /* tp_new */
 };
 
 PyObject *
@@ -687,13 +693,21 @@ PyObject *_change_journal_module;
 
   _change_journal_module = PyModule_Create(&usn_module);
   if (_change_journal_module ==  NULL)
-      return NULL;
+    return NULL;
   add_constants (_change_journal_module);
 
   if (PyType_Ready(&ChangeJournalType) < 0)
-      return NULL;
+    return NULL;
   Py_INCREF (&ChangeJournalType);
+  if (PyType_Ready(&JournalIterator_Type) < 0)
+    return NULL;
+  Py_INCREF (&JournalIterator_Type);
+
   PyModule_AddObject (_change_journal_module, "ChangeJournal", (PyObject *)&ChangeJournalType);
+  //
+  // No need to add the JournalIterator type as it's only
+  // available from the change iterator's __iter__ slot
+  //
 
   return _change_journal_module;
 }
