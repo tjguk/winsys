@@ -348,7 +348,7 @@ class BaseDialog (object):
       dlg.append (["BUTTON", caption, id, (self.W - ((i + 1) * (self.GUTTER_W + self.BUTTON_W)), button_t, self.BUTTON_W, field_h), cs])
     control_t += field_h + self.GUTTER_H
 
-    dlg.insert (0, [self.title, (0, 0, self.W, control_t), style, None, (9, "Lucida Sans str"), None, dlg_class_name])
+    dlg.insert (0, [self.title, (0, 0, self.W, control_t), style, None, (9, "Lucida Sans Unicode"), None, dlg_class_name])
     return dlg
 
 class Dialog (BaseDialog):
@@ -622,12 +622,9 @@ class Dialog (BaseDialog):
     r"""Convenience function to tell the dialog that progress is complete,
     passing a message along which will be displayed in the progress box
     """
-    print ("_progress_complete", message)
     _message = marshal.dumps (message)
-    print ("_message", _message)
     address, length = win32gui.PyGetBufferAddressAndLen (_message)
-    print ("addr, len", address, length)
-    SendMessage (self.hwnd, self.WM_PROGRESS_COMPLETE, length, address)
+    PostMessage (self.hwnd, self.WM_PROGRESS_COMPLETE, length, address)
 
   def _progress_message (self, message):
     r"""Convenience function to send progress messages to the dialog
