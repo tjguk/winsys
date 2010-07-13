@@ -367,7 +367,7 @@ class Dialog (BaseDialog):
       raise RuntimeError ("Must pass at least one field")
     self.results = []
     self.progress_thread = core.UNSET
-    self.progress_cancelled = win32event.CreateEvent (None, 0, 0, None)
+    self.progress_cancelled = win32event.CreateEvent (None, 1, 0, None)
 
   def run (self):
     ur"""The heart of the dialog box functionality. The call to DialogBoxIndirect
@@ -622,7 +622,7 @@ class Dialog (BaseDialog):
     """
     _message = buffer (marshal.dumps (message))
     address, length = win32gui.PyGetBufferAddressAndLen (_message)
-    SendMessage (self.hwnd, self.WM_PROGRESS_COMPLETE, length, address)
+    PostMessage (self.hwnd, self.WM_PROGRESS_COMPLETE, length, address)
 
   def _progress_message (self, message):
     ur"""Convenience function to send progress messages to the dialog
