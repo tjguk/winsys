@@ -367,7 +367,7 @@ class Dialog (BaseDialog):
       raise RuntimeError ("Must pass at least one field")
     self.results = []
     self.progress_thread = core.UNSET
-    self.progress_cancelled = win32event.CreateEvent (None, 1, 0, None)
+    self.progress_cancelled = win32event.CreateEvent (None, 0, 0, None)
 
   def run (self):
     ur"""The heart of the dialog box functionality. The call to DialogBoxIndirect
@@ -446,8 +446,8 @@ class Dialog (BaseDialog):
     r = min (r, l + self.MAX_W)
 
     dt_l, dt_t, dt_r, dt_b = wrapped (win32gui.GetWindowRect, parent)
-    centre_x, centre_y = wrapped (win32gui.ClientToScreen, parent, (round ((dt_r - dt_l) / 2), round ((dt_b - dt_t) / 2)))
-    wrapped (win32gui.MoveWindow, self.hwnd, round (centre_x - (r / 2)), round (centre_y - (b / 2)), r - l, b - t, 0)
+    centre_x, centre_y = wrapped (win32gui.ClientToScreen, parent, ((dt_r - dt_l) / 2, (dt_b - dt_t) / 2))
+    wrapped (win32gui.MoveWindow, self.hwnd, centre_x - (r / 2), centre_y - (b / 2), r - l, b - t, 0)
     l, t, r, b = wrapped (win32gui.GetClientRect, self.hwnd)
     self._resize (r - l, b - t, 0)
     return True
@@ -580,7 +580,7 @@ class Dialog (BaseDialog):
     #
     POINT_FORMAT = "LL"
     MINMAXINO_FORMAT = 5 * POINT_FORMAT
-    data = win32gui.PyGetMemory (lparam, struct.calcsize (MINMAXINO_FORMAT))
+    data = win32gui.PyGetString (lparam, struct.calcsize (MINMAXINO_FORMAT))
     minmaxinfo = list (struct.unpack (MINMAXINO_FORMAT, data))
     minmaxinfo[9] = minmaxinfo[7] = dlg_b - dlg_t
     win32gui.PySetMemory (lparam, struct.pack (MINMAXINO_FORMAT, *minmaxinfo))
@@ -601,7 +601,7 @@ class Dialog (BaseDialog):
     a utf8-encoded string which is to be displayed in the
     dialog's progress static.
     """
-    message = marshal.loads (win32gui.PyGetMemory (lparam, wparam))
+    message = marshal.loads (win32gui.PyGetString (lparam, wparam))
     self._set_item (self._progress_id, message)
 
   def OnProgressComplete (self, hwnd, msg, wparam, lparam):
@@ -610,7 +610,7 @@ class Dialog (BaseDialog):
     and setting focus to the ok so a return or space will close
     the dialog.
     """
-    message = marshal.loads (win32gui.PyGetMemory (lparam, wparam))
+    message = marshal.loads (win32gui.PyGetString (lparam, wparam))
     self._set_item (self._progress_id, message)
     self._enable (win32con.IDCANCEL, False)
     self._enable (win32con.IDOK, True)
@@ -620,14 +620,14 @@ class Dialog (BaseDialog):
     ur"""Convenience function to tell the dialog that progress is complete,
     passing a message along which will be displayed in the progress box
     """
-    _message = marshal.dumps (message)
+    _message = buffer (marshal.dumps (message))
     address, length = win32gui.PyGetBufferAddressAndLen (_message)
-    PostMessage (self.hwnd, self.WM_PROGRESS_COMPLETE, length, address)
+    SendMessage (self.hwnd, self.WM_PROGRESS_COMPLETE, length, address)
 
   def _progress_message (self, message):
     ur"""Convenience function to send progress messages to the dialog
     """
-    _message = marshal.dumps (message)
+    _message = buffer (marshal.dumps (message))
     address, length = win32gui.PyGetBufferAddressAndLen (_message)
     SendMessage (self.hwnd, self.WM_PROGRESS_MESSAGE, length, address)
 
