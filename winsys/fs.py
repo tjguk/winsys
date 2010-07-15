@@ -417,7 +417,7 @@ class FilePath (unicode):
 
   def _get_path (self):
     if self._path is None:
-      self._path = self.__class__.factory (self.root + self.dirname)
+      self._path = self.__class__.factory ((self.root or "") + self.dirname)
     return self._path
   path = property (_get_path)
 
