@@ -461,17 +461,17 @@ static char *kwlist[] = {"DeleteNow", "Notify", NULL};
     goto failure;
   }
 
-  if (!PyArg_ParseTuple (args, kwargs, "|ii", kwlist, &DeleteNow, &Notify))
+  if (!PyArg_ParseTupleAndKeywords (args, kwargs, "|ii", kwlist,
+                                    &DeleteNow, &Notify))
     goto failure;
 
   if (!query_change_journal (self->handle, &journal_data))
     goto failure;
+
   delete_journal_data.UsnJournalID = journal_data.UsnJournalID;
-  delete_journal_data.DeleteFlags = 0;
-  if (DeleteNow)
-    delete_journal_data.DeleteFlags |= USN_DELETE_FLAG_DELETE;
-  if (Notify)
-    delete_journal_data.DeleteFlags |= USN_DELETE_FLAG_NOTIFY;
+  delete_journal_data.DeleteFlags = \
+    (USN_DELETE_FLAG_DELETE * DeleteNow) | (USN_DELETE_FLAG_NOTIFY * Notify);
+
   Py_BEGIN_ALLOW_THREADS
   is_ok = DeviceIoControl (
     self->handle,
