@@ -1436,6 +1436,18 @@ class Dir (Entry):
 
     return Dir (path)
 
+  def mkdir (self, dirname, security_descriptor=None):
+    r"""Create :dirname: as a subdirectory of this directory, specifying a
+    security descriptor. This is implemented in terms of :method:`create`
+    by concatenating this directory and dirname and calling .create on the
+    resulting :class:`Dir` object.
+
+    :param dirname: a relative path
+    :param security_descriptor: anything accepted by :func:`security.security`
+    :returns: a :class:`Dir` representing the newly-created directory
+    """
+    return self.dir (dirname).create (security_descriptor=security_descriptor)
+
   def entries (self, pattern="*", *args, **kwargs):
     r"""Iterate over all entries -- files & directories -- in this directory.
     Implemented via :func:`files`
@@ -1545,11 +1557,12 @@ class Dir (Entry):
     """
     for f in self.flat (includedirs=True):
       raise x_fs (errctx="Dir.mount", errmsg="You can't mount to a non-empty directory")
+    vol = volume (vol)
     for m in vol.mounts:
       if not m.dirname:
         raise x_fs (errctx="Dir.mount", errmsg="Volume %s already has a drive letter %s" % (vol, m.root))
 
-    wrapped (win32file.SetVolumeMountPoint, self, volume (vol).name)
+    wrapped (win32file.SetVolumeMountPoint, self, vol.name)
     return self
 
   def dismount (self):
@@ -1639,7 +1652,6 @@ class Dir (Entry):
     return file (zip_filename)
 
   rmdir = delete
-  mkdir = create
 
 def files (pattern="*", ignore=[".", ".."], ignore_access_errors=False):
   r"""Iterate over files and directories matching pattern, which can include

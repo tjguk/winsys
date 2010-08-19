@@ -55,7 +55,7 @@ wrapped = exc.wrapper (WINERROR_MAP, x_shell)
 #  support it, so I added this workaround.
 #
 def get_path (folder_id):
-  return fs.entry (shell.SHGetPathFromIDList (shell.SHGetSpecialFolderLocation (0, folder_id)))
+  return fs.dir (shell.SHGetPathFromIDList (shell.SHGetSpecialFolderLocation (0, folder_id)))
 
 def desktop (common=0):
   "What folder is equivalent to the current desktop?"
@@ -470,14 +470,14 @@ def properties (source):
   else:
     return Properties (source)
 
-desktop = shell.SHGetDesktopFolder ()
-PyIShellFolder = type (desktop)
+_desktop = shell.SHGetDesktopFolder ()
+PyIShellFolder = type (_desktop)
 PyIID = type (pywintypes.IID ("{00000000-0000-0000-0000-000000000000}"))
 
 class ShellEntry (core._WinSysObject):
 
   def __init__ (self, rpidl, parent=core.UNSET):
-    self.parent = desktop if parent is core.UNSET else parent
+    self.parent = _desktop if parent is core.UNSET else parent
     self.rpidl = rpidl
 
   def as_string (self):
@@ -526,7 +526,7 @@ def shell_entry (shell_entry=core.UNSET):
   if shell_entry is None:
     return None
   elif shell_entry is core.UNSET:
-    return ShellFolder ([], desktop)
+    return ShellFolder ([], _desktop)
   elif isinstance (ShellEntry, shell_entry):
     return shell_entry
   elif isinstance (shell_entry, str):
@@ -534,24 +534,24 @@ def shell_entry (shell_entry=core.UNSET):
     if pidl is None:
       return ShellFolder (
         shell.SHGetFolderLocation (None, CSIDL.constant (shell_entry), None, 0),
-        desktop
+        _desktop
       )
       pidl = None
-    return ShellFolder (desktop.BindToObject (pidl, None, shell.IID_IShellFolder))
+    return ShellFolder (_desktop.BindToObject (pidl, None, shell.IID_IShellFolder))
 
 
 def shell_folder (shell_folder=core.UNSET, parent=core.UNSET):
   if shell_folder is None:
     return None
   elif shell_folder is core.UNSET:
-    return ShellFolder ([], desktop)
+    return ShellFolder ([], _desktop)
   elif isinstance (shell_folder, PyIShellFolder):
     return ShellFolder (shell_folder)
   elif isinstance (shell_folder, str):
     pidl, flags = shell.SHILCreateFromPath (os.path.abspath (shell_folder), 0)
     if pidl is None:
       pidl = shell.SHGetFolderLocation (None, CSIDL.constant (shell_folder), None, 0)
-    return ShellFolder (desktop.BindToObject (pidl, None, shell.IID_IShellFolder))
+    return ShellFolder (_desktop.BindToObject (pidl, None, shell.IID_IShellFolder))
   elif isinstance (shell_folder, list):
     if parent is core.UNSET:
       raise x_shell (errctx="shell_folder", errmsg="Cannot bind to PIDL without parent")
