@@ -6,10 +6,10 @@ def tree (root=None, level=0):
   if level > 3: return
   if root is None:
     root = shell.SHGetDesktopFolder ()
-    print root.GetDisplayNameOf ([], shellcon.SHGDN_NORMAL)
+    print (root.GetDisplayNameOf ([], shellcon.SHGDN_NORMAL))
 
   for folder in root.EnumObjects (None, shellcon.SHCONTF_FOLDERS):
-    print "  " * level, root.GetDisplayNameOf (folder, shellcon.SHGDN_NORMAL)
+    print ("  " * level, root.GetDisplayNameOf (folder, shellcon.SHGDN_NORMAL))
     try:
       tree (root.BindToObject (folder, None, shell.IID_IShellFolder), level+1)
     except pythoncom.com_error:
