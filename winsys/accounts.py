@@ -91,24 +91,24 @@ def principal (principal, cls=core.UNSET):
     return cls.from_string (str (principal))
 
 def user (name):
-  r"""If you know yo're after a user, use this. Particularly
+  r"""If you know you're after a user, use this. Particularly
   useful when a system user is defined as an alias type
   """
   return principal (name, cls=User)
 
 def group (name):
-  r"""If you know yo're after a group, use this. Particularly
+  r"""If you know you're after a group, use this. Particularly
   useful when a system group is defined as an alias type
   """
   return principal (name, cls=Group)
 
 def local_group (name):
-  r"""If you know yo're after a local group, use this.
+  r"""If you know you're after a local group, use this.
   """
   return principal (name, cls=LocalGroup)
 
 def global_group (name):
-  r"""If you know yo're after a global group, use this.
+  r"""If you know you're after a global group, use this.
   """
   return principal (name, cls=GlobalGroup)
 

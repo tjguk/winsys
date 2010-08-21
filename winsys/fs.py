@@ -112,7 +112,7 @@ FILE_CREATION.doc ("Options when creating a file")
 VOLUME_FLAG = constants.Constants.from_dict (dict (
   FILE_CASE_SENSITIVE_SEARCH      = 0x00000001,
   FILE_CASE_PRESERVED_NAMES       = 0x00000002,
-  FILE_str_ON_DISK            = 0x00000004,
+  FILE_UNICODE_ON_DISK            = 0x00000004,
   FILE_PERSISTENT_ACLS            = 0x00000008,
   FILE_FILE_COMPRESSION           = 0x00000010,
   FILE_VOLUME_QUOTAS              = 0x00000020,

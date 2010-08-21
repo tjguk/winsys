@@ -293,7 +293,7 @@ class Registry (core._WinSysObject):
   @classmethod
   def _access (cls, access):
     """Conversion function which returns an integer representing a security access
-    bit pattern. Uses the classu's ACCESS map to translate letters to integers.
+    bit pattern. Uses the class's ACCESS map to translate letters to integers.
     """
     if access is None:
       return None
@@ -434,7 +434,7 @@ class Registry (core._WinSysObject):
 
     This is a very naive approach, and will falter if, for example,
     a string is passed which can be converted into a number, or a string
-    with 2 percent signs which donu't refer to an env var.
+    with 2 percent signs which don't refer to an env var.
     """
     def _guess_type (value):
       try:
@@ -574,7 +574,7 @@ def keys (root, ignore_access_errors=False):
 
 def copy (from_key, to_key):
   """Copy one registry key to another, returning the target. If the
-  target doesnu't already exist it will be created.
+  target doesn't already exist it will be created.
 
   :param from_key: anything accepted by :func:`registry`
   :param to_key: anything accepted by :func:`registry`
@@ -600,7 +600,7 @@ def delete (root, subkey=""):
 
   The common use for this will be to delete a key itself.
   The optional subkey param is useful when this is invoked
-  as a method of a :class:`Registry` object and itu's convenient
+  as a method of a :class:`Registry` object and it's convenient
   to remove one of its subkeys::
 
     from winsys import registry
@@ -693,7 +693,7 @@ def flat (root, ignore_access_errors=False):
       yield value
 
 def parent (key):
-  """Return a registry keyu's parent key if it exists
+  """Return a registry key's parent key if it exists
 
   :param key: anything accepted by :func:`registry`
   :returns: a :class:`Registry` object representing the parent of key
@@ -712,7 +712,7 @@ def hklm ():
   return registry ("hklm")
 
 def hkcu ():
-  return registry ("hkc")
+  return registry ("hkcu")
 
 Registry.values = values
 Registry.keys = keys
