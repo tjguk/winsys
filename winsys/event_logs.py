@@ -74,6 +74,9 @@ class _EventLogEntry (core._WinSysObject):
       self._event_log_name == other._event_log_name and \
       self.record_number == other.record_number
 
+  def __hash__ (self):
+    return hash ((self.computer_name, self._event_log_name, self.record_number))
+
   def dumped (self, level=0):
     output = []
     output.append (u"record_number: %s" % self.record_number)
@@ -323,7 +326,6 @@ class EventSource (core._WinSysObject):
   # be passed to the ReportEvent function in log_event (qv).
   #
   def __enter__ (self):
-    print "About to register", self.computer, self.name
     self._handle = wrapped (win32evtlog.RegisterEventSource, self.computer, self.name)
     return self._handle
 
@@ -425,7 +427,6 @@ def log_event (source, type="error", message=None, data=None, id=0, category=0, 
   message = message or []
 
   with event_source (source) as hLog:
-    print "log_event", (hLog, type, category, id, principal, message, data)
     wrapped (
       win32evtlog.ReportEvent,
       hLog,

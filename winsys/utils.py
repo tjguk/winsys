@@ -108,9 +108,9 @@ def string_as_pointer (string):
   address, length = win32gui.PyGetBufferAddressAndLen (buffer (string))
   return address
   
-def pointer_as_string (pointer):
+def pointer_as_string (pointer, length=0):
   """Convert a WinAPI LPSTR to a Python string"""
-  return win32gui.PyGetString (pointer)
+  return win32gui.PyGetString (pointer, length)
 
 def relative_to (path1, path0):
   """Entirely unsophisticated functionality to remove a short

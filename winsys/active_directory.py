@@ -165,7 +165,6 @@ class GC (IADs):
 
   def __iter__ (self):
     for domain in IADs.__iter__ (self):
-      print domain
       yield ad ("LDAP://" + domain.Name)
 
 def ad (obj=core.UNSET, username=None, password=None, interface=adsi.IID_IADs):

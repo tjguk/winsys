@@ -304,6 +304,9 @@ class Registry (core._WinSysObject):
   def __eq__ (self, other):
     return self.id == other.id and self.access == other.access
 
+  def __hash__ (self):
+    return hash ((self.id, self.access))
+
   def __add__ (self, path):
     """Allow a key to be added to an existing moniker.
 

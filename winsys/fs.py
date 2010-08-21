@@ -358,7 +358,7 @@ class FilePath (unicode):
     return fp
 
   def dump (self, level=0):
-    print self.dumped (level=level)
+    sys.stdout.write (self.dumped (level=level))
 
   def dumped (self, level=0):
     output = []
@@ -733,7 +733,7 @@ class Entry (FilePath, core._WinSysObject):
   def as_string (self):
     return self.encode ("utf8")
 
-  def dumped (self, level=0):
+  def dumped (self, level=0, show_security=False):
     output = []
     output.append (self)
     output.append (super (Entry, self).dumped (level))
@@ -748,6 +748,12 @@ class Entry (FilePath, core._WinSysObject):
       output.append ("size: %s" % self.size)
     output.append ("Attributes:")
     output.append (self.attributes.dumped (level))
+    if self.attributes.directory:
+      vol = self.mounted_by ()
+      if vol:
+        output.append ("Mount point for:")
+        output.append (vol.dumped (level))
+    if show_security:
     try:
       s = self.security ()
     except win32file.error, (errno, errctx, errmsg):
@@ -1319,6 +1325,15 @@ class Dir (Entry):
     #
     return Entry.__new__ (meta, filepath.rstrip (seps) + sep, *args, **kwargs)
 
+  def is_empty (self):
+    r"""Returns True if this directory is empty, False otherwise. Will fail
+    if the directory does not yet exist.
+    """
+    for _ in self:
+      return True
+    else:
+      return False
+
   def compress (self, apply_to_contents=True, callback=None):
     ur"""Flag this directory so that any new files are automatically
     compressed. If apply_to_contents is True, iterate over all subdirectories
@@ -1422,8 +1437,20 @@ class Dir (Entry):
 
     return Dir (path)
 
-  def entries (self, pattern=u"*", *args, **kwargs):
-    ur"""Iterate over all entries -- files & directories -- in this directory.
+  def mkdir (self, dirname, security_descriptor=None):
+    r"""Create :dirname: as a subdirectory of this directory, specifying a
+    security descriptor. This is implemented in terms of :method:`create`
+    by concatenating this directory and dirname and calling .create on the
+    resulting :class:`Dir` object.
+
+    :param dirname: a relative path
+    :param security_descriptor: anything accepted by :func:`security.security`
+    :returns: a :class:`Dir` representing the newly-created directory
+    """
+    return self.dir (dirname).create (security_descriptor=security_descriptor)
+
+  def entries (self, pattern="*", *args, **kwargs):
+    r"""Iterate over all entries -- files & directories -- in this directory.
     Implemented via :func:`files`
 
     :pattern: a |-separated list of wildcards to match
@@ -1530,12 +1557,13 @@ class Dir (Entry):
     :returns: this :class:`Dir`
     """
     for f in self.flat (includedirs=True):
-      raise x_fs (errctx="Dir.mount", errmsg=u"You can't mount to a non-empty directory")
+      raise x_fs (errctx="Dir.mount", errmsg="You can't mount to a non-empty directory")
+    vol = volume (vol)
     for m in vol.mounts:
       if not m.dirname:
         raise x_fs (errctx="Dir.mount", errmsg=u"Volume %s already has a drive letter %s" % (vol, m.root))
 
-    wrapped (win32file.SetVolumeMountPoint, self, volume (vol).name)
+    wrapped (win32file.SetVolumeMountPoint, self, vol.name)
     return self
 
   def dismount (self):
@@ -1625,7 +1653,6 @@ class Dir (Entry):
     return file (zip_filename)
 
   rmdir = delete
-  mkdir = create
 
 def files (pattern="*", ignore=[u".", u".."], ignore_access_errors=False):
   ur"""Iterate over files and directories matching pattern, which can include

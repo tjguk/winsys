@@ -43,8 +43,8 @@ class _DelimitedText (list):
   the more familiar Pythonesque list interface.
   """
   
-  def __init__ (self, env, key, delimiter=u";", initialiser=[]):
-    super (_DelimitedText, self).__init__ (initialiser or env[key].split (delimiter))
+  def __init__ (self, env, key, delimiter=";", initialiser=None):
+    super (_DelimitedText, self).__init__ (env[key].split (delimiter) if initialiser is None else initialiser)
     self.env = env
     self.key = key
     self.delimiter = unicode (delimiter)
@@ -168,7 +168,10 @@ class Env (core._WinSysObject):
     )
     
   def _get_path (self):
+    if self.get ("PATH"):
     return _DelimitedPath (self, "PATH")
+    else:
+      return _DelimitedPath (self, "PATH", initialiser=[])
   def _set_path (self, iterator):
     self['PATH'] = ";".join (_DelimitedPath (self, "PATH", initialiser=iterator))
   def _del_path (self):
@@ -276,7 +279,7 @@ class Persistent (Env):
     try:
       return unicode (self.registry.get_value (item))
     except exc.x_not_found:
-      return None
+      raise KeyError
   
   def keys (self):
     return (name for name, value in self.registry.values ())
