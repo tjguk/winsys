@@ -34,7 +34,7 @@ import winioctlcon
 if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
   winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
-from winsys import constants, core, exc, security, utils, _kernel32, _change_journal
+from winsys import constants, core, exc, security, utils, _kernel32
 
 sep = str (os.sep)
 seps = "/\\"
@@ -140,6 +140,12 @@ FSCTL = constants.Constants.from_pattern ("FSCTL_*", namespace=winioctlcon)
 FSCTL.doc ("Types of fsctl operation")
 
 PyHANDLE = pywintypes.HANDLEType
+
+def ignore_errors (excs_to_ignore):
+  def _ignore_errors (context, exc_info):
+    return exc_info[0] in excs_to_ignore
+  return _ignore_errors
+ignore_access_errors = ignore_errors ([exc.x_access_denied])
 
 LEGAL_FILECHAR = r"[^\?\*\\\:\/]"
 LEGAL_FILECHARS = LEGAL_FILECHAR + "+"
@@ -658,8 +664,8 @@ class Volume (core._WinSysObject):
     return (dir (m) for m in wrapped (win32file.GetVolumePathNamesForVolumeName, self.name))
   mounts = property (_get_mounts)
 
-  def change_journal (self):
-    return _change_journal.ChangeJournal (self.name.rstrip ("\\"))
+  #~ def change_journal (self):
+    #~ return _change_journal.ChangeJournal (self.name.rstrip ("\\"))
 
   def dumped (self, level):
     output = []
@@ -1485,18 +1491,18 @@ class Dir (Entry):
     """
     return (f for f in self.entries (pattern, *args, **kwargs) if isinstance (f, Dir))
 
-  def walk (self, depthfirst=False, ignore_access_errors=False):
+  def walk (self, depthfirst=False, error_handler=None):
     r"""Mimic os.walk, iterating over each directory and the files within
     in. Each iteration yields:
 
       :class:`Dir`, (generator for :class:`Dir` objects), (generator for :class:`File` objects)
 
     :param depthfirst: Whether to use breadth-first (the default) or depth-first traversal
-    :param ignore_access_errors: Whether to continue traversing in the face of access-denied errors
+    :param error_handler: Whether to continue traversing in the face of access-denied errors
     """
     top = self
     dirs, nondirs = [], []
-    for f in self.entries (ignore_access_errors=ignore_access_errors):
+    for f in self.entries (error_handler=error_handler):
       if isinstance (f, Dir):
         dirs.append (f)
       else:
@@ -1504,11 +1510,11 @@ class Dir (Entry):
 
     if not depthfirst: yield top, dirs, nondirs
     for d in dirs:
-      for x in d.walk (depthfirst=depthfirst, ignore_access_errors=ignore_access_errors):
+      for x in d.walk (depthfirst=depthfirst, error_handler=error_handler):
         yield x
     if depthfirst: yield top, dirs, nondirs
 
-  def flat (self, pattern="*", includedirs=False, depthfirst=False, ignore_access_errors=False):
+  def flat (self, pattern="*", includedirs=False, depthfirst=False, error_handler=None):
     r"""Iterate over this directory and all its subdirectories, yielding one
     :class:`File` object on each iteration, and optionally :class:`Dir` objects
     as well.
@@ -1516,12 +1522,12 @@ class Dir (Entry):
     :param pattern: limit the files returned by filename
     :includedirs: whether to yield directories as well as files [False]
     :depthfirst: as for :meth:`Dir.walk`
-    :ignore_access_errors: as for :meth:`Dir.walk`
+    :error_handler: as for :meth:`Dir.walk`
     """
     patterns = pattern.split ("|")
     walker = self.walk (
       depthfirst=depthfirst,
-      ignore_access_errors=ignore_access_errors
+      error_handler=error_handler
     )
     for dirpath, dirs, files in walker:
       if includedirs:
@@ -1653,18 +1659,20 @@ class Dir (Entry):
 
   rmdir = delete
 
-def files (pattern="*", ignore=[".", ".."], ignore_access_errors=False):
+def files (pattern="*", ignore=[".", ".."], error_handler=None):
   r"""Iterate over files and directories matching pattern, which can include
   a path. Calls win32file.FindFilesIterator under the covers, which uses
   FindFirstFile / FindNextFile.
 
   :pattern: A string with one or more wildcard patterns, pipe-separated
+  :ignore: A container of specific paths to ignore
+  :error_handler: a callable which returns True if the iteration is to continue, false otherwise
   """
   for p in pattern.split ("|"):
-    for f in _files (p, ignore=ignore, ignore_access_errors=ignore_access_errors):
+    for f in _files (p, ignore=ignore, error_handler=error_handler):
       yield f
 
-def _files (pattern="*", ignore=[".", ".."], ignore_access_errors=False):
+def _files (pattern="*", ignore=[".", ".."], error_handler=None):
   #
   # special-case ".": FindFilesIterator treats a directory
   # name as an invitation to return only that directory.
@@ -1677,12 +1685,6 @@ def _files (pattern="*", ignore=[".", ".."], ignore_access_errors=False):
 
   try:
     iterator = wrapped (win32file.FindFilesIterator, pattern)
-  except exc.x_access_denied:
-    if ignore_access_errors:
-      core.warn ("Ignored access error on first iteration of %s", pattern)
-      raise StopIteration
-    else:
-      raise
   except x_no_such_file:
     #
     # If this occurs, it means there's a bizarre problem
@@ -1691,6 +1693,15 @@ def _files (pattern="*", ignore=[".", ".."], ignore_access_errors=False):
     #
     core.warn ("Ignored no-such-file on first iteration of %s", pattern)
     raise StopIteration
+  except exc.x_winsys:
+    if error_handler and error_handler (pattern, sys.exc_info ()):
+      #
+      # Even if the error handler says: continue, there's nothing
+      # more we can do here; the iterator can't start.
+      #
+      raise StopIteration
+    else:
+      raise
 
   parts = get_parts (str (pattern))
   dirpath = parts[0] + sep.join (parts[1:-1])
@@ -1704,12 +1715,6 @@ def _files (pattern="*", ignore=[".", ".."], ignore_access_errors=False):
       yield entry (filepath, file_info)
     except StopIteration:
       break
-    except exc.x_access_denied:
-      if ignore_access_errors:
-        core.warn ("Ignored access error on later iteration of %s", pattern)
-        continue
-      else:
-        raise
     except x_no_such_file:
       #
       # If this occurs, it means there's a bizarre problem
@@ -1718,6 +1723,9 @@ def _files (pattern="*", ignore=[".", ".."], ignore_access_errors=False):
       #
       core.warn ("Ignored no-such-file on first iteration of %s", pattern)
       raise StopIteration
+    except exc.x_winsys:
+      if not error_handler or not error_handler (pattern, sys.exc_info ()):
+        raise
 
 def entry (filepath, _file_info=core.UNSET):
   r"""Return a :class:`File` or :class:`Dir` object representing this
@@ -1796,7 +1804,6 @@ def glob (pattern):
   optionally ignoring access errors.
 
   :param pattern: passed to :func:`files`
-  :param ignore_access_errors: passed to :func:`files`
   :returns: yields a :class:`FilePath` object for each matching file
   """
   return files (pattern)
@@ -1806,7 +1813,6 @@ def listdir (d):
   optionally ignoring access errors.
 
   :param d: anything accepted by :func:`dir`
-  :param ignore_access_errors: passed to :func:`files`
   :returns: yield the name of each file in directory d
   """
   return (f.name for f in files (dir (d) + "*"))
@@ -1817,12 +1823,12 @@ def walk (root, depthfirst=False, ignore_access_errors=False):
 
   :param root: anything accepted by :func:`dir`
   :param depthfirst: passed to :meth:`Dir.walk`
-  :param ignore_access_errors: passed to :meth:`Dir.walk`
+  :param error_handler: passed to :meth:`Dir.walk`
   :returns: as :meth:`Dir.walk`
   """
-  return dir (root).walk (depthfirst=depthfirst, ignore_access_errors=ignore_access_errors)
+  return dir (root).walk (depthfirst=depthfirst, error_handler=error_handler)
 
-def flat (root, pattern="*", includedirs=False, depthfirst=False, ignore_access_errors=False):
+def flat (root, pattern="*", includedirs=False, depthfirst=False, error_handler=None):
   r"""Iterate over a flattened version of the directory tree starting
   from root. Implemented via :meth:`Dir.flat`.
 
@@ -1830,14 +1836,14 @@ def flat (root, pattern="*", includedirs=False, depthfirst=False, ignore_access_
   :param pattern: passed to :meth:`Dir.flat`
   :param includedirs: passed to :meth:`Dir.flat`
   :param depthfirst: passed to :meth:`Dir.flat`
-  :param ignore_access_errors: passed to :meth:`Dir.flat`
+  :param error_handler: passed to :meth:`Dir.flat`
   :returns: as :meth:`Dir.flat`
   """
   return dir (root).flat (
     pattern,
     includedirs=includedirs,
     depthfirst=depthfirst,
-    ignore_access_errors=ignore_access_errors
+    error_handler=error_handler
   )
 
 def progress_wrapper (callback):
