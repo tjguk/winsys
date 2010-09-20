@@ -754,13 +754,13 @@ class Entry (FilePath, core._WinSysObject):
         output.append ("Mount point for:")
         output.append (vol.dumped (level))
     if show_security:
-    try:
-      s = self.security ()
-    except win32file.error, (errno, errctx, errmsg):
-      if errno == winerror.ERROR_ACCESS_DENIED:
-        pass
-    else:
-      output.append ("Security:\n" + s.dumped (level))
+      try:
+        s = self.security ()
+      except win32file.error, (errno, errctx, errmsg):
+        if errno == winerror.ERROR_ACCESS_DENIED:
+          pass
+      else:
+        output.append ("Security:\n" + s.dumped (level))
     if self.attributes.directory:
       vol = self.mounted_by ()
       if vol:
