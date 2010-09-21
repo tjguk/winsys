@@ -611,7 +611,10 @@ class Dialog (BaseDialog):
     and setting focus to the ok so a return or space will close
     the dialog.
     """
-    message = marshal.loads (win32gui.PyGetString (lparam, wparam))
+    try:
+      message = marshal.loads (win32gui.PyGetString (lparam, wparam))
+    except ValueError:
+      message = "- Complete -"
     self._set_item (self._progress_id, message)
     self._enable (win32con.IDCANCEL, False)
     self._enable (win32con.IDOK, True)
