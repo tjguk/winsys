@@ -447,7 +447,7 @@ class Dialog (BaseDialog):
     r = min (r, l + self.MAX_W)
 
     dt_l, dt_t, dt_r, dt_b = wrapped (win32gui.GetWindowRect, parent)
-    centre_x, centre_y = wrapped (win32gui.ClientToScreen, parent, (round ((dt_r - dt_l) / 2), round ((dt_b - dt_t) / 2)))
+    centre_x, centre_y = wrapped (win32gui.ClientToScreen, parent, (int (round ((dt_r - dt_l) / 2)), int (round ((dt_b - dt_t) / 2))))
     wrapped (win32gui.MoveWindow, self.hwnd, round (centre_x - (r / 2)), round (centre_y - (b / 2)), r - l, b - t, 0)
     l, t, r, b = wrapped (win32gui.GetClientRect, self.hwnd)
     self._resize (r - l, b - t, 0)
