@@ -40,7 +40,8 @@ def wrapper (winerror_map, default_exception=x_winsys):
     """
     try:
       return function (*args, **kwargs)
-    except pywintypes.com_error, (hresult_code, hresult_name, additional_info, parameter_in_error):
+    except pywintypes.com_error, exception_info:
+      (hresult_code, hresult_name, additional_info, parameter_in_error) = exception_info.args
       exception_string = [u"%08X - %s" % (utils.signed_to_unsigned (hresult_code), hresult_name.decode ("mbcs"))]
       if additional_info:
         wcode, source_of_error, error_description, whlp_file, whlp_context, scode = additional_info
@@ -48,11 +49,12 @@ def wrapper (winerror_map, default_exception=x_winsys):
         exception_string.append (u"  %08X - %s" % (utils.signed_to_unsigned (scode), (error_description or "").decode ("mbcs").strip ()))
       exception = winerror_map.get (hresult_code, default_exception)
       raise exception (hresult_code, hresult_name, "\n".join (exception_string))
-    except pywintypes.error, (errno, errctx, errmsg):
+    except pywintypes.error, exception_info:
+      (errno, errctx, errmsg) = exception_info.args
       exception = winerror_map.get (errno, default_exception)
       raise exception (errno, errctx, errmsg)
-    except (WindowsError, IOError), err:
-      exception = winerror_map.get (err.errno, default_exception)
+    except (WindowsError, IOError), exception_info:
+      exception = winerror_map.get (exception_info.errno, default_exception)
       if exception:
-        raise exception (err.errno, "", err.strerror)
+        raise exception (exception_info.errno, "", exception_info.strerror)
   return _wrapped

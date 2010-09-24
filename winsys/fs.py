@@ -762,7 +762,8 @@ class Entry (FilePath, core._WinSysObject):
     if show_security:
       try:
         s = self.security ()
-      except win32file.error, (errno, errctx, errmsg):
+      except win32file.error, exception:
+        (errno, errctx, errmsg) = exception.args
         if errno == winerror.ERROR_ACCESS_DENIED:
           pass
       else:
