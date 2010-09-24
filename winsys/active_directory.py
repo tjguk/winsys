@@ -21,7 +21,7 @@ from winsys import constants, core, exc, utils
 :1.2.840.113556.1.4.804: bitwise OR
 :1.2.840.113556.1.4.1941: matching rule in chain
 
-Special chars (must be substituted): *()\NUL/
+Special chars (must be substituted): *()\\NUL/
 
 """
 
