@@ -528,6 +528,12 @@ class _Attributes (core._WinSysObject):
   __getattr__ = __getitem__
   __contains__ = __getitem__
 
+  def __eq__ (self, other):
+    return self.flags == other.flags
+
+  def __hash__ (self):
+    return hash (self.flags)
+
   def as_string (self):
     return "%08x" % self.flags
 
@@ -1244,7 +1250,7 @@ class File (Entry):
     if self.attributes != other.attributes:
       return False
     if compare_contents:
-      if not filecmp.cmp (f1, f2, False):
+      if not filecmp.cmp (self, other, False):
         return False
     return True
 
