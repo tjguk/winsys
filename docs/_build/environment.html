@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>environment – Environment Block &mdash; WinSys v0.4dev documentation</title>
+    <title>environment – Environment Block &mdash; WinSys v0.5.2 documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5.2',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
+    <link rel="top" title="WinSys v0.5.2 documentation" href="index.html" />
     <link rel="up" title="Miscellaneous" href="misc.html" />
     <link rel="next" title="Cookbook" href="cookbook.html" />
     <link rel="prev" title="logging_handlers – Additional Logging Handlers" href="logging_handlers.html" /> 
@@ -35,25 +36,26 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="cookbook.html" title="Cookbook"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="logging_handlers.html" title="logging_handlers – Additional Logging Handlers"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="contents.html">WinSys v0.5.2 documentation</a> &raquo;</li>
           <li><a href="misc.html" accesskey="U">Miscellaneous</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
+        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="module-environment">
-<h1><a title="Pythonic access to the environment block" class="reference external" href="#module-environment"><tt class="xref docutils literal"><span class="pre">environment</span></tt></a> &#8211; Environment Block<a class="headerlink" href="#module-environment" title="Permalink to this headline">¶</a></h1>
+<span id="environment-environment-block"></span><h1><a class="reference internal" href="#module-environment" title="Pythonic access to the environment block"><tt class="xref py py-mod docutils literal"><span class="pre">environment</span></tt></a> &#8211; Environment Block<a class="headerlink" href="#module-environment" title="Permalink to this headline">¶</a></h1>
 <p>Each process has an environment block (which may be empty). It
 consists of a set of key-value pairs, each of which is a string.
 The value string may be formed partly or wholly from other environment
@@ -64,19 +66,20 @@ of the system environment variables and the user&#8217;s environment
 variable, some of which are generated automatically by the
 system to reflect the user&#8217;s profile location and home drive etc.</p>
 <p>All three environments are available as a dictalike class whose
-interface matches the <a title="environment.Env" class="reference internal" href="#environment.Env"><tt class="xref docutils literal"><span class="pre">Env</span></tt></a> base class. Each environment
-object quacks like a dict in respect of item access, <a title="environment.Env.get" class="reference internal" href="#environment.Env.get"><tt class="xref docutils literal"><span class="pre">Env.get()</span></tt></a>,
-<a title="environment.Env.keys" class="reference internal" href="#environment.Env.keys"><tt class="xref docutils literal"><span class="pre">Env.keys()</span></tt></a>, <a title="environment.Env.items" class="reference internal" href="#environment.Env.items"><tt class="xref docutils literal"><span class="pre">Env.items()</span></tt></a> and <a title="environment.Env.update" class="reference internal" href="#environment.Env.update"><tt class="xref docutils literal"><span class="pre">Env.update()</span></tt></a> methods 
-and the system and user objects supply an additional <a title="environment.Persistent.broadcast" class="reference internal" href="#environment.Persistent.broadcast"><tt class="xref docutils literal"><span class="pre">Persistent.broadcast()</span></tt></a> 
-method which sends a message to top-level windows, such as the shell, to 
+interface matches the <a class="reference internal" href="#environment.Env" title="environment.Env"><tt class="xref py py-class docutils literal"><span class="pre">Env</span></tt></a> base class. Each environment
+object quacks like a dict in respect of item access, <a class="reference internal" href="#environment.Env.get" title="environment.Env.get"><tt class="xref py py-meth docutils literal"><span class="pre">Env.get()</span></tt></a>,
+<a class="reference internal" href="#environment.Env.keys" title="environment.Env.keys"><tt class="xref py py-meth docutils literal"><span class="pre">Env.keys()</span></tt></a>, <a class="reference internal" href="#environment.Env.items" title="environment.Env.items"><tt class="xref py py-meth docutils literal"><span class="pre">Env.items()</span></tt></a> and <a class="reference internal" href="#environment.Env.update" title="environment.Env.update"><tt class="xref py py-meth docutils literal"><span class="pre">Env.update()</span></tt></a> methods
+and the system and user objects supply an additional <a class="reference internal" href="#environment.Persistent.broadcast" title="environment.Persistent.broadcast"><tt class="xref py py-meth docutils literal"><span class="pre">Persistent.broadcast()</span></tt></a>
+method which sends a message to top-level windows, such as the shell, to
 indicate that the environment has changed.</p>
 <div class="section" id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="environment.process">
 <tt class="descname">process</tt><big>(</big><big>)</big><a class="headerlink" href="#environment.process" title="Permalink to this definition">¶</a></dt>
-<dd>Return a dict-like object representing the environment block of the
-current process.</dd></dl>
+<dd><p>Return a dict-like object representing the environment block of the
+current process.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="environment.system">
@@ -87,8 +90,11 @@ environment variables, optionally selecting a different machine.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>machine</em> &#8211; name or address of a different machine whose system
-environment is to be represented.</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>machine</strong> &#8211; name or address of a different machine whose system
+environment is to be represented.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -110,12 +116,13 @@ environment for the logged-on user.</p>
 <em class="property">class </em><tt class="descname">Env</tt><a class="headerlink" href="#environment.Env" title="Permalink to this definition">¶</a></dt>
 <dd><p>Semi-abstract base class for all environment classes. Outlines
 a dict-like interface which relies on subclasses to implement simple
-<tt class="xref docutils literal"><span class="pre">_get()</span></tt> and <tt class="xref docutils literal"><span class="pre">_items()</span></tt> methods.</p>
+<tt class="xref py py-meth docutils literal"><span class="pre">_get()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">_items()</span></tt> methods.</p>
 <dl class="method">
 <dt id="environment.Env.as_string">
 <tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#environment.Env.as_string" title="Permalink to this definition">¶</a></dt>
-<dd>Produce a readable version of the data, used by
-__str__.</dd></dl>
+<dd><p>Produce a readable version of the data, used by
+__str__.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="environment.Env.dump">
@@ -130,9 +137,10 @@ __str__.</dd></dl>
 <dl class="staticmethod">
 <dt id="environment.Env.expand">
 <em class="property">static </em><tt class="descname">expand</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#environment.Env.expand" title="Permalink to this definition">¶</a></dt>
-<dd>Return a version of <cite>item</cite> with internal environment variables
+<dd><p>Return a version of <cite>item</cite> with internal environment variables
 expanded to their corresponding value. This is done automatically
-by the functions in this class unless you specify <cite>expand=False</cite>.</dd></dl>
+by the functions in this class unless you specify <cite>expand=False</cite>.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="environment.Env.get">
@@ -145,10 +153,10 @@ environment value by setting <cite>expand</cite> to False.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>item</em> &#8211; name of an environment variable</li>
-<li><em>default</em> &#8211; value to return if no such environment variable exists.
+<li><strong>item</strong> &#8211; name of an environment variable</li>
+<li><strong>default</strong> &#8211; value to return if no such environment variable exists.
 This default is expanded if <cite>expand</cite> is True.</li>
-<li><em>expand</em> &#8211; whether to expand embedded environment variables [True]</li>
+<li><strong>expand</strong> &#8211; whether to expand embedded environment variables [True]</li>
 </ul>
 </td>
 </tr>
@@ -164,7 +172,10 @@ This default is expanded if <cite>expand</cite> is True.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>expand</em> &#8211; whether to expand embedded environment variables [True]</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expand</strong> &#8211; whether to expand embedded environment variables [True]</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -173,7 +184,8 @@ This default is expanded if <cite>expand</cite> is True.</li>
 <dl class="method">
 <dt id="environment.Env.keys">
 <tt class="descname">keys</tt><big>(</big><big>)</big><a class="headerlink" href="#environment.Env.keys" title="Permalink to this definition">¶</a></dt>
-<dd>Yield environment variable names</dd></dl>
+<dd><p>Yield environment variable names</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="environment.Env.update">
@@ -201,20 +213,22 @@ another environment:</p>
 <dd><p>Represent persistent (registry-based) environment variables. These
 are held at system and at user level, the latter overriding the former
 when an process environment is put together. Don&#8217;t instantiate this
-class directly: use the <a title="environment.user" class="reference internal" href="#environment.user"><tt class="xref docutils literal"><span class="pre">user()</span></tt></a> and <a title="environment.system" class="reference internal" href="#environment.system"><tt class="xref docutils literal"><span class="pre">system()</span></tt></a> functions.</p>
+class directly: use the <a class="reference internal" href="#environment.user" title="environment.user"><tt class="xref py py-func docutils literal"><span class="pre">user()</span></tt></a> and <a class="reference internal" href="#environment.system" title="environment.system"><tt class="xref py py-func docutils literal"><span class="pre">system()</span></tt></a> functions.</p>
 <dl class="method">
 <dt id="environment.Persistent.as_string">
 <tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#environment.Persistent.as_string" title="Permalink to this definition">¶</a></dt>
-<dd>Produce a readable version of the data, used by
-__str__.</dd></dl>
+<dd><p>Produce a readable version of the data, used by
+__str__.</p>
+</dd></dl>
 
 <dl class="staticmethod">
 <dt id="environment.Persistent.broadcast">
 <em class="property">static </em><tt class="descname">broadcast</tt><big>(</big><em>timeout_ms=2000</em><big>)</big><a class="headerlink" href="#environment.Persistent.broadcast" title="Permalink to this definition">¶</a></dt>
-<dd>Broadcast a message to all top-level windows informing them that
+<dd><p>Broadcast a message to all top-level windows informing them that
 an environment change has occurred. The message must be sent, not posted,
 and times out after <cite>timeout_ms</cite> ms since some top-level windows handle this
-badly. NB This is a static method.</dd></dl>
+badly. NB This is a static method.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="environment.Persistent.dump">
@@ -229,9 +243,10 @@ badly. NB This is a static method.</dd></dl>
 <dl class="staticmethod">
 <dt id="environment.Persistent.expand">
 <em class="property">static </em><tt class="descname">expand</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#environment.Persistent.expand" title="Permalink to this definition">¶</a></dt>
-<dd>Return a version of <cite>item</cite> with internal environment variables
+<dd><p>Return a version of <cite>item</cite> with internal environment variables
 expanded to their corresponding value. This is done automatically
-by the functions in this class unless you specify <cite>expand=False</cite>.</dd></dl>
+by the functions in this class unless you specify <cite>expand=False</cite>.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="environment.Persistent.get">
@@ -244,10 +259,10 @@ environment value by setting <cite>expand</cite> to False.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>item</em> &#8211; name of an environment variable</li>
-<li><em>default</em> &#8211; value to return if no such environment variable exists.
+<li><strong>item</strong> &#8211; name of an environment variable</li>
+<li><strong>default</strong> &#8211; value to return if no such environment variable exists.
 This default is expanded if <cite>expand</cite> is True.</li>
-<li><em>expand</em> &#8211; whether to expand embedded environment variables [True]</li>
+<li><strong>expand</strong> &#8211; whether to expand embedded environment variables [True]</li>
 </ul>
 </td>
 </tr>
@@ -263,7 +278,10 @@ This default is expanded if <cite>expand</cite> is True.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>expand</em> &#8211; whether to expand embedded environment variables [True]</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expand</strong> &#8211; whether to expand embedded environment variables [True]</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -300,7 +318,7 @@ another environment:</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference external" href="cookbook/environment.html"><em>Using the environment module</em></a></dt>
+<dt><a class="reference internal" href="cookbook/environment.html"><em>Using the environment module</em></a></dt>
 <dd>Cookbook examples of using the environment module</dd>
 </dl>
 </div>
@@ -309,6 +327,48 @@ another environment:</p>
 
 
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">environment</span></tt> &#8211; Environment Block</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="logging_handlers.html"
+                        title="previous chapter"><tt class="docutils literal"><span class="pre">logging_handlers</span></tt> &#8211; Additional Logging Handlers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cookbook.html"
+                        title="next chapter">Cookbook</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/environment.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
       </div>
       <div class="clearer"></div>
     </div>
@@ -319,7 +379,7 @@ another environment:</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="cookbook.html" title="Cookbook"
@@ -327,13 +387,13 @@ another environment:</p>
         <li class="right" >
           <a href="logging_handlers.html" title="logging_handlers – Additional Logging Handlers"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="contents.html">WinSys v0.5.2 documentation</a> &raquo;</li>
           <li><a href="misc.html" >Miscellaneous</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2010, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using the event_logs module &mdash; WinSys v0.4dev documentation</title>
+    <title>Using the event_logs module &mdash; WinSys v0.5.2 documentation</title>
     <link rel="stylesheet" href="../_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        VERSION:     '0.5.2',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="../index.html" />
+    <link rel="top" title="WinSys v0.5.2 documentation" href="../index.html" />
     <link rel="up" title="Cookbook" href="../cookbook.html" />
     <link rel="next" title="Using the fs module" href="fs.html" />
     <link rel="prev" title="Using the environment module" href="environment.html" /> 
@@ -35,15 +36,15 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="fs.html" title="Using the fs module"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="environment.html" title="Using the environment module"
              accesskey="P">previous</a> |</li>
-        <li><a href="../contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys v0.5.2 documentation</a> &raquo;</li>
           <li><a href="../cookbook.html" accesskey="U">Cookbook</a> &raquo;</li> 
       </ul>
     </div>  
@@ -55,7 +56,7 @@
             
   <div class="section" id="using-the-event-logs-module">
 <h1>Using the event_logs module<a class="headerlink" href="#using-the-event-logs-module" title="Permalink to this headline">¶</a></h1>
-<p>The examples here all refer to the <a title="Read and write event log entries" class="reference external" href="../event_logs.html#module-event_logs"><tt class="xref docutils literal"><span class="pre">event_logs</span></tt></a> module.</p>
+<p>The examples here all refer to the <a class="reference internal" href="../event_logs.html#module-event_logs" title="Read and write event log entries"><tt class="xref py py-mod docutils literal"><span class="pre">event_logs</span></tt></a> module.</p>
 <div class="section" id="log-an-event-against-an-event-source">
 <h2>Log an event against an event source<a class="headerlink" href="#log-an-event-against-an-event-source" title="Permalink to this headline">¶</a></h2>
 <p>Log an information event against a WinSys event source,
@@ -130,9 +131,9 @@ events.</p>
 <h3>Discussion<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>By default, iterating over an event log starts oldest first. To pick up
 the most recent records, we reverse the iterator. This makes use of the
-<a title="event_logs.EventLog.__reversed__" class="reference external" href="../event_logs.html#event_logs.EventLog.__reversed__"><tt class="xref docutils literal"><span class="pre">EventLog.__reversed__()</span></tt></a> magic method which starts a reverse iterator. Without that,
+<a class="reference internal" href="../event_logs.html#event_logs.EventLog.__reversed__" title="event_logs.EventLog.__reversed__"><tt class="xref py py-meth docutils literal"><span class="pre">EventLog.__reversed__()</span></tt></a> magic method which starts a reverse iterator. Without that,
 the implementation would fall back to a __getitem__-based sequence
-solution, asking for [-1] and then [-2] and so on. Since our <a title="event_logs.EventLog.__getitem__" class="reference external" href="../event_logs.html#event_logs.EventLog.__getitem__"><tt class="xref docutils literal"><span class="pre">EventLog.__getitem__()</span></tt></a>
+solution, asking for [-1] and then [-2] and so on. Since our <a class="reference internal" href="../event_logs.html#event_logs.EventLog.__getitem__" title="event_logs.EventLog.__getitem__"><tt class="xref py py-meth docutils literal"><span class="pre">EventLog.__getitem__()</span></tt></a>
 implementation actually iterates anyway, this would be a less-than-optimal
 solution.</p>
 <p>The standard __str__ for an event log record shows the record number,
@@ -191,17 +192,17 @@ event source and type.</p>
 </td></tr></table></div>
 <div class="section" id="id2">
 <h3>Discussion<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>We use the winsys <tt class="xref docutils literal"><span class="pre">dialogs.dialog</span></tt> module convenience function to request
+<p>We use the winsys <tt class="xref py py-mod docutils literal"><span class="pre">dialogs.dialog</span></tt> module convenience function to request
 the name of the remote computer and the source and event type from the user.
 It would be possible to pick out the list of event sources for a computer
-(using the <a title="event_logs.event_sources" class="reference external" href="../event_logs.html#event_logs.event_sources"><tt class="xref docutils literal"><span class="pre">event_sources()</span></tt></a> function), but there&#8217;s no mechanism
+(using the <a class="reference internal" href="../event_logs.html#event_logs.event_sources" title="event_logs.event_sources"><tt class="xref py py-func docutils literal"><span class="pre">event_sources()</span></tt></a> function), but there&#8217;s no mechanism
 within the dialogs module for updating one field on the basis of another, so
 we could only pre-populate with the valid list for one particular computer.</p>
-<p>The module-level convenience function <a title="event_logs.event_log" class="reference external" href="../event_logs.html#event_logs.event_log"><tt class="xref docutils literal"><span class="pre">event_log()</span></tt></a> returns an
-instance of an <a title="event_logs.EventLog" class="reference external" href="../event_logs.html#event_logs.EventLog"><tt class="xref docutils literal"><span class="pre">EventLog</span></tt></a> matching the computer and event log name in the
+<p>The module-level convenience function <a class="reference internal" href="../event_logs.html#event_logs.event_log" title="event_logs.event_log"><tt class="xref py py-func docutils literal"><span class="pre">event_log()</span></tt></a> returns an
+instance of an <a class="reference internal" href="../event_logs.html#event_logs.EventLog" title="event_logs.EventLog"><tt class="xref py py-class docutils literal"><span class="pre">EventLog</span></tt></a> matching the computer and event log name in the
 UNC-style moniker. The standard iterator goes from the oldest first forwards.
 If we wanted to see the records in reverse chronological order, we&#8217;d use the
-reversed builtin to invoke the class&#8217;s <a title="event_logs.EventLog.__reversed__" class="reference external" href="../event_logs.html#event_logs.EventLog.__reversed__"><tt class="xref docutils literal"><span class="pre">EventLog.__reversed__()</span></tt></a>
+reversed builtin to invoke the class&#8217;s <a class="reference internal" href="../event_logs.html#event_logs.EventLog.__reversed__" title="event_logs.EventLog.__reversed__"><tt class="xref py py-meth docutils literal"><span class="pre">EventLog.__reversed__()</span></tt></a>
 method.</p>
 </div>
 </div>
@@ -218,17 +219,17 @@ method.</p>
             </a></p>
   <h3><a href="../contents.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference external" href="#">Using the event_logs module</a><ul>
-<li><a class="reference external" href="#log-an-event-against-an-event-source">Log an event against an event source</a><ul>
-<li><a class="reference external" href="#discussion">Discussion</a></li>
+<li><a class="reference internal" href="#">Using the event_logs module</a><ul>
+<li><a class="reference internal" href="#log-an-event-against-an-event-source">Log an event against an event source</a><ul>
+<li><a class="reference internal" href="#discussion">Discussion</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#list-the-10-most-recent-records-in-each-event-log">List the 10 most recent records in each event log</a><ul>
-<li><a class="reference external" href="#id1">Discussion</a></li>
+<li><a class="reference internal" href="#list-the-10-most-recent-records-in-each-event-log">List the 10 most recent records in each event log</a><ul>
+<li><a class="reference internal" href="#id1">Discussion</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#write-to-csv-selected-events-from-a-remote-event-log">Write to CSV selected events from a remote event log</a><ul>
-<li><a class="reference external" href="#id2">Discussion</a></li>
+<li><a class="reference internal" href="#write-to-csv-selected-events-from-a-remote-event-log">Write to CSV selected events from a remote event log</a><ul>
+<li><a class="reference internal" href="#id2">Discussion</a></li>
 </ul>
 </li>
 </ul>
@@ -270,7 +271,7 @@ method.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="fs.html" title="Using the fs module"
@@ -278,13 +279,13 @@ method.</p>
         <li class="right" >
           <a href="environment.html" title="Using the environment module"
              >previous</a> |</li>
-        <li><a href="../contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys v0.5.2 documentation</a> &raquo;</li>
           <li><a href="../cookbook.html" >Cookbook</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2010, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

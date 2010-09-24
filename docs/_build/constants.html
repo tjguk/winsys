@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>constants &mdash; WinSys v0.4dev documentation</title>
+    <title>constants &mdash; WinSys v0.5.2 documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5.2',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
+    <link rel="top" title="WinSys v0.5.2 documentation" href="index.html" />
     <link rel="next" title="exc – Exceptions" href="exc.html" />
     <link rel="prev" title="core – Core objects" href="core.html" /> 
   </head>
@@ -34,15 +35,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="exc.html" title="exc – Exceptions"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="core.html" title="core – Core objects"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,17 +53,17 @@
           <div class="body">
             
   <div class="section" id="module-constants">
-<h1><a title="Constants" class="reference external" href="#module-constants"><tt class="xref docutils literal"><span class="pre">constants</span></tt></a><a class="headerlink" href="#module-constants" title="Permalink to this headline">¶</a></h1>
+<span id="constants"></span><h1><a class="reference internal" href="#module-constants" title="Constants"><tt class="xref py py-mod docutils literal"><span class="pre">constants</span></tt></a><a class="headerlink" href="#module-constants" title="Permalink to this headline">¶</a></h1>
 <p>Provide unified access to the different sets of constants used by
 the winsys module. Some of them are provided by modules within the
 pywin32 package. Others belong to those sets but are not present in
 the modules. Still others are not present at all within pywin32 and
 are added here manually.</p>
-<p>The constants are grouped together into <a title="constants.Constants" class="reference internal" href="#constants.Constants"><tt class="xref docutils literal"><span class="pre">Constants</span></tt></a> classes
+<p>The constants are grouped together into <a class="reference internal" href="#constants.Constants" title="constants.Constants"><tt class="xref py py-class docutils literal"><span class="pre">Constants</span></tt></a> classes
 which combine the effect of being a namespace and also providing
 functions to list the constant name or names given a value, which
 is useful when displaying Win32 structures.</p>
-<p>For useful documentation, each <a title="constants.Constants" class="reference internal" href="#constants.Constants"><tt class="xref docutils literal"><span class="pre">Constants</span></tt></a> generates a readable
+<p>For useful documentation, each <a class="reference internal" href="#constants.Constants" title="constants.Constants"><tt class="xref py py-class docutils literal"><span class="pre">Constants</span></tt></a> generates a readable
 docstring tabulating its names &amp; values.</p>
 <div class="section" id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
@@ -71,12 +72,12 @@ docstring tabulating its names &amp; values.</p>
 <em class="property">class </em><tt class="descname">Constants</tt><big>(</big><em>dict_initialiser={}</em><big>)</big><a class="headerlink" href="#constants.Constants" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide a dict-like interface for a group of related
 constants. These can come from a module or other namespace according
-to a wildcard name, or can be added as a list of (unrelated) names from 
+to a wildcard name, or can be added as a list of (unrelated) names from
 a namespace or can simply be a raw dictionary of name-value pairs:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">win32con</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">constants</span>
 <span class="n">COMPRESSION_ENGINE</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span>
-  <span class="s">&quot;COMPRESSION_ENGINE_*&quot;</span><span class="p">,</span> 
+  <span class="s">&quot;COMPRESSION_ENGINE_*&quot;</span><span class="p">,</span>
   <span class="n">namespace</span><span class="o">=</span><span class="n">win32con</span>
 <span class="p">)</span>
 <span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">update</span> <span class="p">(</span><span class="nb">dict</span> <span class="p">(</span>
@@ -92,11 +93,11 @@ just a convention. The pattern parameter to the various factory
 functions will be used to rename the constants on the way in,
 but it can be empty.</p>
 <p>The constants can be accessed as attributes or as items. In addition,
-passing a name or a value to the <a title="constants.Constants.constant" class="reference internal" href="#constants.Constants.constant"><tt class="xref docutils literal"><span class="pre">constant()</span></tt></a> method will return
+passing a name or a value to the <a class="reference internal" href="#constants.Constants.constant" title="constants.Constants.constant"><tt class="xref py py-meth docutils literal"><span class="pre">constant()</span></tt></a> method will return
 the value. This is done automatically by most functions which expect
 a parameter based on one of these constants sets.</p>
 <p>To retrieve the name or names corresponding to a value, use the
-<a title="constants.Constants.name_from_value" class="reference internal" href="#constants.Constants.name_from_value"><tt class="xref docutils literal"><span class="pre">name_from_value()</span></tt></a> or <a title="constants.Constants.names_from_value" class="reference internal" href="#constants.Constants.names_from_value"><tt class="xref docutils literal"><span class="pre">names_from_value()</span></tt></a> function:</p>
+<a class="reference internal" href="#constants.Constants.name_from_value" title="constants.Constants.name_from_value"><tt class="xref py py-meth docutils literal"><span class="pre">name_from_value()</span></tt></a> or <a class="reference internal" href="#constants.Constants.names_from_value" title="constants.Constants.names_from_value"><tt class="xref py py-meth docutils literal"><span class="pre">names_from_value()</span></tt></a> function:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">win32con</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">constants</span>
 <span class="n">ACE_TYPES</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span>
@@ -111,8 +112,9 @@ set of initial values.</p>
 <dl class="method">
 <dt id="constants.Constants.as_string">
 <tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#constants.Constants.as_string" title="Permalink to this definition">¶</a></dt>
-<dd>Produce a readable version of the data, used by
-__str__.</dd></dl>
+<dd><p>Produce a readable version of the data, used by
+__str__.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.constant">
@@ -154,22 +156,25 @@ a combination of the constants in this set.</p>
 <dl class="classmethod">
 <dt id="constants.Constants.from_dict">
 <em class="property">classmethod </em><tt class="descname">from_dict</tt><big>(</big><em>d</em>, <em>pattern=None</em><big>)</big><a class="headerlink" href="#constants.Constants.from_dict" title="Permalink to this definition">¶</a></dt>
-<dd>Factory method to return a class instance from a dictionary-like set of values.
+<dd><p>Factory method to return a class instance from a dictionary-like set of values.
 If a pattern is passed in, use the distinguished part of the name (the part
-which matches the wildcard) as the key name.</dd></dl>
+which matches the wildcard) as the key name.</p>
+</dd></dl>
 
 <dl class="classmethod">
 <dt id="constants.Constants.from_list">
 <em class="property">classmethod </em><tt class="descname">from_list</tt><big>(</big><em>keys</em>, <em>namespace</em>, <em>pattern=None</em><big>)</big><a class="headerlink" href="#constants.Constants.from_list" title="Permalink to this definition">¶</a></dt>
-<dd>Factory method to return a class instance from a list-like set of values
-within a namespace. Hands off to the from_dict factory.</dd></dl>
+<dd><p>Factory method to return a class instance from a list-like set of values
+within a namespace. Hands off to the from_dict factory.</p>
+</dd></dl>
 
 <dl class="classmethod">
 <dt id="constants.Constants.from_pattern">
-<em class="property">classmethod </em><tt class="descname">from_pattern</tt><big>(</big><em>pattern=u'*'</em>, <em>excluded=</em><span class="optional">[</span><span class="optional">]</span>, <em>namespace=&lt;module 'win32con' from 'C:Python26libsite-packageswin32libwin32con.pyc'&gt;</em><big>)</big><a class="headerlink" href="#constants.Constants.from_pattern" title="Permalink to this definition">¶</a></dt>
-<dd>Factory method to return a class instance from a wildcard name pattern. This is
+<em class="property">classmethod </em><tt class="descname">from_pattern</tt><big>(</big><em>pattern='*'</em>, <em>excluded=</em><span class="optional">[</span><span class="optional">]</span>, <em>namespace=&lt;module 'win32con' from 'c:python26libsite-packageswin32libwin32con.pyc'&gt;</em><big>)</big><a class="headerlink" href="#constants.Constants.from_pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Factory method to return a class instance from a wildcard name pattern. This is
 the most common method of constructing a list of constants by passing in, eg,
-FILE_ATTRIBUTE_* and the win32file module as the namespace.</dd></dl>
+FILE_ATTRIBUTE_* and the win32file module as the namespace.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.init">
@@ -188,23 +193,26 @@ FILE_ATTRIBUTE_* and the win32file module as the namespace.</dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.name_from_value">
-<tt class="descname">name_from_value</tt><big>(</big><em>value</em>, <em>default=&lt;Unset&gt;</em>, <em>patterns=</em><span class="optional">[</span>, <em>u'*'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#constants.Constants.name_from_value" title="Permalink to this definition">¶</a></dt>
-<dd>Find the one name in the set of constants (optionally qualified by pattern)
-which matches value.</dd></dl>
+<tt class="descname">name_from_value</tt><big>(</big><em>value</em>, <em>default=&lt;Unset&gt;</em>, <em>patterns=</em><span class="optional">[</span>, <em>'*'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#constants.Constants.name_from_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the one name in the set of constants (optionally qualified by pattern)
+which matches value.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.names">
-<tt class="descname">names</tt><big>(</big><em>patterns=</em><span class="optional">[</span>, <em>u'*'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#constants.Constants.names" title="Permalink to this definition">¶</a></dt>
-<dd>From a list of patterns, return the matching names from the
+<tt class="descname">names</tt><big>(</big><em>patterns=</em><span class="optional">[</span>, <em>'*'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#constants.Constants.names" title="Permalink to this definition">¶</a></dt>
+<dd><p>From a list of patterns, return the matching names from the
 list of constants. A single string is considered as though a
-list of one.</dd></dl>
+list of one.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.names_from_value">
-<tt class="descname">names_from_value</tt><big>(</big><em>value</em>, <em>patterns=</em><span class="optional">[</span>, <em>u'*'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#constants.Constants.names_from_value" title="Permalink to this definition">¶</a></dt>
-<dd>From a number representing the or-ing of several integer values,
+<tt class="descname">names_from_value</tt><big>(</big><em>value</em>, <em>patterns=</em><span class="optional">[</span>, <em>'*'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#constants.Constants.names_from_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>From a number representing the or-ing of several integer values,
 work out which of the constants make up the number using the pattern
-to filter the &#8220;classes&#8221; or constants present in the dataset.</dd></dl>
+to filter the &#8220;classes&#8221; or constants present in the dataset.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.reset_doc">
@@ -214,8 +222,9 @@ to filter the &#8220;classes&#8221; or constants present in the dataset.</dd></d
 <dl class="method">
 <dt id="constants.Constants.update">
 <tt class="descname">update</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#constants.Constants.update" title="Permalink to this definition">¶</a></dt>
-<dd>Act as a dict for updates so that several constant sets may
-be merged into one.</dd></dl>
+<dd><p>Act as a dict for updates so that several constant sets may
+be merged into one.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.values">
@@ -225,7 +234,8 @@ be merged into one.</dd></dl>
 <dl class="method">
 <dt id="constants.Constants.values_from_value">
 <tt class="descname">values_from_value</tt><big>(</big><em>value</em>, <em>patterns=</em><span class="optional">[</span>, <em>'*'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#constants.Constants.values_from_value" title="Permalink to this definition">¶</a></dt>
-<dd>Return the list of values which make up the combined value</dd></dl>
+<dd><p>Return the list of values which make up the combined value</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -450,7 +460,7 @@ be merged into one.</dd></dl>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference external" href="cookbook/constants.html"><em>Using the constants module</em></a></dt>
+<dt><a class="reference internal" href="cookbook/constants.html"><em>Using the constants module</em></a></dt>
 <dd>Cookbook examples of using the constants module</dd>
 </dl>
 </div>
@@ -468,17 +478,17 @@ be merged into one.</dd></dl>
             </a></p>
   <h3><a href="contents.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference external" href="#"><tt class="docutils literal"><span class="pre">constants</span></tt></a><ul>
-<li><a class="reference external" href="#classes">Classes</a></li>
-<li><a class="reference external" href="#id1">Constants</a></li>
-<li><a class="reference external" href="#references">References</a></li>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">constants</span></tt></a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#id1">Constants</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="core.html"
-                        title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">core</span></tt> &#8211; Core objects</a></p>
+                        title="previous chapter"><tt class="docutils literal"><span class="pre">core</span></tt> &#8211; Core objects</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="exc.html"
                         title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">exc</span></tt> &#8211; Exceptions</a></p>
@@ -511,7 +521,7 @@ be merged into one.</dd></dl>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="exc.html" title="exc – Exceptions"
@@ -519,12 +529,12 @@ be merged into one.</dd></dl>
         <li class="right" >
           <a href="core.html" title="core – Core objects"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2010, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

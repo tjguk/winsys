@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>registry – Registry &mdash; WinSys v0.4dev documentation</title>
+    <title>registry – Registry &mdash; WinSys v0.5.2 documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5.2',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
+    <link rel="top" title="WinSys v0.5.2 documentation" href="index.html" />
     <link rel="next" title="security" href="security.html" />
     <link rel="prev" title="Events" href="events.html" /> 
   </head>
@@ -34,15 +35,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="security.html" title="security"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="events.html" title="Events"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,14 +53,14 @@
           <div class="body">
             
   <div class="section" id="module-registry">
-<h1><a title="Pythonic access to the registry" class="reference external" href="#module-registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a> &#8211; Registry<a class="headerlink" href="#module-registry" title="Permalink to this headline">¶</a></h1>
+<span id="registry-registry"></span><h1><a class="reference internal" href="#module-registry" title="Pythonic access to the registry"><tt class="xref py py-mod docutils literal"><span class="pre">registry</span></tt></a> &#8211; Registry<a class="headerlink" href="#module-registry" title="Permalink to this headline">¶</a></h1>
 <p>The registry consists of a series of roots from each of which descends
 a tree of keys and values. Each key has an anonymous (default) value
 and optionally a set of named values, each of which has a particular
 type (string, number etc.).</p>
 <p>For convenience in accessing registry keys and values, the module
 implements the idea of a registry moniker which has the form:
-<tt class="xref docutils literal"><span class="pre">[\\computer\]HKEY[\subkey</span> <span class="pre">path][:[value]]</span></tt>. For example:</p>
+<tt class="xref py py-const docutils literal"><span class="pre">[\\computer\]HKEY[\subkey</span> <span class="pre">path][:[value]]</span></tt>. For example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 
 <span class="c">#</span>
@@ -73,8 +74,8 @@ implements the idea of a registry moniker which has the form:
 <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;HKCU\Control Panel\Desktop&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The key function here is <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a> which is a factory 
-returning a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object which contains
+<p>The key function here is <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a> which is a factory
+returning a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object which contains
 most of the useful functionality in the module. However, the same
 functionality is replicated at module level in many cases for
 convenience.</p>
@@ -90,10 +91,10 @@ is optional but root and path must be specified.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>computer</em> &#8211; (optional) name of a remote computer or &#8220;.&#8221; or <tt class="xref xref docutils literal"><span class="pre">None</span></tt></li>
-<li><em>root</em> &#8211; name or value from REGISTRY_HIVE</li>
-<li><em>path</em> &#8211; backslash-separated registry path</li>
-<li><em>value</em> &#8211; name of a value on that path. An empty string refers to the default value.</li>
+<li><strong>computer</strong> &#8211; (optional) name of a remote computer or &#8220;.&#8221; or <tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></li>
+<li><strong>root</strong> &#8211; name or value from REGISTRY_HIVE</li>
+<li><strong>path</strong> &#8211; backslash-separated registry path</li>
+<li><strong>value</strong> &#8211; name of a value on that path. An empty string refers to the default value.</li>
 </ul>
 </td>
 </tr>
@@ -106,19 +107,19 @@ is optional but root and path must be specified.</p>
 
 <dl class="function">
 <dt id="registry.registry">
-<tt class="descname">registry</tt><big>(</big><em>root</em>, <em>access=u'F'</em>, <em>accept_value=True</em><big>)</big><a class="headerlink" href="#registry.registry" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">registry</tt><big>(</big><em>root</em>, <em>access='F'</em>, <em>accept_value=True</em><big>)</big><a class="headerlink" href="#registry.registry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Factory function for the Registry class.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; any of None, a Registry instance, or a moniker string</li>
-<li><em>access</em> &#8211; an integer bitmask or an <a title="registry.Registry.ACCESS" class="reference internal" href="#registry.Registry.ACCESS"><tt class="xref docutils literal"><span class="pre">Registry.ACCESS</span></tt></a> string</li>
+<li><strong>root</strong> &#8211; any of None, a Registry instance, or a moniker string</li>
+<li><strong>access</strong> &#8211; an integer bitmask or an <a class="reference internal" href="#registry.Registry.ACCESS" title="registry.Registry.ACCESS"><tt class="xref py py-data docutils literal"><span class="pre">Registry.ACCESS</span></tt></a> string</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object</p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object</p>
 </td>
 </tr>
 </tbody>
@@ -141,13 +142,13 @@ for, eg, populating a dictionary:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
-<li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
-<li><em>_want_types</em> &#8211; (internal) used when, eg, copying keys exactly</li>
+<li><strong>root</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>ignore_access_errors</strong> &#8211; if True, will keep on iterating even if access denied</li>
+<li><strong>_want_types</strong> &#8211; (internal) used when, eg, copying keys exactly</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">yields (name, value) for every value under <tt class="xref docutils literal"><span class="pre">root</span></tt></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">yields (name, value) for every value under <tt class="xref py py-const docutils literal"><span class="pre">root</span></tt></p>
 </td>
 </tr>
 </tbody>
@@ -157,18 +158,18 @@ for, eg, populating a dictionary:</p>
 <dl class="function">
 <dt id="registry.keys">
 <tt class="descname">keys</tt><big>(</big><em>root</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#registry.keys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yield the subkeys of a registry key as <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> objects</p>
+<dd><p>Yield the subkeys of a registry key as <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> objects</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
-<li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
+<li><strong>root</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>ignore_access_errors</strong> &#8211; if True, will keep on iterating even if access denied</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">yield <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> objects for each key under <cite>root</cite></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">yield <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> objects for each key under <cite>root</cite></p>
 </td>
 </tr>
 </tbody>
@@ -185,12 +186,12 @@ target doesn&#8217;t already exist it will be created.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>from_key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
-<li><em>to_key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>from_key</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>to_key</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object for <cite>to_key</cite></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object for <cite>to_key</cite></p>
 </td>
 </tr>
 </tbody>
@@ -203,7 +204,7 @@ target doesn&#8217;t already exist it will be created.</p>
 <dd><p>Delete a registry key and all its subkeys</p>
 <p>The common use for this will be to delete a key itself.
 The optional subkey param is useful when this is invoked
-as a method of a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object and it&#8217;s convenient
+as a method of a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object and it&#8217;s convenient
 to remove one of its subkeys:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="n">ws</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys&quot;</span><span class="p">)</span>
@@ -222,12 +223,12 @@ to remove one of its subkeys:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
-<li><em>subkey</em> &#8211; anything accepted by <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">Registry.get_key()</span></tt></a></li>
+<li><strong>root</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>subkey</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.Registry.get_key" title="registry.Registry.get_key"><tt class="xref py py-meth docutils literal"><span class="pre">Registry.get_key()</span></tt></a></li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object for <cite>root</cite></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object for <cite>root</cite></p>
 </td>
 </tr>
 </tbody>
@@ -252,13 +253,13 @@ already existing will be created as needed:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
-<li><em>subkey</em> &#8211; anything accepted by <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">Registry.get_key()</span></tt></a></li>
-<li><em>sec</em> &#8211; a <a title="security.Security" class="reference external" href="security.html#security.Security"><tt class="xref docutils literal"><span class="pre">security.Security</span></tt></a> instance or None</li>
+<li><strong>root</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>subkey</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.Registry.get_key" title="registry.Registry.get_key"><tt class="xref py py-meth docutils literal"><span class="pre">Registry.get_key()</span></tt></a></li>
+<li><strong>sec</strong> &#8211; a <a class="reference internal" href="security.html#security.Security" title="security.Security"><tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt></a> instance or None</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object for <cite>root</cite></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object for <cite>root</cite></p>
 </td>
 </tr>
 </tbody>
@@ -276,9 +277,9 @@ themselves generators.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
-<li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
-<li><em>_want_types</em> &#8211; (internal) indicates whether value types are returned as well as values</li>
+<li><strong>root</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>ignore_access_errors</strong> &#8211; if True, will keep on iterating even if access denied</li>
+<li><strong>_want_types</strong> &#8211; (internal) indicates whether value types are returned as well as values</li>
 </ul>
 </td>
 </tr>
@@ -298,8 +299,8 @@ themselves generators.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
-<li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
+<li><strong>root</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>ignore_access_errors</strong> &#8211; if True, will keep on iterating even if access denied</li>
 </ul>
 </td>
 </tr>
@@ -318,11 +319,16 @@ themselves generators.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+</ul>
+</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object representing the parent of key</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object representing the parent of key</p>
+</td>
 </tr>
-<tr class="field"><th class="field-name">Raises:</th><td class="field-body"><a title="registry.x_registry" class="reference internal" href="#registry.x_registry"><tt class="xref docutils literal"><span class="pre">x_registry</span></tt></a> if no parent exists (eg for a hive)</td>
+<tr class="field"><th class="field-name">Raises :</th><td class="field-body"><p class="first last"><a class="reference internal" href="#registry.x_registry" title="registry.x_registry"><tt class="xref py py-exc docutils literal"><span class="pre">x_registry</span></tt></a> if no parent exists (eg for a hive)</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -333,18 +339,18 @@ themselves generators.</p>
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="registry.Registry">
-<em class="property">class </em><tt class="descname">Registry</tt><big>(</big><em>moniker</em>, <em>access=u'F'</em><big>)</big><a class="headerlink" href="#registry.Registry" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Registry</tt><big>(</big><em>moniker</em>, <em>access='F'</em><big>)</big><a class="headerlink" href="#registry.Registry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent a registry key (including one of the roots) giving
 access to its subkeys and values as well as its security and walking
 its subtrees. The key is True if it exists, False otherwise.</p>
-<p>When access rights are supplied to any function, they can either be an 
-integer representing a bitmask, or one or more letters corresponding to 
-the <a title="registry.Registry.ACCESS" class="reference internal" href="#registry.Registry.ACCESS"><tt class="xref docutils literal"><span class="pre">ACCESS</span></tt></a> mapping. The default access is &#8220;F&#8221; indicating 
+<p>When access rights are supplied to any function, they can either be an
+integer representing a bitmask, or one or more letters corresponding to
+the <a class="reference internal" href="#registry.Registry.ACCESS" title="registry.Registry.ACCESS"><tt class="xref py py-attr docutils literal"><span class="pre">ACCESS</span></tt></a> mapping. The default access is &#8220;F&#8221; indicating
 Full Control.</p>
 <p>Note that addition and attribute / item getting and setting are overridden for convenience
 in accessing subkeys and values as follows:</p>
 <ul>
-<li><p class="first">Adding a string to a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object will result in a new object representing
+<li><p class="first">Adding a string to a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object will result in a new object representing
 the subkey of that name:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="n">software</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;HKLM\Software&quot;</span><span class="p">)</span>
@@ -352,30 +358,30 @@ the subkey of that name:</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Getting an attribute of a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object will return a value
+<li><p class="first">Getting an attribute of a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object will return a value
 if one exists, a key otherwise (or will raise AttributeError). For a key
-name this is the same as calling <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">get_key()</span></tt></a> or adding the key name
-as above. For a value name, this is the same as calling <a title="registry.Registry.get_value" class="reference internal" href="#registry.Registry.get_value"><tt class="xref docutils literal"><span class="pre">get_value()</span></tt></a></p>
+name this is the same as calling <a class="reference internal" href="#registry.Registry.get_key" title="registry.Registry.get_key"><tt class="xref py py-meth docutils literal"><span class="pre">get_key()</span></tt></a> or adding the key name
+as above. For a value name, this is the same as calling <a class="reference internal" href="#registry.Registry.get_value" title="registry.Registry.get_value"><tt class="xref py py-meth docutils literal"><span class="pre">get_value()</span></tt></a></p>
 </li>
 <li><p class="first">Setting an attribute always writes a value, even if a key of that
-name already exists. This is equivalent to calling <a title="registry.Registry.set_value" class="reference internal" href="#registry.Registry.set_value"><tt class="xref docutils literal"><span class="pre">set_value()</span></tt></a>.</p>
+name already exists. This is equivalent to calling <a class="reference internal" href="#registry.Registry.set_value" title="registry.Registry.set_value"><tt class="xref py py-meth docutils literal"><span class="pre">set_value()</span></tt></a>.</p>
 </li>
 <li><p class="first">Deleting an attribute will attempts to delete a value if one exists,
-otherwise it will delete a key of that name. This is equivalent to 
-calling <a title="registry.Registry.del_value" class="reference internal" href="#registry.Registry.del_value"><tt class="xref docutils literal"><span class="pre">del_value()</span></tt></a> or <a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete()</span></tt></a>.</p>
+otherwise it will delete a key of that name. This is equivalent to
+calling <a class="reference internal" href="#registry.Registry.del_value" title="registry.Registry.del_value"><tt class="xref py py-meth docutils literal"><span class="pre">del_value()</span></tt></a> or <a class="reference internal" href="#registry.delete" title="registry.delete"><tt class="xref py py-meth docutils literal"><span class="pre">delete()</span></tt></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="n">python</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;HKLM\Software\Python&quot;</span><span class="p">)</span>
 <span class="n">python</span><span class="o">.</span><span class="n">testing</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="n">python</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;testing&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
-<span class="n">python</span><span class="o">.</span><span class="n">testing</span> <span class="o">==</span> <span class="n">python</span><span class="p">[</span><span class="s">&#39;testing&#39;</span><span class="p">]</span>
+<span class="n">python</span><span class="o">.</span><span class="n">testing</span> <span class="o">==</span> <span class="n">python</span><span class="p">[</span><span class="s">u&#39;testingu&#39;</span><span class="p">]</span>
 <span class="k">del</span> <span class="n">python</span><span class="o">.</span><span class="n">testing</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">To create a key, call <a title="registry.create" class="reference internal" href="#registry.create"><tt class="xref docutils literal"><span class="pre">create()</span></tt></a> or the module-level <a title="registry.create" class="reference internal" href="#registry.create"><tt class="xref docutils literal"><span class="pre">create()</span></tt></a> function.</p>
+<li><p class="first">To create a key, call <a class="reference internal" href="#registry.create" title="registry.create"><tt class="xref py py-meth docutils literal"><span class="pre">create()</span></tt></a> or the module-level <a class="reference internal" href="#registry.create" title="registry.create"><tt class="xref py py-func docutils literal"><span class="pre">create()</span></tt></a> function.</p>
 </li>
-<li><p class="first">To delete a key, call its <a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete()</span></tt></a> method or the module level
-<a title="registry.delete" class="reference internal" href="#registry.delete"><tt class="xref docutils literal"><span class="pre">delete()</span></tt></a> function.</p>
+<li><p class="first">To delete a key, call its <a class="reference internal" href="#registry.delete" title="registry.delete"><tt class="xref py py-meth docutils literal"><span class="pre">delete()</span></tt></a> method or the module level
+<a class="reference internal" href="#registry.delete" title="registry.delete"><tt class="xref py py-func docutils literal"><span class="pre">delete()</span></tt></a> function.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="n">winsys</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">create</span> <span class="p">()</span>
 <span class="n">winsys</span><span class="o">.</span><span class="n">test_value</span> <span class="o">=</span> <span class="mi">4</span>
@@ -395,9 +401,13 @@ calling <a title="registry.Registry.del_value" class="reference internal" href="
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>path</em> &#8211; can be a simple name or a backslash-separated relative path</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; can be a simple name or a backslash-separated relative path</li>
+</ul>
+</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object for the new path</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object for the new path</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -413,12 +423,12 @@ target doesn&#8217;t already exist it will be created.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>from_key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
-<li><em>to_key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>from_key</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>to_key</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object for <cite>to_key</cite></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object for <cite>to_key</cite></p>
 </td>
 </tr>
 </tbody>
@@ -443,13 +453,13 @@ already existing will be created as needed:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
-<li><em>subkey</em> &#8211; anything accepted by <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">Registry.get_key()</span></tt></a></li>
-<li><em>sec</em> &#8211; a <a title="security.Security" class="reference external" href="security.html#security.Security"><tt class="xref docutils literal"><span class="pre">security.Security</span></tt></a> instance or None</li>
+<li><strong>root</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>subkey</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.Registry.get_key" title="registry.Registry.get_key"><tt class="xref py py-meth docutils literal"><span class="pre">Registry.get_key()</span></tt></a></li>
+<li><strong>sec</strong> &#8211; a <a class="reference internal" href="security.html#security.Security" title="security.Security"><tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt></a> instance or None</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object for <cite>root</cite></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object for <cite>root</cite></p>
 </td>
 </tr>
 </tbody>
@@ -459,7 +469,8 @@ already existing will be created as needed:</p>
 <dl class="method">
 <dt id="registry.Registry.del_value">
 <tt class="descname">del_value</tt><big>(</big><em>label</em><big>)</big><a class="headerlink" href="#registry.Registry.del_value" title="Permalink to this definition">¶</a></dt>
-<dd>Removed the value identified by label from this registry key</dd></dl>
+<dd><p>Removed the value identified by label from this registry key</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="registry.Registry.delete">
@@ -467,7 +478,7 @@ already existing will be created as needed:</p>
 <dd><p>Delete a registry key and all its subkeys</p>
 <p>The common use for this will be to delete a key itself.
 The optional subkey param is useful when this is invoked
-as a method of a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object and it&#8217;s convenient
+as a method of a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object and it&#8217;s convenient
 to remove one of its subkeys:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="n">ws</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\winsys&quot;</span><span class="p">)</span>
@@ -486,12 +497,12 @@ to remove one of its subkeys:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
-<li><em>subkey</em> &#8211; anything accepted by <a title="registry.Registry.get_key" class="reference internal" href="#registry.Registry.get_key"><tt class="xref docutils literal"><span class="pre">Registry.get_key()</span></tt></a></li>
+<li><strong>root</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>subkey</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.Registry.get_key" title="registry.Registry.get_key"><tt class="xref py py-meth docutils literal"><span class="pre">Registry.get_key()</span></tt></a></li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object for <cite>root</cite></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object for <cite>root</cite></p>
 </td>
 </tr>
 </tbody>
@@ -507,8 +518,8 @@ to remove one of its subkeys:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
-<li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
+<li><strong>root</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>ignore_access_errors</strong> &#8211; if True, will keep on iterating even if access denied</li>
 </ul>
 </td>
 </tr>
@@ -521,19 +532,23 @@ to remove one of its subkeys:</p>
 
 <dl class="classmethod">
 <dt id="registry.Registry.from_string">
-<em class="property">classmethod </em><tt class="descname">from_string</tt><big>(</big><em>string</em>, <em>access=u'F'</em>, <em>accept_value=True</em><big>)</big><a class="headerlink" href="#registry.Registry.from_string" title="Permalink to this definition">¶</a></dt>
-<dd>Treat the string param as a moniker return either a key
-or a value. This is mostly used via the <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a> function.</dd></dl>
+<em class="property">classmethod </em><tt class="descname">from_string</tt><big>(</big><em>string</em>, <em>access='F'</em>, <em>accept_value=True</em><big>)</big><a class="headerlink" href="#registry.Registry.from_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Treat the string param as a moniker return either a key
+or a value. This is mostly used via the <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a> function.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="registry.Registry.get_key">
 <tt class="descname">get_key</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#registry.Registry.get_key" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a Registry instance corresponding to the key&#8217;s subkey name</p>
+<dd><p>Return a Registry instance corresponding to the keyu&#8217;s subkey name</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>name</em> &#8211; a registry relative path (may be a single name or a backslash-separated path</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211; a registry relative path (may be a single name or a backslash-separated path</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -542,28 +557,30 @@ or a value. This is mostly used via the <a title="registry.registry" class="refe
 <dl class="method">
 <dt id="registry.Registry.get_value">
 <tt class="descname">get_value</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#registry.Registry.get_value" title="Permalink to this definition">¶</a></dt>
-<dd>Return the key&#8217;s value corresponding to name</dd></dl>
+<dd><p>Return the keyu&#8217;s value corresponding to name</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="registry.Registry.get_value_type">
 <tt class="descname">get_value_type</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#registry.Registry.get_value_type" title="Permalink to this definition">¶</a></dt>
-<dd>Return the type of the key&#8217;s value corresponding to name</dd></dl>
+<dd><p>Return the type of the keyu&#8217;s value corresponding to name</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="registry.Registry.keys">
 <tt class="descname">keys</tt><big>(</big><em>root</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#registry.Registry.keys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yield the subkeys of a registry key as <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> objects</p>
+<dd><p>Yield the subkeys of a registry key as <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> objects</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
-<li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
+<li><strong>root</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>ignore_access_errors</strong> &#8211; if True, will keep on iterating even if access denied</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">yield <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> objects for each key under <cite>root</cite></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">yield <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> objects for each key under <cite>root</cite></p>
 </td>
 </tr>
 </tbody>
@@ -578,11 +595,16 @@ or a value. This is mostly used via the <a title="registry.registry" class="refe
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>key</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+</ul>
+</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a <a title="registry.Registry" class="reference internal" href="#registry.Registry"><tt class="xref docutils literal"><span class="pre">Registry</span></tt></a> object representing the parent of key</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a <a class="reference internal" href="#registry.Registry" title="registry.Registry"><tt class="xref py py-class docutils literal"><span class="pre">Registry</span></tt></a> object representing the parent of key</p>
+</td>
 </tr>
-<tr class="field"><th class="field-name">Raises:</th><td class="field-body"><a title="registry.x_registry" class="reference internal" href="#registry.x_registry"><tt class="xref docutils literal"><span class="pre">x_registry</span></tt></a> if no parent exists (eg for a hive)</td>
+<tr class="field"><th class="field-name">Raises :</th><td class="field-body"><p class="first last"><a class="reference internal" href="#registry.x_registry" title="registry.x_registry"><tt class="xref py py-exc docutils literal"><span class="pre">x_registry</span></tt></a> if no parent exists (eg for a hive)</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -591,13 +613,13 @@ or a value. This is mostly used via the <a title="registry.registry" class="refe
 <dl class="method">
 <dt id="registry.Registry.pyobject">
 <tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="headerlink" href="#registry.Registry.pyobject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Lazily return an internal registry key handle according to the instance&#8217;s
+<dd><p>Lazily return an internal registry key handle according to the instanceu&#8217;s
 access requirements.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Raises:</th><td class="field-body"><tt class="xref docutils literal"><span class="pre">x_not_found</span></tt> if the registry path the key refers to does not exist</td>
+<tr class="field"><th class="field-name">Raises :</th><td class="field-body"><tt class="xref py py-exc docutils literal"><span class="pre">x_not_found</span></tt> if the registry path the key refers to does not exist</td>
 </tr>
 </tbody>
 </table>
@@ -606,8 +628,8 @@ access requirements.</p>
 <dl class="method">
 <dt id="registry.Registry.security">
 <tt class="descname">security</tt><big>(</big><em>options=u'OD'</em><big>)</big><a class="headerlink" href="#registry.Registry.security" title="Permalink to this definition">¶</a></dt>
-<dd><p>For a security request, hand off to the <a title="security.Security.from_object" class="reference external" href="security.html#security.Security.from_object"><tt class="xref docutils literal"><span class="pre">from_object()</span></tt></a> method
-of the <a title="security.Security" class="reference external" href="security.html#security.Security"><tt class="xref docutils literal"><span class="pre">security.Security</span></tt></a> object, specifying a registry key as the object type.
+<dd><p>For a security request, hand off to the <a class="reference internal" href="security.html#security.Security.from_object" title="security.Security.from_object"><tt class="xref py py-meth docutils literal"><span class="pre">from_object()</span></tt></a> method
+of the <a class="reference internal" href="security.html#security.Security" title="security.Security"><tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt></a> object, specifying a registry key as the object type.
 Most commonly used as a context manager for security operations:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="k">with</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\python&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">security</span> <span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
@@ -619,9 +641,9 @@ Most commonly used as a context manager for security operations:</p>
 <dl class="method">
 <dt id="registry.Registry.set_value">
 <tt class="descname">set_value</tt><big>(</big><em>label</em>, <em>value</em>, <em>type=None</em><big>)</big><a class="headerlink" href="#registry.Registry.set_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Attempt to set one of the key&#8217;s named values. If type is
-None, then if the value already exists under the key its 
-current type is assumed; otherwise a guess is made at 
+<dd><p>Attempt to set one of the keyu&#8217;s named values. If type is
+None, then if the value already exists under the key its
+current type is assumed; otherwise a guess is made at
 the datatype as follows:</p>
 <ul class="simple">
 <li>If the value is an int, use DWORD</li>
@@ -650,13 +672,13 @@ for, eg, populating a dictionary:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
-<li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
-<li><em>_want_types</em> &#8211; (internal) used when, eg, copying keys exactly</li>
+<li><strong>root</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>ignore_access_errors</strong> &#8211; if True, will keep on iterating even if access denied</li>
+<li><strong>_want_types</strong> &#8211; (internal) used when, eg, copying keys exactly</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">yields (name, value) for every value under <tt class="xref docutils literal"><span class="pre">root</span></tt></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">yields (name, value) for every value under <tt class="xref py py-const docutils literal"><span class="pre">root</span></tt></p>
 </td>
 </tr>
 </tbody>
@@ -674,9 +696,9 @@ themselves generators.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="registry.registry" class="reference internal" href="#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a></li>
-<li><em>ignore_access_errors</em> &#8211; if True, will keep on iterating even if access denied</li>
-<li><em>_want_types</em> &#8211; (internal) indicates whether value types are returned as well as values</li>
+<li><strong>root</strong> &#8211; anything accepted by <a class="reference internal" href="#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a></li>
+<li><strong>ignore_access_errors</strong> &#8211; if True, will keep on iterating even if access denied</li>
+<li><strong>_want_types</strong> &#8211; (internal) indicates whether value types are returned as well as values</li>
 </ul>
 </td>
 </tr>
@@ -920,22 +942,26 @@ themselves generators.</p>
 <dl class="exception">
 <dt id="registry.x_registry">
 <em class="property">exception </em><tt class="descname">x_registry</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#registry.x_registry" title="Permalink to this definition">¶</a></dt>
-<dd>Base exception for all registry exceptions</dd></dl>
+<dd><p>Base exception for all registry exceptions</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="registry.x_moniker">
 <em class="property">exception </em><tt class="descname">x_moniker</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#registry.x_moniker" title="Permalink to this definition">¶</a></dt>
-<dd>Base exception for problems with monikers</dd></dl>
+<dd><p>Base exception for problems with monikers</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="registry.x_moniker_ill_formed">
 <em class="property">exception </em><tt class="descname">x_moniker_ill_formed</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#registry.x_moniker_ill_formed" title="Permalink to this definition">¶</a></dt>
-<dd>Raised when a moniker does not match the correct format</dd></dl>
+<dd><p>Raised when a moniker does not match the correct format</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="registry.x_moniker_no_root">
 <em class="property">exception </em><tt class="descname">x_moniker_no_root</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#registry.x_moniker_no_root" title="Permalink to this definition">¶</a></dt>
-<dd>Raised when a moniker has no Hive in the first or second position</dd></dl>
+<dd><p>Raised when a moniker has no Hive in the first or second position</p>
+</dd></dl>
 
 </div>
 <div class="section" id="references">
@@ -943,7 +969,7 @@ themselves generators.</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference external" href="cookbook/registry.html"><em>Using the registry module</em></a></dt>
+<dt><a class="reference internal" href="cookbook/registry.html"><em>Using the registry module</em></a></dt>
 <dd>Cookbook examples of using the registry module</dd>
 </dl>
 </div>
@@ -968,13 +994,13 @@ themselves generators.</p>
             </a></p>
   <h3><a href="contents.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference external" href="#"><tt class="docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a><ul>
-<li><a class="reference external" href="#functions">Functions</a></li>
-<li><a class="reference external" href="#classes">Classes</a></li>
-<li><a class="reference external" href="#constants">Constants</a></li>
-<li><a class="reference external" href="#exceptions">Exceptions</a></li>
-<li><a class="reference external" href="#references">References</a></li>
-<li><a class="reference external" href="#to-do">To Do</a></li>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#constants">Constants</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+<li><a class="reference internal" href="#to-do">To Do</a></li>
 </ul>
 </li>
 </ul>
@@ -1014,7 +1040,7 @@ themselves generators.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="security.html" title="security"
@@ -1022,12 +1048,12 @@ themselves generators.</p>
         <li class="right" >
           <a href="events.html" title="Events"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2010, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>About WinSys &mdash; WinSys v0.4dev documentation</title>
+    <title>About WinSys &mdash; WinSys v0.5.2 documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5.2',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="#" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
+    <link rel="top" title="WinSys v0.5.2 documentation" href="index.html" />
     <link rel="next" title="Modules" href="modules.html" />
     <link rel="prev" title="BETA: WinSys - Python tools for the Windows Administrator" href="index.html" /> 
   </head>
@@ -34,20 +35,21 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="modules.html" title="Modules"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="BETA: WinSys - Python tools for the Windows Administrator"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
+        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="about-winsys">
@@ -89,7 +91,7 @@ and packages wherever possible:</p>
 </div>
 <div class="section" id="common-features">
 <h2>Common Features<a class="headerlink" href="#common-features" title="Permalink to this headline">¶</a></h2>
-<p>Most of the objects in winsys subclass the <a title="core._WinSysObject" class="reference external" href="core.html#core._WinSysObject"><tt class="xref docutils literal"><span class="pre">core._WinSysObject</span></tt></a> class which
+<p>Most of the objects in winsys subclass the <a class="reference internal" href="core.html#core._WinSysObject" title="core._WinSysObject"><tt class="xref py py-class docutils literal"><span class="pre">core._WinSysObject</span></tt></a> class which
 offers sensible defaults and defines common functionality such as a dump function.
 In addition, the following features are common to many of the modules:</p>
 <div class="section" id="pythonic-naming">
@@ -97,16 +99,16 @@ In addition, the following features are common to many of the modules:</p>
 <p>This is mildly contentious, but the same naming convention has been used
 throughout, following the <tt class="docutils literal"><span class="pre">lowercase_with_underscores</span></tt> convention widely
 adopted in the Python community. The most widespread exception to this is
-in the <a title="Constants" class="reference external" href="constants.html#module-constants"><tt class="xref docutils literal"><span class="pre">constants</span></tt></a> module, where Windows constants retain their
+in the <a class="reference internal" href="constants.html#module-constants" title="Constants"><tt class="xref py py-mod docutils literal"><span class="pre">constants</span></tt></a> module, where Windows constants retain their
 <tt class="docutils literal"><span class="pre">UPPERCASE_WITH_UNDERSCORES</span></tt> names.</p>
 </div>
 <div class="section" id="module-level-functions">
 <h3>Module-level Functions<a class="headerlink" href="#module-level-functions" title="Permalink to this headline">¶</a></h3>
 <p>While a lot of use has been made of Python classes to wrap the function-driven
 Windows API, a lot of the functionality has been exposed as module-level
-convenience functions. So, for example, in the <a title="Files, Directories, &amp;c." class="reference external" href="fs.html#module-fs"><tt class="xref docutils literal"><span class="pre">fs</span></tt></a> module, the <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">fs.File</span></tt></a>
-class offers a <a title="fs.File.copy" class="reference external" href="fs_file.html#fs.File.copy"><tt class="xref docutils literal"><span class="pre">fs.File.copy()</span></tt></a> method, but the same functionality is exposed
-at the module level as <a title="fs.copy" class="reference external" href="fs.html#fs.copy"><tt class="xref docutils literal"><span class="pre">fs.copy()</span></tt></a>. That way, you don&#8217;t have to instantiate
+convenience functions. So, for example, in the <a class="reference internal" href="fs.html#module-fs" title="Files, Directories, &amp;c."><tt class="xref py py-mod docutils literal"><span class="pre">fs</span></tt></a> module, the <tt class="xref py py-class docutils literal"><span class="pre">fs.File</span></tt>
+class offers a <tt class="xref py py-meth docutils literal"><span class="pre">fs.File.copy()</span></tt> method, but the same functionality is exposed
+at the module level as <tt class="xref py py-func docutils literal"><span class="pre">fs.copy()</span></tt>. That way, you don&#8217;t have to instantiate
 one or more objects simply for the purpose of a single operation.</p>
 </div>
 <div class="section" id="factory-functions">
@@ -114,14 +116,14 @@ one or more objects simply for the purpose of a single operation.</p>
 <p>Most of the classes have a corresponding factory function (usually with
 the same name in lower case) which tries to be more accepting in what
 its parameters are and to convert them to what&#8217;s needed by the class&#8217;s
-own <tt class="docutils literal"><span class="pre">__init__</span></tt> method. So, for example, the <tt class="xref docutils literal"><span class="pre">Principal</span></tt> class whose
-initialiser expects a PySID structure has a corresponding <tt class="xref docutils literal"><span class="pre">principal()</span></tt>
+own <tt class="docutils literal"><span class="pre">__init__</span></tt> method. So, for example, the <tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt> class whose
+initialiser expects a PySID structure has a corresponding <tt class="xref py py-func docutils literal"><span class="pre">principal()</span></tt>
 function which will take a Sid or a user or group name or None or an existing
-<tt class="xref docutils literal"><span class="pre">Principal</span></tt> object.</p>
+<tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt> object.</p>
 </div>
 <div class="section" id="dump">
 <h3>Dump<a class="headerlink" href="#dump" title="Permalink to this headline">¶</a></h3>
-<p>Each object derived from <a title="core._WinSysObject" class="reference external" href="core.html#core._WinSysObject"><tt class="xref docutils literal"><span class="pre">core._WinSysObject</span></tt></a> has a dump method which
+<p>Each object derived from <a class="reference internal" href="core.html#core._WinSysObject" title="core._WinSysObject"><tt class="xref py py-class docutils literal"><span class="pre">core._WinSysObject</span></tt></a> has a dump method which
 is intended to display its internal structures, possibly recursively where
 some of the structures are themselves WinSys objects. This is intended more
 for ad-hoc use in the interpreter where it&#8217;s convenient to see, eg, the
@@ -130,7 +132,7 @@ security structure which has been loaded from a file.</p>
 <div class="section" id="iterators-generators">
 <h3>Iterators &amp; Generators<a class="headerlink" href="#iterators-generators" title="Permalink to this headline">¶</a></h3>
 <p>Where possible and meaningful, lazy iterators have been used, often
-implemented by generators. This started in the <a title="Files, Directories, &amp;c." class="reference external" href="fs.html#module-fs"><tt class="xref docutils literal"><span class="pre">fs</span></tt></a> module where
+implemented by generators. This started in the <a class="reference internal" href="fs.html#module-fs" title="Files, Directories, &amp;c."><tt class="xref py py-mod docutils literal"><span class="pre">fs</span></tt></a> module where
 thousands of files were being queried for information, but the approach
 has generally been adopted across the package.</p>
 </div>
@@ -139,9 +141,9 @@ has generally been adopted across the package.</p>
 <p>Where it makes sense, context managers have been used, either by means
 of the contextlib contextmanager decorator or by defining an object as
 its own context manager by means of <tt class="docutils literal"><span class="pre">__enter__</span></tt> and <tt class="docutils literal"><span class="pre">__exit__</span></tt> methods.
-Examples of context-managed objects include the <a title="ipc.Mailslot" class="reference external" href="mailslots.html#ipc.Mailslot"><tt class="xref docutils literal"><span class="pre">ipc.Mailslot</span></tt></a> and
-<a title="security.Security" class="reference external" href="security.html#security.Security"><tt class="xref docutils literal"><span class="pre">security.Security</span></tt></a> objects. Examples of decorated functions include
-the <a title="security.change_privileges" class="reference external" href="security.html#security.change_privileges"><tt class="xref docutils literal"><span class="pre">security.change_privileges()</span></tt></a> and <a title="security.impersonate" class="reference external" href="security.html#security.impersonate"><tt class="xref docutils literal"><span class="pre">security.impersonate()</span></tt></a> functions.</p>
+Examples of context-managed objects include the <a class="reference internal" href="mailslots.html#ipc.Mailslot" title="ipc.Mailslot"><tt class="xref py py-class docutils literal"><span class="pre">ipc.Mailslot</span></tt></a> and
+<a class="reference internal" href="security.html#security.Security" title="security.Security"><tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt></a> objects. Examples of decorated functions include
+the <a class="reference internal" href="security.html#security.change_privileges" title="security.change_privileges"><tt class="xref py py-func docutils literal"><span class="pre">security.change_privileges()</span></tt></a> and <a class="reference internal" href="security.html#security.impersonate" title="security.impersonate"><tt class="xref py py-func docutils literal"><span class="pre">security.impersonate()</span></tt></a> functions.</p>
 </div>
 </div>
 <div class="section" id="todo">
@@ -158,6 +160,56 @@ let&#8217;s hear about it.</p>
 
 
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">About WinSys</a><ul>
+<li><a class="reference internal" href="#design-principles">Design Principles</a></li>
+<li><a class="reference internal" href="#common-features">Common Features</a><ul>
+<li><a class="reference internal" href="#pythonic-naming">Pythonic Naming</a></li>
+<li><a class="reference internal" href="#module-level-functions">Module-level Functions</a></li>
+<li><a class="reference internal" href="#factory-functions">Factory Functions</a></li>
+<li><a class="reference internal" href="#dump">Dump</a></li>
+<li><a class="reference internal" href="#iterators-generators">Iterators &amp; Generators</a></li>
+<li><a class="reference internal" href="#context-managers">Context Managers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#todo">ToDo</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">BETA: WinSys - Python tools for the Windows Administrator</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="next chapter">Modules</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/about.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
       </div>
       <div class="clearer"></div>
     </div>
@@ -168,7 +220,7 @@ let&#8217;s hear about it.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="modules.html" title="Modules"
@@ -176,12 +228,12 @@ let&#8217;s hear about it.</p>
         <li class="right" >
           <a href="index.html" title="BETA: WinSys - Python tools for the Windows Administrator"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2010, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

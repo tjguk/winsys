@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using the registry module &mdash; WinSys v0.4dev documentation</title>
+    <title>Using the registry module &mdash; WinSys v0.5.2 documentation</title>
     <link rel="stylesheet" href="../_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        VERSION:     '0.5.2',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="../index.html" />
+    <link rel="top" title="WinSys v0.5.2 documentation" href="../index.html" />
     <link rel="up" title="Cookbook" href="../cookbook.html" />
     <link rel="next" title="Using the security module" href="security.html" />
     <link rel="prev" title="Using the fs module" href="fs.html" /> 
@@ -35,15 +36,15 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="security.html" title="Using the security module"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="fs.html" title="Using the fs module"
              accesskey="P">previous</a> |</li>
-        <li><a href="../contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys v0.5.2 documentation</a> &raquo;</li>
           <li><a href="../cookbook.html" accesskey="U">Cookbook</a> &raquo;</li> 
       </ul>
     </div>  
@@ -55,7 +56,7 @@
             
   <div class="section" id="using-the-registry-module">
 <h1>Using the registry module<a class="headerlink" href="#using-the-registry-module" title="Permalink to this headline">¶</a></h1>
-<p>The examples here all refer to the <a title="Pythonic access to the registry" class="reference external" href="../registry.html#module-registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a> module.</p>
+<p>The examples here all refer to the <a class="reference internal" href="../registry.html#module-registry" title="Pythonic access to the registry"><tt class="xref py py-mod docutils literal"><span class="pre">registry</span></tt></a> module.</p>
 <div class="section" id="copy-one-registry-key-to-another">
 <span id="id1"></span><h2>Copy one registry key to another<a class="headerlink" href="#copy-one-registry-key-to-another" title="Permalink to this headline">¶</a></h2>
 <p>Copy an existing registry key to a new one and
@@ -99,23 +100,23 @@ the details of the new top-level key, including its security.</p>
 </td></tr></table></div>
 <div class="section" id="discussion">
 <h3>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h3>
-<p>The functions in the <a title="Pythonic access to the registry" class="reference external" href="../registry.html#module-registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a> module hand off any references
-to a registry key to the <a title="registry.registry" class="reference external" href="../registry.html#registry.registry"><tt class="xref docutils literal"><span class="pre">registry()</span></tt></a> function which is
+<p>The functions in the <a class="reference internal" href="../registry.html#module-registry" title="Pythonic access to the registry"><tt class="xref py py-mod docutils literal"><span class="pre">registry</span></tt></a> module hand off any references
+to a registry key to the <a class="reference internal" href="../registry.html#registry.registry" title="registry.registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a> function which is
 as accepting as possible. Here, we&#8217;re referring to the local machine
 (there&#8217;s no server-style \\ prefix in either moniker) and using
 the HKLM/HKCU shortcut styles. In fact the code would work equally
 well if a remote machine were to specified on either side, assuming
 that the necessary permissions were in place.</p>
-<p>The <a title="registry.Registry.security" class="reference external" href="../registry.html#registry.Registry.security"><tt class="xref docutils literal"><span class="pre">Registry.security()</span></tt></a> method acts as a context
+<p>The <a class="reference internal" href="../registry.html#registry.Registry.security" title="registry.Registry.security"><tt class="xref py py-meth docutils literal"><span class="pre">Registry.security()</span></tt></a> method acts as a context
 manager, allowing a series of changes to the registry key&#8217;s
 security descriptor. Here we are breaking the inheritance which
 the new key has inherited automatically, without copying the
 existing permissions over first. Then we add a new DACL with
 just two permissions: allowing the logged-on user full control;
 and allowing all authenticated users read access. The 3-tuples
-are passed to the <tt class="xref docutils literal"><span class="pre">security.ace()</span></tt> function.</p>
+are passed to the <tt class="xref py py-meth docutils literal"><span class="pre">security.ace()</span></tt> function.</p>
 <p>Finally, to demonstrate that the security has been applied, we
-call the registry key&#8217;s <tt class="xref docutils literal"><span class="pre">Registry.dump()</span></tt> method
+call the registry key&#8217;s <tt class="xref py py-meth docutils literal"><span class="pre">Registry.dump()</span></tt> method
 which produces useful information about the key and its security
 in a readable format.</p>
 </div>
@@ -162,7 +163,7 @@ name and the value itself.</p>
 </td></tr></table></div>
 <div class="section" id="id2">
 <h3>Discussion<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>We use <a title="dialogs.dialog" class="reference external" href="../dialogs.html#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialogs.dialog()</span></tt></a> to select the root key and
+<p>We use <a class="reference internal" href="../dialogs.html#dialogs.dialog" title="dialogs.dialog"><tt class="xref py py-func docutils literal"><span class="pre">dialogs.dialog()</span></tt></a> to select the root key and
 the string to search for. We then walk the registry from that
 key downwards, skipping over any keys or values to which we
 do not have access. When we find a value which matches our
@@ -183,13 +184,13 @@ which matched.</p>
             </a></p>
   <h3><a href="../contents.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference external" href="#">Using the registry module</a><ul>
-<li><a class="reference external" href="#copy-one-registry-key-to-another">Copy one registry key to another</a><ul>
-<li><a class="reference external" href="#discussion">Discussion</a></li>
+<li><a class="reference internal" href="#">Using the registry module</a><ul>
+<li><a class="reference internal" href="#copy-one-registry-key-to-another">Copy one registry key to another</a><ul>
+<li><a class="reference internal" href="#discussion">Discussion</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#find-a-string-in-the-registry">Find a string in the registry</a><ul>
-<li><a class="reference external" href="#id2">Discussion</a></li>
+<li><a class="reference internal" href="#find-a-string-in-the-registry">Find a string in the registry</a><ul>
+<li><a class="reference internal" href="#id2">Discussion</a></li>
 </ul>
 </li>
 </ul>
@@ -231,7 +232,7 @@ which matched.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="security.html" title="Using the security module"
@@ -239,13 +240,13 @@ which matched.</p>
         <li class="right" >
           <a href="fs.html" title="Using the fs module"
              >previous</a> |</li>
-        <li><a href="../contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys v0.5.2 documentation</a> &raquo;</li>
           <li><a href="../cookbook.html" >Cookbook</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2010, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

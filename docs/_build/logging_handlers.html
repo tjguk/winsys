@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>logging_handlers – Additional Logging Handlers &mdash; WinSys v0.4dev documentation</title>
+    <title>logging_handlers – Additional Logging Handlers &mdash; WinSys v0.5.2 documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5.2',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
+    <link rel="top" title="WinSys v0.5.2 documentation" href="index.html" />
     <link rel="up" title="Miscellaneous" href="misc.html" />
     <link rel="next" title="environment – Environment Block" href="environment.html" />
     <link rel="prev" title="Miscellaneous" href="misc.html" /> 
@@ -35,15 +36,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="environment.html" title="environment – Environment Block"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="misc.html" title="Miscellaneous"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="contents.html">WinSys v0.5.2 documentation</a> &raquo;</li>
           <li><a href="misc.html" accesskey="U">Miscellaneous</a> &raquo;</li> 
       </ul>
     </div>  
@@ -54,7 +55,7 @@
           <div class="body">
             
   <div class="section" id="module-logging_handlers">
-<h1><a title="Additional handlers for the builtin logging module" class="reference external" href="#module-logging_handlers"><tt class="xref docutils literal"><span class="pre">logging_handlers</span></tt></a> &#8211; Additional Logging Handlers<a class="headerlink" href="#module-logging_handlers" title="Permalink to this headline">¶</a></h1>
+<span id="logging-handlers-additional-logging-handlers"></span><h1><a class="reference internal" href="#module-logging_handlers" title="Additional handlers for the builtin logging module"><tt class="xref py py-mod docutils literal"><span class="pre">logging_handlers</span></tt></a> &#8211; Additional Logging Handlers<a class="headerlink" href="#module-logging_handlers" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>Python&#8217;s <a class="reference external" href="http://docs.python.org/library/logging.html">builtin logging module</a>
@@ -62,7 +63,7 @@ offers the concept of <a class="reference external" href="http://docs.python.org
 each of which takes the logged message and passes to an output channel. There
 are handlers provided for screen, files, NT Event Logs and so on. This module
 offers two handlers to output to a named Windows mailslot. It makes use of the
-<a title="ipc.Mailslot" class="reference external" href="mailslots.html#ipc.Mailslot"><tt class="xref docutils literal"><span class="pre">ipc.Mailslot</span></tt></a> class and can write to a one-time
+<a class="reference internal" href="mailslots.html#ipc.Mailslot" title="ipc.Mailslot"><tt class="xref py py-class docutils literal"><span class="pre">ipc.Mailslot</span></tt></a> class and can write to a one-time
 mailslot or to a mailslot which is running permanently.</p>
 <p>The sort of situation where this might be useful is where you have a number
 of system routines running on and off. If they all log to the same mailslot,
@@ -88,8 +89,9 @@ prompt to shut down. (Although that&#8217;s obviously in the hands of the receiv
 <dl class="class">
 <dt id="logging_handlers.PermanentMailslotHandler">
 <em class="property">class </em><tt class="descname">PermanentMailslotHandler</tt><big>(</big><em>mailslot_name : string</em><big>)</big><a class="headerlink" href="#logging_handlers.PermanentMailslotHandler" title="Permalink to this definition">¶</a></dt>
-<dd>Subclass the MailslotHandler and override the close function so that it
-doesn&#8217;t send the shutdown token to the receiving mailslot(s).</dd></dl>
+<dd><p>Subclass the MailslotHandler and override the close function so that it
+doesn&#8217;t send the shutdown token to the receiving mailslot(s).</p>
+</dd></dl>
 
 </div>
 </div>
@@ -105,9 +107,9 @@ doesn&#8217;t send the shutdown token to the receiving mailslot(s).</dd></dl>
             </a></p>
   <h3><a href="contents.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference external" href="#"><tt class="docutils literal"><span class="pre">logging_handlers</span></tt> &#8211; Additional Logging Handlers</a><ul>
-<li><a class="reference external" href="#introduction">Introduction</a></li>
-<li><a class="reference external" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">logging_handlers</span></tt> &#8211; Additional Logging Handlers</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
 </ul>
 </li>
 </ul>
@@ -147,7 +149,7 @@ doesn&#8217;t send the shutdown token to the receiving mailslot(s).</dd></dl>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="environment.html" title="environment – Environment Block"
@@ -155,13 +157,13 @@ doesn&#8217;t send the shutdown token to the receiving mailslot(s).</dd></dl>
         <li class="right" >
           <a href="misc.html" title="Miscellaneous"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="contents.html">WinSys v0.5.2 documentation</a> &raquo;</li>
           <li><a href="misc.html" >Miscellaneous</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2010, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

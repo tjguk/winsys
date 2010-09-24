@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>accounts – Users, Groups, SIDs &c. &mdash; WinSys v0.4dev documentation</title>
+    <title>accounts – Users, Groups, SIDs &amp;c. &mdash; WinSys v0.5.2 documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5.2',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
+    <link rel="top" title="WinSys v0.5.2 documentation" href="index.html" />
     <link rel="next" title="dialogs – Dialog boxes" href="dialogs.html" />
     <link rel="prev" title="exc – Exceptions" href="exc.html" /> 
   </head>
@@ -34,15 +35,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="dialogs.html" title="dialogs – Dialog boxes"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="exc.html" title="exc – Exceptions"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,7 +53,7 @@
           <div class="body">
             
   <div class="section" id="module-accounts">
-<h1><a title="User accounts, SIDs &amp;c." class="reference external" href="#module-accounts"><tt class="xref docutils literal"><span class="pre">accounts</span></tt></a> &#8211; Users, Groups, SIDs &amp;c.<a class="headerlink" href="#module-accounts" title="Permalink to this headline">¶</a></h1>
+<span id="accounts-users-groups-sids-c"></span><h1><a class="reference internal" href="#module-accounts" title="User accounts, SIDs &amp;c."><tt class="xref py py-mod docutils literal"><span class="pre">accounts</span></tt></a> &#8211; Users, Groups, SIDs &amp;c.<a class="headerlink" href="#module-accounts" title="Permalink to this headline">¶</a></h1>
 <p>All security in windows is handled via Security Principals. These can
 be a user (the most common case), a group of users, a computer, or something
 else. Security principals are uniquely identified by their SID: a binary code
@@ -60,17 +61,17 @@ represented by a string S-a-b-cd-efg... where each of the segments represents
 an aspect of the security authorities involved. (A computer, a domain etc.).
 Certain of the SIDs are considered well-known such as the AuthenticatedUsers
 account on each machine which will always have the same SID.</p>
-<p>Most of the access to this module will be via the <a title="accounts.principal" class="reference internal" href="#accounts.principal"><tt class="xref docutils literal"><span class="pre">principal()</span></tt></a> 
-or <a title="accounts.me" class="reference internal" href="#accounts.me"><tt class="xref docutils literal"><span class="pre">me()</span></tt></a> functions. Although the module is designed to be used
-standalone, it is imported directly into the <a title="Security functions" class="reference external" href="security.html#module-security"><tt class="xref docutils literal"><span class="pre">security</span></tt></a> module&#8217;s
+<p>Most of the access to this module will be via the <a class="reference internal" href="#accounts.principal" title="accounts.principal"><tt class="xref py py-func docutils literal"><span class="pre">principal()</span></tt></a>
+or <a class="reference internal" href="#accounts.me" title="accounts.me"><tt class="xref py py-func docutils literal"><span class="pre">me()</span></tt></a> functions. Although the module is designed to be used
+standalone, it is imported directly into the <a class="reference internal" href="security.html#module-security" title="Security functions"><tt class="xref py py-mod docutils literal"><span class="pre">security</span></tt></a> module&#8217;s
 namespace so its functionality can also be accessed from there.</p>
 <div class="section" id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="accounts.principal">
 <tt class="descname">principal</tt><big>(</big><em>principal</em>, <em>cls=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#accounts.principal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Factory function for the <a title="accounts.Principal" class="reference internal" href="#accounts.Principal"><tt class="xref docutils literal"><span class="pre">Principal</span></tt></a> class. This is the most
-common way to create a <a title="accounts.Principal" class="reference internal" href="#accounts.Principal"><tt class="xref docutils literal"><span class="pre">Principal</span></tt></a> object:</p>
+<dd><p>Factory function for the <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> class. This is the most
+common way to create a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> object:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
 <span class="n">service_account</span> <span class="o">=</span> <span class="n">accounts</span><span class="o">.</span><span class="n">principal</span> <span class="p">(</span><span class="n">accounts</span><span class="o">.</span><span class="n">WELL_KNOWN_SID</span><span class="o">.</span><span class="n">Service</span><span class="p">)</span>
 <span class="n">local_admin</span> <span class="o">=</span> <span class="n">accounts</span><span class="o">.</span><span class="n">principal</span> <span class="p">(</span><span class="s">&quot;Administrator&quot;</span><span class="p">)</span>
@@ -81,10 +82,14 @@ common way to create a <a title="accounts.Principal" class="reference internal" 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>principal</em> &#8211; any of None, a <a title="accounts.Principal" class="reference internal" href="#accounts.Principal"><tt class="xref docutils literal"><span class="pre">Principal</span></tt></a>, a <cite>PySID</cite>, 
-a <a title="accounts.WELL_KNOWN_SID" class="reference internal" href="#accounts.WELL_KNOWN_SID"><tt class="xref docutils literal"><span class="pre">WELL_KNOWN_SID</span></tt></a> or a string</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>principal</strong> &#8211; any of None, a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a>, a <cite>PySID</cite>,
+a <a class="reference internal" href="#accounts.WELL_KNOWN_SID" title="accounts.WELL_KNOWN_SID"><tt class="xref py py-const docutils literal"><span class="pre">WELL_KNOWN_SID</span></tt></a> or a string</li>
+</ul>
+</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a <a title="accounts.Principal" class="reference internal" href="#accounts.Principal"><tt class="xref docutils literal"><span class="pre">Principal</span></tt></a> object corresponding to <cite>principal</cite></td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> object corresponding to <cite>principal</cite></p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -93,20 +98,23 @@ a <a title="accounts.WELL_KNOWN_SID" class="reference internal" href="#accounts.
 <dl class="function">
 <dt id="accounts.user">
 <tt class="descname">user</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#accounts.user" title="Permalink to this definition">¶</a></dt>
-<dd>If you know you&#8217;re after a user, use this. Particularly
-useful when a system user is defined as an alias type</dd></dl>
+<dd><p>If you know you&#8217;re after a user, use this. Particularly
+useful when a system user is defined as an alias type</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="accounts.group">
 <tt class="descname">group</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#accounts.group" title="Permalink to this definition">¶</a></dt>
-<dd>If you know you&#8217;re after a group, use this. Particularly
-useful when a system group is defined as an alias type</dd></dl>
+<dd><p>If you know you&#8217;re after a group, use this. Particularly
+useful when a system group is defined as an alias type</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="accounts.me">
 <tt class="descname">me</tt><big>(</big><big>)</big><a class="headerlink" href="#accounts.me" title="Permalink to this definition">¶</a></dt>
-<dd>Convenience function for the common case of getting the
-logged-on user&#8217;s account.</dd></dl>
+<dd><p>Convenience function for the common case of getting the
+logged-on user&#8217;s account.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="classes">
@@ -115,9 +123,9 @@ logged-on user&#8217;s account.</dd></dl>
 <dt id="accounts.Principal">
 <em class="property">class </em><tt class="descname">Principal</tt><big>(</big><em>sid</em>, <em>system=None</em><big>)</big><a class="headerlink" href="#accounts.Principal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Object wrapping a Windows security principal, represented by a SID
-and, where possible, a name. <a title="accounts.Principal" class="reference internal" href="#accounts.Principal"><tt class="xref docutils literal"><span class="pre">Principal</span></tt></a> compares and hashes 
+and, where possible, a name. <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> compares and hashes
 by SID so can be sorted and used as a dictionary key, set element, etc.</p>
-<p>A <a title="accounts.Principal" class="reference internal" href="#accounts.Principal"><tt class="xref docutils literal"><span class="pre">Principal</span></tt></a> is its own context manager, impersonating the
+<p>A <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> is its own context manager, impersonating the
 corresponding user:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
 <span class="k">with</span> <span class="n">accounts</span><span class="o">.</span><span class="n">principal</span> <span class="p">(</span><span class="s">&quot;python&quot;</span><span class="p">):</span>
@@ -125,7 +133,7 @@ corresponding user:</p>
 </pre></div>
 </div>
 <p>Note, though, that this will prompt for a password using the
-Win32 password UI. To logon with a password, use the <a title="accounts.Principal.impersonate" class="reference internal" href="#accounts.Principal.impersonate"><tt class="xref docutils literal"><span class="pre">impersonate()</span></tt></a>
+Win32 password UI. To logon with a password, use the <a class="reference internal" href="#accounts.Principal.impersonate" title="accounts.Principal.impersonate"><tt class="xref py py-meth docutils literal"><span class="pre">impersonate()</span></tt></a>
 context-managed function. TODO: allow password to be set securely.</p>
 <p>Initialise a Principal from and (optionally) a system name. The sid
 must be a PySID and the system name, if present must be a security
@@ -133,18 +141,18 @@ authority, eg a machine or a domain.</p>
 <dl class="classmethod">
 <dt id="accounts.Principal.from_sid">
 <em class="property">classmethod </em><tt class="descname">from_sid</tt><big>(</big><em>sid</em>, <em>system=None</em><big>)</big><a class="headerlink" href="#accounts.Principal.from_sid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <a title="accounts.Principal" class="reference internal" href="#accounts.Principal"><tt class="xref docutils literal"><span class="pre">Principal</span></tt></a> based on a sid and a security authority.</p>
+<dd><p>Return a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> based on a sid and a security authority.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>sid</em> &#8211; a PySID</li>
-<li><em>system_name</em> &#8211; optional name of a security authority</li>
+<li><strong>sid</strong> &#8211; a PySID</li>
+<li><strong>system_name</strong> &#8211; optional name of a security authority</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="accounts.Principal" class="reference internal" href="#accounts.Principal"><tt class="xref docutils literal"><span class="pre">Principal</span></tt></a> object for <cite>sid</cite></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> object for <cite>sid</cite></p>
 </td>
 </tr>
 </tbody>
@@ -154,19 +162,19 @@ authority, eg a machine or a domain.</p>
 <dl class="classmethod">
 <dt id="accounts.Principal.from_string">
 <em class="property">classmethod </em><tt class="descname">from_string</tt><big>(</big><em>string</em>, <em>system=None</em><big>)</big><a class="headerlink" href="#accounts.Principal.from_string" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <a title="accounts.Principal" class="reference internal" href="#accounts.Principal"><tt class="xref docutils literal"><span class="pre">Principal</span></tt></a> based on a name and a
+<dd><p>Return a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> based on a name and a
 security authority. If <cite>string</cite> is blank, the logged-on user is assumed.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>string</em> &#8211; name of an account in the form &#8220;domainname&#8221;. domain is optional so the simplest form is simply &#8220;name&#8221;</li>
-<li><em>system</em> &#8211; name of a security authority (typically a machine or a domain)</li>
+<li><strong>string</strong> &#8211; name of an account in the form &#8220;domainname&#8221;. domain is optional so the simplest form is simply &#8220;name&#8221;</li>
+<li><strong>system</strong> &#8211; name of a security authority (typically a machine or a domain)</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="accounts.Principal" class="reference internal" href="#accounts.Principal"><tt class="xref docutils literal"><span class="pre">Principal</span></tt></a> object for <cite>string</cite></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> object for <cite>string</cite></p>
 </td>
 </tr>
 </tbody>
@@ -176,14 +184,14 @@ security authority. If <cite>string</cite> is blank, the logged-on user is assum
 <dl class="classmethod">
 <dt id="accounts.Principal.from_well_known">
 <em class="property">classmethod </em><tt class="descname">from_well_known</tt><big>(</big><em>well_known</em>, <em>domain=None</em><big>)</big><a class="headerlink" href="#accounts.Principal.from_well_known" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <a title="accounts.Principal" class="reference internal" href="#accounts.Principal"><tt class="xref docutils literal"><span class="pre">Principal</span></tt></a> based on one of the <a title="accounts.WELL_KNOWN_SID" class="reference internal" href="#accounts.WELL_KNOWN_SID"><tt class="xref docutils literal"><span class="pre">WELL_KNOWN_SID</span></tt></a> values.</p>
+<dd><p>Return a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> based on one of the <a class="reference internal" href="#accounts.WELL_KNOWN_SID" title="accounts.WELL_KNOWN_SID"><tt class="xref py py-const docutils literal"><span class="pre">WELL_KNOWN_SID</span></tt></a> values.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>well_known</em> &#8211; one of the <a title="accounts.WELL_KNOWN_SID" class="reference internal" href="#accounts.WELL_KNOWN_SID"><tt class="xref docutils literal"><span class="pre">WELL_KNOWN_SID</span></tt></a></li>
-<li><em>domain</em> &#8211; anything accepted by <a title="accounts.principal" class="reference internal" href="#accounts.principal"><tt class="xref docutils literal"><span class="pre">principal()</span></tt></a> and corresponding to a domain</li>
+<li><strong>well_known</strong> &#8211; one of the <a class="reference internal" href="#accounts.WELL_KNOWN_SID" title="accounts.WELL_KNOWN_SID"><tt class="xref py py-const docutils literal"><span class="pre">WELL_KNOWN_SID</span></tt></a></li>
+<li><strong>domain</strong> &#8211; anything accepted by <a class="reference internal" href="#accounts.principal" title="accounts.principal"><tt class="xref py py-func docutils literal"><span class="pre">principal()</span></tt></a> and corresponding to a domain</li>
 </ul>
 </td>
 </tr>
@@ -206,15 +214,15 @@ revert:</p>
 <span class="n">security</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="s">&quot;temp.txt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span> <span class="o">==</span> <span class="n">python</span>
 </pre></div>
 </div>
-<p>Note that the <a title="accounts.Principal" class="reference internal" href="#accounts.Principal"><tt class="xref docutils literal"><span class="pre">Principal</span></tt></a> class is also its own 
+<p>Note that the <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> class is also its own
 context manager but does not allow the password to be specified.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>password</em> &#8211; password for this account</li>
-<li><em>logon_type</em> &#8211; one of the <a title="accounts.LOGON" class="reference internal" href="#accounts.LOGON"><tt class="xref docutils literal"><span class="pre">LOGON</span></tt></a> values</li>
+<li><strong>password</strong> &#8211; password for this account</li>
+<li><strong>logon_type</strong> &#8211; one of the <a class="reference internal" href="#accounts.LOGON" title="accounts.LOGON"><tt class="xref py py-const docutils literal"><span class="pre">LOGON</span></tt></a> values</li>
 </ul>
 </td>
 </tr>
@@ -236,8 +244,8 @@ to ask for a password.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>password</em> &#8211; the password for this account</li>
-<li><em>logon_type</em> &#8211; one of the <a title="accounts.LOGON" class="reference internal" href="#accounts.LOGON"><tt class="xref docutils literal"><span class="pre">LOGON</span></tt></a> values</li>
+<li><strong>password</strong> &#8211; the password for this account</li>
+<li><strong>logon_type</strong> &#8211; one of the <a class="reference internal" href="#accounts.LOGON" title="accounts.LOGON"><tt class="xref py py-const docutils literal"><span class="pre">LOGON</span></tt></a> values</li>
 </ul>
 </td>
 </tr>
@@ -251,8 +259,9 @@ to ask for a password.</p>
 <dl class="classmethod">
 <dt id="accounts.Principal.me">
 <em class="property">classmethod </em><tt class="descname">me</tt><big>(</big><big>)</big><a class="headerlink" href="#accounts.Principal.me" title="Permalink to this definition">¶</a></dt>
-<dd>Convenience factory method for the common case of referring to the 
-logged-on user</dd></dl>
+<dd><p>Convenience factory method for the common case of referring to the
+logged-on user</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="accounts.Principal.pyobject">
@@ -280,19 +289,19 @@ authority, eg a machine or a domain.</p>
 <dt id="accounts.User.create">
 <em class="property">classmethod </em><tt class="descname">create</tt><big>(</big><em>username</em>, <em>password</em>, <em>system=None</em><big>)</big><a class="headerlink" href="#accounts.User.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new user with <cite>username</cite> and <cite>password</cite>. Return
-a <a title="accounts.User" class="reference internal" href="#accounts.User"><tt class="xref docutils literal"><span class="pre">User</span></tt></a> for the new user.</p>
+a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt class="xref py py-class docutils literal"><span class="pre">User</span></tt></a> for the new user.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>username</em> &#8211; username of the new user. Must not already exist on <cite>system</cite></li>
-<li><em>password</em> &#8211; password for the new user. Must meet security policy on <cite>system</cite></li>
-<li><em>system</em> &#8211; optional system name</li>
+<li><strong>username</strong> &#8211; username of the new user. Must not already exist on <cite>system</cite></li>
+<li><strong>password</strong> &#8211; password for the new user. Must meet security policy on <cite>system</cite></li>
+<li><strong>system</strong> &#8211; optional system name</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="accounts.User" class="reference internal" href="#accounts.User"><tt class="xref docutils literal"><span class="pre">User</span></tt></a> for <cite>username</cite></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt class="xref py py-class docutils literal"><span class="pre">User</span></tt></a> for <cite>username</cite></p>
 </td>
 </tr>
 </tbody>
@@ -307,7 +316,10 @@ a <a title="accounts.User" class="reference internal" href="#accounts.User"><tt 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>system</em> &#8211; optional security authority</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>system</strong> &#8211; optional security authority</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -321,7 +333,10 @@ a <a title="accounts.User" class="reference internal" href="#accounts.User"><tt 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>system</em> &#8211; optional security authority</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>system</strong> &#8211; optional security authority</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -335,9 +350,13 @@ a <a title="accounts.User" class="reference internal" href="#accounts.User"><tt 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other_group</em> &#8211; anything accepted by <a title="accounts.group" class="reference internal" href="#accounts.group"><tt class="xref docutils literal"><span class="pre">group()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other_group</strong> &#8211; anything accepted by <a class="reference internal" href="#accounts.group" title="accounts.group"><tt class="xref py py-func docutils literal"><span class="pre">group()</span></tt></a></li>
+</ul>
+</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">self</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -351,9 +370,13 @@ a <a title="accounts.User" class="reference internal" href="#accounts.User"><tt 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>other_group</em> &#8211; anything accepted by <a title="accounts.group" class="reference internal" href="#accounts.group"><tt class="xref docutils literal"><span class="pre">group()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other_group</strong> &#8211; anything accepted by <a class="reference internal" href="#accounts.group" title="accounts.group"><tt class="xref py py-func docutils literal"><span class="pre">group()</span></tt></a></li>
+</ul>
+</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">self</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -368,9 +391,9 @@ a <a title="accounts.User" class="reference internal" href="#accounts.User"><tt 
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>command_line</em> &#8211; command line to run, quoted as necessary</li>
-<li><em>password</em> &#8211; password; if not supplied, standard Windows prompt</li>
-<li><em>with_profile</em> &#8211; if True, HKEY_CURRENT_USER is loaded [False]</li>
+<li><strong>command_line</strong> &#8211; command line to run, quoted as necessary</li>
+<li><strong>password</strong> &#8211; password; if not supplied, standard Windows prompt</li>
+<li><strong>with_profile</strong> &#8211; if True, HKEY_CURRENT_USER is loaded [False]</li>
 </ul>
 </td>
 </tr>
@@ -383,9 +406,10 @@ a <a title="accounts.User" class="reference internal" href="#accounts.User"><tt 
 <dl class="class">
 <dt id="accounts.Group">
 <em class="property">class </em><tt class="descname">Group</tt><big>(</big><em>sid</em>, <em>system=None</em><big>)</big><a class="headerlink" href="#accounts.Group" title="Permalink to this definition">¶</a></dt>
-<dd>Initialise a Principal from and (optionally) a system name. The sid
+<dd><p>Initialise a Principal from and (optionally) a system name. The sid
 must be a PySID and the system name, if present must be a security
-authority, eg a machine or a domain.</dd></dl>
+authority, eg a machine or a domain.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="constants">
@@ -1067,7 +1091,8 @@ authority, eg a machine or a domain.</dd></dl>
 <dl class="exception">
 <dt id="accounts.x_accounts">
 <em class="property">exception </em><tt class="descname">x_accounts</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#accounts.x_accounts" title="Permalink to this definition">¶</a></dt>
-<dd>Base for all accounts-related exceptions</dd></dl>
+<dd><p>Base for all accounts-related exceptions</p>
+</dd></dl>
 
 </div>
 <div class="section" id="references">
@@ -1075,7 +1100,7 @@ authority, eg a machine or a domain.</dd></dl>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference external" href="cookbook/accounts.html"><em>Using the accounts module</em></a></dt>
+<dt><a class="reference internal" href="cookbook/accounts.html"><em>Using the accounts module</em></a></dt>
 <dd>Cookbook examples of using the accounts module</dd>
 </dl>
 </div>
@@ -1099,13 +1124,13 @@ authority, eg a machine or a domain.</dd></dl>
             </a></p>
   <h3><a href="contents.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference external" href="#"><tt class="docutils literal"><span class="pre">accounts</span></tt> &#8211; Users, Groups, SIDs &amp;c.</a><ul>
-<li><a class="reference external" href="#functions">Functions</a></li>
-<li><a class="reference external" href="#classes">Classes</a></li>
-<li><a class="reference external" href="#constants">Constants</a></li>
-<li><a class="reference external" href="#exceptions">Exceptions</a></li>
-<li><a class="reference external" href="#references">References</a></li>
-<li><a class="reference external" href="#to-do">To Do</a></li>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">accounts</span></tt> &#8211; Users, Groups, SIDs &amp;c.</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#constants">Constants</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+<li><a class="reference internal" href="#to-do">To Do</a></li>
 </ul>
 </li>
 </ul>
@@ -1145,7 +1170,7 @@ authority, eg a machine or a domain.</dd></dl>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="dialogs.html" title="dialogs – Dialog boxes"
@@ -1153,12 +1178,12 @@ authority, eg a machine or a domain.</dd></dl>
         <li class="right" >
           <a href="exc.html" title="exc – Exceptions"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2010, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

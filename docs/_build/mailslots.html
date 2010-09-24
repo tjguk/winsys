@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Mailslots &mdash; WinSys v0.4dev documentation</title>
+    <title>Mailslots &mdash; WinSys v0.5.2 documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5.2',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
+    <link rel="top" title="WinSys v0.5.2 documentation" href="index.html" />
     <link rel="up" title="ipc – Interprocess Communication" href="ipc.html" />
     <link rel="next" title="Events" href="events.html" />
     <link rel="prev" title="ipc – Interprocess Communication" href="ipc.html" /> 
@@ -35,15 +36,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="events.html" title="Events"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="ipc.html" title="ipc – Interprocess Communication"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="contents.html">WinSys v0.5.2 documentation</a> &raquo;</li>
           <li><a href="ipc.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>  
@@ -58,12 +59,14 @@
 <dl class="exception">
 <dt id="ipc.x_mailslot_invalid_use">
 <em class="property">exception </em><tt class="descname">x_mailslot_invalid_use</tt><a class="headerlink" href="#ipc.x_mailslot_invalid_use" title="Permalink to this definition">¶</a></dt>
-<dd>Indicates that an attempt has been made to use a mailslot for reading <em>and</em> writing.</dd></dl>
+<dd><p>Indicates that an attempt has been made to use a mailslot for reading <em>and</em> writing.</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="ipc.x_mailslot_empty">
 <em class="property">exception </em><tt class="descname">x_mailslot_empty</tt><a class="headerlink" href="#ipc.x_mailslot_empty" title="Permalink to this definition">¶</a></dt>
-<dd>Raised when a call to <a title="ipc.Mailslot.get" class="reference internal" href="#ipc.Mailslot.get"><tt class="xref docutils literal"><span class="pre">Mailslot.get()</span></tt></a> times out with nothing in the mailslot.</dd></dl>
+<dd><p>Raised when a call to <a class="reference internal" href="#ipc.Mailslot.get" title="ipc.Mailslot.get"><tt class="xref py py-meth docutils literal"><span class="pre">Mailslot.get()</span></tt></a> times out with nothing in the mailslot.</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="ipc.Mailslot">
@@ -72,16 +75,16 @@
 which allows messages to be sent to a named mailslot on one or more
 computers in the network regardless of the existence of a listening
 mailslot. This is ideally suited for, eg, logging to one or more
-remote computers. cf <tt class="xref docutils literal"><span class="pre">MailslotHandler</span></tt> and <tt class="xref docutils literal"><span class="pre">mailslot_listener</span></tt>
+remote computers. cf <tt class="xref py py-class docutils literal"><span class="pre">MailslotHandler</span></tt> and <tt class="xref py py-mod docutils literal"><span class="pre">mailslot_listener</span></tt>
 for an implementation of this.</p>
 <p>The Mailslot class mimics Python&#8217;s Queue object although the semantics
 are necessarily a little different. In particular, a Mailslot can only
 be read from or written to within one process: not both. The same class
 is used for readers and writers; the first use (a put or a get) freezes
 the object&#8217;s use and from that point on only that same use is allowed.
-A <tt class="xref docutils literal"><span class="pre">x_ipc_invalid_use</span></tt> is raised if any other use is attempted.</p>
+A <tt class="xref py py-exc docutils literal"><span class="pre">x_ipc_invalid_use</span></tt> is raised if any other use is attempted.</p>
 <p>Although this class can be instantiated directly, it is expected that
-the <a title="ipc.mailslot" class="reference external" href="ipc.html#ipc.mailslot"><tt class="xref docutils literal"><span class="pre">mailslot()</span></tt></a> function will be used, which can offer a slight
+the <a class="reference internal" href="ipc.html#ipc.mailslot" title="ipc.mailslot"><tt class="xref py py-func docutils literal"><span class="pre">mailslot()</span></tt></a> function will be used, which can offer a slight
 ease of use in common naming situations.</p>
 <p>A Mailslot is its own iterator and its own context manager so a common
 usage for a reading mailslot might be:</p>
@@ -104,48 +107,55 @@ to all mailslots named LISTENER anywhere in the network:</p>
 <dl class="method">
 <dt id="ipc.Mailslot.qsize">
 <tt class="descname">qsize</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mailslot.qsize" title="Permalink to this definition">¶</a></dt>
-<dd>Return the number of items waiting in the mailslot to be read.
-<strong>NB This will freeze the mailslot as a reader</strong></dd></dl>
+<dd><p>Return the number of items waiting in the mailslot to be read.
+<strong>NB This will freeze the mailslot as a reader</strong></p>
+</dd></dl>
 
 <dl class="method">
 <dt id="ipc.Mailslot.empty">
 <tt class="descname">empty</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mailslot.empty" title="Permalink to this definition">¶</a></dt>
-<dd>Return True if there is nothing in the mailslot to be read, False otherwise.
-<strong>NB This will freeze the mailslot as a reader</strong></dd></dl>
+<dd><p>Return True if there is nothing in the mailslot to be read, False otherwise.
+<strong>NB This will freeze the mailslot as a reader</strong></p>
+</dd></dl>
 
 <dl class="method">
 <dt id="ipc.Mailslot.full">
 <tt class="descname">full</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mailslot.full" title="Permalink to this definition">¶</a></dt>
-<dd>Return True if the number of messages in the mailslot is the maximum
+<dd><p>Return True if the number of messages in the mailslot is the maximum
 allowed.
-<strong>NB This will freeze the mailslot as a reader</strong></dd></dl>
+<strong>NB This will freeze the mailslot as a reader</strong></p>
+</dd></dl>
 
 <dl class="method">
 <dt id="ipc.Mailslot.get">
 <tt class="descname">get</tt><big>(</big><span class="optional">[</span><em>block=True</em>, <em>timeout_ms=-1</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#ipc.Mailslot.get" title="Permalink to this definition">¶</a></dt>
-<dd>Pop the oldest waiting message from the mailslot, waiting for one to
+<dd><p>Pop the oldest waiting message from the mailslot, waiting for one to
 arrive if block is True, waiting no longer than timeout_ms.
-<strong>NB This will freeze the mailslot as a reader</strong></dd></dl>
+<strong>NB This will freeze the mailslot as a reader</strong></p>
+</dd></dl>
 
 <dl class="method">
 <dt id="ipc.Mailslot.get_nowait">
 <tt class="descname">get_nowait</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mailslot.get_nowait" title="Permalink to this definition">¶</a></dt>
-<dd>Shortcut for <tt class="xref docutils literal"><span class="pre">get</span> <span class="pre">(False,</span> <span class="pre">0)()</span></tt>
-<strong>NB This will freeze the mailslot as a reader</strong></dd></dl>
+<dd><p>Shortcut for <tt class="xref py py-meth docutils literal"><span class="pre">get</span> <span class="pre">(False,</span> <span class="pre">0)()</span></tt>
+<strong>NB This will freeze the mailslot as a reader</strong></p>
+</dd></dl>
 
 <dl class="method">
 <dt id="ipc.Mailslot.put">
 <tt class="descname">put</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#ipc.Mailslot.put" title="Permalink to this definition">¶</a></dt>
-<dd>Send data to this mailslot (which may, depending on its name, map
+<dd><p>Send data to this mailslot (which may, depending on its name, map
 to all mailslots of that name in a domain or available on the network).
-<strong>NB This will freeze the mailslot as a writer</strong></dd></dl>
+<strong>NB This will freeze the mailslot as a writer</strong></p>
+</dd></dl>
 
 <dl class="method">
 <dt id="ipc.Mailslot.close">
 <tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mailslot.close" title="Permalink to this definition">¶</a></dt>
-<dd>Close the mailbox handle, making it impossible to write/read from
-this mailbox. This method is called automatically if <a title="ipc.Mailslot" class="reference internal" href="#ipc.Mailslot"><tt class="xref docutils literal"><span class="pre">Mailslot</span></tt></a>
-is used as a context manager.</dd></dl>
+<dd><p>Close the mailbox handle, making it impossible to write/read from
+this mailbox. This method is called automatically if <a class="reference internal" href="#ipc.Mailslot" title="ipc.Mailslot"><tt class="xref py py-class docutils literal"><span class="pre">Mailslot</span></tt></a>
+is used as a context manager.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -195,7 +205,7 @@ is used as a context manager.</dd></dl>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="events.html" title="Events"
@@ -203,13 +213,13 @@ is used as a context manager.</dd></dl>
         <li class="right" >
           <a href="ipc.html" title="ipc – Interprocess Communication"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="contents.html">WinSys v0.5.2 documentation</a> &raquo;</li>
           <li><a href="ipc.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2010, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>
