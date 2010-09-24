@@ -716,7 +716,9 @@ def hkcu ():
   return registry ("hkcu")
 
 Registry.values = values
+Registry.itervalues = itervalues
 Registry.keys = keys
+Registry.iterkeys = iterkeys
 Registry.__iter__ = keys
 Registry.delete = delete
 Registry.create = create

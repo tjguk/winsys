@@ -1,6 +1,14 @@
 import os, sys
 import operator
-import unittest2 as unittest
+import unittest as unittest0
+try:
+  unittest0.skipUnless
+  unittest0.skip
+except AttributeError:
+  import unittest2 as unittest
+else:
+  unittest = unittest0
+del unittest0
 
 from winsys._security import _privileges
 import win32security
