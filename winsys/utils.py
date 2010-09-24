@@ -1,21 +1,24 @@
 # -*- coding: iso-8859-1 -*-
 from __future__ import with_statement
-import os
+import os, sys
 from datetime import datetime, timedelta
 import re
 import struct
 import threading
-import pywintypes
 import winxpgui as win32gui
 
 #
 # Small support functions
 #
-def from_pytime (pytime):
-  try:
-    return datetime.fromtimestamp (int (pytime))
-  except ValueError:
-    return None
+if sys.version_info >= (3,):
+  def from_pytime (pytime):
+    return pytime
+else:
+  def from_pytime (pytime):
+    try:
+      return datetime.fromtimestamp (int (pytime))
+    except ValueError:
+      return None
 
 def signed_to_unsigned (signed):
   """Convert a (possibly signed) long to unsigned hex"""
