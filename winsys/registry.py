@@ -366,8 +366,8 @@ class Registry (core._WinSysObject):
     output.append (self.as_string ())
     output.append (u"access: %s" % self.access)
     if bool (self):
-      output.append (u"keys:\n%s" % utils.dumped_list ((key.name for key in self.keys (ignore_access_errors=True)), level))
-      output.append (u"values:\n%s" % utils.dumped_dict (dict ((name or u"(Default)", repr (value)) for (name, value) in self.values (ignore_access_errors=True)), level))
+      output.append (u"keys:\n%s" % utils.dumped_list ((key.name for key in self.iterkeys (ignore_access_errors=True)), level))
+      output.append (u"values:\n%s" % utils.dumped_dict (dict ((name or u"(Default)", repr (value)) for (name, value) in self.itervalues (ignore_access_errors=True)), level))
       output.append (u"security:\n%s" % utils.dumped (self.security ().dumped (level), level))
     return utils.dumped ("\n".join (output), level)
 
@@ -514,7 +514,7 @@ def values (root, ignore_access_errors=False, _want_types=False):
     from winsys import registry
 
     com3 = registry.registry (r"HKLM\Software\Microsoft\Com3")
-    com3_values = dict (com3.values ())
+    com3_values = dict (com3.itervalues ())
 
   :param root: anything accepted by :func:`registry`
   :param ignore_access_errors: if True, will keep on iterating even if access denied
@@ -545,6 +545,7 @@ def values (root, ignore_access_errors=False, _want_types=False):
       else:
         raise
     i += 1
+itervalues = values
 
 def keys (root, ignore_access_errors=False):
   """Yield the subkeys of a registry key as :class:`Registry` objects
@@ -570,6 +571,7 @@ def keys (root, ignore_access_errors=False):
       raise StopIteration
     else:
       raise
+iterkeys = keys
 
 def copy (from_key, to_key):
   """Copy one registry key to another, returning the target. If the
@@ -607,7 +609,7 @@ def delete (root, subkey=""):
     ws.create ()
     for subkey in ["winsys1", "winsys2", "winsys3"]:
       ws.create (subkey)
-    for key in ws.keys ():
+    for key in ws.iterkeys ():
       print key
     for subkey in ["winsys1", "winsys2", "winsys3"]:
       ws.delete (subkey)
@@ -618,7 +620,7 @@ def delete (root, subkey=""):
   :returns: a :class:`Registry` object for `root`
   """
   key = registry (root, accept_value=False).get_key (subkey)
-  for k in key.keys ():
+  for k in key.iterkeys ():
     k.delete ()
   win32api.RegDeleteKey (key.parent ().pyobject (), key.name)
   return key
@@ -672,10 +674,10 @@ def walk (root, ignore_access_errors=False, _want_types=False):
   root = registry (root, accept_value=False)
   yield (
     root,
-    root.keys (ignore_access_errors=ignore_access_errors),
-    root.values (ignore_access_errors=ignore_access_errors, _want_types=_want_types)
+    root.iterkeys (ignore_access_errors=ignore_access_errors),
+    root.itervalues (ignore_access_errors=ignore_access_errors, _want_types=_want_types)
   )
-  for subkey in root.keys (ignore_access_errors=ignore_access_errors):
+  for subkey in root.iterkeys (ignore_access_errors=ignore_access_errors):
     for result in walk (subkey, ignore_access_errors=ignore_access_errors, _want_types=_want_types):
       yield result
 

@@ -28,15 +28,15 @@ def console_hwnd ():
 def set_environment (**kwargs):
   root = registry.registry ("HKCU")
   env = root.Environment
-  for label, value in kwargs.items ():
+  for label, value in kwargs.iteritems ():
     env.set_value (label, value)
   win32gui.SendMessageTimeout (
-    win32con.HWND_BROADCAST, win32con.WM_SETTINGCHANGE, 
-    0, "Environment", 
+    win32con.HWND_BROADCAST, win32con.WM_SETTINGCHANGE,
+    0, "Environment",
     win32con.SMTO_ABORTIFHUNG, 2000
   )
 
 def get_environment ():
   return dict (
-    registry.registry (r"HKCU\Environment").values ()
+    registry.registry (r"HKCU\Environment").itervalues ()
   )

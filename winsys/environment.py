@@ -36,7 +36,7 @@ WINERROR_MAP = {
 wrapped = exc.wrapper (WINERROR_MAP, x_environment)
 
 class _DelimitedText (list):
-  ur""""Helper class for values such as PATH and PATHEXT which are
+  ur"""Helper class for values such as PATH and PATHEXT which are
   consistently semicolon-delimited text but which can helpfully
   be treated as a list of individual values. Subclasseed from
   list, it keeps track of the delimited list while exposing
