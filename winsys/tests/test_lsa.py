@@ -1,20 +1,16 @@
 import os, sys
-
-from nose.tools import *
+import unittest
 
 from winsys import _lsa
+from winsys.tests import utils
 
-def setup ():
-  pass
+class TestLSA (unittest.TestCase):
 
-def teardown ():
-  pass
-
-def test_LSA_logon_sessions ():
-  for logon_session in _lsa.LSA.logon_sessions ():
-    logon_session.dump ()
+  def test_LSA_logon_sessions (self):
+    with utils.fake_stdout ():
+      for logon_session in _lsa.LSA.logon_sessions ():
+        logon_session.dump ()
 
 if __name__ == "__main__":
-  import nose
-  nose.runmodule (exit=False)
+  unittest.main ()
   if sys.stdout.isatty (): raw_input ("Press enter...")

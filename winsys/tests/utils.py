@@ -1,3 +1,7 @@
+import os, sys
+import contextlib
+import io
+
 import win32api
 import win32net
 import win32netcon
@@ -16,8 +20,9 @@ def create_user (user, password):
   )
   try:
     win32net.NetUserDel (None, user)
-  except win32net.error, (number, context, message):
-    if number <> 2221:
+  except win32net.error as error:
+    number, context, message = error.args
+    if number != 2221:
       raise
   win32net.NetUserAdd (None, 1, user_info)
 
@@ -27,8 +32,9 @@ def create_group (group):
   )
   try:
     win32net.NetLocalGroupDel (None, group)
-  except win32net.error, (number, context, message):
-    if number <> 2220:
+  except win32net.error as error:
+    number, context, message = error.args
+    if number != 2220:
       raise
   win32net.NetLocalGroupAdd (None, 0, group_info)
 
@@ -41,25 +47,34 @@ def add_user_to_group (user, group):
 def delete_user (user):
   try:
     win32net.NetUserDel (None, user)
-  except win32net.error, (errno, errctx, errmsg):
+  except win32net.error as error:
+    errno, errctx, errmsg = error.args
     if errno != 2221: raise
 
 def delete_group (group):
   try:
     win32net.NetLocalGroupDel (None, group)
-  except win32net.error, (errno, errctx, errmsg):
+  except win32net.error as error:
+    errno, errctx, errmsg = error.args
     if errno != 2220: raise
 
 def change_priv (priv_name, enable=True):
   hToken = win32security.OpenProcessToken (
-    win32api.GetCurrentProcess (), 
+    win32api.GetCurrentProcess (),
     ntsecuritycon.MAXIMUM_ALLOWED
   )
-  win32security.AdjustTokenPrivileges ( 
+  win32security.AdjustTokenPrivileges (
     hToken,
-    False, 
+    False,
     [(
-      win32security.LookupPrivilegeValue (None, priv_name), 
+      win32security.LookupPrivilegeValue (None, priv_name),
       win32security.SE_PRIVILEGE_ENABLED if enable else 0
     )]
   )
+
+@contextlib.contextmanager
+def fake_stdout ():
+  _stdout, sys.stdout = sys.stdout, io.StringIO ()
+  yield sys.stdout
+  sys.stdout = _stdout
+

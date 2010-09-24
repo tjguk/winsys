@@ -1,6 +1,6 @@
-from winsys import fs, constants
+import unittest
 
-from nose.tools import *
+from winsys import fs, constants
 
 CONST = constants.Constants.from_dict (dict (
   a = 1,
@@ -8,31 +8,32 @@ CONST = constants.Constants.from_dict (dict (
   c = 4
 ))
 
-def test_getitem_text ():
-  attributes = fs._Attributes (3, CONST)
-  assert_true (attributes["a"])
-  assert_false (attributes["c"])
+class TestAttributes (unittest.TestCase):
 
-def test_getitem_number ():
-  attributes = fs._Attributes (3, CONST)
-  assert_true (attributes[1])
-  assert_false (attributes[4])
+  def test_getitem_text (self):
+    attributes = fs._Attributes (3, CONST)
+    self.assertTrue (attributes["a"])
+    self.assertFalse (attributes["c"])
 
-def test_getattr ():
-  attributes = fs._Attributes (3, CONST)
-  assert_true (attributes.a)
-  assert_false (attributes.c)
+  def test_getitem_number (self):
+    attributes = fs._Attributes (3, CONST)
+    self.assertTrue (attributes[1])
+    self.assertFalse (attributes[4])
 
-def test_contains ():
-  attributes = fs._Attributes (3, CONST)
-  assert_true ("a" in attributes)
-  assert_false ("c" in attributes)
+  def test_getattr (self):
+    attributes = fs._Attributes (3, CONST)
+    self.assertTrue (attributes.a)
+    self.assertFalse (attributes.c)
 
-def test_string ():
-  attributes = fs._Attributes (3, CONST)
-  assert_equals (attributes.as_string (), "%08X" % 3)
+  def test_contains (self):
+    attributes = fs._Attributes (3, CONST)
+    self.assertTrue ("a" in attributes)
+    self.assertFalse ("c" in attributes)
+
+  def test_string (self):
+    attributes = fs._Attributes (3, CONST)
+    self.assertEquals (attributes.as_string (), "%08X" % 3)
 
 if __name__ == "__main__":
-  import nose
-  nose.runmodule (exit=False)
+  unittest.main ()
   if sys.stdout.isatty (): raw_input ("Press enter...")
