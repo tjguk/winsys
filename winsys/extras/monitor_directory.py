@@ -18,6 +18,7 @@ import urllib
 import urlparse
 from wsgiref.simple_server import make_server
 from wsgiref.util import shift_path_info
+import win32timezone
 
 import error_handler
 from winsys import core, fs, misc
@@ -37,7 +38,7 @@ def deltastamp (delta):
     output_format = "in %s"
 
   days = delta.days
-  if days <> 0:
+  if days != 0:
     wks, days = divmod (days, 7)
     if wks > 0:
       if wks < 9:
@@ -261,7 +262,7 @@ class App (object):
     <input type="submit" value="Refresh" />
     </form><hr>""" % locals ())
 
-    now = datetime.datetime.now ()
+    now = win32timezone.utcnow ()
     if path:
       doc.append (u"<h1>%s</h1>" % title)
       latest_filename = "\\".join (files[-1].parts[1:]) if files else "(no file yet)"
@@ -300,10 +301,10 @@ class App (object):
         if path not in self.paths:
           self.paths[path] = Path (path, size_threshold_mb, self.N_FILES_AT_A_TIME)
         path_handler = self.paths[path]
-        if path_handler._size_threshold_mb <> size_threshold_mb:
+        if path_handler._size_threshold_mb != size_threshold_mb:
           path_handler.finish ()
           path_handler = self.paths[path] = Path (path, size_threshold_mb, self.N_FILES_AT_A_TIME)
-        self._paths_accessed[path] = datetime.datetime.now ()
+        self._paths_accessed[path] = win32timezone.utcnow ()
         files = sorted (path_handler.updated (), key=operator.attrgetter ("size"), reverse=True)
         status = path_handler.status ()
 
@@ -313,8 +314,8 @@ class App (object):
         # its entry. If it is queried again, it will just
         # be restarted as new.
         #
-        for path, last_accessed in self._paths_accessed.items ():
-          if (datetime.datetime.now () - last_accessed).seconds > 180:
+        for path, last_accessed in self._paths_accessed.iteritems ():
+          if (win32timezone.utcnow () - last_accessed).seconds > 180:
             path_handler = self.paths.get (path)
             if path_handler:
               path_handler.finish ()
@@ -332,7 +333,7 @@ class App (object):
     """
     path = shift_path_info (environ).rstrip ("/")
     if path == "":
-      form = dict ((k, v[0]) for (k, v) in cgi.parse_qs (environ['QUERY_STRING']).items () if v)
+      form = dict ((k, v[0]) for (k, v) in cgi.parse_qs (list (environ['QUERY_STRING']).iteritems ()) if v)
       if form.get ("path"):
         form['path'] = form['path'].rstrip ("\\") + "\\"
       refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
@@ -347,7 +348,7 @@ class App (object):
       return []
 
   def finish (self):
-    for path_handler in self.paths.values ():
+    for path_handler in self.paths.itervalues ():
       path_handler.finish ()
 
 if __name__ == '__main__':

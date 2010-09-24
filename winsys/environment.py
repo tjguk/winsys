@@ -146,10 +146,10 @@ class Env (core._WinSysObject):
     raise NotImplementedError
 
   def __repr__ (self):
-    return repr (dict (self.items ()))
+    return repr (dict (self.iteritems ()))
 
   def dumped (self, level):
-    return utils.dumped_dict (dict (self.items ()), level)
+    return utils.dumped_dict (dict (self.iteritems ()), level)
 
   def keys (self):
     """Yield environment variable names
@@ -204,7 +204,7 @@ class Env (core._WinSysObject):
       penv = environment.process ()
       penv.update (environment.system ())
     """
-    for k, v in dict (dict_initialiser).items ():
+    for k, v in dict (dict_initialiser).iteritems ():
       self[k] = v
 
   @staticmethod
@@ -227,10 +227,10 @@ class Process (Env):
     super (Process, self).__init__ ()
 
   def keys (self):
-    return (k for k in wrapped (win32profile.GetEnvironmentStrings).keys ())
+    return (k for k in wrapped (win32profile.GetEnvironmentStrings).iterkeys ())
 
   def _items (self):
-    return (item for item in wrapped (win32profile.GetEnvironmentStrings).items ())
+    return (item for item in wrapped (win32profile.GetEnvironmentStrings).iteritems ())
 
   def _get (self, item):
     return wrapped (win32api.GetEnvironmentVariable, item)
@@ -282,10 +282,10 @@ class Persistent (Env):
       raise KeyError
 
   def keys (self):
-    return (name for name, value in self.registry.values ())
+    return (name for name, value in self.registry.itervalues ())
 
   def _items (self):
-    return self.registry.values ()
+    return list (self.registry.itervalues ())
 
   def __getitem__ (self, item):
     value = self._get (item)
