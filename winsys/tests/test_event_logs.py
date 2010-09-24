@@ -118,7 +118,7 @@ class TestEventLogs (unittest.TestCase):
     self.assertTrue (event_logs.event_source (GUID).as_string ())
 
   def test_event_source_log_event (self):
-    data = bytes (GUID, "utf8")
+    data = str (GUID).encode ("utf8")
     event_logs.event_source (GUID).log_event (data=data)
     for event in yield_logs ():
       if event.SourceName == GUID and event.Data == data:
@@ -192,7 +192,7 @@ class TestEventLogs (unittest.TestCase):
   # Module-level functions
   #
   def test_log_event (self):
-    data = bytes (GUID, "utf8")
+    data = str (GUID).encode ("utf8")
     event_logs.log_event ("%s\\%s" % (LOG_NAME, GUID), data=data)
     for event in yield_logs ():
       if event.SourceName == GUID and event.Data == data:
