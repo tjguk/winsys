@@ -5,7 +5,7 @@ import operator
 import win32security
 import ntsecuritycon
 import tempfile
-import unittest
+import unittest2 as unittest
 
 from winsys.tests import utils
 

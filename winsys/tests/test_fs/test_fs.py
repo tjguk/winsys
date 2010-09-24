@@ -1,6 +1,6 @@
 import os, sys
 import tempfile
-import unittest
+import unittest2 as unittest
 import uuid
 
 import win32file

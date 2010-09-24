@@ -6,7 +6,7 @@ import win32con
 import win32security
 import ntsecuritycon
 import tempfile
-import unittest
+import unittest2 as unittest
 
 from winsys import accounts
 from winsys._security import _aces, _acls

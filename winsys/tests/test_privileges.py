@@ -1,6 +1,6 @@
 import os, sys
 import operator
-import unittest
+import unittest2 as unittest
 
 from winsys._security import _privileges
 import win32security

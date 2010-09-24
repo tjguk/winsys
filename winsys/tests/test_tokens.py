@@ -1,5 +1,5 @@
 import os, sys
-import unittest
+import unittest2 as unittest
 
 import win32api
 import win32security

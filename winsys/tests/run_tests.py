@@ -1,7 +1,7 @@
 import os, sys
 import glob
 import imp
-import unittest
+import unittest2 as unittest
 
 IGNORE_DIRECTORIES = set (['.svn', "build", "dist"])
 

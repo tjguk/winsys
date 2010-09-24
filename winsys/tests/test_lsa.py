@@ -1,5 +1,5 @@
 import os, sys
-import unittest
+import unittest2 as unittest
 
 from winsys import _lsa
 from winsys.tests import utils

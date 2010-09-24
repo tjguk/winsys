@@ -1,7 +1,7 @@
 import os, sys
 import struct
 import tempfile
-import unittest
+import unittest2 as unittest
 
 import win32api
 import win32file

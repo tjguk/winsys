@@ -2,7 +2,7 @@ from __future__ import with_statement
 import os, sys
 import contextlib
 import tempfile
-import unittest
+import unittest2 as unittest
 import uuid
 
 import winerror
