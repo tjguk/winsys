@@ -16,9 +16,9 @@ ext_modules = [
 
 if __name__ == '__main__':
   if refactorer:
-    refactorer.refactor_dir ("./winsys", write=True)
+    refactorer.refactor_dir (".", write=True)
   setup (
-      name='WinSys-2.x',
+      name='WinSys',
       version='0.5.2',
       url='http://code.google.com/p/winsys',
       #~ download_url='http://timgolden.me.uk/python/downloads/winsys',
