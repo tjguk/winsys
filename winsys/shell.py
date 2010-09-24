@@ -281,7 +281,7 @@ class Shortcut (core._WinSysObject):
       ).Load (
         self.filepath
       )
-    for k, v in kwargs.items ():
+    for k, v in kwargs.iteritems ():
       setattr (self, k, v)
 
   def as_string (self):
@@ -429,13 +429,13 @@ class PropertySet (core._WinSysObject):
     return self.as_dict ()[attr]
 
   def keys (self):
-    return self.as_dict ().keys ()
+    return list (self.as_dict ().iterkeys ())
 
   def values (self):
-    return self.as_dict ().values ()
+    return list (self.as_dict ().itervalues ())
 
   def items (self):
-    return self.as_dict ().items ()
+    return list (self.as_dict ().iteritems ())
 
 class Properties (core._WinSysObject):
 

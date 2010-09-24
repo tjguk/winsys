@@ -314,7 +314,7 @@ class App (object):
         # its entry. If it is queried again, it will just
         # be restarted as new.
         #
-        for path, last_accessed in self._paths_accessed.items ():
+        for path, last_accessed in self._paths_accessed.iteritems ():
           if (win32timezone.utcnow () - last_accessed).seconds > 180:
             path_handler = self.paths.get (path)
             if path_handler:
@@ -333,7 +333,7 @@ class App (object):
     """
     path = shift_path_info (environ).rstrip ("/")
     if path == "":
-      form = dict ((k, v[0]) for (k, v) in cgi.parse_qs (environ['QUERY_STRING']).items () if v)
+      form = dict ((k, v[0]) for (k, v) in cgi.parse_qs (list (environ['QUERY_STRING']).iteritems ()) if v)
       if form.get ("path"):
         form['path'] = form['path'].rstrip ("\\") + "\\"
       refresh_secs = int (form.get ("refresh_secs", self.REFRESH_SECS) or 0)
@@ -348,7 +348,7 @@ class App (object):
       return []
 
   def finish (self):
-    for path_handler in self.paths.values ():
+    for path_handler in self.paths.itervalues ():
       path_handler.finish ()
 
 if __name__ == '__main__':
