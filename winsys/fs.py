@@ -68,6 +68,10 @@ WINERROR_MAP = {
 }
 wrapped = exc.wrapper (WINERROR_MAP, x_fs)
 
+def ignore_access_errors (exc_info):
+  print exc_info[0]
+  return exc_info[0] is exc.x_access_denied
+
 FILE_ACCESS = constants.Constants.from_pattern ("FILE_*", namespace=ntsecuritycon)
 FILE_ACCESS.update (constants.STANDARD_ACCESS)
 FILE_ACCESS.update (constants.GENERIC_ACCESS)
@@ -2084,7 +2088,7 @@ class _DirWatcher (object):
 
           if action:
             result = (action, old_file, new_file)
-            if result <> last_result:
+            if result != last_result:
               self._changes.append (result)
 
       if self._changes:
