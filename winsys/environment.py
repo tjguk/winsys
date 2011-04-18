@@ -146,10 +146,10 @@ class Env (core._WinSysObject):
     raise NotImplementedError
 
   def __repr__ (self):
-    return repr (dict (self.iteritems ()))
+    return repr (dict (self).items ())
 
   def dumped (self, level):
-    return utils.dumped_dict (dict (self.iteritems ()), level)
+    return utils.dumped_dict (dict (self).items (), level)
 
   def keys (self):
     """Yield environment variable names
@@ -166,6 +166,7 @@ class Env (core._WinSysObject):
         for k, v
         in self._items ()
     )
+  iteritems = items
 
   def _get_path (self):
     if self.get ("PATH"):
