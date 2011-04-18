@@ -260,7 +260,7 @@ def handle (filepath, write=False, attributes=None, sec=None):
   return wrapped (
     win32file.CreateFile,
     normalised (filepath),
-    (FILE_ACCESS.READ | FILE_ACCESS.WRITE) if write else 0,
+    (FILE_ACCESS.READ | FILE_ACCESS.WRITE) if write else FILE_ACCESS.READ,
     (FILE_SHARE.READ | FILE_SHARE.WRITE) if write else FILE_SHARE.READ,
     sec,
     FILE_CREATION.OPEN_ALWAYS if write else FILE_CREATION.OPEN_EXISTING,
