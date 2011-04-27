@@ -291,6 +291,8 @@ class BaseDialog (object):
         field_type, sub_type = "BUTTON", "RADIOBUTTON"
       elif isinstance (default_value, list):
         field_type, sub_type = "COMBOBOX", None
+      elif default_value == "PASSWORD":
+        field_type, sub_type = "EDIT", "PASSWORD"
       else:
         field_type, sub_type = "EDIT", None
 
@@ -320,6 +322,8 @@ class BaseDialog (object):
           display_h = field_h = self.CONTROL_H * min (default_value.count ("\r\n"), 10)
         if sub_type == "READONLY":
           field_styles |= win32con.ES_READONLY
+        if sub_type == "PASSWORD":
+          field_styles |= win32con.ES_PASSWORD
       else:
         raise x_dialogs ("Problemo", "_get_dialog_template", 0)
 
