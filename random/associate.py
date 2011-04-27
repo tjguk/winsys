@@ -18,7 +18,10 @@ the dropped file as sys.argv[1].
 the environment has changed and that they ought to refetch their copy.
 """
 import os, sys
-import _winreg
+try:
+  import _winreg
+except ImportError:
+  import winreg as _winreg
 import warnings
 try:
   import ctypes
@@ -50,10 +53,10 @@ if ctypes:
 else:
   def expand_environment_strings (path):
     return path
-  
+
 def add_to_path (user_or_system):
-  """Note that, uniquely, Windows creates an effective path by combining 
-  system & user paths in that order. At the end of this function, there 
+  """Note that, uniquely, Windows creates an effective path by combining
+  system & user paths in that order. At the end of this function, there
   should be exactly one version of Python referenced in the combined path.
   If you're updating the system, you'll certainly have access to the user
   path; if you're updating the user path you may not have access to adjust
@@ -64,12 +67,12 @@ def add_to_path (user_or_system):
   SYSTEM_REG = r"SYSTEM\CurrentControlSet\Control\Session Manager"
   user_key = _winreg.CreateKey (_winreg.HKEY_CURRENT_USER, USER_REG)
   system_key = _winreg.CreateKey (_winreg.HKEY_LOCAL_MACHINE, SYSTEM_REG)
-    
+
   old_user_path = _winreg.QueryValueEx (_winreg.CreateKey (user_key, "Environment"), "PATH")[0]
   user_paths = expand_environment_strings (old_user_path.encode ("cp1252")).split (";")
   old_system_path = _winreg.QueryValueEx (_winreg.CreateKey (system_key, "Environment"), "PATH")[0]
   system_paths = expand_environment_strings (old_system_path.encode ("cp1252")).split (";")
-  
+
   system_python_exes = find_python_exes (system_paths)
   user_python_exes = find_python_exes (user_paths)
 
@@ -84,7 +87,7 @@ def add_to_path (user_or_system):
     system_paths.append (PYTHON_DIRNAME)
     system_paths.append (os.path.join (PYTHON_DIRNAME, "scripts"))
     new_system_path = ";".join (system_paths)
-    if new_system_path <> old_system_path:
+    if new_system_path != old_system_path:
       _winreg.SetValueEx (_winreg.CreateKey (system_key, "Environment"), "PATH", 0, _winreg.REG_EXPAND_SZ, ";".join (system_paths))
       _winreg.SetValueEx (_winreg.CreateKey (system_key, "Environment"), "OLDPATH", 0, _winreg.REG_EXPAND_SZ, old_system_path)
 
@@ -94,7 +97,7 @@ def add_to_path (user_or_system):
     user_paths.append (PYTHON_DIRNAME)
     user_paths.append (os.path.join (PYTHON_DIRNAME, "scripts"))
   new_user_path = ";".join (user_paths)
-  if new_user_path <> old_user_path:
+  if new_user_path != old_user_path:
     _winreg.SetValueEx (_winreg.CreateKey (user_key, "Environment"), "OLDPATH", 0, _winreg.REG_EXPAND_SZ, old_user_path)
     _winreg.SetValueEx (_winreg.CreateKey (user_key, "Environment"), "PATH", 0, _winreg.REG_EXPAND_SZ, new_user_path)
 
@@ -104,7 +107,7 @@ def add_association (user_or_system):
     root = _winreg.HKEY_CURRENT_USER
   else:
     root = _winreg.HKEY_LOCAL_MACHINE
-  
+
   _winreg.SetValueEx (
     _winreg.CreateKey (
       root,
@@ -126,7 +129,7 @@ def add_apppath (user_or_system):
     root = _winreg.HKEY_CURRENT_USER
   else:
     root = _winreg.HKEY_LOCAL_MACHINE
-  
+
   _winreg.SetValueEx (
     _winreg.CreateKey (
       root,
@@ -148,21 +151,18 @@ def add_pathext ():
   PYTHON_PATHEXTS = ['.py', '.pyc', '.pyw', '.pys', '.pyo']
   SYSTEM_REG = r"SYSTEM\CurrentControlSet\Control\Session Manager"
   system_key = _winreg.CreateKey (_winreg.HKEY_LOCAL_MACHINE, SYSTEM_REG)
-    
+
   old_pathexts = _winreg.QueryValueEx (_winreg.CreateKey (system_key, "Environment"), "PATHEXT")[0]
   _winreg.SetValueEx (system_key, "OLD_PATHEXT", 0, _winreg.REG_SZ, old_pathexts)
-  
-  print "old_pathexts", old_pathexts
+
   pathexts = [p for p in old_pathexts.lower ().split (";") if p not in PYTHON_PATHEXTS] + PYTHON_PATHEXTS
-  print "pathexts", pathexts
-  print ";".join (pathexts)
   _winreg.SetValueEx (system_key, "PATHEXT", 0, _winreg.REG_SZ, ";".join (pathexts))
 
 if ctypes and wintypes:
   def notify_changes ():
     HWND_BROADCAST = 65535
     WM_SETTINGCHANGE = 26
-    SMTO_ABORTIFHUNG = 2  
+    SMTO_ABORTIFHUNG = 2
     result = wintypes.DWORD ()
     ctypes.windll.user32.SendMessageTimeoutA (
       HWND_BROADCAST,
@@ -182,7 +182,7 @@ if __name__ == '__main__':
     user_or_system = sys.argv[1].lower ()
   else:
     user_or_system = "system"
-  
+
   add_to_path (user_or_system)
   add_association (user_or_system)
   add_apppath (user_or_system)
