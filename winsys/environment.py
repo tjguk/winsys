@@ -329,3 +329,6 @@ def user ():
   """
   return Persistent (ur"HKCU\Environment")
 
+
+def broadcast (timeout_ms=2000):
+  return Persistent.broadcast (timeout_ms=timeout_ms)
