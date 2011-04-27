@@ -310,9 +310,9 @@ class BaseDialog (object):
       elif field_type == "COMBOBOX":
         if callback is not None:
           raise x_dialogs ("Cannot combine a list with a callback")
-        field_styles |= win32con.CBS_DROPDOWNLIST
+        field_styles |= win32con.CBS_DROPDOWNLIST | win32con.WS_VSCROLL
         field_w = self.FIELD_W
-        field_h = 4 * self.CONTROL_H
+        field_h = 8 * self.CONTROL_H
         display_h = self.CONTROL_H
       elif field_type == "EDIT":
         field_styles |= win32con.WS_BORDER | win32con.ES_AUTOHSCROLL | win32con.ES_AUTOVSCROLL
