@@ -291,7 +291,7 @@ class BaseDialog (object):
         field_type, sub_type = "BUTTON", "RADIOBUTTON"
       elif isinstance (default_value, list):
         field_type, sub_type = "COMBOBOX", None
-      elif default_value == "PASSWORD":
+      elif field.upper () == "PASSWORD":
         field_type, sub_type = "EDIT", "PASSWORD"
       else:
         field_type, sub_type = "EDIT", None
