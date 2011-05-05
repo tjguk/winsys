@@ -1465,7 +1465,7 @@ class Dir (Entry):
 
     :pattern: a |-separated list of wildcards to match
     """
-    return files (self + pattern, *args, **kwargs)
+    return files ("|".join (self + p for p in pattern.split ("|")), *args, **kwargs)
   __iter__ = entries
 
   def file (self, name):
