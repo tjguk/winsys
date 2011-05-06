@@ -159,8 +159,6 @@ PATHSEG = "(" + LEGAL_FILECHARS + ")" + sep * 2 + "?"
 PATHSEGS = "(?:%s)*" % PATHSEG
 FILEPATH = PREFIX + PATHSEGS
 
-PRESERVE_CASE = False
-
 def get_parts (filepath):
   ur"""Helper function to regularise a file path and then
   to pick out its drive and path components.
@@ -351,8 +349,7 @@ class FilePath (unicode):
   =================== ========== ========= ========= ========= =========== =========== ===== ====
   """
   def __new__ (meta, filepath):
-    _filepath = filepath if PRESERVE_CASE else filepath.lower ()
-    fp = unicode.__new__ (meta, _filepath.replace ("/", sep))
+    fp = unicode.__new__ (meta, filepath.replace ("/", sep))
     fp._parts = None
     fp._root = None
     fp._filename = None
@@ -389,11 +386,17 @@ class FilePath (unicode):
     """
     return cls (filepath)
 
-  def __repr__ (self):
-    return u'<%s %s>' % (self.__class__.__name__, self)
-
   def __add__ (self, other):
     return self.__class__.factory (os.path.join (unicode (self), unicode (other)))
+
+  def __eq__ (self, other):
+    return self.lower () == unicode (other).lower ()
+
+  def __hash__ (self):
+    return hash (self.lower ())
+
+  def __repr__ (self):
+    return u'<%s %s>' % (self.__class__.__name__, self)
 
   def __radd__ (self, other):
     return self.__class__.factory (os.path.join (unicode (other), unicode (self)))
