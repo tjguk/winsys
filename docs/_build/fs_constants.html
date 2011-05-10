@@ -197,6 +197,33 @@
 <dt id="fs.FILE_SHARE">
 <tt class="descname">FILE_SHARE</tt><a class="headerlink" href="#fs.FILE_SHARE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ways of sharing a file for reading, writing, &amp;c.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="12%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>READ</td>
+<td>1</td>
+<td>FILE_SHARE_READ</td>
+</tr>
+<tr><td>WRITE</td>
+<td>2</td>
+<td>FILE_SHARE_WRITE</td>
+</tr>
+<tr><td>DELETE</td>
+<td>4</td>
+<td>FILE_SHARE_DELETE</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="data">
@@ -248,6 +275,41 @@
 <dt id="fs.FILE_ACTION">
 <tt class="descname">FILE_ACTION</tt><a class="headerlink" href="#fs.FILE_ACTION" title="Permalink to this definition">¶</a></dt>
 <dd><p>Results of a file change</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="46%" />
+<col width="9%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>ADDED</td>
+<td>1</td>
+<td>ADDED</td>
+</tr>
+<tr><td>REMOVED</td>
+<td>2</td>
+<td>REMOVED</td>
+</tr>
+<tr><td>MODIFIED</td>
+<td>3</td>
+<td>MODIFIED</td>
+</tr>
+<tr><td>RENAMED_OLD_NAME</td>
+<td>4</td>
+<td>RENAMED_OLD_NAME</td>
+</tr>
+<tr><td>RENAMED_NEW_NAME</td>
+<td>5</td>
+<td>RENAMED_NEW_NAME</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="data">
@@ -331,12 +393,82 @@
 <dt id="fs.PROGRESS">
 <tt class="descname">PROGRESS</tt><a class="headerlink" href="#fs.PROGRESS" title="Permalink to this definition">¶</a></dt>
 <dd><p>States within a file move/copy progress</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="11%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>CONTINUE</td>
+<td>0</td>
+<td>PROGRESS_CONTINUE</td>
+</tr>
+<tr><td>CANCEL</td>
+<td>1</td>
+<td>PROGRESS_CANCEL</td>
+</tr>
+<tr><td>STOP</td>
+<td>2</td>
+<td>PROGRESS_STOP</td>
+</tr>
+<tr><td>QUIET</td>
+<td>3</td>
+<td>PROGRESS_QUIET</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="data">
 <dt id="fs.MOVEFILE">
 <tt class="descname">MOVEFILE</tt><a class="headerlink" href="#fs.MOVEFILE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Options when moving a file</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="39%" />
+<col width="6%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>REPLACE_EXISTING</td>
+<td>1</td>
+<td>MOVEFILE_REPLACE_EXISTING</td>
+</tr>
+<tr><td>CREATE_HARDLINK</td>
+<td>16</td>
+<td>MOVEFILE_CREATE_HARDLINK</td>
+</tr>
+<tr><td>COPY_ALLOWED</td>
+<td>2</td>
+<td>MOVEFILE_COPY_ALLOWED</td>
+</tr>
+<tr><td>FAIL_IF_NOT_TRACKABLE</td>
+<td>32</td>
+<td>MOVEFILE_FAIL_IF_NOT_TRACKABLE</td>
+</tr>
+<tr><td>DELAY_UNTIL_REBOOT</td>
+<td>4</td>
+<td>MOVEFILE_DELAY_UNTIL_REBOOT</td>
+</tr>
+<tr><td>WRITE_THROUGH</td>
+<td>8</td>
+<td>MOVEFILE_WRITE_THROUGH</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="data">
@@ -396,6 +528,41 @@
 <dt id="fs.FILE_CREATION">
 <tt class="descname">FILE_CREATION</tt><a class="headerlink" href="#fs.FILE_CREATION" title="Permalink to this definition">¶</a></dt>
 <dd><p>Options when creating a file</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="46%" />
+<col width="8%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>CREATE_NEW</td>
+<td>1</td>
+<td>CREATE_NEW</td>
+</tr>
+<tr><td>CREATE_ALWAYS</td>
+<td>2</td>
+<td>CREATE_ALWAYS</td>
+</tr>
+<tr><td>OPEN_EXISTING</td>
+<td>3</td>
+<td>OPEN_EXISTING</td>
+</tr>
+<tr><td>OPEN_ALWAYS</td>
+<td>4</td>
+<td>OPEN_ALWAYS</td>
+</tr>
+<tr><td>TRUNCATE_EXISTING</td>
+<td>5</td>
+<td>TRUNCATE_EXISTING</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="data">
@@ -487,12 +654,82 @@
 <dt id="fs.DRIVE_TYPE">
 <tt class="descname">DRIVE_TYPE</tt><a class="headerlink" href="#fs.DRIVE_TYPE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Types of drive</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="10%" />
+<col width="55%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>UNKNOWN</td>
+<td>0</td>
+<td>DRIVE_UNKNOWN</td>
+</tr>
+<tr><td>NO_ROOT_DIR</td>
+<td>1</td>
+<td>DRIVE_NO_ROOT_DIR</td>
+</tr>
+<tr><td>REMOVABLE</td>
+<td>2</td>
+<td>DRIVE_REMOVABLE</td>
+</tr>
+<tr><td>FIXED</td>
+<td>3</td>
+<td>DRIVE_FIXED</td>
+</tr>
+<tr><td>REMOTE</td>
+<td>4</td>
+<td>DRIVE_REMOTE</td>
+</tr>
+<tr><td>CDROM</td>
+<td>5</td>
+<td>DRIVE_CDROM</td>
+</tr>
+<tr><td>RAMDISK</td>
+<td>6</td>
+<td>DRIVE_RAMDISK</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="data">
 <dt id="fs.COMPRESSION_FORMAT">
 <tt class="descname">COMPRESSION_FORMAT</tt><a class="headerlink" href="#fs.COMPRESSION_FORMAT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ways in which a file can be compressed</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="41%" />
+<col width="18%" />
+<col width="41%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>NONE</td>
+<td>0</td>
+<td>NONE</td>
+</tr>
+<tr><td>DEFAULT</td>
+<td>1</td>
+<td>DEFAULT</td>
+</tr>
+<tr><td>LZNT1</td>
+<td>2</td>
+<td>LZNT1</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="data">

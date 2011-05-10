@@ -415,12 +415,82 @@ event source.</p>
 <dt id="event_logs.EVENTLOG_READ">
 <tt class="descname">EVENTLOG_READ</tt><a class="headerlink" href="#event_logs.EVENTLOG_READ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ways of reading event logs</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="8%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>SEQUENTIAL</td>
+<td>1</td>
+<td>EVENTLOG_SEQUENTIAL_READ</td>
+</tr>
+<tr><td>SEEK</td>
+<td>2</td>
+<td>EVENTLOG_SEEK_READ</td>
+</tr>
+<tr><td>FORWARDS</td>
+<td>4</td>
+<td>EVENTLOG_FORWARDS_READ</td>
+</tr>
+<tr><td>BACKWARDS</td>
+<td>8</td>
+<td>EVENTLOG_BACKWARDS_READ</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="data">
 <dt id="event_logs.EVENTLOG_TYPE">
 <tt class="descname">EVENTLOG_TYPE</tt><a class="headerlink" href="#event_logs.EVENTLOG_TYPE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Types of records in event logs</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="7%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>EVENTLOG_SUCCESS</td>
+<td>0</td>
+<td>EVENTLOG_SUCCESS</td>
+</tr>
+<tr><td>ERROR</td>
+<td>1</td>
+<td>EVENTLOG_ERROR_TYPE</td>
+</tr>
+<tr><td>AUDIT_FAILURE</td>
+<td>16</td>
+<td>AUDIT_FAILURE</td>
+</tr>
+<tr><td>WARNING</td>
+<td>2</td>
+<td>EVENTLOG_WARNING_TYPE</td>
+</tr>
+<tr><td>INFORMATION</td>
+<td>4</td>
+<td>EVENTLOG_INFORMATION_TYPE</td>
+</tr>
+<tr><td>AUDIT_SUCCESS</td>
+<td>8</td>
+<td>AUDIT_SUCCESS</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

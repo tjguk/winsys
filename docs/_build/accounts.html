@@ -400,24 +400,484 @@ authority, eg a machine or a domain.</p>
 <dt id="accounts.LOGON">
 <tt class="descname">LOGON</tt><a class="headerlink" href="#accounts.LOGON" title="Permalink to this definition">¶</a></dt>
 <dd><p>Types of logon used by LogonUser and related APIs</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="40%" />
+<col width="5%" />
+<col width="54%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>PROVIDER_DEFAULT</td>
+<td>0</td>
+<td>LOGON32_PROVIDER_DEFAULT</td>
+</tr>
+<tr><td>PROVIDER_WINNT35</td>
+<td>1</td>
+<td>LOGON32_PROVIDER_WINNT35</td>
+</tr>
+<tr><td>PROVIDER_WINNT40</td>
+<td>2</td>
+<td>LOGON32_PROVIDER_WINNT40</td>
+</tr>
+<tr><td>LOGON_INTERACTIVE</td>
+<td>2</td>
+<td>LOGON32_PROVIDER_WINNT40</td>
+</tr>
+<tr><td>LOGON_NETWORK</td>
+<td>3</td>
+<td>LOGON32_PROVIDER_WINNT50</td>
+</tr>
+<tr><td>PROVIDER_WINNT50</td>
+<td>3</td>
+<td>LOGON32_PROVIDER_WINNT50</td>
+</tr>
+<tr><td>LOGON_BATCH</td>
+<td>4</td>
+<td>LOGON32_LOGON_BATCH</td>
+</tr>
+<tr><td>LOGON_SERVICE</td>
+<td>5</td>
+<td>LOGON32_LOGON_SERVICE</td>
+</tr>
+<tr><td>LOGON_UNLOCK</td>
+<td>7</td>
+<td>LOGON32_LOGON_UNLOCK</td>
+</tr>
+<tr><td>LOGON_NETWORK_CLEARTEXT</td>
+<td>8</td>
+<td>LOGON32_LOGON_NETWORK_CLEARTEXT</td>
+</tr>
+<tr><td>LOGON_NEW_CREDENTIALS</td>
+<td>9</td>
+<td>LOGON32_LOGON_NEW_CREDENTIALS</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="data">
 <dt id="accounts.EXTENDED_NAME">
 <tt class="descname">EXTENDED_NAME</tt><a class="headerlink" href="#accounts.EXTENDED_NAME" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extended display formats for usernames</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="41%" />
+<col width="8%" />
+<col width="51%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Unknown</td>
+<td>0</td>
+<td>NameUnknown</td>
+</tr>
+<tr><td>FullyQualifiedDN</td>
+<td>1</td>
+<td>NameFullyQualifiedDN</td>
+</tr>
+<tr><td>ServicePrincipal</td>
+<td>10</td>
+<td>NameServicePrincipal</td>
+</tr>
+<tr><td>DnsDomain</td>
+<td>12</td>
+<td>NameDnsDomain</td>
+</tr>
+<tr><td>SamCompatible</td>
+<td>2</td>
+<td>NameSamCompatible</td>
+</tr>
+<tr><td>Display</td>
+<td>3</td>
+<td>NameDisplay</td>
+</tr>
+<tr><td>UniqueId</td>
+<td>6</td>
+<td>NameUniqueId</td>
+</tr>
+<tr><td>Canonical</td>
+<td>7</td>
+<td>NameCanonical</td>
+</tr>
+<tr><td>UserPrincipal</td>
+<td>8</td>
+<td>NameUserPrincipal</td>
+</tr>
+<tr><td>CanonicalEx</td>
+<td>9</td>
+<td>NameCanonicalEx</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="data">
 <dt id="accounts.WELL_KNOWN_SID">
 <tt class="descname">WELL_KNOWN_SID</tt><a class="headerlink" href="#accounts.WELL_KNOWN_SID" title="Permalink to this definition">¶</a></dt>
 <dd><p>Well-known SIDs common to all computers</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="45%" />
+<col width="4%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Null</td>
+<td>0</td>
+<td>WinNullSid</td>
+</tr>
+<tr><td>World</td>
+<td>1</td>
+<td>WinWorldSid</td>
+</tr>
+<tr><td>Batch</td>
+<td>10</td>
+<td>WinBatchSid</td>
+</tr>
+<tr><td>Interactive</td>
+<td>11</td>
+<td>WinInteractiveSid</td>
+</tr>
+<tr><td>Service</td>
+<td>12</td>
+<td>WinServiceSid</td>
+</tr>
+<tr><td>Anonymous</td>
+<td>13</td>
+<td>WinAnonymousSid</td>
+</tr>
+<tr><td>Proxy</td>
+<td>14</td>
+<td>WinProxySid</td>
+</tr>
+<tr><td>EnterpriseControllers</td>
+<td>15</td>
+<td>WinEnterpriseControllersSid</td>
+</tr>
+<tr><td>Self</td>
+<td>16</td>
+<td>WinSelfSid</td>
+</tr>
+<tr><td>AuthenticatedUser</td>
+<td>17</td>
+<td>WinAuthenticatedUserSid</td>
+</tr>
+<tr><td>RestrictedCode</td>
+<td>18</td>
+<td>WinRestrictedCodeSid</td>
+</tr>
+<tr><td>TerminalServer</td>
+<td>19</td>
+<td>WinTerminalServerSid</td>
+</tr>
+<tr><td>Local</td>
+<td>2</td>
+<td>WinLocalSid</td>
+</tr>
+<tr><td>RemoteLogonId</td>
+<td>20</td>
+<td>WinRemoteLogonIdSid</td>
+</tr>
+<tr><td>LogonIds</td>
+<td>21</td>
+<td>WinLogonIdsSid</td>
+</tr>
+<tr><td>LocalSystem</td>
+<td>22</td>
+<td>WinLocalSystemSid</td>
+</tr>
+<tr><td>LocalService</td>
+<td>23</td>
+<td>WinLocalServiceSid</td>
+</tr>
+<tr><td>NetworkService</td>
+<td>24</td>
+<td>WinNetworkServiceSid</td>
+</tr>
+<tr><td>BuiltinDomain</td>
+<td>25</td>
+<td>WinBuiltinDomainSid</td>
+</tr>
+<tr><td>BuiltinAdministrators</td>
+<td>26</td>
+<td>WinBuiltinAdministratorsSid</td>
+</tr>
+<tr><td>BuiltinUsers</td>
+<td>27</td>
+<td>WinBuiltinUsersSid</td>
+</tr>
+<tr><td>BuiltinGuests</td>
+<td>28</td>
+<td>WinBuiltinGuestsSid</td>
+</tr>
+<tr><td>BuiltinPowerUsers</td>
+<td>29</td>
+<td>WinBuiltinPowerUsersSid</td>
+</tr>
+<tr><td>CreatorOwner</td>
+<td>3</td>
+<td>WinCreatorOwnerSid</td>
+</tr>
+<tr><td>BuiltinAccountOperators</td>
+<td>30</td>
+<td>WinBuiltinAccountOperatorsSid</td>
+</tr>
+<tr><td>BuiltinSystemOperators</td>
+<td>31</td>
+<td>WinBuiltinSystemOperatorsSid</td>
+</tr>
+<tr><td>BuiltinPrintOperators</td>
+<td>32</td>
+<td>WinBuiltinPrintOperatorsSid</td>
+</tr>
+<tr><td>BuiltinBackupOperators</td>
+<td>33</td>
+<td>WinBuiltinBackupOperatorsSid</td>
+</tr>
+<tr><td>BuiltinReplicator</td>
+<td>34</td>
+<td>WinBuiltinReplicatorSid</td>
+</tr>
+<tr><td>BuiltinPreWindows2000CompatibleAccess</td>
+<td>35</td>
+<td>WinBuiltinPreWindows2000CompatibleAccessSid</td>
+</tr>
+<tr><td>BuiltinRemoteDesktopUsers</td>
+<td>36</td>
+<td>WinBuiltinRemoteDesktopUsersSid</td>
+</tr>
+<tr><td>BuiltinNetworkConfigurationOperators</td>
+<td>37</td>
+<td>WinBuiltinNetworkConfigurationOperatorsSid</td>
+</tr>
+<tr><td>AccountAdministrator</td>
+<td>38</td>
+<td>WinAccountAdministratorSid</td>
+</tr>
+<tr><td>AccountGuest</td>
+<td>39</td>
+<td>WinAccountGuestSid</td>
+</tr>
+<tr><td>CreatorGroup</td>
+<td>4</td>
+<td>WinCreatorGroupSid</td>
+</tr>
+<tr><td>AccountKrbtgt</td>
+<td>40</td>
+<td>WinAccountKrbtgtSid</td>
+</tr>
+<tr><td>AccountDomainAdmins</td>
+<td>41</td>
+<td>WinAccountDomainAdminsSid</td>
+</tr>
+<tr><td>AccountDomainUsers</td>
+<td>42</td>
+<td>WinAccountDomainUsersSid</td>
+</tr>
+<tr><td>AccountDomainGuests</td>
+<td>43</td>
+<td>WinAccountDomainGuestsSid</td>
+</tr>
+<tr><td>AccountComputers</td>
+<td>44</td>
+<td>WinAccountComputersSid</td>
+</tr>
+<tr><td>AccountControllers</td>
+<td>45</td>
+<td>WinAccountControllersSid</td>
+</tr>
+<tr><td>AccountCertAdmins</td>
+<td>46</td>
+<td>WinAccountCertAdminsSid</td>
+</tr>
+<tr><td>AccountSchemaAdmins</td>
+<td>47</td>
+<td>WinAccountSchemaAdminsSid</td>
+</tr>
+<tr><td>AccountEnterpriseAdmins</td>
+<td>48</td>
+<td>WinAccountEnterpriseAdminsSid</td>
+</tr>
+<tr><td>AccountPolicyAdmins</td>
+<td>49</td>
+<td>WinAccountPolicyAdminsSid</td>
+</tr>
+<tr><td>CreatorOwnerServer</td>
+<td>5</td>
+<td>WinCreatorOwnerServerSid</td>
+</tr>
+<tr><td>AccountRasAndIasServers</td>
+<td>50</td>
+<td>WinAccountRasAndIasServersSid</td>
+</tr>
+<tr><td>NTLMAuthentication</td>
+<td>51</td>
+<td>WinNTLMAuthenticationSid</td>
+</tr>
+<tr><td>DigestAuthentication</td>
+<td>52</td>
+<td>WinDigestAuthenticationSid</td>
+</tr>
+<tr><td>SChannelAuthentication</td>
+<td>53</td>
+<td>WinSChannelAuthenticationSid</td>
+</tr>
+<tr><td>ThisOrganization</td>
+<td>54</td>
+<td>WinThisOrganizationSid</td>
+</tr>
+<tr><td>OtherOrganization</td>
+<td>55</td>
+<td>WinOtherOrganizationSid</td>
+</tr>
+<tr><td>BuiltinIncomingForestTrustBuilders</td>
+<td>56</td>
+<td>WinBuiltinIncomingForestTrustBuildersSid</td>
+</tr>
+<tr><td>BuiltinPerfMonitoringUsers</td>
+<td>57</td>
+<td>WinBuiltinPerfMonitoringUsersSid</td>
+</tr>
+<tr><td>BuiltinPerfLoggingUsers</td>
+<td>58</td>
+<td>WinBuiltinPerfLoggingUsersSid</td>
+</tr>
+<tr><td>BuiltinAuthorizationAccess</td>
+<td>59</td>
+<td>WinBuiltinAuthorizationAccessSid</td>
+</tr>
+<tr><td>CreatorGroupServer</td>
+<td>6</td>
+<td>WinCreatorGroupServerSid</td>
+</tr>
+<tr><td>BuiltinTerminalServerLicenseServers</td>
+<td>60</td>
+<td>WinBuiltinTerminalServerLicenseServersSid</td>
+</tr>
+<tr><td>BuiltinDCOMUsers</td>
+<td>61</td>
+<td>WinBuiltinDCOMUsersSid</td>
+</tr>
+<tr><td>BuiltinIUsers</td>
+<td>62</td>
+<td>WinBuiltinIUsersSid</td>
+</tr>
+<tr><td>IUser</td>
+<td>63</td>
+<td>WinIUserSid</td>
+</tr>
+<tr><td>BuiltinCryptoOperators</td>
+<td>64</td>
+<td>WinBuiltinCryptoOperatorsSid</td>
+</tr>
+<tr><td>UntrustedLabel</td>
+<td>65</td>
+<td>WinUntrustedLabelSid</td>
+</tr>
+<tr><td>LowLabel</td>
+<td>66</td>
+<td>WinLowLabelSid</td>
+</tr>
+<tr><td>MediumLabel</td>
+<td>67</td>
+<td>WinMediumLabelSid</td>
+</tr>
+<tr><td>HighLabel</td>
+<td>68</td>
+<td>WinHighLabelSid</td>
+</tr>
+<tr><td>SystemLabel</td>
+<td>69</td>
+<td>WinSystemLabelSid</td>
+</tr>
+<tr><td>NtAuthority</td>
+<td>7</td>
+<td>WinNtAuthoritySid</td>
+</tr>
+<tr><td>WriteRestrictedCode</td>
+<td>70</td>
+<td>WinWriteRestrictedCodeSid</td>
+</tr>
+<tr><td>CreatorOwnerRights</td>
+<td>71</td>
+<td>WinCreatorOwnerRightsSid</td>
+</tr>
+<tr><td>CacheablePrincipalsGroup</td>
+<td>72</td>
+<td>WinCacheablePrincipalsGroupSid</td>
+</tr>
+<tr><td>NonCacheablePrincipalsGroup</td>
+<td>73</td>
+<td>WinNonCacheablePrincipalsGroupSid</td>
+</tr>
+<tr><td>EnterpriseReadonlyControllers</td>
+<td>74</td>
+<td>WinEnterpriseReadonlyControllersSid</td>
+</tr>
+<tr><td>AccountReadonlyControllers</td>
+<td>75</td>
+<td>WinAccountReadonlyControllersSid</td>
+</tr>
+<tr><td>Dialup</td>
+<td>8</td>
+<td>WinDialupSid</td>
+</tr>
+<tr><td>Network</td>
+<td>9</td>
+<td>WinNetworkSid</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="data">
 <dt id="accounts.USER_PRIV">
 <tt class="descname">USER_PRIV</tt><a class="headerlink" href="#accounts.USER_PRIV" title="Permalink to this definition">¶</a></dt>
 <dd><p>User-types for creating new users</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="13%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>GUEST</td>
+<td>0</td>
+<td>USER_PRIV_GUEST</td>
+</tr>
+<tr><td>USER</td>
+<td>1</td>
+<td>USER_PRIV_USER</td>
+</tr>
+<tr><td>ADMIN</td>
+<td>2</td>
+<td>USER_PRIV_ADMIN</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="data">
@@ -509,12 +969,102 @@ authority, eg a machine or a domain.</p>
 <dt id="accounts.SID_NAME_USE">
 <tt class="descname">SID_NAME_USE</tt><a class="headerlink" href="#accounts.SID_NAME_USE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Types of accounts for which SIDs exist</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="8%" />
+<col width="55%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>User</td>
+<td>1</td>
+<td>SidTypeUser</td>
+</tr>
+<tr><td>Label</td>
+<td>10</td>
+<td>SidTypeLabel</td>
+</tr>
+<tr><td>Group</td>
+<td>2</td>
+<td>SidTypeGroup</td>
+</tr>
+<tr><td>Domain</td>
+<td>3</td>
+<td>SidTypeDomain</td>
+</tr>
+<tr><td>Alias</td>
+<td>4</td>
+<td>SidTypeAlias</td>
+</tr>
+<tr><td>WellKnownGroup</td>
+<td>5</td>
+<td>SidTypeWellKnownGroup</td>
+</tr>
+<tr><td>DeletedAccount</td>
+<td>6</td>
+<td>SidTypeDeletedAccount</td>
+</tr>
+<tr><td>Invalid</td>
+<td>7</td>
+<td>SidTypeInvalid</td>
+</tr>
+<tr><td>Unknown</td>
+<td>8</td>
+<td>SidTypeUnknown</td>
+</tr>
+<tr><td>Computer</td>
+<td>9</td>
+<td>SidTypeComputer</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="data">
 <dt id="accounts.FILTER">
 <tt class="descname">FILTER</tt><a class="headerlink" href="#accounts.FILTER" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters when enumerating users</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="42%" />
+<col width="5%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>TEMP_DUPLICATE_ACCOUNT</td>
+<td>1</td>
+<td>FILTER_TEMP_DUPLICATE_ACCOUNT</td>
+</tr>
+<tr><td>WORKSTATION_TRUST_ACCOUNT</td>
+<td>16</td>
+<td>FILTER_WORKSTATION_TRUST_ACCOUNT</td>
+</tr>
+<tr><td>NORMAL_ACCOUNT</td>
+<td>2</td>
+<td>FILTER_NORMAL_ACCOUNT</td>
+</tr>
+<tr><td>SERVER_TRUST_ACCOUNT</td>
+<td>32</td>
+<td>FILTER_SERVER_TRUST_ACCOUNT</td>
+</tr>
+<tr><td>INTERDOMAIN_TRUST_ACCOUNT</td>
+<td>8</td>
+<td>FILTER_INTERDOMAIN_TRUST_ACCOUNT</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

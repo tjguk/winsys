@@ -7,7 +7,6 @@ Contents
     :maxdepth: 2
 
     index
-    overview
     about
     modules
     core
