@@ -112,19 +112,22 @@ class Constants (core._WinSysObject):
       self.__doc__ = ""
       return
 
-    namelen = len (max (self._dict, key=len))
-    aliaslen = len (max (self._key_dict.itervalues (), key=len))
+    namelen, valuelen, aliaslen = (len (h) for h in headers)
+
+    namelen = max (namelen, len (max (self._dict, key=len)))
+    aliaslen = max (aliaslen, len (max (self._key_dict.itervalues (), key=len)))
     try:
       int (self._dict.itervalues ()[0])
     except:
-      valuelen = len (max ((unicode (v) for v in self._dict.itervalues ()), key=len))
+      valuelen = max (valuelen, len (max ((unicode (v) for v in self._dict.itervalues ()), key=len)))
       prefix = ""
       row_format = "|%%-%ds|%%-%ds|%%-%ds|" % (namelen, valuelen, aliaslen)
       converter = unicode
     else:
-      valuelen = 2 * ((1 + len ("%x" % max (self._dict.itervalues ()))) // 2)
+      valuelen = max (valuelen, 2 * ((1 + len ("%x" % max (self._dict.itervalues ()))) // 2))
       prefix = "0x"
       row_format = "|%%-%ds|%s%%0%dX|%%-%ds|" % (namelen, prefix, valuelen, aliaslen)
+      print "row_format:", row_format
       converter = utils.signed_to_unsigned
     header_format = "|%%-%ds|%%-%ds|%%-%ds|" % (namelen, len (prefix) + valuelen, aliaslen)
 
@@ -134,7 +137,7 @@ class Constants (core._WinSysObject):
     rows = ((name, converter (value), self._key_dict[value]) for (name, value) in self._dict.iteritems ())
     table = "\n".join ([
       separator,
-      header_format % ("Name", "Val", "Win32"),
+      header_format % headers,
       header,
       "\n".join (row % r for r in sorted (rows, key=operator.itemgetter (1))),
     ])
