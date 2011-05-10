@@ -112,6 +112,7 @@ class Constants (core._WinSysObject):
       self.__doc__ = ""
       return
 
+    headers = "Name", "Val", "Win32"
     namelen, valuelen, aliaslen = (len (h) for h in headers)
 
     namelen = max (namelen, len (max (self._dict, key=len)))
