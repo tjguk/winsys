@@ -39,6 +39,9 @@ WINERROR_MAP = {
 }
 wrapped = exc.wrapper (WINERROR_MAP, x_ipc)
 
+def _unserialised (data):
+  return data
+
 class Mailslot (core._WinSysObject):
   ur"""A mailslot is a mechanism for passing small datasets (up to about
   400 bytes) between machines in the same network. For transport and
@@ -55,7 +58,7 @@ class Mailslot (core._WinSysObject):
   determine where the trace-collecting mailslot is running or even
   if it is running at all.
 
-  The format for mailslot names is \\<computer>\mailslot\<path>\<to>\<mailslot>
+  The format for mailslot names is \\\\<computer>\\mailslot\\<path>\\<to>\\<mailslot>
   The computer name can be "." for the local computer, a Windows
   computer name, a domain name, or an asterisk to indicate a broadcast.
   It's not necessary to have a complex path for the mailslot but it is
@@ -76,7 +79,7 @@ class Mailslot (core._WinSysObject):
   * A mailslot is its own iterator (strictly: generator)
 
   * By default the data through a mailslot is expected to be
-    text, and is serialised and unserialised by `str`. Alternative
+    text, and is passed through untouched. Alternative
     serialisers can be provided, for example marshal.dumps and
     marshal.loads to allow simple objects to be transmitted via
     the mailslot. Note that the maximum message size still applies
@@ -88,7 +91,7 @@ class Mailslot (core._WinSysObject):
   def __init__ (
     self,
     name,
-    serialiser=(str, str),
+    serialiser=(_unserialised, _unserialised),
     message_size=0,
     timeout_ms=-1,
     *args, **kwargs
@@ -96,9 +99,10 @@ class Mailslot (core._WinSysObject):
     """Set up a mailslot of the given name, which must be valid according to
     the Microsoft docs.
 
-    :param serialiser: a pair of functions which will be used to
-                       encode & decode data respectively. Typical serialisers
-                       are (str, str) and (marshal.dumps, marshal.loads).
+    :param serialiser: a pair of callable which will be used to
+                       encode & decode data respectively. Typical
+                       serialisers would be (marshal.dumps, marshal.loads).
+    :type serialiser: a pair of callables each taking one param and returning bytes
     :param message_size: the maximum size of a message to this mailslot,
                          up to the system-defined maximum of about 400 bytes
                          if passing between computers.
@@ -150,6 +154,10 @@ class Mailslot (core._WinSysObject):
     return self._hWrite
 
   def pyobject (self):
+    """
+    :returns: the underlying PyHANDLE object
+    :raises: :exc:`x_mailslot` if the mailslot has not yet been determined for reading or for writing
+    """
     if self._hRead:
       return self._hRead
     elif self._hWrite:
@@ -184,18 +192,34 @@ class Mailslot (core._WinSysObject):
     return utils.dumped ("\n".join (output), level)
 
   def qsize (self):
+    """
+    :returns: the number of messages waiting in the mailslot
+    """
     maxsize, nextsize, message_count, timeout = wrapped (win32file.GetMailslotInfo, self._read_handle ())
     return message_count
 
   def empty (self):
+    """
+    :returns: `True` if there is nothing waiting to be read
+    """
     maxsize, nextsize, message_count, timeout = wrapped (win32file.GetMailslotInfo, self._read_handle ())
     return message_count == 0
 
   def full (self):
+    """
+    :returns: `True` if the number of messages waiting to be read has reached the maximum size for the mailslot
+    """
     maxsize, nextsize, message_count, timeout = wrapped (win32file.GetMailslotInfo, self._read_handle ())
     return message_count == maxsize
 
   def get (self, block=True, timeout_ms=None):
+    """Attempt to read from the mailslot, optionally blocking and timing out if nothing is found.
+
+    :param block: whether to wait `timeout_ms` milliseconds before raising `x_mailslot_empty`
+    :param timeout_ms: how many milliseconds to wait before timing out if blocking. None => wait forever
+    :returns: the first message from the mailslot queue serialised according to the class's `serialiser`
+    :raises: :exc:`x_mailslot_empty` if timed out or unblocked
+    """
     hMailslot = self._read_handle ()
     if timeout_ms is None:
       timeout_ms = self.timeout_ms
@@ -221,9 +245,16 @@ class Mailslot (core._WinSysObject):
         return serialiser_out (data)
 
   def get_nowait (self):
+    "Convenience wrapper which calls :meth:`get` without blocking"
     return self.get (False, 0)
 
   def put (self, data):
+    """Attempt to write to the mailslot
+
+    :param data: data to be written to the mailslot via its serialisers
+    :raises: :exc:`x_mailslot_message_too_big` if the serialised message
+             exceeds the mailslot's maximum size
+    """
     serialiser_in, serialiser_out = self.serialiser
     data = serialiser_in (data)
     if self.message_size and len (data) > self.message_size:
@@ -235,12 +266,32 @@ class Mailslot (core._WinSysObject):
     wrapped (win32file.WriteFile, self._write_handle (), data, None)
 
   def close (self):
+    """Close the mailslot for reading or writing. This will be called automatically
+    if the mailslot is being context-managed. Closing a mailslot which has not been
+    used (and which therefore has no open handles) will succeed silently.
+    """
     if self._hRead is not None:
       wrapped (win32file.CloseHandle, self._hRead)
     if self._hWrite is not None:
       wrapped (win32file.CloseHandle, self._hWrite)
 
 class Event (core._WinSysObject):
+  """An event object is an interprocess (but not intermachine) synchronisation
+  mechanism which allows one or more threads of control to wait on others.
+  The most common configuration is given by the defaults: anonymous,
+  not set initially, and automatically reset once set (ie only set for long
+  enough to release any waiting threads and then reset. A common
+  variant is a named event which can then be referred to easily by other
+  processes without having to pass handles around. This is why the :func:`ipc.event`
+  function reverses the order of parameters and takes the name first.
+
+  The Event class mimics Python's Event objects which are in any case very
+  close to the semantics of the underlying Windows object. For that reason,
+  although :meth:`clear` is used to reset the event, :meth:`reset` is also
+  provided as an alias, matching the Windows API.
+
+  An event is Truthful if it is currently set
+  """
 
   def __init__ (self, security=None, needs_manual_reset=False, initially_set=False, name=None):
     core._WinSysObject.__init__ (self)
@@ -275,16 +326,29 @@ class Event (core._WinSysObject):
     return self._hEvent
 
   def pulse (self):
+    """Cause the event to set and reset immediately
+    """
     wrapped (win32event.PulseEvent, self._handle ())
 
   def set (self):
+    """Trigger the event
+    """
     wrapped (win32event.SetEvent, self._handle ())
 
   def clear (self):
+    """Reset the event
+    """
     wrapped (win32event.ResetEvent, self._handle ())
   reset = clear
 
   def wait (self, timeout_s=WAIT.INFINITE):
+    """Wait, optionally timing out, for the event to fire. cf also the :func:`any` and
+    :func:`all` convenience functions which take an iterable of events or other objects.
+
+    :param timeout_s: how many seconds to wait before timing out.
+    :type timeout_s: a number of seconds (to match the Python event API)
+    :returns: `True` if the event fired, False otherwise
+    """
     if timeout_s == WAIT.INFINITE:
       timeout_ms = timeout_s
     else:
@@ -296,6 +360,7 @@ class Event (core._WinSysObject):
       return True
 
   def isSet (self):
+    "Detect whether the event is currently set (by waiting without blocking)"
     return self.wait (0)
 
   def __nonzero__ (self):
@@ -313,10 +378,10 @@ def mailslot (mailslot, marshalled=True, message_size=0, timeout_ms=-1):
                    is unqualified it is suitable prefixed to form a local
                    mailslot identifier.
   :param marshalled: whether the data is to be marshalled or simply passed
-                     along unchanged. [True]
-  :param message_size: what message should be used; 0 to use the system default [0]
+                     along unchanged.
+  :param message_size: what message should be used; 0 to use the system default
   :param timeout_ms: how many milliseconds should a read wait before giving up?
-                     -1 to wait forever. [-1]
+                     -1 to wait forever.
   """
   if mailslot is None:
     return None
@@ -324,26 +389,59 @@ def mailslot (mailslot, marshalled=True, message_size=0, timeout_ms=-1):
     return mailslot
   else:
     if marshalled:
-      serialiser = (marshal.dumps, marshal.loads)
+      serialiser = marshal.dumps, marshal.loads
     else:
-      serialiser = (lambda x: x, lambda x : x)
+      serialiser = _unserialised, _unserialised
     if not re.match (ur"\\\\[^\\]+\\mailslot\\", unicode (mailslot), re.UNICODE):
       mailslot = ur"\\.\mailslot\%s" % mailslot
     return Mailslot (mailslot, serialiser, message_size, timeout_ms)
 
-def event (name=None, initially_set=0, needs_manual_reset=0, security=None):
+def event (name=None, initially_set=False, needs_manual_reset=False, security=None):
+  """Return a :class:`Event` instance, named or anonymous, unset by default
+  and with automatic reset.
+
+  :param name: a valid event name. If `None` (the default) then an anonymous
+               event is created which may be passed to threads which need to
+               synchronise.
+  :param initially_set: whether the event is set on creation. [False]
+  :param needs_manual_reset: whether the event needs to be reset manually once it
+                             has fired. The alternative is that, once the event has
+                             fired, it falls back to an unset state.
+  :param security: what security to apply to the new event
+  :type security: anything accepted by :func:`security.security`
+  :returns: a :class:`Event` instance
+  """
   return Event (security, needs_manual_reset, initially_set, name)
 
-def any (handle_list, timeout_ms=WAIT.INFINITE):
-  result = wrapped (win32event.WaitForMultipleObjects, handle_list, 0, timeout_ms)
+def any (objects, timeout_ms=WAIT.INFINITE):
+  """Wait for any of the Windows synchronisation objects in the list to fire.
+  The objects must be winsys synchronisation objects (or, at least, have
+  a pyobject method which returns a PyHANDLE object). The one which
+  fires will be returned unless a timeout occurs in which case x_ipc_timeout
+  will be raised.
+
+  :param objects: an iterable of winsys objects each of which has a waitable handle
+  :param timeout_ms: how many milliseconds to wait
+  :returns: the object which fired
+  :raises: :exc:`x_ipc_timeout` if `timeout_ms` is exceeded
+  """
+  handles = [o.pyobject () for o in objects]
+  result = wrapped (win32event.WaitForMultipleObjects, handles, 0, timeout_ms)
   if result == WAIT.TIMEOUT:
     raise x_ipc_timeout (core.UNSET, "any", "Wait timed out")
   else:
-    return handle_list[result - WAIT.OBJECT_0]
+    return objects[result - WAIT.OBJECT_0]
 
-def all (handle_list, timeout_ms=WAIT.INFINITE):
-  result = wrapped (win32event.WaitForMultipleObjects, handle_list, 1, timeout_ms)
+def all (objects, timeout_ms=WAIT.INFINITE):
+  """Wait for all of the Windows synchronisation objects in the list to fire.
+  The objects must be winsys synchronisation objects (or, at least, have
+  a pyobject method which returns a PyHANDLE object).
+
+  :param objects: an iterable of winsys objects each of which has a waitable handle
+  :param timeout_ms: how many milliseconds to wait
+  :raises: :exc:`x_ipc_timeout` if `timeout_ms` is exceeded
+  """
+  handles = [o.pyobject () for o in objects]
+  wrapped (win32event.WaitForMultipleObjects, handles, 1, timeout_ms)
   if result == WAIT.TIMEOUT:
     raise x_ipc_timeout (core.UNSET, "all", "Wait timed out")
-  else:
-    return handle_list[result - WAIT.OBJECT_0]

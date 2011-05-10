@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>exc – Exceptions &mdash; WinSys v0.4dev documentation</title>
+    <title>exc – Exceptions &mdash; WinSys v0.5beta documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5beta',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,8 +23,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
-    <link rel="next" title="accounts – Users, Groups, SIDs &c." href="accounts.html" />
+    <link rel="top" title="WinSys v0.5beta documentation" href="index.html" />
+    <link rel="next" title="accounts – Users, Groups, SIDs &amp;c." href="accounts.html" />
     <link rel="prev" title="constants" href="constants.html" /> 
   </head>
   <body>
@@ -34,15 +35,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
-          <a href="accounts.html" title="accounts – Users, Groups, SIDs &c."
+          <a href="accounts.html" title="accounts – Users, Groups, SIDs &amp;c."
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="constants.html" title="constants"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,31 +53,35 @@
           <div class="body">
             
   <div class="section" id="module-exc">
-<h1><a title="" class="reference external" href="#module-exc"><tt class="xref docutils literal"><span class="pre">exc</span></tt></a> &#8211; Exceptions<a class="headerlink" href="#module-exc" title="Permalink to this headline">¶</a></h1>
+<span id="exc-exceptions"></span><h1><a class="reference internal" href="#module-exc" title="exc"><tt class="xref py py-mod docutils literal"><span class="pre">exc</span></tt></a> &#8211; Exceptions<a class="headerlink" href="#module-exc" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="exceptions">
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
 <dt id="exc.x_winsys">
 <em class="property">exception </em><tt class="descname">x_winsys</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#exc.x_winsys" title="Permalink to this definition">¶</a></dt>
-<dd>Base for all WinSys exception. Subclasses pywintypes.error so that
+<dd><p>Base for all WinSys exception. Subclasses pywintypes.error so that
 except pywintypes.error clauses can be used to catch all relevant exceptions.
 Note that the __init__ is specified so that exception invocations can pass
-just an error message by keyword.</dd></dl>
+just an error message by keyword.</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="exc.x_access_denied">
 <em class="property">exception </em><tt class="descname">x_access_denied</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#exc.x_access_denied" title="Permalink to this definition">¶</a></dt>
-<dd>General purpose access-denied exception</dd></dl>
+<dd><p>General purpose access-denied exception</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="exc.x_not_found">
 <em class="property">exception </em><tt class="descname">x_not_found</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#exc.x_not_found" title="Permalink to this definition">¶</a></dt>
-<dd>General purpose not-found exception</dd></dl>
+<dd><p>General purpose not-found exception</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="exc.x_invalid_handle">
 <em class="property">exception </em><tt class="descname">x_invalid_handle</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#exc.x_invalid_handle" title="Permalink to this definition">¶</a></dt>
-<dd>General purpose invalid-handle exception</dd></dl>
+<dd><p>General purpose invalid-handle exception</p>
+</dd></dl>
 
 </div>
 <div class="section" id="functions">
@@ -84,9 +89,10 @@ just an error message by keyword.</dd></dl>
 <dl class="function">
 <dt id="exc.wrapper">
 <tt class="descname">wrapper</tt><big>(</big><em>winerror_map</em>, <em>default_exception=&lt;class 'exc.x_winsys'&gt;</em><big>)</big><a class="headerlink" href="#exc.wrapper" title="Permalink to this definition">¶</a></dt>
-<dd>Used by each module to map specific windows error codes onto
+<dd><p>Used by each module to map specific windows error codes onto
 Python exceptions. Always includes a default which is raised if
-no specific exception is found.</dd></dl>
+no specific exception is found.</p>
+</dd></dl>
 
 </div>
 </div>
@@ -102,9 +108,9 @@ no specific exception is found.</dd></dl>
             </a></p>
   <h3><a href="contents.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference external" href="#"><tt class="docutils literal"><span class="pre">exc</span></tt> &#8211; Exceptions</a><ul>
-<li><a class="reference external" href="#exceptions">Exceptions</a></li>
-<li><a class="reference external" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">exc</span></tt> &#8211; Exceptions</a><ul>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
 </ul>
 </li>
 </ul>
@@ -144,20 +150,20 @@ no specific exception is found.</dd></dl>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="accounts.html" title="accounts – Users, Groups, SIDs &c."
+          <a href="accounts.html" title="accounts – Users, Groups, SIDs &amp;c."
              >next</a> |</li>
         <li class="right" >
           <a href="constants.html" title="constants"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2011, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

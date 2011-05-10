@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The Entry class &mdash; WinSys v0.4dev documentation</title>
+    <title>The Entry class &mdash; WinSys v0.5beta documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5beta',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,8 +23,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
-    <link rel="up" title="fs – Files, Directories, &c." href="fs.html" />
+    <link rel="top" title="WinSys v0.5beta documentation" href="index.html" />
+    <link rel="up" title="fs – Files, Directories, &amp;c." href="fs.html" />
     <link rel="next" title="The File class" href="fs_file.html" />
     <link rel="prev" title="The FilePath class" href="fs_filepath.html" /> 
   </head>
@@ -35,21 +36,22 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="fs_file.html" title="The File class"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="fs_filepath.html" title="The FilePath class"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
+        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="the-entry-class">
@@ -57,28 +59,28 @@
 <dl class="class">
 <dt id="fs.Entry">
 <em class="property">class </em><tt class="descname">Entry</tt><a class="headerlink" href="#fs.Entry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a title="fs.FilePath" class="reference external" href="fs_filepath.html#fs.FilePath"><tt class="xref docutils literal"><span class="pre">fs.FilePath</span></tt></a>, <tt class="xref docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
-<p>Heart of the fs module. This is a subtype of <a title="fs.FilePath" class="reference external" href="fs_filepath.html#fs.FilePath"><tt class="xref docutils literal"><span class="pre">FilePath</span></tt></a> and
+<dd><p>Bases: <a class="reference internal" href="fs_filepath.html#fs.FilePath" title="fs.FilePath"><tt class="xref py py-class docutils literal"><span class="pre">fs.FilePath</span></tt></a>, <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
+<p>Heart of the fs module. This is a subtype of <a class="reference internal" href="fs_filepath.html#fs.FilePath" title="fs.FilePath"><tt class="xref py py-class docutils literal"><span class="pre">FilePath</span></tt></a> and
 therefore of the base unicode type and is the parent of the
-<a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> and <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> classes and contains all the
+<a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> and <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> classes and contains all the
 functionality common to both. It is rarely instantiated itself,
 altho&#8217; it&#8217;s possible to do so.</p>
 <p>Attributes:
-* <a title="fs.Entry.readable" class="reference internal" href="#fs.Entry.readable"><tt class="xref docutils literal"><span class="pre">readable</span></tt></a>
-* <tt class="xref docutils literal"><span class="pre">filepath</span></tt>
-* <a title="fs.Entry.created_at" class="reference internal" href="#fs.Entry.created_at"><tt class="xref docutils literal"><span class="pre">created_at</span></tt></a>
-* <a title="fs.Entry.accessed_at" class="reference internal" href="#fs.Entry.accessed_at"><tt class="xref docutils literal"><span class="pre">accessed_at</span></tt></a>
-* <a title="fs.Entry.written_at" class="reference internal" href="#fs.Entry.written_at"><tt class="xref docutils literal"><span class="pre">written_at</span></tt></a>
-* <a title="fs.Entry.uncompressed_size" class="reference internal" href="#fs.Entry.uncompressed_size"><tt class="xref docutils literal"><span class="pre">uncompressed_size</span></tt></a>
-* <a title="fs.Entry.size" class="reference internal" href="#fs.Entry.size"><tt class="xref docutils literal"><span class="pre">size</span></tt></a>
-* <a title="fs.attributes" class="reference external" href="fs.html#fs.attributes"><tt class="xref docutils literal"><span class="pre">attributes</span></tt></a>
-* <a title="fs.Entry.id" class="reference internal" href="#fs.Entry.id"><tt class="xref docutils literal"><span class="pre">id</span></tt></a>
-* <a title="fs.Entry.n_links" class="reference internal" href="#fs.Entry.n_links"><tt class="xref docutils literal"><span class="pre">n_links</span></tt></a>
-* <tt class="xref docutils literal"><span class="pre">attributes</span> <span class="pre">-</span> <span class="pre">an</span> <span class="pre">:class:`_Attributes</span></tt> object representing combinations of <a title="fs.FILE_ATTRIBUTE" class="reference external" href="fs_constants.html#fs.FILE_ATTRIBUTE"><tt class="xref docutils literal"><span class="pre">FILE_ATTRIBUTE</span></tt></a></p>
+* <a class="reference internal" href="#fs.Entry.readable" title="fs.Entry.readable"><tt class="xref py py-attr docutils literal"><span class="pre">readable</span></tt></a>
+* <tt class="xref py py-attr docutils literal"><span class="pre">filepath</span></tt>
+* <a class="reference internal" href="#fs.Entry.created_at" title="fs.Entry.created_at"><tt class="xref py py-attr docutils literal"><span class="pre">created_at</span></tt></a>
+* <a class="reference internal" href="#fs.Entry.accessed_at" title="fs.Entry.accessed_at"><tt class="xref py py-attr docutils literal"><span class="pre">accessed_at</span></tt></a>
+* <a class="reference internal" href="#fs.Entry.written_at" title="fs.Entry.written_at"><tt class="xref py py-attr docutils literal"><span class="pre">written_at</span></tt></a>
+* <a class="reference internal" href="#fs.Entry.uncompressed_size" title="fs.Entry.uncompressed_size"><tt class="xref py py-attr docutils literal"><span class="pre">uncompressed_size</span></tt></a>
+* <a class="reference internal" href="#fs.Entry.size" title="fs.Entry.size"><tt class="xref py py-attr docutils literal"><span class="pre">size</span></tt></a>
+* <a class="reference internal" href="fs.html#fs.attributes" title="fs.attributes"><tt class="xref py py-attr docutils literal"><span class="pre">attributes</span></tt></a>
+* <a class="reference internal" href="#fs.Entry.id" title="fs.Entry.id"><tt class="xref py py-attr docutils literal"><span class="pre">id</span></tt></a>
+* <a class="reference internal" href="#fs.Entry.n_links" title="fs.Entry.n_links"><tt class="xref py py-attr docutils literal"><span class="pre">n_links</span></tt></a>
+* <tt class="xref py py-attr docutils literal"><span class="pre">attributes</span> <span class="pre">-</span> <span class="pre">an</span> <span class="pre">:class:`_Attributes</span></tt> object representing combinations of <a class="reference internal" href="fs_constants.html#fs.FILE_ATTRIBUTE" title="fs.FILE_ATTRIBUTE"><tt class="xref py py-const docutils literal"><span class="pre">FILE_ATTRIBUTE</span></tt></a></p>
 <p>Common functionality:</p>
 <ul class="simple">
 <li>Entries compare (eq, lt, etc.) according to their full filepath. To do a
-content-wise comparison, use <tt class="xref docutils literal"><span class="pre">equal_contents()</span></tt>.</li>
+content-wise comparison, use <tt class="xref py py-meth docutils literal"><span class="pre">equal_contents()</span></tt>.</li>
 <li>Entries are True according to their existence on a filesystem</li>
 <li>The str representation is the filepath utf8-encoded; unicode is the filepath itself</li>
 <li>Adding one path to another will use os.path.join semantics</li>
@@ -86,13 +88,13 @@ content-wise comparison, use <tt class="xref docutils literal"><span class="pre"
 <dl class="method">
 <dt id="fs.Entry.ancestors">
 <tt class="descname">ancestors</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.ancestors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Iterate over this entry&#8217;s ancestors, yielding the <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object
+<dd><p>Iterate over this entry&#8217;s ancestors, yielding the <a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> object
 corresponding to each one.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">yield a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object for each ancestor</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">yield a <a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> object for each ancestor</td>
 </tr>
 </tbody>
 </table>
@@ -121,7 +123,7 @@ be compressed automatically.</p>
 
 <dl class="method">
 <dt id="fs.Entry.dumped">
-<tt class="descname">dumped</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#fs.Entry.dumped" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dumped</tt><big>(</big><em>level=0</em>, <em>show_security=False</em><big>)</big><a class="headerlink" href="#fs.Entry.dumped" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -141,7 +143,8 @@ be compressed automatically.</p>
 <dl class="method">
 <dt id="fs.Entry.encryption_users">
 <tt class="descname">encryption_users</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.encryption_users" title="Permalink to this definition">¶</a></dt>
-<dd>FIXME: Need to work out how to create certificates for this</dd></dl>
+<dd><p>FIXME: Need to work out how to create certificates for this</p>
+</dd></dl>
 
 <dl class="classmethod">
 <dt id="fs.Entry.factory">
@@ -151,27 +154,32 @@ be compressed automatically.</p>
 <dl class="method">
 <dt id="fs.Entry.get_accessed_at">
 <tt class="descname">get_accessed_at</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_accessed_at" title="Permalink to this definition">¶</a></dt>
-<dd>Get and store the latest access time from the filesystem</dd></dl>
+<dd><p>Get and store the latest access time from the filesystem</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.get_attributes">
 <tt class="descname">get_attributes</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_attributes" title="Permalink to this definition">¶</a></dt>
-<dd>Get and store the latest file attributes from the filesystem</dd></dl>
+<dd><p>Get and store the latest file attributes from the filesystem</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.get_created_at">
 <tt class="descname">get_created_at</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_created_at" title="Permalink to this definition">¶</a></dt>
-<dd>Get and store the latest creation time from the filesystem</dd></dl>
+<dd><p>Get and store the latest creation time from the filesystem</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.get_size">
 <tt class="descname">get_size</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_size" title="Permalink to this definition">¶</a></dt>
-<dd>Get and store the latest (possibly compressed) size from the filesystem</dd></dl>
+<dd><p>Get and store the latest (possibly compressed) size from the filesystem</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.get_written_at">
 <tt class="descname">get_written_at</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_written_at" title="Permalink to this definition">¶</a></dt>
-<dd>Get and store the latest modification time from the filesystem</dd></dl>
+<dd><p>Get and store the latest modification time from the filesystem</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.like">
@@ -188,7 +196,7 @@ be compressed automatically.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>pattern</em> &#8211; an <cite>fnmatch</cite> pattern</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pattern</strong> &#8211; an <cite>fnmatch</cite> pattern</td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body">True if this file matches <cite>pattern</cite></td>
 </tr>
@@ -206,14 +214,14 @@ If other is a directory, self</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></li>
-<li><em>callback</em> &#8211; a function which will receive a total size &amp; total transferred</li>
-<li><em>callback_data</em> &#8211; passed as extra data to callback</li>
-<li><em>clobber</em> &#8211; whether to overwrite the other file if it exists</li>
+<li><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.entry" title="fs.entry"><tt class="xref py py-func docutils literal"><span class="pre">entry()</span></tt></a></li>
+<li><strong>callback</strong> &#8211; a function which will receive a total size &amp; total transferred</li>
+<li><strong>callback_data</strong> &#8211; passed as extra data to callback</li>
+<li><strong>clobber</strong> &#8211; whether to overwrite the other file if it exists</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object corresponding to the target file</p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object corresponding to the target file</p>
 </td>
 </tr>
 </tbody>
@@ -230,14 +238,14 @@ If other is a directory, self</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>other</em> &#8211; anything accepted by <a title="fs.entry" class="reference external" href="fs.html#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></li>
-<li><em>callback</em> &#8211; a function which will receive a total size &amp; total transferred</li>
-<li><em>callback_data</em> &#8211; passed as extra data to callback</li>
-<li><em>clobber</em> &#8211; whether to overwrite the other file if it exists</li>
+<li><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.entry" title="fs.entry"><tt class="xref py py-func docutils literal"><span class="pre">entry()</span></tt></a></li>
+<li><strong>callback</strong> &#8211; a function which will receive a total size &amp; total transferred</li>
+<li><strong>callback_data</strong> &#8211; passed as extra data to callback</li>
+<li><strong>clobber</strong> &#8211; whether to overwrite the other file if it exists</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object corresponding to the target file</p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object corresponding to the target file</p>
 </td>
 </tr>
 </tbody>
@@ -247,7 +255,7 @@ If other is a directory, self</p>
 <dl class="method">
 <dt id="fs.Entry.security">
 <tt class="descname">security</tt><big>(</big><em>options=u'OD'</em><big>)</big><a class="headerlink" href="#fs.Entry.security" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <a title="security.Security" class="reference external" href="security.html#security.Security"><tt class="xref docutils literal"><span class="pre">security.Security</span></tt></a> object corresponding to this
+<dd><p>Return a <a class="reference internal" href="security.html#security.Security" title="security.Security"><tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt></a> object corresponding to this
 entry&#8217;s security attributes. Note that the returning object is a context
 manager so a common pattern is:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#</span>
@@ -265,9 +273,9 @@ manager so a common pattern is:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>options</em> &#8211; cf <a title="security.security" class="reference external" href="security.html#security.security"><tt class="xref docutils literal"><span class="pre">security.security()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>options</strong> &#8211; cf <a class="reference internal" href="security.html#security.security" title="security.security"><tt class="xref py py-func docutils literal"><span class="pre">security.security()</span></tt></a></td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a <a title="security.Security" class="reference external" href="security.html#security.Security"><tt class="xref docutils literal"><span class="pre">security.Security</span></tt></a> object which may be used as a context manager</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a <a class="reference internal" href="security.html#security.Security" title="security.Security"><tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt></a> object which may be used as a context manager</td>
 </tr>
 </tbody>
 </table>
@@ -277,13 +285,13 @@ manager so a common pattern is:</p>
 <dt id="fs.Entry.take_control">
 <tt class="descname">take_control</tt><big>(</big><em>principal=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#fs.Entry.take_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Give the logged-on user full control to a file. This may
-need to be preceded by a call to <a title="fs.Entry.take_ownership" class="reference internal" href="#fs.Entry.take_ownership"><tt class="xref docutils literal"><span class="pre">take_ownership()</span></tt></a> so that the
+need to be preceded by a call to <a class="reference internal" href="#fs.Entry.take_ownership" title="fs.Entry.take_ownership"><tt class="xref py py-func docutils literal"><span class="pre">take_ownership()</span></tt></a> so that the
 user gains WRITE_DAC permissions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>principal</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal()</span></tt> [logged-on user]</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>principal</strong> &#8211; anything accepted by <tt class="xref py py-func docutils literal"><span class="pre">principal()</span></tt> [logged-on user]</td>
 </tr>
 </tbody>
 </table>
@@ -304,7 +312,7 @@ the ACL.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>principal</em> &#8211; anything accepted by <tt class="xref docutils literal"><span class="pre">principal()</span></tt> [logged-on user]</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>principal</strong> &#8211; anything accepted by <tt class="xref py py-func docutils literal"><span class="pre">principal()</span></tt> [logged-on user]</td>
 </tr>
 </tbody>
 </table>
@@ -343,72 +351,85 @@ not be compressed automatically.</p>
 <dl class="attribute">
 <dt id="fs.Entry.accessed_at">
 <tt class="descname">accessed_at</tt><a class="headerlink" href="#fs.Entry.accessed_at" title="Permalink to this definition">¶</a></dt>
-<dd>Get the access time from the original file read or the latest from
-the filesystem if none was stored.</dd></dl>
+<dd><p>Get the access time from the original file read or the latest from
+the filesystem if none was stored.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.archive">
 <tt class="descname">archive</tt><a class="headerlink" href="#fs.Entry.archive" title="Permalink to this definition">¶</a></dt>
-<dd>Is the archive bit set on the file?</dd></dl>
+<dd><p>Is the archive bit set on the file?</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.attributes">
 <tt class="descname">attributes</tt><a class="headerlink" href="#fs.Entry.attributes" title="Permalink to this definition">¶</a></dt>
-<dd>Get and store the file attributes from the original file read or the latest from
-the filesystem if none was stored.</dd></dl>
+<dd><p>Get and store the file attributes from the original file read or the latest from
+the filesystem if none was stored.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.compressed">
 <tt class="descname">compressed</tt><a class="headerlink" href="#fs.Entry.compressed" title="Permalink to this definition">¶</a></dt>
-<dd>Is the file compressed?</dd></dl>
+<dd><p>Is the file compressed?</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.created_at">
 <tt class="descname">created_at</tt><a class="headerlink" href="#fs.Entry.created_at" title="Permalink to this definition">¶</a></dt>
-<dd>Get the creation time from the original file read or the latest from
-the filesystem if none was stored.</dd></dl>
+<dd><p>Get the creation time from the original file read or the latest from
+the filesystem if none was stored.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.directory">
 <tt class="descname">directory</tt><a class="headerlink" href="#fs.Entry.directory" title="Permalink to this definition">¶</a></dt>
-<dd>Is the file a directory?</dd></dl>
+<dd><p>Is the file a directory?</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.encrypted">
 <tt class="descname">encrypted</tt><a class="headerlink" href="#fs.Entry.encrypted" title="Permalink to this definition">¶</a></dt>
-<dd>Is the file encrypted?</dd></dl>
+<dd><p>Is the file encrypted?</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.hidden">
 <tt class="descname">hidden</tt><a class="headerlink" href="#fs.Entry.hidden" title="Permalink to this definition">¶</a></dt>
-<dd>Is the file hidden?</dd></dl>
+<dd><p>Is the file hidden?</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.id">
 <tt class="descname">id</tt><a class="headerlink" href="#fs.Entry.id" title="Permalink to this definition">¶</a></dt>
-<dd>Return an id for this file which can be used to compare it to another while
-both files are open to determine if both are the same physical file.</dd></dl>
+<dd><p>Return an id for this file which can be used to compare it to another while
+both files are open to determine if both are the same physical file.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.n_links">
 <tt class="descname">n_links</tt><a class="headerlink" href="#fs.Entry.n_links" title="Permalink to this definition">¶</a></dt>
-<dd>Determine how many links point to this file. &gt;1 indicates that
-the file is hardlinked.</dd></dl>
+<dd><p>Determine how many links point to this file. &gt;1 indicates that
+the file is hardlinked.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.normal">
 <tt class="descname">normal</tt><a class="headerlink" href="#fs.Entry.normal" title="Permalink to this definition">¶</a></dt>
-<dd>Is the file normal?</dd></dl>
+<dd><p>Is the file normal?</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.not_content_indexed">
 <tt class="descname">not_content_indexed</tt><a class="headerlink" href="#fs.Entry.not_content_indexed" title="Permalink to this definition">¶</a></dt>
-<dd>Should the file&#8217;s content not be indexed?</dd></dl>
+<dd><p>Should the file&#8217;s content not be indexed?</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.offline">
 <tt class="descname">offline</tt><a class="headerlink" href="#fs.Entry.offline" title="Permalink to this definition">¶</a></dt>
-<dd>Is the file offline?</dd></dl>
+<dd><p>Is the file offline?</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.readable">
@@ -418,50 +439,59 @@ the file is hardlinked.</dd></dl>
 <dl class="attribute">
 <dt id="fs.Entry.readonly">
 <tt class="descname">readonly</tt><a class="headerlink" href="#fs.Entry.readonly" title="Permalink to this definition">¶</a></dt>
-<dd>Is the file readonly?</dd></dl>
+<dd><p>Is the file readonly?</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.reparse_point">
 <tt class="descname">reparse_point</tt><a class="headerlink" href="#fs.Entry.reparse_point" title="Permalink to this definition">¶</a></dt>
-<dd>Is the file a reparse point?</dd></dl>
+<dd><p>Is the file a reparse point?</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.size">
 <tt class="descname">size</tt><a class="headerlink" href="#fs.Entry.size" title="Permalink to this definition">¶</a></dt>
-<dd>Get and store the (possibly compressed) size from the original file read or the latest from
-the filesystem if none was stored.</dd></dl>
+<dd><p>Get and store the (possibly compressed) size from the original file read or the latest from
+the filesystem if none was stored.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.sparse_file">
 <tt class="descname">sparse_file</tt><a class="headerlink" href="#fs.Entry.sparse_file" title="Permalink to this definition">¶</a></dt>
-<dd>Is the file sparse?</dd></dl>
+<dd><p>Is the file sparse?</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.system">
 <tt class="descname">system</tt><a class="headerlink" href="#fs.Entry.system" title="Permalink to this definition">¶</a></dt>
-<dd>Is the file a system file?</dd></dl>
+<dd><p>Is the file a system file?</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.temporary">
 <tt class="descname">temporary</tt><a class="headerlink" href="#fs.Entry.temporary" title="Permalink to this definition">¶</a></dt>
-<dd>Is the file a temporary file?</dd></dl>
+<dd><p>Is the file a temporary file?</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.uncompressed_size">
 <tt class="descname">uncompressed_size</tt><a class="headerlink" href="#fs.Entry.uncompressed_size" title="Permalink to this definition">¶</a></dt>
-<dd>Get the size of the file data, ignoring any filesystem
-compression which may have been applied.</dd></dl>
+<dd><p>Get the size of the file data, ignoring any filesystem
+compression which may have been applied.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.virtual">
 <tt class="descname">virtual</tt><a class="headerlink" href="#fs.Entry.virtual" title="Permalink to this definition">¶</a></dt>
-<dd>Is the file a virtual file?</dd></dl>
+<dd><p>Is the file a virtual file?</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="fs.Entry.written_at">
 <tt class="descname">written_at</tt><a class="headerlink" href="#fs.Entry.written_at" title="Permalink to this definition">¶</a></dt>
-<dd>Get and store the modification time from the original file read or the latest from
-the filesystem if none was stored.</dd></dl>
+<dd><p>Get and store the modification time from the original file read or the latest from
+the filesystem if none was stored.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -469,6 +499,38 @@ the filesystem if none was stored.</dd></dl>
 
 
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fs_filepath.html"
+                        title="previous chapter">The FilePath class</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fs_file.html"
+                        title="next chapter">The File class</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/fs_entry.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
       </div>
       <div class="clearer"></div>
     </div>
@@ -479,7 +541,7 @@ the filesystem if none was stored.</dd></dl>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="fs_file.html" title="The File class"
@@ -487,13 +549,13 @@ the filesystem if none was stored.</dd></dl>
         <li class="right" >
           <a href="fs_filepath.html" title="The FilePath class"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
+          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2011, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>BETA: WinSys - Python tools for the Windows Administrator &mdash; WinSys v0.4dev documentation</title>
+    <title>BETA: WinSys - Python tools for the Windows Administrator &mdash; WinSys v0.5beta documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5beta',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="#" />
+    <link rel="top" title="WinSys v0.5beta documentation" href="#" />
     <link rel="next" title="About WinSys" href="about.html" />
     <link rel="prev" title="Contents" href="contents.html" /> 
   </head>
@@ -34,20 +35,21 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="about.html" title="About WinSys"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="contents.html" title="Contents"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
+        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="beta-winsys-python-tools-for-the-windows-administrator">
@@ -62,13 +64,13 @@ It targets recent versions of Python and reasonably recent versions of Windows
 although it&#8217;s not yet up to speed on Vista/W7 &amp; x64.</p>
 <p>It is unashamedly platform-specific: no hint of a concession towards more
 Unix-like operating systems.  You can read about the design
-philosophy and decisions in <a class="reference external" href="about.html#about-winsys"><em>About WinSys</em></a>. If you want to see some
-examples, have a look in the <a class="reference external" href="cookbook.html#cookbook"><em>Cookbook</em></a>. Or visit the <em class="xref">overview</em>
+philosophy and decisions in <a class="reference internal" href="about.html#about-winsys"><em>About WinSys</em></a>. If you want to see some
+examples, have a look in the <a class="reference internal" href="cookbook.html#cookbook"><em>Cookbook</em></a>. Or visit the <a class="reference internal" href="overview.html"><em>An Overview of WinSys</em></a>
 page for an overview and rationale.</p>
 <p>WinSys is developed as an Open Source project and the project home,
 together with issues list and browseable source code is at:</p>
 <blockquote>
-<a class="reference external" href="http://code.google.com/p/winsys/">http://code.google.com/p/winsys/</a></blockquote>
+<div><a class="reference external" href="http://code.google.com/p/winsys/">http://code.google.com/p/winsys/</a></div></blockquote>
 <p>If you&#8217;re interested in helping with the project let me know and I&#8217;ll
 add you to the project members list.</p>
 </div>
@@ -112,8 +114,8 @@ Then dump the details of the new top-level key, including its security.</p>
   <span class="n">new_key</span><span class="o">.</span><span class="n">security</span> <span class="p">()</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
 </pre></div>
 </td></tr></table></div>
-<p>This example makes use of the <a title="Pythonic access to the registry" class="reference external" href="registry.html#module-registry"><tt class="xref docutils literal"><span class="pre">registry</span></tt></a>, <a title="User accounts, SIDs &amp;c." class="reference external" href="accounts.html#module-accounts"><tt class="xref docutils literal"><span class="pre">accounts</span></tt></a> and <a title="Security functions" class="reference external" href="security.html#module-security"><tt class="xref docutils literal"><span class="pre">security</span></tt></a> modules.
-You can see <a class="reference external" href="cookbook/registry.html#copy-one-registry-key-to-another"><em>discussion</em></a> of this example and more in the <a class="reference external" href="cookbook.html#cookbook"><em>Cookbook</em></a>.</p>
+<p>This example makes use of the <a class="reference internal" href="registry.html#module-registry" title="registry: Pythonic access to the registry"><tt class="xref py py-mod docutils literal"><span class="pre">registry</span></tt></a>, <a class="reference internal" href="accounts.html#module-accounts" title="accounts: User accounts, SIDs &amp;c."><tt class="xref py py-mod docutils literal"><span class="pre">accounts</span></tt></a> and <a class="reference internal" href="security.html#module-security" title="security: Security functions"><tt class="xref py py-mod docutils literal"><span class="pre">security</span></tt></a> modules.
+You can see <a class="reference internal" href="cookbook/registry.html#copy-one-registry-key-to-another"><em>discussion</em></a> of this example and more in the <a class="reference internal" href="cookbook.html#cookbook"><em>Cookbook</em></a>.</p>
 </div>
 <div class="section" id="download">
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
@@ -152,6 +154,49 @@ unless you tweak the setup.py code.</p>
 
 
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">BETA: WinSys - Python tools for the Windows Administrator</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#download">Download</a></li>
+<li><a class="reference internal" href="#copyright-license">Copyright &amp; License</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="contents.html"
+                        title="previous chapter">Contents</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="about.html"
+                        title="next chapter">About WinSys</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
       </div>
       <div class="clearer"></div>
     </div>
@@ -162,7 +207,7 @@ unless you tweak the setup.py code.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="about.html" title="About WinSys"
@@ -170,12 +215,12 @@ unless you tweak the setup.py code.</p>
         <li class="right" >
           <a href="contents.html" title="Contents"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2011, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

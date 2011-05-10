@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>fs – Files, Directories, &c. &mdash; WinSys v0.4dev documentation</title>
+    <title>fs – Files, Directories, &amp;c. &mdash; WinSys v0.5beta documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5beta',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
+    <link rel="top" title="WinSys v0.5beta documentation" href="index.html" />
     <link rel="next" title="The Drive class" href="fs_drive_vol.html" />
     <link rel="prev" title="event_logs – Event Logs" href="event_logs.html" /> 
   </head>
@@ -34,34 +35,35 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="fs_drive_vol.html" title="The Drive class"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="event_logs.html" title="event_logs – Event Logs"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
+        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="module-fs">
-<h1><a title="Files, Directories, &amp;c." class="reference external" href="#module-fs"><tt class="xref docutils literal"><span class="pre">fs</span></tt></a> &#8211; Files, Directories, &amp;c.<a class="headerlink" href="#module-fs" title="Permalink to this headline">¶</a></h1>
+<span id="fs-files-directories-c"></span><h1><a class="reference internal" href="#module-fs" title="fs: Files, Directories, &amp;c."><tt class="xref py py-mod docutils literal"><span class="pre">fs</span></tt></a> &#8211; Files, Directories, &amp;c.<a class="headerlink" href="#module-fs" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The fs module makes it easy to work with files, directories, drives, volumes and paths within the Windows filesystems.
-The most common entry-point is to use <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a> to return a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> or <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object, although you
-can use <a title="fs.file" class="reference internal" href="#fs.file"><tt class="xref docutils literal"><span class="pre">file()</span></tt></a> or <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a> directly. Instances of these classes need not exist on any filesystem &#8211; in fact
+The most common entry-point is to use <a class="reference internal" href="#fs.entry" title="fs.entry"><tt class="xref py py-func docutils literal"><span class="pre">entry()</span></tt></a> to return a <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> or <a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> object, although you
+can use <a class="reference internal" href="#fs.file" title="fs.file"><tt class="xref py py-func docutils literal"><span class="pre">file()</span></tt></a> or <a class="reference internal" href="#fs.dir" title="fs.dir"><tt class="xref py py-func docutils literal"><span class="pre">dir()</span></tt></a> directly. Instances of these classes need not exist on any filesystem &#8211; in fact
 they equate to True or False according to the existence or not of a corresponding filesystem object. But they can
 be the source or target of all the usual filesystem operations. In common with other modules in this package,
-functionality is provided at the module level as well as at the class level, so you can, eg, call <a title="fs.File.copy" class="reference external" href="fs_file.html#fs.File.copy"><tt class="xref docutils literal"><span class="pre">File.copy()</span></tt></a>
-or <a title="fs.copy" class="reference internal" href="#fs.copy"><tt class="xref docutils literal"><span class="pre">copy()</span></tt></a> to copy a file to another location.</p>
-<p>An important part of the module is the <a title="fs.FilePath" class="reference external" href="fs_filepath.html#fs.FilePath"><tt class="xref docutils literal"><span class="pre">FilePath</span></tt></a> class which eases manipulation of filesystem paths and is
+functionality is provided at the module level as well as at the class level, so you can, eg, call <a class="reference internal" href="fs_file.html#fs.File.copy" title="fs.File.copy"><tt class="xref py py-meth docutils literal"><span class="pre">File.copy()</span></tt></a>
+or <a class="reference internal" href="#fs.copy" title="fs.copy"><tt class="xref py py-func docutils literal"><span class="pre">copy()</span></tt></a> to copy a file to another location.</p>
+<p>An important part of the module is the <a class="reference internal" href="fs_filepath.html#fs.FilePath" title="fs.FilePath"><tt class="xref py py-class docutils literal"><span class="pre">FilePath</span></tt></a> class which eases manipulation of filesystem paths and is
 at the same time a subclass of unicode, so is accepted in system calls where strings are expected.</p>
 </div>
 <div class="section" id="functions">
@@ -71,7 +73,7 @@ at the same time a subclass of unicode, so is accepted in system calls where str
 <dl class="function">
 <dt id="fs.entry">
 <tt class="descname">entry</tt><big>(</big><em>filepath</em>, <em>_file_info=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#fs.entry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> or <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object representing this
+<dd><p>Return a <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> or <a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> object representing this
 filepath.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -84,21 +86,21 @@ filepath.</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><tt class="xref xref docutils literal"><span class="pre">None</span></tt> or &#8220;&#8221;</td>
-<td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
+<tr><td><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt> or &#8220;&#8221;</td>
+<td><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></td>
 </tr>
-<tr><td>an <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> or subclass object</td>
+<tr><td>an <a class="reference internal" href="fs_entry.html#fs.Entry" title="fs.Entry"><tt class="xref py py-class docutils literal"><span class="pre">Entry</span></tt></a> or subclass object</td>
 <td>the same object</td>
 </tr>
 <tr><td>an existing file name</td>
-<td>a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object representing that file</td>
+<td>a <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object representing that file</td>
 </tr>
 <tr><td>an existing directory name</td>
-<td>a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object representing that directory</td>
+<td>a <a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> object representing that directory</td>
 </tr>
 <tr><td>a file name which doesn&#8217;t exist</td>
-<td>a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> if filepath ends with \,
-<a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> otherwise</td>
+<td>a <a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> if filepath ends with \,
+<a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> otherwise</td>
 </tr>
 </tbody>
 </table>
@@ -107,25 +109,27 @@ filepath.</p>
 <dl class="function">
 <dt id="fs.file">
 <tt class="descname">file</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.file" title="Permalink to this definition">¶</a></dt>
-<dd>Return a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object representing this filepath on
-the filepath. If filepath is already a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object, return
+<dd><p>Return a <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object representing this filepath on
+the filepath. If filepath is already a <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object, return
 it unchanged otherwise ensure that the filepath doesn&#8217;t point to
-an existing directory and return a <a title="fs.File" class="reference external" href="fs_file.html#fs.File"><tt class="xref docutils literal"><span class="pre">File</span></tt></a> object which
-represents it.</dd></dl>
+an existing directory and return a <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object which
+represents it.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="fs.dir">
 <tt class="descname">dir</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.dir" title="Permalink to this definition">¶</a></dt>
-<dd>Return a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object representing this filepath on
-the filepath. If filepath is already a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object, return
+<dd><p>Return a <a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> object representing this filepath on
+the filepath. If filepath is already a <a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> object, return
 it unchanged otherwise ensure that the filepath doesn&#8217;t point to
-an existing file and return a <a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a> object which
-represents it.</dd></dl>
+an existing file and return a <a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> object which
+represents it.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="fs.drive">
 <tt class="descname">drive</tt><big>(</big><em>drive</em><big>)</big><a class="headerlink" href="#fs.drive" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <a title="fs.Drive" class="reference external" href="fs_drive_vol.html#fs.Drive"><tt class="xref docutils literal"><span class="pre">Drive</span></tt></a> object representing drive</p>
+<dd><p>Return a <a class="reference internal" href="fs_drive_vol.html#fs.Drive" title="fs.Drive"><tt class="xref py py-class docutils literal"><span class="pre">Drive</span></tt></a> object representing drive</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="44%" />
@@ -137,14 +141,14 @@ represents it.</dd></dl>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
-<td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
+<tr><td><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></td>
+<td><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></td>
 </tr>
-<tr><td>an <a title="fs.Drive" class="reference external" href="fs_drive_vol.html#fs.Drive"><tt class="xref docutils literal"><span class="pre">Drive</span></tt></a> or subclass object</td>
+<tr><td>an <a class="reference internal" href="fs_drive_vol.html#fs.Drive" title="fs.Drive"><tt class="xref py py-class docutils literal"><span class="pre">Drive</span></tt></a> or subclass object</td>
 <td>the same object</td>
 </tr>
 <tr><td>a drive letter</td>
-<td>a <a title="fs.Drive" class="reference external" href="fs_drive_vol.html#fs.Drive"><tt class="xref docutils literal"><span class="pre">Drive</span></tt></a> object</td>
+<td>a <a class="reference internal" href="fs_drive_vol.html#fs.Drive" title="fs.Drive"><tt class="xref py py-class docutils literal"><span class="pre">Drive</span></tt></a> object</td>
 </tr>
 </tbody>
 </table>
@@ -153,7 +157,7 @@ represents it.</dd></dl>
 <dl class="function">
 <dt id="fs.volume">
 <tt class="descname">volume</tt><big>(</big><em>volume</em><big>)</big><a class="headerlink" href="#fs.volume" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <a title="fs.Volume" class="reference external" href="fs_drive_vol.html#fs.Volume"><tt class="xref docutils literal"><span class="pre">Volume</span></tt></a> object corresponding to volume</p>
+<dd><p>Return a <a class="reference internal" href="fs_drive_vol.html#fs.Volume" title="fs.Volume"><tt class="xref py py-class docutils literal"><span class="pre">Volume</span></tt></a> object corresponding to volume</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="44%" />
@@ -165,17 +169,17 @@ represents it.</dd></dl>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
-<td><tt class="xref xref docutils literal"><span class="pre">None</span></tt></td>
+<tr><td><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></td>
+<td><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></td>
 </tr>
-<tr><td>an <a title="fs.Volume" class="reference external" href="fs_drive_vol.html#fs.Volume"><tt class="xref docutils literal"><span class="pre">Volume</span></tt></a> or subclass object</td>
+<tr><td>an <a class="reference internal" href="fs_drive_vol.html#fs.Volume" title="fs.Volume"><tt class="xref py py-class docutils literal"><span class="pre">Volume</span></tt></a> or subclass object</td>
 <td>the same object</td>
 </tr>
 <tr><td>a volume name \\?\Volume...</td>
-<td>a <a title="fs.Volume" class="reference external" href="fs_drive_vol.html#fs.Volume"><tt class="xref docutils literal"><span class="pre">Volume</span></tt></a> object representing that volume</td>
+<td>a <a class="reference internal" href="fs_drive_vol.html#fs.Volume" title="fs.Volume"><tt class="xref py py-class docutils literal"><span class="pre">Volume</span></tt></a> object representing that volume</td>
 </tr>
 <tr><td>a directory name</td>
-<td>a <a title="fs.Volume" class="reference external" href="fs_drive_vol.html#fs.Volume"><tt class="xref docutils literal"><span class="pre">Volume</span></tt></a> object representing the volume
+<td>a <a class="reference internal" href="fs_drive_vol.html#fs.Volume" title="fs.Volume"><tt class="xref py py-class docutils literal"><span class="pre">Volume</span></tt></a> object representing the volume
 at that mountpoint</td>
 </tr>
 </tbody>
@@ -196,14 +200,9 @@ optionally ignoring access errors.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>d</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
-<li><em>ignore_access_errors</em> &#8211; passed to <tt class="xref docutils literal"><span class="pre">files()</span></tt></li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>d</strong> &#8211; anything accepted by <a class="reference internal" href="#fs.dir" title="fs.dir"><tt class="xref py py-func docutils literal"><span class="pre">dir()</span></tt></a></td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">yield the name of each file in directory d</p>
-</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">yield the name of each file in directory d</td>
 </tr>
 </tbody>
 </table>
@@ -218,14 +217,9 @@ optionally ignoring access errors.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>pattern</em> &#8211; passed to <tt class="xref docutils literal"><span class="pre">files()</span></tt></li>
-<li><em>ignore_access_errors</em> &#8211; passed to <tt class="xref docutils literal"><span class="pre">files()</span></tt></li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pattern</strong> &#8211; passed to <tt class="xref py py-func docutils literal"><span class="pre">files()</span></tt></td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">yields a <a title="fs.FilePath" class="reference external" href="fs_filepath.html#fs.FilePath"><tt class="xref docutils literal"><span class="pre">FilePath</span></tt></a> object for each matching file</p>
-</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">yields a <a class="reference internal" href="fs_filepath.html#fs.FilePath" title="fs.FilePath"><tt class="xref py py-class docutils literal"><span class="pre">FilePath</span></tt></a> object for each matching file</td>
 </tr>
 </tbody>
 </table>
@@ -234,7 +228,8 @@ optionally ignoring access errors.</p>
 <dl class="function">
 <dt id="fs.mkdir">
 <tt class="descname">mkdir</tt><big>(</big><em>dirpath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.mkdir" title="Permalink to this definition">¶</a></dt>
-<dd>Mimic os.mkdir, implemented via <a title="fs.Dir.create" class="reference external" href="fs_dir.html#fs.Dir.create"><tt class="xref docutils literal"><span class="pre">Dir.create()</span></tt></a></dd></dl>
+<dd><p>Mimic os.mkdir, implemented via <a class="reference internal" href="fs_dir.html#fs.Dir.create" title="fs.Dir.create"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.create()</span></tt></a></p>
+</dd></dl>
 
 <dl class="function">
 <dt id="fs.rmdir">
@@ -245,8 +240,8 @@ optionally ignoring access errors.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
-<li><em>recursive</em> &#8211; passed to <a title="fs.Dir.delete" class="reference external" href="fs_dir.html#fs.Dir.delete"><tt class="xref docutils literal"><span class="pre">Dir.delete()</span></tt></a></li>
+<li><strong>filepath</strong> &#8211; anything accepted by <a class="reference internal" href="#fs.dir" title="fs.dir"><tt class="xref py py-func docutils literal"><span class="pre">dir()</span></tt></a></li>
+<li><strong>recursive</strong> &#8211; passed to <a class="reference internal" href="fs_dir.html#fs.Dir.delete" title="fs.Dir.delete"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.delete()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -256,7 +251,7 @@ optionally ignoring access errors.</p>
 
 <dl class="function">
 <dt id="fs.walk">
-<tt class="descname">walk</tt><big>(</big><em>root</em>, <em>depthfirst=False</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.walk" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">walk</tt><big>(</big><em>root</em>, <em>depthfirst=False</em>, <em>error_handler=None</em><big>)</big><a class="headerlink" href="#fs.walk" title="Permalink to this definition">¶</a></dt>
 <dd><p>Walk the directory tree starting from root, optionally ignoring
 access errors.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -264,13 +259,13 @@ access errors.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
-<li><em>depthfirst</em> &#8211; passed to <a title="fs.Dir.walk" class="reference external" href="fs_dir.html#fs.Dir.walk"><tt class="xref docutils literal"><span class="pre">Dir.walk()</span></tt></a></li>
-<li><em>ignore_access_errors</em> &#8211; passed to <a title="fs.Dir.walk" class="reference external" href="fs_dir.html#fs.Dir.walk"><tt class="xref docutils literal"><span class="pre">Dir.walk()</span></tt></a></li>
+<li><strong>root</strong> &#8211; anything accepted by <a class="reference internal" href="#fs.dir" title="fs.dir"><tt class="xref py py-func docutils literal"><span class="pre">dir()</span></tt></a></li>
+<li><strong>depthfirst</strong> &#8211; passed to <a class="reference internal" href="fs_dir.html#fs.Dir.walk" title="fs.Dir.walk"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.walk()</span></tt></a></li>
+<li><strong>error_handler</strong> &#8211; passed to <a class="reference internal" href="fs_dir.html#fs.Dir.walk" title="fs.Dir.walk"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.walk()</span></tt></a></li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">as <a title="fs.Dir.walk" class="reference external" href="fs_dir.html#fs.Dir.walk"><tt class="xref docutils literal"><span class="pre">Dir.walk()</span></tt></a></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">as <a class="reference internal" href="fs_dir.html#fs.Dir.walk" title="fs.Dir.walk"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.walk()</span></tt></a></p>
 </td>
 </tr>
 </tbody>
@@ -279,23 +274,23 @@ access errors.</p>
 
 <dl class="function">
 <dt id="fs.flat">
-<tt class="descname">flat</tt><big>(</big><em>root</em>, <em>pattern='*'</em>, <em>includedirs=False</em>, <em>depthfirst=False</em>, <em>ignore_access_errors=False</em><big>)</big><a class="headerlink" href="#fs.flat" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">flat</tt><big>(</big><em>root</em>, <em>pattern='*'</em>, <em>includedirs=False</em>, <em>depthfirst=False</em>, <em>error_handler=None</em><big>)</big><a class="headerlink" href="#fs.flat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over a flattened version of the directory tree starting
-from root. Implemented via <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a>.</p>
+from root. Implemented via <a class="reference internal" href="fs_dir.html#fs.Dir.flat" title="fs.Dir.flat"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.flat()</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>root</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
-<li><em>pattern</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
-<li><em>includedirs</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
-<li><em>depthfirst</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
-<li><em>ignore_access_errors</em> &#8211; passed to <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
+<li><strong>root</strong> &#8211; anything accepted by <a class="reference internal" href="#fs.dir" title="fs.dir"><tt class="xref py py-func docutils literal"><span class="pre">dir()</span></tt></a></li>
+<li><strong>pattern</strong> &#8211; passed to <a class="reference internal" href="fs_dir.html#fs.Dir.flat" title="fs.Dir.flat"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
+<li><strong>includedirs</strong> &#8211; passed to <a class="reference internal" href="fs_dir.html#fs.Dir.flat" title="fs.Dir.flat"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
+<li><strong>depthfirst</strong> &#8211; passed to <a class="reference internal" href="fs_dir.html#fs.Dir.flat" title="fs.Dir.flat"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
+<li><strong>error_handler</strong> &#8211; passed to <a class="reference internal" href="fs_dir.html#fs.Dir.flat" title="fs.Dir.flat"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.flat()</span></tt></a></li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">as <a title="fs.Dir.flat" class="reference external" href="fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">as <a class="reference internal" href="fs_dir.html#fs.Dir.flat" title="fs.Dir.flat"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.flat()</span></tt></a></p>
 </td>
 </tr>
 </tbody>
@@ -305,12 +300,12 @@ from root. Implemented via <a title="fs.Dir.flat" class="reference external" hre
 <dl class="function">
 <dt id="fs.move">
 <tt class="descname">move</tt><big>(</big><em>source_filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.move" title="Permalink to this definition">¶</a></dt>
-<dd><p>Move one <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object to another, implemented via <tt class="xref docutils literal"><span class="pre">File.move()</span></tt> or <tt class="xref docutils literal"><span class="pre">Dir.move()</span></tt></p>
+<dd><p>Move one <a class="reference internal" href="fs_entry.html#fs.Entry" title="fs.Entry"><tt class="xref py py-class docutils literal"><span class="pre">Entry</span></tt></a> object to another, implemented via <tt class="xref py py-meth docutils literal"><span class="pre">File.move()</span></tt> or <tt class="xref py py-meth docutils literal"><span class="pre">Dir.move()</span></tt></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>source_filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>source_filepath</strong> &#8211; anything accepted by <a class="reference internal" href="#fs.entry" title="fs.entry"><tt class="xref py py-func docutils literal"><span class="pre">entry()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -319,12 +314,12 @@ from root. Implemented via <a title="fs.Dir.flat" class="reference external" hre
 <dl class="function">
 <dt id="fs.copy">
 <tt class="descname">copy</tt><big>(</big><em>source_filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.copy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copy one <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object to another, implemented via <a title="fs.File.copy" class="reference external" href="fs_file.html#fs.File.copy"><tt class="xref docutils literal"><span class="pre">File.copy()</span></tt></a> or <a title="fs.Dir.copy" class="reference external" href="fs_dir.html#fs.Dir.copy"><tt class="xref docutils literal"><span class="pre">Dir.copy()</span></tt></a></p>
+<dd><p>Copy one <a class="reference internal" href="fs_entry.html#fs.Entry" title="fs.Entry"><tt class="xref py py-class docutils literal"><span class="pre">Entry</span></tt></a> object to another, implemented via <a class="reference internal" href="fs_file.html#fs.File.copy" title="fs.File.copy"><tt class="xref py py-meth docutils literal"><span class="pre">File.copy()</span></tt></a> or <a class="reference internal" href="fs_dir.html#fs.Dir.copy" title="fs.Dir.copy"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.copy()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>source_filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>source_filepath</strong> &#8211; anything accepted by <a class="reference internal" href="#fs.entry" title="fs.entry"><tt class="xref py py-func docutils literal"><span class="pre">entry()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -333,12 +328,12 @@ from root. Implemented via <a title="fs.Dir.flat" class="reference external" hre
 <dl class="function">
 <dt id="fs.delete">
 <tt class="descname">delete</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deletes a <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> object, implemented via <a title="fs.File.delete" class="reference external" href="fs_file.html#fs.File.delete"><tt class="xref docutils literal"><span class="pre">File.delete()</span></tt></a> or <a title="fs.Dir.delete" class="reference external" href="fs_dir.html#fs.Dir.delete"><tt class="xref docutils literal"><span class="pre">Dir.delete()</span></tt></a></p>
+<dd><p>Deletes a <a class="reference internal" href="fs_entry.html#fs.Entry" title="fs.Entry"><tt class="xref py py-class docutils literal"><span class="pre">Entry</span></tt></a> object, implemented via <a class="reference internal" href="fs_file.html#fs.File.delete" title="fs.File.delete"><tt class="xref py py-meth docutils literal"><span class="pre">File.delete()</span></tt></a> or <a class="reference internal" href="fs_dir.html#fs.Dir.delete" title="fs.Dir.delete"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.delete()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; anything accepted by <a class="reference internal" href="#fs.entry" title="fs.entry"><tt class="xref py py-func docutils literal"><span class="pre">entry()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -347,14 +342,14 @@ from root. Implemented via <a title="fs.Dir.flat" class="reference external" hre
 <dl class="function">
 <dt id="fs.exists">
 <tt class="descname">exists</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.exists" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mimic os.path.exists, implemented via the <a title="fs.Entry" class="reference external" href="fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">Entry</span></tt></a> boolean mechanism</p>
+<dd><p>Mimic os.path.exists, implemented via the <a class="reference internal" href="fs_entry.html#fs.Entry" title="fs.Entry"><tt class="xref py py-class docutils literal"><span class="pre">Entry</span></tt></a> boolean mechanism</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; anything accepted by <a class="reference internal" href="#fs.entry" title="fs.entry"><tt class="xref py py-func docutils literal"><span class="pre">entry()</span></tt></a></td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="xref xref docutils literal"><span class="pre">True</span></tt> if filepath exists, <tt class="xref xref docutils literal"><span class="pre">False</span></tt> otherwise</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt> if filepath exists, <tt class="xref py py-const xref docutils literal"><span class="pre">False</span></tt> otherwise</td>
 </tr>
 </tbody>
 </table>
@@ -363,12 +358,12 @@ from root. Implemented via <a title="fs.Dir.flat" class="reference external" hre
 <dl class="function">
 <dt id="fs.zip">
 <tt class="descname">zip</tt><big>(</big><em>filepath</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.zip" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create and return a zip archive of filepath, implemented via <a title="fs.File.zip" class="reference external" href="fs_file.html#fs.File.zip"><tt class="xref docutils literal"><span class="pre">File.zip()</span></tt></a> or <a title="fs.Dir.zip" class="reference external" href="fs_dir.html#fs.Dir.zip"><tt class="xref docutils literal"><span class="pre">Dir.zip()</span></tt></a></p>
+<dd><p>Create and return a zip archive of filepath, implemented via <a class="reference internal" href="fs_file.html#fs.File.zip" title="fs.File.zip"><tt class="xref py py-meth docutils literal"><span class="pre">File.zip()</span></tt></a> or <a class="reference internal" href="fs_dir.html#fs.Dir.zip" title="fs.Dir.zip"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.zip()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; anything accepted by <a class="reference internal" href="#fs.entry" title="fs.entry"><tt class="xref py py-func docutils literal"><span class="pre">entry()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -378,12 +373,12 @@ from root. Implemented via <a title="fs.Dir.flat" class="reference external" hre
 <dt id="fs.touch">
 <tt class="descname">touch</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.touch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update a file&#8217;s modification time, creating it if it
-does not exist, implemented via <a title="fs.File.create" class="reference external" href="fs_file.html#fs.File.create"><tt class="xref docutils literal"><span class="pre">File.create()</span></tt></a></p>
+does not exist, implemented via <a class="reference internal" href="fs_file.html#fs.File.create" title="fs.File.create"><tt class="xref py py-meth docutils literal"><span class="pre">File.create()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.file" class="reference internal" href="#fs.file"><tt class="xref docutils literal"><span class="pre">file()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; anything accepted by <a class="reference internal" href="#fs.file" title="fs.file"><tt class="xref py py-func docutils literal"><span class="pre">file()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -475,9 +470,10 @@ with a trailing slash. This is stripped off.</p>
 <dl class="function">
 <dt id="fs.normalised">
 <tt class="descname">normalised</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.normalised" title="Permalink to this definition">¶</a></dt>
-<dd>Convert any path or path-like object into the
+<dd><p>Convert any path or path-like object into the
 length-unlimited unicode equivalent. This should avoid
-issues with maximum path length and the like.</dd></dl>
+issues with maximum path length and the like.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="fs.handle">
@@ -489,9 +485,9 @@ issues with maximum path length and the like.</dd></dl>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>filepath</em> &#8211; anything whose unicode representation is a valid file path</li>
-<li><em>write</em> &#8211; is the handle to be used for writing [True]</li>
-<li><em>attributes</em> &#8211; anything accepted by <a title="fs.FILE_ATTRIBUTE" class="reference external" href="fs_constants.html#fs.FILE_ATTRIBUTE"><tt class="xref docutils literal"><span class="pre">FILE_ATTRIBUTE</span></tt></a></li>
+<li><strong>filepath</strong> &#8211; anything whose unicode representation is a valid file path</li>
+<li><strong>write</strong> &#8211; is the handle to be used for writing [True]</li>
+<li><strong>attributes</strong> &#8211; anything accepted by <a class="reference internal" href="fs_constants.html#fs.FILE_ATTRIBUTE" title="fs.FILE_ATTRIBUTE"><tt class="xref py py-const docutils literal"><span class="pre">FILE_ATTRIBUTE</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -539,8 +535,8 @@ are normalised first.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>filepath1</em> &#8211; a file or directory</li>
-<li><em>filepath2</em> &#8211; a directory</li>
+<li><strong>filepath1</strong> &#8211; a file or directory</li>
+<li><strong>filepath2</strong> &#8211; a directory</li>
 </ul>
 </td>
 </tr>
@@ -554,15 +550,15 @@ are normalised first.</p>
 <dl class="function">
 <dt id="fs.attributes">
 <tt class="descname">attributes</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.attributes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an <a title="fs._Attributes" class="reference internal" href="#fs._Attributes"><tt class="xref docutils literal"><span class="pre">_Attributes</span></tt></a> object representing the file attributes
-of filepath, implemented via <a title="fs.Entry.attributes" class="reference external" href="fs_entry.html#fs.Entry.attributes"><tt class="xref docutils literal"><span class="pre">Entry.attributes()</span></tt></a></p>
+<dd><p>Return an <a class="reference internal" href="#fs._Attributes" title="fs._Attributes"><tt class="xref py py-class docutils literal"><span class="pre">_Attributes</span></tt></a> object representing the file attributes
+of filepath, implemented via <a class="reference internal" href="fs_entry.html#fs.Entry.attributes" title="fs.Entry.attributes"><tt class="xref py py-meth docutils literal"><span class="pre">Entry.attributes()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.entry" class="reference internal" href="#fs.entry"><tt class="xref docutils literal"><span class="pre">entry()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; anything accepted by <a class="reference internal" href="#fs.entry" title="fs.entry"><tt class="xref py py-func docutils literal"><span class="pre">entry()</span></tt></a></td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">an <a title="fs._Attributes" class="reference internal" href="#fs._Attributes"><tt class="xref docutils literal"><span class="pre">_Attributes</span></tt></a> object</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">an <a class="reference internal" href="#fs._Attributes" title="fs._Attributes"><tt class="xref py py-class docutils literal"><span class="pre">_Attributes</span></tt></a> object</td>
 </tr>
 </tbody>
 </table>
@@ -574,14 +570,14 @@ of filepath, implemented via <a title="fs.Entry.attributes" class="reference ext
 <dl class="function">
 <dt id="fs.mount">
 <tt class="descname">mount</tt><big>(</big><em>filepath</em>, <em>vol</em><big>)</big><a class="headerlink" href="#fs.mount" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mount vol at filepath, implemented via <a title="fs.Dir.mount" class="reference external" href="fs_dir.html#fs.Dir.mount"><tt class="xref docutils literal"><span class="pre">Dir.mount()</span></tt></a></p>
+<dd><p>Mount vol at filepath, implemented via <a class="reference internal" href="fs_dir.html#fs.Dir.mount" title="fs.Dir.mount"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.mount()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></li>
-<li><em>vol</em> &#8211; passed to <a title="fs.Dir.mount" class="reference external" href="fs_dir.html#fs.Dir.mount"><tt class="xref docutils literal"><span class="pre">Dir.mount()</span></tt></a></li>
+<li><strong>filepath</strong> &#8211; anything accepted by <a class="reference internal" href="#fs.dir" title="fs.dir"><tt class="xref py py-func docutils literal"><span class="pre">dir()</span></tt></a></li>
+<li><strong>vol</strong> &#8211; passed to <a class="reference internal" href="fs_dir.html#fs.Dir.mount" title="fs.Dir.mount"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.mount()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -592,12 +588,12 @@ of filepath, implemented via <a title="fs.Entry.attributes" class="reference ext
 <dl class="function">
 <dt id="fs.dismount">
 <tt class="descname">dismount</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.dismount" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dismount the volume at filepath, implemented via <a title="fs.Dir.dismount" class="reference external" href="fs_dir.html#fs.Dir.dismount"><tt class="xref docutils literal"><span class="pre">Dir.dismount()</span></tt></a></p>
+<dd><p>Dismount the volume at filepath, implemented via <a class="reference internal" href="fs_dir.html#fs.Dir.dismount" title="fs.Dir.dismount"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.dismount()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>filepath</em> &#8211; anything accepted by <a title="fs.dir" class="reference internal" href="#fs.dir"><tt class="xref docutils literal"><span class="pre">dir()</span></tt></a></td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; anything accepted by <a class="reference internal" href="#fs.dir" title="fs.dir"><tt class="xref py py-func docutils literal"><span class="pre">dir()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -606,20 +602,22 @@ of filepath, implemented via <a title="fs.Entry.attributes" class="reference ext
 <dl class="function">
 <dt id="fs.drives">
 <tt class="descname">drives</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.drives" title="Permalink to this definition">¶</a></dt>
-<dd>Iterate over all the drive letters in the system, yielding a <a title="fs.Drive" class="reference external" href="fs_drive_vol.html#fs.Drive"><tt class="xref docutils literal"><span class="pre">Drive</span></tt></a> object
-representing each one.</dd></dl>
+<dd><p>Iterate over all the drive letters in the system, yielding a <a class="reference internal" href="fs_drive_vol.html#fs.Drive" title="fs.Drive"><tt class="xref py py-class docutils literal"><span class="pre">Drive</span></tt></a> object
+representing each one.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="fs.volumes">
 <tt class="descname">volumes</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.volumes" title="Permalink to this definition">¶</a></dt>
-<dd>Iterate over all the volumes in the system, yielding a <a title="fs.Volume" class="reference external" href="fs_drive_vol.html#fs.Volume"><tt class="xref docutils literal"><span class="pre">Volume</span></tt></a> object
-representing each one.</dd></dl>
+<dd><p>Iterate over all the volumes in the system, yielding a <a class="reference internal" href="fs_drive_vol.html#fs.Volume" title="fs.Volume"><tt class="xref py py-class docutils literal"><span class="pre">Volume</span></tt></a> object
+representing each one.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="fs.mounts">
 <tt class="descname">mounts</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.mounts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over all mounted volume mountpoints in the system, yielding a
-(<a title="fs.Dir" class="reference external" href="fs_dir.html#fs.Dir"><tt class="xref docutils literal"><span class="pre">Dir</span></tt></a>, <a title="fs.Volume" class="reference external" href="fs_drive_vol.html#fs.Volume"><tt class="xref docutils literal"><span class="pre">Volume</span></tt></a>) pair for each one, eg:</p>
+(<a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a>, <a class="reference internal" href="fs_drive_vol.html#fs.Volume" title="fs.Volume"><tt class="xref py py-class docutils literal"><span class="pre">Volume</span></tt></a>) pair for each one, eg:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
 <span class="n">drive_volumes</span> <span class="o">=</span> <span class="nb">dict</span> <span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">mounts</span> <span class="p">())</span>
 </pre></div>
@@ -631,7 +629,7 @@ representing each one.</dd></dl>
 <tt class="descname">watch</tt><big>(</big><em>root</em>, <em>subdirs=False</em>, <em>watch_for=287</em>, <em>buffer_size=8192</em><big>)</big><a class="headerlink" href="#fs.watch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an iterator which returns a file change on every iteration.
 The file change comes in the form: action, old_filename, new_filename.
-action is one of the <a title="fs.FILE_ACTION" class="reference external" href="fs_constants.html#fs.FILE_ACTION"><tt class="xref docutils literal"><span class="pre">FILE_ACTION</span></tt></a> constants, while the filenames
+action is one of the <a class="reference internal" href="fs_constants.html#fs.FILE_ACTION" title="fs.FILE_ACTION"><tt class="xref py py-const docutils literal"><span class="pre">FILE_ACTION</span></tt></a> constants, while the filenames
 speak for themselves. The filenames will be the same if the file has been
 updated. If the file is new, old_filename will be None; if it has been
 deleted, new_filename will be None; if it has been renamed, they will
@@ -668,12 +666,12 @@ access, item access and the &#8220;in&#8221; operator:</p>
 
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference external" href="fs_drive_vol.html">The Drive class</a></li>
-<li class="toctree-l1"><a class="reference external" href="fs_drive_vol.html#the-volume-class">The Volume class</a></li>
-<li class="toctree-l1"><a class="reference external" href="fs_filepath.html">The FilePath class</a></li>
-<li class="toctree-l1"><a class="reference external" href="fs_entry.html">The Entry class</a></li>
-<li class="toctree-l1"><a class="reference external" href="fs_file.html">The File class</a></li>
-<li class="toctree-l1"><a class="reference external" href="fs_dir.html">The Dir class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fs_drive_vol.html">The Drive class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fs_drive_vol.html#the-volume-class">The Volume class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fs_filepath.html">The FilePath class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fs_entry.html">The Entry class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fs_file.html">The File class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fs_dir.html">The Dir class</a></li>
 </ul>
 </div>
 </div>
@@ -681,7 +679,7 @@ access, item access and the &#8220;in&#8221; operator:</p>
 <h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference external" href="fs_constants.html">fs Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fs_constants.html">fs Constants</a></li>
 </ul>
 </div>
 </div>
@@ -690,32 +688,38 @@ access, item access and the &#8220;in&#8221; operator:</p>
 <dl class="exception">
 <dt id="fs.x_fs">
 <em class="property">exception </em><tt class="descname">x_fs</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_fs" title="Permalink to this definition">¶</a></dt>
-<dd>Base for all fs-related exceptions</dd></dl>
+<dd><p>Base for all fs-related exceptions</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="fs.x_no_such_file">
 <em class="property">exception </em><tt class="descname">x_no_such_file</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_no_such_file" title="Permalink to this definition">¶</a></dt>
-<dd>Raised when a file could not be found</dd></dl>
+<dd><p>Raised when a file could not be found</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="fs.x_too_many_files">
 <em class="property">exception </em><tt class="descname">x_too_many_files</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_too_many_files" title="Permalink to this definition">¶</a></dt>
-<dd>Raised when more than one file matches a name</dd></dl>
+<dd><p>Raised when more than one file matches a name</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="fs.x_invalid_name">
 <em class="property">exception </em><tt class="descname">x_invalid_name</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_invalid_name" title="Permalink to this definition">¶</a></dt>
-<dd>Raised when a filename contains invalid characters</dd></dl>
+<dd><p>Raised when a filename contains invalid characters</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="fs.x_no_certificate">
 <em class="property">exception </em><tt class="descname">x_no_certificate</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_no_certificate" title="Permalink to this definition">¶</a></dt>
-<dd>Raised when encryption is attempted without a certificate</dd></dl>
+<dd><p>Raised when encryption is attempted without a certificate</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="fs.x_not_ready">
 <em class="property">exception </em><tt class="descname">x_not_ready</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#fs.x_not_ready" title="Permalink to this definition">¶</a></dt>
-<dd>Raised when a device is not ready</dd></dl>
+<dd><p>Raised when a device is not ready</p>
+</dd></dl>
 
 </div>
 <div class="section" id="references">
@@ -723,7 +727,7 @@ access, item access and the &#8220;in&#8221; operator:</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference external" href="cookbook/fs.html"><em>Using the fs module</em></a></dt>
+<dt><a class="reference internal" href="cookbook/fs.html"><em>Using the fs module</em></a></dt>
 <dd>Cookbook examples of using the fs module</dd>
 </dl>
 </div>
@@ -732,6 +736,61 @@ access, item access and the &#8220;in&#8221; operator:</p>
 
 
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#factories">Factories</a></li>
+<li><a class="reference internal" href="#stdlib-extras">stdlib Extras</a></li>
+<li><a class="reference internal" href="#helpers">Helpers</a></li>
+<li><a class="reference internal" href="#additional-filesystem-operations">Additional Filesystem Operations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#classes">Classes</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#constants">Constants</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="event_logs.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">event_logs</span></tt> &#8211; Event Logs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fs_drive_vol.html"
+                        title="next chapter">The Drive class</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/fs.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
       </div>
       <div class="clearer"></div>
     </div>
@@ -742,7 +801,7 @@ access, item access and the &#8220;in&#8221; operator:</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="fs_drive_vol.html" title="The Drive class"
@@ -750,12 +809,12 @@ access, item access and the &#8220;in&#8221; operator:</p>
         <li class="right" >
           <a href="event_logs.html" title="event_logs – Event Logs"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2011, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

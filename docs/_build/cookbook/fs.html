@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using the fs module &mdash; WinSys v0.4dev documentation</title>
+    <title>Using the fs module &mdash; WinSys v0.5beta documentation</title>
     <link rel="stylesheet" href="../_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        VERSION:     '0.5beta',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="../index.html" />
+    <link rel="top" title="WinSys v0.5beta documentation" href="../index.html" />
     <link rel="up" title="Cookbook" href="../cookbook.html" />
     <link rel="next" title="Using the registry module" href="registry.html" />
     <link rel="prev" title="Using the event_logs module" href="event_logs.html" /> 
@@ -35,15 +36,15 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="registry.html" title="Using the registry module"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="event_logs.html" title="Using the event_logs module"
              accesskey="P">previous</a> |</li>
-        <li><a href="../contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
           <li><a href="../cookbook.html" accesskey="U">Cookbook</a> &raquo;</li> 
       </ul>
     </div>  
@@ -75,12 +76,12 @@
 <span class="k">assert</span> <span class="n">f</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="s">&quot;O&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span> <span class="o">==</span> <span class="n">security</span><span class="o">.</span><span class="n">me</span> <span class="p">()</span>
 </pre></div>
 </td></tr></table></div>
-<p>The <a title="fs.Entry.take_ownership" class="reference external" href="../fs_entry.html#fs.Entry.take_ownership"><tt class="xref docutils literal"><span class="pre">Entry.take_ownership()</span></tt></a> method assumes that you have no existing
+<p>The <a class="reference internal" href="../fs_entry.html#fs.Entry.take_ownership" title="fs.Entry.take_ownership"><tt class="xref py py-meth docutils literal"><span class="pre">Entry.take_ownership()</span></tt></a> method assumes that you have no existing
 access to the object, so does not attempt to read its security at all
 since this would probably fail. If you do not even have permission
 to set the owner entry in the security descriptor you need to enable
 the SeTakeOwnership privilege in your token. Best practice is to
-enable privileges for only as long as you need them, so the <tt class="xref docutils literal"><span class="pre">security.changed_privileges()</span></tt>
+enable privileges for only as long as you need them, so the <tt class="xref py py-func docutils literal"><span class="pre">security.changed_privileges()</span></tt>
 is a context manager which reverses the privilege changes once it exits.</p>
 </div>
 <div class="section" id="find-the-sizes-of-top-level-directories">
@@ -117,14 +118,14 @@ in descending order of size.</p>
   <span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;=&gt;&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_as_mb</span> <span class="p">(</span><span class="n">size</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
-<p>The <a title="dialogs.dialog" class="reference external" href="../dialogs.html#dialogs.dialog"><tt class="xref docutils literal"><span class="pre">dialogs.dialog()</span></tt></a> function sets up a simple dialog box
+<p>The <a class="reference internal" href="../dialogs.html#dialogs.dialog" title="dialogs.dialog"><tt class="xref py py-func docutils literal"><span class="pre">dialogs.dialog()</span></tt></a> function sets up a simple dialog box
 requesting the name of the root directory (offering a push-button
-for a standard selection dialog). Then the <a title="fs.Dir.dirs" class="reference external" href="../fs_dir.html#fs.Dir.dirs"><tt class="xref docutils literal"><span class="pre">Dir.dirs()</span></tt></a> method
-iterates over all subdirectories of its directory, and <a title="fs.Dir.flat" class="reference external" href="../fs_dir.html#fs.Dir.flat"><tt class="xref docutils literal"><span class="pre">Dir.flat()</span></tt></a>
+for a standard selection dialog). Then the <a class="reference internal" href="../fs_dir.html#fs.Dir.dirs" title="fs.Dir.dirs"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.dirs()</span></tt></a> method
+iterates over all subdirectories of its directory, and <a class="reference internal" href="../fs_dir.html#fs.Dir.flat" title="fs.Dir.flat"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.flat()</span></tt></a>
 iterates over all the files underneath a directory from which we can
 fetch their (compressed) size and sum them all up.</p>
 <p>The rest is mostly standard Python gimmickry with sorting dictionaries
-etc. <tt class="xref docutils literal"><span class="pre">utils.size_as_mb()</span></tt> provides a more human-readable
+etc. <tt class="xref py py-func docutils literal"><span class="pre">utils.size_as_mb()</span></tt> provides a more human-readable
 version of a number of bytes.</p>
 </div>
 </div>
@@ -140,9 +141,9 @@ version of a number of bytes.</p>
             </a></p>
   <h3><a href="../contents.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference external" href="#">Using the fs module</a><ul>
-<li><a class="reference external" href="#take-ownership-of-a-file">Take ownership of a file</a></li>
-<li><a class="reference external" href="#find-the-sizes-of-top-level-directories">Find the sizes of top-level directories</a></li>
+<li><a class="reference internal" href="#">Using the fs module</a><ul>
+<li><a class="reference internal" href="#take-ownership-of-a-file">Take ownership of a file</a></li>
+<li><a class="reference internal" href="#find-the-sizes-of-top-level-directories">Find the sizes of top-level directories</a></li>
 </ul>
 </li>
 </ul>
@@ -182,7 +183,7 @@ version of a number of bytes.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="registry.html" title="Using the registry module"
@@ -190,13 +191,13 @@ version of a number of bytes.</p>
         <li class="right" >
           <a href="event_logs.html" title="Using the event_logs module"
              >previous</a> |</li>
-        <li><a href="../contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
           <li><a href="../cookbook.html" >Cookbook</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2011, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

@@ -15,7 +15,7 @@ although it's not yet up to speed on Vista/W7 & x64.
 It is unashamedly platform-specific: no hint of a concession towards more
 Unix-like operating systems.  You can read about the design
 philosophy and decisions in :ref:`about-winsys`. If you want to see some
-examples, have a look in the :ref:`cookbook`. Or visit the :ref:`overview`
+examples, have a look in the :ref:`cookbook`. Or visit the :doc:`overview`
 page for an overview and rationale.
 
 WinSys is developed as an Open Source project and the project home,

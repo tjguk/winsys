@@ -14,34 +14,23 @@ mutexes, sempahores and waitable timers. At least, that's the plan.
 At the time of writing, only mailslots and events are in there. But
 the rest are definitely on the way.
 
-Exceptions
+
+Functions
 ----------
 
-..  exception:: x_ipc
+Factories
+~~~~~~~~~
 
-    Base of all exceptions in this module; subclass of :exc:`core.x_winsys`
-    
-Functions
----------
+..  autofunction:: mailslot
+..  autofunction:: event
 
-..  function:: mailslot (mailslot[, message_size=0, timeout_ms=-1]) -> Mailslot object
-    
-    Factory function to return a :class:`Mailslot` object with the given
-    name, number of messages and timeout in milliseconds. If ``name``
-    is not an absolute mailslot name (looking like :file:`\\\\...\\mailslot\\...`)
-    it is assumed to be a local mailslot and is prefixed with
-    :file:`\\\\.\\mailslot\\`. If ``name`` is None, None is returned and the other
-    parameters are ignored. If ``name`` is a ``Mailslot`` instance, it is returned
-    unaltered and the remaining parameters are ignored.
+Helpers
+~~~~~~~
 
-..  function:: event (event[, initially_set=0, needs_manual_reset=0, security=None]) -> Event object
-    
-    Factory function to return a :class:`Event` object with the given
-    name and flags. If ``event`` is None, None is returned and the remaining
-    parameters are ignored. If ``event`` is an ``Event`` instance, it is returned
-    unaltered and the remaining parameters are ignored.
-    
-    
+..  autofunction:: any
+..  autofunction:: all
+
+
 Classes
 -------
 
@@ -49,7 +38,23 @@ Classes
 
     mailslots
     events
-    
+
+Constants
+---------
+
+..  autodata:: WAIT
+
+Exceptions
+----------
+
+..  autoexception:: x_ipc
+..  autoexception:: x_mailslot
+..  autoexception:: x_mailslot_invalid_use
+..  autoexception:: x_mailslot_empty
+..  autoexception:: x_mailslot_message_too_big
+..  autoexception:: x_mailslot_message_too_complex
+
+
 References
 ----------
 
@@ -57,6 +62,9 @@ References
 
     `Synchronisation <http://msdn.microsoft.com/en-us/library/ms686353(VS.85).aspx>`_
      Documentation on microsoft.com for synchronisation objects
+
+    :doc:`cookbook/ipc`
+      Cookbook examples of using the ipc module
 
 To Do
 -----

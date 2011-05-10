@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using the dialogs module &mdash; WinSys v0.4dev documentation</title>
+    <title>Using the dialogs module &mdash; WinSys v0.5beta documentation</title>
     <link rel="stylesheet" href="../_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        VERSION:     '0.5beta',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="../index.html" />
+    <link rel="top" title="WinSys v0.5beta documentation" href="../index.html" />
     <link rel="up" title="Cookbook" href="../cookbook.html" />
     <link rel="next" title="Using the environment module" href="environment.html" />
     <link rel="prev" title="Using the constants module" href="constants.html" /> 
@@ -35,15 +36,15 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="environment.html" title="Using the environment module"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="constants.html" title="Using the constants module"
              accesskey="P">previous</a> |</li>
-        <li><a href="../contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
           <li><a href="../cookbook.html" accesskey="U">Cookbook</a> &raquo;</li> 
       </ul>
     </div>  
@@ -55,7 +56,7 @@
             
   <div class="section" id="using-the-dialogs-module">
 <h1>Using the dialogs module<a class="headerlink" href="#using-the-dialogs-module" title="Permalink to this headline">¶</a></h1>
-<p>The examples here all refer to the <a title="Dialog boxes" class="reference external" href="../dialogs.html#module-dialogs"><tt class="xref docutils literal"><span class="pre">dialogs</span></tt></a> module.</p>
+<p>The examples here all refer to the <a class="reference internal" href="../dialogs.html#module-dialogs" title="dialogs: Dialog boxes"><tt class="xref py py-mod docutils literal"><span class="pre">dialogs</span></tt></a> module.</p>
 <div class="section" id="ask-the-user-for-input">
 <h2>Ask the user for input<a class="headerlink" href="#ask-the-user-for-input" title="Permalink to this headline">¶</a></h2>
 <p>This is the simplest kind of dialog box: a one-line edit
@@ -109,7 +110,7 @@ input, we can call out to another dialog box to select the
 file. Here we use the one supplied by winsys, but the only
 requirement for the callback is that it return a string or
 None to indicate no change.</p>
-<p>A <a title="fs.Entry" class="reference external" href="../fs_entry.html#fs.Entry"><tt class="xref docutils literal"><span class="pre">fs.Entry</span></tt></a> object evaluates to True if the file
+<p>A <a class="reference internal" href="../fs_entry.html#fs.Entry" title="fs.Entry"><tt class="xref py py-class docutils literal"><span class="pre">fs.Entry</span></tt></a> object evaluates to True if the file
 it represents exists on the file system.</p>
 </div>
 </div>
@@ -126,10 +127,10 @@ it represents exists on the file system.</p>
             </a></p>
   <h3><a href="../contents.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference external" href="#">Using the dialogs module</a><ul>
-<li><a class="reference external" href="#ask-the-user-for-input">Ask the user for input</a></li>
-<li><a class="reference external" href="#prompt-for-a-filename-to-open">Prompt for a filename to open</a><ul>
-<li><a class="reference external" href="#discussion">Discussion</a></li>
+<li><a class="reference internal" href="#">Using the dialogs module</a><ul>
+<li><a class="reference internal" href="#ask-the-user-for-input">Ask the user for input</a></li>
+<li><a class="reference internal" href="#prompt-for-a-filename-to-open">Prompt for a filename to open</a><ul>
+<li><a class="reference internal" href="#discussion">Discussion</a></li>
 </ul>
 </li>
 </ul>
@@ -171,7 +172,7 @@ it represents exists on the file system.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="environment.html" title="Using the environment module"
@@ -179,13 +180,13 @@ it represents exists on the file system.</p>
         <li class="right" >
           <a href="constants.html" title="Using the constants module"
              >previous</a> |</li>
-        <li><a href="../contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
           <li><a href="../cookbook.html" >Cookbook</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2011, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>core – Core objects &mdash; WinSys v0.4dev documentation</title>
+    <title>core – Core objects &mdash; WinSys v0.5beta documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5beta',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,9 +23,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
+    <link rel="top" title="WinSys v0.5beta documentation" href="index.html" />
     <link rel="next" title="constants" href="constants.html" />
-    <link rel="prev" title="About WinSys" href="about.html" /> 
+    <link rel="prev" title="Modules" href="modules.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,15 +35,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="constants.html" title="constants"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="about.html" title="About WinSys"
+          <a href="modules.html" title="Modules"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,10 +53,10 @@
           <div class="body">
             
   <div class="section" id="module-core">
-<h1><a title="Core objects for the WinSys package" class="reference external" href="#module-core"><tt class="xref docutils literal"><span class="pre">core</span></tt></a> &#8211; Core objects<a class="headerlink" href="#module-core" title="Permalink to this headline">¶</a></h1>
+<span id="core-core-objects"></span><h1><a class="reference internal" href="#module-core" title="core: Core objects for the WinSys package"><tt class="xref py py-mod docutils literal"><span class="pre">core</span></tt></a> &#8211; Core objects<a class="headerlink" href="#module-core" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>The <a title="Core objects for the WinSys package" class="reference external" href="#module-core"><tt class="xref docutils literal"><span class="pre">core</span></tt></a> module is not intended to be used by
+<p>The <a class="reference internal" href="#module-core" title="core: Core objects for the WinSys package"><tt class="xref py py-mod docutils literal"><span class="pre">core</span></tt></a> module is not intended to be used by
 user code but establishes base objects for all other
 WinSys modules.</p>
 </div>
@@ -64,22 +65,26 @@ WinSys modules.</p>
 <dl class="exception">
 <dt id="core.x_winsys">
 <em class="property">exception </em><tt class="descname">x_winsys</tt><a class="headerlink" href="#core.x_winsys" title="Permalink to this definition">¶</a></dt>
-<dd>Base of all exceptions in the package</dd></dl>
+<dd><p>Base of all exceptions in the package</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="core.x_access_denied">
 <em class="property">exception </em><tt class="descname">x_access_denied</tt><a class="headerlink" href="#core.x_access_denied" title="Permalink to this definition">¶</a></dt>
-<dd>Common exception corresponding to an access denied error</dd></dl>
+<dd><p>Common exception corresponding to an access denied error</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="core.x_not_found">
 <em class="property">exception </em><tt class="descname">x_not_found</tt><a class="headerlink" href="#core.x_not_found" title="Permalink to this definition">¶</a></dt>
-<dd>Common exception corresponding to a file or path not found error</dd></dl>
+<dd><p>Common exception corresponding to a file or path not found error</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="core.x_invalid_handle">
 <em class="property">exception </em><tt class="descname">x_invalid_handle</tt><a class="headerlink" href="#core.x_invalid_handle" title="Permalink to this definition">¶</a></dt>
-<dd>Common exception corresponding to a handle not found error</dd></dl>
+<dd><p>Common exception corresponding to a handle not found error</p>
+</dd></dl>
 
 </div>
 <div class="section" id="classes">
@@ -90,36 +95,39 @@ WinSys modules.</p>
 <dd><p>Not intended to be used by instantiated by itself, this class forms the
 basis for most of the classes in the WinSys package. It provides useful
 defaults for common functionality, including filling in comparison
-functions (<tt class="xref docutils literal"><span class="pre">__ne__()</span></tt>, <tt class="xref docutils literal"><span class="pre">__le__()</span></tt> and so on) so that total
+functions (<tt class="xref py py-meth docutils literal"><span class="pre">__ne__()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">__le__()</span></tt> and so on) so that total
 ordering can be assumed for all derived classes.</p>
 <dl class="method">
 <dt id="core._WinSysObject.as_string">
 <tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#core._WinSysObject.as_string" title="Permalink to this definition">¶</a></dt>
-<dd>By default, the name of the class; usually overriden in derived
+<dd><p>By default, the name of the class; usually overriden in derived
 classes to be some meaningful name. Forms the basis for the
-<tt class="xref docutils literal"><span class="pre">__str__()</span></tt> and <tt class="xref docutils literal"><span class="pre">__unicode__()</span></tt> methods.</dd></dl>
+<tt class="xref py py-meth docutils literal"><span class="pre">__str__()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">__unicode__()</span></tt> methods.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="core._WinSysObject.dumped">
 <tt class="descname">dumped</tt><big>(</big><big>)</big><a class="headerlink" href="#core._WinSysObject.dumped" title="Permalink to this definition">¶</a></dt>
-<dd>By default, simply dump the result of <a title="core._WinSysObject.as_string" class="reference internal" href="#core._WinSysObject.as_string"><tt class="xref docutils literal"><span class="pre">as_string()</span></tt></a> to give a
+<dd><p>By default, simply dump the result of <a class="reference internal" href="#core._WinSysObject.as_string" title="core._WinSysObject.as_string"><tt class="xref py py-meth docutils literal"><span class="pre">as_string()</span></tt></a> to give a
 usable if unhelpful default. Intended to be overriden by subclasses,
 generally to stack attribute values into a list of strings which is
-then passed to <tt class="xref docutils literal"><span class="pre">utils.dumped()</span></tt> to fill in the curly brackets.</dd></dl>
+then passed to <tt class="xref py py-func docutils literal"><span class="pre">utils.dumped()</span></tt> to fill in the curly brackets.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="core._WinSysObject.dump">
 <tt class="descname">dump</tt><big>(</big><big>)</big><a class="headerlink" href="#core._WinSysObject.dump" title="Permalink to this definition">¶</a></dt>
-<dd>Calls the underlying <a title="core._WinSysObject.dumped" class="reference internal" href="#core._WinSysObject.dumped"><tt class="xref docutils literal"><span class="pre">dumped()</span></tt></a> implementation to provide a
-convenient representation of the object&#8217;s data.</dd></dl>
+<dd><p>Calls the underlying <a class="reference internal" href="#core._WinSysObject.dumped" title="core._WinSysObject.dumped"><tt class="xref py py-meth docutils literal"><span class="pre">dumped()</span></tt></a> implementation to provide a
+convenient representation of the object&#8217;s data.</p>
+</dd></dl>
 
 </dd></dl>
 
 </div>
 <div class="section" id="logging-functions">
 <h2>Logging Functions<a class="headerlink" href="#logging-functions" title="Permalink to this headline">¶</a></h2>
-<p>The <a title="Core objects for the WinSys package" class="reference external" href="#module-core"><tt class="xref docutils literal"><span class="pre">core</span></tt></a> module establishes a simple logger under the name &#8220;winsys&#8221;,
-logging to filename <tt class="docutils literal"><span class="pre">winsys.log</span></tt>. The logger&#8217;s <em>debug</em>, <em>log</em>, <em>info</em>,
+<p>The <a class="reference internal" href="#module-core" title="core: Core objects for the WinSys package"><tt class="xref py py-mod docutils literal"><span class="pre">core</span></tt></a> module establishes a simple logger under the name &#8220;winsys&#8221;,
+logging to filename <tt class="file docutils literal"><span class="pre">winsys.log</span></tt>. The logger&#8217;s <em>debug</em>, <em>log</em>, <em>info</em>,
 <em>warn</em> and <em>error</em> methods are imported directly into the module&#8217;s namespace.</p>
 </div>
 </div>
@@ -135,18 +143,18 @@ logging to filename <tt class="docutils literal"><span class="pre">winsys.log</s
             </a></p>
   <h3><a href="contents.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference external" href="#"><tt class="docutils literal"><span class="pre">core</span></tt> &#8211; Core objects</a><ul>
-<li><a class="reference external" href="#introduction">Introduction</a></li>
-<li><a class="reference external" href="#exceptions">Exceptions</a></li>
-<li><a class="reference external" href="#classes">Classes</a></li>
-<li><a class="reference external" href="#logging-functions">Logging Functions</a></li>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">core</span></tt> &#8211; Core objects</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#logging-functions">Logging Functions</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="about.html"
-                        title="previous chapter">About WinSys</a></p>
+  <p class="topless"><a href="modules.html"
+                        title="previous chapter">Modules</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="constants.html"
                         title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">constants</span></tt></a></p>
@@ -179,20 +187,20 @@ logging to filename <tt class="docutils literal"><span class="pre">winsys.log</s
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="constants.html" title="constants"
              >next</a> |</li>
         <li class="right" >
-          <a href="about.html" title="About WinSys"
+          <a href="modules.html" title="Modules"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2011, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

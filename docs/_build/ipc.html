@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ipc – Interprocess Communication &mdash; WinSys v0.4dev documentation</title>
+    <title>ipc – Interprocess Communication &mdash; WinSys v0.5beta documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5beta',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,8 +23,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
-    <link rel="next" title="Mailslots" href="mailslots.html" />
+    <link rel="top" title="WinSys v0.5beta documentation" href="index.html" />
+    <link rel="next" title="The Mailslot class" href="mailslots.html" />
     <link rel="prev" title="fs Constants" href="fs_constants.html" /> 
   </head>
   <body>
@@ -34,15 +35,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
-          <a href="mailslots.html" title="Mailslots"
+          <a href="mailslots.html" title="The Mailslot class"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="fs_constants.html" title="fs Constants"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,7 +53,7 @@
           <div class="body">
             
   <div class="section" id="module-ipc">
-<h1><a title="Pythonic access to Windows IPC mechanisms" class="reference external" href="#module-ipc"><tt class="xref docutils literal"><span class="pre">ipc</span></tt></a> &#8211; Interprocess Communication<a class="headerlink" href="#module-ipc" title="Permalink to this headline">¶</a></h1>
+<span id="ipc-interprocess-communication"></span><h1><a class="reference internal" href="#module-ipc" title="ipc: Pythonic access to Windows IPC mechanisms"><tt class="xref py py-mod docutils literal"><span class="pre">ipc</span></tt></a> &#8211; Interprocess Communication<a class="headerlink" href="#module-ipc" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The IPC module offers an interface to the various forms of interprocess
@@ -61,44 +62,212 @@ mutexes, sempahores and waitable timers. At least, that&#8217;s the plan.
 At the time of writing, only mailslots and events are in there. But
 the rest are definitely on the way.</p>
 </div>
-<div class="section" id="exceptions">
-<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
-<dl class="exception">
-<dt id="ipc.x_ipc">
-<em class="property">exception </em><tt class="descname">x_ipc</tt><a class="headerlink" href="#ipc.x_ipc" title="Permalink to this definition">¶</a></dt>
-<dd>Base of all exceptions in this module; subclass of <a title="core.x_winsys" class="reference external" href="core.html#core.x_winsys"><tt class="xref docutils literal"><span class="pre">core.x_winsys</span></tt></a></dd></dl>
-
-</div>
 <div class="section" id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="factories">
+<h3>Factories<a class="headerlink" href="#factories" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="ipc.mailslot">
-<tt class="descname">mailslot</tt><big>(</big><em>mailslot</em><span class="optional">[</span>, <em>message_size=0</em>, <em>timeout_ms=-1</em><span class="optional">]</span><big>)</big> &rarr; Mailslot object<a class="headerlink" href="#ipc.mailslot" title="Permalink to this definition">¶</a></dt>
-<dd>Factory function to return a <a title="ipc.Mailslot" class="reference external" href="mailslots.html#ipc.Mailslot"><tt class="xref docutils literal"><span class="pre">Mailslot</span></tt></a> object with the given
-name, number of messages and timeout in milliseconds. If <tt class="docutils literal"><span class="pre">name</span></tt>
-is not an absolute mailslot name (looking like <tt class="docutils literal"><span class="pre">\\...\mailslot\...</span></tt>)
-it is assumed to be a local mailslot and is prefixed with
-<tt class="docutils literal"><span class="pre">\\.\mailslot\</span></tt>. If <tt class="docutils literal"><span class="pre">name</span></tt> is None, None is returned and the other
-parameters are ignored. If <tt class="docutils literal"><span class="pre">name</span></tt> is a <tt class="docutils literal"><span class="pre">Mailslot</span></tt> instance, it is returned
-unaltered and the remaining parameters are ignored.</dd></dl>
+<tt class="descname">mailslot</tt><big>(</big><em>mailslot</em>, <em>marshalled=True</em>, <em>message_size=0</em>, <em>timeout_ms=-1</em><big>)</big><a class="headerlink" href="#ipc.mailslot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a <a class="reference internal" href="mailslots.html#ipc.Mailslot" title="ipc.Mailslot"><tt class="xref py py-class docutils literal"><span class="pre">Mailslot</span></tt></a> instance based on the name in <cite>mailslot</cite>.
+If the name is not a fully-qualified mailslot name (.mailslot) then
+it is assumed to be on the local machine and is prefixed accordingly.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mailslot</strong> &#8211; a valid mailslot name, with the convenience that if it
+is unqualified it is suitable prefixed to form a local
+mailslot identifier.</li>
+<li><strong>marshalled</strong> &#8211; whether the data is to be marshalled or simply passed
+along unchanged.</li>
+<li><strong>message_size</strong> &#8211; what message should be used; 0 to use the system default</li>
+<li><strong>timeout_ms</strong> &#8211; how many milliseconds should a read wait before giving up?
+-1 to wait forever.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="ipc.event">
-<tt class="descname">event</tt><big>(</big><em>event</em><span class="optional">[</span>, <em>initially_set=0</em>, <em>needs_manual_reset=0</em>, <em>security=None</em><span class="optional">]</span><big>)</big> &rarr; Event object<a class="headerlink" href="#ipc.event" title="Permalink to this definition">¶</a></dt>
-<dd>Factory function to return a <a title="ipc.Event" class="reference external" href="events.html#ipc.Event"><tt class="xref docutils literal"><span class="pre">Event</span></tt></a> object with the given
-name and flags. If <tt class="docutils literal"><span class="pre">event</span></tt> is None, None is returned and the remaining
-parameters are ignored. If <tt class="docutils literal"><span class="pre">event</span></tt> is an <tt class="docutils literal"><span class="pre">Event</span></tt> instance, it is returned
-unaltered and the remaining parameters are ignored.</dd></dl>
+<tt class="descname">event</tt><big>(</big><em>name=None</em>, <em>initially_set=False</em>, <em>needs_manual_reset=False</em>, <em>security=None</em><big>)</big><a class="headerlink" href="#ipc.event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a <a class="reference internal" href="events.html#ipc.Event" title="ipc.Event"><tt class="xref py py-class docutils literal"><span class="pre">Event</span></tt></a> instance, named or anonymous, unset by default
+and with automatic reset.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> &#8211; a valid event name. If <cite>None</cite> (the default) then an anonymous
+event is created which may be passed to threads which need to
+synchronise.</li>
+<li><strong>initially_set</strong> &#8211; whether the event is set on creation. [False]</li>
+<li><strong>needs_manual_reset</strong> &#8211; whether the event needs to be reset manually once it
+has fired. The alternative is that, once the event has
+fired, it falls back to an unset state.</li>
+<li><strong>security</strong> (anything accepted by <a class="reference internal" href="security.html#security.security" title="security.security"><tt class="xref py py-func docutils literal"><span class="pre">security.security()</span></tt></a>) &#8211; what security to apply to the new event</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="events.html#ipc.Event" title="ipc.Event"><tt class="xref py py-class docutils literal"><span class="pre">Event</span></tt></a> instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
+</div>
+<div class="section" id="helpers">
+<h3>Helpers<a class="headerlink" href="#helpers" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ipc.any">
+<tt class="descname">any</tt><big>(</big><em>objects</em>, <em>timeout_ms=-1</em><big>)</big><a class="headerlink" href="#ipc.any" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for any of the Windows synchronisation objects in the list to fire.
+The objects must be winsys synchronisation objects (or, at least, have
+a pyobject method which returns a PyHANDLE object). The one which
+fires will be returned unless a timeout occurs in which case x_ipc_timeout
+will be raised.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>objects</strong> &#8211; an iterable of winsys objects each of which has a waitable handle</li>
+<li><strong>timeout_ms</strong> &#8211; how many milliseconds to wait</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the object which fired</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Raises :</th><td class="field-body"><p class="first last"><tt class="xref py py-exc docutils literal"><span class="pre">x_ipc_timeout</span></tt> if <cite>timeout_ms</cite> is exceeded</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipc.all">
+<tt class="descname">all</tt><big>(</big><em>objects</em>, <em>timeout_ms=-1</em><big>)</big><a class="headerlink" href="#ipc.all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for all of the Windows synchronisation objects in the list to fire.
+The objects must be winsys synchronisation objects (or, at least, have
+a pyobject method which returns a PyHANDLE object).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>objects</strong> &#8211; an iterable of winsys objects each of which has a waitable handle</li>
+<li><strong>timeout_ms</strong> &#8211; how many milliseconds to wait</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Raises :</th><td class="field-body"><p class="first last"><tt class="xref py py-exc docutils literal"><span class="pre">x_ipc_timeout</span></tt> if <cite>timeout_ms</cite> is exceeded</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 </div>
 <div class="section" id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference external" href="mailslots.html">Mailslots</a></li>
-<li class="toctree-l1"><a class="reference external" href="events.html">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mailslots.html">The Mailslot class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">The Event class</a></li>
 </ul>
 </div>
+</div>
+<div class="section" id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="ipc.WAIT">
+<tt class="descname">WAIT</tt><a class="headerlink" href="#ipc.WAIT" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="9%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Val</th>
+<th class="head">Win32</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>FAILED</td>
+<td>-1</td>
+<td>INFINITE</td>
+</tr>
+<tr><td>INFINITE</td>
+<td>-1</td>
+<td>INFINITE</td>
+</tr>
+<tr><td>OBJECT_0</td>
+<td>0</td>
+<td>WAIT_OBJECT_0</td>
+</tr>
+<tr><td>ABANDONED</td>
+<td>128</td>
+<td>WAIT_ABANDONED_0</td>
+</tr>
+<tr><td>ABANDONED_0</td>
+<td>128</td>
+<td>WAIT_ABANDONED_0</td>
+</tr>
+<tr><td>IO_COMPLETION</td>
+<td>192</td>
+<td>WAIT_IO_COMPLETION</td>
+</tr>
+<tr><td>TIMEOUT</td>
+<td>258</td>
+<td>WAIT_TIMEOUT</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="ipc.x_ipc">
+<em class="property">exception </em><tt class="descname">x_ipc</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#ipc.x_ipc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="ipc.x_mailslot">
+<em class="property">exception </em><tt class="descname">x_mailslot</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#ipc.x_mailslot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="ipc.x_mailslot_invalid_use">
+<em class="property">exception </em><tt class="descname">x_mailslot_invalid_use</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#ipc.x_mailslot_invalid_use" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="ipc.x_mailslot_empty">
+<em class="property">exception </em><tt class="descname">x_mailslot_empty</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#ipc.x_mailslot_empty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="ipc.x_mailslot_message_too_big">
+<em class="property">exception </em><tt class="descname">x_mailslot_message_too_big</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#ipc.x_mailslot_message_too_big" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="ipc.x_mailslot_message_too_complex">
+<em class="property">exception </em><tt class="descname">x_mailslot_message_too_complex</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#ipc.x_mailslot_message_too_complex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
@@ -107,6 +276,8 @@ unaltered and the remaining parameters are ignored.</dd></dl>
 <dl class="last docutils">
 <dt><a class="reference external" href="http://msdn.microsoft.com/en-us/library/ms686353(VS.85).aspx">Synchronisation</a></dt>
 <dd>Documentation on microsoft.com for synchronisation objects</dd>
+<dt><tt class="xref doc docutils literal"><span class="pre">cookbook/ipc</span></tt></dt>
+<dd>Cookbook examples of using the ipc module</dd>
 </dl>
 </div>
 </div>
@@ -132,15 +303,20 @@ unaltered and the remaining parameters are ignored.</dd></dl>
             </a></p>
   <h3><a href="contents.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference external" href="#"><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a><ul>
-<li><a class="reference external" href="#introduction">Introduction</a></li>
-<li><a class="reference external" href="#exceptions">Exceptions</a></li>
-<li><a class="reference external" href="#functions">Functions</a></li>
-<li><a class="reference external" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#factories">Factories</a></li>
+<li><a class="reference internal" href="#helpers">Helpers</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#references">References</a></li>
-<li><a class="reference external" href="#to-do">To Do</a></li>
+<li><a class="reference internal" href="#classes">Classes</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#constants">Constants</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+<li><a class="reference internal" href="#to-do">To Do</a></li>
 </ul>
 </li>
 </ul>
@@ -150,7 +326,7 @@ unaltered and the remaining parameters are ignored.</dd></dl>
                         title="previous chapter">fs Constants</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="mailslots.html"
-                        title="next chapter">Mailslots</a></p>
+                        title="next chapter">The Mailslot class</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/ipc.txt"
@@ -180,20 +356,20 @@ unaltered and the remaining parameters are ignored.</dd></dl>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="mailslots.html" title="Mailslots"
+          <a href="mailslots.html" title="The Mailslot class"
              >next</a> |</li>
         <li class="right" >
           <a href="fs_constants.html" title="fs Constants"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2011, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

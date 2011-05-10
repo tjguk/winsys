@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Events &mdash; WinSys v0.4dev documentation</title>
+    <title>The Event class &mdash; WinSys v0.5beta documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5beta',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,10 +23,10 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" />
+    <link rel="top" title="WinSys v0.5beta documentation" href="index.html" />
     <link rel="up" title="ipc – Interprocess Communication" href="ipc.html" />
     <link rel="next" title="registry – Registry" href="registry.html" />
-    <link rel="prev" title="Mailslots" href="mailslots.html" /> 
+    <link rel="prev" title="The Mailslot class" href="mailslots.html" /> 
   </head>
   <body>
     <div class="related">
@@ -35,15 +36,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="registry.html" title="registry – Registry"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="mailslots.html" title="Mailslots"
+          <a href="mailslots.html" title="The Mailslot class"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
           <li><a href="ipc.html" accesskey="U"><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>  
@@ -53,55 +54,86 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="events">
-<h1>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="the-event-class">
+<h1>The Event class<a class="headerlink" href="#the-event-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="ipc.Event">
-<em class="property">class </em><tt class="descname">Event</tt><big>(</big><span class="optional">[</span><em>security=None</em>, <em>needs_manual_reset=0</em>, <em>initially_set=0</em>, <em>name=None</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#ipc.Event" title="Permalink to this definition">¶</a></dt>
-<dd><p>An event object is an interprocess (but not intermachine) synchronisation
+<em class="property">class </em><tt class="descname">Event</tt><big>(</big><em>security=None</em>, <em>needs_manual_reset=False</em>, <em>initially_set=False</em>, <em>name=None</em><big>)</big><a class="headerlink" href="#ipc.Event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
+<p>An event object is an interprocess (but not intermachine) synchronisation
 mechanism which allows one or more threads of control to wait on others.
 The most common configuration is given by the defaults: anonymous,
 not set initially, and automatically reset once set (ie only set for long
 enough to release any waiting threads and then reset. A common
 variant is a named event which can then be referred to easily by other
-processes without having to pass handles around. This is why the <a title="ipc.event" class="reference external" href="ipc.html#ipc.event"><tt class="xref docutils literal"><span class="pre">ipc.event()</span></tt></a>
+processes without having to pass handles around. This is why the <a class="reference internal" href="ipc.html#ipc.event" title="ipc.event"><tt class="xref py py-func docutils literal"><span class="pre">ipc.event()</span></tt></a>
 function reverses the order of parameters and takes the name first.</p>
 <p>The Event class mimics Python&#8217;s Event objects which are in any case very
 close to the semantics of the underlying Windows object. For that reason,
-although <a title="ipc.Event.clear" class="reference internal" href="#ipc.Event.clear"><tt class="xref docutils literal"><span class="pre">clear()</span></tt></a> is used to reset the event, <a title="ipc.Event.reset" class="reference internal" href="#ipc.Event.reset"><tt class="xref docutils literal"><span class="pre">reset()</span></tt></a> is also
+although <a class="reference internal" href="#ipc.Event.clear" title="ipc.Event.clear"><tt class="xref py py-meth docutils literal"><span class="pre">clear()</span></tt></a> is used to reset the event, <a class="reference internal" href="#ipc.Event.reset" title="ipc.Event.reset"><tt class="xref py py-meth docutils literal"><span class="pre">reset()</span></tt></a> is also
 provided as an alias, matching the Windows API.</p>
+<p>An event is Truthful if it is currently set</p>
 <dl class="method">
-<dt id="ipc.Event.pulse">
-<tt class="descname">pulse</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.pulse" title="Permalink to this definition">¶</a></dt>
-<dd>Briefly set the event and then reset it</dd></dl>
-
-<dl class="method">
-<dt id="ipc.Event.set">
-<tt class="descname">set</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.set" title="Permalink to this definition">¶</a></dt>
-<dd>Set the event, causing waiting threads to release.</dd></dl>
+<dt id="ipc.Event.as_string">
+<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.as_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="ipc.Event.clear">
 <tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.clear" title="Permalink to this definition">¶</a></dt>
-<dd>Reset the event.</dd></dl>
+<dd><p>Reset the event</p>
+</dd></dl>
 
 <dl class="method">
-<dt id="ipc.Event.reset">
-<tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.reset" title="Permalink to this definition">¶</a></dt>
-<dd>Alias for <a title="ipc.Event.clear" class="reference internal" href="#ipc.Event.clear"><tt class="xref docutils literal"><span class="pre">clear()</span></tt></a></dd></dl>
-
-<dl class="method">
-<dt id="ipc.Event.wait">
-<tt class="descname">wait</tt><big>(</big><span class="optional">[</span><em>timeout_s=-1</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#ipc.Event.wait" title="Permalink to this definition">¶</a></dt>
-<dd>Block for at most timeout_s seconds until the event is set. By default
-block forever.
-<em>NB</em> The timeout value is in (possibly fractional) seconds, whereas the
-underlying windows API expects timeouts in milliseconds.</dd></dl>
+<dt id="ipc.Event.dumped">
+<tt class="descname">dumped</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#ipc.Event.dumped" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="ipc.Event.isSet">
 <tt class="descname">isSet</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.isSet" title="Permalink to this definition">¶</a></dt>
-<dd>return True if the event is set, False otherwise.</dd></dl>
+<dd><p>Detect whether the event is currently set (by waiting without blocking)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipc.Event.pulse">
+<tt class="descname">pulse</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.pulse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cause the event to set and reset immediately</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipc.Event.pyobject">
+<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.pyobject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipc.Event.reset">
+<tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the event</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipc.Event.set">
+<tt class="descname">set</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger the event</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipc.Event.wait">
+<tt class="descname">wait</tt><big>(</big><em>timeout_s=-1</em><big>)</big><a class="headerlink" href="#ipc.Event.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait, optionally timing out, for the event to fire. cf also the <a class="reference internal" href="ipc.html#ipc.any" title="ipc.any"><tt class="xref py py-func docutils literal"><span class="pre">any()</span></tt></a> and
+<a class="reference internal" href="ipc.html#ipc.all" title="ipc.all"><tt class="xref py py-func docutils literal"><span class="pre">all()</span></tt></a> convenience functions which take an iterable of events or other objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout_s</strong> (<em>a number of seconds (to match the Python event API)</em>) &#8211; how many seconds to wait before timing out.</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite> if the event fired, False otherwise</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -118,7 +150,7 @@ underlying windows API expects timeouts in milliseconds.</dd></dl>
             </a></p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="mailslots.html"
-                        title="previous chapter">Mailslots</a></p>
+                        title="previous chapter">The Mailslot class</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="registry.html"
                         title="next chapter"><tt class="docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a></p>
@@ -151,21 +183,21 @@ underlying windows API expects timeouts in milliseconds.</dd></dl>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="registry.html" title="registry – Registry"
              >next</a> |</li>
         <li class="right" >
-          <a href="mailslots.html" title="Mailslots"
+          <a href="mailslots.html" title="The Mailslot class"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li>
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
           <li><a href="ipc.html" ><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2011, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

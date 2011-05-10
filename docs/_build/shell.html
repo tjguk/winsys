@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,14 +7,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>shell – Shell functionality &mdash; WinSys v0.4dev documentation</title>
+    <title>shell – Shell functionality &mdash; WinSys v0.5beta documentation</title>
     <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.4dev',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.5beta',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.4dev documentation" href="index.html" /> 
+    <link rel="top" title="WinSys v0.5beta documentation" href="index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -32,26 +33,27 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
+        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="module-shell">
-<h1><a title="Shell functionality" class="reference external" href="#module-shell"><tt class="xref docutils literal"><span class="pre">shell</span></tt></a> &#8211; Shell functionality<a class="headerlink" href="#module-shell" title="Permalink to this headline">¶</a></h1>
+<span id="shell-shell-functionality"></span><h1><a class="reference internal" href="#module-shell" title="shell: Shell functionality"><tt class="xref py py-mod docutils literal"><span class="pre">shell</span></tt></a> &#8211; Shell functionality<a class="headerlink" href="#module-shell" title="Permalink to this headline">¶</a></h1>
 <p>Wrappers around standard functionality from the semi-independent Windows Shell
 subsystem which powers the desktop, shortcuts, special folders, property sheets &amp;c.</p>
 <p>Implemented so far:</p>
 <ul class="simple">
-<li>Shortcuts: use the <a title="shell.shortcut" class="reference internal" href="#shell.shortcut"><tt class="xref docutils literal"><span class="pre">shortcut()</span></tt></a> function to edit or create desktop shortcuts</li>
-<li>[EXPERIMENTAL] Properties: use the <a title="shell.properties" class="reference internal" href="#shell.properties"><tt class="xref docutils literal"><span class="pre">properties()</span></tt></a> function to expose property sheet data</li>
-<li>Standard folders: commonly-accessed shell folders are exposed at module level, eg <tt class="xref docutils literal"><span class="pre">desktop()</span></tt>,
-<tt class="xref docutils literal"><span class="pre">startup()</span></tt>, <tt class="xref docutils literal"><span class="pre">recent()</span></tt></li>
+<li>Shortcuts: use the <a class="reference internal" href="#shell.shortcut" title="shell.shortcut"><tt class="xref py py-func docutils literal"><span class="pre">shortcut()</span></tt></a> function to edit or create desktop shortcuts</li>
+<li>[EXPERIMENTAL] Properties: use the <a class="reference internal" href="#shell.properties" title="shell.properties"><tt class="xref py py-func docutils literal"><span class="pre">properties()</span></tt></a> function to expose property sheet data</li>
+<li>Standard folders: commonly-accessed shell folders are exposed at module level, eg <tt class="xref py py-func docutils literal"><span class="pre">desktop()</span></tt>,
+<tt class="xref py py-func docutils literal"><span class="pre">startup()</span></tt>, <tt class="xref py py-func docutils literal"><span class="pre">recent()</span></tt></li>
 </ul>
 <div class="section" id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
@@ -79,259 +81,16 @@ subsystem which powers the desktop, shortcuts, special folders, property sheets 
 <dl class="data">
 <dt id="shell.CSIDL">
 <tt class="descname">CSIDL</tt><a class="headerlink" href="#shell.CSIDL" title="Permalink to this definition">¶</a></dt>
-<dd><table border="1" class="docutils">
-<colgroup>
-<col width="41%" />
-<col width="7%" />
-<col width="52%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>DESKTOP</td>
-<td>0x00</td>
-<td>CSIDL_DESKTOP</td>
-</tr>
-<tr><td>INTERNET</td>
-<td>0x01</td>
-<td>CSIDL_INTERNET</td>
-</tr>
-<tr><td>PROGRAMS</td>
-<td>0x02</td>
-<td>CSIDL_PROGRAMS</td>
-</tr>
-<tr><td>CONTROLS</td>
-<td>0x03</td>
-<td>CSIDL_CONTROLS</td>
-</tr>
-<tr><td>PRINTERS</td>
-<td>0x04</td>
-<td>CSIDL_PRINTERS</td>
-</tr>
-<tr><td>PERSONAL</td>
-<td>0x05</td>
-<td>CSIDL_PERSONAL</td>
-</tr>
-<tr><td>FAVORITES</td>
-<td>0x06</td>
-<td>CSIDL_FAVORITES</td>
-</tr>
-<tr><td>STARTUP</td>
-<td>0x07</td>
-<td>CSIDL_STARTUP</td>
-</tr>
-<tr><td>RECENT</td>
-<td>0x08</td>
-<td>CSIDL_RECENT</td>
-</tr>
-<tr><td>SENDTO</td>
-<td>0x09</td>
-<td>CSIDL_SENDTO</td>
-</tr>
-<tr><td>BITBUCKET</td>
-<td>0x0A</td>
-<td>CSIDL_BITBUCKET</td>
-</tr>
-<tr><td>STARTMENU</td>
-<td>0x0B</td>
-<td>CSIDL_STARTMENU</td>
-</tr>
-<tr><td>MYDOCUMENTS</td>
-<td>0x0C</td>
-<td>CSIDL_MYDOCUMENTS</td>
-</tr>
-<tr><td>MYMUSIC</td>
-<td>0x0D</td>
-<td>CSIDL_MYMUSIC</td>
-</tr>
-<tr><td>MYVIDEO</td>
-<td>0x0E</td>
-<td>CSIDL_MYVIDEO</td>
-</tr>
-<tr><td>DESKTOPDIRECTORY</td>
-<td>0x10</td>
-<td>CSIDL_DESKTOPDIRECTORY</td>
-</tr>
-<tr><td>DRIVES</td>
-<td>0x11</td>
-<td>CSIDL_DRIVES</td>
-</tr>
-<tr><td>NETWORK</td>
-<td>0x12</td>
-<td>CSIDL_NETWORK</td>
-</tr>
-<tr><td>NETHOOD</td>
-<td>0x13</td>
-<td>CSIDL_NETHOOD</td>
-</tr>
-<tr><td>FONTS</td>
-<td>0x14</td>
-<td>CSIDL_FONTS</td>
-</tr>
-<tr><td>TEMPLATES</td>
-<td>0x15</td>
-<td>CSIDL_TEMPLATES</td>
-</tr>
-<tr><td>COMMON_STARTMENU</td>
-<td>0x16</td>
-<td>CSIDL_COMMON_STARTMENU</td>
-</tr>
-<tr><td>COMMON_PROGRAMS</td>
-<td>0x17</td>
-<td>CSIDL_COMMON_PROGRAMS</td>
-</tr>
-<tr><td>COMMON_STARTUP</td>
-<td>0x18</td>
-<td>CSIDL_COMMON_STARTUP</td>
-</tr>
-<tr><td>COMMON_DESKTOPDIRECTORY</td>
-<td>0x19</td>
-<td>CSIDL_COMMON_DESKTOPDIRECTORY</td>
-</tr>
-<tr><td>APPDATA</td>
-<td>0x1A</td>
-<td>CSIDL_APPDATA</td>
-</tr>
-<tr><td>PRINTHOOD</td>
-<td>0x1B</td>
-<td>CSIDL_PRINTHOOD</td>
-</tr>
-<tr><td>LOCAL_APPDATA</td>
-<td>0x1C</td>
-<td>CSIDL_LOCAL_APPDATA</td>
-</tr>
-<tr><td>ALTSTARTUP</td>
-<td>0x1D</td>
-<td>CSIDL_ALTSTARTUP</td>
-</tr>
-<tr><td>COMMON_ALTSTARTUP</td>
-<td>0x1E</td>
-<td>CSIDL_COMMON_ALTSTARTUP</td>
-</tr>
-<tr><td>COMMON_FAVORITES</td>
-<td>0x1F</td>
-<td>CSIDL_COMMON_FAVORITES</td>
-</tr>
-<tr><td>INTERNET_CACHE</td>
-<td>0x20</td>
-<td>CSIDL_INTERNET_CACHE</td>
-</tr>
-<tr><td>COOKIES</td>
-<td>0x21</td>
-<td>CSIDL_COOKIES</td>
-</tr>
-<tr><td>HISTORY</td>
-<td>0x22</td>
-<td>CSIDL_HISTORY</td>
-</tr>
-<tr><td>COMMON_APPDATA</td>
-<td>0x23</td>
-<td>CSIDL_COMMON_APPDATA</td>
-</tr>
-<tr><td>WINDOWS</td>
-<td>0x24</td>
-<td>CSIDL_WINDOWS</td>
-</tr>
-<tr><td>SYSTEM</td>
-<td>0x25</td>
-<td>CSIDL_SYSTEM</td>
-</tr>
-<tr><td>PROGRAM_FILES</td>
-<td>0x26</td>
-<td>CSIDL_PROGRAM_FILES</td>
-</tr>
-<tr><td>MYPICTURES</td>
-<td>0x27</td>
-<td>CSIDL_MYPICTURES</td>
-</tr>
-<tr><td>PROFILE</td>
-<td>0x28</td>
-<td>CSIDL_PROFILE</td>
-</tr>
-<tr><td>SYSTEMX86</td>
-<td>0x29</td>
-<td>CSIDL_SYSTEMX86</td>
-</tr>
-<tr><td>PROGRAM_FILESX86</td>
-<td>0x2A</td>
-<td>CSIDL_PROGRAM_FILESX86</td>
-</tr>
-<tr><td>PROGRAM_FILES_COMMON</td>
-<td>0x2B</td>
-<td>CSIDL_PROGRAM_FILES_COMMON</td>
-</tr>
-<tr><td>PROGRAM_FILES_COMMONX86</td>
-<td>0x2C</td>
-<td>CSIDL_PROGRAM_FILES_COMMONX86</td>
-</tr>
-<tr><td>COMMON_TEMPLATES</td>
-<td>0x2D</td>
-<td>CSIDL_COMMON_TEMPLATES</td>
-</tr>
-<tr><td>COMMON_DOCUMENTS</td>
-<td>0x2E</td>
-<td>CSIDL_COMMON_DOCUMENTS</td>
-</tr>
-<tr><td>COMMON_ADMINTOOLS</td>
-<td>0x2F</td>
-<td>CSIDL_COMMON_ADMINTOOLS</td>
-</tr>
-<tr><td>ADMINTOOLS</td>
-<td>0x30</td>
-<td>CSIDL_ADMINTOOLS</td>
-</tr>
-<tr><td>CONNECTIONS</td>
-<td>0x31</td>
-<td>CSIDL_CONNECTIONS</td>
-</tr>
-<tr><td>COMMON_MUSIC</td>
-<td>0x35</td>
-<td>CSIDL_COMMON_MUSIC</td>
-</tr>
-<tr><td>COMMON_PICTURES</td>
-<td>0x36</td>
-<td>CSIDL_COMMON_PICTURES</td>
-</tr>
-<tr><td>COMMON_VIDEO</td>
-<td>0x37</td>
-<td>CSIDL_COMMON_VIDEO</td>
-</tr>
-<tr><td>RESOURCES</td>
-<td>0x38</td>
-<td>CSIDL_RESOURCES</td>
-</tr>
-<tr><td>RESOURCES_LOCALIZED</td>
-<td>0x39</td>
-<td>CSIDL_RESOURCES_LOCALIZED</td>
-</tr>
-<tr><td>COMMON_OEM_LINKS</td>
-<td>0x3A</td>
-<td>CSIDL_COMMON_OEM_LINKS</td>
-</tr>
-<tr><td>CDBURN_AREA</td>
-<td>0x3B</td>
-<td>CSIDL_CDBURN_AREA</td>
-</tr>
-<tr><td>COMPUTERSNEARME</td>
-<td>0x3D</td>
-<td>CSIDL_COMPUTERSNEARME</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="data">
 <dt id="shell.STGM">
 <tt class="descname">STGM</tt><a class="headerlink" href="#shell.STGM" title="Permalink to this definition">¶</a></dt>
 <dd><table border="1" class="docutils">
 <colgroup>
-<col width="34%" />
-<col width="21%" />
-<col width="45%" />
+<col width="35%" />
+<col width="20%" />
+<col width="46%" />
 </colgroup>
 <thead valign="bottom">
 <tr><th class="head">Name</th>
@@ -341,72 +100,72 @@ subsystem which powers the desktop, shortcuts, special folders, property sheets 
 </thead>
 <tbody valign="top">
 <tr><td>FAILIFTHERE</td>
-<td>0x00000000</td>
+<td>0</td>
 <td>STGM_READ</td>
 </tr>
 <tr><td>READ</td>
-<td>0x00000000</td>
+<td>0</td>
 <td>STGM_READ</td>
 </tr>
 <tr><td>DIRECT</td>
-<td>0x00000000</td>
+<td>0</td>
 <td>STGM_READ</td>
 </tr>
 <tr><td>WRITE</td>
-<td>0x00000001</td>
+<td>1</td>
 <td>STGM_WRITE</td>
 </tr>
-<tr><td>READWRITE</td>
-<td>0x00000002</td>
-<td>STGM_READWRITE</td>
+<tr><td>NOSCRATCH</td>
+<td>1048576</td>
+<td>STGM_NOSCRATCH</td>
+</tr>
+<tr><td>CONVERT</td>
+<td>131072</td>
+<td>STGM_CONVERT</td>
+</tr>
+<tr><td>SIMPLE</td>
+<td>134217728</td>
+<td>STGM_SIMPLE</td>
 </tr>
 <tr><td>SHARE_EXCLUSIVE</td>
-<td>0x00000010</td>
+<td>16</td>
 <td>STGM_SHARE_EXCLUSIVE</td>
 </tr>
+<tr><td>READWRITE</td>
+<td>2</td>
+<td>STGM_READWRITE</td>
+</tr>
+<tr><td>NOSNAPSHOT</td>
+<td>2097152</td>
+<td>STGM_NOSNAPSHOT</td>
+</tr>
+<tr><td>PRIORITY</td>
+<td>262144</td>
+<td>STGM_PRIORITY</td>
+</tr>
 <tr><td>SHARE_DENY_WRITE</td>
-<td>0x00000020</td>
+<td>32</td>
 <td>STGM_SHARE_DENY_WRITE</td>
 </tr>
+<tr><td>CREATE</td>
+<td>4096</td>
+<td>STGM_CREATE</td>
+</tr>
 <tr><td>SHARE_DENY_READ</td>
-<td>0x00000030</td>
+<td>48</td>
 <td>STGM_SHARE_DENY_READ</td>
 </tr>
 <tr><td>SHARE_DENY_NONE</td>
-<td>0x00000040</td>
+<td>64</td>
 <td>STGM_SHARE_DENY_NONE</td>
 </tr>
-<tr><td>CREATE</td>
-<td>0x00001000</td>
-<td>STGM_CREATE</td>
-</tr>
 <tr><td>TRANSACTED</td>
-<td>0x00010000</td>
+<td>65536</td>
 <td>STGM_TRANSACTED</td>
 </tr>
-<tr><td>CONVERT</td>
-<td>0x00020000</td>
-<td>STGM_CONVERT</td>
-</tr>
-<tr><td>PRIORITY</td>
-<td>0x00040000</td>
-<td>STGM_PRIORITY</td>
-</tr>
-<tr><td>NOSCRATCH</td>
-<td>0x00100000</td>
-<td>STGM_NOSCRATCH</td>
-</tr>
-<tr><td>NOSNAPSHOT</td>
-<td>0x00200000</td>
-<td>STGM_NOSNAPSHOT</td>
-</tr>
 <tr><td>DELETEONRELEASE</td>
-<td>0x04000000</td>
+<td>67108864</td>
 <td>STGM_DELETEONRELEASE</td>
-</tr>
-<tr><td>SIMPLE</td>
-<td>0x08000000</td>
-<td>STGM_SIMPLE</td>
 </tr>
 </tbody>
 </table>
@@ -415,46 +174,7 @@ subsystem which powers the desktop, shortcuts, special folders, property sheets 
 <dl class="data">
 <dt id="shell.STGFMT">
 <tt class="descname">STGFMT</tt><a class="headerlink" href="#shell.STGFMT" title="Permalink to this definition">¶</a></dt>
-<dd><table border="1" class="docutils">
-<colgroup>
-<col width="31%" />
-<col width="15%" />
-<col width="54%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>STORAGE</td>
-<td>0x00</td>
-<td>STGFMT_STORAGE</td>
-</tr>
-<tr><td>DOCUMENT</td>
-<td>0x00</td>
-<td>STGFMT_STORAGE</td>
-</tr>
-<tr><td>NATIVE</td>
-<td>0x01</td>
-<td>STGFMT_NATIVE</td>
-</tr>
-<tr><td>FILE</td>
-<td>0x03</td>
-<td>STGFMT_FILE</td>
-</tr>
-<tr><td>ANY</td>
-<td>0x04</td>
-<td>STGFMT_ANY</td>
-</tr>
-<tr><td>DOCFILE</td>
-<td>0x05</td>
-<td>STGFMT_DOCFILE</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="data">
 <dt id="shell.FMTID">
@@ -547,242 +267,35 @@ subsystem which powers the desktop, shortcuts, special folders, property sheets 
 <dl class="data">
 <dt id="shell.PIDSI">
 <tt class="descname">PIDSI</tt><a class="headerlink" href="#shell.PIDSI" title="Permalink to this definition">¶</a></dt>
-<dd><table border="1" class="docutils">
-<colgroup>
-<col width="35%" />
-<col width="12%" />
-<col width="53%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>TITLE</td>
-<td>0x02</td>
-<td>PIDSI_TITLE</td>
-</tr>
-<tr><td>SUBJECT</td>
-<td>0x03</td>
-<td>PIDSI_SUBJECT</td>
-</tr>
-<tr><td>AUTHOR</td>
-<td>0x04</td>
-<td>PIDSI_AUTHOR</td>
-</tr>
-<tr><td>KEYWORDS</td>
-<td>0x05</td>
-<td>PIDSI_KEYWORDS</td>
-</tr>
-<tr><td>COMMENTS</td>
-<td>0x06</td>
-<td>PIDSI_COMMENTS</td>
-</tr>
-<tr><td>TEMPLATE</td>
-<td>0x07</td>
-<td>PIDSI_TEMPLATE</td>
-</tr>
-<tr><td>LASTAUTHOR</td>
-<td>0x08</td>
-<td>PIDSI_LASTAUTHOR</td>
-</tr>
-<tr><td>REVNUMBER</td>
-<td>0x09</td>
-<td>PIDSI_REVNUMBER</td>
-</tr>
-<tr><td>EDITTIME</td>
-<td>0x0A</td>
-<td>PIDSI_EDITTIME</td>
-</tr>
-<tr><td>LASTPRINTED</td>
-<td>0x0B</td>
-<td>PIDSI_LASTPRINTED</td>
-</tr>
-<tr><td>CREATE_DTM</td>
-<td>0x0C</td>
-<td>PIDSI_CREATE_DTM</td>
-</tr>
-<tr><td>LASTSAVE_DTM</td>
-<td>0x0D</td>
-<td>PIDSI_LASTSAVE_DTM</td>
-</tr>
-<tr><td>PAGECOUNT</td>
-<td>0x0E</td>
-<td>PIDSI_PAGECOUNT</td>
-</tr>
-<tr><td>WORDCOUNT</td>
-<td>0x0F</td>
-<td>PIDSI_WORDCOUNT</td>
-</tr>
-<tr><td>CHARCOUNT</td>
-<td>0x10</td>
-<td>PIDSI_CHARCOUNT</td>
-</tr>
-<tr><td>THUMBNAIL</td>
-<td>0x11</td>
-<td>PIDSI_THUMBNAIL</td>
-</tr>
-<tr><td>APPNAME</td>
-<td>0x12</td>
-<td>PIDSI_APPNAME</td>
-</tr>
-<tr><td>DOC_SECURITY</td>
-<td>0x13</td>
-<td>PIDSI_DOC_SECURITY</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="data">
 <dt id="shell.PIDDSI">
 <tt class="descname">PIDDSI</tt><a class="headerlink" href="#shell.PIDDSI" title="Permalink to this definition">¶</a></dt>
-<dd><table border="1" class="docutils">
-<colgroup>
-<col width="33%" />
-<col width="12%" />
-<col width="55%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>CATEGORY</td>
-<td>0x02</td>
-<td>PIDDSI_CATEGORY</td>
-</tr>
-<tr><td>PRESFORMAT</td>
-<td>0x03</td>
-<td>PIDDSI_PRESFORMAT</td>
-</tr>
-<tr><td>BYTECOUNT</td>
-<td>0x04</td>
-<td>PIDDSI_BYTECOUNT</td>
-</tr>
-<tr><td>LINECOUNT</td>
-<td>0x05</td>
-<td>PIDDSI_LINECOUNT</td>
-</tr>
-<tr><td>PARCOUNT</td>
-<td>0x06</td>
-<td>PIDDSI_PARCOUNT</td>
-</tr>
-<tr><td>SLIDECOUNT</td>
-<td>0x07</td>
-<td>PIDDSI_SLIDECOUNT</td>
-</tr>
-<tr><td>NOTECOUNT</td>
-<td>0x08</td>
-<td>PIDDSI_NOTECOUNT</td>
-</tr>
-<tr><td>HIDDENCOUNT</td>
-<td>0x09</td>
-<td>PIDDSI_HIDDENCOUNT</td>
-</tr>
-<tr><td>MMCLIPCOUNT</td>
-<td>0x0A</td>
-<td>PIDDSI_MMCLIPCOUNT</td>
-</tr>
-<tr><td>SCALE</td>
-<td>0x0B</td>
-<td>PIDDSI_SCALE</td>
-</tr>
-<tr><td>HEADINGPAIR</td>
-<td>0x0C</td>
-<td>PIDDSI_HEADINGPAIR</td>
-</tr>
-<tr><td>DOCPARTS</td>
-<td>0x0D</td>
-<td>PIDDSI_DOCPARTS</td>
-</tr>
-<tr><td>MANAGER</td>
-<td>0x0E</td>
-<td>PIDDSI_MANAGER</td>
-</tr>
-<tr><td>COMPANY</td>
-<td>0x0F</td>
-<td>PIDDSI_COMPANY</td>
-</tr>
-<tr><td>LINKSDIRTY</td>
-<td>0x10</td>
-<td>PIDDSI_LINKSDIRTY</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="data">
 <dt id="shell.PIDMSI">
 <tt class="descname">PIDMSI</tt><a class="headerlink" href="#shell.PIDMSI" title="Permalink to this definition">¶</a></dt>
-<dd><table border="1" class="docutils">
-<colgroup>
-<col width="33%" />
-<col width="12%" />
-<col width="55%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>EDITOR</td>
-<td>0x02</td>
-<td>PIDMSI_EDITOR</td>
-</tr>
-<tr><td>SUPPLIER</td>
-<td>0x03</td>
-<td>PIDMSI_SUPPLIER</td>
-</tr>
-<tr><td>SOURCE</td>
-<td>0x04</td>
-<td>PIDMSI_SOURCE</td>
-</tr>
-<tr><td>SEQUENCE_NO</td>
-<td>0x05</td>
-<td>PIDMSI_SEQUENCE_NO</td>
-</tr>
-<tr><td>PROJECT</td>
-<td>0x06</td>
-<td>PIDMSI_PROJECT</td>
-</tr>
-<tr><td>STATUS</td>
-<td>0x07</td>
-<td>PIDMSI_STATUS</td>
-</tr>
-<tr><td>OWNER</td>
-<td>0x08</td>
-<td>PIDMSI_OWNER</td>
-</tr>
-<tr><td>RATING</td>
-<td>0x09</td>
-<td>PIDMSI_RATING</td>
-</tr>
-<tr><td>PRODUCTION</td>
-<td>0x0A</td>
-<td>PIDMSI_PRODUCTION</td>
-</tr>
-<tr><td>COPYRIGHT</td>
-<td>0x0B</td>
-<td>PIDMSI_COPYRIGHT</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="data">
 <dt id="shell.PIDASI">
 <tt class="descname">PIDASI</tt><a class="headerlink" href="#shell.PIDASI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="shell.PID_VOLUME">
+<tt class="descname">PID_VOLUME</tt><a class="headerlink" href="#shell.PID_VOLUME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="shell.SHCONTF">
+<tt class="descname">SHCONTF</tt><a class="headerlink" href="#shell.SHCONTF" title="Permalink to this definition">¶</a></dt>
 <dd><table border="1" class="docutils">
 <colgroup>
-<col width="35%" />
-<col width="11%" />
+<col width="38%" />
+<col width="8%" />
 <col width="54%" />
 </colgroup>
 <thead valign="bottom">
@@ -792,121 +305,33 @@ subsystem which powers the desktop, shortcuts, special folders, property sheets 
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>FORMAT</td>
-<td>0x02</td>
-<td>PIDASI_FORMAT</td>
-</tr>
-<tr><td>TIMELENGTH</td>
-<td>0x03</td>
-<td>PIDASI_TIMELENGTH</td>
-</tr>
-<tr><td>AVG_DATA_RATE</td>
-<td>0x04</td>
-<td>PIDASI_AVG_DATA_RATE</td>
-</tr>
-<tr><td>SAMPLE_RATE</td>
-<td>0x05</td>
-<td>PIDASI_SAMPLE_RATE</td>
-</tr>
-<tr><td>SAMPLE_SIZE</td>
-<td>0x06</td>
-<td>PIDASI_SAMPLE_SIZE</td>
-</tr>
-<tr><td>CHANNEL_COUNT</td>
-<td>0x07</td>
-<td>PIDASI_CHANNEL_COUNT</td>
-</tr>
-<tr><td>STREAM_NUMBER</td>
-<td>0x08</td>
-<td>PIDASI_STREAM_NUMBER</td>
-</tr>
-<tr><td>STREAM_NAME</td>
-<td>0x09</td>
-<td>PIDASI_STREAM_NAME</td>
-</tr>
-<tr><td>COMPRESSION</td>
-<td>0x0A</td>
-<td>PIDASI_COMPRESSION</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="data">
-<dt id="shell.PID_VOLUME">
-<tt class="descname">PID_VOLUME</tt><a class="headerlink" href="#shell.PID_VOLUME" title="Permalink to this definition">¶</a></dt>
-<dd><table border="1" class="docutils">
-<colgroup>
-<col width="29%" />
-<col width="11%" />
-<col width="60%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>FREE</td>
-<td>0x02</td>
-<td>PID_VOLUME_FREE</td>
-</tr>
-<tr><td>CAPACITY</td>
-<td>0x03</td>
-<td>PID_VOLUME_CAPACITY</td>
-</tr>
-<tr><td>FILESYSTEM</td>
-<td>0x04</td>
-<td>PID_VOLUME_FILESYSTEM</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="data">
-<dt id="shell.SHCONTF">
-<tt class="descname">SHCONTF</tt><a class="headerlink" href="#shell.SHCONTF" title="Permalink to this definition">¶</a></dt>
-<dd><table border="1" class="docutils">
-<colgroup>
-<col width="36%" />
-<col width="12%" />
-<col width="52%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>FOLDERS</td>
-<td>0x0020</td>
-<td>SHCONTF_FOLDERS</td>
-</tr>
-<tr><td>NONFOLDERS</td>
-<td>0x0040</td>
-<td>SHCONTF_NONFOLDERS</td>
-</tr>
-<tr><td>INCLUDEHIDDEN</td>
-<td>0x0080</td>
-<td>SHCONTF_INCLUDEHIDDEN</td>
-</tr>
-<tr><td>INIT_ON_FIRST_NEXT</td>
-<td>0x0100</td>
-<td>SHCONTF_INIT_ON_FIRST_NEXT</td>
-</tr>
-<tr><td>NETPRINTERSRCH</td>
-<td>0x0200</td>
-<td>SHCONTF_NETPRINTERSRCH</td>
-</tr>
 <tr><td>SHAREABLE</td>
-<td>0x0400</td>
+<td>1024</td>
 <td>SHCONTF_SHAREABLE</td>
 </tr>
+<tr><td>INCLUDEHIDDEN</td>
+<td>128</td>
+<td>SHCONTF_INCLUDEHIDDEN</td>
+</tr>
 <tr><td>STORAGE</td>
-<td>0x0800</td>
+<td>2048</td>
 <td>SHCONTF_STORAGE</td>
+</tr>
+<tr><td>INIT_ON_FIRST_NEXT</td>
+<td>256</td>
+<td>SHCONTF_INIT_ON_FIRST_NEXT</td>
+</tr>
+<tr><td>FOLDERS</td>
+<td>32</td>
+<td>SHCONTF_FOLDERS</td>
+</tr>
+<tr><td>NETPRINTERSRCH</td>
+<td>512</td>
+<td>SHCONTF_NETPRINTERSRCH</td>
+</tr>
+<tr><td>NONFOLDERS</td>
+<td>64</td>
+<td>SHCONTF_NONFOLDERS</td>
 </tr>
 </tbody>
 </table>
@@ -918,8 +343,8 @@ subsystem which powers the desktop, shortcuts, special folders, property sheets 
 <dd><table border="1" class="docutils">
 <colgroup>
 <col width="38%" />
-<col width="13%" />
-<col width="50%" />
+<col width="11%" />
+<col width="51%" />
 </colgroup>
 <thead valign="bottom">
 <tr><th class="head">Name</th>
@@ -929,28 +354,28 @@ subsystem which powers the desktop, shortcuts, special folders, property sheets 
 </thead>
 <tbody valign="top">
 <tr><td>NORMAL</td>
-<td>0x0000</td>
+<td>0</td>
 <td>SHGDN_NORMAL</td>
 </tr>
 <tr><td>INFOLDER</td>
-<td>0x0001</td>
+<td>1</td>
 <td>SHGDN_INFOLDER</td>
 </tr>
-<tr><td>FOREDITING</td>
-<td>0x1000</td>
-<td>SHGDN_FOREDITING</td>
-</tr>
-<tr><td>INCLUDE_NONFILESYS</td>
-<td>0x2000</td>
-<td>SHGDN_INCLUDE_NONFILESYS</td>
-</tr>
 <tr><td>FORADDRESSBAR</td>
-<td>0x4000</td>
+<td>16384</td>
 <td>SHGDN_FORADDRESSBAR</td>
 </tr>
 <tr><td>FORPARSING</td>
-<td>0x8000</td>
+<td>32768</td>
 <td>SHGDN_FORPARSING</td>
+</tr>
+<tr><td>FOREDITING</td>
+<td>4096</td>
+<td>SHGDN_FOREDITING</td>
+</tr>
+<tr><td>INCLUDE_NONFILESYS</td>
+<td>8192</td>
+<td>SHGDN_INCLUDE_NONFILESYS</td>
 </tr>
 </tbody>
 </table>
@@ -959,34 +384,7 @@ subsystem which powers the desktop, shortcuts, special folders, property sheets 
 <dl class="data">
 <dt id="shell.SLGP">
 <tt class="descname">SLGP</tt><a class="headerlink" href="#shell.SLGP" title="Permalink to this definition">¶</a></dt>
-<dd><table border="1" class="docutils">
-<colgroup>
-<col width="35%" />
-<col width="13%" />
-<col width="52%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>SHORTPATH</td>
-<td>0x01</td>
-<td>SLGP_SHORTPATH</td>
-</tr>
-<tr><td>UNCPRIORITY</td>
-<td>0x02</td>
-<td>SLGP_UNCPRIORITY</td>
-</tr>
-<tr><td>RAWPATH</td>
-<td>0x04</td>
-<td>SLGP_RAWPATH</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="exceptions">
@@ -1002,7 +400,7 @@ subsystem which powers the desktop, shortcuts, special folders, property sheets 
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><tt class="xref docutils literal"><span class="pre">cookbook/shell</span></tt></dt>
+<dt><tt class="xref doc docutils literal"><span class="pre">cookbook/shell</span></tt></dt>
 <dd>Cookbook examples of using the shell module</dd>
 </dl>
 </div>
@@ -1011,6 +409,44 @@ subsystem which powers the desktop, shortcuts, special folders, property sheets 
 
 
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">shell</span></tt> &#8211; Shell functionality</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#constants">Constants</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/shell.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
       </div>
       <div class="clearer"></div>
     </div>
@@ -1021,14 +457,14 @@ subsystem which powers the desktop, shortcuts, special folders, property sheets 
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="contents.html">WinSys v0.4dev documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.
+        &copy; Copyright 2011, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>
