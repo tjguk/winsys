@@ -375,7 +375,7 @@ def mailslot (mailslot, marshalled=True, message_size=0, timeout_ms=-1):
   it is assumed to be on the local machine and is prefixed accordingly.
 
   :param mailslot: a valid mailslot name, with the convenience that if it
-                   is unqualified it is suitable prefixed to form a local
+                   is unqualified it is suitably prefixed to form a local
                    mailslot identifier.
   :param marshalled: whether the data is to be marshalled or simply passed
                      along unchanged.
