@@ -11,7 +11,7 @@ import win32file
 import win32pipe
 import win32security
 
-from winsys import constants, core, exc, fs, security, utils
+from winsys import constants, core, exc, fs, security, utils, handles
 
 WAIT = constants.Constants.from_pattern (u"WAIT_*", namespace=win32event)
 WAIT.update (dict (INFINITE=win32event.INFINITE))
@@ -459,19 +459,35 @@ class AnonymousPipe (Pipe):
 
   def __init__ (self, inheritable=False, buffer_size=0):
     Pipe.__init__ (self, None, inheritable)
-    self._rhandle, self._whandle = wrapped (win32pipe.CreatePipe, self.sa, buffer_size)
+    r, w = wrapped (win32pipe.CreatePipe, self.sa, buffer_size)
+    self._rhandle = handles.handle (r)
+    self._whandle = handles.handle (w)
+
+  def reader (self, process=None):
+    return self._rhandle.duplicate (processes.process (process))
+
+  def writer (self, process=None):
+    return self._whandle.duplicate (processes.process (process))
 
   def read (self):
+    ur"""Read bytes from the pipe.
+
+    :returns: any bytes waiting in the pipe. Will block if nothing is ready.
+    """
+    handle = self._rhandle.pyobject ()
     data = ""
     while True:
-      hr, _data = wrapped (win32file.ReadFile, self._rhandle, Pipe.DEFAULT_IN_BUFFER_SIZE, None)
+      hr, _data = wrapped (win32file.ReadFile, handle, Pipe.DEFAULT_IN_BUFFER_SIZE, None)
       data += _data
       if hr == 0:
         break
     return data
 
   def write (self, data):
-    wrapped (win32file.WriteFile, self._whandle, data)
+    ur"""Writes `data` to the pipe. Will block if the internal buffer fills up.
+    """
+    handle = self._whandle.pyobject ()
+    wrapped (win32file.WriteFile, handle, data)
 
 class NamedPipe (Pipe):
 
