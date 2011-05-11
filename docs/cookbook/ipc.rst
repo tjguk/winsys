@@ -31,9 +31,6 @@ For simplicity I've run a reading mailslot inside a thread. For a clearer
 demonstration you could run the same code in a separate process, ideally on
 a separate machine within the same domain.
 
-The "STOP" message is an agreed sentinel. An example below demonstrates a combination
-of mailslot and event to coordinate starting and stopping.
-
 Read and write a local mailslot
 -------------------------------
 Read and write to local named mailslot, interleaving reads and writes.
@@ -53,3 +50,9 @@ present. We then randomly put one word from our message into the mailslot from
 the writer's end and go round again. Finally, we send our STOP sentinel so that
 both ends release their respective mailslot handles.
 
+
+Mailslot as an iterable
+-----------------------
+Iterate over the contents of a mailslot
+
+..  literalinclude:: ipc/iterable_mailslot.pyt

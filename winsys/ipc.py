@@ -19,6 +19,9 @@ PyHANDLE = pywintypes.HANDLEType
 class x_ipc (exc.x_winsys):
   pass
 
+class x_ipc_timeout (x_ipc):
+  pass
+
 class x_mailslot (x_ipc):
   pass
 
@@ -84,6 +87,10 @@ class Mailslot (core._WinSysObject):
     marshal.loads to allow simple objects to be transmitted via
     the mailslot. Note that the maximum message size still applies
     so it's not possible to send very complex datasets this way.
+
+  Since a mailslot will always return immediately if passed to one
+  of the Wait... functions, events or other synchronisation objects
+  will be needed to coordinate between mailslots.
   """
 
   MAX_MESSAGE_SIZE = 420
@@ -132,14 +139,14 @@ class Mailslot (core._WinSysObject):
 
   def _read_handle (self):
     if self._hWrite is not None:
-      raise x_mailslot_invalid_use (core.UNSET, "Mailslot._read_handle", "Cannot read from this mailslot; it is used for writing")
+      raise x_mailslot_invalid_use (None, "Mailslot._read_handle", "Cannot read from this mailslot; it is used for writing")
     if self._hRead is None:
       self._hRead = wrapped (win32file.CreateMailslot, self.name, self.message_size, self.timeout_ms, None)
     return self._hRead
 
   def _write_handle (self):
     if self._hRead is not None:
-      raise x_mailslot_invalid_use (core.UNSET, "Mailslot._write_handle", u"Cannot write to this mailslot; it is used for reading")
+      raise x_mailslot_invalid_use (None, "Mailslot._write_handle", u"Cannot write to this mailslot; it is used for reading")
     if self._hWrite is None:
       self._hWrite = wrapped (
         win32file.CreateFile,
@@ -163,7 +170,7 @@ class Mailslot (core._WinSysObject):
     elif self._hWrite:
       return self._hWrite
     else:
-      raise x_mailslot (core.UNSET, "Mailslot.pyobject", "Mailslot has not yet been used for reading or writing")
+      raise x_mailslot (None, "Mailslot.pyobject", "Mailslot has not yet been used for reading or writing")
 
   def __iter__ (self):
     while True:
@@ -259,7 +266,7 @@ class Mailslot (core._WinSysObject):
     data = serialiser_in (data)
     if self.message_size and len (data) > self.message_size:
       raise x_mailslot_message_too_big (
-        core.UNSET,
+        None,
         "%s.put" % self.__class__.__name__,
         "Mailslot messages must be <= %d bytes" % self.message_size
       )
@@ -366,6 +373,33 @@ class Event (core._WinSysObject):
   def __nonzero__ (self):
     return self.isSet ()
 
+class Mutex (core._WinSysObject):
+
+  def __init__ (self, name=None):
+    self.name = name
+    self._handle = wrapped (win32event.CreateMutex, None, False, name)
+
+  def __enter__ (self):
+    self.acquire ()
+    return self
+
+  def __exit__ (self, *args):
+    self.release ()
+
+  def pyobject (self):
+    return self._handler
+
+  def as_string (self):
+    return self.name or str (int (self._handle))
+
+  def acquire (self, timeout_ms=WAIT.INFINITE):
+    result = wrapped (win32event.WaitForSingleObject, self._handle, timeout_ms)
+    if result == WAIT.TIMEOUT:
+      raise x_ipc_timeout (None, "Mutex.acquire", "timed out")
+
+  def release (self):
+    wrapped (win32event.ReleaseMutex, self._handle)
+
 #
 # Module-level convenience functions
 #
@@ -413,6 +447,19 @@ def event (name=None, initially_set=False, needs_manual_reset=False, security=No
   """
   return Event (security, needs_manual_reset, initially_set, name)
 
+def mutex (name=None, take_initial_ownership=False):
+  """Return a :class:`Mutex` instance, named or anonymous, not initially owned
+  by default.
+
+  :param name: a valid mutex name. If `None` (the default) then an anonymous
+               mutex is created which may be passed to threads which need to
+               synchronise.
+  :param take_initial_ownership: whether the mutex just created is to be owned
+                                 by the creating thread.
+  :returns: a :class:`Mutex` instance
+  """
+  return Mutex (name, take_initial_ownership)
+
 def any (objects, timeout_ms=WAIT.INFINITE):
   """Wait for any of the Windows synchronisation objects in the list to fire.
   The objects must be winsys synchronisation objects (or, at least, have
@@ -428,7 +475,7 @@ def any (objects, timeout_ms=WAIT.INFINITE):
   handles = [o.pyobject () for o in objects]
   result = wrapped (win32event.WaitForMultipleObjects, handles, 0, timeout_ms)
   if result == WAIT.TIMEOUT:
-    raise x_ipc_timeout (core.UNSET, "any", "Wait timed out")
+    raise x_ipc_timeout (None, "any", "Wait timed out")
   else:
     return objects[result - WAIT.OBJECT_0]
 
@@ -444,4 +491,4 @@ def all (objects, timeout_ms=WAIT.INFINITE):
   handles = [o.pyobject () for o in objects]
   wrapped (win32event.WaitForMultipleObjects, handles, 1, timeout_ms)
   if result == WAIT.TIMEOUT:
-    raise x_ipc_timeout (core.UNSET, "all", "Wait timed out")
+    raise x_ipc_timeout (None, "all", "Wait timed out")
