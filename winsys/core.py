@@ -16,7 +16,7 @@ class _WinSysObject (object):
     """Produce a readable version of the data, used by
     __str__.
     """
-    return self.__class__.__name__
+    return getattr (self, "name", self.__class__.__name__)
 
   def __str__ (self):
     return self.as_string ()

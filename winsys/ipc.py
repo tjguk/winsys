@@ -8,11 +8,16 @@ import pywintypes
 import winerror
 import win32event
 import win32file
+import win32pipe
+import win32security
 
 from winsys import constants, core, exc, fs, security, utils
 
 WAIT = constants.Constants.from_pattern (u"WAIT_*", namespace=win32event)
 WAIT.update (dict (INFINITE=win32event.INFINITE))
+PIPE_ACCESS = constants.Constants.from_pattern (u"PIPE_ACCESS_*", namespace=win32pipe)
+PIPE_TYPE = constants.Constants.from_pattern (u"PIPE_TYPE_*", namespace=win32pipe)
+NMPWAIT = constants.Constants.from_pattern (u"NMPWAIT_*", namespace=win32pipe)
 
 PyHANDLE = pywintypes.HANDLEType
 
@@ -391,6 +396,7 @@ class Mutex (core._WinSysObject):
       # do stuff
   """
   def __init__ (self, name=None):
+    core._WinSysObject.__init__ (self)
     self.name = name
     self._handle = wrapped (win32event.CreateMutex, None, False, name)
 
@@ -423,6 +429,78 @@ class Mutex (core._WinSysObject):
     """
     wrapped (win32event.ReleaseMutex, self._handle)
 
+class Pipe (core._WinSysObject):
+  ur"""A pipe is a kernel object which allows communication between two parts
+  of a process or two separate processes, possibly on separate machines. A
+  pipe can be named or anonymous. The former can span processes and machines;
+  the latter are typically used within one process although they can cross
+  processes with some effort.
+
+  Named pipes have one particular characteristic which makes them especially
+  interesting for handing off between a client and a server: the server can
+  transparently impersonate the security context of the client. This makes
+  them ideal for, eg, a server which accepts requests from a client and
+  actions them on the client's behalf.
+  """
+
+  DEFAULT_IN_BUFFER_SIZE = 4096
+  DEFAULT_OUT_BUFFER_SIZE = 4096
+
+  def __init__ (self, name=None, inheritable=False):
+    core._WinSysObject.__init__ (self)
+    self.name = name
+    if inheritable:
+      self.sa = wrapped (win32security.SECURITY_ATTRIBUTES)
+      self.sa.bInheritHandle = True
+    else:
+      self.sa = None
+
+class AnonymousPipe (Pipe):
+
+  def __init__ (self, inheritable=False, buffer_size=0):
+    Pipe.__init__ (self, None, inheritable)
+    self._rhandle, self._whandle = wrapped (win32pipe.CreatePipe, self.sa, buffer_size)
+
+  def read (self):
+    data = ""
+    while True:
+      hr, _data = wrapped (win32file.ReadFile, self._rhandle, Pipe.DEFAULT_IN_BUFFER_SIZE, None)
+      data += _data
+      if hr == 0:
+        break
+    return data
+
+  def write (self, data):
+    wrapped (win32file.WriteFile, self._whandle, data)
+
+class NamedPipe (Pipe):
+
+  def __init__ (
+    self,
+    name,
+    mode=PIPE_ACCESS.DUPLEX,
+    type=PIPE_TYPE.BYTE,
+    max_instances=win32pipe.PIPE_UNLIMITED_INSTANCES,
+    in_buffer_size=Pipe.DEFAULT_IN_BUFFER_SIZE,
+    out_buffer_size=Pipe.DEFAULT_OUT_BUFFER_SIZE,
+    default_timeout=NMPWAIT.USE_DEFAULT_WAIT,
+    inheritable=False
+
+  ):
+    Pipe.__init__ (self, name, inheritable)
+    self._pipe = wrapped (
+      win32pipe.CreateNamedPipe,
+      name,
+      mode,
+      type,
+      max_instances,
+      in_buffer_size,
+      out_buffer_size,
+      default_timeout,
+      self.sa
+    )
+
+
 #
 # Module-level convenience functions
 #
@@ -454,7 +532,7 @@ def mailslot (mailslot, marshalled=True, message_size=0, timeout_ms=-1):
     return Mailslot (mailslot, serialiser, message_size, timeout_ms)
 
 def event (name=None, initially_set=False, needs_manual_reset=False, security=None):
-  """Return a :class:`Event` instance, named or anonymous, unset by default
+  ur"""Return a :class:`Event` instance, named or anonymous, unset by default
   and with automatic reset.
 
   :param name: a valid event name. If `None` (the default) then an anonymous
@@ -471,7 +549,7 @@ def event (name=None, initially_set=False, needs_manual_reset=False, security=No
   return Event (security, needs_manual_reset, initially_set, name)
 
 def mutex (name=None, take_initial_ownership=False):
-  """Return a :class:`Mutex` instance, named or anonymous, not initially owned
+  ur"""Return a :class:`Mutex` instance, named or anonymous, not initially owned
   by default.
 
   :param name: a valid mutex name. If `None` (the default) then an anonymous
@@ -482,6 +560,19 @@ def mutex (name=None, take_initial_ownership=False):
   :returns: a :class:`Mutex` instance
   """
   return Mutex (name, take_initial_ownership)
+
+def pipe (name=None):
+  ur"""Return a pipe. If name is given a :class:`NamedPipe` is returned, otherwise
+  an :class:`AnonymousPipe`. If name is not in the correct form for a pipe
+  (\\\\<machine>\\pipe\\<name>) it is assumed to be a local pipe and renamed
+  as such.
+  """
+  if name is None:
+    return AnonymousPipe ()
+  else:
+    if not name.startswith (ur"\\\\"):
+      name = ur"\\.\pipe\%s" % name
+    return NamedPipe (name)
 
 def any (objects, timeout_ms=WAIT.INFINITE):
   """Wait for any of the Windows synchronisation objects in the list to fire.

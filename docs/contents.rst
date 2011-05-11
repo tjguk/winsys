@@ -21,3 +21,4 @@ Contents
     security
     misc
     cookbook
+    changelog

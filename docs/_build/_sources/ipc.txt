@@ -24,6 +24,7 @@ Factories
 ..  autofunction:: mailslot
 ..  autofunction:: event
 ..  autofunction:: mutex
+..  autofunction:: pipe
 
 Helpers
 ~~~~~~~
@@ -40,6 +41,7 @@ Classes
     mailslots
     events
     mutexes
+    pipes
 
 Constants
 ---------

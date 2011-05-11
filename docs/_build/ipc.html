@@ -145,6 +145,15 @@ by the creating thread.</li>
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="ipc.pipe">
+<tt class="descname">pipe</tt><big>(</big><em>name=None</em><big>)</big><a class="headerlink" href="#ipc.pipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a pipe. If name is given a <a class="reference internal" href="pipes.html#ipc.NamedPipe" title="ipc.NamedPipe"><tt class="xref py py-class docutils literal"><span class="pre">NamedPipe</span></tt></a> is returned, otherwise
+an <a class="reference internal" href="pipes.html#ipc.AnonymousPipe" title="ipc.AnonymousPipe"><tt class="xref py py-class docutils literal"><span class="pre">AnonymousPipe</span></tt></a>. If name is not in the correct form for a pipe
+(\\&lt;machine&gt;\pipe\&lt;name&gt;) it is assumed to be a local pipe and renamed
+as such.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="helpers">
 <h3>Helpers<a class="headerlink" href="#helpers" title="Permalink to this headline">¶</a></h3>
@@ -208,6 +217,7 @@ a pyobject method which returns a PyHANDLE object).</p>
 <li class="toctree-l1"><a class="reference internal" href="mailslots.html">The Mailslot class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="events.html">The Event class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mutexes.html">The Mutex class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipes.html">The Pipe classes</a></li>
 </ul>
 </div>
 </div>
