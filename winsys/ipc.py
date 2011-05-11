@@ -333,23 +333,20 @@ class Event (core._WinSysObject):
     return self._hEvent
 
   def pulse (self):
-    """Cause the event to set and reset immediately
-    """
+    ur"Cause the event to set and reset immediately"
     wrapped (win32event.PulseEvent, self._handle ())
 
   def set (self):
-    """Trigger the event
-    """
+    ur"Trigger the event"
     wrapped (win32event.SetEvent, self._handle ())
 
   def clear (self):
-    """Reset the event
-    """
+    ur"Reset the event"
     wrapped (win32event.ResetEvent, self._handle ())
   reset = clear
 
   def wait (self, timeout_s=WAIT.INFINITE):
-    """Wait, optionally timing out, for the event to fire. cf also the :func:`any` and
+    ur"""Wait, optionally timing out, for the event to fire. cf also the :func:`any` and
     :func:`all` convenience functions which take an iterable of events or other objects.
 
     :param timeout_s: how many seconds to wait before timing out.
@@ -367,14 +364,32 @@ class Event (core._WinSysObject):
       return True
 
   def isSet (self):
-    "Detect whether the event is currently set (by waiting without blocking)"
+    u"Detect whether the event is currently set (by waiting without blocking)"
     return self.wait (0)
 
   def __nonzero__ (self):
     return self.isSet ()
 
 class Mutex (core._WinSysObject):
+  ur"""A Mutex is a kernel object which can only be held by one thread or process
+  at a time. Its usual application is to protect shared data structures or to
+  prevent more than one instance of an application from running simultaneously.
+  Mutexes can be named or anonymous. Anonymous mutexes can be used between
+  processes by passing their handle from one process to the other on the
+  command line.
 
+  This is very similar to a Python threading.Lock object. (In fact the Python
+  objects are implemented as Semaphores on Windows, presumably for re-entrancy).
+  For this reason, the :meth:`acquire` and :meth:`release` names have been
+  used for methods.
+
+  The mutex is its own context manager, so a typical usage would be::
+
+    from winsys import ipc
+
+    with ipc.mutex ("ONLYONCE"):
+      # do stuff
+  """
   def __init__ (self, name=None):
     self.name = name
     self._handle = wrapped (win32event.CreateMutex, None, False, name)
@@ -393,18 +408,26 @@ class Mutex (core._WinSysObject):
     return self.name or str (int (self._handle))
 
   def acquire (self, timeout_ms=WAIT.INFINITE):
+    ur"""Acquire the mutex waiting for `timeout_ms` milliseconds before failing
+
+    :param timeout_ms: how many milliseconds to wait before giving up
+    :raises: :exc:`x_ipc_timeout` if timeout expires
+    """
     result = wrapped (win32event.WaitForSingleObject, self._handle, timeout_ms)
     if result == WAIT.TIMEOUT:
       raise x_ipc_timeout (None, "Mutex.acquire", "timed out")
 
   def release (self):
+    ur"""Release the mutex. Consider using the object as a context manager
+    instead.
+    """
     wrapped (win32event.ReleaseMutex, self._handle)
 
 #
 # Module-level convenience functions
 #
 def mailslot (mailslot, marshalled=True, message_size=0, timeout_ms=-1):
-  """Return a :class:`Mailslot` instance based on the name in `mailslot`.
+  ur"""Return a :class:`Mailslot` instance based on the name in `mailslot`.
   If the name is not a fully-qualified mailslot name (\\.\mailslot) then
   it is assumed to be on the local machine and is prefixed accordingly.
 

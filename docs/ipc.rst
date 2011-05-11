@@ -23,6 +23,7 @@ Factories
 
 ..  autofunction:: mailslot
 ..  autofunction:: event
+..  autofunction:: mutex
 
 Helpers
 ~~~~~~~
@@ -38,6 +39,7 @@ Classes
 
     mailslots
     events
+    mutexes
 
 Constants
 ---------
@@ -71,5 +73,4 @@ To Do
 
 * Named Pipes
 * Waitable Timers
-* Mutexes
 * Waits

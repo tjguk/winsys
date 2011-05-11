@@ -70,7 +70,7 @@ the rest are definitely on the way.</p>
 <dt id="ipc.mailslot">
 <tt class="descname">mailslot</tt><big>(</big><em>mailslot</em>, <em>marshalled=True</em>, <em>message_size=0</em>, <em>timeout_ms=-1</em><big>)</big><a class="headerlink" href="#ipc.mailslot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a <a class="reference internal" href="mailslots.html#ipc.Mailslot" title="ipc.Mailslot"><tt class="xref py py-class docutils literal"><span class="pre">Mailslot</span></tt></a> instance based on the name in <cite>mailslot</cite>.
-If the name is not a fully-qualified mailslot name (.mailslot) then
+If the name is not a fully-qualified mailslot name (\.mailslot) then
 it is assumed to be on the local machine and is prefixed accordingly.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -114,6 +114,31 @@ fired, it falls back to an unset state.</li>
 </td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="events.html#ipc.Event" title="ipc.Event"><tt class="xref py py-class docutils literal"><span class="pre">Event</span></tt></a> instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipc.mutex">
+<tt class="descname">mutex</tt><big>(</big><em>name=None</em>, <em>take_initial_ownership=False</em><big>)</big><a class="headerlink" href="#ipc.mutex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a <a class="reference internal" href="mutexes.html#ipc.Mutex" title="ipc.Mutex"><tt class="xref py py-class docutils literal"><span class="pre">Mutex</span></tt></a> instance, named or anonymous, not initially owned
+by default.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> &#8211; a valid mutex name. If <cite>None</cite> (the default) then an anonymous
+mutex is created which may be passed to threads which need to
+synchronise.</li>
+<li><strong>take_initial_ownership</strong> &#8211; whether the mutex just created is to be owned
+by the creating thread.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="mutexes.html#ipc.Mutex" title="ipc.Mutex"><tt class="xref py py-class docutils literal"><span class="pre">Mutex</span></tt></a> instance</p>
 </td>
 </tr>
 </tbody>
@@ -182,6 +207,7 @@ a pyobject method which returns a PyHANDLE object).</p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="mailslots.html">The Mailslot class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="events.html">The Event class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mutexes.html">The Mutex class</a></li>
 </ul>
 </div>
 </div>
@@ -286,7 +312,6 @@ a pyobject method which returns a PyHANDLE object).</p>
 <ul class="simple">
 <li>Named Pipes</li>
 <li>Waitable Timers</li>
-<li>Mutexes</li>
 <li>Waits</li>
 </ul>
 </div>

@@ -77,6 +77,7 @@
   </dl></dd>
     <dt><a href="fs_entry.html#fs.Entry.accessed_at">accessed_at (Entry attribute)</a></dt>
     <dt><a href="accounts.html#module-accounts">accounts (module)</a></dt>
+    <dt><a href="mutexes.html#ipc.Mutex.acquire">acquire() (Mutex method)</a></dt>
     <dt><a href="ipc.html#ipc.all">all() (in module ipc)</a></dt>
 </dl></td>
   <td style="width: 33%" valign="top"><dl>
@@ -90,6 +91,7 @@
       <dt><a href="environment.html#environment.Env.as_string">(Env method)</a></dt>
       <dt><a href="events.html#ipc.Event.as_string">(Event method)</a></dt>
       <dt><a href="mailslots.html#ipc.Mailslot.as_string">(Mailslot method)</a></dt>
+      <dt><a href="mutexes.html#ipc.Mutex.as_string">(Mutex method)</a></dt>
       <dt><a href="environment.html#environment.Persistent.as_string">(Persistent method)</a></dt>
       <dt><a href="security.html#security.Privilege.as_string">(Privilege method)</a></dt>
       <dt><a href="security.html#security.Security.as_string">(Security method)</a></dt>
@@ -457,14 +459,14 @@
     <dd><dl>
       <dt><a href="fs.html#fs.mkdir">(in module fs)</a></dt>
   </dl></dd>
-</dl></td>
-  <td style="width: 33%" valign="top"><dl>
     <dt><a href="fs_dir.html#fs.Dir.mount">mount() (Dir method)</a></dt>
     <dd><dl>
       <dt><a href="fs_drive_vol.html#fs.Drive.mount">(Drive method)</a></dt>
       <dt><a href="fs_drive_vol.html#fs.Volume.mount">(Volume method)</a></dt>
       <dt><a href="fs.html#fs.mount">(in module fs)</a></dt>
   </dl></dd>
+</dl></td>
+  <td style="width: 33%" valign="top"><dl>
     <dt><a href="fs_dir.html#fs.Dir.mounted_by">mounted_by() (Dir method)</a></dt>
     <dt><a href="fs_drive_vol.html#fs.Volume.mounts">mounts (Volume attribute)</a></dt>
     <dt><a href="fs.html#fs.mounts">mounts() (in module fs)</a></dt>
@@ -473,6 +475,8 @@
       <dt><a href="fs.html#fs.move">(in module fs)</a></dt>
   </dl></dd>
     <dt><a href="fs_constants.html#fs.MOVEFILE">MOVEFILE (in module fs)</a></dt>
+    <dt><a href="mutexes.html#ipc.Mutex">Mutex (class in ipc)</a></dt>
+    <dt><a href="ipc.html#ipc.mutex">mutex() (in module ipc)</a></dt>
 </dl></td>
 </tr></table>
 
@@ -571,6 +575,7 @@
     <dt><a href="events.html#ipc.Event.pyobject">pyobject() (Event method)</a></dt>
     <dd><dl>
       <dt><a href="mailslots.html#ipc.Mailslot.pyobject">(Mailslot method)</a></dt>
+      <dt><a href="mutexes.html#ipc.Mutex.pyobject">(Mutex method)</a></dt>
       <dt><a href="accounts.html#accounts.Principal.pyobject">(Principal method)</a></dt>
       <dt><a href="security.html#security.Privilege.pyobject">(Privilege method)</a></dt>
       <dt><a href="registry.html#registry.Registry.pyobject">(Registry method)</a></dt>
@@ -602,6 +607,7 @@
     <dd><dl>
       <dt><a href="fs.html#fs.relative_to">(in module fs)</a></dt>
   </dl></dd>
+    <dt><a href="mutexes.html#ipc.Mutex.release">release() (Mutex method)</a></dt>
 </dl></td>
   <td style="width: 33%" valign="top"><dl>
     <dt><a href="fs_entry.html#fs.Entry.rename">rename() (Entry method)</a></dt>

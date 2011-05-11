@@ -58,7 +58,7 @@
 <h1>The Mailslot class<a class="headerlink" href="#the-mailslot-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="ipc.Mailslot">
-<em class="property">class </em><tt class="descname">Mailslot</tt><big>(</big><em>name</em>, <em>serialiser=(&lt;function _unserialised at 0x035BFF70&gt;</em>, <em>&lt;function _unserialised at 0x035BFF70&gt;)</em>, <em>message_size=0</em>, <em>timeout_ms=-1</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#ipc.Mailslot" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Mailslot</tt><big>(</big><em>name</em>, <em>serialiser=(&lt;function _unserialised at 0x04FD3270&gt;</em>, <em>&lt;function _unserialised at 0x04FD3270&gt;)</em>, <em>message_size=0</em>, <em>timeout_ms=-1</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#ipc.Mailslot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
 <p>A mailslot is a mechanism for passing small datasets (up to about
 400 bytes) between machines in the same network. For transport and
@@ -96,6 +96,9 @@ marshal.loads to allow simple objects to be transmitted via
 the mailslot. Note that the maximum message size still applies
 so it&#8217;s not possible to send very complex datasets this way.</li>
 </ul>
+<p>Since a mailslot will always return immediately if passed to one
+of the Wait... functions, events or other synchronisation objects
+will be needed to coordinate between mailslots.</p>
 <p>Set up a mailslot of the given name, which must be valid according to
 the Microsoft docs.</p>
 <table class="docutils field-list" frame="void" rules="none">

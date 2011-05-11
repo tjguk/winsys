@@ -114,8 +114,6 @@ each mailslot in a &#8220;with&#8221; block.</p>
 <p>For simplicity I&#8217;ve run a reading mailslot inside a thread. For a clearer
 demonstration you could run the same code in a separate process, ideally on
 a separate machine within the same domain.</p>
-<p>The &#8220;STOP&#8221; message is an agreed sentinel. An example below demonstrates a combination
-of mailslot and event to coordinate starting and stopping.</p>
 </div>
 <div class="section" id="read-and-write-a-local-mailslot">
 <h2>Read and write a local mailslot<a class="headerlink" href="#read-and-write-a-local-mailslot" title="Permalink to this headline">¶</a></h2>
@@ -181,6 +179,10 @@ present. We then randomly put one word from our message into the mailslot from
 the writer&#8217;s end and go round again. Finally, we send our STOP sentinel so that
 both ends release their respective mailslot handles.</p>
 </div>
+<div class="section" id="mailslot-as-an-iterable">
+<h2>Mailslot as an iterable<a class="headerlink" href="#mailslot-as-an-iterable" title="Permalink to this headline">¶</a></h2>
+<p>Iterate over the contents of a mailslot</p>
+</div>
 </div>
 
 
@@ -197,6 +199,7 @@ both ends release their respective mailslot handles.</p>
 <li><a class="reference internal" href="#">Using the ipc module</a><ul>
 <li><a class="reference internal" href="#writing-to-a-network-logger">Writing to a network logger</a></li>
 <li><a class="reference internal" href="#read-and-write-a-local-mailslot">Read and write a local mailslot</a></li>
+<li><a class="reference internal" href="#mailslot-as-an-iterable">Mailslot as an iterable</a></li>
 </ul>
 </li>
 </ul>

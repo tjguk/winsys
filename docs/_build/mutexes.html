@@ -1,0 +1,177 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Mutex class &mdash; WinSys v0.5beta documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.5beta',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.5beta documentation" href="index.html" />
+    <link rel="up" title="ipc – Interprocess Communication" href="ipc.html" />
+    <link rel="next" title="registry – Registry" href="registry.html" />
+    <link rel="prev" title="The Event class" href="events.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="registry.html" title="registry – Registry"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="events.html" title="The Event class"
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
+          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-mutex-class">
+<h1>The Mutex class<a class="headerlink" href="#the-mutex-class" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="ipc.Mutex">
+<em class="property">class </em><tt class="descname">Mutex</tt><big>(</big><em>name=None</em><big>)</big><a class="headerlink" href="#ipc.Mutex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
+<p>A Mutex is a kernel object which can only be held by one thread or process
+at a time. Its usual application is to protect shared data structures or to
+prevent more than one instance of an application from running simultaneously.
+Mutexes can be named or anonymous. Anonymous mutexes can be used between
+processes by passing their handle from one process to the other on the
+command line.</p>
+<p>This is very similar to a Python threading.Lock object. (In fact the Python
+objects are implemented as Semaphores on Windows, presumably for re-entrancy).
+For this reason, the <a class="reference internal" href="#ipc.Mutex.acquire" title="ipc.Mutex.acquire"><tt class="xref py py-meth docutils literal"><span class="pre">acquire()</span></tt></a> and <a class="reference internal" href="#ipc.Mutex.release" title="ipc.Mutex.release"><tt class="xref py py-meth docutils literal"><span class="pre">release()</span></tt></a> names have been
+used for methods.</p>
+<p>The mutex is its own context manager, so a typical usage would be:</p>
+<div class="highlight-python"><pre>from winsys import ipc
+
+with ipc.mutex ("ONLYONCE"):
+  # do stuff</pre>
+</div>
+<dl class="method">
+<dt id="ipc.Mutex.acquire">
+<tt class="descname">acquire</tt><big>(</big><em>timeout_ms=-1</em><big>)</big><a class="headerlink" href="#ipc.Mutex.acquire" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acquire the mutex waiting for <cite>timeout_ms</cite> milliseconds before failing</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout_ms</strong> &#8211; how many milliseconds to wait before giving up</td>
+</tr>
+<tr class="field"><th class="field-name">Raises :</th><td class="field-body"><tt class="xref py py-exc docutils literal"><span class="pre">x_ipc_timeout</span></tt> if timeout expires</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipc.Mutex.as_string">
+<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mutex.as_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipc.Mutex.pyobject">
+<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mutex.pyobject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipc.Mutex.release">
+<tt class="descname">release</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mutex.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release the mutex. Consider using the object as a context manager
+instead.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="events.html"
+                        title="previous chapter">The Event class</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="registry.html"
+                        title="next chapter"><tt class="docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/mutexes.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="registry.html" title="registry – Registry"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="events.html" title="The Event class"
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
+          <li><a href="ipc.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

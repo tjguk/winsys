@@ -1455,7 +1455,7 @@ class Dir (Entry):
 
   def mkdir (self, dirname, security_descriptor=None):
     r"""Create :dirname: as a subdirectory of this directory, specifying a
-    security descriptor. This is implemented in terms of :method:`create`
+    security descriptor. This is implemented in terms of :meth:`create`
     by concatenating this directory and dirname and calling .create on the
     resulting :class:`Dir` object.
 
@@ -1469,7 +1469,7 @@ class Dir (Entry):
     r"""Iterate over all entries -- files & directories -- in this directory.
     Implemented via :func:`files`
 
-    :pattern: a |-separated list of wildcards to match
+    :param pattern: a \|-separated list of wildcards to match
     """
     return files ("|".join (self + p for p in pattern.split ("|")), *args, **kwargs)
   __iter__ = entries
@@ -1490,7 +1490,7 @@ class Dir (Entry):
     ur"""Iterate over all files in this directory which match pattern, yielding
     a :class:`File` object for each one. Implemented via :meth:`Dir.entries`.
 
-    :pattern: a |-separated list of wildcards to match
+    :param pattern: a \|-separated list of wildcards to match
     """
     return (f for f in self.entries (pattern, *args, **kwargs) if isinstance (f, File))
 
@@ -1498,7 +1498,7 @@ class Dir (Entry):
     ur"""Iterate over all directories in this directory which match pattern, yielding
     a :class:`Dir` object for each one. Implemented via :meth:`Dir.entries`.
 
-    :pattern: a |-separated list of wildcards to match
+    :param pattern: a \|-separated list of wildcards to match
     """
     return (f for f in self.entries (pattern, *args, **kwargs) if isinstance (f, Dir))
 
