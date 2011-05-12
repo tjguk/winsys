@@ -1,0 +1,210 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>iasyncio – Overlapped IO &mdash; WinSys v0.5beta documentation</title>
+    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.5beta',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="WinSys v0.5beta documentation" href="index.html" />
+    <link rel="next" title="registry – Registry" href="registry.html" />
+    <link rel="prev" title="The Pipe classes" href="pipes.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="registry.html" title="registry – Registry"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pipes.html" title="The Pipe classes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-asyncio">
+<span id="iasyncio-overlapped-io"></span><h1><tt class="xref py py-mod docutils literal"><span class="pre">iasyncio</span></tt> &#8211; Overlapped IO<a class="headerlink" href="#module-asyncio" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#asyncio.AsyncIO" title="asyncio.AsyncIO"><tt class="xref py py-class docutils literal"><span class="pre">AsyncIO</span></tt></a> objects wrap Overlapped IO &#8211; Microsoft&#8217;s answer to
+asynchronous IO &#8211; to allow fairly easy access.</p>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="asyncio.AsyncIO">
+<em class="property">class </em><tt class="descname">AsyncIO</tt><big>(</big><em>handle</em>, <em>buffer_size=4096</em><big>)</big><a class="headerlink" href="#asyncio.AsyncIO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
+<dl class="method">
+<dt id="asyncio.AsyncIO.is_complete">
+<tt class="descname">is_complete</tt><big>(</big><big>)</big><a class="headerlink" href="#asyncio.AsyncIO.is_complete" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite> if the IO has completed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.AsyncIO.pyobject">
+<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="headerlink" href="#asyncio.AsyncIO.pyobject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the pyobject of the underlying event so that this object can
+be waited on by the <a class="reference internal" href="ipc.html#ipc.all" title="ipc.all"><tt class="xref py py-func docutils literal"><span class="pre">ipc.all()</span></tt></a> or <a class="reference internal" href="ipc.html#ipc.any" title="ipc.any"><tt class="xref py py-func docutils literal"><span class="pre">ipc.any()</span></tt></a> functions</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.AsyncIO.wait_for_completion">
+<tt class="descname">wait_for_completion</tt><big>(</big><big>)</big><a class="headerlink" href="#asyncio.AsyncIO.wait_for_completion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for the IO to complete in such a way that the wait can
+be interrupted by a KeyboardInterrupt.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="asyncio.AsyncWriter">
+<em class="property">class </em><tt class="descname">AsyncWriter</tt><big>(</big><em>handle</em>, <em>data</em><big>)</big><a class="headerlink" href="#asyncio.AsyncWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#asyncio.AsyncIO" title="asyncio.AsyncIO"><tt class="xref py py-class docutils literal"><span class="pre">asyncio.AsyncIO</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="asyncio.AsyncReader">
+<em class="property">class </em><tt class="descname">AsyncReader</tt><big>(</big><em>handle</em><big>)</big><a class="headerlink" href="#asyncio.AsyncReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#asyncio.AsyncIO" title="asyncio.AsyncIO"><tt class="xref py py-class docutils literal"><span class="pre">asyncio.AsyncIO</span></tt></a></p>
+<dl class="method">
+<dt id="asyncio.AsyncReader.data">
+<tt class="descname">data</tt><big>(</big><big>)</big><a class="headerlink" href="#asyncio.AsyncReader.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until the IO has completed and return the data from the read. This
+is expected to be called after is_complete is true.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="asyncio.x_asyncio">
+<em class="property">exception </em><tt class="descname">x_asyncio</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#asyncio.x_asyncio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://msdn.microsoft.com/en-us/library/ms686353(VS.85).aspx">Synchronisation</a></dt>
+<dd>Documentation on microsoft.com for synchronisation objects</dd>
+<dt><a class="reference internal" href="cookbook/asyncio.html"><em>Using the asyncio module</em></a></dt>
+<dd>Cookbook examples of using the asyncio module</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="contents.html">
+              <img class="logo" src="_static/cpython2.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">iasyncio</span></tt> &#8211; Overlapped IO</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pipes.html"
+                        title="previous chapter">The Pipe classes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="registry.html"
+                        title="next chapter"><tt class="docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/asyncio.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="registry.html" title="registry – Registry"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pipes.html" title="The Pipe classes"
+             >previous</a> |</li>
+        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
