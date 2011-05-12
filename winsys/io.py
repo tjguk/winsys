@@ -1,8 +1,10 @@
 # -*- coding: iso-8859-1 -*-
 import pywintypes
 import winerror
+import win32con
 import win32event
 import win32file
+import ntsecuritycon
 
 from winsys import constants, core, exc, utils
 

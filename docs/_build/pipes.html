@@ -45,7 +45,7 @@
           <a href="mutexes.html" title="The Mutex class"
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -57,9 +57,25 @@
   <div class="section" id="the-pipe-classes">
 <h1>The Pipe classes<a class="headerlink" href="#the-pipe-classes" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
+<dt id="ipc.Pipe">
+<em class="property">class </em><tt class="descname">Pipe</tt><big>(</big><em>name=None</em>, <em>inheritable=False</em><big>)</big><a class="headerlink" href="#ipc.Pipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
+<p>A pipe is a kernel object which allows communication between two parts
+of a process or two separate processes, possibly on separate machines. A
+pipe can be named or anonymous. The former can span processes and machines;
+the latter are typically used within one process although they can cross
+processes with some effort.</p>
+<p>Named pipes have one particular characteristic which makes them especially
+interesting for handing off between a client and a server: the server can
+transparently impersonate the security context of the client. This makes
+them ideal for, eg, a server which accepts requests from a client and
+actions them on the client&#8217;s behalf.</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="ipc.AnonymousPipe">
 <em class="property">class </em><tt class="descname">AnonymousPipe</tt><big>(</big><em>inheritable=False</em>, <em>buffer_size=0</em><big>)</big><a class="headerlink" href="#ipc.AnonymousPipe" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">ipc.Pipe</span></tt></p>
+<dd><p>Bases: <a class="reference internal" href="#ipc.Pipe" title="ipc.Pipe"><tt class="xref py py-class docutils literal"><span class="pre">ipc.Pipe</span></tt></a></p>
 <dl class="method">
 <dt id="ipc.AnonymousPipe.read">
 <tt class="descname">read</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.AnonymousPipe.read" title="Permalink to this definition">¶</a></dt>
@@ -95,7 +111,7 @@
 <dl class="class">
 <dt id="ipc.NamedPipe">
 <em class="property">class </em><tt class="descname">NamedPipe</tt><big>(</big><em>name</em>, <em>mode=3</em>, <em>type=0</em>, <em>max_instances=255</em>, <em>in_buffer_size=4096</em>, <em>out_buffer_size=4096</em>, <em>default_timeout=0</em>, <em>inheritable=False</em><big>)</big><a class="headerlink" href="#ipc.NamedPipe" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">ipc.Pipe</span></tt></p>
+<dd><p>Bases: <a class="reference internal" href="#ipc.Pipe" title="ipc.Pipe"><tt class="xref py py-class docutils literal"><span class="pre">ipc.Pipe</span></tt></a></p>
 </dd></dl>
 
 </div>
@@ -153,7 +169,7 @@
           <a href="mutexes.html" title="The Mutex class"
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+          <li><a href="ipc.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

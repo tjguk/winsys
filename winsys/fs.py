@@ -33,7 +33,7 @@ import winioctlcon
 if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
   winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
-from winsys import asyncio, constants, core, exc, handles, io, security, utils, _kernel32
+from winsys import constants, core, exc, handles, io, security, utils, _kernel32
 
 sep = unicode (os.sep)
 seps = u"/\\"

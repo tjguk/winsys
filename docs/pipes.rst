@@ -3,6 +3,11 @@
 The Pipe classes
 ================
 
+..  autoclass:: Pipe
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 ..  autoclass:: AnonymousPipe
     :members:
     :undoc-members:
