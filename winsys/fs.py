@@ -33,7 +33,7 @@ import winioctlcon
 if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
   winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
-from winsys import constants, core, exc, security, utils, _kernel32
+from winsys import asyncio, constants, core, exc, handles, io, security, utils, _kernel32
 
 sep = unicode (os.sep)
 seps = u"/\\"
@@ -72,13 +72,6 @@ def ignore_access_errors (exc_info):
   print exc_info[0]
   return exc_info[0] is exc.x_access_denied
 
-FILE_ACCESS = constants.Constants.from_pattern ("FILE_*", namespace=ntsecuritycon)
-FILE_ACCESS.update (constants.STANDARD_ACCESS)
-FILE_ACCESS.update (constants.GENERIC_ACCESS)
-FILE_ACCESS.update (constants.ACCESS)
-FILE_ACCESS.doc ("File-specific access rights")
-FILE_SHARE = constants.Constants.from_pattern (u"FILE_SHARE_*", namespace=win32file)
-FILE_SHARE.doc (u"Ways of sharing a file for reading, writing, &c.")
 FILE_NOTIFY_CHANGE = constants.Constants.from_pattern (u"FILE_NOTIFY_CHANGE_*", namespace=win32con)
 FILE_NOTIFY_CHANGE.doc (u"Notification types to watch for when a file changes")
 FILE_ACTION = constants.Constants.from_dict (dict (
@@ -104,14 +97,6 @@ MOVEFILE = constants.Constants.from_pattern (u"MOVEFILE_*", namespace=win32file)
 MOVEFILE.doc (u"Options when moving a file")
 FILE_FLAG = constants.Constants.from_pattern (u"FILE_FLAG_*", namespace=win32con)
 FILE_FLAG.doc (u"File flags")
-FILE_CREATION = constants.Constants.from_list ([
-  u"CREATE_ALWAYS",
-  u"CREATE_NEW",
-  u"OPEN_ALWAYS",
-  u"OPEN_EXISTING",
-  u"TRUNCATE_EXISTING"
-], namespace=win32con)
-FILE_CREATION.doc (u"Options when creating a file")
 VOLUME_FLAG = constants.Constants.from_dict (dict (
   FILE_CASE_SENSITIVE_SEARCH      = 0x00000001,
   FILE_CASE_PRESERVED_NAMES       = 0x00000002,
@@ -245,7 +230,11 @@ def normalised (filepath):
     abspath = os.path.abspath (filepath)
     return (u"\\\\?\\" + abspath) + (sep if is_dir and not abspath.endswith (sep) else "")
 
-def handle (filepath, write=False, attributes=None, sec=None):
+
+def read (handle):
+  wrapped (win32file.ReadFile, handle)
+
+def handle (filepath, write=False, async=False, attributes=None, sec=None):
   ur"""Return a file handle either for querying
   (the default case) or for writing -- including writing directories
 
@@ -257,13 +246,15 @@ def handle (filepath, write=False, attributes=None, sec=None):
   attributes = FILE_ATTRIBUTE.constant (attributes)
   if attributes is None:
     attributes = FILE_ATTRIBUTE.NORMAL | FILE_FLAG.BACKUP_SEMANTICS
+  if async:
+    attributes |= FILE_FLAG.OVERLAPPED
   return wrapped (
     win32file.CreateFile,
     normalised (filepath),
-    (FILE_ACCESS.READ | FILE_ACCESS.WRITE) if write else FILE_ACCESS.READ,
-    (FILE_SHARE.READ | FILE_SHARE.WRITE) if write else FILE_SHARE.READ,
+    (io.FILE_ACCESS.READ | io.FILE_ACCESS.WRITE) if write else io.FILE_ACCESS.READ,
+    (io.FILE_SHARE.READ | io.FILE_SHARE.WRITE) if write else io.FILE_SHARE.READ,
     sec,
-    FILE_CREATION.OPEN_ALWAYS if write else FILE_CREATION.OPEN_EXISTING,
+    io.FILE_CREATION.OPEN_ALWAYS if write else io.FILE_CREATION.OPEN_EXISTING,
     attributes,
     None
   )
@@ -1040,6 +1031,9 @@ class Entry (FilePath, core._WinSysObject):
       for ancestor in self.parent.ancestors ():
         yield ancestor
 
+  def handle (self, mode="r"):
+    return handles.handle (handle (self, write="w" in mode))
+
   def security (self, options=security.Security.DEFAULT_OPTIONS):
     ur"""Return a :class:`security.Security` object corresponding to this
     entry's security attributes. Note that the returning object is a context
@@ -1185,7 +1179,7 @@ class File (Entry):
   ##   Their ids (inodes) are equal
   ##   Their contents are equal
   ##
-  def open (self, mode="r", attributes=None, sec=None):
+  def open_ (self, mode="r", attributes=None, sec=None):
     ur"""EXPERIMENTAL: Use the `codecs.open` function to open this file as a Python file
     object. Positional and keyword arguments are passed straight through to
     the codecs function.
@@ -1297,10 +1291,10 @@ class File (Entry):
     wrapped (
       win32file.CreateFile,
       self._normpath,
-      FILE_ACCESS.WRITE,
+      io.FILE_ACCESS.WRITE,
       0,
       None if security is None else security.pyobject (),
-      FILE_CREATION.OPEN_ALWAYS,
+      io.FILE_CREATION.OPEN_ALWAYS,
       0,
       None
     ).close ()
@@ -2042,14 +2036,14 @@ class _DirWatcher (object):
     self.hDir = wrapped (
       win32file.CreateFile,
       normalised (root),
-      FILE_ACCESS.LIST_DIRECTORY,
+      io.FILE_ACCESS.LIST_DIRECTORY,
       #
       # This must allow RWD otherwises files in
       # the dir will be constrained.
       #
-      FILE_SHARE.READ | FILE_SHARE.WRITE | FILE_SHARE.DELETE,
+      io.FILE_SHARE.READ | io.FILE_SHARE.WRITE | io.FILE_SHARE.DELETE,
       None,
-      FILE_CREATION.OPEN_EXISTING,
+      io.FILE_CREATION.OPEN_EXISTING,
       FILE_FLAG.BACKUP_SEMANTICS | FILE_FLAG.OVERLAPPED,
       None
     )

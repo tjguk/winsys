@@ -115,7 +115,7 @@ provided as an alias, matching the Windows API.</p>
 <dl class="method">
 <dt id="ipc.Event.set">
 <tt class="descname">set</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.set" title="Permalink to this definition">¶</a></dt>
-<dd><p>Trigger the event</p>
+<dd><p>Signal the event</p>
 </dd></dl>
 
 <dl class="method">
@@ -127,9 +127,9 @@ provided as an alias, matching the Windows API.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout_s</strong> (<em>a number of seconds (to match the Python event API)</em>) &#8211; how many seconds to wait before timing out.</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout_s</strong> (<em>float</em>) &#8211; how many seconds to wait before timing out.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite> if the event fired, False otherwise</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite> if the event fired, <cite>False</cite> otherwise</td>
 </tr>
 </tbody>
 </table>

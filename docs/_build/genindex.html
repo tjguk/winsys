@@ -79,10 +79,10 @@
     <dt><a href="accounts.html#module-accounts">accounts (module)</a></dt>
     <dt><a href="mutexes.html#ipc.Mutex.acquire">acquire() (Mutex method)</a></dt>
     <dt><a href="ipc.html#ipc.all">all() (in module ipc)</a></dt>
-</dl></td>
-  <td style="width: 33%" valign="top"><dl>
     <dt><a href="fs_entry.html#fs.Entry.ancestors">ancestors() (Entry method)</a></dt>
     <dt><a href="pipes.html#ipc.AnonymousPipe">AnonymousPipe (class in ipc)</a></dt>
+</dl></td>
+  <td style="width: 33%" valign="top"><dl>
     <dt><a href="ipc.html#ipc.any">any() (in module ipc)</a></dt>
     <dt><a href="fs_entry.html#fs.Entry.archive">archive (Entry attribute)</a></dt>
     <dt><a href="core.html#core._WinSysObject.as_string">as_string() (_WinSysObject method)</a></dt>
@@ -97,6 +97,10 @@
       <dt><a href="security.html#security.Privilege.as_string">(Privilege method)</a></dt>
       <dt><a href="security.html#security.Security.as_string">(Security method)</a></dt>
   </dl></dd>
+    <dt><a href="asyncio.html#asyncio.AsyncIO">AsyncIO (class in asyncio)</a></dt>
+    <dt><a href="asyncio.html#module-asyncio">asyncio (module)</a></dt>
+    <dt><a href="asyncio.html#asyncio.AsyncReader">AsyncReader (class in asyncio)</a></dt>
+    <dt><a href="asyncio.html#asyncio.AsyncWriter">AsyncWriter (class in asyncio)</a></dt>
     <dt><a href="fs_entry.html#fs.Entry.attributes">attributes (Entry attribute)</a></dt>
     <dt><a href="fs.html#fs.attributes">attributes() (in module fs)</a></dt>
 </dl></td>
@@ -168,6 +172,7 @@
   <td style="width: 33%" valign="top"><dl>
     <dt><a href="security.html#security.Security.dacl">dacl (Security attribute)</a></dt>
     <dt><a href="event_logs.html#event_logs._EventLogEntry.data">data (_EventLogEntry attribute)</a></dt>
+    <dt><a href="asyncio.html#asyncio.AsyncReader.data">data() (AsyncReader method)</a></dt>
     <dt><a href="registry.html#registry.Registry.del_value">del_value() (Registry method)</a></dt>
     <dt><a href="fs_dir.html#fs.Dir.delete">delete() (Dir method)</a></dt>
     <dd><dl>
@@ -357,7 +362,10 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
-    <dt><a href="fs.html#fs.handle">handle() (in module fs)</a></dt>
+    <dt><a href="fs_entry.html#fs.Entry.handle">handle() (Entry method)</a></dt>
+    <dd><dl>
+      <dt><a href="fs.html#fs.handle">(in module fs)</a></dt>
+  </dl></dd>
     <dt><a href="fs_file.html#fs.File.hard_link_from">hard_link_from() (File method)</a></dt>
 </dl></td>
   <td style="width: 33%" valign="top"><dl>
@@ -378,9 +386,10 @@
     <dt><a href="dialogs.html#dialogs.InfoDialog">InfoDialog (class in dialogs)</a></dt>
     <dt><a href="constants.html#constants.Constants.init">init() (Constants method)</a></dt>
     <dt><a href="ipc.html#module-ipc">ipc (module)</a></dt>
-    <dt><a href="fs_dir.html#fs.Dir.is_empty">is_empty() (Dir method)</a></dt>
+    <dt><a href="asyncio.html#asyncio.AsyncIO.is_complete">is_complete() (AsyncIO method)</a></dt>
 </dl></td>
   <td style="width: 33%" valign="top"><dl>
+    <dt><a href="fs_dir.html#fs.Dir.is_empty">is_empty() (Dir method)</a></dt>
     <dt><a href="fs_filepath.html#fs.FilePath.is_relative">is_relative() (FilePath method)</a></dt>
     <dt><a href="events.html#ipc.Event.isSet">isSet() (Event method)</a></dt>
     <dt><a href="constants.html#constants.Constants.items">items() (Constants method)</a></dt>
@@ -539,7 +548,7 @@
     <dd><dl>
       <dt><a href="dialogs.html#dialogs.InfoDialog.OnSize">(InfoDialog method)</a></dt>
   </dl></dd>
-    <dt><a href="fs_file.html#fs.File.open">open() (File method)</a></dt>
+    <dt><a href="fs_file.html#fs.File.open_">open_() (File method)</a></dt>
     <dt><a href="security.html#security.Security.OPTIONS">OPTIONS (Security attribute)</a></dt>
     <dt><a href="security.html#security.Security.owner">owner (Security attribute)</a></dt>
 </dl></td>
@@ -575,8 +584,9 @@
     <dt><a href="shell.html#shell.properties">properties() (in module shell)</a></dt>
     <dt><a href="events.html#ipc.Event.pulse">pulse() (Event method)</a></dt>
     <dt><a href="mailslots.html#ipc.Mailslot.put">put() (Mailslot method)</a></dt>
-    <dt><a href="events.html#ipc.Event.pyobject">pyobject() (Event method)</a></dt>
+    <dt><a href="asyncio.html#asyncio.AsyncIO.pyobject">pyobject() (AsyncIO method)</a></dt>
     <dd><dl>
+      <dt><a href="events.html#ipc.Event.pyobject">(Event method)</a></dt>
       <dt><a href="mailslots.html#ipc.Mailslot.pyobject">(Mailslot method)</a></dt>
       <dt><a href="mutexes.html#ipc.Mutex.pyobject">(Mutex method)</a></dt>
       <dt><a href="accounts.html#accounts.Principal.pyobject">(Principal method)</a></dt>
@@ -597,7 +607,9 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
+    <dt><a href="pipes.html#ipc.AnonymousPipe.read">read() (AnonymousPipe method)</a></dt>
     <dt><a href="fs_entry.html#fs.Entry.readable">readable (Entry attribute)</a></dt>
+    <dt><a href="pipes.html#ipc.AnonymousPipe.reader">reader() (AnonymousPipe method)</a></dt>
     <dt><a href="fs_entry.html#fs.Entry.readonly">readonly (Entry attribute)</a></dt>
     <dt><a href="event_logs.html#event_logs._EventLogEntry.record_number">record_number (_EventLogEntry attribute)</a></dt>
     <dt><a href="registry.html#registry.Registry">Registry (class in registry)</a></dt>
@@ -610,9 +622,9 @@
     <dd><dl>
       <dt><a href="fs.html#fs.relative_to">(in module fs)</a></dt>
   </dl></dd>
-    <dt><a href="mutexes.html#ipc.Mutex.release">release() (Mutex method)</a></dt>
 </dl></td>
   <td style="width: 33%" valign="top"><dl>
+    <dt><a href="mutexes.html#ipc.Mutex.release">release() (Mutex method)</a></dt>
     <dt><a href="fs_entry.html#fs.Entry.rename">rename() (Entry method)</a></dt>
     <dt><a href="fs_entry.html#fs.Entry.reparse_point">reparse_point (Entry attribute)</a></dt>
     <dt><a href="events.html#ipc.Event.reset">reset() (Event method)</a></dt>
@@ -744,6 +756,7 @@
   <td style="width: 33%" valign="top"><dl>
     <dt><a href="ipc.html#ipc.WAIT">WAIT (in module ipc)</a></dt>
     <dt><a href="events.html#ipc.Event.wait">wait() (Event method)</a></dt>
+    <dt><a href="asyncio.html#asyncio.AsyncIO.wait_for_completion">wait_for_completion() (AsyncIO method)</a></dt>
     <dt><a href="fs_dir.html#fs.Dir.walk">walk() (Dir method)</a></dt>
     <dd><dl>
       <dt><a href="registry.html#registry.Registry.walk">(Registry method)</a></dt>
@@ -754,11 +767,13 @@
     <dd><dl>
       <dt><a href="fs.html#fs.watch">(in module fs)</a></dt>
   </dl></dd>
+    <dt><a href="event_logs.html#event_logs.EventLog.watcher">watcher() (EventLog method)</a></dt>
 </dl></td>
   <td style="width: 33%" valign="top"><dl>
-    <dt><a href="event_logs.html#event_logs.EventLog.watcher">watcher() (EventLog method)</a></dt>
     <dt><a href="accounts.html#accounts.WELL_KNOWN_SID">WELL_KNOWN_SID (in module accounts)</a></dt>
     <dt><a href="exc.html#exc.wrapper">wrapper() (in module exc)</a></dt>
+    <dt><a href="pipes.html#ipc.AnonymousPipe.write">write() (AnonymousPipe method)</a></dt>
+    <dt><a href="pipes.html#ipc.AnonymousPipe.writer">writer() (AnonymousPipe method)</a></dt>
     <dt><a href="fs_entry.html#fs.Entry.written_at">written_at (Entry attribute)</a></dt>
 </dl></td>
 </tr></table>
@@ -768,6 +783,7 @@
   <td style="width: 33%" valign="top"><dl>
     <dt><a href="core.html#core.x_access_denied">x_access_denied</a>, <a href="exc.html#exc.x_access_denied">[1]</a></dt>
     <dt><a href="accounts.html#accounts.x_accounts">x_accounts</a></dt>
+    <dt><a href="asyncio.html#asyncio.x_asyncio">x_asyncio</a></dt>
     <dt><a href="dialogs.html#dialogs.x_dialogs">x_dialogs</a></dt>
     <dt><a href="event_logs.html#event_logs.x_event_logs">x_event_logs</a></dt>
     <dt><a href="fs.html#fs.x_fs">x_fs</a></dt>

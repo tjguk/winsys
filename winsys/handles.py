@@ -1,6 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 import win32api
 import win32con
+import win32file
 
 import pywintypes
 from winsys import constants, core, exc, utils

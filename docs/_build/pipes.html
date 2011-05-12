@@ -25,7 +25,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="WinSys v0.5beta documentation" href="index.html" />
     <link rel="up" title="ipc – Interprocess Communication" href="ipc.html" />
-    <link rel="next" title="registry – Registry" href="registry.html" />
+    <link rel="next" title="iasyncio – Overlapped IO" href="asyncio.html" />
     <link rel="prev" title="The Mutex class" href="mutexes.html" /> 
   </head>
   <body>
@@ -39,13 +39,13 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="registry.html" title="registry – Registry"
+          <a href="asyncio.html" title="iasyncio – Overlapped IO"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="mutexes.html" title="The Mutex class"
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -60,6 +60,36 @@
 <dt id="ipc.AnonymousPipe">
 <em class="property">class </em><tt class="descname">AnonymousPipe</tt><big>(</big><em>inheritable=False</em>, <em>buffer_size=0</em><big>)</big><a class="headerlink" href="#ipc.AnonymousPipe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">ipc.Pipe</span></tt></p>
+<dl class="method">
+<dt id="ipc.AnonymousPipe.read">
+<tt class="descname">read</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.AnonymousPipe.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read bytes from the pipe.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">any bytes waiting in the pipe. Will block if nothing is ready.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipc.AnonymousPipe.reader">
+<tt class="descname">reader</tt><big>(</big><em>process=None</em><big>)</big><a class="headerlink" href="#ipc.AnonymousPipe.reader" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipc.AnonymousPipe.write">
+<tt class="descname">write</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#ipc.AnonymousPipe.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes <cite>data</cite> to the pipe. Will block if the internal buffer fills up.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipc.AnonymousPipe.writer">
+<tt class="descname">writer</tt><big>(</big><em>process=None</em><big>)</big><a class="headerlink" href="#ipc.AnonymousPipe.writer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -83,8 +113,8 @@
   <p class="topless"><a href="mutexes.html"
                         title="previous chapter">The Mutex class</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="registry.html"
-                        title="next chapter"><tt class="docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a></p>
+  <p class="topless"><a href="asyncio.html"
+                        title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">iasyncio</span></tt> &#8211; Overlapped IO</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/pipes.txt"
@@ -117,13 +147,13 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="registry.html" title="registry – Registry"
+          <a href="asyncio.html" title="iasyncio – Overlapped IO"
              >next</a> |</li>
         <li class="right" >
           <a href="mutexes.html" title="The Mutex class"
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+          <li><a href="ipc.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

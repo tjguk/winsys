@@ -342,7 +342,7 @@ class Event (core._WinSysObject):
     wrapped (win32event.PulseEvent, self._handle ())
 
   def set (self):
-    ur"Trigger the event"
+    ur"Signal the event"
     wrapped (win32event.SetEvent, self._handle ())
 
   def clear (self):
@@ -355,8 +355,8 @@ class Event (core._WinSysObject):
     :func:`all` convenience functions which take an iterable of events or other objects.
 
     :param timeout_s: how many seconds to wait before timing out.
-    :type timeout_s: a number of seconds (to match the Python event API)
-    :returns: `True` if the event fired, False otherwise
+    :type timeout_s: float
+    :returns: `True` if the event fired, `False` otherwise
     """
     if timeout_s == WAIT.INFINITE:
       timeout_ms = timeout_s
