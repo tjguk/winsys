@@ -38,6 +38,20 @@ WINERROR_MAP = {
 }
 wrapped = exc.wrapper (WINERROR_MAP, x_io)
 
+def CreateFile (
+  path,
+  access,
+  share_mode,
+  security_attributes,
+  creation_disposition,
+  flags_and_attributes,
+
+):
+  ur"""The Swiss Army Knife of Windows file operations, giving access to
+  almost anything.
+  """
+
+
 def open (path, mode="r"):
   ur"""Return a file handle either for querying
   (the default case) or for writing -- including writing directories
