@@ -20,9 +20,8 @@ wrapped = exc.wrapper (WINERROR_MAP, x_asyncio)
 
 class AsyncIO (core._WinSysObject):
 
-  def __init__ (self, handle, buffer_size=4096):
+  def __init__ (self):
     core._WinSysObject.__init__ (self)
-    self.handle = handle
     self.event = ipc.event (needs_manual_reset=True)
     self.overlapped = wrapped (win32file.OVERLAPPED)
     self.overlapped.hEvent = self.event.pyobject ()
@@ -38,26 +37,34 @@ class AsyncIO (core._WinSysObject):
     return self.event.isSet ()
   __nonzero__ = is_complete
 
-  def wait_for_completion (self):
+  def wait (self):
     ur"""Wait for the IO to complete in such a way that the wait can
     be interrupted by a KeyboardInterrupt.
     """
     while not self.event.wait (timeout_s=0.5):
       pass
 
-class AsyncWriter (AsyncIO):
+class AsyncHandler (AsyncIO):
+
+  BUFFER_SIZE = 4096
+
+  def __init__ (self, handle, buffer_size=BUFFER_SIZE):
+    AsyncIO.__init__ (self)
+    self.handle = handle
+
+class AsyncWriter (AsyncHandler):
 
   def __init__ (self, handle, data):
-    AsyncIO.__init__ (self, handle)
+    AsyncHandler.__init__ (self, handle)
     self.data = data
     wrapped (win32file.WriteFile, self.handle, data, self.overlapped)
 
-class AsyncReader (AsyncIO):
+class AsyncReader (AsyncHandler):
 
   BUFFER_SIZE = 4096
 
   def __init__ (self, handle):
-    AsyncIO.__init__ (self, handle)
+    AsyncHandler.__init__ (self, handle)
     self.buffer = win32file.AllocateReadBuffer (self.BUFFER_SIZE)
     wrapped (win32file.ReadFile, self.handle, self.buffer, self.overlapped)
 

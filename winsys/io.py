@@ -28,6 +28,9 @@ FILE_CREATION = constants.Constants.from_list ([
 ], namespace=win32con)
 FILE_CREATION.doc (u"Options when creating a file")
 
+FILE_FLAG = constants.Constants.from_pattern (u"FILE_FLAG_*", namespace=win32con)
+FILE_FLAG.doc (u"File flags")
+
 class x_io (exc.x_winsys):
   pass
 

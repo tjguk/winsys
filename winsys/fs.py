@@ -95,8 +95,6 @@ PROGRESS = constants.Constants.from_pattern (u"PROGRESS_*", namespace=win32file)
 PROGRESS.doc (u"States within a file move/copy progress")
 MOVEFILE = constants.Constants.from_pattern (u"MOVEFILE_*", namespace=win32file)
 MOVEFILE.doc (u"Options when moving a file")
-FILE_FLAG = constants.Constants.from_pattern (u"FILE_FLAG_*", namespace=win32con)
-FILE_FLAG.doc (u"File flags")
 VOLUME_FLAG = constants.Constants.from_dict (dict (
   FILE_CASE_SENSITIVE_SEARCH      = 0x00000001,
   FILE_CASE_PRESERVED_NAMES       = 0x00000002,

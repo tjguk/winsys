@@ -11,7 +11,7 @@ import win32file
 import win32pipe
 import win32security
 
-from winsys import constants, core, exc, fs, security, utils, handles
+from winsys import constants, core, exc, fs, io, security, utils, handles
 
 WAIT = constants.Constants.from_pattern (u"WAIT_*", namespace=win32event)
 WAIT.update (dict (INFINITE=win32event.INFINITE))
@@ -494,7 +494,7 @@ class NamedPipe (Pipe):
   def __init__ (
     self,
     name,
-    mode=PIPE_ACCESS.DUPLEX,
+    mode=PIPE_ACCESS.DUPLEX | io.FILE_FLAG.OVERLAPPED,
     type=PIPE_TYPE.BYTE,
     max_instances=win32pipe.PIPE_UNLIMITED_INSTANCES,
     in_buffer_size=Pipe.DEFAULT_IN_BUFFER_SIZE,
@@ -504,6 +504,7 @@ class NamedPipe (Pipe):
 
   ):
     Pipe.__init__ (self, name, inheritable)
+    self._pipe = None
     self._pipe = wrapped (
       win32pipe.CreateNamedPipe,
       name,
@@ -516,6 +517,18 @@ class NamedPipe (Pipe):
       self.sa
     )
 
+  def listen (self, async=False):
+    if async:
+      from winsys import asyncio
+      waiter = asyncio.AsyncIO ()
+      overlapped = waiter.overlapped
+    else:
+      overlapped = None
+
+    wrapped (win32pipe.ConnectNamedPipe, self._pipe, overlapped)
+
+    if async:
+      return waiter
 
 #
 # Module-level convenience functions
@@ -577,6 +590,19 @@ def mutex (name=None, take_initial_ownership=False):
   """
   return Mutex (name, take_initial_ownership)
 
+def open_pipe (name, mode="rw", timeout_ms=WAIT.INFINITE):
+  if not name.startswith (ur"\\\\"):
+    name = ur"\\.\pipe\%s" % name
+
+  result = win32pipe.WaitNamedPipe (name, timeout_ms)
+  read_mode = 0
+  if "r" in mode:
+    read_mode |= constants.GENERIC_ACCESS.READ
+  if "w" in mode:
+    read_mode |= constants.GENERIC_ACCESS.WRITE
+  hPipe = wrapped (win32file.CreateFile, name, read_mode, 0, None, io.FILE_CREATION.OPEN_EXISTING, 0, None)
+  win32pipe.
+
 def pipe (name=None):
   ur"""Return a pipe. If name is given a :class:`NamedPipe` is returned, otherwise
   an :class:`AnonymousPipe`. If name is not in the correct form for a pipe
@@ -589,6 +615,17 @@ def pipe (name=None):
     if not name.startswith (ur"\\\\"):
       name = ur"\\.\pipe\%s" % name
     return NamedPipe (name)
+
+def wait (object, timeout_ms=WAIT.INFINITE):
+  ur"""Wait for one synchronisation object to fire.
+
+  :param object: an object whose `pyobject` method returns a handle to a synchronisation object
+  :param timeout_ms: how many milliseconds to wait
+  :raises: :exc:`x_ipc_timeout` if `timeout_ms` is exceeded
+  """
+  result = wrapped (win32event.WaitForSingleObject, object.pyobject (), timeout_ms)
+  if result == WAIT.TIMEOUT:
+    raise x_ipc_timeout (None, "wait", "wait timed out")
 
 def any (objects, timeout_ms=WAIT.INFINITE):
   """Wait for any of the Windows synchronisation objects in the list to fire.
