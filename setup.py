@@ -13,13 +13,14 @@ packages = ['winsys', 'winsys.tests', 'winsys._security', 'winsys.extras']
 ext_modules = [
   Extension ("winsys._change_journal", ["src/_change_journal.c"]),
 ]
+version = open ("VERSION.txt").read ().strip ()
 
 if __name__ == '__main__':
   if refactorer:
     refactorer.refactor_dir (".", write=True)
   setup (
       name='WinSys-%d.x' % (sys.version_info[0]),
-      version='0.5.2',
+      version=version,
       url='http://code.google.com/p/winsys',
       #~ download_url='http://timgolden.me.uk/python/downloads/winsys',
       license='LICENSE.txt',
