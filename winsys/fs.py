@@ -376,12 +376,23 @@ class FilePath (unicode):
     return cls (filepath)
 
   def __add__ (self, other):
+    ur"""Have FilepathA + FilepathB return FilepathA/FilepathB::
+
+    from winsys import fs
+
+    fs.dir (r"c:\windows") + "notepad.exe"
+    # returns fs.File ("c:/windows/notepad.exe")
+    """
     return self.__class__.factory (os.path.join (unicode (self), unicode (other)))
 
   def __eq__ (self, other):
+    ur"""Files compare equal if their case-insensitive paths are equal
+    """
     return self.lower () == unicode (other).lower ()
 
   def __hash__ (self):
+    ur"""Entries hash equal equal if their case-insensitive paths hash equal
+    """
     return hash (self.lower ())
 
   def __repr__ (self):
@@ -456,19 +467,19 @@ class FilePath (unicode):
     return not self.root.endswith (sep)
 
   def relative_to (self, other):
-    """Return this filepath as relative to another. cf :func:`utils.relative_to`
+    ur"""Return this filepath as relative to another. cf :func:`utils.relative_to`
     """
     return self.__class__.factory (relative_to (self, unicode (other)))
 
   def absolute (self):
-    """Return an absolute version of the current FilePath, whether
+    ur"""Return an absolute version of the current FilePath, whether
     relative or not. Use :func:`os.path.abspath` semantics.
     """
     return self.__class__.factory (os.path.abspath (self))
   abspath = absolute
 
   def changed (self, root=None, dirname=None, filename=None, base=None, infix=None, ext=None):
-    """Return a new :class:`FilePath` with one or more parts changed. This is particularly
+    ur"""Return a new :class:`FilePath` with one or more parts changed. This is particularly
     convenient for, say, changing the extension of a file or producing a version on
     another path, eg::
 
@@ -570,13 +581,16 @@ class Drive (core._WinSysObject):
     ur"""Mount the specified volume in this drive.
 
     :param vol: anything accepted by :func:`volume`
-    :returns: self
+    :returns: `self`
     """
     self.root ().mount (vol)
     return self
 
   def dismount (self):
-    ur"""Dismount this drive from its volume"""
+    ur"""Dismount this drive from its volume
+
+    :returns: `self`
+    """
     self.root ().dismount ()
     return self
 
@@ -618,7 +632,7 @@ class Volume (core._WinSysObject):
       return [None, None, None, 0, None]
 
   def _get_label (self):
-    """The user-assigned label set by the DOS LABEL command
+    ur"""The user-assigned label set by the DOS LABEL command
     """
     return self._get_info ()[0]
   label = property (_get_label)
@@ -655,7 +669,7 @@ class Volume (core._WinSysObject):
 
   def _get_mounts (self):
     ur"""An iterator of the :class:`Dir` objects which mount this volume. NB Windows
-    restrictions mean that more than one drive root directory can mount the same
+    restrictions mean that no more than one drive root directory can mount the same
     volume simultaneously. But it is possible for a volume to be mounted on, eg,
     e:\ and c:\mounts\e at the same time.
     """
@@ -710,8 +724,8 @@ class Entry (FilePath, core._WinSysObject):
 
   Common functionality:
 
-  * Entries compare (eq, lt, etc.) according to their full filepath. To do a
-    content-wise comparison, use :meth:`equal_contents`.
+  * Entries compare (eq, lt, etc.) according to their full case-insensitive filepath.
+    To do a content-wise comparison, use :meth:`equal_contents`.
   * Entries are True according to their existence on a filesystem
   * The str representation is the filepath utf8-encoded; unicode is the filepath itself
   * Adding one path to another will use os.path.join semantics
@@ -719,6 +733,10 @@ class Entry (FilePath, core._WinSysObject):
   def __new__ (meta, filepath, _file_info=core.UNSET):
     fp = FilePath.__new__ (meta, filepath)
     fp._normpath = normalised (fp)
+    #
+    # An Entry can be initialised from a Win32 FIND_FILES object, in which
+    # case cache the information available for speed.
+    #
     if _file_info is core.UNSET:
       fp._attributes = core.UNSET
       fp._created_at = core.UNSET
@@ -805,7 +823,8 @@ class Entry (FilePath, core._WinSysObject):
   readable = property (_get_readable)
 
   def get_created_at (self):
-    ur"""Get and store the latest creation time from the filesystem"""
+    ur"""Get and store the latest creation time from the filesystem. Note that this forces a
+    re-read of the metadata."""
     self._created_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self._normpath)[1])
     return self._created_at
   def _get_created_at (self):
@@ -822,7 +841,8 @@ class Entry (FilePath, core._WinSysObject):
   created_at = property (_get_created_at, _set_created_at)
 
   def get_accessed_at (self):
-    ur"""Get and store the latest access time from the filesystem"""
+    ur"""Get and store the latest access time from the filesystem. Note that this
+    forces a re-read of the metadata"""
     self._accessed_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self._normpath)[3])
     return self._accessed_at
   def _get_accessed_at (self):
@@ -839,7 +859,8 @@ class Entry (FilePath, core._WinSysObject):
   accessed_at = property (_get_accessed_at, _set_accessed_at)
 
   def get_written_at (self):
-    ur"""Get and store the latest modification time from the filesystem"""
+    ur"""Get and store the latest modification time from the filesystem. Note that this
+    forces a re-read of the metadata"""
     self._written_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self._normpath)[2])
     return self._written_at
   def _get_written_at (self):
@@ -864,7 +885,8 @@ class Entry (FilePath, core._WinSysObject):
   uncompressed_size = property (_get_uncompressed_size)
 
   def get_size (self):
-    ur"""Get and store the latest (possibly compressed) size from the filesystem"""
+    ur"""Get and store the latest (possibly compressed) size from the filesystem. Note that this
+    forces a re-read of the metadata"""
     self._size = wrapped (_kernel32.GetCompressedFileSize, self._normpath)
     return self._size
   def _get_size (self):
@@ -877,7 +899,8 @@ class Entry (FilePath, core._WinSysObject):
   size = property (_get_size)
 
   def get_attributes (self):
-    ur"""Get and store the latest file attributes from the filesystem"""
+    ur"""Get and store the latest file attributes from the filesystem. Note that this
+    forces a re-read of the metadata"""
     self._attributes = _Attributes (wrapped (win32file.GetFileAttributesExW, self._normpath)[0])
     return self._attributes
   def _get_attributes (self):
@@ -1112,10 +1135,16 @@ class Entry (FilePath, core._WinSysObject):
     :returns: a :class:`File` object corresponding to the target file
     """
     other_file = entry (other)
+    #
+    # If the target is already a directory, the result of the move will
+    # be a file or a directory inside that directory. Otherwise the
+    # result will be a new file or directory inside the target's
+    # parent.
+    #
     if other_file and other_file.directory:
-      target_filepath = other_file + self.filename
+      target_filepath = self.factory (other_file + self.filename)
     else:
-      target_filepath = other_file
+      target_filepath = self.factory (other_file)
     flags = MOVEFILE.WRITE_THROUGH
     if clobber:
       flags |= MOVEFILE.REPLACE_EXISTING
@@ -1127,11 +1156,11 @@ class Entry (FilePath, core._WinSysObject):
       callback_data,
       flags
     )
-    return file (target_filepath)
+    return entry (unicode (target_filepath))
   rename = move
 
   def take_control (self, principal=core.UNSET):
-    """Give the logged-on user full control to a file. This may
+    ur"""Give the logged-on user full control to a file. This may
     need to be preceded by a call to :func:`take_ownership` so that the
     user gains WRITE_DAC permissions.
 
@@ -1147,7 +1176,7 @@ class Entry (FilePath, core._WinSysObject):
       s.dacl.append ((principal, "F", "ALLOW"))
 
   def take_ownership (self, principal=core.UNSET):
-    """Set the new owner of the file to be the logged-on user.
+    ur"""Set the new owner of the file to be the logged-on user.
     This is no more than a slight shortcut to the equivalent
     security operations.
 
@@ -1155,7 +1184,15 @@ class Entry (FilePath, core._WinSysObject):
     the default) you may need to have enabled SE_RESTORE privilege.
     Even the logged-in user may need to have enabled SE_TAKE_OWNERSHIP
     if that user has not been granted the appropriate security by
-    the ACL.
+    the ACL::
+
+      from winsys import fs, security
+
+      f = fs.file ("c:/temp/temp.txt")
+      assert f
+      with security.change_privileges (["take_ownership"]):
+        f.take_ownership ()
+        f.take_control ()
 
     :param principal: anything accepted by :func:`principal` [logged-on user]
     """
@@ -1233,7 +1270,7 @@ class File (Entry):
   def equals (self, other, compare_contents=False):
     ur"""Is this file equal in size, dates and attributes to another.
     if `compare_contents` is True, use filecmp to compare the contents
-    of the files.
+    of the files. Note that filecmp.cmp fails early.
 
     :param other: anything accepted by :func:`file`
     :compare_contents: True to compare contents, False otherwise
@@ -1252,10 +1289,10 @@ class File (Entry):
     return True
 
   def hard_link_to (self, other):
-    ur"""Create other as a hard link to this file.
+    ur"""Create `other` as a hard link to this file.
 
     :param other: anything accepted by :func:`file`
-    :returns: :class:`File` object corresponding to other
+    :returns: :class:`File` object corresponding to `other`
     """
     other = file (other)
     wrapped (
@@ -1443,7 +1480,7 @@ class Dir (Entry):
           security_descriptor.pyobject () if security_descriptor else None
         )
 
-    return Dir (path)
+    return self.factory (path)
 
   def mkdir (self, dirname, security_descriptor=None):
     r"""Create :dirname: as a subdirectory of this directory, specifying a
