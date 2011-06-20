@@ -34,6 +34,7 @@ PID_VOLUME = constants.Constants.from_pattern ("PID_VOLUME_*", namespace=shellco
 SHCONTF = constants.Constants.from_pattern ("SHCONTF_*", namespace=shellcon)
 SHGDN = constants.Constants.from_pattern ("SHGDN_*", namespace=shellcon)
 SLGP = constants.Constants.from_pattern ("SLGP_*", namespace=shell)
+SFGAO = constants.Constants.from_pattern ("SFGAO_*", namespace=shellcon)
 
 PROPERTIES = {
   FMTID.SummaryInformation : PIDSI,
@@ -49,6 +50,13 @@ class x_shell (exc.x_winsys):
 WINERROR_MAP = {
 }
 wrapped = exc.wrapper (WINERROR_MAP, x_shell)
+
+def _rpidl (parent, child):
+  l = len (parent)
+  if child[:l] != parent:
+    raise x_shell ("Parent %s is not related to child %s" % (parent, child))
+  else:
+    return child[l:]
 
 #
 # Although this can be done in one call, Win9x didn't
@@ -476,12 +484,49 @@ PyIID = type (pywintypes.IID ("{00000000-0000-0000-0000-000000000000}"))
 
 class ShellEntry (core._WinSysObject):
 
-  def __init__ (self, rpidl, parent=core.UNSET):
-    self.parent = desktop if parent is core.UNSET else parent
-    self.rpidl = rpidl
+  def __init__ (self, rpidl, parent_obj):
+    self._parent_obj = parent_obj
+    self._rpidl = rpidl
+    self._entry = self._parent_obj.BindToObject (self._rpidl, None, shell.IID_IShellFolder)
 
   def as_string (self):
-    return self.parent.GetDisplayNameOf (self.rpidl, SHGDN.NORMAL)
+    return self._parent.GetDisplayNameOf (self.rpidl, SHGDN.NORMAL)
+
+  @classmethod
+  def from_pidl (cls, pidl, parent_obj=None):
+    if parent_obj is None:
+      parent_obj = desktop.BindToObject (pidl[:-1], None, shell.IID_IShellFolder)
+      rpidl = pidl[-1:]
+    else:
+      rpid = pidl
+    return cls (rpidl, parent)
+
+  @classmethod
+  def from_path (cls, path):
+    _, pidl, flags = desktop.ParseDisplayName (0, None, path, SFGAO.FOLDER)
+    if flags & SFGAO.FOLDER:
+      return ShellFolder.from_pidl (pidl)
+    else:
+      return ShellItem.from_pidl (pidl)
+
+  @classmethod
+  def factory (shell_entry=core.UNSET):
+    if shell_entry is None:
+      return None
+    elif shell_entry is core.UNSET:
+      return ShellFolder ([], desktop)
+    elif isinstance (shell_entry, ShellEntry):
+      return shell_entry
+    elif isinstance (shell_entry, int):
+      return ShellFolder (shell.SHGetSpecialFolderLocation (0, shell_entry))
+    else:
+      if isinstance (shell_entry, list):
+        pidl = shell_entry
+      elif isinstance (shell_entry, basestring):
+        _, pidl, flags = desktop.ParseDisplayName (shell_entry)
+
+        pidl, flags = shell.SHILCreateFromPath (os.path.abspath (shell_folder), SHCONTF.FOLDERS)
+      return ShellFolder (desktop.BindToObject (pidl, None, shell.IID_IShellFolder))
 
 class ShellItem (ShellEntry):
   pass
@@ -491,21 +536,9 @@ class ShellFolder (ShellEntry):
   #~ def __getattr__ (self, attr):
     #~ return getattr (self.shell_folder, attr)
 
-  def walk (self, depthfirst=False, ignore_access_errors=False):
-    top = self
-    dirs, nondirs = [], []
-    for f in self.entries (ignore_access_errors=ignore_access_errors):
-      if isinstance (f, Dir):
-        dirs.append (f)
-      else:
-        nondirs.append (f)
-
-    if not depthfirst: yield top, dirs, nondirs
-    for d in dirs:
-      for x in d.walk (depthfirst=depthfirst, ignore_access_errors=ignore_access_errors):
-        yield x
-    if depthfirst: yield top, dirs, nondirs
-
+  def __iter__ (self):
+    for item in self._entry:
+      yield self.__class__.factory (item, self._entry)
 
   def walk (self, depthfirst=False):
     top = self.shell_folder
@@ -522,22 +555,7 @@ class ShellFolder (ShellEntry):
       except shell.error:
         pass
 
-def shell_entry (shell_entry=core.UNSET):
-  if shell_entry is None:
-    return None
-  elif shell_entry is core.UNSET:
-    return ShellFolder ([], desktop)
-  elif isinstance (ShellEntry, shell_entry):
-    return shell_entry
-  elif isinstance (shell_entry, basestring):
-    pidl, flags = shell.SHILCreateFromPath (os.path.abspath (shell_folder), SHCONTF.FOLDERS)
-    if pidl is None:
-      return ShellFolder (
-        shell.SHGetFolderLocation (None, CSIDL.constant (shell_entry), None, 0),
-        desktop
-      )
-      pidl = None
-    return ShellFolder (desktop.BindToObject (pidl, None, shell.IID_IShellFolder))
+shell_entry = ShellEntry.factory
 
 
 def shell_folder (shell_folder=core.UNSET, parent=core.UNSET):
