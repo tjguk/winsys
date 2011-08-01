@@ -10,7 +10,6 @@ import os, sys
 import codecs
 import collections
 import contextlib
-import datetime
 import filecmp
 import fnmatch
 import msvcrt
