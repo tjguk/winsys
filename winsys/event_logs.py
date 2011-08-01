@@ -4,6 +4,7 @@ import os, sys
 import contextlib
 import re
 import struct
+import warnings
 
 import winerror
 import win32api
@@ -123,20 +124,26 @@ class EventLog (core._WinSysObject):
     core._WinSysObject.__init__ (self)
     self.computer = computer or "."
     self.name = name
-    key = registry.registry (self.REG_ROOT % self.computer).get_key (self.name)
-    if not key:
-      raise exc.x_not_found (None, "EventLog", r"\\%s\%s" % (self.computer, self.name))
+    try:
+      key = registry.registry (self.REG_ROOT % self.computer).get_key (self.name)
+    except exc.x_winsys, err:
+      warnings.warn ("Registry access failed with error: %s; log access may still be possible" % err.args[-1])
+      values = dict ()
     else:
-      values = dict (key.values ())
-      self.auto_backup_log_files = values.get ("AutoBackupLogFiles")
-      self.display_name_file = values.get ("DisplayNameFile")
-      self.display_name_id = values.get ("DisplayNameID")
-      self.file = values.get ("File")
-      self.max_size = values.get ("MaxSize")
-      self.primary_module = values.get ("PrimaryModule")
-      self.restrict_guest_access = values.get ("RestrictGuestAccess")
-      self.retention = values.get ("Retention")
-      self.sources = values.get ("Sources")
+      if key:
+        values = dict (key.values ())
+      else:
+        raise exc.x_not_found (None, "EventLog", r"\\%s\%s" % (self.computer, self.name))
+
+    self.auto_backup_log_files = values.get ("AutoBackupLogFiles")
+    self.display_name_file = values.get ("DisplayNameFile")
+    self.display_name_id = values.get ("DisplayNameID")
+    self.file = values.get ("File")
+    self.max_size = values.get ("MaxSize")
+    self.primary_module = values.get ("PrimaryModule")
+    self.restrict_guest_access = values.get ("RestrictGuestAccess")
+    self.retention = values.get ("Retention")
+    self.sources = values.get ("Sources")
     self._handle = wrapped (win32evtlog.OpenEventLog, self.computer, self.name)
 
   def as_string (self):
@@ -144,15 +151,15 @@ class EventLog (core._WinSysObject):
 
   def dumped (self, level=0):
     output = []
-    output.append (u"auto_backup_log_files: %s" % self.auto_backup_log_files)
-    output.append (u"display_name_file: %s" % self.display_name_file)
-    output.append (u"display_name_id: %s" % self.display_name_id)
-    output.append (u"file: %s" % self.file)
-    output.append (u"max_size: %s" % utils.size_as_mb (self.max_size))
-    output.append (u"primary_module: %s" % self.primary_module)
-    output.append (u"restrict_guest_access: %s" % self.restrict_guest_access)
-    output.append (u"retention: %s" % utils.secs_as_string (self.retention))
-    output.append (u"sources: %s" % utils.dumped_list (self.sources, level))
+    if self.auto_backup_log_files: output.append (u"auto_backup_log_files: %s" % self.auto_backup_log_files)
+    if self.display_name_file: output.append (u"display_name_file: %s" % self.display_name_file)
+    if self.display_name_id: output.append (u"display_name_id: %s" % self.display_name_id)
+    if self.file: output.append (u"file: %s" % self.file)
+    if self.max_size is not None: output.append (u"max_size: %s" % utils.size_as_mb (self.max_size))
+    if self.primary_module: output.append (u"primary_module: %s" % self.primary_module)
+    if self.restrict_guest_access: output.append (u"restrict_guest_access: %s" % self.restrict_guest_access)
+    if self.retention: output.append (u"retention: %s" % utils.secs_as_string (self.retention))
+    if self.sources: output.append (u"sources: %s" % utils.dumped_list (self.sources, level))
     return utils.dumped (u"\n".join (output), level)
 
   @contextlib.contextmanager
