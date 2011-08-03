@@ -4,7 +4,7 @@ import win32con
 import win32process
 
 import pywintypes
-from winsys import constants, core, exc, utils
+from winsys import constants, core, exc, ipc, utils
 
 class x_processes (exc.x_winsys):
   pass
@@ -35,6 +35,12 @@ class Process (core._WinSysObject):
   def from_handles (cls, hProcess, hThread, pid, tid):
     self.hProcess, self.hThread, self.pid, self.tid = hProcess, hThread, pid, tid
 
+  def pyobject (self):
+    return self.hProcess
+
+  def wait (self):
+    ipc.wait (self)
+
 def process (process=None, flags=0, startupinfo=None):
   if process is None:
     return Process.from_handles (
@@ -52,4 +58,4 @@ def process (process=None, flags=0, startupinfo=None):
     elif startupinfo:
       for k, v in startupdict.items ():
         setattr (s, k, v)
-    return Process (command, flags=flags, startupinfo=s)
+    return Process (process, flags=flags, startupinfo=s)

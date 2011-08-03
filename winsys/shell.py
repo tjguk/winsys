@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+#-*- coding: iso-8859-1 -*-
 ur"""Wrappers around standard functionality from the semi-independent Windows Shell
 subsystem which powers the desktop, shortcuts, special folders, property sheets &c.
 
@@ -47,6 +47,9 @@ PROPERTIES = {
 class x_shell (exc.x_winsys):
   pass
 
+class x_not_a_shortcut (x_shell):
+  pass
+
 WINERROR_MAP = {
 }
 wrapped = exc.wrapper (WINERROR_MAP, x_shell)
@@ -58,6 +61,9 @@ def _rpidl (parent, child):
   else:
     return child[l:]
 
+_desktop = shell.SHGetDesktopFolder ()
+PyIShellFolder = type (_desktop)
+
 #
 # Although this can be done in one call, Win9x didn't
 #  support it, so I added this workaround.
@@ -65,7 +71,7 @@ def _rpidl (parent, child):
 def get_path (folder_id):
   return fs.entry (shell.SHGetPathFromIDList (shell.SHGetSpecialFolderLocation (0, folder_id)))
 
-def desktop (common=0):
+def desktop_folder (common=0):
   u"What folder is equivalent to the current desktop?"
   return get_path ((shellcon.CSIDL_DESKTOP, shellcon.CSIDL_COMMON_DESKTOPDIRECTORY)[common])
 
@@ -74,20 +80,20 @@ def special_folder (folder_id):
 
 def application_data (common=0):
   u"What folder holds application configuration files?"
-  return get_path ((shellcon.CSIDL_APPDATA, shellcon.CSIDL_COMMON_APPDATA)[common])
+  return get_path ((CSIDL.APPDATA, CSIDL.COMMON_APPDATA)[common])
 
 def favourites (common=0):
   u"What folder holds the Explorer favourites shortcuts?"
-  return get_path ((shellcon.CSIDL_FAVORITES, shellcon.CSIDL_COMMON_FAVORITES)[common])
+  return get_path ((CSIDL.FAVORITES, CSIDL.COMMON_FAVORITES)[common])
 bookmarks = favourites
 
 def start_menu (common=0):
   u"What folder holds the Start Menu shortcuts?"
-  return get_path ((shellcon.CSIDL_STARTMENU, shellcon.CSIDL_COMMON_STARTMENU)[common])
+  return get_path ((CSIDL.STARTMENU, CSIDL.COMMON_STARTMENU)[common])
 
 def programs (common=0):
   u"What folder holds the Programs shortcuts (from the Start Menu)?"
-  return get_path ((shellcon.CSIDL_PROGRAMS, shellcon.CSIDL_COMMON_PROGRAMS)[common])
+  return get_path ((CSIDL.PROGRAMS, CSIDL.COMMON_PROGRAMS)[common])
 
 def startup (common=0):
   u"What folder holds the Startup shortcuts (from the Start Menu)?"
@@ -376,12 +382,12 @@ class Shortcut (core._WinSysObject):
       raise x_shell (errmsg="Must specify a filepath for an unsaved shortcut")
 
     wrapped (
-        self._shell_link.QueryInterface,
-        pythoncom.IID_IPersistFile
-      ).Save (
-        self.filepath,
-        filepath == self.filepath
-      )
+      self._shell_link.QueryInterface,
+      pythoncom.IID_IPersistFile
+    ).Save (
+      self.filepath,
+      filepath == self.filepath
+    )
 
     self.filepath = filepath
     return self
@@ -449,7 +455,7 @@ class Properties (core._WinSysObject):
 
   def __init__ (self, filepath):
     self._pidl, _ = shell.SHILCreateFromPath (os.path.abspath (filepath), 0)
-    self._pss = shell.SHGetDesktopFolder ().BindToStorage (self._pidl, None, pythoncom.IID_IPropertySetStorage)
+    self._pss = _desktop.BindToStorage (self._pidl, None, pythoncom.IID_IPropertySetStorage)
 
   def property_set (self, fmtid):
     return PropertySet (self._pss, FMTID.constant (fmtid))
@@ -489,8 +495,6 @@ PyIID = type (pywintypes.IID ("{00000000-0000-0000-0000-000000000000}"))
 #
 class ShellEntry (core._WinSysObject):
 
-  _desktop = shell.SHGetDesktopFolder ()
-
   def __init__ (self, parent_obj, rpidl):
     self._parent_obj = parent_obj
     self._rpidl = rpidl
@@ -504,7 +508,7 @@ class ShellEntry (core._WinSysObject):
       #
       # pidl is absolute
       #
-      parent_obj = desktop.BindToObject (pidl[:-1], None, shell.IID_IShellFolder)
+      parent_obj = _desktop.BindToObject (pidl[:-1], None, shell.IID_IShellFolder)
       rpidl = pidl[-1:]
     else:
       #
@@ -515,7 +519,7 @@ class ShellEntry (core._WinSysObject):
 
   @classmethod
   def from_path (cls, path):
-    _, pidl, flags = desktop.ParseDisplayName (0, None, path, SFGAO.FOLDER)
+    _, pidl, flags = _desktop.ParseDisplayName (0, None, path, SFGAO.FOLDER)
     if flags & SFGAO.FOLDER:
       return ShellFolder.from_pidl (pidl)
     else:
@@ -526,7 +530,7 @@ class ShellEntry (core._WinSysObject):
     if shell_entry is None:
       return None
     elif shell_entry is core.UNSET:
-      return ShellFolder (cls._desktop, [])
+      return ShellFolder (_desktop, [])
     elif isinstance (shell_entry, ShellEntry):
       return shell_entry
     elif isinstance (shell_entry, int):
@@ -543,7 +547,16 @@ class ShellEntry (core._WinSysObject):
 
   @property
   def attributes (self):
-    return SFGAO.names_from_value (self._parent_obj.GetAttributesOf ([self._rpidl], -1))
+    return constants.Attributes (self._parent_obj.GetAttributesOf ([self._rpidl], -1), SFGAO)
+
+  def attribute (self, attr):
+    """Determine whether this entry has this attribute set
+
+    :param attr: one of :const:`SFGAO`
+    :returns: `True` if set otherwise `False`
+    """
+    value = SFGAO.constant (attr)
+    return bool (self._parent_obj.GetAttributesOf ([self._rpidl], value) & value)
 
 class ShellItem (ShellEntry):
   pass
@@ -579,17 +592,19 @@ def shell_folder (shell_folder=core.UNSET, parent=core.UNSET):
   if shell_folder is None:
     return None
   elif shell_folder is core.UNSET:
-    return ShellFolder ([], desktop)
-  elif isinstance (shell_folder, type (desktop)):
+    return ShellFolder ([], _desktop)
+  elif isinstance (shell_folder, PyIShellFolder):
     return ShellFolder (shell_folder)
   elif isinstance (shell_folder, basestring):
     pidl, flags = shell.SHILCreateFromPath (os.path.abspath (shell_folder), 0)
     if pidl is None:
       pidl = shell.SHGetFolderLocation (None, CSIDL.constant (shell_folder), None, 0)
-    return ShellFolder (desktop.BindToObject (pidl, None, shell.IID_IShellFolder))
+    return ShellFolder (_desktop.BindToObject (pidl, None, shell.IID_IShellFolder))
   elif isinstance (shell_folder, list):
     if parent is core.UNSET:
       raise x_shell (errctx="shell_folder", errmsg="Cannot bind to PIDL without parent")
     return ShellFolder (parent.BindToObject (shell_folder, None, shell.IID_IShellFolder))
   else:
     raise x_shell (errctx="shell_folder")
+
+desktop = ShellFolder (_desktop, [])

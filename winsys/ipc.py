@@ -601,7 +601,7 @@ def open_pipe (name, mode="rw", timeout_ms=WAIT.INFINITE):
   if "w" in mode:
     read_mode |= constants.GENERIC_ACCESS.WRITE
   hPipe = wrapped (win32file.CreateFile, name, read_mode, 0, None, io.FILE_CREATION.OPEN_EXISTING, 0, None)
-  win32pipe.
+  #~ win32pipe.
 
 def pipe (name=None):
   ur"""Return a pipe. If name is given a :class:`NamedPipe` is returned, otherwise
@@ -656,6 +656,6 @@ def all (objects, timeout_ms=WAIT.INFINITE):
   :raises: :exc:`x_ipc_timeout` if `timeout_ms` is exceeded
   """
   handles = [o.pyobject () for o in objects]
-  wrapped (win32event.WaitForMultipleObjects, handles, 1, timeout_ms)
+  result = wrapped (win32event.WaitForMultipleObjects, handles, 1, timeout_ms)
   if result == WAIT.TIMEOUT:
     raise x_ipc_timeout (None, "all", "Wait timed out")
