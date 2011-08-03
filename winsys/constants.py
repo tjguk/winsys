@@ -294,3 +294,39 @@ STANDARD_ACCESS = Constants.from_list ([u"STANDARD_RIGHTS_READ", u"STANDARD_RIGH
 #~ TASKPAGE = Constants.from_pattern (u"TASKPAGE_*", namespace=taskscheduler)
 #~ TASK = Constants.from_pattern (u"TASK_*", namespace=taskscheduler)
 #~ TASK_PRIORITY = Constants.from_pattern (u"*_PRIORITY_CLASS", namespace=taskscheduler)
+
+class Attributes (core._WinSysObject):
+  u"""Simple class wrapper for the list of file attributes
+  (readonly, hidden, &c.) It can be accessed by attribute
+  access, item access and the "in" operator::
+
+    from winsys import fs
+    attributes = fs.file (fs.__file__).parent ().attributes
+    assert (attributes.directory)
+    assert (attributes[fs.FILE_ATTRIBUTE.DIRECTORY])
+    assert ("directory" in attributes)
+  """
+  def __init__ (self, flags, const):
+    self.const = const
+    self.flags = flags
+
+  def __getitem__ (self, item):
+    return bool (self.flags & self.const.constant (item))
+  __getattr__ = __getitem__
+  __contains__ = __getitem__
+
+  def __eq__ (self, other):
+    return self.flags == other.flags
+
+  def __hash__ (self):
+    return hash (self.flags)
+
+  def as_string (self):
+    return "%08x" % self.flags
+
+  def dumped (self, level=0):
+    return utils.dumped (
+      u"\n".join (u"%s => %s" % (k, bool (self.flags & v)) for k, v in sorted (self.const.items ())),
+      level
+    )
+

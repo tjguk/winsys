@@ -510,41 +510,6 @@ class FilePath (unicode):
 
 filepath = FilePath
 
-class _Attributes (core._WinSysObject):
-  u"""Simple class wrapper for the list of file attributes
-  (readonly, hidden, &c.) It can be accessed by attribute
-  access, item access and the "in" operator::
-
-    from winsys import fs
-    attributes = fs.file (fs.__file__).parent ().attributes
-    assert (attributes.directory)
-    assert (attributes[fs.FILE_ATTRIBUTE.DIRECTORY])
-    assert ("directory" in attributes)
-  """
-  def __init__ (self, flags=0, const=FILE_ATTRIBUTE):
-    self.const = const
-    self.flags = flags
-
-  def __getitem__ (self, item):
-    return bool (self.flags & self.const.constant (item))
-  __getattr__ = __getitem__
-  __contains__ = __getitem__
-
-  def __eq__ (self, other):
-    return self.flags == other.flags
-
-  def __hash__ (self):
-    return hash (self.flags)
-
-  def as_string (self):
-    return "%08x" % self.flags
-
-  def dumped (self, level=0):
-    return utils.dumped (
-      u"\n".join (u"%s => %s" % (k, bool (self.flags & v)) for k, v in sorted (self.const.items ())),
-      level
-    )
-
 class Drive (core._WinSysObject):
   ur"""Wraps a drive letter, offering access to its :attr:`Drive.volume`
   and the ability to :meth:`mount` or :meth:`dismount` it on a particular
@@ -658,7 +623,7 @@ class Volume (core._WinSysObject):
 
   def _get_flags (self):
     ur"""An attribute set corresponding to some combination of :const:`VOLUME_FLAG`"""
-    return _Attributes (self._get_info ()[3], VOLUME_FLAG)
+    return constants.Attributes (self._get_info ()[3], VOLUME_FLAG)
   flags = property (_get_flags)
 
   def _get_file_system_name (self):
@@ -719,7 +684,7 @@ class Entry (FilePath, core._WinSysObject):
   * :attr:`attributes`
   * :attr:`id`
   * :attr:`n_links`
-  * :attr:`attributes - an :class:`_Attributes` object representing combinations of :const:`FILE_ATTRIBUTE`
+  * :attr:`attributes - an :class:`constants.Attributes` object representing combinations of :const:`FILE_ATTRIBUTE`
 
   Common functionality:
 
@@ -744,7 +709,7 @@ class Entry (FilePath, core._WinSysObject):
       fp._size = core.UNSET
       fp._reparse_tag = core.UNSET
     else:
-      fp._attributes = _Attributes (_file_info[0])
+      fp._attributes = constants.Attributes (_file_info[0], FILE_ATTRIBUTE)
       fp._created_at = utils.from_pytime (_file_info[1])
       fp._accessed_at = utils.from_pytime (_file_info[2])
       fp._written_at = utils.from_pytime (_file_info[3])
@@ -900,7 +865,7 @@ class Entry (FilePath, core._WinSysObject):
   def get_attributes (self):
     ur"""Get and store the latest file attributes from the filesystem. Note that this
     forces a re-read of the metadata"""
-    self._attributes = _Attributes (wrapped (win32file.GetFileAttributesExW, self._normpath)[0])
+    self._attributes = constants.Attributes (wrapped (win32file.GetFileAttributesExW, self._normpath)[0], FILE_ATTRIBUTE)
     return self._attributes
   def _get_attributes (self):
     ur"""Get and store the file attributes from the original file read or the latest from
@@ -1932,11 +1897,11 @@ def rmdir (filepath, recursive=False):
   return dir (filepath).delete (recursive=recursive)
 
 def attributes (filepath):
-  ur"""Return an :class:`_Attributes` object representing the file attributes
+  ur"""Return an :class:`constants.Attributes` object representing the file attributes
   of filepath, implemented via :meth:`Entry.attributes`
 
   :param filepath: anything accepted by :func:`entry`
-  :returns: an :class:`_Attributes` object
+  :returns: an :class:`constants.Attributes` object
   """
   return entry (filepath).attributes
 
