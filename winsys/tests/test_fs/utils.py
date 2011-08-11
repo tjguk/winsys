@@ -82,7 +82,7 @@ def can_encrypt ():
     name = f.name
   try:
     fs.file (name).encrypt ()
-  except fs.x_no_certificate:
+  except fs.x_fs:
     return False
   else:
     return True

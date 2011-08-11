@@ -9,6 +9,9 @@ else:
   unittest = unittest0
 del unittest0
 
+from winsys.tests import utils
+if not utils.i_am_admin ():
+  raise RuntimeError ("These tests must be run as Administrator")
 from winsys import _lsa
 from winsys.tests import utils
 

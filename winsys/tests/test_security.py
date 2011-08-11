@@ -23,6 +23,8 @@ import ntsecuritycon
 import pywintypes
 
 from winsys.tests import utils
+if not utils.i_am_admin ():
+  raise RuntimeError ("These tests must be run as Administrator")
 from winsys import security
 
 OPTIONS = \

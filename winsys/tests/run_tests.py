@@ -14,15 +14,24 @@ del unittest0
 IGNORE_DIRECTORIES = set (['.svn', "build", "dist"])
 
 def add_tests_from_directory (suite, directory):
+  skipped_modules = []
   print ("Adding tests from ", directory)
   for filepath in glob.glob (os.path.join (directory, "test_*.py")):
     module_name = os.path.basename (filepath).split (".")[0]
-    pymodule = imp.load_source (module_name, filepath)
-
-    for item in dir (pymodule):
-      obj = getattr (pymodule, item)
-      if isinstance (obj, type) and issubclass (obj, unittest.TestCase):
-        suite.addTest (unittest.TestLoader ().loadTestsFromTestCase (obj))
+    try:
+      pymodule = imp.load_source (module_name, filepath)
+    except RuntimeError, err:
+      skipped_modules.append (module_name)
+      continue
+    else:
+      for item in dir (pymodule):
+        obj = getattr (pymodule, item)
+        if isinstance (obj, type) and issubclass (obj, unittest.TestCase):
+          suite.addTest (unittest.TestLoader ().loadTestsFromTestCase (obj))
+  if skipped_modules:
+    print "Skipped because not running as Admin:"
+    for m in skipped_modules:
+      print "  ", m
 
 def main (test_directory="."):
   suite = unittest.TestSuite ()

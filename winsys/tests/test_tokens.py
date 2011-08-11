@@ -13,8 +13,10 @@ import win32api
 import win32security
 import ntsecuritycon
 
-from winsys._security import _tokens
 from winsys.tests import utils
+if not utils.i_am_admin ():
+  raise RuntimeError ("These tests must be run as Administrator")
+from winsys._security import _tokens
 
 class TestTokens (unittest.TestCase):
 
@@ -69,10 +71,11 @@ class TestTokens (unittest.TestCase):
       win32security.LOGON32_LOGON_NETWORK,
       win32security.LOGON32_PROVIDER_DEFAULT
     )
+    me = _tokens.token ().Owner.pyobject ()
     win32security.ImpersonateLoggedOnUser (_tokens.Token (hToken).pyobject ())
-    assert _tokens.token ().Owner.pyobject () == self.alice
+    self.assertEquals (_tokens.token ().Owner.pyobject (), self.alice)
     win32security.RevertToSelf ()
-    assert _tokens.token ().Owner.pyobject () == self.me
+    self.assertEquals (_tokens.token ().Owner.pyobject (), me)
 
   def test_Token_change_privileges_enable (self):
     for disabled_priv, status in win32security.GetTokenInformation (self.token0, win32security.TokenPrivileges):

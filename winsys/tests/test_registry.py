@@ -16,6 +16,9 @@ import win32con
 import win32security
 import pywintypes
 
+from winsys.tests import utils
+if not utils.i_am_admin ():
+  raise RuntimeError ("These tests must be run as Administrator")
 from winsys import registry, utils
 
 GUID = str (uuid.uuid1 ())

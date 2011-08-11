@@ -7,6 +7,7 @@ import win32net
 import win32netcon
 import win32security
 import ntsecuritycon
+from win32com.shell import shell
 
 def create_user (user, password):
   user_info = dict (
@@ -78,3 +79,5 @@ def fake_stdout ():
   yield sys.stdout
   sys.stdout = _stdout
 
+def i_am_admin ():
+  return shell.IsUserAnAdmin ()

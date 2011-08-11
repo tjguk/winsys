@@ -12,8 +12,10 @@ del unittest0
 import win32api
 import win32security
 
-from winsys import accounts
 from winsys.tests import utils
+if not utils.i_am_admin ():
+  raise RuntimeError ("These tests must be run as Administrator")
+from winsys import accounts
 
 class TestAccounts (unittest.TestCase):
 

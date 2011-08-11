@@ -17,9 +17,11 @@ import win32evtlog
 import win32security
 import pywintypes
 
+from winsys.tests import utils
+if not utils.i_am_admin ():
+  raise RuntimeError ("These tests must be run as Administrator")
 from winsys import event_logs, registry, utils
 
-registry_root = registry.registry (r"HKLM\SYSTEM\CurrentControlSet\Services\Eventlog")
 
 LOG_NAME = event_logs.DEFAULT_LOG_NAME
 GUID = "_winsys-%s" % uuid.uuid1 ()
@@ -55,6 +57,7 @@ class TestEventLogs (unittest.TestCase):
   #
   def setUp (self):
     event_logs.EventSource.create (GUID, LOG_NAME)
+    self.registry_root = registry.registry (r"HKLM\SYSTEM\CurrentControlSet\Services\Eventlog")
 
   def tearDown (self):
     event_logs.event_source (r"%s\%s" % (LOG_NAME, GUID)).delete ()
@@ -67,29 +70,29 @@ class TestEventLogs (unittest.TestCase):
     guid = "_winsys-test_create_source-%s" % uuid.uuid1 ()
     try:
       source = event_logs.EventSource.create (guid, log_name)
-      self.assertTrue (registry_root + log_name + guid)
+      self.assertTrue (self.registry_root + log_name + guid)
     except:
       raise
     else:
       source.delete ()
-      self.assertFalse (bool (registry_root + log_name + guid))
+      self.assertFalse (bool (self.registry_root + log_name + guid))
 
   def test_create_source_at_default (self):
     guid = "_winsys-test_create_source_at_default-%s" % uuid.uuid1 ()
     try:
       source = event_logs.EventSource.create (guid)
-      self.assertTrue (registry_root + event_logs.DEFAULT_LOG_NAME + guid)
+      self.assertTrue (self.registry_root + event_logs.DEFAULT_LOG_NAME + guid)
     except:
       raise
     else:
       source.delete ()
-      self.assertFalse (bool (registry_root + event_logs.DEFAULT_LOG_NAME + guid))
+      self.assertFalse (bool (self.registry_root + event_logs.DEFAULT_LOG_NAME + guid))
 
   def test_event_sources (self):
     log_name = "System"
     self.assertEquals (
       set (s.name for s in event_logs.event_sources (log_name)),
-      set (r.name for r in registry_root + log_name)
+      set (r.name for r in self.registry_root + log_name)
     )
     self.assertTrue (all (isinstance (s, event_logs.EventSource) for s in event_logs.event_sources (log_name)))
 
@@ -141,7 +144,7 @@ class TestEventLogs (unittest.TestCase):
   def test_event_logs (self):
     self.assertEquals (
       set (s.name for s in event_logs.event_logs ()),
-      set (r.name for r in registry_root.keys ())
+      set (r.name for r in self.registry_root.keys ())
     )
     self.assertTrue (all (isinstance (s, event_logs.EventLog) for s in event_logs.event_logs ()))
 

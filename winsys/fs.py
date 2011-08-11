@@ -242,9 +242,9 @@ def handle (filepath, write=False, async=False, attributes=None, sec=None):
   """
   attributes = FILE_ATTRIBUTE.constant (attributes)
   if attributes is None:
-    attributes = FILE_ATTRIBUTE.NORMAL | FILE_FLAG.BACKUP_SEMANTICS
+    attributes = FILE_ATTRIBUTE.NORMAL | io.FILE_FLAG.BACKUP_SEMANTICS
   if async:
-    attributes |= FILE_FLAG.OVERLAPPED
+    attributes |= io.FILE_FLAG.OVERLAPPED
   return wrapped (
     win32file.CreateFile,
     normalised (filepath),
@@ -2043,7 +2043,7 @@ class _DirWatcher (object):
       io.FILE_SHARE.READ | io.FILE_SHARE.WRITE | io.FILE_SHARE.DELETE,
       None,
       io.FILE_CREATION.OPEN_EXISTING,
-      FILE_FLAG.BACKUP_SEMANTICS | FILE_FLAG.OVERLAPPED,
+      io.FILE_FLAG.BACKUP_SEMANTICS | io.FILE_FLAG.OVERLAPPED,
       None
     )
     self._changes = collections.deque ()

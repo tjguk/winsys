@@ -92,7 +92,7 @@ def dumped_list (l, level, indent=2):
   return dumped (u"\n".join (unicode (i)  for i in l), level, indent)
 
 def dumped_dict (d, level, indent=2):
-  return dumped (u"\n".join (u"%s => %s" % (k, v) for (k, v) in d.iteritems ()), level, indent)
+  return dumped (u"\n".join (u"%s => %r" % (k, v) for (k, v) in d.iteritems ()), level, indent)
 
 def dumped_flags (f, lookups, level, indent=2):
   return dumped (u"\n".join (lookups.names_from_value (f)) or u"None", level, indent)
