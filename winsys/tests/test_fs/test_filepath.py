@@ -1,6 +1,5 @@
 import os
 import filecmp
-import io
 import shutil
 import tempfile
 import unittest as unittest0

@@ -11,7 +11,7 @@ import win32file
 import win32pipe
 import win32security
 
-from winsys import constants, core, exc, fs, io, security, utils, handles
+from winsys import constants, core, exc, fs, security, utils, handles
 
 WAIT = constants.Constants.from_pattern (u"WAIT_*", namespace=win32event)
 WAIT.update (dict (INFINITE=win32event.INFINITE))
@@ -494,7 +494,7 @@ class NamedPipe (Pipe):
   def __init__ (
     self,
     name,
-    mode=PIPE_ACCESS.DUPLEX | io.FILE_FLAG.OVERLAPPED,
+    mode=PIPE_ACCESS.DUPLEX | fs.FILE_FLAG.OVERLAPPED,
     type=PIPE_TYPE.BYTE,
     max_instances=win32pipe.PIPE_UNLIMITED_INSTANCES,
     in_buffer_size=Pipe.DEFAULT_IN_BUFFER_SIZE,
@@ -600,7 +600,7 @@ def open_pipe (name, mode="rw", timeout_ms=WAIT.INFINITE):
     read_mode |= constants.GENERIC_ACCESS.READ
   if "w" in mode:
     read_mode |= constants.GENERIC_ACCESS.WRITE
-  hPipe = wrapped (win32file.CreateFile, name, read_mode, 0, None, io.FILE_CREATION.OPEN_EXISTING, 0, None)
+  hPipe = wrapped (win32file.CreateFile, name, read_mode, 0, None, fs.FILE_CREATION.OPEN_EXISTING, 0, None)
   #~ win32pipe.
 
 def pipe (name=None):
