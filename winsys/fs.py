@@ -1721,6 +1721,10 @@ def _files (pattern="*", ignore=[u".", u".."], error_handler=None):
     core.warn ("Ignored no-such-file on first iteration of %s", pattern)
     raise StopIteration
   except:
+    #
+    # If we get a trappable error at this point, there's nowhere
+    # else to go: raise StopIteration to exit cleanly
+    #
     if error_handler and error_handler (sys.exc_info ()):
       raise StopIteration
     else:
@@ -1747,6 +1751,9 @@ def _files (pattern="*", ignore=[u".", u".."], error_handler=None):
       core.warn ("Ignored no-such-file on first iteration of %s", pattern)
       raise StopIteration
     except:
+      #
+      # If the error_handler chooses to swallow this error, carry on
+      #
       if error_handler and error_handler (sys.exc_info ()):
         continue
       else:
