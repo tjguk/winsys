@@ -571,6 +571,11 @@ def security (obj=core.UNSET, obj_type=core.UNSET, options=core.UNSET):
     s = security.security ("c:/windows")
     s.dump ()
 
+  Note that it may be necessary to create a :class:`Security` object tied to
+  an existing kernel object but without reading any of the object's security.
+  This can be done by passing `None` for the `options` parameter. (This is
+  done, eg, by the :meth:`fs.Entry.take_ownership` method).
+
   :param obj: any of :const:`None`, a :class:`Security` object, a pywin32 :const:`PyHANDLE`,
               a pywin32 :const:`PySECURITY_DESCRIPTOR`, or a string
   :param obj_type: an :const:`SE_OBJECT_TYPE` [:const:`file_object`]
