@@ -32,7 +32,7 @@ import winioctlcon
 if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
   winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
-from winsys import constants, core, exc, handles, io, security, utils, _kernel32
+from winsys import constants, core, exc, handles, security, utils, _kernel32
 
 sep = unicode (os.sep)
 seps = u"/\\"
@@ -70,6 +70,29 @@ wrapped = exc.wrapper (WINERROR_MAP, x_fs)
 def ignore_access_errors (exc_info):
   print exc_info[0]
   return exc_info[0] is exc.x_access_denied
+
+PyHANDLE = pywintypes.HANDLEType
+
+FILE_ACCESS = constants.Constants.from_pattern ("FILE_*", namespace=ntsecuritycon)
+FILE_ACCESS.update (constants.STANDARD_ACCESS)
+FILE_ACCESS.update (constants.GENERIC_ACCESS)
+FILE_ACCESS.update (constants.ACCESS)
+FILE_ACCESS.doc ("File-specific access rights")
+
+FILE_SHARE = constants.Constants.from_pattern (u"FILE_SHARE_*", namespace=win32file)
+FILE_SHARE.doc (u"Ways of sharing a file for reading, writing, &c.")
+
+FILE_CREATION = constants.Constants.from_list ([
+  u"CREATE_ALWAYS",
+  u"CREATE_NEW",
+  u"OPEN_ALWAYS",
+  u"OPEN_EXISTING",
+  u"TRUNCATE_EXISTING"
+], namespace=win32con)
+FILE_CREATION.doc (u"Options when creating a file")
+
+FILE_FLAG = constants.Constants.from_pattern (u"FILE_FLAG_*", namespace=win32con)
+FILE_FLAG.doc (u"File flags")
 
 FILE_NOTIFY_CHANGE = constants.Constants.from_pattern (u"FILE_NOTIFY_CHANGE_*", namespace=win32con)
 FILE_NOTIFY_CHANGE.doc (u"Notification types to watch for when a file changes")
@@ -242,16 +265,16 @@ def handle (filepath, write=False, async=False, attributes=None, sec=None):
   """
   attributes = FILE_ATTRIBUTE.constant (attributes)
   if attributes is None:
-    attributes = FILE_ATTRIBUTE.NORMAL | io.FILE_FLAG.BACKUP_SEMANTICS
+    attributes = FILE_ATTRIBUTE.NORMAL | FILE_FLAG.BACKUP_SEMANTICS
   if async:
-    attributes |= io.FILE_FLAG.OVERLAPPED
+    attributes |= FILE_FLAG.OVERLAPPED
   return wrapped (
     win32file.CreateFile,
     normalised (filepath),
-    (io.FILE_ACCESS.READ | io.FILE_ACCESS.WRITE) if write else io.FILE_ACCESS.READ,
-    (io.FILE_SHARE.READ | io.FILE_SHARE.WRITE) if write else io.FILE_SHARE.READ,
+    (FILE_ACCESS.READ | FILE_ACCESS.WRITE) if write else FILE_ACCESS.READ,
+    (FILE_SHARE.READ | FILE_SHARE.WRITE) if write else FILE_SHARE.READ,
     sec,
-    io.FILE_CREATION.OPEN_ALWAYS if write else io.FILE_CREATION.OPEN_EXISTING,
+    FILE_CREATION.OPEN_ALWAYS if write else FILE_CREATION.OPEN_EXISTING,
     attributes,
     None
   )
@@ -1290,10 +1313,10 @@ class File (Entry):
     wrapped (
       win32file.CreateFile,
       self._normpath,
-      io.FILE_ACCESS.WRITE,
+      FILE_ACCESS.WRITE,
       0,
       None if security is None else security.pyobject (),
-      io.FILE_CREATION.OPEN_ALWAYS,
+      FILE_CREATION.OPEN_ALWAYS,
       0,
       None
     ).close ()
@@ -2035,15 +2058,15 @@ class _DirWatcher (object):
     self.hDir = wrapped (
       win32file.CreateFile,
       normalised (root),
-      io.FILE_ACCESS.LIST_DIRECTORY,
+      FILE_ACCESS.LIST_DIRECTORY,
       #
       # This must allow RWD otherwises files in
       # the dir will be constrained.
       #
-      io.FILE_SHARE.READ | io.FILE_SHARE.WRITE | io.FILE_SHARE.DELETE,
+      FILE_SHARE.READ | FILE_SHARE.WRITE | FILE_SHARE.DELETE,
       None,
-      io.FILE_CREATION.OPEN_EXISTING,
-      io.FILE_FLAG.BACKUP_SEMANTICS | io.FILE_FLAG.OVERLAPPED,
+      FILE_CREATION.OPEN_EXISTING,
+      FILE_FLAG.BACKUP_SEMANTICS | FILE_FLAG.OVERLAPPED,
       None
     )
     self._changes = collections.deque ()
