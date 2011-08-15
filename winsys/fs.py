@@ -1190,7 +1190,7 @@ class Entry (FilePath, core._WinSysObject):
     # whatsoever on the security descriptor and be relying on
     # the take_ownership privilege.
     #
-    with self.security (options=0) as s:
+    with self.security (options=None) as s:
       s.owner = principal
 
 class File (Entry):
