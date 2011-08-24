@@ -395,10 +395,10 @@ class Mutex (core._WinSysObject):
     with ipc.mutex ("ONLYONCE"):
       # do stuff
   """
-  def __init__ (self, name=None):
+  def __init__ (self, name=None, take_initial_ownership=False):
     core._WinSysObject.__init__ (self)
     self.name = name
-    self._handle = wrapped (win32event.CreateMutex, None, False, name)
+    self._handle = wrapped (win32event.CreateMutex, None, take_initial_ownership, name)
 
   def __enter__ (self):
     self.acquire ()
