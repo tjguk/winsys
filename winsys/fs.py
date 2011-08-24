@@ -55,6 +55,9 @@ class x_no_certificate (x_fs):
 class x_not_ready (x_fs):
   u"Raised when a device is not ready"
 
+class x_sharing_violation (x_fs):
+  u"Raised when a sharing violation occurs"
+
 WINERROR_MAP = {
   winerror.ERROR_ACCESS_DENIED : exc.x_access_denied,
   winerror.ERROR_PATH_NOT_FOUND : x_no_such_file,
@@ -63,7 +66,8 @@ WINERROR_MAP = {
   winerror.ERROR_INVALID_NAME : x_invalid_name,
   winerror.ERROR_BAD_RECOVERY_POLICY : x_no_certificate,
   winerror.ERROR_NOT_READY : x_not_ready,
-  winerror.ERROR_INVALID_HANDLE : exc.x_invalid_handle
+  winerror.ERROR_INVALID_HANDLE : exc.x_invalid_handle,
+  winerror.ERROR_SHARING_VIOLATION : x_sharing_violation,
 }
 wrapped = exc.wrapper (WINERROR_MAP, x_fs)
 
