@@ -258,7 +258,7 @@ def normalised (filepath):
 def read (handle):
   wrapped (win32file.ReadFile, handle)
 
-def handle (filepath, write=False, async=False, attributes=None, sec=None):
+def handle (filepath, write=False, exclusive=False, async=False, attributes=None, sec=None):
   ur"""Return a file handle either for querying
   (the default case) or for writing -- including writing directories
 
@@ -276,7 +276,7 @@ def handle (filepath, write=False, async=False, attributes=None, sec=None):
     win32file.CreateFile,
     normalised (filepath),
     (FILE_ACCESS.READ | FILE_ACCESS.WRITE) if write else FILE_ACCESS.READ,
-    (FILE_SHARE.READ | FILE_SHARE.WRITE) if write else FILE_SHARE.READ,
+    0 if exclusive else (FILE_SHARE.READ | FILE_SHARE.WRITE) if write else FILE_SHARE.READ,
     sec,
     FILE_CREATION.OPEN_ALWAYS if write else FILE_CREATION.OPEN_EXISTING,
     attributes,
@@ -1044,7 +1044,7 @@ class Entry (FilePath, core._WinSysObject):
         yield ancestor
 
   def handle (self, mode="r"):
-    return handles.handle (handle (self, write="w" in mode))
+    return handles.handle (handle (self, write="w" in mode, exclusive="x" in mode))
 
   def security (self, options=security.Security.DEFAULT_OPTIONS):
     ur"""Return a :class:`security.Security` object corresponding to this
