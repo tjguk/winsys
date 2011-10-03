@@ -18,3 +18,5 @@ Create shortcut
 %x% expansion
 
 unit test
+
+Switch to github
