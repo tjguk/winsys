@@ -1,0 +1,148 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>logging_handlers &mdash; WinSys v0.5beta documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.5beta',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="top" title="WinSys v0.5beta documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for logging_handlers</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">marshal</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">exc</span><span class="p">,</span> <span class="n">ipc</span>
+
+<div class="viewcode-block" id="MailslotHandler"><a class="viewcode-back" href="../logging_handlers.html#logging_handlers.MailslotHandler">[docs]</a><span class="k">class</span> <span class="nc">MailslotHandler</span> <span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Handler</span><span class="p">):</span>
+  <span class="sd">ur&quot;&quot;&quot;A logging-compatible handler which will write to a named</span>
+<span class="sd">  mailslot. The data is marshalled before being sent which means</span>
+<span class="sd">  that only Python primitives may be sent, but allows, eg, None</span>
+<span class="sd">  to be used as a sentinel value.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mailslot_name</span><span class="p">):</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">Handler</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">mailslot_name</span> <span class="o">=</span> <span class="n">mailslot_name</span>
+    
+  <span class="k">def</span> <span class="nf">put</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+    <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mailslot_name</span><span class="p">)</span><span class="o">.</span><span class="n">put</span> <span class="p">(</span><span class="n">marshal</span><span class="o">.</span><span class="n">dumps</span> <span class="p">(</span><span class="n">msg</span><span class="p">))</span>
+  
+  <span class="k">def</span> <span class="nf">emit</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">put</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="n">record</span><span class="p">))</span>
+    
+  <span class="k">def</span> <span class="nf">close</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">put</span> <span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">:</span>
+      <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="PermanentMailslotHandler"><a class="viewcode-back" href="../logging_handlers.html#logging_handlers.PermanentMailslotHandler">[docs]</a><span class="k">class</span> <span class="nc">PermanentMailslotHandler</span> <span class="p">(</span><span class="n">MailslotHandler</span><span class="p">):</span>
+  <span class="sd">ur&quot;&quot;&quot;Subclass the MailslotHandler but take no action on closedown.</span>
+<span class="sd">  This is intended to be used when the receiving mailslot is running</span>
+<span class="sd">  permanently so shouldn&#39;t be closed when the logging process finishes.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">def</span> <span class="nf">close</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+  <span class="kn">import</span> <span class="nn">sys</span>
+  <span class="kn">import</span> <span class="nn">subprocess</span>
+  <span class="kn">import</span> <span class="nn">logging</span>
+  <span class="kn">import</span> <span class="nn">time</span>
+  <span class="kn">import</span> <span class="nn">uuid</span>
+  <span class="n">mailslot_name</span> <span class="o">=</span> <span class="nb">str</span> <span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid1</span> <span class="p">())</span>
+  <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span> <span class="p">([</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="s">&quot;extras/mailslot_listener.pyw&quot;</span><span class="p">,</span> <span class="n">mailslot_name</span><span class="p">])</span>
+  <span class="n">time</span><span class="o">.</span><span class="n">sleep</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span> <span class="p">(</span><span class="n">mailslot_name</span><span class="p">)</span>
+  <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span> <span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+  <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span> <span class="p">(</span><span class="n">MailslotHandler</span> <span class="p">(</span><span class="n">mailslot_name</span><span class="p">))</span>
+  <span class="n">logger</span><span class="o">.</span><span class="n">debug</span> <span class="p">(</span><span class="s">&quot;DEBUG&quot;</span><span class="p">)</span>
+  <span class="n">logger</span><span class="o">.</span><span class="n">info</span> <span class="p">(</span><span class="s">&quot;INFO&quot;</span><span class="p">)</span>
+  <span class="n">logger</span><span class="o">.</span><span class="n">warn</span> <span class="p">(</span><span class="s">&quot;WARN&quot;</span><span class="p">)</span>
+  <span class="n">logger</span><span class="o">.</span><span class="n">error</span> <span class="p">(</span><span class="s">&quot;ERROR&quot;</span><span class="p">)</span>
+  <span class="nb">raw_input</span> <span class="p">(</span><span class="s">&quot;Press enter...&quot;</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../contents.html">
+              <img class="logo" src="../_static/cpython2.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
