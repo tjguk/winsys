@@ -14,6 +14,8 @@ Classes
     :undoc-members:
     :inherited-members:
 
+.. autoclass:: Attributes
+
 Constants
 ---------
 ..  autodata:: GENERAL

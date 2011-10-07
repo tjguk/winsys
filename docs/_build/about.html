@@ -99,16 +99,16 @@ In addition, the following features are common to many of the modules:</p>
 <p>This is mildly contentious, but the same naming convention has been used
 throughout, following the <tt class="docutils literal"><span class="pre">lowercase_with_underscores</span></tt> convention widely
 adopted in the Python community. The most widespread exception to this is
-in the <tt class="xref py py-mod docutils literal"><span class="pre">constants</span></tt> module, where Windows constants retain their
+in the <a class="reference internal" href="constants.html#module-constants" title="constants: Constants"><tt class="xref py py-mod docutils literal"><span class="pre">constants</span></tt></a> module, where Windows constants retain their
 <tt class="docutils literal"><span class="pre">UPPERCASE_WITH_UNDERSCORES</span></tt> names.</p>
 </div>
 <div class="section" id="module-level-functions">
 <h3>Module-level Functions<a class="headerlink" href="#module-level-functions" title="Permalink to this headline">¶</a></h3>
 <p>While a lot of use has been made of Python classes to wrap the function-driven
 Windows API, a lot of the functionality has been exposed as module-level
-convenience functions. So, for example, in the <a class="reference internal" href="fs.html#module-fs" title="fs: Files, Directories, &amp;c."><tt class="xref py py-mod docutils literal"><span class="pre">fs</span></tt></a> module, the <tt class="xref py py-class docutils literal"><span class="pre">fs.File</span></tt>
-class offers a <tt class="xref py py-meth docutils literal"><span class="pre">fs.File.copy()</span></tt> method, but the same functionality is exposed
-at the module level as <tt class="xref py py-func docutils literal"><span class="pre">fs.copy()</span></tt>. That way, you don&#8217;t have to instantiate
+convenience functions. So, for example, in the <a class="reference internal" href="fs.html#module-fs" title="fs: Files, Directories, &amp;c."><tt class="xref py py-mod docutils literal"><span class="pre">fs</span></tt></a> module, the <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">fs.File</span></tt></a>
+class offers a <a class="reference internal" href="fs_file.html#fs.File.copy" title="fs.File.copy"><tt class="xref py py-meth docutils literal"><span class="pre">fs.File.copy()</span></tt></a> method, but the same functionality is exposed
+at the module level as <a class="reference internal" href="fs.html#fs.copy" title="fs.copy"><tt class="xref py py-func docutils literal"><span class="pre">fs.copy()</span></tt></a>. That way, you don&#8217;t have to instantiate
 one or more objects simply for the purpose of a single operation.</p>
 </div>
 <div class="section" id="factory-functions">
@@ -141,9 +141,9 @@ has generally been adopted across the package.</p>
 <p>Where it makes sense, context managers have been used, either by means
 of the contextlib contextmanager decorator or by defining an object as
 its own context manager by means of <tt class="docutils literal"><span class="pre">__enter__</span></tt> and <tt class="docutils literal"><span class="pre">__exit__</span></tt> methods.
-Examples of context-managed objects include the <tt class="xref py py-class docutils literal"><span class="pre">ipc.Mailslot</span></tt> and
-<tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt> objects. Examples of decorated functions include
-the <tt class="xref py py-func docutils literal"><span class="pre">security.change_privileges()</span></tt> and <tt class="xref py py-func docutils literal"><span class="pre">security.impersonate()</span></tt> functions.</p>
+Examples of context-managed objects include the <a class="reference internal" href="mailslots.html#ipc.Mailslot" title="ipc.Mailslot"><tt class="xref py py-class docutils literal"><span class="pre">ipc.Mailslot</span></tt></a> and
+<a class="reference internal" href="security.html#security.Security" title="security.Security"><tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt></a> objects. Examples of decorated functions include
+the <a class="reference internal" href="security.html#security.change_privileges" title="security.change_privileges"><tt class="xref py py-func docutils literal"><span class="pre">security.change_privileges()</span></tt></a> and <a class="reference internal" href="security.html#security.impersonate" title="security.impersonate"><tt class="xref py py-func docutils literal"><span class="pre">security.impersonate()</span></tt></a> functions.</p>
 </div>
 </div>
 <div class="section" id="todo">

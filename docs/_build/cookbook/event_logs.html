@@ -131,9 +131,9 @@ events.</p>
 <h3>Discussion<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>By default, iterating over an event log starts oldest first. To pick up
 the most recent records, we reverse the iterator. This makes use of the
-<tt class="xref py py-meth docutils literal"><span class="pre">EventLog.__reversed__()</span></tt> magic method which starts a reverse iterator. Without that,
+<a class="reference internal" href="../event_logs.html#event_logs.EventLog.__reversed__" title="event_logs.EventLog.__reversed__"><tt class="xref py py-meth docutils literal"><span class="pre">EventLog.__reversed__()</span></tt></a> magic method which starts a reverse iterator. Without that,
 the implementation would fall back to a __getitem__-based sequence
-solution, asking for [-1] and then [-2] and so on. Since our <tt class="xref py py-meth docutils literal"><span class="pre">EventLog.__getitem__()</span></tt>
+solution, asking for [-1] and then [-2] and so on. Since our <a class="reference internal" href="../event_logs.html#event_logs.EventLog.__getitem__" title="event_logs.EventLog.__getitem__"><tt class="xref py py-meth docutils literal"><span class="pre">EventLog.__getitem__()</span></tt></a>
 implementation actually iterates anyway, this would be a less-than-optimal
 solution.</p>
 <p>The standard __str__ for an event log record shows the record number,
@@ -192,17 +192,17 @@ event source and type.</p>
 </td></tr></table></div>
 <div class="section" id="id2">
 <h3>Discussion<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>We use the winsys <tt class="xref py py-mod docutils literal"><span class="pre">dialogs.dialog</span></tt> module convenience function to request
+<p>We use the winsys <a class="reference internal" href="../dialogs.html#dialogs.dialog" title="dialogs.dialog"><tt class="xref py py-mod docutils literal"><span class="pre">dialogs.dialog</span></tt></a> module convenience function to request
 the name of the remote computer and the source and event type from the user.
 It would be possible to pick out the list of event sources for a computer
-(using the <tt class="xref py py-func docutils literal"><span class="pre">event_sources()</span></tt> function), but there&#8217;s no mechanism
+(using the <a class="reference internal" href="../event_logs.html#event_logs.event_sources" title="event_logs.event_sources"><tt class="xref py py-func docutils literal"><span class="pre">event_sources()</span></tt></a> function), but there&#8217;s no mechanism
 within the dialogs module for updating one field on the basis of another, so
 we could only pre-populate with the valid list for one particular computer.</p>
-<p>The module-level convenience function <tt class="xref py py-func docutils literal"><span class="pre">event_log()</span></tt> returns an
-instance of an <tt class="xref py py-class docutils literal"><span class="pre">EventLog</span></tt> matching the computer and event log name in the
+<p>The module-level convenience function <a class="reference internal" href="../event_logs.html#event_logs.event_log" title="event_logs.event_log"><tt class="xref py py-func docutils literal"><span class="pre">event_log()</span></tt></a> returns an
+instance of an <a class="reference internal" href="../event_logs.html#event_logs.EventLog" title="event_logs.EventLog"><tt class="xref py py-class docutils literal"><span class="pre">EventLog</span></tt></a> matching the computer and event log name in the
 UNC-style moniker. The standard iterator goes from the oldest first forwards.
 If we wanted to see the records in reverse chronological order, we&#8217;d use the
-reversed builtin to invoke the class&#8217;s <tt class="xref py py-meth docutils literal"><span class="pre">EventLog.__reversed__()</span></tt>
+reversed builtin to invoke the class&#8217;s <a class="reference internal" href="../event_logs.html#event_logs.EventLog.__reversed__" title="event_logs.EventLog.__reversed__"><tt class="xref py py-meth docutils literal"><span class="pre">EventLog.__reversed__()</span></tt></a>
 method.</p>
 </div>
 </div>

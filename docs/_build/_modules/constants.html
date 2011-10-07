@@ -344,7 +344,7 @@
 <span class="c">#~ TASK = Constants.from_pattern (u&quot;TASK_*&quot;, namespace=taskscheduler)</span>
 <span class="c">#~ TASK_PRIORITY = Constants.from_pattern (u&quot;*_PRIORITY_CLASS&quot;, namespace=taskscheduler)</span>
 
-<span class="k">class</span> <span class="nc">Attributes</span> <span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
+<div class="viewcode-block" id="Attributes"><a class="viewcode-back" href="../constants.html#constants.Attributes">[docs]</a><span class="k">class</span> <span class="nc">Attributes</span> <span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
   <span class="sd">u&quot;&quot;&quot;Simple class wrapper for the list of file attributes</span>
 <span class="sd">  (readonly, hidden, &amp;c.) It can be accessed by attribute</span>
 <span class="sd">  access, item access and the &quot;in&quot; operator::</span>
@@ -378,7 +378,7 @@
       <span class="s">u&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="s">u&quot;</span><span class="si">%s</span><span class="s"> =&gt; </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">bool</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">const</span><span class="o">.</span><span class="n">items</span> <span class="p">())),</span>
       <span class="n">level</span>
     <span class="p">)</span>
-</pre></div>
+</pre></div></div>
 
           </div>
         </div>

@@ -12,8 +12,8 @@ The fs module makes it easy to work with files, directories, drives, volumes and
 The most common entry-point is to use :func:`entry` to return a :class:`File` or :class:`Dir` object, although you
 can use :func:`file` or :func:`dir` directly. Instances of these classes need not exist on any filesystem -- in fact
 they equate to True or False according to the existence or not of a corresponding filesystem object. But they can
-be the source or target of all the usual filesystem operations. In common with other modules in this package, 
-functionality is provided at the module level as well as at the class level, so you can, eg, call :meth:`File.copy` 
+be the source or target of all the usual filesystem operations. In common with other modules in this package,
+functionality is provided at the module level as well as at the class level, so you can, eg, call :meth:`File.copy`
 or :func:`copy` to copy a file to another location.
 
 An important part of the module is the :class:`FilePath` class which eases manipulation of filesystem paths and is
@@ -68,8 +68,6 @@ Additional Filesystem Operations
 Classes
 -------
 
-.. autoclass:: _Attributes
-
 .. toctree::
    :maxdepth: 1
 
@@ -84,7 +82,7 @@ Constants
 
 .. toctree::
    :maxdepth: 1
-   
+
    fs_constants
 
 Exceptions

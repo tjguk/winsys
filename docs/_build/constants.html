@@ -254,6 +254,21 @@ be merged into one.</p>
 
 </dd></dl>
 
+<dl class="class">
+<dt id="constants.Attributes">
+<em class="property">class </em><tt class="descclassname">constants.</tt><tt class="descname">Attributes</tt><big>(</big><em>flags</em>, <em>const</em><big>)</big><a class="reference internal" href="_modules/constants.html#Attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple class wrapper for the list of file attributes
+(readonly, hidden, &amp;c.) It can be accessed by attribute
+access, item access and the &#8220;in&#8221; operator:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
+<span class="n">attributes</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span> <span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="p">()</span><span class="o">.</span><span class="n">attributes</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">attributes</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="n">fs</span><span class="o">.</span><span class="n">FILE_ATTRIBUTE</span><span class="o">.</span><span class="n">DIRECTORY</span><span class="p">])</span>
+<span class="k">assert</span> <span class="p">(</span><span class="s">&quot;directory&quot;</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 <div class="section" id="id1">
 <h2>Constants<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
