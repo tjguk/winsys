@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>The Event class &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -58,7 +58,7 @@
 <h1>The Event class<a class="headerlink" href="#the-event-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="ipc.Event">
-<em class="property">class </em><tt class="descname">Event</tt><big>(</big><em>security=None</em>, <em>needs_manual_reset=False</em>, <em>initially_set=False</em>, <em>name=None</em><big>)</big><a class="headerlink" href="#ipc.Event" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">ipc.</tt><tt class="descname">Event</tt><big>(</big><em>security=None</em>, <em>needs_manual_reset=False</em>, <em>initially_set=False</em>, <em>name=None</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
 <p>An event object is an interprocess (but not intermachine) synchronisation
 mechanism which allows one or more threads of control to wait on others.
@@ -75,35 +75,35 @@ provided as an alias, matching the Windows API.</p>
 <p>An event is Truthful if it is currently set</p>
 <dl class="method">
 <dt id="ipc.Event.as_string">
-<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.as_string" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.as_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.as_string" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="ipc.Event.clear">
-<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.clear" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reset the event</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ipc.Event.dumped">
-<tt class="descname">dumped</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#ipc.Event.dumped" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dumped</tt><big>(</big><em>level=0</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.dumped"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.dumped" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="ipc.Event.isSet">
-<tt class="descname">isSet</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.isSet" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">isSet</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.isSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.isSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Detect whether the event is currently set (by waiting without blocking)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ipc.Event.pulse">
-<tt class="descname">pulse</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.pulse" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">pulse</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.pulse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.pulse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cause the event to set and reset immediately</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ipc.Event.pyobject">
-<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.pyobject" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.pyobject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.pyobject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -114,13 +114,13 @@ provided as an alias, matching the Windows API.</p>
 
 <dl class="method">
 <dt id="ipc.Event.set">
-<tt class="descname">set</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.set" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">set</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Signal the event</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ipc.Event.wait">
-<tt class="descname">wait</tt><big>(</big><em>timeout_s=-1</em><big>)</big><a class="headerlink" href="#ipc.Event.wait" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">wait</tt><big>(</big><em>timeout_s=-1</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.wait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait, optionally timing out, for the event to fire. cf also the <a class="reference internal" href="ipc.html#ipc.any" title="ipc.any"><tt class="xref py py-func docutils literal"><span class="pre">any()</span></tt></a> and
 <a class="reference internal" href="ipc.html#ipc.all" title="ipc.all"><tt class="xref py py-func docutils literal"><span class="pre">all()</span></tt></a> convenience functions which take an iterable of events or other objects.</p>
 <table class="docutils field-list" frame="void" rules="none">

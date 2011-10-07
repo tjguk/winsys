@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>The Mutex class &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -45,7 +45,7 @@
           <a href="events.html" title="The Event class"
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -58,7 +58,7 @@
 <h1>The Mutex class<a class="headerlink" href="#the-mutex-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="ipc.Mutex">
-<em class="property">class </em><tt class="descname">Mutex</tt><big>(</big><em>name=None</em><big>)</big><a class="headerlink" href="#ipc.Mutex" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">ipc.</tt><tt class="descname">Mutex</tt><big>(</big><em>name=None</em>, <em>take_initial_ownership=False</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Mutex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mutex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
 <p>A Mutex is a kernel object which can only be held by one thread or process
 at a time. Its usual application is to protect shared data structures or to
@@ -78,7 +78,7 @@ with ipc.mutex ("ONLYONCE"):
 </div>
 <dl class="method">
 <dt id="ipc.Mutex.acquire">
-<tt class="descname">acquire</tt><big>(</big><em>timeout_ms=-1</em><big>)</big><a class="headerlink" href="#ipc.Mutex.acquire" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">acquire</tt><big>(</big><em>timeout_ms=-1</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Mutex.acquire"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mutex.acquire" title="Permalink to this definition">¶</a></dt>
 <dd><p>Acquire the mutex waiting for <cite>timeout_ms</cite> milliseconds before failing</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -94,17 +94,17 @@ with ipc.mutex ("ONLYONCE"):
 
 <dl class="method">
 <dt id="ipc.Mutex.as_string">
-<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mutex.as_string" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Mutex.as_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mutex.as_string" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="ipc.Mutex.pyobject">
-<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mutex.pyobject" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Mutex.pyobject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mutex.pyobject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="ipc.Mutex.release">
-<tt class="descname">release</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mutex.release" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">release</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Mutex.release"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mutex.release" title="Permalink to this definition">¶</a></dt>
 <dd><p>Release the mutex. Consider using the object as a context manager
 instead.</p>
 </dd></dl>
@@ -166,7 +166,7 @@ instead.</p>
           <a href="events.html" title="The Event class"
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+          <li><a href="ipc.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

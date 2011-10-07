@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>accounts – Users, Groups, SIDs &amp;c. &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -61,7 +61,7 @@ represented by a string S-a-b-cd-efg... where each of the segments represents
 an aspect of the security authorities involved. (A computer, a domain etc.).
 Certain of the SIDs are considered well-known such as the AuthenticatedUsers
 account on each machine which will always have the same SID.</p>
-<p>Most of the access to this module will be via the <a class="reference internal" href="#accounts.principal" title="accounts.principal"><tt class="xref py py-func docutils literal"><span class="pre">principal()</span></tt></a> 
+<p>Most of the access to this module will be via the <a class="reference internal" href="#accounts.principal" title="accounts.principal"><tt class="xref py py-func docutils literal"><span class="pre">principal()</span></tt></a>
 or <a class="reference internal" href="#accounts.me" title="accounts.me"><tt class="xref py py-func docutils literal"><span class="pre">me()</span></tt></a> functions. Although the module is designed to be used
 standalone, it is imported directly into the <a class="reference internal" href="security.html#module-security" title="security: Security functions"><tt class="xref py py-mod docutils literal"><span class="pre">security</span></tt></a> module&#8217;s
 namespace so its functionality can also be accessed from there.</p>
@@ -69,7 +69,7 @@ namespace so its functionality can also be accessed from there.</p>
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="accounts.principal">
-<tt class="descname">principal</tt><big>(</big><em>principal</em>, <em>cls=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#accounts.principal" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">principal</tt><big>(</big><em>principal</em>, <em>cls=&lt;Unset&gt;</em><big>)</big><a class="reference internal" href="_modules/accounts.html#principal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.principal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Factory function for the <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> class. This is the most
 common way to create a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> object:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
@@ -82,7 +82,7 @@ common way to create a <a class="reference internal" href="#accounts.Principal" 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>principal</strong> &#8211; any of None, a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a>, a <cite>PySID</cite>, 
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>principal</strong> &#8211; any of None, a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a>, a <cite>PySID</cite>,
 a <a class="reference internal" href="#accounts.WELL_KNOWN_SID" title="accounts.WELL_KNOWN_SID"><tt class="xref py py-const docutils literal"><span class="pre">WELL_KNOWN_SID</span></tt></a> or a string</td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body">a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> object corresponding to <cite>principal</cite></td>
@@ -93,21 +93,21 @@ a <a class="reference internal" href="#accounts.WELL_KNOWN_SID" title="accounts.
 
 <dl class="function">
 <dt id="accounts.user">
-<tt class="descname">user</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#accounts.user" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">user</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/accounts.html#user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.user" title="Permalink to this definition">¶</a></dt>
 <dd><p>If you know you&#8217;re after a user, use this. Particularly
 useful when a system user is defined as an alias type</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="accounts.group">
-<tt class="descname">group</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#accounts.group" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">group</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/accounts.html#group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.group" title="Permalink to this definition">¶</a></dt>
 <dd><p>If you know you&#8217;re after a group, use this. Particularly
 useful when a system group is defined as an alias type</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="accounts.me">
-<tt class="descname">me</tt><big>(</big><big>)</big><a class="headerlink" href="#accounts.me" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">me</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/accounts.html#me"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.me" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience function for the common case of getting the
 logged-on user&#8217;s account.</p>
 </dd></dl>
@@ -117,9 +117,9 @@ logged-on user&#8217;s account.</p>
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="accounts.Principal">
-<em class="property">class </em><tt class="descname">Principal</tt><big>(</big><em>sid</em>, <em>system=None</em><big>)</big><a class="headerlink" href="#accounts.Principal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">accounts.</tt><tt class="descname">Principal</tt><big>(</big><em>sid</em>, <em>system=None</em><big>)</big><a class="reference internal" href="_modules/accounts.html#Principal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.Principal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Object wrapping a Windows security principal, represented by a SID
-and, where possible, a name. <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> compares and hashes 
+and, where possible, a name. <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> compares and hashes
 by SID so can be sorted and used as a dictionary key, set element, etc.</p>
 <p>A <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> is its own context manager, impersonating the
 corresponding user:</p>
@@ -136,7 +136,7 @@ must be a PySID and the system name, if present must be a security
 authority, eg a machine or a domain.</p>
 <dl class="classmethod">
 <dt id="accounts.Principal.from_sid">
-<em class="property">classmethod </em><tt class="descname">from_sid</tt><big>(</big><em>sid</em>, <em>system=None</em><big>)</big><a class="headerlink" href="#accounts.Principal.from_sid" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">from_sid</tt><big>(</big><em>sid</em>, <em>system=None</em><big>)</big><a class="reference internal" href="_modules/accounts.html#Principal.from_sid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.Principal.from_sid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> based on a sid and a security authority.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -157,7 +157,7 @@ authority, eg a machine or a domain.</p>
 
 <dl class="classmethod">
 <dt id="accounts.Principal.from_string">
-<em class="property">classmethod </em><tt class="descname">from_string</tt><big>(</big><em>string</em>, <em>system=None</em><big>)</big><a class="headerlink" href="#accounts.Principal.from_string" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">from_string</tt><big>(</big><em>string</em>, <em>system=None</em><big>)</big><a class="reference internal" href="_modules/accounts.html#Principal.from_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.Principal.from_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> based on a name and a
 security authority. If <cite>string</cite> is blank, the logged-on user is assumed.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -179,7 +179,7 @@ security authority. If <cite>string</cite> is blank, the logged-on user is assum
 
 <dl class="classmethod">
 <dt id="accounts.Principal.from_well_known">
-<em class="property">classmethod </em><tt class="descname">from_well_known</tt><big>(</big><em>well_known</em>, <em>domain=None</em><big>)</big><a class="headerlink" href="#accounts.Principal.from_well_known" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">from_well_known</tt><big>(</big><em>well_known</em>, <em>domain=None</em><big>)</big><a class="reference internal" href="_modules/accounts.html#Principal.from_well_known"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.Principal.from_well_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> based on one of the <a class="reference internal" href="#accounts.WELL_KNOWN_SID" title="accounts.WELL_KNOWN_SID"><tt class="xref py py-const docutils literal"><span class="pre">WELL_KNOWN_SID</span></tt></a> values.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -197,7 +197,7 @@ security authority. If <cite>string</cite> is blank, the logged-on user is assum
 
 <dl class="method">
 <dt id="accounts.Principal.impersonate">
-<tt class="descname">impersonate</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="headerlink" href="#accounts.Principal.impersonate" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">impersonate</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="_modules/accounts.html#Principal.impersonate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.Principal.impersonate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Context-managed function to impersonate this user and then
 revert:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span><span class="p">,</span> <span class="n">security</span>
@@ -210,7 +210,7 @@ revert:</p>
 <span class="n">security</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="s">&quot;temp.txt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span> <span class="o">==</span> <span class="n">python</span>
 </pre></div>
 </div>
-<p>Note that the <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> class is also its own 
+<p>Note that the <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> class is also its own
 context manager but does not allow the password to be specified.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -228,7 +228,7 @@ context manager but does not allow the password to be specified.</p>
 
 <dl class="method">
 <dt id="accounts.Principal.logon">
-<tt class="descname">logon</tt><big>(</big><em>password=&lt;Unset&gt;</em>, <em>logon_type=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#accounts.Principal.logon" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">logon</tt><big>(</big><em>password=&lt;Unset&gt;</em>, <em>logon_type=&lt;Unset&gt;</em><big>)</big><a class="reference internal" href="_modules/accounts.html#Principal.logon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.Principal.logon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Log on as an authenticated user, returning that
 user&#8217;s token. This is used by security.impersonate
 which wraps the token in a Token object and manages
@@ -254,14 +254,14 @@ to ask for a password.</p>
 
 <dl class="classmethod">
 <dt id="accounts.Principal.me">
-<em class="property">classmethod </em><tt class="descname">me</tt><big>(</big><big>)</big><a class="headerlink" href="#accounts.Principal.me" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience factory method for the common case of referring to the 
+<em class="property">classmethod </em><tt class="descname">me</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/accounts.html#Principal.me"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.Principal.me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience factory method for the common case of referring to the
 logged-on user</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="accounts.Principal.pyobject">
-<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="headerlink" href="#accounts.Principal.pyobject" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/accounts.html#Principal.pyobject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.Principal.pyobject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the internal representation of this object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -277,13 +277,13 @@ logged-on user</p>
 
 <dl class="class">
 <dt id="accounts.User">
-<em class="property">class </em><tt class="descname">User</tt><big>(</big><em>sid</em>, <em>system=None</em><big>)</big><a class="headerlink" href="#accounts.User" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">accounts.</tt><tt class="descname">User</tt><big>(</big><em>sid</em>, <em>system=None</em><big>)</big><a class="reference internal" href="_modules/accounts.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.User" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise a Principal from and (optionally) a system name. The sid
 must be a PySID and the system name, if present must be a security
 authority, eg a machine or a domain.</p>
 <dl class="classmethod">
 <dt id="accounts.User.create">
-<em class="property">classmethod </em><tt class="descname">create</tt><big>(</big><em>username</em>, <em>password</em>, <em>system=None</em><big>)</big><a class="headerlink" href="#accounts.User.create" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">create</tt><big>(</big><em>username</em>, <em>password</em>, <em>system=None</em><big>)</big><a class="reference internal" href="_modules/accounts.html#User.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.User.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new user with <cite>username</cite> and <cite>password</cite>. Return
 a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt class="xref py py-class docutils literal"><span class="pre">User</span></tt></a> for the new user.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -306,7 +306,7 @@ a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt 
 
 <dl class="method">
 <dt id="accounts.User.delete">
-<tt class="descname">delete</tt><big>(</big><big>)</big><a class="headerlink" href="#accounts.User.delete" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">delete</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/accounts.html#User.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.User.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete this user from <cite>system</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -320,7 +320,7 @@ a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt 
 
 <dl class="method">
 <dt id="accounts.User.groups">
-<tt class="descname">groups</tt><big>(</big><big>)</big><a class="headerlink" href="#accounts.User.groups" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">groups</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/accounts.html#User.groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.User.groups" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yield the groups this user belongs to</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -334,7 +334,7 @@ a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt 
 
 <dl class="method">
 <dt id="accounts.User.join">
-<tt class="descname">join</tt><big>(</big><em>other_group</em><big>)</big><a class="headerlink" href="#accounts.User.join" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">join</tt><big>(</big><em>other_group</em><big>)</big><a class="reference internal" href="_modules/accounts.html#User.join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.User.join" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add this user to a group</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -350,7 +350,7 @@ a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt 
 
 <dl class="method">
 <dt id="accounts.User.leave">
-<tt class="descname">leave</tt><big>(</big><em>other_group</em><big>)</big><a class="headerlink" href="#accounts.User.leave" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">leave</tt><big>(</big><em>other_group</em><big>)</big><a class="reference internal" href="_modules/accounts.html#User.leave"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.User.leave" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove this user from a group</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -366,7 +366,7 @@ a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt 
 
 <dl class="method">
 <dt id="accounts.User.runas">
-<tt class="descname">runas</tt><big>(</big><em>command_line</em>, <em>password=&lt;Unset&gt;</em>, <em>load_profile=False</em><big>)</big><a class="headerlink" href="#accounts.User.runas" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">runas</tt><big>(</big><em>command_line</em>, <em>password=&lt;Unset&gt;</em>, <em>load_profile=False</em><big>)</big><a class="reference internal" href="_modules/accounts.html#User.runas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.User.runas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run a command logged on as this user</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -387,7 +387,7 @@ a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt 
 
 <dl class="class">
 <dt id="accounts.Group">
-<em class="property">class </em><tt class="descname">Group</tt><big>(</big><em>sid</em>, <em>system=None</em><big>)</big><a class="headerlink" href="#accounts.Group" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">accounts.</tt><tt class="descname">Group</tt><big>(</big><em>sid</em>, <em>system=None</em><big>)</big><a class="reference internal" href="_modules/accounts.html#Group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.Group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise a Principal from and (optionally) a system name. The sid
 must be a PySID and the system name, if present must be a security
 authority, eg a machine or a domain.</p>
@@ -398,7 +398,7 @@ authority, eg a machine or a domain.</p>
 <h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
 <dl class="data">
 <dt id="accounts.LOGON">
-<tt class="descname">LOGON</tt><a class="headerlink" href="#accounts.LOGON" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">LOGON</tt><a class="headerlink" href="#accounts.LOGON" title="Permalink to this definition">¶</a></dt>
 <dd><p>Types of logon used by LogonUser and related APIs</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -463,7 +463,7 @@ authority, eg a machine or a domain.</p>
 
 <dl class="data">
 <dt id="accounts.EXTENDED_NAME">
-<tt class="descname">EXTENDED_NAME</tt><a class="headerlink" href="#accounts.EXTENDED_NAME" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">EXTENDED_NAME</tt><a class="headerlink" href="#accounts.EXTENDED_NAME" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extended display formats for usernames</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -524,7 +524,7 @@ authority, eg a machine or a domain.</p>
 
 <dl class="data">
 <dt id="accounts.WELL_KNOWN_SID">
-<tt class="descname">WELL_KNOWN_SID</tt><a class="headerlink" href="#accounts.WELL_KNOWN_SID" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">WELL_KNOWN_SID</tt><a class="headerlink" href="#accounts.WELL_KNOWN_SID" title="Permalink to this definition">¶</a></dt>
 <dd><p>Well-known SIDs common to all computers</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -849,7 +849,7 @@ authority, eg a machine or a domain.</p>
 
 <dl class="data">
 <dt id="accounts.USER_PRIV">
-<tt class="descname">USER_PRIV</tt><a class="headerlink" href="#accounts.USER_PRIV" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">USER_PRIV</tt><a class="headerlink" href="#accounts.USER_PRIV" title="Permalink to this definition">¶</a></dt>
 <dd><p>User-types for creating new users</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -882,7 +882,7 @@ authority, eg a machine or a domain.</p>
 
 <dl class="data">
 <dt id="accounts.UF">
-<tt class="descname">UF</tt><a class="headerlink" href="#accounts.UF" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">UF</tt><a class="headerlink" href="#accounts.UF" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flags for creating new users</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -967,7 +967,7 @@ authority, eg a machine or a domain.</p>
 
 <dl class="data">
 <dt id="accounts.SID_NAME_USE">
-<tt class="descname">SID_NAME_USE</tt><a class="headerlink" href="#accounts.SID_NAME_USE" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">SID_NAME_USE</tt><a class="headerlink" href="#accounts.SID_NAME_USE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Types of accounts for which SIDs exist</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -1028,7 +1028,7 @@ authority, eg a machine or a domain.</p>
 
 <dl class="data">
 <dt id="accounts.FILTER">
-<tt class="descname">FILTER</tt><a class="headerlink" href="#accounts.FILTER" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">FILTER</tt><a class="headerlink" href="#accounts.FILTER" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters when enumerating users</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -1072,7 +1072,7 @@ authority, eg a machine or a domain.</p>
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
 <dt id="accounts.x_accounts">
-<em class="property">exception </em><tt class="descname">x_accounts</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#accounts.x_accounts" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">accounts.</tt><tt class="descname">x_accounts</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="reference internal" href="_modules/accounts.html#x_accounts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#accounts.x_accounts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base for all accounts-related exceptions</p>
 </dd></dl>
 

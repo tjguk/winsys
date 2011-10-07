@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Using the fs module &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="../_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -76,7 +76,7 @@
 <span class="k">assert</span> <span class="n">f</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="s">&quot;O&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span> <span class="o">==</span> <span class="n">security</span><span class="o">.</span><span class="n">me</span> <span class="p">()</span>
 </pre></div>
 </td></tr></table></div>
-<p>The <a class="reference internal" href="../fs_entry.html#fs.Entry.take_ownership" title="fs.Entry.take_ownership"><tt class="xref py py-meth docutils literal"><span class="pre">Entry.take_ownership()</span></tt></a> method assumes that you have no existing
+<p>The <tt class="xref py py-meth docutils literal"><span class="pre">Entry.take_ownership()</span></tt> method assumes that you have no existing
 access to the object, so does not attempt to read its security at all
 since this would probably fail. If you do not even have permission
 to set the owner entry in the security descriptor you need to enable
@@ -118,10 +118,10 @@ in descending order of size.</p>
   <span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;=&gt;&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_as_mb</span> <span class="p">(</span><span class="n">size</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
-<p>The <a class="reference internal" href="../dialogs.html#dialogs.dialog" title="dialogs.dialog"><tt class="xref py py-func docutils literal"><span class="pre">dialogs.dialog()</span></tt></a> function sets up a simple dialog box
+<p>The <tt class="xref py py-func docutils literal"><span class="pre">dialogs.dialog()</span></tt> function sets up a simple dialog box
 requesting the name of the root directory (offering a push-button
-for a standard selection dialog). Then the <a class="reference internal" href="../fs_dir.html#fs.Dir.dirs" title="fs.Dir.dirs"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.dirs()</span></tt></a> method
-iterates over all subdirectories of its directory, and <a class="reference internal" href="../fs_dir.html#fs.Dir.flat" title="fs.Dir.flat"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.flat()</span></tt></a>
+for a standard selection dialog). Then the <tt class="xref py py-meth docutils literal"><span class="pre">Dir.dirs()</span></tt> method
+iterates over all subdirectories of its directory, and <tt class="xref py py-meth docutils literal"><span class="pre">Dir.flat()</span></tt>
 iterates over all the files underneath a directory from which we can
 fetch their (compressed) size and sum them all up.</p>
 <p>The rest is mostly standard Python gimmickry with sorting dictionaries

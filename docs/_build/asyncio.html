@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>iasyncio – Overlapped IO &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -63,11 +63,11 @@ asynchronous IO &#8211; to allow fairly easy access.</p>
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="asyncio.AsyncIO">
-<em class="property">class </em><tt class="descname">AsyncIO</tt><big>(</big><em>handle</em>, <em>buffer_size=4096</em><big>)</big><a class="headerlink" href="#asyncio.AsyncIO" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">asyncio.</tt><tt class="descname">AsyncIO</tt><a class="reference internal" href="_modules/asyncio.html#AsyncIO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asyncio.AsyncIO" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
 <dl class="method">
 <dt id="asyncio.AsyncIO.is_complete">
-<tt class="descname">is_complete</tt><big>(</big><big>)</big><a class="headerlink" href="#asyncio.AsyncIO.is_complete" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">is_complete</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/asyncio.html#AsyncIO.is_complete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asyncio.AsyncIO.is_complete" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -80,14 +80,14 @@ asynchronous IO &#8211; to allow fairly easy access.</p>
 
 <dl class="method">
 <dt id="asyncio.AsyncIO.pyobject">
-<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="headerlink" href="#asyncio.AsyncIO.pyobject" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/asyncio.html#AsyncIO.pyobject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asyncio.AsyncIO.pyobject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the pyobject of the underlying event so that this object can
 be waited on by the <a class="reference internal" href="ipc.html#ipc.all" title="ipc.all"><tt class="xref py py-func docutils literal"><span class="pre">ipc.all()</span></tt></a> or <a class="reference internal" href="ipc.html#ipc.any" title="ipc.any"><tt class="xref py py-func docutils literal"><span class="pre">ipc.any()</span></tt></a> functions</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="asyncio.AsyncIO.wait_for_completion">
-<tt class="descname">wait_for_completion</tt><big>(</big><big>)</big><a class="headerlink" href="#asyncio.AsyncIO.wait_for_completion" title="Permalink to this definition">¶</a></dt>
+<dt id="asyncio.AsyncIO.wait">
+<tt class="descname">wait</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/asyncio.html#AsyncIO.wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asyncio.AsyncIO.wait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait for the IO to complete in such a way that the wait can
 be interrupted by a KeyboardInterrupt.</p>
 </dd></dl>
@@ -96,17 +96,17 @@ be interrupted by a KeyboardInterrupt.</p>
 
 <dl class="class">
 <dt id="asyncio.AsyncWriter">
-<em class="property">class </em><tt class="descname">AsyncWriter</tt><big>(</big><em>handle</em>, <em>data</em><big>)</big><a class="headerlink" href="#asyncio.AsyncWriter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#asyncio.AsyncIO" title="asyncio.AsyncIO"><tt class="xref py py-class docutils literal"><span class="pre">asyncio.AsyncIO</span></tt></a></p>
+<em class="property">class </em><tt class="descclassname">asyncio.</tt><tt class="descname">AsyncWriter</tt><big>(</big><em>handle</em>, <em>data</em><big>)</big><a class="reference internal" href="_modules/asyncio.html#AsyncWriter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asyncio.AsyncWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">asyncio.AsyncHandler</span></tt></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="asyncio.AsyncReader">
-<em class="property">class </em><tt class="descname">AsyncReader</tt><big>(</big><em>handle</em><big>)</big><a class="headerlink" href="#asyncio.AsyncReader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#asyncio.AsyncIO" title="asyncio.AsyncIO"><tt class="xref py py-class docutils literal"><span class="pre">asyncio.AsyncIO</span></tt></a></p>
+<em class="property">class </em><tt class="descclassname">asyncio.</tt><tt class="descname">AsyncReader</tt><big>(</big><em>handle</em><big>)</big><a class="reference internal" href="_modules/asyncio.html#AsyncReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asyncio.AsyncReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">asyncio.AsyncHandler</span></tt></p>
 <dl class="method">
 <dt id="asyncio.AsyncReader.data">
-<tt class="descname">data</tt><big>(</big><big>)</big><a class="headerlink" href="#asyncio.AsyncReader.data" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">data</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/asyncio.html#AsyncReader.data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asyncio.AsyncReader.data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait until the IO has completed and return the data from the read. This
 is expected to be called after is_complete is true.</p>
 </dd></dl>
@@ -118,7 +118,7 @@ is expected to be called after is_complete is true.</p>
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
 <dt id="asyncio.x_asyncio">
-<em class="property">exception </em><tt class="descname">x_asyncio</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#asyncio.x_asyncio" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">asyncio.</tt><tt class="descname">x_asyncio</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="reference internal" href="_modules/asyncio.html#x_asyncio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asyncio.x_asyncio" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

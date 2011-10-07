@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>The Entry class &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -45,7 +45,7 @@
           <a href="fs_filepath.html" title="The FilePath class"
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -58,7 +58,7 @@
 <h1>The Entry class<a class="headerlink" href="#the-entry-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fs.Entry">
-<em class="property">class </em><tt class="descname">Entry</tt><a class="headerlink" href="#fs.Entry" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">fs.</tt><tt class="descname">Entry</tt><a class="reference internal" href="_modules/fs.html#Entry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="fs_filepath.html#fs.FilePath" title="fs.FilePath"><tt class="xref py py-class docutils literal"><span class="pre">fs.FilePath</span></tt></a>, <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
 <p>Heart of the fs module. This is a subtype of <a class="reference internal" href="fs_filepath.html#fs.FilePath" title="fs.FilePath"><tt class="xref py py-class docutils literal"><span class="pre">FilePath</span></tt></a> and
 therefore of the base unicode type and is the parent of the
@@ -76,18 +76,18 @@ altho&#8217; it&#8217;s possible to do so.</p>
 * <a class="reference internal" href="fs.html#fs.attributes" title="fs.attributes"><tt class="xref py py-attr docutils literal"><span class="pre">attributes</span></tt></a>
 * <a class="reference internal" href="#fs.Entry.id" title="fs.Entry.id"><tt class="xref py py-attr docutils literal"><span class="pre">id</span></tt></a>
 * <a class="reference internal" href="#fs.Entry.n_links" title="fs.Entry.n_links"><tt class="xref py py-attr docutils literal"><span class="pre">n_links</span></tt></a>
-* <tt class="xref py py-attr docutils literal"><span class="pre">attributes</span> <span class="pre">-</span> <span class="pre">an</span> <span class="pre">:class:`_Attributes</span></tt> object representing combinations of <a class="reference internal" href="fs_constants.html#fs.FILE_ATTRIBUTE" title="fs.FILE_ATTRIBUTE"><tt class="xref py py-const docutils literal"><span class="pre">FILE_ATTRIBUTE</span></tt></a></p>
+* <tt class="xref py py-attr docutils literal"><span class="pre">attributes</span> <span class="pre">-</span> <span class="pre">an</span> <span class="pre">:class:`constants.Attributes</span></tt> object representing combinations of <a class="reference internal" href="fs_constants.html#fs.FILE_ATTRIBUTE" title="fs.FILE_ATTRIBUTE"><tt class="xref py py-const docutils literal"><span class="pre">FILE_ATTRIBUTE</span></tt></a></p>
 <p>Common functionality:</p>
 <ul class="simple">
-<li>Entries compare (eq, lt, etc.) according to their full filepath. To do a
-content-wise comparison, use <tt class="xref py py-meth docutils literal"><span class="pre">equal_contents()</span></tt>.</li>
+<li>Entries compare (eq, lt, etc.) according to their full case-insensitive filepath.
+To do a content-wise comparison, use <tt class="xref py py-meth docutils literal"><span class="pre">equal_contents()</span></tt>.</li>
 <li>Entries are True according to their existence on a filesystem</li>
 <li>The str representation is the filepath utf8-encoded; unicode is the filepath itself</li>
 <li>Adding one path to another will use os.path.join semantics</li>
 </ul>
 <dl class="method">
 <dt id="fs.Entry.ancestors">
-<tt class="descname">ancestors</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.ancestors" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">ancestors</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.ancestors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.ancestors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over this entry&#8217;s ancestors, yielding the <a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> object
 corresponding to each one.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -102,12 +102,12 @@ corresponding to each one.</p>
 
 <dl class="method">
 <dt id="fs.Entry.as_string">
-<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.as_string" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.as_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.as_string" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.compress">
-<tt class="descname">compress</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.compress" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">compress</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.compress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.compress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compress this entry; if it is a file, it will be compressed, if it
 is a directory it will be marked so that any new files added to it will
 be compressed automatically.</p>
@@ -123,12 +123,12 @@ be compressed automatically.</p>
 
 <dl class="method">
 <dt id="fs.Entry.dumped">
-<tt class="descname">dumped</tt><big>(</big><em>level=0</em>, <em>show_security=False</em><big>)</big><a class="headerlink" href="#fs.Entry.dumped" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dumped</tt><big>(</big><em>level=0</em>, <em>show_security=False</em><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.dumped"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.dumped" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.encrypt">
-<tt class="descname">encrypt</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.encrypt" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">encrypt</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.encrypt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.encrypt" title="Permalink to this definition">¶</a></dt>
 <dd><p>FIXME: Need to work out how to create certificates for this</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -142,53 +142,58 @@ be compressed automatically.</p>
 
 <dl class="method">
 <dt id="fs.Entry.encryption_users">
-<tt class="descname">encryption_users</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.encryption_users" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">encryption_users</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.encryption_users"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.encryption_users" title="Permalink to this definition">¶</a></dt>
 <dd><p>FIXME: Need to work out how to create certificates for this</p>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="fs.Entry.factory">
-<em class="property">classmethod </em><tt class="descname">factory</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.Entry.factory" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">factory</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.factory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.factory" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.get_accessed_at">
-<tt class="descname">get_accessed_at</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_accessed_at" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get and store the latest access time from the filesystem</p>
+<tt class="descname">get_accessed_at</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.get_accessed_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.get_accessed_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get and store the latest access time from the filesystem. Note that this
+forces a re-read of the metadata</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.get_attributes">
-<tt class="descname">get_attributes</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_attributes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get and store the latest file attributes from the filesystem</p>
+<tt class="descname">get_attributes</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.get_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.get_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get and store the latest file attributes from the filesystem. Note that this
+forces a re-read of the metadata</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.get_created_at">
-<tt class="descname">get_created_at</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_created_at" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get and store the latest creation time from the filesystem</p>
+<tt class="descname">get_created_at</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.get_created_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.get_created_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get and store the latest creation time from the filesystem. Note that this forces a
+re-read of the metadata.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.get_size">
-<tt class="descname">get_size</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get and store the latest (possibly compressed) size from the filesystem</p>
+<tt class="descname">get_size</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.get_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.get_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get and store the latest (possibly compressed) size from the filesystem. Note that this
+forces a re-read of the metadata</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.get_written_at">
-<tt class="descname">get_written_at</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.get_written_at" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get and store the latest modification time from the filesystem</p>
+<tt class="descname">get_written_at</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.get_written_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.get_written_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get and store the latest modification time from the filesystem. Note that this
+forces a re-read of the metadata</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.handle">
-<tt class="descname">handle</tt><big>(</big><em>mode='r'</em><big>)</big><a class="headerlink" href="#fs.Entry.handle" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle</tt><big>(</big><em>mode='r'</em><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.handle" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="fs.Entry.like">
-<tt class="descname">like</tt><big>(</big><em>pattern</em><big>)</big><a class="headerlink" href="#fs.Entry.like" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">like</tt><big>(</big><em>pattern</em><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.like"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.like" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return true if this filename&#8217;s name (not the path) matches
 <cite>pattern</cite> according to <cite>fnmatch</cite>, eg:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
@@ -211,7 +216,7 @@ be compressed automatically.</p>
 
 <dl class="method">
 <dt id="fs.Entry.move">
-<tt class="descname">move</tt><big>(</big><em>other</em>, <em>callback=None</em>, <em>callback_data=None</em>, <em>clobber=False</em><big>)</big><a class="headerlink" href="#fs.Entry.move" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">move</tt><big>(</big><em>other</em>, <em>callback=None</em>, <em>callback_data=None</em>, <em>clobber=False</em><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.move" title="Permalink to this definition">¶</a></dt>
 <dd><p>Move this entry to the file/directory represented by other.
 If other is a directory, self</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -259,7 +264,7 @@ If other is a directory, self</p>
 
 <dl class="method">
 <dt id="fs.Entry.security">
-<tt class="descname">security</tt><big>(</big><em>options=u'OD'</em><big>)</big><a class="headerlink" href="#fs.Entry.security" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">security</tt><big>(</big><em>options=u'OD'</em><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.security"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.security" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a <a class="reference internal" href="security.html#security.Security" title="security.Security"><tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt></a> object corresponding to this
 entry&#8217;s security attributes. Note that the returning object is a context
 manager so a common pattern is:</p>
@@ -288,7 +293,7 @@ manager so a common pattern is:</p>
 
 <dl class="method">
 <dt id="fs.Entry.take_control">
-<tt class="descname">take_control</tt><big>(</big><em>principal=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#fs.Entry.take_control" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">take_control</tt><big>(</big><em>principal=&lt;Unset&gt;</em><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.take_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.take_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Give the logged-on user full control to a file. This may
 need to be preceded by a call to <a class="reference internal" href="#fs.Entry.take_ownership" title="fs.Entry.take_ownership"><tt class="xref py py-func docutils literal"><span class="pre">take_ownership()</span></tt></a> so that the
 user gains WRITE_DAC permissions.</p>
@@ -304,7 +309,7 @@ user gains WRITE_DAC permissions.</p>
 
 <dl class="method">
 <dt id="fs.Entry.take_ownership">
-<tt class="descname">take_ownership</tt><big>(</big><em>principal=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#fs.Entry.take_ownership" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">take_ownership</tt><big>(</big><em>principal=&lt;Unset&gt;</em><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.take_ownership"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.take_ownership" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the new owner of the file to be the logged-on user.
 This is no more than a slight shortcut to the equivalent
 security operations.</p>
@@ -312,7 +317,16 @@ security operations.</p>
 the default) you may need to have enabled SE_RESTORE privilege.
 Even the logged-in user may need to have enabled SE_TAKE_OWNERSHIP
 if that user has not been granted the appropriate security by
-the ACL.</p>
+the ACL:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span><span class="p">,</span> <span class="n">security</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span> <span class="p">(</span><span class="s">&quot;c:/temp/temp.txt&quot;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">f</span>
+<span class="k">with</span> <span class="n">security</span><span class="o">.</span><span class="n">change_privileges</span> <span class="p">([</span><span class="s">&quot;take_ownership&quot;</span><span class="p">]):</span>
+  <span class="n">f</span><span class="o">.</span><span class="n">take_ownership</span> <span class="p">()</span>
+  <span class="n">f</span><span class="o">.</span><span class="n">take_control</span> <span class="p">()</span>
+</pre></div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -325,7 +339,7 @@ the ACL.</p>
 
 <dl class="method">
 <dt id="fs.Entry.uncompress">
-<tt class="descname">uncompress</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.uncompress" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">uncompress</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.uncompress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.uncompress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uncompress this entry; if it is a file, it will be uncompressed, if it
 is a directory it will be marked so that any new files added to it will
 not be compressed automatically.</p>
@@ -341,7 +355,7 @@ not be compressed automatically.</p>
 
 <dl class="method">
 <dt id="fs.Entry.unencrypt">
-<tt class="descname">unencrypt</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Entry.unencrypt" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">unencrypt</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.unencrypt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.unencrypt" title="Permalink to this definition">¶</a></dt>
 <dd><p>FIXME: Need to work out how to create certificates for this</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -555,7 +569,7 @@ the filesystem if none was stored.</p>
           <a href="fs_filepath.html" title="The FilePath class"
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

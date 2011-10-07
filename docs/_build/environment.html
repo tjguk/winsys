@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>environment – Environment Block &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -76,14 +76,14 @@ indicate that the environment has changed.</p>
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="environment.process">
-<tt class="descname">process</tt><big>(</big><big>)</big><a class="headerlink" href="#environment.process" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">environment.</tt><tt class="descname">process</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/environment.html#process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#environment.process" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a dict-like object representing the environment block of the
 current process.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="environment.system">
-<tt class="descname">system</tt><big>(</big><em>machine=None</em><big>)</big><a class="headerlink" href="#environment.system" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">environment.</tt><tt class="descname">system</tt><big>(</big><em>machine=None</em><big>)</big><a class="reference internal" href="_modules/environment.html#system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#environment.system" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a dict-like object representing the system-level persistent
 environment variables, optionally selecting a different machine.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -99,7 +99,7 @@ environment is to be represented.</td>
 
 <dl class="function">
 <dt id="environment.user">
-<tt class="descname">user</tt><big>(</big><big>)</big><a class="headerlink" href="#environment.user" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">environment.</tt><tt class="descname">user</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/environment.html#user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#environment.user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a dict-like object representing the user-level persistent
 environment for the logged-on user.</p>
 <p>TODO: include alternate user functionality via logon token</p>
@@ -110,7 +110,7 @@ environment for the logged-on user.</p>
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="environment.Env">
-<em class="property">class </em><tt class="descname">Env</tt><a class="headerlink" href="#environment.Env" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">environment.</tt><tt class="descname">Env</tt><a class="reference internal" href="_modules/environment.html#Env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#environment.Env" title="Permalink to this definition">¶</a></dt>
 <dd><p>Semi-abstract base class for all environment classes. Outlines
 a dict-like interface which relies on subclasses to implement simple
 <tt class="xref py py-meth docutils literal"><span class="pre">_get()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">_items()</span></tt> methods.</p>
@@ -128,12 +128,12 @@ __str__.</p>
 
 <dl class="method">
 <dt id="environment.Env.dumped">
-<tt class="descname">dumped</tt><big>(</big><em>level</em><big>)</big><a class="headerlink" href="#environment.Env.dumped" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dumped</tt><big>(</big><em>level</em><big>)</big><a class="reference internal" href="_modules/environment.html#Env.dumped"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#environment.Env.dumped" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
 <dt id="environment.Env.expand">
-<em class="property">static </em><tt class="descname">expand</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#environment.Env.expand" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">expand</tt><big>(</big><em>item</em><big>)</big><a class="reference internal" href="_modules/environment.html#Env.expand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#environment.Env.expand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a version of <cite>item</cite> with internal environment variables
 expanded to their corresponding value. This is done automatically
 by the functions in this class unless you specify <cite>expand=False</cite>.</p>
@@ -141,7 +141,7 @@ by the functions in this class unless you specify <cite>expand=False</cite>.</p>
 
 <dl class="method">
 <dt id="environment.Env.get">
-<tt class="descname">get</tt><big>(</big><em>item</em>, <em>default=None</em>, <em>expand=True</em><big>)</big><a class="headerlink" href="#environment.Env.get" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get</tt><big>(</big><em>item</em>, <em>default=None</em>, <em>expand=True</em><big>)</big><a class="reference internal" href="_modules/environment.html#Env.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#environment.Env.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an environment value if it exists, otherwise
 <cite>[default]</cite>. This is the only way to get an unexpanded
 environment value by setting <cite>expand</cite> to False.</p>
@@ -163,7 +163,7 @@ This default is expanded if <cite>expand</cite> is True.</li>
 
 <dl class="method">
 <dt id="environment.Env.items">
-<tt class="descname">items</tt><big>(</big><em>expand=True</em><big>)</big><a class="headerlink" href="#environment.Env.items" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">items</tt><big>(</big><em>expand=True</em><big>)</big><a class="reference internal" href="_modules/environment.html#Env.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#environment.Env.items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yield key-value pairs of environment variables</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -191,13 +191,13 @@ This default is expanded if <cite>expand</cite> is True.</li>
 
 <dl class="method">
 <dt id="environment.Env.keys">
-<tt class="descname">keys</tt><big>(</big><big>)</big><a class="headerlink" href="#environment.Env.keys" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">keys</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/environment.html#Env.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#environment.Env.keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yield environment variable names</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="environment.Env.update">
-<tt class="descname">update</tt><big>(</big><em>dict_initialiser</em><big>)</big><a class="headerlink" href="#environment.Env.update" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">update</tt><big>(</big><em>dict_initialiser</em><big>)</big><a class="reference internal" href="_modules/environment.html#Env.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#environment.Env.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update this environment from a dict-like object, typically
 another environment:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">environment</span>
@@ -217,7 +217,7 @@ another environment:</p>
 
 <dl class="class">
 <dt id="environment.Persistent">
-<em class="property">class </em><tt class="descname">Persistent</tt><big>(</big><em>root</em><big>)</big><a class="headerlink" href="#environment.Persistent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">environment.</tt><tt class="descname">Persistent</tt><big>(</big><em>root</em><big>)</big><a class="reference internal" href="_modules/environment.html#Persistent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#environment.Persistent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent persistent (registry-based) environment variables. These
 are held at system and at user level, the latter overriding the former
 when an process environment is put together. Don&#8217;t instantiate this
@@ -231,7 +231,7 @@ __str__.</p>
 
 <dl class="staticmethod">
 <dt id="environment.Persistent.broadcast">
-<em class="property">static </em><tt class="descname">broadcast</tt><big>(</big><em>timeout_ms=2000</em><big>)</big><a class="headerlink" href="#environment.Persistent.broadcast" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">broadcast</tt><big>(</big><em>timeout_ms=2000</em><big>)</big><a class="reference internal" href="_modules/environment.html#Persistent.broadcast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#environment.Persistent.broadcast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Broadcast a message to all top-level windows informing them that
 an environment change has occurred. The message must be sent, not posted,
 and times out after <cite>timeout_ms</cite> ms since some top-level windows handle this
@@ -308,7 +308,7 @@ This default is expanded if <cite>expand</cite> is True.</li>
 
 <dl class="method">
 <dt id="environment.Persistent.keys">
-<tt class="descname">keys</tt><big>(</big><big>)</big><a class="headerlink" href="#environment.Persistent.keys" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">keys</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/environment.html#Persistent.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#environment.Persistent.keys" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

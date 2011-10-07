@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>The Dir class &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -45,7 +45,7 @@
           <a href="fs_file.html" title="The File class"
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -58,11 +58,11 @@
 <h1>The Dir class<a class="headerlink" href="#the-dir-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fs.Dir">
-<em class="property">class </em><tt class="descname">Dir</tt><a class="headerlink" href="#fs.Dir" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">fs.</tt><tt class="descname">Dir</tt><a class="reference internal" href="_modules/fs.html#Dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="fs_entry.html#fs.Entry" title="fs.Entry"><tt class="xref py py-class docutils literal"><span class="pre">fs.Entry</span></tt></a></p>
 <dl class="method">
 <dt id="fs.Dir.compress">
-<tt class="descname">compress</tt><big>(</big><em>apply_to_contents=True</em>, <em>callback=None</em><big>)</big><a class="headerlink" href="#fs.Dir.compress" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">compress</tt><big>(</big><em>apply_to_contents=True</em>, <em>callback=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.compress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.compress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flag this directory so that any new files are automatically
 compressed. If apply_to_contents is True, iterate over all subdirectories
 and their files, compressing likewise.</p>
@@ -86,7 +86,7 @@ and their files</li>
 
 <dl class="method">
 <dt id="fs.Dir.copy">
-<tt class="descname">copy</tt><big>(</big><em>target_filepath</em>, <em>callback=None</em>, <em>callback_data=None</em><big>)</big><a class="headerlink" href="#fs.Dir.copy" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">copy</tt><big>(</big><em>target_filepath</em>, <em>callback=None</em>, <em>callback_data=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copy this directory to another, which must be a directory if it
 exists. If it does exist, this directory&#8217;s contents will be copied
 inside it; if it does not exist, this directory will become it.
@@ -112,7 +112,7 @@ to <cite>other_directory + self.name</cite>.</p>
 
 <dl class="method">
 <dt id="fs.Dir.create">
-<tt class="descname">create</tt><big>(</big><em>security_descriptor=None</em><big>)</big><a class="headerlink" href="#fs.Dir.create" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">create</tt><big>(</big><em>security_descriptor=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create this directory, optionally specifying a security descriptor.
 If the directory already exists, silently succeed.
 All intervening directories are automatically created if they do not
@@ -132,7 +132,7 @@ an exception is raised.</p>
 
 <dl class="method">
 <dt id="fs.Dir.delete">
-<tt class="descname">delete</tt><big>(</big><em>recursive=False</em><big>)</big><a class="headerlink" href="#fs.Dir.delete" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">delete</tt><big>(</big><em>recursive=False</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete this directory, optionally including its children.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -148,14 +148,14 @@ an exception is raised.</p>
 
 <dl class="method">
 <dt id="fs.Dir.dir">
-<tt class="descname">dir</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#fs.Dir.dir" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dir</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a <a class="reference internal" href="#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> object representing a Directory called name inside
 this directory.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="fs.Dir.dirs">
-<tt class="descname">dirs</tt><big>(</big><em>pattern=u'*'</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.Dir.dirs" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dirs</tt><big>(</big><em>pattern=u'*'</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.dirs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over all directories in this directory which match pattern, yielding
 a <a class="reference internal" href="#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> object for each one. Implemented via <a class="reference internal" href="#fs.Dir.entries" title="fs.Dir.entries"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.entries()</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -170,12 +170,12 @@ a <a class="reference internal" href="#fs.Dir" title="fs.Dir"><tt class="xref py
 
 <dl class="method">
 <dt id="fs.Dir.disable_encryption">
-<tt class="descname">disable_encryption</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Dir.disable_encryption" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">disable_encryption</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.disable_encryption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.disable_encryption" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="fs.Dir.dismount">
-<tt class="descname">dismount</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Dir.dismount" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dismount</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.dismount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.dismount" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dismount whatever volume is mounted at this directory</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -189,17 +189,17 @@ a <a class="reference internal" href="#fs.Dir" title="fs.Dir"><tt class="xref py
 
 <dl class="method">
 <dt id="fs.Dir.enable_encryption">
-<tt class="descname">enable_encryption</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Dir.enable_encryption" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">enable_encryption</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.enable_encryption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.enable_encryption" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="fs.Dir.encrypt">
-<tt class="descname">encrypt</tt><big>(</big><em>apply_to_contents=True</em><big>)</big><a class="headerlink" href="#fs.Dir.encrypt" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">encrypt</tt><big>(</big><em>apply_to_contents=True</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.encrypt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.encrypt" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="fs.Dir.entries">
-<tt class="descname">entries</tt><big>(</big><em>pattern='*'</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.Dir.entries" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">entries</tt><big>(</big><em>pattern='*'</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.entries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.entries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over all entries &#8211; files &amp; directories &#8211; in this directory.
 Implemented via <a class="reference internal" href="#fs.Dir.files" title="fs.Dir.files"><tt class="xref py py-func docutils literal"><span class="pre">files()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -214,14 +214,14 @@ Implemented via <a class="reference internal" href="#fs.Dir.files" title="fs.Dir
 
 <dl class="method">
 <dt id="fs.Dir.file">
-<tt class="descname">file</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#fs.Dir.file" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">file</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object representing a file called name inside
 this directory.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="fs.Dir.files">
-<tt class="descname">files</tt><big>(</big><em>pattern=u'*'</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.Dir.files" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">files</tt><big>(</big><em>pattern=u'*'</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.files" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over all files in this directory which match pattern, yielding
 a <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object for each one. Implemented via <a class="reference internal" href="#fs.Dir.entries" title="fs.Dir.entries"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.entries()</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -236,7 +236,7 @@ a <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt 
 
 <dl class="method">
 <dt id="fs.Dir.flat">
-<tt class="descname">flat</tt><big>(</big><em>pattern='*'</em>, <em>includedirs=False</em>, <em>depthfirst=False</em>, <em>error_handler=None</em><big>)</big><a class="headerlink" href="#fs.Dir.flat" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">flat</tt><big>(</big><em>pattern='*'</em>, <em>includedirs=False</em>, <em>depthfirst=False</em>, <em>error_handler=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.flat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.flat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over this directory and all its subdirectories, yielding one
 <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object on each iteration, and optionally <a class="reference internal" href="#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> objects
 as well.</p>
@@ -258,14 +258,14 @@ as well.</p>
 
 <dl class="method">
 <dt id="fs.Dir.is_empty">
-<tt class="descname">is_empty</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Dir.is_empty" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">is_empty</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.is_empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.is_empty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if this directory is empty, False otherwise. Will fail
 if the directory does not yet exist.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="fs.Dir.mkdir">
-<tt class="descname">mkdir</tt><big>(</big><em>dirname</em>, <em>security_descriptor=None</em><big>)</big><a class="headerlink" href="#fs.Dir.mkdir" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">mkdir</tt><big>(</big><em>dirname</em>, <em>security_descriptor=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.mkdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.mkdir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create :dirname: as a subdirectory of this directory, specifying a
 security descriptor. This is implemented in terms of <a class="reference internal" href="#fs.Dir.create" title="fs.Dir.create"><tt class="xref py py-meth docutils literal"><span class="pre">create()</span></tt></a>
 by concatenating this directory and dirname and calling .create on the
@@ -289,7 +289,7 @@ resulting <a class="reference internal" href="#fs.Dir" title="fs.Dir"><tt class=
 
 <dl class="method">
 <dt id="fs.Dir.mount">
-<tt class="descname">mount</tt><big>(</big><em>vol</em><big>)</big><a class="headerlink" href="#fs.Dir.mount" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">mount</tt><big>(</big><em>vol</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.mount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.mount" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mount a volume on this directory. The directory must be empty or
 an exception is raised. eg:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
@@ -310,7 +310,7 @@ an exception is raised. eg:</p>
 
 <dl class="method">
 <dt id="fs.Dir.mounted_by">
-<tt class="descname">mounted_by</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Dir.mounted_by" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">mounted_by</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.mounted_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.mounted_by" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the volume mounted on this directory, or None.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -340,7 +340,7 @@ an exception is raised. eg:</p>
 
 <dl class="method">
 <dt id="fs.Dir.uncompress">
-<tt class="descname">uncompress</tt><big>(</big><em>apply_to_contents=True</em>, <em>callback=None</em><big>)</big><a class="headerlink" href="#fs.Dir.uncompress" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">uncompress</tt><big>(</big><em>apply_to_contents=True</em>, <em>callback=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.uncompress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.uncompress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flag this directory so that any new files are automatically
 not compressed. If apply_to_contents is True, iterate over all
 subdirectories and their files, uncompressing likewise.</p>
@@ -364,12 +364,12 @@ and their files</li>
 
 <dl class="method">
 <dt id="fs.Dir.unencrypt">
-<tt class="descname">unencrypt</tt><big>(</big><em>apply_to_contents=True</em><big>)</big><a class="headerlink" href="#fs.Dir.unencrypt" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">unencrypt</tt><big>(</big><em>apply_to_contents=True</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.unencrypt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.unencrypt" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="fs.Dir.walk">
-<tt class="descname">walk</tt><big>(</big><em>depthfirst=False</em>, <em>error_handler=None</em><big>)</big><a class="headerlink" href="#fs.Dir.walk" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">walk</tt><big>(</big><em>depthfirst=False</em>, <em>error_handler=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.walk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.walk" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mimic os.walk, iterating over each directory and the files within
 in. Each iteration yields:</p>
 <blockquote>
@@ -390,13 +390,13 @@ in. Each iteration yields:</p>
 
 <dl class="method">
 <dt id="fs.Dir.watch">
-<tt class="descname">watch</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#fs.Dir.watch" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">watch</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.watch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.watch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a directory watcher, as per <a class="reference internal" href="fs.html#fs.watch" title="fs.watch"><tt class="xref py py-func docutils literal"><span class="pre">watch()</span></tt></a></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="fs.Dir.zip">
-<tt class="descname">zip</tt><big>(</big><em>zip_filename=&lt;Unset&gt;</em>, <em>mode='w'</em>, <em>compression=8</em><big>)</big><a class="headerlink" href="#fs.Dir.zip" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">zip</tt><big>(</big><em>zip_filename=&lt;Unset&gt;</em>, <em>mode='w'</em>, <em>compression=8</em><big>)</big><a class="reference internal" href="_modules/fs.html#Dir.zip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Dir.zip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Zip the directory up into a zip file. By default, the file will have the
 name of the directory with &#8221;.zip&#8221; appended and will be a sibling of the directory.
 Also by default a new zipfile will be created, overwriting any existing one, and
@@ -480,7 +480,7 @@ directory and its children. [directory.zip]</li>
           <a href="fs_file.html" title="The File class"
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

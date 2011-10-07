@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>exc – Exceptions &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -58,7 +58,7 @@
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
 <dt id="exc.x_winsys">
-<em class="property">exception </em><tt class="descname">x_winsys</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#exc.x_winsys" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">exc.</tt><tt class="descname">x_winsys</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="reference internal" href="_modules/exc.html#x_winsys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exc.x_winsys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base for all WinSys exception. Subclasses pywintypes.error so that
 except pywintypes.error clauses can be used to catch all relevant exceptions.
 Note that the __init__ is specified so that exception invocations can pass
@@ -67,19 +67,19 @@ just an error message by keyword.</p>
 
 <dl class="exception">
 <dt id="exc.x_access_denied">
-<em class="property">exception </em><tt class="descname">x_access_denied</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#exc.x_access_denied" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">exc.</tt><tt class="descname">x_access_denied</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="reference internal" href="_modules/exc.html#x_access_denied"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exc.x_access_denied" title="Permalink to this definition">¶</a></dt>
 <dd><p>General purpose access-denied exception</p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="exc.x_not_found">
-<em class="property">exception </em><tt class="descname">x_not_found</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#exc.x_not_found" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">exc.</tt><tt class="descname">x_not_found</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="reference internal" href="_modules/exc.html#x_not_found"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exc.x_not_found" title="Permalink to this definition">¶</a></dt>
 <dd><p>General purpose not-found exception</p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="exc.x_invalid_handle">
-<em class="property">exception </em><tt class="descname">x_invalid_handle</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#exc.x_invalid_handle" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">exc.</tt><tt class="descname">x_invalid_handle</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="reference internal" href="_modules/exc.html#x_invalid_handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exc.x_invalid_handle" title="Permalink to this definition">¶</a></dt>
 <dd><p>General purpose invalid-handle exception</p>
 </dd></dl>
 
@@ -88,7 +88,7 @@ just an error message by keyword.</p>
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="exc.wrapper">
-<tt class="descname">wrapper</tt><big>(</big><em>winerror_map</em>, <em>default_exception=&lt;class 'exc.x_winsys'&gt;</em><big>)</big><a class="headerlink" href="#exc.wrapper" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">exc.</tt><tt class="descname">wrapper</tt><big>(</big><em>winerror_map</em>, <em>default_exception=&lt;class 'exc.x_winsys'&gt;</em><big>)</big><a class="reference internal" href="_modules/exc.html#wrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exc.wrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used by each module to map specific windows error codes onto
 Python exceptions. Always includes a default which is raised if
 no specific exception is found.</p>
@@ -117,7 +117,7 @@ no specific exception is found.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="constants.html"
-                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">constants</span></tt></a></p>
+                        title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">constants</span></tt></a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="accounts.html"
                         title="next chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">accounts</span></tt> &#8211; Users, Groups, SIDs &amp;c.</a></p>

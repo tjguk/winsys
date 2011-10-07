@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>dialogs – Dialog boxes &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -88,7 +88,7 @@ scrolled and select-copied.</p>
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="dialogs.dialog">
-<tt class="descname">dialog</tt><big>(</big><em>title</em>, <em>*fields</em><big>)</big><a class="headerlink" href="#dialogs.dialog" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dialogs.</tt><tt class="descname">dialog</tt><big>(</big><em>title</em>, <em>*fields</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.dialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shortcut function to populate and run a dialog, returning
 the button pressed and values saved. After the title, the
 function expects a series of 2-tuples where the first item
@@ -126,7 +126,7 @@ available as <a class="reference internal" href="#dialogs.get_filename" title="d
 
 <dl class="function">
 <dt id="dialogs.progress_dialog">
-<tt class="descname">progress_dialog</tt><big>(</big><em>title</em>, <em>progress_callback</em>, <em>*fields</em><big>)</big><a class="headerlink" href="#dialogs.progress_dialog" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dialogs.</tt><tt class="descname">progress_dialog</tt><big>(</big><em>title</em>, <em>progress_callback</em>, <em>*fields</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#progress_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.progress_dialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populate and run a dialog with a progress
 callback which yields messages. Fields are the same as for
 <a class="reference internal" href="#dialogs.dialog" title="dialogs.dialog"><tt class="xref py py-func docutils literal"><span class="pre">dialog()</span></tt></a> but the second parameter is a function which
@@ -183,7 +183,7 @@ display a human-redable version of each directory size:</p>
 
 <dl class="function">
 <dt id="dialogs.info_dialog">
-<tt class="descname">info_dialog</tt><big>(</big><em>title</em>, <em>text</em>, <em>hwnd=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#dialogs.info_dialog" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dialogs.</tt><tt class="descname">info_dialog</tt><big>(</big><em>title</em>, <em>text</em>, <em>hwnd=&lt;Unset&gt;</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#info_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.info_dialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>A dialog with no fields which simply displays information
 in a read-only multiline edit box. The text can be arbitrarily big
 but the dialog will only adjust vertically up to a certain point.
@@ -212,7 +212,7 @@ selected and copied:</p>
 
 <dl class="function">
 <dt id="dialogs.get_filename">
-<tt class="descname">get_filename</tt><big>(</big><em>hwnd=None</em>, <em>start_folder=None</em><big>)</big><a class="headerlink" href="#dialogs.get_filename" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dialogs.</tt><tt class="descname">get_filename</tt><big>(</big><em>hwnd=None</em>, <em>start_folder=None</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#get_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.get_filename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Quick interface to the shell&#8217;s browse-for-folder dialog,
 optionally starting in a particular folder and allowing file
 and share selection.</p>
@@ -228,7 +228,7 @@ interpreter to stack dump.</p>
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="dialogs.BaseDialog">
-<em class="property">class </em><tt class="descname">BaseDialog</tt><big>(</big><em>title</em>, <em>parent_hwnd=0</em><big>)</big><a class="headerlink" href="#dialogs.BaseDialog" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">dialogs.</tt><tt class="descname">BaseDialog</tt><big>(</big><em>title</em>, <em>parent_hwnd=0</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#BaseDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.BaseDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basic template for a dialog with one or more fields plus
 [Ok] and [Cancel] buttons. A simple spacing / sizing algorithm
 is used. Most of the work is done inside <tt class="xref py py-meth docutils literal"><span class="pre">_get_dialog_template()</span></tt>
@@ -240,7 +240,7 @@ the form [(label, default), ...].</p>
 
 <dl class="class">
 <dt id="dialogs.Dialog">
-<em class="property">class </em><tt class="descname">Dialog</tt><big>(</big><em>title</em>, <em>fields</em>, <em>progress_callback=&lt;Unset&gt;</em>, <em>parent_hwnd=0</em><big>)</big><a class="headerlink" href="#dialogs.Dialog" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">dialogs.</tt><tt class="descname">Dialog</tt><big>(</big><em>title</em>, <em>fields</em>, <em>progress_callback=&lt;Unset&gt;</em>, <em>parent_hwnd=0</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#Dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.Dialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>A general-purpose dialog class for collecting arbitrary information in
 text strings and handing it back to the user. Only Ok &amp; Cancel buttons are
 allowed, and all the fields are considered to be strings. The list of
@@ -250,7 +250,7 @@ in the same order.</p>
 the form [(label, default), ...].</p>
 <dl class="method">
 <dt id="dialogs.Dialog.OnCallback">
-<tt class="descname">OnCallback</tt><big>(</big><em>hwnd</em>, <em>field_id</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnCallback" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">OnCallback</tt><big>(</big><em>hwnd</em>, <em>field_id</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#Dialog.OnCallback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.Dialog.OnCallback" title="Permalink to this definition">¶</a></dt>
 <dd><p>If the user pressed a callback button associated with a text
 field, find the field and call its callback with the dialog window
 and the field&#8217;s current value. If anything is returned, put that
@@ -259,7 +259,7 @@ value back into the field.</p>
 
 <dl class="method">
 <dt id="dialogs.Dialog.OnCancel">
-<tt class="descname">OnCancel</tt><big>(</big><em>hwnd</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnCancel" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">OnCancel</tt><big>(</big><em>hwnd</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#Dialog.OnCancel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.Dialog.OnCancel" title="Permalink to this definition">¶</a></dt>
 <dd><p>If the user presses cancel check to see whether we&#8217;re running within
 a progress thread. If so, set the cancel event and wait for the thread
 to catch up. Either way, close the dialog with a cancelled state.</p>
@@ -267,14 +267,14 @@ to catch up. Either way, close the dialog with a cancelled state.</p>
 
 <dl class="method">
 <dt id="dialogs.Dialog.OnCommand">
-<tt class="descname">OnCommand</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnCommand" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">OnCommand</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#Dialog.OnCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.Dialog.OnCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle button presses: OK, Cancel and the callback buttons
 which are optional for text fields</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="dialogs.Dialog.OnInitDialog">
-<tt class="descname">OnInitDialog</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnInitDialog" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">OnInitDialog</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#Dialog.OnInitDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.Dialog.OnInitDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attempt to position the dialog box more or less in
 the middle of its parent (possibly the desktop). Then
 force a resize of the dialog controls which should take
@@ -284,7 +284,7 @@ new size.</p>
 
 <dl class="method">
 <dt id="dialogs.Dialog.OnMinMaxInfo">
-<tt class="descname">OnMinMaxInfo</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnMinMaxInfo" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">OnMinMaxInfo</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#Dialog.OnMinMaxInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.Dialog.OnMinMaxInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prevent the dialog from resizing vertically by extracting
 the window&#8217;s current size and using the minmaxinfo message
 to set the maximum &amp; minimum window heights to be its current height.</p>
@@ -292,7 +292,7 @@ to set the maximum &amp; minimum window heights to be its current height.</p>
 
 <dl class="method">
 <dt id="dialogs.Dialog.OnOk">
-<tt class="descname">OnOk</tt><big>(</big><em>hwnd</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnOk" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">OnOk</tt><big>(</big><em>hwnd</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#Dialog.OnOk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.Dialog.OnOk" title="Permalink to this definition">¶</a></dt>
 <dd><p>When OK is pressed, if this isn&#8217;t a progress dialog then simply
 gather the results and return. If this is a progress dialog then
 start a thread to handle progress via the progress iterator.</p>
@@ -300,7 +300,7 @@ start a thread to handle progress via the progress iterator.</p>
 
 <dl class="method">
 <dt id="dialogs.Dialog.OnProgressComplete">
-<tt class="descname">OnProgressComplete</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnProgressComplete" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">OnProgressComplete</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#Dialog.OnProgressComplete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.Dialog.OnProgressComplete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Respond to the a message signalling that all processing is
 now complete by re-enabling the ok button, disabling cancel,
 and setting focus to the ok so a return or space will close
@@ -309,7 +309,7 @@ the dialog.</p>
 
 <dl class="method">
 <dt id="dialogs.Dialog.OnProgressMessage">
-<tt class="descname">OnProgressMessage</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnProgressMessage" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">OnProgressMessage</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#Dialog.OnProgressMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.Dialog.OnProgressMessage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Respond to a progress update from within the progress
 thread. LParam will be a pointer to a string containing
 a utf8-encoded string which is to be displayed in the
@@ -318,21 +318,21 @@ dialog&#8217;s progress static.</p>
 
 <dl class="method">
 <dt id="dialogs.Dialog.OnSize">
-<tt class="descname">OnSize</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.OnSize" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">OnSize</tt><big>(</big><em>hwnd</em>, <em>msg</em>, <em>wparam</em>, <em>lparam</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#Dialog.OnSize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.Dialog.OnSize" title="Permalink to this definition">¶</a></dt>
 <dd><p>If the dialog box is resized, force a corresponding resize
 of the controls</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="dialogs.Dialog.corners">
-<tt class="descname">corners</tt><big>(</big><em>l</em>, <em>t</em>, <em>r</em>, <em>b</em><big>)</big><a class="headerlink" href="#dialogs.Dialog.corners" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">corners</tt><big>(</big><em>l</em>, <em>t</em>, <em>r</em>, <em>b</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#Dialog.corners"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.Dialog.corners" title="Permalink to this definition">¶</a></dt>
 <dd><p>Designed to be subclassed (eg by <a class="reference internal" href="#dialogs.InfoDialog" title="dialogs.InfoDialog"><tt class="xref py py-class docutils literal"><span class="pre">InfoDialog</span></tt></a>). By
 default simply returns the values unchanged.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="dialogs.Dialog.run">
-<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#dialogs.Dialog.run" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/dialogs.html#Dialog.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.Dialog.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>The heart of the dialog box functionality. The call to DialogBoxIndirect
 kicks off the dialog&#8217;s message loop, finally returning via the EndDialog call
 in OnCommand</p>
@@ -342,7 +342,7 @@ in OnCommand</p>
 
 <dl class="class">
 <dt id="dialogs.InfoDialog">
-<em class="property">class </em><tt class="descname">InfoDialog</tt><big>(</big><em>title</em>, <em>info</em>, <em>parent_hwnd=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">dialogs.</tt><tt class="descname">InfoDialog</tt><big>(</big><em>title</em>, <em>info</em>, <em>parent_hwnd=&lt;Unset&gt;</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#InfoDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.InfoDialog" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="dialogs.InfoDialog.OnCallback">
 <tt class="descname">OnCallback</tt><big>(</big><em>hwnd</em>, <em>field_id</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.OnCallback" title="Permalink to this definition">¶</a></dt>
@@ -387,7 +387,7 @@ to set the maximum &amp; minimum window heights to be its current height.</p>
 
 <dl class="method">
 <dt id="dialogs.InfoDialog.OnOk">
-<tt class="descname">OnOk</tt><big>(</big><em>hwnd</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.OnOk" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">OnOk</tt><big>(</big><em>hwnd</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#InfoDialog.OnOk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.InfoDialog.OnOk" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -417,7 +417,7 @@ of the controls</p>
 
 <dl class="method">
 <dt id="dialogs.InfoDialog.corners">
-<tt class="descname">corners</tt><big>(</big><em>l</em>, <em>t</em>, <em>r</em>, <em>b</em><big>)</big><a class="headerlink" href="#dialogs.InfoDialog.corners" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">corners</tt><big>(</big><em>l</em>, <em>t</em>, <em>r</em>, <em>b</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#InfoDialog.corners"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.InfoDialog.corners" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called when the dialog is first initialised: estimate how wide
 the dialog should be according to the longest line of text</p>
 </dd></dl>
@@ -437,7 +437,7 @@ in OnCommand</p>
 <h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
 <dl class="data">
 <dt id="dialogs.BIF">
-<tt class="descname">BIF</tt><a class="headerlink" href="#dialogs.BIF" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dialogs.</tt><tt class="descname">BIF</tt><a class="headerlink" href="#dialogs.BIF" title="Permalink to this definition">¶</a></dt>
 <dd><p>Styles for browsing for a folder</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -522,7 +522,7 @@ in OnCommand</p>
 
 <dl class="data">
 <dt id="dialogs.BFFM">
-<tt class="descname">BFFM</tt><a class="headerlink" href="#dialogs.BFFM" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dialogs.</tt><tt class="descname">BFFM</tt><a class="headerlink" href="#dialogs.BFFM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Part of the browse-for-folder shell mechanism</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -594,7 +594,7 @@ in OnCommand</p>
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
 <dt id="dialogs.x_dialogs">
-<em class="property">exception </em><tt class="descname">x_dialogs</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#dialogs.x_dialogs" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">dialogs.</tt><tt class="descname">x_dialogs</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="reference internal" href="_modules/dialogs.html#x_dialogs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dialogs.x_dialogs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base for dialog-related exceptions</p>
 </dd></dl>
 

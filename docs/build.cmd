@@ -1,2 +1,2 @@
-build.py -b html . .\_build
+sphinx-build -b html . .\_build
 pause

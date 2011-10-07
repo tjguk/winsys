@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>The Drive class &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -45,7 +45,7 @@
           <a href="fs.html" title="fs – Files, Directories, &amp;c."
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -58,19 +58,27 @@
 <h1>The Drive class<a class="headerlink" href="#the-drive-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fs.Drive">
-<em class="property">class </em><tt class="descname">Drive</tt><big>(</big><em>drive</em><big>)</big><a class="headerlink" href="#fs.Drive" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">fs.</tt><tt class="descname">Drive</tt><big>(</big><em>drive</em><big>)</big><a class="reference internal" href="_modules/fs.html#Drive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Drive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wraps a drive letter, offering access to its <a class="reference internal" href="#fs.Drive.volume" title="fs.Drive.volume"><tt class="xref py py-attr docutils literal"><span class="pre">Drive.volume</span></tt></a>
 and the ability to <a class="reference internal" href="fs.html#fs.mount" title="fs.mount"><tt class="xref py py-meth docutils literal"><span class="pre">mount()</span></tt></a> or <a class="reference internal" href="fs.html#fs.dismount" title="fs.dismount"><tt class="xref py py-meth docutils literal"><span class="pre">dismount()</span></tt></a> it on a particular
 volume.</p>
 <dl class="method">
 <dt id="fs.Drive.dismount">
-<tt class="descname">dismount</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.Drive.dismount" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dismount</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#Drive.dismount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Drive.dismount" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dismount this drive from its volume</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><cite>self</cite></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="fs.Drive.mount">
-<tt class="descname">mount</tt><big>(</big><em>vol</em><big>)</big><a class="headerlink" href="#fs.Drive.mount" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">mount</tt><big>(</big><em>vol</em><big>)</big><a class="reference internal" href="_modules/fs.html#Drive.mount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Drive.mount" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mount the specified volume in this drive.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -78,7 +86,7 @@ volume.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vol</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.volume" title="fs.volume"><tt class="xref py py-func docutils literal"><span class="pre">volume()</span></tt></a></td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><cite>self</cite></td>
 </tr>
 </tbody>
 </table>
@@ -106,7 +114,7 @@ method.</p>
 <h1>The Volume class<a class="headerlink" href="#the-volume-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fs.Volume">
-<em class="property">class </em><tt class="descname">Volume</tt><big>(</big><em>volume</em><big>)</big><a class="headerlink" href="#fs.Volume" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">fs.</tt><tt class="descname">Volume</tt><big>(</big><em>volume</em><big>)</big><a class="reference internal" href="_modules/fs.html#Volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Volume" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wraps a filesystem volume, giving access to useful
 information such as the filesystem and a list of drives
 mounted on it. Also offers the ability to mount or dismount.</p>
@@ -121,7 +129,7 @@ mounted on it. Also offers the ability to mount or dismount.</p>
 </ul>
 <dl class="method">
 <dt id="fs.Volume.dismount">
-<tt class="descname">dismount</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.Volume.dismount" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dismount</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/fs.html#Volume.dismount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Volume.dismount" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dismount this volume from a particular filepath</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -135,7 +143,7 @@ mounted on it. Also offers the ability to mount or dismount.</p>
 
 <dl class="method">
 <dt id="fs.Volume.mount">
-<tt class="descname">mount</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.Volume.mount" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">mount</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/fs.html#Volume.mount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Volume.mount" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mount this volume on a particular filepath</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -177,7 +185,7 @@ segment of of the path can be no longer than 255 chars.</p>
 <dt id="fs.Volume.mounts">
 <tt class="descname">mounts</tt><a class="headerlink" href="#fs.Volume.mounts" title="Permalink to this definition">¶</a></dt>
 <dd><p>An iterator of the <a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> objects which mount this volume. NB Windows
-restrictions mean that more than one drive root directory can mount the same
+restrictions mean that no more than one drive root directory can mount the same
 volume simultaneously. But it is possible for a volume to be mounted on, eg,
 e:and c:mountse at the same time.</p>
 </dd></dl>
@@ -210,7 +218,7 @@ number assigned by the device manufacturer.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="fs.html"
-                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a></p>
+                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="fs_filepath.html"
                         title="next chapter">The FilePath class</a></p>
@@ -252,7 +260,7 @@ number assigned by the device manufacturer.</p>
           <a href="fs.html" title="fs – Files, Directories, &amp;c."
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

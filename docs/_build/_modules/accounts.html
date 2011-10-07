@@ -1,0 +1,654 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>accounts &mdash; WinSys v0.5beta documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.5beta',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="top" title="WinSys v0.5beta documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for accounts</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: iso-8859-1 -*-</span>
+<span class="sd">ur&quot;&quot;&quot;All security in windows is handled via Security Principals. These can</span>
+<span class="sd">be a user (the most common case), a group of users, a computer, or something</span>
+<span class="sd">else. Security principals are uniquely identified by their SID: a binary code</span>
+<span class="sd">represented by a string S-a-b-cd-efg... where each of the segments represents</span>
+<span class="sd">an aspect of the security authorities involved. (A computer, a domain etc.).</span>
+<span class="sd">Certain of the SIDs are considered well-known such as the AuthenticatedUsers</span>
+<span class="sd">account on each machine which will always have the same SID.</span>
+
+<span class="sd">Most of the access to this module will be via the :func:`principal`</span>
+<span class="sd">or :func:`me` functions. Although the module is designed to be used</span>
+<span class="sd">standalone, it is imported directly into the :mod:`security` module&#39;s</span>
+<span class="sd">namespace so its functionality can also be accessed from there.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+
+<span class="kn">import</span> <span class="nn">ntsecuritycon</span>
+<span class="kn">import</span> <span class="nn">pywintypes</span>
+<span class="kn">import</span> <span class="nn">win32con</span>
+<span class="kn">import</span> <span class="nn">win32security</span>
+<span class="kn">import</span> <span class="nn">win32api</span>
+<span class="kn">import</span> <span class="nn">win32cred</span>
+<span class="kn">import</span> <span class="nn">win32event</span>
+<span class="kn">import</span> <span class="nn">win32net</span>
+<span class="kn">import</span> <span class="nn">win32netcon</span>
+<span class="kn">import</span> <span class="nn">winerror</span>
+
+<span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">constants</span><span class="p">,</span> <span class="n">core</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">_advapi32</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;LOGON&#39;</span><span class="p">,</span> <span class="s">&#39;EXTENDED_NAME&#39;</span><span class="p">,</span> <span class="s">&#39;x_accounts&#39;</span><span class="p">,</span> <span class="s">&#39;principal&#39;</span><span class="p">,</span> <span class="s">&#39;Principal&#39;</span><span class="p">,</span> <span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="s">&#39;Group&#39;</span><span class="p">,</span> <span class="s">&#39;me&#39;</span><span class="p">]</span>
+
+<span class="n">LOGON</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span><span class="s">u&quot;LOGON32_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32security</span><span class="p">)</span>
+<span class="n">LOGON</span><span class="o">.</span><span class="n">doc</span> <span class="p">(</span><span class="s">&quot;Types of logon used by LogonUser and related APIs&quot;</span><span class="p">)</span>
+<span class="n">EXTENDED_NAME</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span><span class="s">u&quot;Name*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32con</span><span class="p">)</span>
+<span class="n">EXTENDED_NAME</span><span class="o">.</span><span class="n">doc</span> <span class="p">(</span><span class="s">&quot;Extended display formats for usernames&quot;</span><span class="p">)</span>
+<span class="n">WELL_KNOWN_SID</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span><span class="s">u&quot;Win*Sid&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32security</span><span class="p">)</span>
+<span class="n">WELL_KNOWN_SID</span><span class="o">.</span><span class="n">doc</span> <span class="p">(</span><span class="s">&quot;Well-known SIDs common to all computers&quot;</span><span class="p">)</span>
+<span class="n">USER_PRIV</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_list</span> <span class="p">([</span><span class="s">u&quot;USER_PRIV_GUEST&quot;</span><span class="p">,</span> <span class="s">u&quot;USER_PRIV_USER&quot;</span><span class="p">,</span> <span class="s">u&quot;USER_PRIV_ADMIN&quot;</span><span class="p">],</span> <span class="n">pattern</span><span class="o">=</span><span class="s">&quot;USER_PRIV_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32netcon</span><span class="p">)</span>
+<span class="n">USER_PRIV</span><span class="o">.</span><span class="n">doc</span> <span class="p">(</span><span class="s">&quot;User-types for creating new users&quot;</span><span class="p">)</span>
+<span class="n">UF</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span><span class="s">u&quot;UF_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32netcon</span><span class="p">)</span>
+<span class="n">UF</span><span class="o">.</span><span class="n">doc</span> <span class="p">(</span><span class="s">&quot;Flags for creating new users&quot;</span><span class="p">)</span>
+<span class="n">SID_NAME_USE</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span><span class="s">u&quot;SidType*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">ntsecuritycon</span><span class="p">)</span>
+<span class="n">SID_NAME_USE</span><span class="o">.</span><span class="n">doc</span> <span class="p">(</span><span class="s">&quot;Types of accounts for which SIDs exist&quot;</span><span class="p">)</span>
+<span class="n">FILTER</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span><span class="s">u&quot;FILTER_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32netcon</span><span class="p">)</span>
+<span class="n">FILTER</span><span class="o">.</span><span class="n">doc</span> <span class="p">(</span><span class="s">&quot;Filters when enumerating users&quot;</span><span class="p">)</span>
+
+<span class="n">PySID</span> <span class="o">=</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">SIDType</span>
+
+<div class="viewcode-block" id="x_accounts"><a class="viewcode-back" href="../accounts.html#accounts.x_accounts">[docs]</a><span class="k">class</span> <span class="nc">x_accounts</span> <span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">x_winsys</span><span class="p">):</span>
+  <span class="s">&quot;Base for all accounts-related exceptions&quot;</span>
+</div>
+<span class="n">WINERROR_MAP</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">winerror</span><span class="o">.</span><span class="n">ERROR_NONE_MAPPED</span> <span class="p">:</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span>
+<span class="p">}</span>
+<span class="n">wrapped</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="n">wrapper</span> <span class="p">(</span><span class="n">WINERROR_MAP</span><span class="p">,</span> <span class="n">x_accounts</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_win32net_enum</span> <span class="p">(</span><span class="n">win32_fn</span><span class="p">,</span> <span class="n">system_or_domain</span><span class="p">):</span>
+  <span class="n">resume</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="n">items</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">resume</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32_fn</span><span class="p">,</span> <span class="n">system_or_domain</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">resume</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+      <span class="k">yield</span> <span class="n">item</span>
+    <span class="k">if</span> <span class="n">resume</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">break</span>
+
+<div class="viewcode-block" id="principal"><a class="viewcode-back" href="../accounts.html#accounts.principal">[docs]</a><span class="k">def</span> <span class="nf">principal</span> <span class="p">(</span><span class="n">principal</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
+  <span class="sd">ur&quot;&quot;&quot;Factory function for the :class:`Principal` class. This is the most</span>
+<span class="sd">  common way to create a :class:`Principal` object::</span>
+
+<span class="sd">    from winsys import accounts</span>
+<span class="sd">    service_account = accounts.principal (accounts.WELL_KNOWN_SID.Service)</span>
+<span class="sd">    local_admin = accounts.principal (&quot;Administrator&quot;)</span>
+<span class="sd">    domain_users = accounts.principal (r&quot;DOMAIN\Domain Users&quot;)</span>
+
+<span class="sd">  :param principal: any of None, a :class:`Principal`, a `PySID`,</span>
+<span class="sd">                    a :const:`WELL_KNOWN_SID` or a string</span>
+<span class="sd">  :returns: a :class:`Principal` object corresponding to `principal`</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">cls</span> <span class="o">=</span> <span class="n">Principal</span> <span class="k">if</span> <span class="n">cls</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span> <span class="k">else</span> <span class="n">cls</span>
+  <span class="k">if</span> <span class="n">principal</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">None</span>
+  <span class="k">elif</span> <span class="nb">type</span> <span class="p">(</span><span class="n">principal</span><span class="p">)</span> <span class="o">==</span> <span class="n">PySID</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_sid</span> <span class="p">(</span><span class="n">principal</span><span class="p">)</span>
+  <span class="k">elif</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">principal</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_well_known</span> <span class="p">(</span><span class="n">principal</span><span class="p">)</span>
+  <span class="k">elif</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">principal</span><span class="p">,</span> <span class="n">cls</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">principal</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_string</span> <span class="p">(</span><span class="nb">unicode</span> <span class="p">(</span><span class="n">principal</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="user"><a class="viewcode-back" href="../accounts.html#accounts.user">[docs]</a><span class="k">def</span> <span class="nf">user</span> <span class="p">(</span><span class="n">name</span><span class="p">):</span>
+  <span class="sd">ur&quot;&quot;&quot;If you know you&#39;re after a user, use this. Particularly</span>
+<span class="sd">  useful when a system user is defined as an alias type</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">principal</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="n">User</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="group"><a class="viewcode-back" href="../accounts.html#accounts.group">[docs]</a><span class="k">def</span> <span class="nf">group</span> <span class="p">(</span><span class="n">name</span><span class="p">):</span>
+  <span class="sd">ur&quot;&quot;&quot;If you know you&#39;re after a group, use this. Particularly</span>
+<span class="sd">  useful when a system group is defined as an alias type</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">principal</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="n">Group</span><span class="p">)</span>
+</div>
+<span class="k">def</span> <span class="nf">local_group</span> <span class="p">(</span><span class="n">name</span><span class="p">):</span>
+  <span class="sd">ur&quot;&quot;&quot;If you know you&#39;re after a local group, use this.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">principal</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="n">LocalGroup</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">global_group</span> <span class="p">(</span><span class="n">name</span><span class="p">):</span>
+  <span class="sd">ur&quot;&quot;&quot;If you know you&#39;re after a global group, use this.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">principal</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="n">GlobalGroup</span><span class="p">)</span>
+
+<div class="viewcode-block" id="me"><a class="viewcode-back" href="../accounts.html#accounts.me">[docs]</a><span class="k">def</span> <span class="nf">me</span> <span class="p">():</span>
+  <span class="sd">ur&quot;&quot;&quot;Convenience function for the common case of getting the</span>
+<span class="sd">  logged-on user&#39;s account.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">Principal</span><span class="o">.</span><span class="n">me</span> <span class="p">()</span>
+</div>
+<span class="n">_domain</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="k">def</span> <span class="nf">domain</span> <span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+  <span class="k">global</span> <span class="n">_domain</span>
+  <span class="k">if</span> <span class="n">_domain</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">_domain</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetWkstaGetInfo</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="mi">100</span><span class="p">)[</span><span class="s">&#39;langroup&#39;</span><span class="p">]</span>
+  <span class="k">return</span> <span class="n">_domain</span>
+
+<span class="k">def</span> <span class="nf">domain_controller</span> <span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetGetAnyDCName</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">domain</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">users</span> <span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+  <span class="sd">ur&quot;&quot;&quot;Convenience function to yield each of the local users</span>
+<span class="sd">  on a system.</span>
+
+<span class="sd">  :param system: optional security authority</span>
+<span class="sd">  :returns: yield :class:`User` objects</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="nb">iter</span> <span class="p">(</span><span class="n">_LocalUsers</span> <span class="p">(</span><span class="n">system</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Principal"><a class="viewcode-back" href="../accounts.html#accounts.Principal">[docs]</a><span class="k">class</span> <span class="nc">Principal</span> <span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
+  <span class="sd">ur&quot;&quot;&quot;Object wrapping a Windows security principal, represented by a SID</span>
+<span class="sd">  and, where possible, a name. :class:`Principal` compares and hashes</span>
+<span class="sd">  by SID so can be sorted and used as a dictionary key, set element, etc.</span>
+
+<span class="sd">  A :class:`Principal` is its own context manager, impersonating the</span>
+<span class="sd">  corresponding user::</span>
+
+<span class="sd">    from winsys import accounts</span>
+<span class="sd">    with accounts.principal (&quot;python&quot;):</span>
+<span class="sd">      print accounts.me ()</span>
+
+<span class="sd">  Note, though, that this will prompt for a password using the</span>
+<span class="sd">  Win32 password UI. To logon with a password, use the :meth:`impersonate`</span>
+<span class="sd">  context-managed function. TODO: allow password to be set securely.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">u&quot;&quot;&quot;Initialise a Principal from and (optionally) a system name. The sid</span>
+<span class="sd">    must be a PySID and the system name, if present must be a security</span>
+<span class="sd">    authority, eg a machine or a domain.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sid</span> <span class="o">=</span> <span class="n">sid</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">system</span> <span class="o">=</span> <span class="n">system</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">LookupAccountSid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sid</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sid</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">domain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="c">#~ if self.system is None:</span>
+      <span class="c">#~ self.system = domain_controller (self.domain)</span>
+
+  <span class="k">def</span> <span class="nf">__hash__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">hash</span> <span class="p">(</span><span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sid</span><span class="p">))</span>
+
+  <span class="k">def</span> <span class="nf">__eq__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sid</span> <span class="o">==</span> <span class="n">principal</span> <span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="n">sid</span>
+
+  <span class="k">def</span> <span class="nf">__lt__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sid</span> <span class="o">&lt;</span> <span class="n">principal</span> <span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="n">sid</span>
+
+<div class="viewcode-block" id="Principal.pyobject"><a class="viewcode-back" href="../accounts.html#accounts.Principal.pyobject">[docs]</a>  <span class="k">def</span> <span class="nf">pyobject</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Return the internal representation of this object.</span>
+
+<span class="sd">    :returns: pywin32 SID</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sid</span>
+</div>
+  <span class="k">def</span> <span class="nf">as_string</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">:</span>
+      <span class="k">return</span> <span class="s">ur&quot;</span><span class="si">%s</span><span class="s">\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sid</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">dumped</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span> <span class="p">(</span><span class="s">u&quot;user: </span><span class="si">%s</span><span class="se">\n</span><span class="s">sid: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">as_string</span> <span class="p">(),</span>
+      <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">ConvertSidToStringSid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sid</span><span class="p">)</span>
+    <span class="p">),</span> <span class="n">level</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Principal.logon"><a class="viewcode-back" href="../accounts.html#accounts.Principal.logon">[docs]</a>  <span class="k">def</span> <span class="nf">logon</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">logon_type</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
+    <span class="sd">u&quot;&quot;&quot;Log on as an authenticated user, returning that</span>
+<span class="sd">    user&#39;s token. This is used by security.impersonate</span>
+<span class="sd">    which wraps the token in a Token object and manages</span>
+<span class="sd">    its lifetime in a context.</span>
+
+<span class="sd">    (EXPERIMENTAL) If no password is given, a UI pops up</span>
+<span class="sd">    to ask for a password.</span>
+
+<span class="sd">    :param password: the password for this account</span>
+<span class="sd">    :param logon_type: one of the :const:`LOGON` values</span>
+<span class="sd">    :returns: a pywin32 handle to a token</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">logon_type</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+      <span class="n">logon_type</span> <span class="o">=</span> <span class="n">LOGON</span><span class="o">.</span><span class="n">LOGON_NETWORK</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">logon_type</span> <span class="o">=</span> <span class="n">LOGON</span><span class="o">.</span><span class="n">constant</span> <span class="p">(</span><span class="n">logon_type</span><span class="p">)</span>
+    <span class="c">#~ if password is core.UNSET:</span>
+      <span class="c">#~ password = dialogs.get_password (self.name, self.domain)</span>
+    <span class="n">hUser</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span>
+      <span class="n">win32security</span><span class="o">.</span><span class="n">LogonUser</span><span class="p">,</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span>
+      <span class="n">password</span><span class="p">,</span>
+      <span class="n">logon_type</span><span class="p">,</span>
+      <span class="n">LOGON</span><span class="o">.</span><span class="n">PROVIDER_DEFAULT</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">hUser</span>
+</div>
+  <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Principal.from_string"><a class="viewcode-back" href="../accounts.html#accounts.Principal.from_string">[docs]</a>  <span class="k">def</span> <span class="nf">from_string</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Return a :class:`Principal` based on a name and a</span>
+<span class="sd">    security authority. If `string` is blank, the logged-on user is assumed.</span>
+
+<span class="sd">    :param string: name of an account in the form &quot;domain\name&quot;. domain is optional so the simplest form is simply &quot;name&quot;</span>
+<span class="sd">    :param system: name of a security authority (typically a machine or a domain)</span>
+<span class="sd">    :returns: a :class:`Principal` object for `string`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">string</span> <span class="o">==</span> <span class="s">&quot;&quot;</span><span class="p">:</span>
+      <span class="n">string</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">GetUserNameEx</span><span class="p">,</span> <span class="n">win32con</span><span class="o">.</span><span class="n">NameSamCompatible</span><span class="p">)</span>
+    <span class="n">sid</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span>
+      <span class="n">win32security</span><span class="o">.</span><span class="n">LookupAccountName</span><span class="p">,</span>
+      <span class="bp">None</span> <span class="k">if</span> <span class="n">system</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">unicode</span> <span class="p">(</span><span class="n">system</span><span class="p">),</span>
+      <span class="nb">unicode</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">cls</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">SID_NAME_USE_MAP</span><span class="o">.</span><span class="n">get</span> <span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cls</span> <span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="bp">None</span> <span class="k">if</span> <span class="n">system</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">unicode</span> <span class="p">(</span><span class="n">system</span><span class="p">))</span>
+</div>
+  <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Principal.from_sid"><a class="viewcode-back" href="../accounts.html#accounts.Principal.from_sid">[docs]</a>  <span class="k">def</span> <span class="nf">from_sid</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">sid</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Return a :class:`Principal` based on a sid and a security authority.</span>
+
+<span class="sd">    :param sid: a PySID</span>
+<span class="sd">    :param system_name: optional name of a security authority</span>
+<span class="sd">    :returns: a :class:`Principal` object for `sid`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">name</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span>
+        <span class="n">win32security</span><span class="o">.</span><span class="n">LookupAccountSid</span><span class="p">,</span>
+        <span class="bp">None</span> <span class="k">if</span> <span class="n">system</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">unicode</span> <span class="p">(</span><span class="n">system</span><span class="p">),</span>
+        <span class="n">sid</span>
+      <span class="p">)</span>
+    <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">:</span>
+      <span class="n">name</span> <span class="o">=</span> <span class="n">domain</span> <span class="o">=</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+    <span class="n">cls</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">SID_NAME_USE_MAP</span><span class="o">.</span><span class="n">get</span> <span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cls</span> <span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="bp">None</span> <span class="k">if</span> <span class="n">system</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">unicode</span> <span class="p">(</span><span class="n">system</span><span class="p">))</span>
+</div>
+  <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Principal.from_well_known"><a class="viewcode-back" href="../accounts.html#accounts.Principal.from_well_known">[docs]</a>  <span class="k">def</span> <span class="nf">from_well_known</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">well_known</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Return a :class:`Principal` based on one of the :const:`WELL_KNOWN_SID` values.</span>
+
+<span class="sd">    :param well_known: one of the :const:`WELL_KNOWN_SID`</span>
+<span class="sd">    :param domain: anything accepted by :func:`principal` and corresponding to a domain</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_sid</span> <span class="p">(</span><span class="n">wrapped</span> <span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">CreateWellKnownSid</span><span class="p">,</span> <span class="n">well_known</span><span class="p">,</span> <span class="n">principal</span> <span class="p">(</span><span class="n">domain</span><span class="p">)))</span>
+</div>
+  <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Principal.me"><a class="viewcode-back" href="../accounts.html#accounts.Principal.me">[docs]</a>  <span class="k">def</span> <span class="nf">me</span> <span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+    <span class="sd">u&quot;&quot;&quot;Convenience factory method for the common case of referring to the</span>
+<span class="sd">    logged-on user</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_string</span> <span class="p">(</span><span class="n">wrapped</span> <span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">GetUserNameEx</span><span class="p">,</span> <span class="n">EXTENDED_NAME</span><span class="o">.</span><span class="n">SamCompatible</span><span class="p">))</span>
+</div>
+  <span class="nd">@contextlib.contextmanager</span>
+<div class="viewcode-block" id="Principal.impersonate"><a class="viewcode-back" href="../accounts.html#accounts.Principal.impersonate">[docs]</a>  <span class="k">def</span> <span class="nf">impersonate</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">logon_type</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Context-managed function to impersonate this user and then</span>
+<span class="sd">    revert::</span>
+
+<span class="sd">      from winsys import accounts, security</span>
+<span class="sd">      print accounts.me ()</span>
+<span class="sd">      python = accounts.principal (&quot;python&quot;)</span>
+<span class="sd">      with python.impersonate (&quot;Pa55w0rd&quot;):</span>
+<span class="sd">        print accounts.me ()</span>
+<span class="sd">        open (&quot;temp.txt&quot;, &quot;w&quot;).close ()</span>
+<span class="sd">      print accounts.me ()</span>
+<span class="sd">      security.security (&quot;temp.txt&quot;).owner == python</span>
+
+<span class="sd">    Note that the :class:`Principal` class is also its own</span>
+<span class="sd">    context manager but does not allow the password to be specified.</span>
+
+<span class="sd">    :param password: password for this account</span>
+<span class="sd">    :param logon_type: one of the :const:`LOGON` values</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hLogon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logon</span> <span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">logon_type</span><span class="p">)</span>
+    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">ImpersonateLoggedOnUser</span><span class="p">,</span> <span class="n">hLogon</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">hLogon</span>
+    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">RevertToSelf</span><span class="p">)</span>
+</div>
+  <span class="k">def</span> <span class="nf">__enter__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">ImpersonateLoggedOnUser</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">logon</span> <span class="p">(</span><span class="n">logon_type</span><span class="o">=</span><span class="n">LOGON</span><span class="o">.</span><span class="n">LOGON_INTERACTIVE</span><span class="p">))</span>
+
+  <span class="k">def</span> <span class="nf">__exit__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">exc_info</span><span class="p">):</span>
+    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">RevertToSelf</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="User"><a class="viewcode-back" href="../accounts.html#accounts.User">[docs]</a><span class="k">class</span> <span class="nc">User</span> <span class="p">(</span><span class="n">Principal</span><span class="p">):</span>
+
+  <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="User.create"><a class="viewcode-back" href="../accounts.html#accounts.User.create">[docs]</a>  <span class="k">def</span> <span class="nf">create</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Create a new user with `username` and `password`. Return</span>
+<span class="sd">    a :class:`User` for the new user.</span>
+
+<span class="sd">    :param username: username of the new user. Must not already exist on `system`</span>
+<span class="sd">    :param password: password for the new user. Must meet security policy on `system`</span>
+<span class="sd">    :param system: optional system name</span>
+<span class="sd">    :returns: a :class:`User` for `username`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">user_info</span> <span class="o">=</span> <span class="nb">dict</span> <span class="p">(</span>
+      <span class="n">name</span> <span class="o">=</span> <span class="n">username</span><span class="p">,</span>
+      <span class="n">password</span> <span class="o">=</span> <span class="n">password</span><span class="p">,</span>
+      <span class="n">priv</span> <span class="o">=</span> <span class="n">USER_PRIV</span><span class="o">.</span><span class="n">USER</span><span class="p">,</span>
+      <span class="n">home_dir</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+      <span class="n">comment</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+      <span class="n">flags</span> <span class="o">=</span> <span class="n">UF</span><span class="o">.</span><span class="n">SCRIPT</span><span class="p">,</span>
+      <span class="n">script_path</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="p">)</span>
+    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetUserAdd</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">user_info</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_string</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="User.delete"><a class="viewcode-back" href="../accounts.html#accounts.User.delete">[docs]</a>  <span class="k">def</span> <span class="nf">delete</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Delete this user from `system`.</span>
+
+<span class="sd">    :param system: optional security authority</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetUserDel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="User.groups"><a class="viewcode-back" href="../accounts.html#accounts.User.groups">[docs]</a>  <span class="k">def</span> <span class="nf">groups</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Yield the groups this user belongs to</span>
+
+<span class="sd">    :param system: optional security authority</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">group_name</span><span class="p">,</span> <span class="n">attributes</span> <span class="ow">in</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetUserGetGroups</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+      <span class="k">yield</span> <span class="n">group</span> <span class="p">(</span><span class="n">group_name</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">group_name</span> <span class="ow">in</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetUserGetLocalGroups</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+      <span class="k">yield</span> <span class="n">group</span> <span class="p">(</span><span class="n">group_name</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="User.join"><a class="viewcode-back" href="../accounts.html#accounts.User.join">[docs]</a>  <span class="k">def</span> <span class="nf">join</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_group</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Add this user to a group</span>
+
+<span class="sd">    :param other_group: anything accepted by :func:`group`</span>
+<span class="sd">    :returns: self</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">group</span> <span class="p">(</span><span class="n">other_group</span><span class="p">)</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="User.leave"><a class="viewcode-back" href="../accounts.html#accounts.User.leave">[docs]</a>  <span class="k">def</span> <span class="nf">leave</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_group</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Remove this user from a group</span>
+
+<span class="sd">    :param other_group: anything accepted by :func:`group`</span>
+<span class="sd">    :returns: self</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">group</span> <span class="p">(</span><span class="n">other_group</span><span class="p">)</span><span class="o">.</span><span class="n">remove</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="User.runas"><a class="viewcode-back" href="../accounts.html#accounts.User.runas">[docs]</a>  <span class="k">def</span> <span class="nf">runas</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command_line</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">load_profile</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Run a command logged on as this user</span>
+
+<span class="sd">    :param command_line: command line to run, quoted as necessary</span>
+<span class="sd">    :param password: password; if not supplied, standard Windows prompt</span>
+<span class="sd">    :param with_profile: if True, HKEY_CURRENT_USER is loaded [False]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c">#~ if not password:</span>
+      <span class="c">#~ password = dialogs.get_password (self.name, self.domain)</span>
+    <span class="n">logon_flags</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">load_profile</span><span class="p">:</span> <span class="n">logon_flags</span> <span class="o">|=</span> <span class="n">_advapi32</span><span class="o">.</span><span class="n">LOGON_FLAGS</span><span class="o">.</span><span class="n">WITH_PROFILE</span>
+    <span class="n">process_info</span> <span class="o">=</span> <span class="n">_advapi32</span><span class="o">.</span><span class="n">CreateProcessWithLogonW</span> <span class="p">(</span>
+      <span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+      <span class="n">domain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span>
+      <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
+      <span class="n">command_line</span><span class="o">=</span><span class="n">command_line</span><span class="p">,</span>
+      <span class="n">logon_flags</span><span class="o">=</span><span class="n">logon_flags</span>
+    <span class="p">)</span>
+    <span class="c">#</span>
+    <span class="c"># Wait for up to 20 secs</span>
+    <span class="c">#</span>
+    <span class="c">#~ if wrapped (win32event.WaitForInputIdle, process_info.hProcess, 10000) == win32event.WAIT_TIMEOUT:</span>
+      <span class="c">#~ raise x_accounts (errctx=&quot;runas&quot;, errmsg=&quot;runas process not created with 10 secs&quot;)</span>
+</div></div>
+<div class="viewcode-block" id="Group"><a class="viewcode-back" href="../accounts.html#accounts.Group">[docs]</a><span class="k">class</span> <span class="nc">Group</span> <span class="p">(</span><span class="n">Principal</span><span class="p">):</span>
+
+  <span class="n">SID_NAME_USE_MAP</span> <span class="o">=</span> <span class="p">{}</span>
+
+  <span class="k">def</span> <span class="nf">__contains__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">member</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Crudely, iterate over the group&#39;s members until you hit `member`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">member</span> <span class="o">=</span> <span class="n">principal</span> <span class="p">(</span><span class="n">member</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">any</span> <span class="p">(</span><span class="n">member</span> <span class="o">==</span> <span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+</div>
+<span class="k">class</span> <span class="nc">GlobalGroup</span> <span class="p">(</span><span class="n">Group</span><span class="p">):</span>
+
+  <span class="n">_enumerator</span> <span class="o">=</span> <span class="n">win32net</span><span class="o">.</span><span class="n">NetGroupEnum</span>
+
+  <span class="nd">@classmethod</span>
+  <span class="k">def</span> <span class="nf">create</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">groupname</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Create a new group. Return a :class:`Group` for the new group.</span>
+
+<span class="sd">    :param groupname: name of the new group. Must not already exist on `system`</span>
+<span class="sd">    :param system: optional security authority</span>
+<span class="sd">    :returns: a :class:`Group` for `groupname`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">system</span> <span class="o">=</span> <span class="n">domain_controller</span> <span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetGroupAdd</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">dict</span> <span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">groupname</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_string</span> <span class="p">(</span><span class="n">groupname</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">delete</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Delete this group from `system`.</span>
+
+<span class="sd">    :param system: optional security authority</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetGroupDel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">add</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">member</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Add a :class:`Principal` to this local group</span>
+
+<span class="sd">    :param member: anything accepted by :func:`principal`</span>
+<span class="sd">    :returns: :class:`Principal` for `member`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">member</span> <span class="o">=</span> <span class="n">principal</span> <span class="p">(</span><span class="n">member</span><span class="p">)</span>
+    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetGroupAddUser</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">r&quot;</span><span class="si">%s</span><span class="s">\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">member</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">member</span>
+
+  <span class="k">def</span> <span class="nf">remove</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">member</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Remove a :class:`Principal` from this local group. The</span>
+<span class="sd">    principal must already be a member of the group.</span>
+
+<span class="sd">    :param member: anything accepted by :func:`principal`</span>
+<span class="sd">    :returns: :class:`Principal` for `member`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">member</span> <span class="o">=</span> <span class="n">principal</span> <span class="p">(</span><span class="n">member</span><span class="p">)</span>
+    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetGroupDelUser</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">r&quot;</span><span class="si">%s</span><span class="s">\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">member</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">member</span>
+
+  <span class="k">def</span> <span class="nf">__iter__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Yield the list of members of this group.</span>
+
+<span class="sd">    :returns: yield a :class:`Principal` or subclass corresponding to each member</span>
+<span class="sd">              of this group</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">resume</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+      <span class="n">members</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">resume</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetGroupGetUsers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">resume</span><span class="p">)</span>
+      <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">principal</span> <span class="p">(</span><span class="n">member</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
+      <span class="k">if</span> <span class="n">resume</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">break</span>
+
+<span class="k">class</span> <span class="nc">LocalGroup</span> <span class="p">(</span><span class="n">Group</span><span class="p">):</span>
+
+  <span class="nd">@classmethod</span>
+  <span class="k">def</span> <span class="nf">create</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">groupname</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Create a new group. Return a :class:`Group` for the new group.</span>
+
+<span class="sd">    :param groupname: name of the new group. Must not already exist on `system`</span>
+<span class="sd">    :param system: optional security authority</span>
+<span class="sd">    :returns: a :class:`Group` for `groupname`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetLocalGroupAdd</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">dict</span> <span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">groupname</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_string</span> <span class="p">(</span><span class="n">groupname</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">delete</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Delete this group from `system`.</span>
+
+<span class="sd">    :param system: optional security authority</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetLocalGroupDel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">add</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">member</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Add a :class:`Principal` to this local group</span>
+
+<span class="sd">    :param member: anything accepted by :func:`principal`</span>
+<span class="sd">    :returns: :class:`Principal` for `member`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">member</span> <span class="o">=</span> <span class="n">principal</span> <span class="p">(</span><span class="n">member</span><span class="p">)</span>
+    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetLocalGroupAddMembers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="nb">dict</span> <span class="p">(</span><span class="n">sid</span><span class="o">=</span><span class="n">member</span><span class="o">.</span><span class="n">sid</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">member</span>
+
+  <span class="k">def</span> <span class="nf">remove</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">member</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Remove a :class:`Principal` from this local group. The</span>
+<span class="sd">    principal must already be a member of the group.</span>
+
+<span class="sd">    :param member: anything accepted by :func:`principal`</span>
+<span class="sd">    :returns: :class:`Principal` for `member`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">member</span> <span class="o">=</span> <span class="n">principal</span> <span class="p">(</span><span class="n">member</span><span class="p">)</span>
+    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetLocalGroupDelMembers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">member</span><span class="o">.</span><span class="n">name</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">member</span>
+
+  <span class="k">def</span> <span class="nf">__iter__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">ur&quot;&quot;&quot;Yield the list of members of this group.</span>
+
+<span class="sd">    :returns: yield a :class:`Principal` or subclass corresponding to each member</span>
+<span class="sd">              of this group</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">resume</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+      <span class="n">members</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">resume</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetLocalGroupGetMembers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">resume</span><span class="p">)</span>
+      <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">principal</span> <span class="p">(</span><span class="n">member</span><span class="p">[</span><span class="s">&#39;sid&#39;</span><span class="p">])</span>
+      <span class="k">if</span> <span class="n">resume</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">break</span>
+
+<span class="n">Principal</span><span class="o">.</span><span class="n">SID_NAME_USE_MAP</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">SID_NAME_USE</span><span class="o">.</span><span class="n">User</span> <span class="p">:</span> <span class="n">User</span><span class="p">,</span>
+  <span class="n">SID_NAME_USE</span><span class="o">.</span><span class="n">Group</span> <span class="p">:</span> <span class="n">Group</span><span class="p">,</span>
+  <span class="n">SID_NAME_USE</span><span class="o">.</span><span class="n">WellKnownGroup</span> <span class="p">:</span> <span class="n">Group</span>
+<span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">local_groups</span> <span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+  <span class="sd">ur&quot;&quot;&quot;Convenience function to yield each of the local users</span>
+<span class="sd">  on a system.</span>
+
+<span class="sd">  :param system: optional security authority</span>
+<span class="sd">  :returns: yield :class:`LocalGroup` objects</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">_win32net_enum</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetLocalGroupEnum</span><span class="p">,</span> <span class="n">system</span><span class="p">):</span>
+    <span class="k">yield</span> <span class="n">LocalGroup</span><span class="o">.</span><span class="n">from_string</span> <span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">global_groups</span> <span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+  <span class="sd">ur&quot;&quot;&quot;Convenience function to yield each of the local users</span>
+<span class="sd">  on a system.</span>
+
+<span class="sd">  :param domain: optional security domain</span>
+<span class="sd">  :returns: yield :class:`GlobalGroup` objects</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">_win32net_enum</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetGroupEnum</span><span class="p">,</span> <span class="n">domain_controller</span> <span class="p">(</span><span class="n">domain</span><span class="p">)):</span>
+    <span class="k">yield</span> <span class="n">GlobalGroup</span><span class="o">.</span><span class="n">from_string</span> <span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
+
+<span class="k">class</span> <span class="nc">_LocalUsers</span> <span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+  <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">system</span> <span class="o">=</span> <span class="n">system</span>
+
+  <span class="k">def</span> <span class="nf">__iter__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">resume</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+      <span class="n">users</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">resume</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32net</span><span class="o">.</span><span class="n">NetUserEnum</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">FILTER</span><span class="o">.</span><span class="n">NORMAL_ACCOUNT</span><span class="p">,</span> <span class="n">resume</span><span class="p">)</span>
+      <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">User</span><span class="o">.</span><span class="n">from_string</span> <span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
+      <span class="k">if</span> <span class="n">resume</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">break</span>
+
+  <span class="k">def</span> <span class="nf">add</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">User</span><span class="o">.</span><span class="n">create</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">remove</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">local_user</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">user</span> <span class="p">(</span><span class="n">local_user</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span> <span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../contents.html">
+              <img class="logo" src="../_static/cpython2.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Tim Golden.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

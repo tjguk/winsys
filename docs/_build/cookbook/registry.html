@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Using the registry module &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="../_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -56,7 +56,7 @@
             
   <div class="section" id="using-the-registry-module">
 <h1>Using the registry module<a class="headerlink" href="#using-the-registry-module" title="Permalink to this headline">¶</a></h1>
-<p>The examples here all refer to the <a class="reference internal" href="../registry.html#module-registry" title="registry: Pythonic access to the registry"><tt class="xref py py-mod docutils literal"><span class="pre">registry</span></tt></a> module.</p>
+<p>The examples here all refer to the <tt class="xref py py-mod docutils literal"><span class="pre">registry</span></tt> module.</p>
 <div class="section" id="copy-one-registry-key-to-another">
 <span id="id1"></span><h2>Copy one registry key to another<a class="headerlink" href="#copy-one-registry-key-to-another" title="Permalink to this headline">¶</a></h2>
 <p>Copy an existing registry key to a new one and
@@ -100,14 +100,14 @@ the details of the new top-level key, including its security.</p>
 </td></tr></table></div>
 <div class="section" id="discussion">
 <h3>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h3>
-<p>The functions in the <a class="reference internal" href="../registry.html#module-registry" title="registry: Pythonic access to the registry"><tt class="xref py py-mod docutils literal"><span class="pre">registry</span></tt></a> module hand off any references
-to a registry key to the <a class="reference internal" href="../registry.html#module-registry" title="registry: Pythonic access to the registry"><tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt></a> function which is
+<p>The functions in the <tt class="xref py py-mod docutils literal"><span class="pre">registry</span></tt> module hand off any references
+to a registry key to the <tt class="xref py py-func docutils literal"><span class="pre">registry()</span></tt> function which is
 as accepting as possible. Here, we&#8217;re referring to the local machine
 (there&#8217;s no server-style \\ prefix in either moniker) and using
 the HKLM/HKCU shortcut styles. In fact the code would work equally
 well if a remote machine were to specified on either side, assuming
 that the necessary permissions were in place.</p>
-<p>The <a class="reference internal" href="../registry.html#registry.Registry.security" title="registry.Registry.security"><tt class="xref py py-meth docutils literal"><span class="pre">Registry.security()</span></tt></a> method acts as a context
+<p>The <tt class="xref py py-meth docutils literal"><span class="pre">Registry.security()</span></tt> method acts as a context
 manager, allowing a series of changes to the registry key&#8217;s
 security descriptor. Here we are breaking the inheritance which
 the new key has inherited automatically, without copying the
@@ -163,7 +163,7 @@ name and the value itself.</p>
 </td></tr></table></div>
 <div class="section" id="id2">
 <h3>Discussion<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>We use <a class="reference internal" href="../dialogs.html#dialogs.dialog" title="dialogs.dialog"><tt class="xref py py-func docutils literal"><span class="pre">dialogs.dialog()</span></tt></a> to select the root key and
+<p>We use <tt class="xref py py-func docutils literal"><span class="pre">dialogs.dialog()</span></tt> to select the root key and
 the string to search for. We then walk the registry from that
 key downwards, skipping over any keys or values to which we
 do not have access. When we find a value which matches our

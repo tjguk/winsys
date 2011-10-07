@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>The File class &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -45,7 +45,7 @@
           <a href="fs_entry.html" title="The Entry class"
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -58,11 +58,11 @@
 <h1>The File class<a class="headerlink" href="#the-file-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fs.File">
-<em class="property">class </em><tt class="descname">File</tt><a class="headerlink" href="#fs.File" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">fs.</tt><tt class="descname">File</tt><a class="reference internal" href="_modules/fs.html#File"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="fs_entry.html#fs.Entry" title="fs.Entry"><tt class="xref py py-class docutils literal"><span class="pre">fs.Entry</span></tt></a></p>
 <dl class="method">
 <dt id="fs.File.copy">
-<tt class="descname">copy</tt><big>(</big><em>other</em>, <em>callback=None</em>, <em>callback_data=None</em><big>)</big><a class="headerlink" href="#fs.File.copy" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">copy</tt><big>(</big><em>other</em>, <em>callback=None</em>, <em>callback_data=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copy this file to another file or directory. If other is
 a directory, this file is copied into it, otherwise this file
 is copied over it.</p>
@@ -86,7 +86,7 @@ is copied over it.</p>
 
 <dl class="method">
 <dt id="fs.File.create">
-<tt class="descname">create</tt><big>(</big><em>security=None</em><big>)</big><a class="headerlink" href="#fs.File.create" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">create</tt><big>(</big><em>security=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create this file optionally with specific security. If the
 file already exists it will not be overwritten.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -103,7 +103,7 @@ file already exists it will not be overwritten.</p>
 
 <dl class="method">
 <dt id="fs.File.delete">
-<tt class="descname">delete</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.File.delete" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">delete</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#File.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete this file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -117,10 +117,10 @@ file already exists it will not be overwritten.</p>
 
 <dl class="method">
 <dt id="fs.File.equals">
-<tt class="descname">equals</tt><big>(</big><em>other</em>, <em>compare_contents=False</em><big>)</big><a class="headerlink" href="#fs.File.equals" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">equals</tt><big>(</big><em>other</em>, <em>compare_contents=False</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.equals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.equals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is this file equal in size, dates and attributes to another.
 if <cite>compare_contents</cite> is True, use filecmp to compare the contents
-of the files.</p>
+of the files. Note that filecmp.cmp fails early.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -138,7 +138,7 @@ of the files.</p>
 
 <dl class="method">
 <dt id="fs.File.hard_link_from">
-<tt class="descname">hard_link_from</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#fs.File.hard_link_from" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">hard_link_from</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.hard_link_from"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.hard_link_from" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create this file as a hard link from other</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -154,15 +154,15 @@ of the files.</p>
 
 <dl class="method">
 <dt id="fs.File.hard_link_to">
-<tt class="descname">hard_link_to</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#fs.File.hard_link_to" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create other as a hard link to this file.</p>
+<tt class="descname">hard_link_to</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.hard_link_to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.hard_link_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create <cite>other</cite> as a hard link to this file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><tt class="xref py py-func docutils literal"><span class="pre">file()</span></tt></a></td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object corresponding to other</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object corresponding to <cite>other</cite></td>
 </tr>
 </tbody>
 </table>
@@ -170,7 +170,7 @@ of the files.</p>
 
 <dl class="method">
 <dt id="fs.File.open_">
-<tt class="descname">open_</tt><big>(</big><em>mode='r'</em>, <em>attributes=None</em>, <em>sec=None</em><big>)</big><a class="headerlink" href="#fs.File.open_" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">open_</tt><big>(</big><em>mode='r'</em>, <em>attributes=None</em>, <em>sec=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.open_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.open_" title="Permalink to this definition">¶</a></dt>
 <dd><p>EXPERIMENTAL: Use the <cite>codecs.open</cite> function to open this file as a Python file
 object. Positional and keyword arguments are passed straight through to
 the codecs function.</p>
@@ -208,7 +208,7 @@ file already exists it will not be overwritten.</p>
 
 <dl class="method">
 <dt id="fs.File.zip">
-<tt class="descname">zip</tt><big>(</big><em>zip_filename=&lt;Unset&gt;</em>, <em>mode='w'</em>, <em>compression=8</em>, <em>allow_zip64=False</em><big>)</big><a class="headerlink" href="#fs.File.zip" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">zip</tt><big>(</big><em>zip_filename=&lt;Unset&gt;</em>, <em>mode='w'</em>, <em>compression=8</em>, <em>allow_zip64=False</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.zip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.zip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Zip the file up into a zipfile. By default, the zipfile will have the
 name of the file with &#8221;.zip&#8221; appended and will be a sibling of the file.
 Also by default a new zipfile will be created, overwriting any existing one, and
@@ -292,7 +292,7 @@ can be appended to (if it exists) by specifying &#8220;a&#8221; as the mode para
           <a href="fs_entry.html" title="The Entry class"
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

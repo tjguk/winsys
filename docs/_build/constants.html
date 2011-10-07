@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>constants &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -69,7 +69,7 @@ docstring tabulating its names &amp; values.</p>
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="constants.Constants">
-<em class="property">class </em><tt class="descname">Constants</tt><big>(</big><em>dict_initialiser={}</em><big>)</big><a class="headerlink" href="#constants.Constants" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">constants.</tt><tt class="descname">Constants</tt><big>(</big><em>dict_initialiser={}</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide a dict-like interface for a group of related
 constants. These can come from a module or other namespace according
 to a wildcard name, or can be added as a list of (unrelated) names from
@@ -118,7 +118,7 @@ __str__.</p>
 
 <dl class="method">
 <dt id="constants.Constants.constant">
-<tt class="descname">constant</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#constants.Constants.constant" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">constant</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.constant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.constant" title="Permalink to this definition">¶</a></dt>
 <dd><p>From a value, which may be a string or an integer, determine
 the corresponding value in this set of constants. If the value
 is a number, it is passed straight back out. If not, it is
@@ -140,7 +140,7 @@ a combination of the constants in this set.</p>
 
 <dl class="method">
 <dt id="constants.Constants.doc">
-<tt class="descname">doc</tt><big>(</big><em>preamble</em><big>)</big><a class="headerlink" href="#constants.Constants.doc" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">doc</tt><big>(</big><em>preamble</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.doc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -150,12 +150,12 @@ a combination of the constants in this set.</p>
 
 <dl class="method">
 <dt id="constants.Constants.dumped">
-<tt class="descname">dumped</tt><big>(</big><em>level=None</em><big>)</big><a class="headerlink" href="#constants.Constants.dumped" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dumped</tt><big>(</big><em>level=None</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.dumped"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.dumped" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="classmethod">
 <dt id="constants.Constants.from_dict">
-<em class="property">classmethod </em><tt class="descname">from_dict</tt><big>(</big><em>d</em>, <em>pattern=None</em><big>)</big><a class="headerlink" href="#constants.Constants.from_dict" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">from_dict</tt><big>(</big><em>d</em>, <em>pattern=None</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.from_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.from_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Factory method to return a class instance from a dictionary-like set of values.
 If a pattern is passed in, use the distinguished part of the name (the part
 which matches the wildcard) as the key name.</p>
@@ -163,14 +163,14 @@ which matches the wildcard) as the key name.</p>
 
 <dl class="classmethod">
 <dt id="constants.Constants.from_list">
-<em class="property">classmethod </em><tt class="descname">from_list</tt><big>(</big><em>keys</em>, <em>namespace</em>, <em>pattern=None</em><big>)</big><a class="headerlink" href="#constants.Constants.from_list" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">from_list</tt><big>(</big><em>keys</em>, <em>namespace</em>, <em>pattern=None</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.from_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.from_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Factory method to return a class instance from a list-like set of values
 within a namespace. Hands off to the from_dict factory.</p>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="constants.Constants.from_pattern">
-<em class="property">classmethod </em><tt class="descname">from_pattern</tt><big>(</big><em>pattern=u'*'</em>, <em>excluded=</em><span class="optional">[</span><span class="optional">]</span>, <em>namespace=&lt;module 'win32con' from 'C:Python27libsite-packageswin32libwin32con.pyc'&gt;</em><big>)</big><a class="headerlink" href="#constants.Constants.from_pattern" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">from_pattern</tt><big>(</big><em>pattern=u'*'</em>, <em>excluded=</em><span class="optional">[</span><span class="optional">]</span>, <em>namespace=&lt;module 'win32con' from 'C:Python27libsite-packageswin32libwin32con.pyc'&gt;</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.from_pattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.from_pattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>Factory method to return a class instance from a wildcard name pattern. This is
 the most common method of constructing a list of constants by passing in, eg,
 FILE_ATTRIBUTE_* and the win32file module as the namespace.</p>
@@ -178,12 +178,12 @@ FILE_ATTRIBUTE_* and the win32file module as the namespace.</p>
 
 <dl class="method">
 <dt id="constants.Constants.init">
-<tt class="descname">init</tt><big>(</big><em>dict_initialiser</em><big>)</big><a class="headerlink" href="#constants.Constants.init" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">init</tt><big>(</big><em>dict_initialiser</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.init" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.items">
-<tt class="descname">items</tt><big>(</big><big>)</big><a class="headerlink" href="#constants.Constants.items" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">items</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.items" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -203,19 +203,19 @@ FILE_ATTRIBUTE_* and the win32file module as the namespace.</p>
 
 <dl class="method">
 <dt id="constants.Constants.keys">
-<tt class="descname">keys</tt><big>(</big><big>)</big><a class="headerlink" href="#constants.Constants.keys" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">keys</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.keys" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.name_from_value">
-<tt class="descname">name_from_value</tt><big>(</big><em>value, default=&lt;Unset&gt;, patterns=[u'*']</em><big>)</big><a class="headerlink" href="#constants.Constants.name_from_value" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">name_from_value</tt><big>(</big><em>value, default=&lt;Unset&gt;, patterns=[u'*']</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.name_from_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.name_from_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the one name in the set of constants (optionally qualified by pattern)
 which matches value.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.names">
-<tt class="descname">names</tt><big>(</big><em>patterns=[u'*']</em><big>)</big><a class="headerlink" href="#constants.Constants.names" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">names</tt><big>(</big><em>patterns=[u'*']</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.names" title="Permalink to this definition">¶</a></dt>
 <dd><p>From a list of patterns, return the matching names from the
 list of constants. A single string is considered as though a
 list of one.</p>
@@ -223,7 +223,7 @@ list of one.</p>
 
 <dl class="method">
 <dt id="constants.Constants.names_from_value">
-<tt class="descname">names_from_value</tt><big>(</big><em>value, patterns=[u'*']</em><big>)</big><a class="headerlink" href="#constants.Constants.names_from_value" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">names_from_value</tt><big>(</big><em>value, patterns=[u'*']</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.names_from_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.names_from_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>From a number representing the or-ing of several integer values,
 work out which of the constants make up the number using the pattern
 to filter the &#8220;classes&#8221; or constants present in the dataset.</p>
@@ -231,24 +231,24 @@ to filter the &#8220;classes&#8221; or constants present in the dataset.</p>
 
 <dl class="method">
 <dt id="constants.Constants.reset_doc">
-<tt class="descname">reset_doc</tt><big>(</big><big>)</big><a class="headerlink" href="#constants.Constants.reset_doc" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">reset_doc</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.reset_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.reset_doc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.update">
-<tt class="descname">update</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#constants.Constants.update" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">update</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Act as a dict for updates so that several constant sets may
 be merged into one.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.values">
-<tt class="descname">values</tt><big>(</big><big>)</big><a class="headerlink" href="#constants.Constants.values" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">values</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.values" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="constants.Constants.values_from_value">
-<tt class="descname">values_from_value</tt><big>(</big><em>value, patterns=['*']</em><big>)</big><a class="headerlink" href="#constants.Constants.values_from_value" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">values_from_value</tt><big>(</big><em>value, patterns=['*']</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.values_from_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.values_from_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the list of values which make up the combined value</p>
 </dd></dl>
 
@@ -259,7 +259,7 @@ be merged into one.</p>
 <h2>Constants<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <dl class="data">
 <dt id="constants.GENERAL">
-<tt class="descname">GENERAL</tt><a class="headerlink" href="#constants.GENERAL" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">constants.</tt><tt class="descname">GENERAL</tt><a class="headerlink" href="#constants.GENERAL" title="Permalink to this definition">¶</a></dt>
 <dd><table border="1" class="docutils">
 <colgroup>
 <col width="39%" />
@@ -287,7 +287,7 @@ be merged into one.</p>
 
 <dl class="data">
 <dt id="constants.TOKEN_FLAG">
-<tt class="descname">TOKEN_FLAG</tt><a class="headerlink" href="#constants.TOKEN_FLAG" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">constants.</tt><tt class="descname">TOKEN_FLAG</tt><a class="headerlink" href="#constants.TOKEN_FLAG" title="Permalink to this definition">¶</a></dt>
 <dd><table border="1" class="docutils">
 <colgroup>
 <col width="37%" />
@@ -359,7 +359,7 @@ be merged into one.</p>
 
 <dl class="data">
 <dt id="constants.ACCESS">
-<tt class="descname">ACCESS</tt><a class="headerlink" href="#constants.ACCESS" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">constants.</tt><tt class="descname">ACCESS</tt><a class="headerlink" href="#constants.ACCESS" title="Permalink to this definition">¶</a></dt>
 <dd><table border="1" class="docutils">
 <colgroup>
 <col width="42%" />
@@ -403,7 +403,7 @@ be merged into one.</p>
 
 <dl class="data">
 <dt id="constants.GENERIC_ACCESS">
-<tt class="descname">GENERIC_ACCESS</tt><a class="headerlink" href="#constants.GENERIC_ACCESS" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">constants.</tt><tt class="descname">GENERIC_ACCESS</tt><a class="headerlink" href="#constants.GENERIC_ACCESS" title="Permalink to this definition">¶</a></dt>
 <dd><table border="1" class="docutils">
 <colgroup>
 <col width="21%" />
@@ -439,7 +439,7 @@ be merged into one.</p>
 
 <dl class="data">
 <dt id="constants.STANDARD_ACCESS">
-<tt class="descname">STANDARD_ACCESS</tt><a class="headerlink" href="#constants.STANDARD_ACCESS" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">constants.</tt><tt class="descname">STANDARD_ACCESS</tt><a class="headerlink" href="#constants.STANDARD_ACCESS" title="Permalink to this definition">¶</a></dt>
 <dd><table border="1" class="docutils">
 <colgroup>
 <col width="43%" />

@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>event_logs – Event Logs &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -83,13 +83,13 @@ which you can then iterate over; and <a class="reference internal" href="#event_
 against a named source.</p>
 <dl class="function">
 <dt id="event_logs.event_logs">
-<tt class="descname">event_logs</tt><big>(</big><em>computer='.'</em><big>)</big><a class="headerlink" href="#event_logs.event_logs" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">event_logs.</tt><tt class="descname">event_logs</tt><big>(</big><em>computer='.'</em><big>)</big><a class="reference internal" href="_modules/event_logs.html#event_logs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.event_logs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple iterator over all known event logs.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="event_logs.event_log">
-<tt class="descname">event_log</tt><big>(</big><em>log</em><big>)</big><a class="headerlink" href="#event_logs.event_log" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">event_logs.</tt><tt class="descname">event_log</tt><big>(</big><em>log</em><big>)</big><a class="reference internal" href="_modules/event_logs.html#event_log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.event_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience function to return an <a class="reference internal" href="#event_logs.EventLog" title="event_logs.EventLog"><tt class="xref py py-class docutils literal"><span class="pre">EventLog</span></tt></a> object representing
 one of the existing event logs. Will raise <tt class="xref py py-exc docutils literal"><span class="pre">x_not_found</span></tt> if the event
 log does not exist.</p>
@@ -105,13 +105,13 @@ log does not exist.</p>
 
 <dl class="function">
 <dt id="event_logs.event_sources">
-<tt class="descname">event_sources</tt><big>(</big><em>log_name='Application'</em>, <em>computer='.'</em><big>)</big><a class="headerlink" href="#event_logs.event_sources" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">event_logs.</tt><tt class="descname">event_sources</tt><big>(</big><em>log_name='Application'</em>, <em>computer='.'</em><big>)</big><a class="reference internal" href="_modules/event_logs.html#event_sources"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.event_sources" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple iterator over all the event sources for a named log</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="event_logs.event_source">
-<tt class="descname">event_source</tt><big>(</big><em>source</em><big>)</big><a class="headerlink" href="#event_logs.event_source" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">event_logs.</tt><tt class="descname">event_source</tt><big>(</big><em>source</em><big>)</big><a class="reference internal" href="_modules/event_logs.html#event_source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.event_source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience function to return an <a class="reference internal" href="#event_logs.EventSource" title="event_logs.EventSource"><tt class="xref py py-class docutils literal"><span class="pre">EventSource</span></tt></a> object representing
 one of the existing event sources. Will raise <tt class="xref py py-exc docutils literal"><span class="pre">exceptions.x_not_found</span></tt> if the event
 source does not exist.</p>
@@ -127,7 +127,7 @@ source does not exist.</p>
 
 <dl class="function">
 <dt id="event_logs.log_event">
-<tt class="descname">log_event</tt><big>(</big><em>source</em>, <em>type='error'</em>, <em>message=None</em>, <em>data=None</em>, <em>id=0</em>, <em>category=0</em>, <em>principal=&lt;Unset&gt;</em><big>)</big><a class="headerlink" href="#event_logs.log_event" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">event_logs.</tt><tt class="descname">log_event</tt><big>(</big><em>source</em>, <em>type='error'</em>, <em>message=None</em>, <em>data=None</em>, <em>id=0</em>, <em>category=0</em>, <em>principal=&lt;Unset&gt;</em><big>)</big><a class="reference internal" href="_modules/event_logs.html#log_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.log_event" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience function to log an event against an existing source.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -153,7 +153,7 @@ source does not exist.</p>
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="event_logs._EventLogEntry">
-<em class="property">class </em><tt class="descname">_EventLogEntry</tt><big>(</big><em>event_log_name</em>, <em>event_log_entry</em><big>)</big><a class="headerlink" href="#event_logs._EventLogEntry" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">event_logs.</tt><tt class="descname">_EventLogEntry</tt><big>(</big><em>event_log_name</em>, <em>event_log_entry</em><big>)</big><a class="reference internal" href="_modules/event_logs.html#_EventLogEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs._EventLogEntry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Internal class for convenient access to attributes of an event log
 record. Attributes are available as lowercase_with_underscore equivalents
 of their TitleCase counterparts and are converted to Python data types
@@ -228,7 +228,7 @@ and the corresponding strings filled in.</p>
 
 <dl class="class">
 <dt id="event_logs.EventLog">
-<em class="property">class </em><tt class="descname">EventLog</tt><big>(</big><em>computer</em>, <em>name</em><big>)</big><a class="headerlink" href="#event_logs.EventLog" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">event_logs.</tt><tt class="descname">EventLog</tt><big>(</big><em>computer</em>, <em>name</em><big>)</big><a class="reference internal" href="_modules/event_logs.html#EventLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.EventLog" title="Permalink to this definition">¶</a></dt>
 <dd><p>An Event Log is a sequential database managed through API calls
 with a number of different Event Sources, against which events can
 be logged. The log can be read backwards (using the reversed () builtin)
@@ -256,7 +256,7 @@ except to find a few records at either end.</p>
 <p>How many seconds the records should be kept for before purging</p>
 <dl class="method">
 <dt id="event_logs.EventLog.__len__">
-<tt class="descname">__len__</tt><big>(</big><big>)</big><a class="headerlink" href="#event_logs.EventLog.__len__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__len__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/event_logs.html#EventLog.__len__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.EventLog.__len__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>Queries the underlying implementation for the current number of records
@@ -269,7 +269,7 @@ efficiently the number of records currently in the log:</p>
 </div>
 <dl class="method">
 <dt id="event_logs.EventLog.__iter__">
-<tt class="descname">__iter__</tt><big>(</big><big>)</big><a class="headerlink" href="#event_logs.EventLog.__iter__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__iter__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/event_logs.html#EventLog.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.EventLog.__iter__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>Implement the iterator protocol so that the event log itself can be treated
@@ -282,7 +282,7 @@ as an iterable. To iterate over the records in the log, oldest first:</p>
 <p>cf <a class="reference internal" href="#event_logs.EventLog.__reversed__" title="event_logs.EventLog.__reversed__"><tt class="xref py py-meth docutils literal"><span class="pre">__reversed__()</span></tt></a> for iterating in reverse order.</p>
 <dl class="method">
 <dt id="event_logs.EventLog.__reversed__">
-<tt class="descname">__reversed__</tt><big>(</big><big>)</big><a class="headerlink" href="#event_logs.EventLog.__reversed__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__reversed__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/event_logs.html#EventLog.__reversed__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.EventLog.__reversed__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>Implement the reverse iterator protocol so the event log can be iterated
@@ -294,7 +294,7 @@ over in reverse, ie latest first:</p>
 </div>
 <dl class="method">
 <dt id="event_logs.EventLog.__getitem__">
-<tt class="descname">__getitem__</tt><big>(</big><big>)</big><a class="headerlink" href="#event_logs.EventLog.__getitem__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__getitem__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/event_logs.html#EventLog.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.EventLog.__getitem__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>Allow random access to this event log by record position. NB This
@@ -311,20 +311,20 @@ used to find the first or last records:</p>
 <p>At present, slices are not supported.</p>
 <dl class="method">
 <dt id="event_logs.EventLog.clear">
-<tt class="descname">clear</tt><big>(</big><em>save_to_filename=None</em><big>)</big><a class="headerlink" href="#event_logs.EventLog.clear" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">clear</tt><big>(</big><em>save_to_filename=None</em><big>)</big><a class="reference internal" href="_modules/event_logs.html#EventLog.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.EventLog.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear the event log, optionally saving out to an opaque file first,
 using the built-in functionality.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="event_logs.EventLog.log_event">
-<tt class="descname">log_event</tt><big>(</big><em>source</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#event_logs.EventLog.log_event" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">log_event</tt><big>(</big><em>source</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/event_logs.html#EventLog.log_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.EventLog.log_event" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pass-through for <a class="reference internal" href="#event_logs.log_event" title="event_logs.log_event"><tt class="xref py py-func docutils literal"><span class="pre">log_event()</span></tt></a></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="event_logs.EventLog.watcher">
-<tt class="descname">watcher</tt><big>(</big><big>)</big><a class="headerlink" href="#event_logs.EventLog.watcher" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">watcher</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/event_logs.html#EventLog.watcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.EventLog.watcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>(EXPERIMENTAL) Unsure if this will be of any use. In principle, you can ask for an event
 to fire when a new record is written to this log. In practice, though, there&#8217;s
 no way of determining which record was added and you have to do some housekeeping
@@ -337,7 +337,7 @@ log every time to find the last record to match against. Does work, though.</p>
 
 <dl class="class">
 <dt id="event_logs.EventSource">
-<em class="property">class </em><tt class="descname">EventSource</tt><big>(</big><em>computer</em>, <em>log_name</em>, <em>source_name</em><big>)</big><a class="headerlink" href="#event_logs.EventSource" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">event_logs.</tt><tt class="descname">EventSource</tt><big>(</big><em>computer</em>, <em>log_name</em>, <em>source_name</em><big>)</big><a class="reference internal" href="_modules/event_logs.html#EventSource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.EventSource" title="Permalink to this definition">¶</a></dt>
 <dd><p>An Event Source is an apparently necessary but in fact slightly unnecessary
 part of the event log mechanism. In principle, it represents a name and a DLL
 with a bunch of message ids in it. In practice, you can log an event with an
@@ -365,7 +365,7 @@ Python event sources this will be the win32evtlog.pyd file.</p>
 <p>List of <a class="reference internal" href="#event_logs.EVENTLOG_TYPE" title="event_logs.EVENTLOG_TYPE"><tt class="xref py py-data docutils literal"><span class="pre">EVENTLOG_TYPE</span></tt></a> name strings supported by this event source.</p>
 <dl class="classmethod">
 <dt id="event_logs.EventSource.create">
-<em class="property">classmethod </em><tt class="descname">create</tt><big>(</big><em>name</em>, <em>log_name='Application'</em><big>)</big><a class="headerlink" href="#event_logs.EventSource.create" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">create</tt><big>(</big><em>name</em>, <em>log_name='Application'</em><big>)</big><a class="reference internal" href="_modules/event_logs.html#EventSource.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.EventSource.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the convenience functions to add a simple event source to
 the registry against a named event log (usually Application).
 Return the event source so you can log against it.</p>
@@ -385,7 +385,7 @@ Return the event source so you can log against it.</p>
 
 <dl class="method">
 <dt id="event_logs.EventSource.delete">
-<tt class="descname">delete</tt><big>(</big><big>)</big><a class="headerlink" href="#event_logs.EventSource.delete" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">delete</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/event_logs.html#EventSource.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.EventSource.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove an event source from the registry. NB There is no particular
 security at work here: it&#8217;s perfectly possible to remove someone else&#8217;s
 event source.</p>
@@ -393,7 +393,7 @@ event source.</p>
 
 <dl class="method">
 <dt id="event_logs.EventSource.log_event">
-<tt class="descname">log_event</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#event_logs.EventSource.log_event" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">log_event</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/event_logs.html#EventSource.log_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.EventSource.log_event" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pass-through to module-level <a class="reference internal" href="#event_logs.log_event" title="event_logs.log_event"><tt class="xref py py-func docutils literal"><span class="pre">log_event()</span></tt></a></p>
 </dd></dl>
 
@@ -404,7 +404,7 @@ event source.</p>
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
 <dt id="event_logs.x_event_logs">
-<em class="property">exception </em><tt class="descname">x_event_logs</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="headerlink" href="#event_logs.x_event_logs" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">event_logs.</tt><tt class="descname">x_event_logs</tt><big>(</big><em>errno=None</em>, <em>errctx=None</em>, <em>errmsg=None</em><big>)</big><a class="reference internal" href="_modules/event_logs.html#x_event_logs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.x_event_logs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base exception for eventlog-specific exceptions</p>
 </dd></dl>
 
@@ -413,7 +413,7 @@ event source.</p>
 <h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
 <dl class="data">
 <dt id="event_logs.EVENTLOG_READ">
-<tt class="descname">EVENTLOG_READ</tt><a class="headerlink" href="#event_logs.EVENTLOG_READ" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">event_logs.</tt><tt class="descname">EVENTLOG_READ</tt><a class="headerlink" href="#event_logs.EVENTLOG_READ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ways of reading event logs</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -450,7 +450,7 @@ event source.</p>
 
 <dl class="data">
 <dt id="event_logs.EVENTLOG_TYPE">
-<tt class="descname">EVENTLOG_TYPE</tt><a class="headerlink" href="#event_logs.EVENTLOG_TYPE" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">event_logs.</tt><tt class="descname">EVENTLOG_TYPE</tt><a class="headerlink" href="#event_logs.EVENTLOG_TYPE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Types of records in event logs</p>
 <table border="1" class="docutils">
 <colgroup>

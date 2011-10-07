@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>The FilePath class &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -45,7 +45,7 @@
           <a href="fs_drive_vol.html" title="The Drive class"
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -58,7 +58,7 @@
 <h1>The FilePath class<a class="headerlink" href="#the-filepath-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="fs.FilePath">
-<em class="property">class </em><tt class="descname">FilePath</tt><a class="headerlink" href="#fs.FilePath" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">fs.</tt><tt class="descname">FilePath</tt><a class="reference internal" href="_modules/fs.html#FilePath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt></p>
 <p>A unicode subtype which knows about path structures on Windows.
 The path itself need not exist on any filesystem, but it has to match
@@ -189,7 +189,7 @@ an exception is FilePath is relative.</li>
 </table>
 <dl class="method">
 <dt id="fs.FilePath.absolute">
-<tt class="descname">absolute</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.FilePath.absolute" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">absolute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#FilePath.absolute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.absolute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an absolute version of the current FilePath, whether
 relative or not. Use <tt class="xref py py-func docutils literal"><span class="pre">os.path.abspath()</span></tt> semantics.</p>
 </dd></dl>
@@ -203,42 +203,43 @@ relative or not. Use <tt class="xref py py-func docutils literal"><span class="p
 
 <dl class="method">
 <dt id="fs.FilePath.changed">
-<tt class="descname">changed</tt><big>(</big><em>root=None</em>, <em>dirname=None</em>, <em>filename=None</em>, <em>base=None</em>, <em>infix=None</em>, <em>ext=None</em><big>)</big><a class="headerlink" href="#fs.FilePath.changed" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">changed</tt><big>(</big><em>root=None</em>, <em>dirname=None</em>, <em>filename=None</em>, <em>base=None</em>, <em>infix=None</em>, <em>ext=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#FilePath.changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a new <a class="reference internal" href="#fs.FilePath" title="fs.FilePath"><tt class="xref py py-class docutils literal"><span class="pre">FilePath</span></tt></a> with one or more parts changed. This is particularly
 convenient for, say, changing the extension of a file or producing a version on
 another path, eg:</p>
-<div class="highlight-python"><pre>from winsys import fs, shell
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span><span class="p">,</span> <span class="n">shell</span>
 
-BACKUP_DRIVE = "D:\"
-for f in fs.flat (shell.special_folder ("personal"), "*.doc"):
-  f.copy (f.changed (root=BACKUP_DRIVE))</pre>
+<span class="n">BACKUP_DRIVE</span> <span class="o">=</span> <span class="s">&quot;D:</span><span class="se">\\</span><span class="s">&quot;</span>
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">flat</span> <span class="p">(</span><span class="n">shell</span><span class="o">.</span><span class="n">special_folder</span> <span class="p">(</span><span class="s">&quot;personal&quot;</span><span class="p">),</span> <span class="s">&quot;*.doc&quot;</span><span class="p">):</span>
+  <span class="n">f</span><span class="o">.</span><span class="n">copy</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">changed</span> <span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">BACKUP_DRIVE</span><span class="p">))</span>
+</pre></div>
 </div>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="fs.FilePath.factory">
-<em class="property">classmethod </em><tt class="descname">factory</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#fs.FilePath.factory" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">factory</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/fs.html#FilePath.factory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Designed to be redefined in a subclass so that the <tt class="xref py py-meth docutils literal"><span class="pre">__add__()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">__radd__()</span></tt>
 methods can return the appropriate type.</p>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="fs.FilePath.from_parts">
-<em class="property">classmethod </em><tt class="descname">from_parts</tt><big>(</big><em>root</em>, <em>dirname</em>, <em>base</em>, <em>ext</em><big>)</big><a class="headerlink" href="#fs.FilePath.from_parts" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">from_parts</tt><big>(</big><em>root</em>, <em>dirname</em>, <em>base</em>, <em>ext</em><big>)</big><a class="reference internal" href="_modules/fs.html#FilePath.from_parts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.from_parts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recreate a filepath from its constituent parts. No real validation is done;
 it is assumed that the parameters are valid parts of a filepath.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="fs.FilePath.is_relative">
-<tt class="descname">is_relative</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.FilePath.is_relative" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">is_relative</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#FilePath.is_relative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.is_relative" title="Permalink to this definition">¶</a></dt>
 <dd><p>A filepath is relative if it has no root or if its
 root is a drive letter only (without a directory backslash).</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="fs.FilePath.relative_to">
-<tt class="descname">relative_to</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#fs.FilePath.relative_to" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">relative_to</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="_modules/fs.html#FilePath.relative_to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.relative_to" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return this filepath as relative to another. cf <tt class="xref py py-func docutils literal"><span class="pre">utils.relative_to()</span></tt></p>
 </dd></dl>
 
@@ -299,7 +300,7 @@ root is a drive letter only (without a directory backslash).</p>
           <a href="fs_drive_vol.html" title="The Drive class"
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

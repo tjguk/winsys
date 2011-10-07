@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>The Mailslot class &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -45,7 +45,7 @@
           <a href="ipc.html" title="ipc – Interprocess Communication"
              accesskey="P">previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -58,7 +58,7 @@
 <h1>The Mailslot class<a class="headerlink" href="#the-mailslot-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="ipc.Mailslot">
-<em class="property">class </em><tt class="descname">Mailslot</tt><big>(</big><em>name</em>, <em>serialiser=(&lt;function _unserialised at 0x034F2CF0&gt;</em>, <em>&lt;function _unserialised at 0x034F2CF0&gt;)</em>, <em>message_size=0</em>, <em>timeout_ms=-1</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#ipc.Mailslot" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">ipc.</tt><tt class="descname">Mailslot</tt><big>(</big><em>name</em>, <em>serialiser=(&lt;function _unserialised at 0x03CA8EF0&gt;</em>, <em>&lt;function _unserialised at 0x03CA8EF0&gt;)</em>, <em>message_size=0</em>, <em>timeout_ms=-1</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
 <p>A mailslot is a mechanism for passing small datasets (up to about
 400 bytes) between machines in the same network. For transport and
@@ -121,12 +121,12 @@ this mailslot</li>
 </table>
 <dl class="method">
 <dt id="ipc.Mailslot.as_string">
-<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mailslot.as_string" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot.as_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot.as_string" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="ipc.Mailslot.close">
-<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mailslot.close" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot.close" title="Permalink to this definition">¶</a></dt>
 <dd><p>Close the mailslot for reading or writing. This will be called automatically
 if the mailslot is being context-managed. Closing a mailslot which has not been
 used (and which therefore has no open handles) will succeed silently.</p>
@@ -134,12 +134,12 @@ used (and which therefore has no open handles) will succeed silently.</p>
 
 <dl class="method">
 <dt id="ipc.Mailslot.dumped">
-<tt class="descname">dumped</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#ipc.Mailslot.dumped" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dumped</tt><big>(</big><em>level=0</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot.dumped"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot.dumped" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="ipc.Mailslot.empty">
-<tt class="descname">empty</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mailslot.empty" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">empty</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot.empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot.empty" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -152,7 +152,7 @@ used (and which therefore has no open handles) will succeed silently.</p>
 
 <dl class="method">
 <dt id="ipc.Mailslot.full">
-<tt class="descname">full</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mailslot.full" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">full</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot.full"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot.full" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -165,7 +165,7 @@ used (and which therefore has no open handles) will succeed silently.</p>
 
 <dl class="method">
 <dt id="ipc.Mailslot.get">
-<tt class="descname">get</tt><big>(</big><em>block=True</em>, <em>timeout_ms=None</em><big>)</big><a class="headerlink" href="#ipc.Mailslot.get" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get</tt><big>(</big><em>block=True</em>, <em>timeout_ms=None</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attempt to read from the mailslot, optionally blocking and timing out if nothing is found.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -189,13 +189,13 @@ used (and which therefore has no open handles) will succeed silently.</p>
 
 <dl class="method">
 <dt id="ipc.Mailslot.get_nowait">
-<tt class="descname">get_nowait</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mailslot.get_nowait" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_nowait</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot.get_nowait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot.get_nowait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience wrapper which calls <a class="reference internal" href="#ipc.Mailslot.get" title="ipc.Mailslot.get"><tt class="xref py py-meth docutils literal"><span class="pre">get()</span></tt></a> without blocking</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ipc.Mailslot.put">
-<tt class="descname">put</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#ipc.Mailslot.put" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">put</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot.put"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot.put" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attempt to write to the mailslot</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -212,7 +212,7 @@ exceeds the mailslot&#8217;s maximum size</td>
 
 <dl class="method">
 <dt id="ipc.Mailslot.pyobject">
-<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mailslot.pyobject" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot.pyobject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot.pyobject" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -227,7 +227,7 @@ exceeds the mailslot&#8217;s maximum size</td>
 
 <dl class="method">
 <dt id="ipc.Mailslot.qsize">
-<tt class="descname">qsize</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Mailslot.qsize" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">qsize</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot.qsize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot.qsize" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -253,7 +253,7 @@ exceeds the mailslot&#8217;s maximum size</td>
             </a></p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="ipc.html"
-                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a></p>
+                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="events.html"
                         title="next chapter">The Event class</a></p>
@@ -295,7 +295,7 @@ exceeds the mailslot&#8217;s maximum size</td>
           <a href="ipc.html" title="ipc – Interprocess Communication"
              >previous</a> |</li>
         <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" ><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+          <li><a href="ipc.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

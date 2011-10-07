@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Using the accounts module &mdash; WinSys v0.5beta documentation</title>
-    <link rel="stylesheet" href="../_static/winsys.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -56,7 +56,7 @@
             
   <div class="section" id="using-the-accounts-module">
 <h1>Using the accounts module<a class="headerlink" href="#using-the-accounts-module" title="Permalink to this headline">¶</a></h1>
-<p>The examples here all refer to the <a class="reference internal" href="../accounts.html#module-accounts" title="accounts: User accounts, SIDs &amp;c."><tt class="xref py py-mod docutils literal"><span class="pre">accounts</span></tt></a> module.</p>
+<p>The examples here all refer to the <tt class="xref py py-mod docutils literal"><span class="pre">accounts</span></tt> module.</p>
 <div class="section" id="get-the-logged-on-user-s-account">
 <h2>Get the logged-on user&#8217;s account<a class="headerlink" href="#get-the-logged-on-user-s-account" title="Permalink to this headline">¶</a></h2>
 <p>Get the account for the logged-on user.</p>
@@ -119,10 +119,10 @@ owner. (Assumes the existence of a &#8220;python&#8221; user).</p>
 <p>There can be a lot of subtlety involved in switching users. The winsys
 code at present takes a very straightforward approach which should work
 for several cases.</p>
-<p>Since we&#8217;re using the <a class="reference internal" href="../accounts.html#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> class itself as a context manager,
+<p>Since we&#8217;re using the <tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt> class itself as a context manager,
 no password can be passed in, so the program automatically pops up a
 standard Windows password UI with the username filled in. To pass a
-password in automatically, use the <a class="reference internal" href="../accounts.html#accounts.Principal.impersonate" title="accounts.Principal.impersonate"><tt class="xref py py-meth docutils literal"><span class="pre">Principal.impersonate()</span></tt></a> method
+password in automatically, use the <tt class="xref py py-meth docutils literal"><span class="pre">Principal.impersonate()</span></tt> method
 which accepts a password and a logon type.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -150,7 +150,7 @@ privs.</p>
 in the Users group. (This last means that it will not show up on the
 quick-logon screen in XP etc.). The same approach can be used for creating
 a local group, except that the <tt class="xref py py-meth docutils literal"><span class="pre">Group.create()</span></tt> method should be called on
-the <a class="reference internal" href="../accounts.html#accounts.Group" title="accounts.Group"><tt class="xref py py-class docutils literal"><span class="pre">Group</span></tt></a> class instead.</p>
+the <tt class="xref py py-class docutils literal"><span class="pre">Group</span></tt> class instead.</p>
 </div>
 </div>
 <div class="section" id="delete-a-local-user">
