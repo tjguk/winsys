@@ -72,7 +72,6 @@ WINERROR_MAP = {
 wrapped = exc.wrapper (WINERROR_MAP, x_fs)
 
 def ignore_access_errors (exc_info):
-  print exc_info[0]
   return exc_info[0] is exc.x_access_denied
 
 PyHANDLE = pywintypes.HANDLEType
