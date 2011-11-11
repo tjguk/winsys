@@ -1758,6 +1758,7 @@ def _files (pattern="*", ignore=[u".", u".."], error_handler=None):
       # If the error_handler chooses to swallow this error, carry on
       #
       if error_handler and error_handler (sys.exc_info ()):
+        core.warn ("Error %s ignored", sys.exc_info ()[0])
         continue
       else:
         raise
