@@ -9,6 +9,8 @@ all a pythonic feel. There's nothing here you couldn't do yourself with
 10 minutes and a copy of the pywin32 and SDK docs. But it's all here already,
 and with a more Pythonish feel about it.
 
+Docs available at: http://winsys.readthedocs.org/en/latest/index.html
+
 Design Principles
 -----------------
 

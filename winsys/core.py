@@ -66,10 +66,16 @@ class Unset (object):
 
 UNSET = Unset ()
 
+class NullHandler (logging.Handler):
+  def emit (self, record):
+    pass
+
 #
 # Create a logger without any handlers.
 #
 _logger = logging.getLogger (u"winsys")
+_logger.addHandler (NullHandler ())
+
 debug = _logger.debug
 log = _logger.log
 info = _logger.info
@@ -82,6 +88,3 @@ def add_logging_handler (handler):
 
 def remove_logging_handler (handler):
   _logger.removeHandler (handler)
-
-log_filepath = tempfile.mkstemp (".log", "winsys-")[-1]
-add_logging_handler (logging.FileHandler (log_filepath))
