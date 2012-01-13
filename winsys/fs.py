@@ -1351,6 +1351,23 @@ class File (Entry):
 
     return file (zip_filename)
 
+  def bytes (self):
+    """Return the contents of the file as a bytes object (str in 2.x)
+
+    :returns: a bytes/str object corresponding to the contents of the file
+    """
+    with open (self, "rb") as f:
+      return f.read ()
+
+  def text (self, encoding="ascii"):
+    """Return the contents of the file as a text object (unicode in 2.x)
+
+    :param encoding: valid encoding to pass to codecs.open
+    :returns: a text/unicode object corresponding to the contents of the file
+    """
+    with codecs.open (self, "r", encoding=encoding) as f:
+      return f.read ()
+
   touch = create
 
 class Dir (Entry):
