@@ -173,7 +173,10 @@ def _register_wndclass ():
   icon_flags = win32con.LR_LOADFROMFILE | win32con.LR_DEFAULTSIZE
 
   python_exe = wrapped (win32api.GetModuleHandle, None)
-  wc.hIcon = wrapped (win32gui.LoadIcon, python_exe, 1)
+  if hasattr (sys, "frozen"):
+    wc.hIcon = None
+  else:
+    wc.hIcon = wrapped (win32gui.LoadIcon, python_exe, 1)
   class_atom = wrapped (win32gui.RegisterClass, wc)
   return class_name
 
