@@ -27,6 +27,8 @@ import win32api
 import win32con
 import win32event
 import win32file
+import win32net
+import win32netcon
 import winioctlcon
 
 if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
@@ -149,6 +151,7 @@ COMPRESSION_FORMAT = constants.Constants.from_dict (dict (
 COMPRESSION_FORMAT.doc (u"Ways in which a file can be compressed")
 FSCTL = constants.Constants.from_pattern (u"FSCTL_*", namespace=winioctlcon)
 FSCTL.doc (u"Types of fsctl operation")
+STYPE = constants.Constants.from_pattern (u"STYPE_*", namespace=win32netcon)
 
 PyHANDLE = pywintypes.HANDLEType
 
@@ -691,6 +694,47 @@ class Volume (core._WinSysObject):
     :param filepath: anything accepted by :func:`dir`
     """
     dir (filepath).dismount ()
+
+class Share (core._WinSysObject):
+  ur"""Wraps a drive share
+  """
+
+  def __init__ (self, servername, sharename):
+    self.servername = servername.strip ("\\") or "."
+    self.sharename = sharename.strip ("\\")
+
+  def as_string (self):
+    return r"\\%s\%s" % (self.servername, self.sharename)
+
+  def __getattr__ (self, attr):
+    info = self._get_info ()
+    try:
+      return info[attr]
+    except KeyError:
+      raise AttributeError
+
+  def _get_info (self):
+    return wrapped (win32net.NetShareGetInfo, self.servername, self.sharename, 502)
+
+  def _get_path (self):
+    return dir (self._get_info ().get ("path"))
+  path = property (_get_path)
+
+  def _get_security (self):
+    return security.security (self._get_info ().get ('security_descriptor'))
+  security = property (_get_security)
+
+  def dumped (self, level=0, show_security=True):
+    output = []
+    output.append (self.as_string ())
+    output.append ("type: (%d) %s" % (self.type, STYPE.names_from_value (self.type)))
+    output.append ("remark: %s" % self.remark)
+    output.append ("path: %s" % self.path)
+    if show_security:
+      security = self.security
+      if security:
+        output.append (security.dumped (level))
+    return utils.dumped ("\n".join (output), level)
 
 class Entry (FilePath, core._WinSysObject):
   ur"""Heart of the fs module. This is a subtype of :class:`FilePath` and
@@ -1835,7 +1879,7 @@ def file (filepath):
   elif isinstance (f, Dir) and f:
     raise x_fs, (None, u"file", u"%s exists but is a directory" % filepath)
   else:
-    return File (filepath)
+    return File (unicode (filepath))
 
 def dir (filepath):
   ur"""Return a :class:`Dir` object representing this filepath on
@@ -1850,7 +1894,7 @@ def dir (filepath):
   elif isinstance (f, File) and f:
     raise x_fs (None, u"dir", u"%s exists but is a file" % filepath)
   else:
-    return Dir (filepath)
+    return Dir (unicode (filepath))
 
 def glob (pattern):
   ur"""Mimic the built-in glob.glob functionality as a generator,
@@ -2058,6 +2102,32 @@ def volumes ():
       break
     else:
       yield Volume (volume_name)
+
+def share (share):
+  ur"""Return a :class:`Share` object corresponding to share
+  """
+  if share is None:
+    return None
+  elif isinstance (share, Share):
+    return share
+  else:
+    match = re.match (sep * 4 + "(" + LEGAL_FILECHARS + ")" + sep * 2 + "(" + LEGAL_FILECHARS + ")", share)
+    if match:
+      return Share (*match.groups ())
+    else:
+      raise x_fs ("Invalid share name: %s" % share)
+
+def shares (servername="."):
+  ur"""Iterate over all the shares in a system, yielding a :class:`Share` object
+  representing each one
+  """
+  infos, total, hResume = wrapped (win32net.NetShareEnum, servername, 0)
+  for info in infos:
+    yield Share (servername, info['netname'])
+  while hResume > 0:
+    infos, total, hResume = wrapped (win32net.NetShareEnum, servername, 0, hResume)
+    for info in infos:
+      yield Share (servername, info['netname'])
 
 def mounts ():
   ur"""Iterate over all mounted volume mountpoints in the system, yielding a

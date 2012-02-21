@@ -499,7 +499,7 @@ class Security (core._WinSysObject):
     Almost never called directly; use :func:`security` unless you need some
     slightly special handling with inherited handles.
     """
-    if options is core.UNSET: options = self.DEFAULT_OPTIONS
+    if options is core.UNSET: options = cls.DEFAULT_OPTIONS
 
     options = cls.security_options (options)
     control, revision = sd.GetSecurityDescriptorControl ()
