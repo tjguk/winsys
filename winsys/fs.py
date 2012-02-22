@@ -573,7 +573,7 @@ class Drive (core._WinSysObject):
     :param vol: anything accepted by :func:`volume`
     :returns: `self`
     """
-    self.root ().mount (vol)
+    self.root.mount (vol)
     return self
 
   def dismount (self):
@@ -581,7 +581,7 @@ class Drive (core._WinSysObject):
 
     :returns: `self`
     """
-    self.root ().dismount ()
+    self.root.dismount ()
     return self
 
   def dumped (self, level):
