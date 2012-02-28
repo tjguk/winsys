@@ -839,9 +839,12 @@ class Entry (FilePath, core._WinSysObject):
       output.append ("written_at: %s" % self.written_at)
       output.append ("uncompressed_size: %s" % self.uncompressed_size)
       output.append ("size: %s" % self.size)
-    output.append ("Attributes:")
-    output.append (self.attributes.dumped (level))
-    if self.attributes.directory:
+      output.append ("Attributes:")
+      output.append (self.attributes.dumped (level))
+      is_directory = self.attributes.directory
+    else:
+      is_directory = False
+    if is_directory:
       vol = self.mounted_by ()
       if vol:
         output.append ("Mount point for:")
@@ -855,7 +858,7 @@ class Entry (FilePath, core._WinSysObject):
           pass
       else:
         output.append ("Security:\n" + s.dumped (level))
-    if self.attributes.directory:
+    if is_directory:
       vol = self.mounted_by ()
       if vol:
         output.append ("Mount point for:")
@@ -1786,6 +1789,18 @@ class Dir (Entry):
 
   rmdir = delete
 
+class SharedDir (Dir):
+
+  def mounted_by (self):
+    raise NotImplementedError
+
+  def mount (self, vol):
+    raise NotImplementedError
+
+  def dumped (self, level=0):
+    raise NotImplementedError
+
+
 def files (pattern="*", ignore=[u".", u".."], error_handler=None):
   ur"""Iterate over files and directories matching pattern, which can include
   a path. Calls win32file.FindFilesIterator under the covers, which uses
@@ -1930,7 +1945,10 @@ def dir (filepath):
   elif isinstance (f, File) and f:
     raise x_fs (None, u"dir", u"%s exists but is a file" % filepath)
   else:
-    return Dir (unicode (filepath))
+    if re.match (UNC, f.root):
+      return SharedDir (unicode (filepath))
+    else:
+      return Dir (unicode (filepath))
 
 def glob (pattern):
   ur"""Mimic the built-in glob.glob functionality as a generator,
