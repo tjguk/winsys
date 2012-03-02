@@ -70,6 +70,7 @@ WINERROR_MAP = {
   winerror.ERROR_NOT_READY : x_not_ready,
   winerror.ERROR_INVALID_HANDLE : exc.x_invalid_handle,
   winerror.ERROR_SHARING_VIOLATION : x_sharing_violation,
+  2310 : x_no_such_file,
 }
 wrapped = exc.wrapper (WINERROR_MAP, x_fs)
 
@@ -699,15 +700,21 @@ class Share (core._WinSysObject):
   ur"""Wraps a drive share
   """
 
-  def __init__ (self, servername, sharename, path=core.UNSET, remark=core.UNSET, security=core.UNSET):
+  def __init__ (self, servername, sharename):
     self.servername = (servername or ".").strip ("\\")
     self.sharename = sharename.strip ("\\")
-    self.path = path
-    self.remark = remark
-    self.security = security_.security (security)
 
   def as_string (self):
     return r"\\%s\%s" % (self.servername, self.sharename)
+
+  def __bool__ (self):
+    try:
+      wrapped (win32net.NetShareGetInfo, self.servername, self.sharename, 2)
+    except x_no_such_file:
+      return False
+    else:
+      return True
+  __nonzero__ = __bool__
 
   def __getattr__ (self, attr):
     info = self._get_info ()
@@ -739,17 +746,31 @@ class Share (core._WinSysObject):
         output.append (security_.dumped (level))
     return utils.dumped ("\n".join (output), level)
 
+  def create (self, servername, sharename, path, remark=core.UNSET, security=core.UNSET):
+    remark = u"" if remark is core.UNSET else remark
+    security = security_.security (None if security is core.UNSET else security)
+    info = dict (
+      netname=sharename,
+      path=path,
+      remark=remark,
+      security=security.pyobject ().SECURITY_DESCRIPTOR if security else None
+    )
+    wrapped (win32net.NetShareAdd, servername, 502, info)
+    return self.__class__ (servername, sharename)
+
   def clone (self, servername=core.UNSET, sharename=core.UNSET, path=core.UNSET, remark=core.UNSET, security=core.UNSET):
     if servername is core.UNSET and sharename is core.UNSET:
       raise x_fs ("At least one of servername and sharename must be specified")
-    servername = self.servername if servername is core.UNSET else servername
-    info = dict (
-      netname = self.sharename if sharename is core.UNSET else sharename,
+    return self.__class__.create (
+      servername = self.servername if servername is core.UNSET else servername,
+      sharename = self.sharename if sharename is core.UNSET else sharename,
       path = self.path if path is core.UNSET else path,
       remark = self.remark if remark is core.UNSET else remark,
-      security = security_.security (self.security if security is core.UNSET else security).pyobject ().SECURITY_DESCRIPTOR
+      security = self.security if security is core.UNSET else security
     )
-    wrapped (win32net.NetShareAdd, servername, 502, info)
+
+  def delete (self):
+    wrapped (win32net.NetShareDel, self.servername, self.sharename)
 
 class Entry (FilePath, core._WinSysObject):
   ur"""Heart of the fs module. This is a subtype of :class:`FilePath` and
@@ -818,9 +839,12 @@ class Entry (FilePath, core._WinSysObject):
       output.append ("written_at: %s" % self.written_at)
       output.append ("uncompressed_size: %s" % self.uncompressed_size)
       output.append ("size: %s" % self.size)
-    output.append ("Attributes:")
-    output.append (self.attributes.dumped (level))
-    if self.attributes.directory:
+      output.append ("Attributes:")
+      output.append (self.attributes.dumped (level))
+      is_directory = self.attributes.directory
+    else:
+      is_directory = False
+    if is_directory:
       vol = self.mounted_by ()
       if vol:
         output.append ("Mount point for:")
@@ -834,7 +858,7 @@ class Entry (FilePath, core._WinSysObject):
           pass
       else:
         output.append ("Security:\n" + s.dumped (level))
-    if self.attributes.directory:
+    if is_directory:
       vol = self.mounted_by ()
       if vol:
         output.append ("Mount point for:")
@@ -1765,6 +1789,18 @@ class Dir (Entry):
 
   rmdir = delete
 
+class SharedDir (Dir):
+
+  def mounted_by (self):
+    raise NotImplementedError
+
+  def mount (self, vol):
+    raise NotImplementedError
+
+  def dumped (self, level=0):
+    raise NotImplementedError
+
+
 def files (pattern="*", ignore=[u".", u".."], error_handler=None):
   ur"""Iterate over files and directories matching pattern, which can include
   a path. Calls win32file.FindFilesIterator under the covers, which uses
@@ -1909,7 +1945,10 @@ def dir (filepath):
   elif isinstance (f, File) and f:
     raise x_fs (None, u"dir", u"%s exists but is a file" % filepath)
   else:
-    return Dir (unicode (filepath))
+    if re.match (UNC, f.root):
+      return SharedDir (unicode (filepath))
+    else:
+      return Dir (unicode (filepath))
 
 def glob (pattern):
   ur"""Mimic the built-in glob.glob functionality as a generator,
