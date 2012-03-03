@@ -34,7 +34,7 @@ import winioctlcon
 if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
   winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
-from winsys import constants, core, exc, handles, security, utils, _kernel32
+from winsys import constants, core, exc, handles, security as security_, utils, _kernel32
 
 sep = unicode (os.sep)
 seps = u"/\\"
@@ -70,6 +70,7 @@ WINERROR_MAP = {
   winerror.ERROR_NOT_READY : x_not_ready,
   winerror.ERROR_INVALID_HANDLE : exc.x_invalid_handle,
   winerror.ERROR_SHARING_VIOLATION : x_sharing_violation,
+  2310 : x_no_such_file,
 }
 wrapped = exc.wrapper (WINERROR_MAP, x_fs)
 
@@ -700,11 +701,20 @@ class Share (core._WinSysObject):
   """
 
   def __init__ (self, servername, sharename):
-    self.servername = servername.strip ("\\") or "."
+    self.servername = (servername or ".").strip ("\\")
     self.sharename = sharename.strip ("\\")
 
   def as_string (self):
     return r"\\%s\%s" % (self.servername, self.sharename)
+
+  def __bool__ (self):
+    try:
+      wrapped (win32net.NetShareGetInfo, self.servername, self.sharename, 2)
+    except x_no_such_file:
+      return False
+    else:
+      return True
+  __nonzero__ = __bool__
 
   def __getattr__ (self, attr):
     info = self._get_info ()
@@ -721,7 +731,7 @@ class Share (core._WinSysObject):
   path = property (_get_path)
 
   def _get_security (self):
-    return security.security (self._get_info ().get ('security_descriptor'))
+    return security_.security (self._get_info ().get ('security_descriptor'))
   security = property (_get_security)
 
   def dumped (self, level=0, show_security=True):
@@ -733,8 +743,34 @@ class Share (core._WinSysObject):
     if show_security:
       security = self.security
       if security:
-        output.append (security.dumped (level))
+        output.append (security_.dumped (level))
     return utils.dumped ("\n".join (output), level)
+
+  def create (self, servername, sharename, path, remark=core.UNSET, security=core.UNSET):
+    remark = u"" if remark is core.UNSET else remark
+    security = security_.security (None if security is core.UNSET else security)
+    info = dict (
+      netname=sharename,
+      path=path,
+      remark=remark,
+      security=security.pyobject ().SECURITY_DESCRIPTOR if security else None
+    )
+    wrapped (win32net.NetShareAdd, servername, 502, info)
+    return self.__class__ (servername, sharename)
+
+  def clone (self, servername=core.UNSET, sharename=core.UNSET, path=core.UNSET, remark=core.UNSET, security=core.UNSET):
+    if servername is core.UNSET and sharename is core.UNSET:
+      raise x_fs ("At least one of servername and sharename must be specified")
+    return self.__class__.create (
+      servername = self.servername if servername is core.UNSET else servername,
+      sharename = self.sharename if sharename is core.UNSET else sharename,
+      path = self.path if path is core.UNSET else path,
+      remark = self.remark if remark is core.UNSET else remark,
+      security = self.security if security is core.UNSET else security
+    )
+
+  def delete (self):
+    wrapped (win32net.NetShareDel, self.servername, self.sharename)
 
 class Entry (FilePath, core._WinSysObject):
   ur"""Heart of the fs module. This is a subtype of :class:`FilePath` and
@@ -803,9 +839,12 @@ class Entry (FilePath, core._WinSysObject):
       output.append ("written_at: %s" % self.written_at)
       output.append ("uncompressed_size: %s" % self.uncompressed_size)
       output.append ("size: %s" % self.size)
-    output.append ("Attributes:")
-    output.append (self.attributes.dumped (level))
-    if self.attributes.directory:
+      output.append ("Attributes:")
+      output.append (self.attributes.dumped (level))
+      is_directory = self.attributes.directory
+    else:
+      is_directory = False
+    if is_directory:
       vol = self.mounted_by ()
       if vol:
         output.append ("Mount point for:")
@@ -819,7 +858,7 @@ class Entry (FilePath, core._WinSysObject):
           pass
       else:
         output.append ("Security:\n" + s.dumped (level))
-    if self.attributes.directory:
+    if is_directory:
       vol = self.mounted_by ()
       if vol:
         output.append ("Mount point for:")
@@ -1089,8 +1128,8 @@ class Entry (FilePath, core._WinSysObject):
   def handle (self, mode="r"):
     return handles.handle (handle (self, write="w" in mode, exclusive="x" in mode))
 
-  def security (self, options=security.Security.DEFAULT_OPTIONS):
-    ur"""Return a :class:`security.Security` object corresponding to this
+  def security (self, options=security_.Security.DEFAULT_OPTIONS):
+    ur"""Return a :class:`security_.Security` object corresponding to this
     entry's security attributes. Note that the returning object is a context
     manager so a common pattern is::
 
@@ -1104,10 +1143,10 @@ class Entry (FilePath, core._WinSysObject):
           s.break_inheritance ()
           s.dacl = [(s.owner, "F", "ALLOW")]
 
-    :param options: cf :func:`security.security`
-    :returns: a :class:`security.Security` object which may be used as a context manager
+    :param options: cf :func:`security_.security`
+    :returns: a :class:`security_.Security` object which may be used as a context manager
     """
-    return security.security (self, options=options)
+    return security_.security (self, options=options)
 
   def compress (self):
     ur"""Compress this entry; if it is a file, it will be compressed, if it
@@ -1153,7 +1192,7 @@ class Entry (FilePath, core._WinSysObject):
     ur"""FIXME: Need to work out how to create certificates for this
     """
     return (
-      (security.principal (sid), hashblob, info)
+      (security_.principal (sid), hashblob, info)
         for (sid, hashblob, info)
         in wrapped (win32file.QueryUsersOnEncryptedFile, self._normpath)
     )
@@ -1201,7 +1240,7 @@ class Entry (FilePath, core._WinSysObject):
     :param principal: anything accepted by :func:`principal` [logged-on user]
     """
     if principal is core.UNSET:
-      principal = security.me ()
+      principal = security_.me ()
     #
     # Specify only DACL when reading as we may have no more rights
     # than that, and we don't need any more.
@@ -1224,14 +1263,14 @@ class Entry (FilePath, core._WinSysObject):
 
       f = fs.file ("c:/temp/temp.txt")
       assert f
-      with security.change_privileges (["take_ownership"]):
+      with security_.change_privileges (["take_ownership"]):
         f.take_ownership ()
         f.take_control ()
 
     :param principal: anything accepted by :func:`principal` [logged-on user]
     """
     if principal is core.UNSET:
-      principal = security.me ()
+      principal = security_.me ()
     #
     # Specify no options when reading as we may have no rights
     # whatsoever on the security descriptor and be relying on
@@ -1351,10 +1390,10 @@ class File (Entry):
     return self
 
   def create (self, security=None):
-    ur"""Create this file optionally with specific security. If the
+    ur"""Create this file optionally with specific security_. If the
     file already exists it will not be overwritten.
 
-    :param security: a :class:`security.Security` object
+    :param security: a :class:`security_.Security` object
     :returns: this object
     """
     wrapped (
@@ -1362,7 +1401,7 @@ class File (Entry):
       self._normpath,
       FILE_ACCESS.WRITE,
       0,
-      None if security is None else security.pyobject (),
+      None if security is None else security_.pyobject (),
       FILE_CREATION.OPEN_ALWAYS,
       0,
       None
@@ -1511,10 +1550,10 @@ class Dir (Entry):
     already exist. If any exists but is a file rather than a directory,
     an exception is raised.
 
-    :param security_descriptor: anything accepted by :func:`security.security`
+    :param security_descriptor: anything accepted by :func:`security_.security`
     :returns: a :class:`Dir` representing the newly-created directory
     """
-    security_descriptor = security.security (security_descriptor)
+    security_descriptor = security_.security (security_descriptor)
     parts = self.parts
     root, pieces = parts[0], parts[1:]
 
@@ -1540,7 +1579,7 @@ class Dir (Entry):
     resulting :class:`Dir` object.
 
     :param dirname: a relative path
-    :param security_descriptor: anything accepted by :func:`security.security`
+    :param security_descriptor: anything accepted by :func:`security_.security`
     :returns: a :class:`Dir` representing the newly-created directory
     """
     return self.dir (dirname).create (security_descriptor=security_descriptor)
@@ -1750,6 +1789,18 @@ class Dir (Entry):
 
   rmdir = delete
 
+class SharedDir (Dir):
+
+  def mounted_by (self):
+    raise NotImplementedError
+
+  def mount (self, vol):
+    raise NotImplementedError
+
+  def dumped (self, level=0):
+    raise NotImplementedError
+
+
 def files (pattern="*", ignore=[u".", u".."], error_handler=None):
   ur"""Iterate over files and directories matching pattern, which can include
   a path. Calls win32file.FindFilesIterator under the covers, which uses
@@ -1894,7 +1945,10 @@ def dir (filepath):
   elif isinstance (f, File) and f:
     raise x_fs (None, u"dir", u"%s exists but is a file" % filepath)
   else:
-    return Dir (unicode (filepath))
+    if re.match (UNC, f.root):
+      return SharedDir (unicode (filepath))
+    else:
+      return Dir (unicode (filepath))
 
 def glob (pattern):
   ur"""Mimic the built-in glob.glob functionality as a generator,
