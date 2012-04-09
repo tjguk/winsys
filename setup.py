@@ -27,7 +27,7 @@ if __name__ == '__main__':
       author='Tim Golden',
       author_email='mail@timgolden.me.uk',
       description='Python tools for the Windows sysadmin',
-      long_description=open ("README.txt").read (),
+      long_description=open ("README.rst").read (),
       classifiers=[
           'Development Status :: 4 - Beta',
           'Environment :: Console',
