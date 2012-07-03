@@ -163,7 +163,7 @@ def _register_wndclass ():
   class_name = str (uuid.uuid1 ())
   wc = wrapped (win32gui.WNDCLASS)
   wc.SetDialogProc ()
-  wc.hInstance = win32gui.dllhandle
+  wc.hInstance = sys.dllhandle
   wc.lpszClassName = class_name
   wc.style = win32con.CS_VREDRAW | win32con.CS_HREDRAW
   wc.hCursor = wrapped (win32gui.LoadCursor, 0, win32con.IDC_ARROW)
@@ -173,9 +173,7 @@ def _register_wndclass ():
   icon_flags = win32con.LR_LOADFROMFILE | win32con.LR_DEFAULTSIZE
 
   python_exe = wrapped (win32api.GetModuleHandle, None)
-  if hasattr (sys, "frozen"):
-    wc.hIcon = None
-  else:
+  if not hasattr (sys, "frozen"):
     wc.hIcon = wrapped (win32gui.LoadIcon, python_exe, 1)
   class_atom = wrapped (win32gui.RegisterClass, wc)
   return class_name
