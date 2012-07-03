@@ -163,7 +163,7 @@ def _register_wndclass ():
   class_name = str (uuid.uuid1 ())
   wc = wrapped (win32gui.WNDCLASS)
   wc.SetDialogProc ()
-  wc.hInstance = sys.dllhandle
+  wc.hInstance = win32gui.dllhandle
   wc.lpszClassName = class_name
   wc.style = win32con.CS_VREDRAW | win32con.CS_HREDRAW
   wc.hCursor = wrapped (win32gui.LoadCursor, 0, win32con.IDC_ARROW)
