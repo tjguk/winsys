@@ -1694,10 +1694,6 @@ class Dir (Entry):
     for f in self.flat (includedirs=True):
       raise x_fs (errctx="Dir.mount", errmsg="You can't mount to a non-empty directory")
     vol = volume (vol)
-    for m in vol.mounts:
-      if not m.dirname:
-        raise x_fs (errctx="Dir.mount", errmsg=u"Volume %s already has a drive letter %s" % (vol, m.root))
-
     wrapped (win32file.SetVolumeMountPoint, self, vol.name)
     return self
 
