@@ -75,7 +75,7 @@ class NullHandler (logging.Handler):
 #
 # Create a logger without any handlers.
 #
-_logger = logging.getLogger (u"winsys")
+_logger = logging.getLogger ("winsys")
 _logger.addHandler (NullHandler ())
 
 debug = _logger.debug

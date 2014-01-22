@@ -9,9 +9,9 @@ from win32file import *
 import winioctlcon
 
 FORMATS = {
-  u"DWORDLONG" : "Q",
-  u"USN" : "q",
-  u"DWORD" : "L"
+  "DWORDLONG" : "Q",
+  "USN" : "q",
+  "DWORD" : "L"
 }
 
 def parse_structure (structure):
@@ -53,9 +53,9 @@ class Data (object):
     return struct.pack (self.format (), *(self._items[item] for item in self.items ()))
 
   def dump (self):
-    print u"{\n  %s\n}" % "\n  ".join ("%s : %s" % (k, v) for (k, v) in self._items.items ())
+    print "{\n  %s\n}" % "\n  ".join ("%s : %s" % (k, v) for (k, v) in self._items.items ())
 
-USN_JOURNAL_DATA_STRUCT = u"""
+USN_JOURNAL_DATA_STRUCT = """
   DWORDLONG UsnJournalID;
   USN FirstUsn;
   USN NextUsn;
@@ -67,7 +67,7 @@ USN_JOURNAL_DATA_STRUCT = u"""
 class USN_JOURNAL_DATA (Data):
   STRUCTURE = parse_structure (USN_JOURNAL_DATA_STRUCT)
 
-CREATE_USN_JOURNAL_DATA_STRUCT = u"""
+CREATE_USN_JOURNAL_DATA_STRUCT = """
 typedef struct {
   DWORDLONG MaximumSize;
   DWORDLONG AllocationDelta;
@@ -77,7 +77,7 @@ class CREATE_USN_JOURNAL_DATA (Data):
   STRUCTURE = parse_structure (CREATE_USN_JOURNAL_DATA_STRUCT)
 
 
-READ_USN_JOURNAL_DATA_STRUCT = u"""
+READ_USN_JOURNAL_DATA_STRUCT = """
 typedef struct {
   USN StartUsn;
   DWORD ReasonMask;
@@ -90,7 +90,7 @@ typedef struct {
 class READ_USN_JOURNAL_DATA (Data):
   STRUCTURE = parse_structure (READ_USN_JOURNAL_DATA_STRUCT)
 
-USN_RECORD_STRUCT = u"""
+USN_RECORD_STRUCT = """
   DWORD RecordLength;
   WORD MajorVersion;
   WORD MinorVersion;
@@ -112,7 +112,7 @@ class USN_RECORD (Data):
 
 def main ():
   hVolume = CreateFile  (
-    u"\\.\c:",
+    "\\.\c:",
     GENERIC_READ,
     FILE_SHARE_READ | FILE_SHARE_WRITE,
     None,

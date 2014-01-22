@@ -59,17 +59,17 @@ class ACL (core._WinSysObject):
 
   def dumped (self, level=0):
     output = []
-    output.append (u"inherited: %s" % self.inherited)
+    output.append ("inherited: %s" % self.inherited)
     for ace in self._list or []:
       output.append (ace.dumped (level))
-    return utils.dumped (u"\n".join (output), level)
+    return utils.dumped ("\n".join (output), level)
 
   def pyobject (self, *args, **kwargs):
     raise NotImplementedError
 
   def __iter__ (self):
     if self._list is None:
-      raise x_value_not_set (core.UNSET, "ACL.__iter__", u"No entry has been set for this ACL")
+      raise x_value_not_set (core.UNSET, "ACL.__iter__", "No entry has been set for this ACL")
     else:
       return iter (sorted (self._list))
 
@@ -143,8 +143,8 @@ class ACL (core._WinSysObject):
 class DACL (ACL):
   _ACE = _aces.DACE
   _ACE_MAP = {
-    _aces.ACE_TYPE.ACCESS_ALLOWED : u"AddAccessAllowedAceEx",
-    _aces.ACE_TYPE.ACCESS_DENIED : u"AddAccessDeniedAceEx",
+    _aces.ACE_TYPE.ACCESS_ALLOWED : "AddAccessAllowedAceEx",
+    _aces.ACE_TYPE.ACCESS_DENIED : "AddAccessDeniedAceEx",
   }
 
   def pyobject (self, include_inherited=False):
@@ -169,16 +169,16 @@ class DACL (ACL):
 
   @classmethod
   def public (cls):
-    return cls.from_list ([(u"Everyone", u"F", u"ALLOW")])
+    return cls.from_list ([("Everyone", "F", "ALLOW")])
 
   @classmethod
   def private (cls):
-    return cls.from_list ([("", u"F", u"ALLOW")])
+    return cls.from_list ([("", "F", "ALLOW")])
 
 class SACL (ACL):
   _ACE = _aces.SACE
   _ACE_MAP = {
-    _aces.ACE_TYPE.SYSTEM_AUDIT : u"AddAuditAccessAceEx",
+    _aces.ACE_TYPE.SYSTEM_AUDIT : "AddAuditAccessAceEx",
   }
 
   def pyobject (self, include_inherited=False):

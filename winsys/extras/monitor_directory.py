@@ -232,8 +232,8 @@ class App (object):
       title = cgi.escape ("Top files on %s over %dMb - %s" % (path, size_threshold_mb, status))
 
     doc = []
-    doc.append (u"<html><head><title>%s</title>" % title)
-    doc.append (u"""<style>
+    doc.append ("<html><head><title>%s</title>" % title)
+    doc.append ("""<style>
     body {font-family : calibri, verdana, sans-serif;}
     h1 {font-size : 120%;}
     form#params {font-size : 120%;}
@@ -247,11 +247,11 @@ class App (object):
     table td {padding-right : 0.5em;}
     table td.filename {width : 72%;}
     </style>""")
-    doc.append (u"""<style media="print">
+    doc.append ("""<style media="print">
     form#params {display : none;}
     </style>""")
-    doc.append (u"</head><body>")
-    doc.append (u"""<form id="params" action="/" method="GET">
+    doc.append ("</head><body>")
+    doc.append ("""<form id="params" action="/" method="GET">
     <span class="label">Scan</span>&nbsp;<input type="text" name="path" value="%(path)s" size="20" maxlength="20" />&nbsp;
     <span class="label">for files over</span>&nbsp;<input type="text" name="size_threshold_mb" value="%(size_threshold_mb)s" size="5" maxlength="5" />Mb
     <span class="label">showing the top</span>&nbsp;<input type="text" name="top_n_files" value="%(top_n_files)s" size="3" maxlength="3" /> files
@@ -264,7 +264,7 @@ class App (object):
 
     now = win32timezone.utcnow ()
     if path:
-      doc.append (u"<h1>%s</h1>" % title)
+      doc.append ("<h1>%s</h1>" % title)
       latest_filename = "\\".join (files[-1].parts[1:]) if files else "(no file yet)"
       doc.append (u'<p class="updated">Last updated %s</p>' % time.asctime ())
       doc.append (u'<table><thead><tr><td class="filename">Filename</td><td class="size">Size (Mb)</td><td class="updated">Updated</td></tr></thead>')
@@ -281,9 +281,9 @@ class App (object):
           )
         except fs.exc.x_winsys:
           pass
-      doc.append (u"</table>")
+      doc.append ("</table>")
 
-    doc.append (u"</body></html>")
+    doc.append ("</body></html>")
     return doc
 
   def handler (self, form):

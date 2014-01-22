@@ -61,27 +61,27 @@ class Token (core._WinSysObject):
     self.hThread = hThread
 
   def __getattr__ (self, attr):
-    info_type = getattr (win32security, u"Token" + attr)
+    info_type = getattr (win32security, "Token" + attr)
     fn = self._MAP.get (attr, lambda x : x)
     return fn (wrapped (win32security.GetTokenInformation, self.hToken, info_type))
 
   def as_string (self):
-    return u"%s in process/thread %s/%s" % (self.User, self.hProcess, self.hThread)
+    return "%s in process/thread %s/%s" % (self.User, self.hProcess, self.hThread)
 
   def dumped (self, level):
     output = []
-    output.append (u"user: %s" % self.User)
-    output.append (u"owner: %s" % self.Owner)
-    output.append (u"groups:\n%s" % utils.dumped_list (self.Groups, level))
-    output.append (u"restricted_sids:\n%s" % utils.dumped_list (self.RestrictedSids, level))
-    output.append (u"privileges:\n%s" % utils.dumped_list (sorted (self.Privileges), level))
-    output.append (u"primary_group: %s" % self.PrimaryGroup)
-    output.append (u"source: %s, %s" % self.Source)
-    output.append (u"default_dacl:\n%s" % self.DefaultDacl.dumped (level))
-    output.append (u"type: %s" % self.Type)
-    output.append (u"session_id: %s" % self.SessionId)
-    output.append (u"statistics:\n%s" % utils.dumped_dict (self.Statistics, level))
-    return utils.dumped (u"\n".join (output), level)
+    output.append ("user: %s" % self.User)
+    output.append ("owner: %s" % self.Owner)
+    output.append ("groups:\n%s" % utils.dumped_list (self.Groups, level))
+    output.append ("restricted_sids:\n%s" % utils.dumped_list (self.RestrictedSids, level))
+    output.append ("privileges:\n%s" % utils.dumped_list (sorted (self.Privileges), level))
+    output.append ("primary_group: %s" % self.PrimaryGroup)
+    output.append ("source: %s, %s" % self.Source)
+    output.append ("default_dacl:\n%s" % self.DefaultDacl.dumped (level))
+    output.append ("type: %s" % self.Type)
+    output.append ("session_id: %s" % self.SessionId)
+    output.append ("statistics:\n%s" % utils.dumped_dict (self.Statistics, level))
+    return utils.dumped ("\n".join (output), level)
 
   def pyobject (self):
     return self.hToken
@@ -122,4 +122,4 @@ def token (token=core.UNSET):
   elif issubclass (token.__class__, Token):
     return token
   else:
-    raise x_winsys (u"Token must be HANDLE, Token or None")
+    raise x_winsys ("Token must be HANDLE, Token or None")

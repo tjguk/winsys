@@ -28,7 +28,7 @@ def console_hwnd ():
     set_console_title (old_title)
 
 def set_environment (**kwargs):
-  root = registry.registry ("HKCU")
+  root = registry.registry ("HKC")
   env = root.Environment
   for label, value in kwargs.iteritems ():
     env.set_value (label, value)

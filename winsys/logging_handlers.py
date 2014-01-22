@@ -7,7 +7,7 @@ import logging
 from winsys import exc, ipc
 
 class MailslotHandler (logging.Handler):
-  u"""A logging-compatible handler which will write to a named
+  """A logging-compatible handler which will write to a named
   mailslot. The data is marshalled before being sent which means
   that only Python primitives may be sent, but allows, eg, None
   to be used as a sentinel value.
@@ -30,7 +30,7 @@ class MailslotHandler (logging.Handler):
       pass
 
 class PermanentMailslotHandler (MailslotHandler):
-  u"""Subclass the MailslotHandler but take no action on closedown.
+  """Subclass the MailslotHandler but take no action on closedown.
   This is intended to be used when the receiving mailslot is running
   permanently so shouldn't be closed when the logging process finishes.
   """

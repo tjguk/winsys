@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-u"""Provide functions unavailable via pywin32 which reside in kernel32.dll
+"""Provide functions unavailable via pywin32 which reside in kernel32.dll
 """
 from __future__ import unicode_literals
 
@@ -84,7 +84,7 @@ def CreateProcessWithLogonW (
   if domain: domain = unicode (domain)
   if password: password = unicode (password)
   if application_name: application_name = unicode (application_name)
-  command_line = ctypes.create_unicode_buffer (command_line or u"")
+  command_line = ctypes.create_unicode_buffer (command_line or "")
   if current_directory: current_directory = unicode (current_directory)
   if not startup_info:
     startup_info = STARTUPINFO ()

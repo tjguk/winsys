@@ -16,31 +16,31 @@ class x_unknown_value (x_ace):
   pass
 
 ACE_FLAG = constants.Constants.from_list ([
-  u"CONTAINER_INHERIT_ACE",
-  u"INHERIT_ONLY_ACE",
-  u"INHERITED_ACE",
-  u"NO_PROPAGATE_INHERIT_ACE",
-  u"OBJECT_INHERIT_ACE",
-  u"FAILED_ACCESS_ACE_FLAG",
-  u"SUCCESSFUL_ACCESS_ACE_FLAG"
-], pattern=u"*_ACE", namespace=win32security)
-ACE_TYPE = constants.Constants.from_pattern (u"*_ACE_TYPE", namespace=win32security)
-DACE_TYPE = constants.Constants.from_pattern (u"ACCESS_*_ACE_TYPE", namespace=win32security)
-SACE_TYPE = constants.Constants.from_pattern (u"SYSTEM_*_ACE_TYPE", namespace=win32security)
+  "CONTAINER_INHERIT_ACE",
+  "INHERIT_ONLY_ACE",
+  "INHERITED_ACE",
+  "NO_PROPAGATE_INHERIT_ACE",
+  "OBJECT_INHERIT_ACE",
+  "FAILED_ACCESS_ACE_FLAG",
+  "SUCCESSFUL_ACCESS_ACE_FLAG"
+], pattern="*_ACE", namespace=win32security)
+ACE_TYPE = constants.Constants.from_pattern ("*_ACE_TYPE", namespace=win32security)
+DACE_TYPE = constants.Constants.from_pattern ("ACCESS_*_ACE_TYPE", namespace=win32security)
+SACE_TYPE = constants.Constants.from_pattern ("SYSTEM_*_ACE_TYPE", namespace=win32security)
 
 class ACE (core._WinSysObject):
 
   ACCESS = {
-    u"R" : constants.GENERIC_ACCESS.READ,
-    u"W" : constants.GENERIC_ACCESS.WRITE,
-    u"X" : constants.GENERIC_ACCESS.EXECUTE,
-    u"C" : constants.GENERIC_ACCESS.READ | constants.GENERIC_ACCESS.WRITE | constants.GENERIC_ACCESS.EXECUTE,
-    u"F" : constants.GENERIC_ACCESS.ALL
+    "R" : constants.GENERIC_ACCESS.READ,
+    "W" : constants.GENERIC_ACCESS.WRITE,
+    "X" : constants.GENERIC_ACCESS.EXECUTE,
+    "C" : constants.GENERIC_ACCESS.READ | constants.GENERIC_ACCESS.WRITE | constants.GENERIC_ACCESS.EXECUTE,
+    "F" : constants.GENERIC_ACCESS.ALL
   }
   FLAGS = ACE_FLAG.OBJECT_INHERIT | ACE_FLAG.CONTAINER_INHERIT
 
   def __init__ (self, trustee, access, type, flags=core.UNSET, object_type=core.UNSET, inherited_object_type=core.UNSET):
-    u"""Construct a new ACE
+    """Construct a new ACE
 
     @param trustee "domain \ user" or Principal instance representing the security principal
     @param access Bitmask or "RWXCF"
@@ -64,16 +64,16 @@ class ACE (core._WinSysObject):
     type = ACE_TYPE.name_from_value (self.type)
     flags = " | ".join (ACE_FLAG.names_from_value (self.flags))
     access = utils.mask_as_string (self.access)
-    return u"%s %s %s %s" % (self.trustee, access, flags, type)
+    return "%s %s %s %s" % (self.trustee, access, flags, type)
 
   def dumped (self, level):
     output = []
-    output.append (u"trustee: %s" % self.trustee)
-    output.append (u"access: %s" % utils.mask_as_string (self.access))
-    output.append (u"type: %s" % ACE_TYPE.name_from_value (self.type))
+    output.append ("trustee: %s" % self.trustee)
+    output.append ("access: %s" % utils.mask_as_string (self.access))
+    output.append ("type: %s" % ACE_TYPE.name_from_value (self.type))
     if self.flags:
-      output.append (u"flags:\n%s" % utils.dumped_flags (self.flags, ACE_FLAG, level))
-    return utils.dumped (u"\n".join (output), level)
+      output.append ("flags:\n%s" % utils.dumped_flags (self.flags, ACE_FLAG, level))
+    return utils.dumped ("\n".join (output), level)
 
   def _get_inherited (self):
     return bool (self.flags & ACE_FLAG.INHERITED)
@@ -88,7 +88,7 @@ class ACE (core._WinSysObject):
     return bool (self.flags & ACE_FLAG.CONTAINER_INHERIT)
   def _set_containers_inherit (self, switch):
     if self.inherited:
-      raise exc.x_access_denied (errctx=u"ACE._get_containers_inherit", errmsg=u"Cannot change an inherited ACE")
+      raise exc.x_access_denied (errctx="ACE._get_containers_inherit", errmsg="Cannot change an inherited ACE")
     if switch:
       self.flags |= ACE_FLAG.CONTAINER_INHERIT
     else:
@@ -99,7 +99,7 @@ class ACE (core._WinSysObject):
     return bool (self.flags & ACE_FLAG.OBJECT_INHERIT)
   def _set_objects_inherit (self, switch):
     if self.inherited:
-      raise exc.x_access_denied (errctx=u"ACE._get_objects_inherit", errmsg=u"Cannot change an inherited ACE")
+      raise exc.x_access_denied (errctx="ACE._get_objects_inherit", errmsg="Cannot change an inherited ACE")
     if switch:
       self.flags |= ACE_FLAG.OBJECT_INHERIT
     else:
@@ -110,7 +110,7 @@ class ACE (core._WinSysObject):
     return self._access_mask
   def _set_access (self, access):
     if self.inherited:
-      raise exc.x_access_denied (errctx=u"ACE._set_access", errmsg=u"Cannot change an inherited ACE")
+      raise exc.x_access_denied (errctx="ACE._set_access", errmsg="Cannot change an inherited ACE")
     self._access_mask = self._access (access)
   access = property (_get_access, _set_access)
 
@@ -118,7 +118,7 @@ class ACE (core._WinSysObject):
     return self._trustee
   def _set_trustee (self, trustee):
     if self.inherited:
-      raise exc.x_access_denied (errctx=u"ACE._get_trustee", errmsg=u"Cannot change an inherited ACE")
+      raise exc.x_access_denied (errctx="ACE._get_trustee", errmsg="Cannot change an inherited ACE")
     self._trustee = accounts.principal (trustee)
   trustee = property (_get_trustee, _set_trustee)
 
@@ -126,7 +126,7 @@ class ACE (core._WinSysObject):
   def from_ace (cls, ace):
     (type, flags) = ace[0]
     name = ACE_TYPE.name_from_value (type)
-    if u"object" in name.lower ().split (u"_"):
+    if "object" in name.lower ().split ("_"):
       mask, object_type, inherited_object_type, sid = ace[1:]
     else:
       mask, sid = ace[1:]
@@ -137,7 +137,7 @@ class ACE (core._WinSysObject):
     elif issubclass (cls, SACE):
       _class = SACE
     else:
-      if name in ACE_TYPE.names (u"ACCESS_*"):
+      if name in ACE_TYPE.names ("ACCESS_*"):
         _class = DACE
       else:
         _class = SACE
@@ -152,13 +152,13 @@ class ACE (core._WinSysObject):
       try:
         return reduce (operator.or_, (cls.ACCESS[a] for a in access.upper ()), 0)
       except KeyError:
-        raise x_unknown_value (errctx=u"ACE._access", errmsg=u"%s is not a valid access string" % access)
+        raise x_unknown_value (errctx="ACE._access", errmsg="%s is not a valid access string" % access)
 
 class DACE (ACE):
 
   TYPES = {
-    u"ALLOW" : ACE_TYPE.ACCESS_ALLOWED,
-    u"DENY" : ACE_TYPE.ACCESS_DENIED,
+    "ALLOW" : ACE_TYPE.ACCESS_ALLOWED,
+    "DENY" : ACE_TYPE.ACCESS_DENIED,
   }
 
   def __init__ (
@@ -190,7 +190,7 @@ class DACE (ACE):
       try:
         return cls.TYPES[type.upper ()]
       except KeyError:
-        raise x_unknown_value (errctx=u"ACE._type", errmsg=u"%s is not a valid type string" % type)
+        raise x_unknown_value (errctx="ACE._type", errmsg="%s is not a valid type string" % type)
 
   def __hash__(self):
     return hash((self.trustee, self.access, self.type))
@@ -200,7 +200,7 @@ class DACE (ACE):
     return (self.trustee, self.access, self.type) == (other.trustee, other.access, other.type)
 
   def __lt__ (self, other):
-    u"""Deny comes first, then what?"""
+    """Deny comes first, then what?"""
     other = self.ace (other)
     return (self.is_allowed < other.is_allowed)
 
@@ -279,7 +279,7 @@ def dace (dace):
     else:
       return DACE.from_tuple (dace)
   except (ValueError, TypeError):
-    raise x_ace (errctx=u"dace", errmsg=u"DACE must be an existing DACE or a 3-tuple of (trustee, access, type)")
+    raise x_ace (errctx="dace", errmsg="DACE must be an existing DACE or a 3-tuple of (trustee, access, type)")
 
 def sace (sace):
   """Attempt to return a SACE either from an existing SACE
@@ -296,7 +296,7 @@ def sace (sace):
     else:
       return SACE.from_tuple (sace)
   except (ValueError, TypeError):
-    raise x_ace (errctx=u"sace", errmsg=u"SACE must be an existing SACE or a 4-tuple of (trustee, access, audit_what)")
+    raise x_ace (errctx="sace", errmsg="SACE must be an existing SACE or a 4-tuple of (trustee, access, audit_what)")
 
 def ace (ace):
   """Attempt to return a SACE / DACE depending on the structure passed
@@ -315,4 +315,4 @@ def ace (ace):
       else:
         raise TypeError
   except (ValueError, TypeError):
-    raise x_ace (errctx=u"ace", errmsg=u"ACE must be an existing DACE/SACE or a 3-tuple which can be passed to dace or sace")
+    raise x_ace (errctx="ace", errmsg="ACE must be an existing DACE/SACE or a 3-tuple which can be passed to dace or sace")

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-u"""Windows manages security by granting rights -- such as the
+"""Windows manages security by granting rights -- such as the
 ability to read or write an object -- in the form of
 Access Control Lists (ACLs) of Access Control Entries (ACEs)
 to specific security principals: users, groups or other entities.
@@ -48,60 +48,60 @@ from winsys._security._privileges import *
 from winsys.accounts import *
 
 SE_OBJECT_TYPE = constants.Constants.from_list ([
-  u"SE_UNKNOWN_OBJECT_TYPE",
-  u"SE_FILE_OBJECT",
-  u"SE_SERVICE",
-  u"SE_PRINTER",
-  u"SE_REGISTRY_KEY",
-  u"SE_LMSHARE",
-  u"SE_KERNEL_OBJECT",
-  u"SE_WINDOW_OBJECT",
-  u"SE_DS_OBJECT",
-  u"SE_DS_OBJECT_ALL",
-  u"SE_PROVIDER_DEFINED_OBJECT",
-  u"SE_WMIGUID_OBJECT",
-  u"SE_REGISTRY_WOW64_32KEY"
-], pattern=u"SE_*", namespace=win32security)
-SE_OBJECT_TYPE.doc (u"Types of object which can be secured")
+  "SE_UNKNOWN_OBJECT_TYPE",
+  "SE_FILE_OBJECT",
+  "SE_SERVICE",
+  "SE_PRINTER",
+  "SE_REGISTRY_KEY",
+  "SE_LMSHARE",
+  "SE_KERNEL_OBJECT",
+  "SE_WINDOW_OBJECT",
+  "SE_DS_OBJECT",
+  "SE_DS_OBJECT_ALL",
+  "SE_PROVIDER_DEFINED_OBJECT",
+  "SE_WMIGUID_OBJECT",
+  "SE_REGISTRY_WOW64_32KEY"
+], pattern="SE_*", namespace=win32security)
+SE_OBJECT_TYPE.doc ("Types of object which can be secured")
 SECURITY_INFORMATION = constants.Constants.from_pattern (
-  u"*_SECURITY_INFORMATION",
+  "*_SECURITY_INFORMATION",
   namespace=win32security
 )
-SECURITY_INFORMATION.doc (u"Information held with a security descriptor body")
+SECURITY_INFORMATION.doc ("Information held with a security descriptor body")
 SD_CONTROL = constants.Constants.from_list ([
   #~ "SE_DACL_AUTO_INHERIT_REQ",
-  u"SE_DACL_AUTO_INHERITED",
-  u"SE_DACL_DEFAULTED",
-  u"SE_DACL_PRESENT",
-  u"SE_DACL_PROTECTED",
-  u"SE_GROUP_DEFAULTED",
-  u"SE_OWNER_DEFAULTED",
+  "SE_DACL_AUTO_INHERITED",
+  "SE_DACL_DEFAULTED",
+  "SE_DACL_PRESENT",
+  "SE_DACL_PROTECTED",
+  "SE_GROUP_DEFAULTED",
+  "SE_OWNER_DEFAULTED",
   #~ "SE_RM_CONTROL_VALID",
   #~ "SE_SACL_AUTO_INHERIT_REQ",
-  u"SE_SACL_AUTO_INHERITED",
-  u"SE_SACL_DEFAULTED",
-  u"SE_SACL_PRESENT",
-  u"SE_SACL_PROTECTED",
-  u"SE_SELF_RELATIVE"
-], pattern=u"SE_*", namespace=win32security)
-SD_CONTROL.doc (u"Information held with a security descriptor header")
+  "SE_SACL_AUTO_INHERITED",
+  "SE_SACL_DEFAULTED",
+  "SE_SACL_PRESENT",
+  "SE_SACL_PROTECTED",
+  "SE_SELF_RELATIVE"
+], pattern="SE_*", namespace=win32security)
+SD_CONTROL.doc ("Information held with a security descriptor header")
 
 PyHANDLE = pywintypes.HANDLEType
 PySECURITY_ATTRIBUTES = pywintypes.SECURITY_ATTRIBUTESType
 PySECURITY_DESCRIPTOR = type (pywintypes.SECURITY_DESCRIPTOR ())
 
 class x_security (exc.x_winsys):
-  u"Base for security-related exceptions"
+  "Base for security-related exceptions"
 
 class x_value_not_set (x_security):
-  u"Raised if an attempt is made to read a security value which hasn't been set"
+  "Raised if an attempt is made to read a security value which hasn't been set"
 
 WINERROR_MAP = {
 }
 wrapped = exc.wrapper (WINERROR_MAP, x_security)
 
 class Security (core._WinSysObject):
-  u"""The heart of the :mod:`security` module, this class represents the security
+  """The heart of the :mod:`security` module, this class represents the security
   descriptor of a file, kernel object or any other securable object. It's most
   commonly instantiated from an object's security method (eg `fs.File.security`)
   or by means of the :func:`security` function which can take the name or handle
@@ -154,19 +154,19 @@ class Security (core._WinSysObject):
   """
 
   OPTIONS = {
-    u"O" : SECURITY_INFORMATION.OWNER,
-    u"G" : SECURITY_INFORMATION.GROUP,
-    u"D" : SECURITY_INFORMATION.DACL,
-    u"S" : SECURITY_INFORMATION.SACL
+    "O" : SECURITY_INFORMATION.OWNER,
+    "G" : SECURITY_INFORMATION.GROUP,
+    "D" : SECURITY_INFORMATION.DACL,
+    "S" : SECURITY_INFORMATION.SACL
   }
-  u"""Mapping between characters and security info:
+  """Mapping between characters and security info:
 
   * O - Owner
   * G - Group
   * D - DACL
   * S - SACL
   """
-  DEFAULT_OPTIONS = u"OD"
+  DEFAULT_OPTIONS = "OD"
   DEFAULT_CONTROL = SD_CONTROL.SELF_RELATIVE
 
   def __init__ (
@@ -180,7 +180,7 @@ class Security (core._WinSysObject):
     originating_object=core.UNSET,
     originating_object_type=core.UNSET
   ):
-    u"""Create a new :class:`Security` object from its component pieces,
+    """Create a new :class:`Security` object from its component pieces,
     all optional. You won't often need to call this as you can do most
     useful things via the :func:`security` function, but to create a simple
     security descriptor for immediate use, you can instantiate it directly.
@@ -247,19 +247,19 @@ class Security (core._WinSysObject):
   def dumped (self, level):
     output = []
     if self._control is not core.UNSET:
-      output.append (u"control:\n%s" % utils.dumped_flags (self._control, SD_CONTROL, level))
+      output.append ("control:\n%s" % utils.dumped_flags (self._control, SD_CONTROL, level))
     if self._owner is not core.UNSET:
-      output.append (u"owner: %s" % self.owner)
+      output.append ("owner: %s" % self.owner)
     if self._group is not core.UNSET:
-      output.append (u"group: %s" % self.group)
+      output.append ("group: %s" % self.group)
     if self._dacl is not core.UNSET:
-      output.append (u"dacl:\n%s" % self.dacl.dumped (level))
+      output.append ("dacl:\n%s" % self.dacl.dumped (level))
     if self._sacl is not core.UNSET:
-      output.append (u"sacl:\n%s" % self.sacl.dumped (level))
-    return utils.indented (u"\n".join (output), level)
+      output.append ("sacl:\n%s" % self.sacl.dumped (level))
+    return utils.indented ("\n".join (output), level)
 
   def break_inheritance (self, copy_first=True, break_dacl=True, break_sacl=True):
-    u"""Cause this security object to start a new thread of inheritance. By
+    """Cause this security object to start a new thread of inheritance. By
     default, assume that DACL & SACL inheritance are both to be broken and
     that existing permissions are to be retained, although uninherited.
 
@@ -275,7 +275,7 @@ class Security (core._WinSysObject):
     return self
 
   def restore_inheritance (self, copy_back=True, restore_dacl=True, restore_sacl=True):
-    u"""Cause this security object to regain its inhertance from its parents.
+    """Cause this security object to regain its inhertance from its parents.
     By default, assume that DACL & SACL inheritance are both to be recovered and
     that existing permissions are to be copied back in.
 
@@ -292,27 +292,27 @@ class Security (core._WinSysObject):
 
   def _get_owner (self):
     if self._owner is core.UNSET:
-      raise x_value_not_set (errctx=u"Security._get_owner", errmsg=u"No Owner has been set for this Security object")
+      raise x_value_not_set (errctx="Security._get_owner", errmsg="No Owner has been set for this Security object")
     return self._owner
   def _set_owner (self, owner):
     if owner is None:
-      raise x_value_not_set (errctx=u"Security._set_owner", errmsg=u"Cannot set owner to None for this Security object")
+      raise x_value_not_set (errctx="Security._set_owner", errmsg="Cannot set owner to None for this Security object")
     self._owner = principal (owner) or core.UNSET
   owner = property (_get_owner, _set_owner)
 
   def _get_group (self):
     if self._group is core.UNSET:
-      raise x_value_not_set (errctx=u"Security._get_group", errmsg=u"No Group has been set for this Security object")
+      raise x_value_not_set (errctx="Security._get_group", errmsg="No Group has been set for this Security object")
     return self._group
   def _set_group (self, group):
     if group is None:
-      raise x_value_not_set (errctx="Security._set_group", errmsg=u"Cannot set group to None for this Security object")
+      raise x_value_not_set (errctx="Security._set_group", errmsg="Cannot set group to None for this Security object")
     self._group = principal (group) or core.UNSET
   group = property (_get_group, _set_group)
 
   def _get_dacl (self):
     if self._dacl is core.UNSET:
-      raise x_value_not_set (errctx=u"Security.dacl", errmsg=u"No DACL has been set for this Security object")
+      raise x_value_not_set (errctx="Security.dacl", errmsg="No DACL has been set for this Security object")
     return self._dacl
   def _set_dacl (self, dacl):
     if dacl is core.UNSET:
@@ -323,7 +323,7 @@ class Security (core._WinSysObject):
 
   def _get_sacl (self):
     if self._sacl is core.UNSET:
-      raise x_value_not_set (errctx=u"Security._get_sacl", errmsg=u"No SACL has been set for this Security object")
+      raise x_value_not_set (errctx="Security._get_sacl", errmsg="No SACL has been set for this Security object")
     return self._sacl
   def _set_sacl (self, sacl):
     if sacl is core.UNSET:
@@ -334,7 +334,7 @@ class Security (core._WinSysObject):
 
   def __enter__ (self):
     if not self._originating_object:
-      raise x_security (errctx=u"Security.__enter__", errmsg=u"Cannot run anonymous security within a context")
+      raise x_security (errctx="Security.__enter__", errmsg="Cannot run anonymous security within a context")
     return self
 
   def __exit__ (self, exc_type, exc_value, traceback):
@@ -346,7 +346,7 @@ class Security (core._WinSysObject):
 
   @classmethod
   def security_options (cls, options):
-    u"""Accept either an integer representing a bitmask combination
+    """Accept either an integer representing a bitmask combination
     or :const:`SECURITY_INFORMATION` values; or a string whose
     characters map, via :const:`OPTIONS` to the same values.
     The following have the same result:
@@ -363,7 +363,7 @@ class Security (core._WinSysObject):
       return reduce (operator.or_, (cls.OPTIONS[opt] for opt in options.upper ()), 0)
 
   def to_object (self, obj=core.UNSET, object_type=core.UNSET, options=core.UNSET):
-    u"""Write the current state of the object as the security settings
+    """Write the current state of the object as the security settings
     on a Windows object, typically a file. This is most often called
     implicitly when the :class:`Security` object is used as a context
     manager, but can be called explicitly, especially to copy one object's
@@ -380,7 +380,7 @@ class Security (core._WinSysObject):
     """
     obj = obj or self._originating_object
     if not obj:
-      raise x_security (errctx=u"Security.to_object", errmsg=u"No object to write security to")
+      raise x_security (errctx="Security.to_object", errmsg="No object to write security to")
     if object_type is core.UNSET:
       object_type = self._originating_object_type or SE_OBJECT_TYPE.FILE_OBJECT
     else:
@@ -468,7 +468,7 @@ class Security (core._WinSysObject):
 
   @classmethod
   def from_object (cls, obj, object_type=core.UNSET, options=core.UNSET):
-    u"""Constructs a :class:`Security` object from a PyHANDLE or an object name.
+    """Constructs a :class:`Security` object from a PyHANDLE or an object name.
     Almost never called directly; use :func:`security`.
     """
     if object_type is core.UNSET: object_type = SE_OBJECT_TYPE.FILE_OBJECT
@@ -500,7 +500,7 @@ class Security (core._WinSysObject):
     originating_object_type=core.UNSET,
     options=core.UNSET
   ):
-    u"""Constructs a :class:`Security` object from a PySECURITY_DESCRIPTOR object.
+    """Constructs a :class:`Security` object from a PySECURITY_DESCRIPTOR object.
     Almost never called directly; use :func:`security` unless you need some
     slightly special handling with inherited handles.
     """
@@ -542,7 +542,7 @@ class Security (core._WinSysObject):
 
   @classmethod
   def from_string (cls, sddl, options=core.UNSET):
-    u"""Constructs a :class:`Security` object from an SDDL string.
+    """Constructs a :class:`Security` object from an SDDL string.
     Useful for round-tripping, since the :meth:`__str__` method produces
     an SDDL string.
     """
@@ -558,7 +558,7 @@ class Security (core._WinSysObject):
     )
 
 def security (obj=core.UNSET, obj_type=core.UNSET, options=core.UNSET):
-  u"""Return a :class:`Security` object representing the security attributes
+  """Return a :class:`Security` object representing the security attributes
   of a named object (eg a file, registry key) or a kernel object (eg a process,
   a pipe). With no parameters, an empty :class:`Security` object is returned which can then be
   set up with appropriate attributes and applied to other objects via its
@@ -605,7 +605,7 @@ def security (obj=core.UNSET, obj_type=core.UNSET, options=core.UNSET):
 #
 @contextlib.contextmanager
 def impersonate (user, password=core.UNSET):
-  u"""Context-manager which impersonates a user with a password
+  """Context-manager which impersonates a user with a password
   and then reverts to the current user::
 
     from __future__ import with_statement
@@ -626,7 +626,7 @@ def impersonate (user, password=core.UNSET):
 
 @contextlib.contextmanager
 def change_privileges (enable_privs=[], disable_privs=[], _token=core.UNSET):
-  u"""Context manager which temporarily enables/disables privs within the
+  """Context manager which temporarily enables/disables privs within the
   current token, reverting when done to the previous situation::
 
     from __future__ import with_statement
