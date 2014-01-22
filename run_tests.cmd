@@ -1,2 +1,2 @@
-python_d -c "from winsys import tests; tests.run ()"
+py -m winsys.tests
 pause
