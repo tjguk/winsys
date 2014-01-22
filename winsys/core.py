@@ -80,6 +80,8 @@ class NullHandler (logging.Handler):
 #
 _logger = logging.getLogger ("winsys")
 _logger.addHandler (NullHandler ())
+#~ _logger.addHandler(logging.StreamHandler())
+#~ _logger.setLevel(logging.DEBUG)
 
 debug = _logger.debug
 log = _logger.log

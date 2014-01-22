@@ -116,7 +116,6 @@ class TestSecurity (unittest.TestCase):
     if os.path.exists (filepath):
       os.remove (filepath)
 
-
   #
   # The security function should convert its argument to something
   # useful:
@@ -369,17 +368,22 @@ class TestSecurity (unittest.TestCase):
     sd.SetSecurityDescriptorSacl (1, sacl, 0)
     assert equal (sd, s)
 
-  @unittest.skip("2and3")
   def test_Security_break_dacl_inheritance_no_copy (self):
+    #
+    # This is currently failing because, within the test folder,
+    # the file created doesn't have inherited ACEs at the point
+    # at which the inheritance is broken. Since unherited ACEs are
+    # copied regardless, the test fails.
+    #
     with self.test_file () as filepath:
       s = security.security (filepath, options=OPTIONS)
       assert s.dacl.inherited
       s.break_inheritance (copy_first=False, break_dacl=True, break_sacl=False)
       s.to_object ()
       sd = win32security.GetNamedSecurityInfo (filepath, win32security.SE_FILE_OBJECT, OPTIONS)
-      assert (sd.GetSecurityDescriptorControl ()[0] & win32security.SE_DACL_PROTECTED)
-      assert (not sd.GetSecurityDescriptorControl ()[0] & win32security.SE_SACL_PROTECTED)
-      assert sd.GetSecurityDescriptorDacl ().GetAceCount () == 0
+      self.assertTrue(sd.GetSecurityDescriptorControl ()[0] & win32security.SE_DACL_PROTECTED)
+      self.assertTrue(not sd.GetSecurityDescriptorControl ()[0] & win32security.SE_SACL_PROTECTED)
+      self.assertEqual(sd.GetSecurityDescriptorDacl ().GetAceCount (), 0)
 
   def test_Security_break_dacl_inheritance_copy (self):
     with self.test_file () as TEST_FILE:
