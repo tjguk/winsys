@@ -173,9 +173,7 @@ def _register_wndclass ():
   icon_flags = win32con.LR_LOADFROMFILE | win32con.LR_DEFAULTSIZE
 
   python_exe = wrapped (win32api.GetModuleHandle, None)
-  if hasattr (sys, "frozen"):
-    wc.hIcon = None
-  else:
+  if not hasattr (sys, "frozen"):
     wc.hIcon = wrapped (win32gui.LoadIcon, python_exe, 1)
   class_atom = wrapped (win32gui.RegisterClass, wc)
   return class_name
@@ -630,7 +628,8 @@ class Dialog (BaseDialog):
     self._set_item (self._progress_id, message)
     self._enable (win32con.IDCANCEL, False)
     self._enable (win32con.IDOK, True)
-    wrapped (win32gui.SetFocus, wrapped (win32gui.GetDlgItem, hwnd, win32con.IDOK))
+    PostMessage(self.hwnd, win32con.WM_QUIT, 0, 0)
+    #~ wrapped (win32gui.SetFocus, wrapped (win32gui.GetDlgItem, hwnd, win32con.IDOK))
 
   def _progress_complete (self, message):
     ur"""Convenience function to tell the dialog that progress is complete,
