@@ -24,7 +24,7 @@ else:
 
 def signed_to_unsigned (signed):
   """Convert a (possibly signed) long to unsigned hex"""
-  unsigned, = struct.unpack ("L", struct.pack ("l", signed))
+  unsigned, = struct.unpack (b"L", struct.pack (b"l", signed))
   return unsigned
 
 def mask_as_string (mask, length=32):

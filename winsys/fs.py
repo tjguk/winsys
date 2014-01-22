@@ -430,7 +430,7 @@ class FilePath (unicode):
     return hash (self.lower ())
 
   def __repr__ (self):
-    return u'<%s %s>' % (self.__class__.__name__, self)
+    return '<%s %s>' % (self.__class__.__name__, self)
 
   def __radd__ (self, other):
     return self.__class__.factory (os.path.join (unicode (other), unicode (self)))
