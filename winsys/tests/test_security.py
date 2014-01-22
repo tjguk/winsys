@@ -75,6 +75,8 @@ class TestSecurity (unittest.TestCase):
     self.GUID = str (uuid.uuid1 ())
     self.TEST_ROOT = tempfile.mkdtemp (prefix="winsys-")
     assert os.path.isdir (self.TEST_ROOT)
+
+  def setUpSACL(self):
     sacl = win32security.ACL ()
     sid, _, _ = win32security.LookupAccountName (None, win32api.GetUserName ())
     sacl.AddAuditAccessAceEx (
@@ -89,6 +91,7 @@ class TestSecurity (unittest.TestCase):
       win32security.SACL_SECURITY_INFORMATION,
       None, None, None, sacl
     )
+
 
   @staticmethod
   def restore_access (filepath):
@@ -398,6 +401,7 @@ class TestSecurity (unittest.TestCase):
       assert sd.GetSecurityDescriptorDacl ().GetAceCount () == n_aces
 
   def test_Security_break_sacl_inheritance_no_copy (self):
+    self.setUpSACL()
     with self.test_file () as TEST_FILE:
       s = security.security (TEST_FILE, options=OPTIONS)
       assert s.sacl.inherited
@@ -409,6 +413,7 @@ class TestSecurity (unittest.TestCase):
       assert sd.GetSecurityDescriptorSacl ().GetAceCount () == 0
 
   def test_Security_break_sacl_inheritance_copy (self):
+    self.setUpSACL()
     with self.test_file () as TEST_FILE:
       s = security.security (TEST_FILE, options=OPTIONS)
       n_aces = len (s.sacl)
