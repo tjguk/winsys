@@ -20,7 +20,7 @@ examples, have a look in the :ref:`cookbook`.
 WinSys is developed as an Open Source project and the project home,
 together with issues list and browseable source code is at:
 
-  http://code.google.com/p/winsys/
+  https://github.com/tjguk/winsys
 
 If you're interested in helping with the project let me know and I'll
 add you to the project members list.
@@ -58,9 +58,9 @@ Download
     unzip winsys-x.y.z.zip
     python setup.py install
 
-* Subversion trunk::
+* Git master::
 
-    svn co http://winsys.googlecode.com/svn/trunk winsys
+    git clone git://github.com/tjguk/winsys.git
 
   and then either add that directory into sys.path (I use a .pth
   file but whatever works for you) or run setup.py install from
@@ -70,5 +70,5 @@ Download
 Copyright & License
 -------------------
 
-winsys is Copyright Tim Golden 2009 and is licensed under the
+winsys is Copyright Tim Golden 2011 and is licensed under the
 (GPL-compatible) MIT License: http://www.opensource.org/licenses/mit-license.php

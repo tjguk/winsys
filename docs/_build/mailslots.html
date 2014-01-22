@@ -3,13 +3,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The Mailslot class &mdash; WinSys v0.5beta documentation</title>
+    <title>The Mailslot class &mdash; WinSys 0.5beta documentation</title>
+    
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -23,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.5beta documentation" href="index.html" />
+    <link rel="top" title="WinSys 0.5beta documentation" href="index.html" />
     <link rel="up" title="ipc – Interprocess Communication" href="ipc.html" />
     <link rel="next" title="The Event class" href="events.html" />
     <link rel="prev" title="ipc – Interprocess Communication" href="ipc.html" /> 
@@ -44,7 +47,7 @@
         <li class="right" >
           <a href="ipc.html" title="ipc – Interprocess Communication"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
+        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
           <li><a href="ipc.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>  
@@ -58,7 +61,7 @@
 <h1>The Mailslot class<a class="headerlink" href="#the-mailslot-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="ipc.Mailslot">
-<em class="property">class </em><tt class="descclassname">ipc.</tt><tt class="descname">Mailslot</tt><big>(</big><em>name</em>, <em>serialiser=(&lt;function _unserialised at 0x033C0730&gt;</em>, <em>&lt;function _unserialised at 0x033C0730&gt;)</em>, <em>message_size=0</em>, <em>timeout_ms=-1</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">ipc.</tt><tt class="descname">Mailslot</tt><big>(</big><em>name</em>, <em>serialiser=(&lt;function _unserialised at 0x03AD7C70&gt;</em>, <em>&lt;function _unserialised at 0x03AD7C70&gt;)</em>, <em>message_size=0</em>, <em>timeout_ms=-1</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
 <p>A mailslot is a mechanism for passing small datasets (up to about
 400 bytes) between machines in the same network. For transport and
@@ -105,7 +108,7 @@ the Microsoft docs.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>serialiser</strong> (<em>a pair of callables each taking one param and returning bytes</em>) &#8211; a pair of callable which will be used to
 encode &amp; decode data respectively. Typical
 serialisers would be (marshal.dumps, marshal.loads).</li>
@@ -144,7 +147,7 @@ used (and which therefore has no open handles) will succeed silently.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite> if there is nothing waiting to be read</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite> if there is nothing waiting to be read</td>
 </tr>
 </tbody>
 </table>
@@ -157,7 +160,7 @@ used (and which therefore has no open handles) will succeed silently.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite> if the number of messages waiting to be read has reached the maximum size for the mailslot</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite> if the number of messages waiting to be read has reached the maximum size for the mailslot</td>
 </tr>
 </tbody>
 </table>
@@ -171,16 +174,16 @@ used (and which therefore has no open handles) will succeed silently.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>block</strong> &#8211; whether to wait <cite>timeout_ms</cite> milliseconds before raising <cite>x_mailslot_empty</cite></li>
 <li><strong>timeout_ms</strong> &#8211; how many milliseconds to wait before timing out if blocking. None =&gt; wait forever</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the first message from the mailslot queue serialised according to the class&#8217;s <cite>serialiser</cite></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the first message from the mailslot queue serialised according to the class&#8217;s <cite>serialiser</cite></p>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Raises :</th><td class="field-body"><p class="first last"><a class="reference internal" href="ipc.html#ipc.x_mailslot_empty" title="ipc.x_mailslot_empty"><tt class="xref py py-exc docutils literal"><span class="pre">x_mailslot_empty</span></tt></a> if timed out or unblocked</p>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first last"><a class="reference internal" href="ipc.html#ipc.x_mailslot_empty" title="ipc.x_mailslot_empty"><tt class="xref py py-exc docutils literal"><span class="pre">x_mailslot_empty</span></tt></a> if timed out or unblocked</p>
 </td>
 </tr>
 </tbody>
@@ -201,9 +204,9 @@ used (and which therefore has no open handles) will succeed silently.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> &#8211; data to be written to the mailslot via its serialisers</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> &#8211; data to be written to the mailslot via its serialisers</td>
 </tr>
-<tr class="field"><th class="field-name">Raises :</th><td class="field-body"><a class="reference internal" href="ipc.html#ipc.x_mailslot_message_too_big" title="ipc.x_mailslot_message_too_big"><tt class="xref py py-exc docutils literal"><span class="pre">x_mailslot_message_too_big</span></tt></a> if the serialised message
+<tr class="field-even field"><th class="field-name">Raises :</th><td class="field-body"><a class="reference internal" href="ipc.html#ipc.x_mailslot_message_too_big" title="ipc.x_mailslot_message_too_big"><tt class="xref py py-exc docutils literal"><span class="pre">x_mailslot_message_too_big</span></tt></a> if the serialised message
 exceeds the mailslot&#8217;s maximum size</td>
 </tr>
 </tbody>
@@ -217,9 +220,9 @@ exceeds the mailslot&#8217;s maximum size</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the underlying PyHANDLE object</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the underlying PyHANDLE object</td>
 </tr>
-<tr class="field"><th class="field-name">Raises :</th><td class="field-body"><a class="reference internal" href="ipc.html#ipc.x_mailslot" title="ipc.x_mailslot"><tt class="xref py py-exc docutils literal"><span class="pre">x_mailslot</span></tt></a> if the mailslot has not yet been determined for reading or for writing</td>
+<tr class="field-even field"><th class="field-name">Raises :</th><td class="field-body"><a class="reference internal" href="ipc.html#ipc.x_mailslot" title="ipc.x_mailslot"><tt class="xref py py-exc docutils literal"><span class="pre">x_mailslot</span></tt></a> if the mailslot has not yet been determined for reading or for writing</td>
 </tr>
 </tbody>
 </table>
@@ -232,11 +235,16 @@ exceeds the mailslot&#8217;s maximum size</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the number of messages waiting in the mailslot</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number of messages waiting in the mailslot</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="ipc.Mailslot.MAX_MESSAGE_SIZE">
+<tt class="descname">MAX_MESSAGE_SIZE</tt><em class="property"> = 420</em><a class="headerlink" href="#ipc.Mailslot.MAX_MESSAGE_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -265,7 +273,7 @@ exceeds the mailslot&#8217;s maximum size</td>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -294,13 +302,13 @@ exceeds the mailslot&#8217;s maximum size</td>
         <li class="right" >
           <a href="ipc.html" title="ipc – Interprocess Communication"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
+        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
           <li><a href="ipc.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
     </div>
   </body>
 </html>

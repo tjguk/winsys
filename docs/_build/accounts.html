@@ -3,13 +3,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>accounts – Users, Groups, SIDs &amp;c. &mdash; WinSys v0.5beta documentation</title>
+    <title>accounts – Users, Groups, SIDs &amp;c. &mdash; WinSys 0.5beta documentation</title>
+    
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -23,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.5beta documentation" href="index.html" />
+    <link rel="top" title="WinSys 0.5beta documentation" href="index.html" />
     <link rel="next" title="dialogs – Dialog boxes" href="dialogs.html" />
     <link rel="prev" title="exc – Exceptions" href="exc.html" /> 
   </head>
@@ -43,7 +46,7 @@
         <li class="right" >
           <a href="exc.html" title="exc – Exceptions"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -82,10 +85,10 @@ common way to create a <a class="reference internal" href="#accounts.Principal" 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>principal</strong> &#8211; any of None, a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a>, a <cite>PySID</cite>,
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>principal</strong> &#8211; any of None, a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a>, a <cite>PySID</cite>,
 a <a class="reference internal" href="#accounts.WELL_KNOWN_SID" title="accounts.WELL_KNOWN_SID"><tt class="xref py py-const docutils literal"><span class="pre">WELL_KNOWN_SID</span></tt></a> or a string</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> object corresponding to <cite>principal</cite></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> object corresponding to <cite>principal</cite></td>
 </tr>
 </tbody>
 </table>
@@ -142,13 +145,13 @@ authority, eg a machine or a domain.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>sid</strong> &#8211; a PySID</li>
 <li><strong>system_name</strong> &#8211; optional name of a security authority</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> object for <cite>sid</cite></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> object for <cite>sid</cite></p>
 </td>
 </tr>
 </tbody>
@@ -164,13 +167,13 @@ security authority. If <cite>string</cite> is blank, the logged-on user is assum
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>string</strong> &#8211; name of an account in the form &#8220;domainname&#8221;. domain is optional so the simplest form is simply &#8220;name&#8221;</li>
 <li><strong>system</strong> &#8211; name of a security authority (typically a machine or a domain)</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> object for <cite>string</cite></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> object for <cite>string</cite></p>
 </td>
 </tr>
 </tbody>
@@ -185,7 +188,7 @@ security authority. If <cite>string</cite> is blank, the logged-on user is assum
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>well_known</strong> &#8211; one of the <a class="reference internal" href="#accounts.WELL_KNOWN_SID" title="accounts.WELL_KNOWN_SID"><tt class="xref py py-const docutils literal"><span class="pre">WELL_KNOWN_SID</span></tt></a></li>
 <li><strong>domain</strong> &#8211; anything accepted by <a class="reference internal" href="#accounts.principal" title="accounts.principal"><tt class="xref py py-func docutils literal"><span class="pre">principal()</span></tt></a> and corresponding to a domain</li>
 </ul>
@@ -216,7 +219,7 @@ context manager but does not allow the password to be specified.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>password</strong> &#8211; password for this account</li>
 <li><strong>logon_type</strong> &#8211; one of the <a class="reference internal" href="#accounts.LOGON" title="accounts.LOGON"><tt class="xref py py-const docutils literal"><span class="pre">LOGON</span></tt></a> values</li>
 </ul>
@@ -239,13 +242,13 @@ to ask for a password.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>password</strong> &#8211; the password for this account</li>
 <li><strong>logon_type</strong> &#8211; one of the <a class="reference internal" href="#accounts.LOGON" title="accounts.LOGON"><tt class="xref py py-const docutils literal"><span class="pre">LOGON</span></tt></a> values</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a pywin32 handle to a token</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a pywin32 handle to a token</p>
 </td>
 </tr>
 </tbody>
@@ -267,7 +270,7 @@ logged-on user</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">pywin32 SID</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">pywin32 SID</td>
 </tr>
 </tbody>
 </table>
@@ -290,14 +293,14 @@ a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>username</strong> &#8211; username of the new user. Must not already exist on <cite>system</cite></li>
 <li><strong>password</strong> &#8211; password for the new user. Must meet security policy on <cite>system</cite></li>
 <li><strong>system</strong> &#8211; optional system name</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt class="xref py py-class docutils literal"><span class="pre">User</span></tt></a> for <cite>username</cite></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt class="xref py py-class docutils literal"><span class="pre">User</span></tt></a> for <cite>username</cite></p>
 </td>
 </tr>
 </tbody>
@@ -312,7 +315,7 @@ a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>system</strong> &#8211; optional security authority</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>system</strong> &#8211; optional security authority</td>
 </tr>
 </tbody>
 </table>
@@ -326,7 +329,7 @@ a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>system</strong> &#8211; optional security authority</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>system</strong> &#8211; optional security authority</td>
 </tr>
 </tbody>
 </table>
@@ -340,9 +343,9 @@ a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other_group</strong> &#8211; anything accepted by <a class="reference internal" href="#accounts.group" title="accounts.group"><tt class="xref py py-func docutils literal"><span class="pre">group()</span></tt></a></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other_group</strong> &#8211; anything accepted by <a class="reference internal" href="#accounts.group" title="accounts.group"><tt class="xref py py-func docutils literal"><span class="pre">group()</span></tt></a></td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">self</td>
 </tr>
 </tbody>
 </table>
@@ -356,9 +359,9 @@ a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other_group</strong> &#8211; anything accepted by <a class="reference internal" href="#accounts.group" title="accounts.group"><tt class="xref py py-func docutils literal"><span class="pre">group()</span></tt></a></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other_group</strong> &#8211; anything accepted by <a class="reference internal" href="#accounts.group" title="accounts.group"><tt class="xref py py-func docutils literal"><span class="pre">group()</span></tt></a></td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">self</td>
 </tr>
 </tbody>
 </table>
@@ -372,7 +375,7 @@ a <a class="reference internal" href="#accounts.User" title="accounts.User"><tt 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>command_line</strong> &#8211; command line to run, quoted as necessary</li>
 <li><strong>password</strong> &#8211; password; if not supplied, standard Windows prompt</li>
 <li><strong>with_profile</strong> &#8211; if True, HKEY_CURRENT_USER is loaded [False]</li>
@@ -398,7 +401,7 @@ authority, eg a machine or a domain.</p>
 <h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
 <dl class="data">
 <dt id="accounts.LOGON">
-<tt class="descclassname">accounts.</tt><tt class="descname">LOGON</tt><a class="headerlink" href="#accounts.LOGON" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">LOGON</tt><em class="property"> = &lt;Constants: {'LOGON_NEW_CREDENTIALS': 9, 'LOGON_NETWORK_CLEARTEXT': 8, 'LOGON_UNLOCK': 7, 'LOGON_BATCH': 4, 'PROVIDER_WINNT40': 2, 'LOGON_NETWORK': 3, 'PROVIDER_WINNT50': 3, 'LOGON_INTERACTIVE': 2, 'LOGON_SERVICE': 5, 'PROVIDER_DEFAULT': 0, 'PROVIDER_WINNT35': 1}&gt;</em><a class="headerlink" href="#accounts.LOGON" title="Permalink to this definition">¶</a></dt>
 <dd><p>Types of logon used by LogonUser and related APIs</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -407,53 +410,53 @@ authority, eg a machine or a domain.</p>
 <col width="54%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Name</th>
+<tr class="row-odd"><th class="head">Name</th>
 <th class="head">Val</th>
 <th class="head">Win32</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>PROVIDER_DEFAULT</td>
+<tr class="row-even"><td>PROVIDER_DEFAULT</td>
 <td>0</td>
 <td>LOGON32_PROVIDER_DEFAULT</td>
 </tr>
-<tr><td>PROVIDER_WINNT35</td>
+<tr class="row-odd"><td>PROVIDER_WINNT35</td>
 <td>1</td>
 <td>LOGON32_PROVIDER_WINNT35</td>
 </tr>
-<tr><td>PROVIDER_WINNT40</td>
+<tr class="row-even"><td>PROVIDER_WINNT40</td>
 <td>2</td>
 <td>LOGON32_PROVIDER_WINNT40</td>
 </tr>
-<tr><td>LOGON_INTERACTIVE</td>
+<tr class="row-odd"><td>LOGON_INTERACTIVE</td>
 <td>2</td>
 <td>LOGON32_PROVIDER_WINNT40</td>
 </tr>
-<tr><td>LOGON_NETWORK</td>
+<tr class="row-even"><td>LOGON_NETWORK</td>
 <td>3</td>
 <td>LOGON32_PROVIDER_WINNT50</td>
 </tr>
-<tr><td>PROVIDER_WINNT50</td>
+<tr class="row-odd"><td>PROVIDER_WINNT50</td>
 <td>3</td>
 <td>LOGON32_PROVIDER_WINNT50</td>
 </tr>
-<tr><td>LOGON_BATCH</td>
+<tr class="row-even"><td>LOGON_BATCH</td>
 <td>4</td>
 <td>LOGON32_LOGON_BATCH</td>
 </tr>
-<tr><td>LOGON_SERVICE</td>
+<tr class="row-odd"><td>LOGON_SERVICE</td>
 <td>5</td>
 <td>LOGON32_LOGON_SERVICE</td>
 </tr>
-<tr><td>LOGON_UNLOCK</td>
+<tr class="row-even"><td>LOGON_UNLOCK</td>
 <td>7</td>
 <td>LOGON32_LOGON_UNLOCK</td>
 </tr>
-<tr><td>LOGON_NETWORK_CLEARTEXT</td>
+<tr class="row-odd"><td>LOGON_NETWORK_CLEARTEXT</td>
 <td>8</td>
 <td>LOGON32_LOGON_NETWORK_CLEARTEXT</td>
 </tr>
-<tr><td>LOGON_NEW_CREDENTIALS</td>
+<tr class="row-even"><td>LOGON_NEW_CREDENTIALS</td>
 <td>9</td>
 <td>LOGON32_LOGON_NEW_CREDENTIALS</td>
 </tr>
@@ -463,7 +466,7 @@ authority, eg a machine or a domain.</p>
 
 <dl class="data">
 <dt id="accounts.EXTENDED_NAME">
-<tt class="descclassname">accounts.</tt><tt class="descname">EXTENDED_NAME</tt><a class="headerlink" href="#accounts.EXTENDED_NAME" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">EXTENDED_NAME</tt><em class="property"> = &lt;Constants: {'UniqueId': 6, 'CanonicalEx': 9, 'DnsDomain': 12, 'Unknown': 0, 'ServicePrincipal': 10, 'UserPrincipal': 8, 'SamCompatible': 2, 'FullyQualifiedDN': 1, 'Display': 3, 'Canonical': 7}&gt;</em><a class="headerlink" href="#accounts.EXTENDED_NAME" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extended display formats for usernames</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -472,49 +475,49 @@ authority, eg a machine or a domain.</p>
 <col width="51%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Name</th>
+<tr class="row-odd"><th class="head">Name</th>
 <th class="head">Val</th>
 <th class="head">Win32</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>Unknown</td>
+<tr class="row-even"><td>Unknown</td>
 <td>0</td>
 <td>NameUnknown</td>
 </tr>
-<tr><td>FullyQualifiedDN</td>
+<tr class="row-odd"><td>FullyQualifiedDN</td>
 <td>1</td>
 <td>NameFullyQualifiedDN</td>
 </tr>
-<tr><td>ServicePrincipal</td>
+<tr class="row-even"><td>ServicePrincipal</td>
 <td>10</td>
 <td>NameServicePrincipal</td>
 </tr>
-<tr><td>DnsDomain</td>
+<tr class="row-odd"><td>DnsDomain</td>
 <td>12</td>
 <td>NameDnsDomain</td>
 </tr>
-<tr><td>SamCompatible</td>
+<tr class="row-even"><td>SamCompatible</td>
 <td>2</td>
 <td>NameSamCompatible</td>
 </tr>
-<tr><td>Display</td>
+<tr class="row-odd"><td>Display</td>
 <td>3</td>
 <td>NameDisplay</td>
 </tr>
-<tr><td>UniqueId</td>
+<tr class="row-even"><td>UniqueId</td>
 <td>6</td>
 <td>NameUniqueId</td>
 </tr>
-<tr><td>Canonical</td>
+<tr class="row-odd"><td>Canonical</td>
 <td>7</td>
 <td>NameCanonical</td>
 </tr>
-<tr><td>UserPrincipal</td>
+<tr class="row-even"><td>UserPrincipal</td>
 <td>8</td>
 <td>NameUserPrincipal</td>
 </tr>
-<tr><td>CanonicalEx</td>
+<tr class="row-odd"><td>CanonicalEx</td>
 <td>9</td>
 <td>NameCanonicalEx</td>
 </tr>
@@ -524,7 +527,7 @@ authority, eg a machine or a domain.</p>
 
 <dl class="data">
 <dt id="accounts.WELL_KNOWN_SID">
-<tt class="descclassname">accounts.</tt><tt class="descname">WELL_KNOWN_SID</tt><a class="headerlink" href="#accounts.WELL_KNOWN_SID" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">WELL_KNOWN_SID</tt><em class="property"> = &lt;Constants: {'AccountKrbtgt': 40, 'AccountDomainUsers': 42, 'BuiltinRemoteDesktopUsers': 36, 'Dialup': 8, 'Network': 9, 'BuiltinDCOMUsers': 61, 'AccountGuest': 39, 'Self': 16, 'BuiltinDomain': 25, 'CreatorGroup': 4, 'BuiltinPrintOperators': 32, 'CreatorOwner': 3, 'RemoteLogonId': 20, 'BuiltinAuthorizationAccess': 59, 'CreatorOwnerRights': 71, 'BuiltinBackupOperators': 33, 'EnterpriseControllers': 15, 'Local': 2, 'WriteRestrictedCode': 70, 'AccountEnterpriseAdmins': 48, 'DigestAuthentication': 52, 'BuiltinPowerUsers': 29, 'BuiltinUsers': 27, 'UntrustedLabel': 65, 'BuiltinIncomingForestTrustBuilders': 56, 'AccountSchemaAdmins': 47, 'Service': 12, 'BuiltinIUsers': 62, 'AccountDomainAdmins': 41, 'BuiltinAdministrators': 26, 'AccountRasAndIasServers': 50, 'Proxy': 14, 'Anonymous': 13, 'World': 1, 'BuiltinPerfLoggingUsers': 58, 'BuiltinCryptoOperators': 64, 'BuiltinPerfMonitoringUsers': 57, 'IUser': 63, 'BuiltinReplicator': 34, 'BuiltinTerminalServerLicenseServers': 60, 'LowLabel': 66, 'CreatorGroupServer': 6, 'OtherOrganization': 55, 'CreatorOwnerServer': 5, 'NetworkService': 24, 'SystemLabel': 69, 'NtAuthority': 7, 'BuiltinSystemOperators': 31, 'Batch': 10, 'MediumLabel': 67, 'LocalSystem': 22, 'NTLMAuthentication': 51, 'RestrictedCode': 18, 'LocalService': 23, 'AccountAdministrator': 38, 'TerminalServer': 19, 'LogonIds': 21, 'BuiltinAccountOperators': 30, 'Interactive': 11, 'BuiltinNetworkConfigurationOperators': 37, 'CacheablePrincipalsGroup': 72, 'EnterpriseReadonlyControllers': 74, 'AccountPolicyAdmins': 49, 'HighLabel': 68, 'BuiltinPreWindows2000CompatibleAccess': 35, 'AuthenticatedUser': 17, 'SChannelAuthentication': 53, 'ThisOrganization': 54, 'AccountDomainGuests': 43, 'BuiltinGuests': 28, 'AccountReadonlyControllers': 75, 'AccountControllers': 45, 'AccountCertAdmins': 46, 'Null': 0, 'AccountComputers': 44, 'NonCacheablePrincipalsGroup': 73}&gt;</em><a class="headerlink" href="#accounts.WELL_KNOWN_SID" title="Permalink to this definition">¶</a></dt>
 <dd><p>Well-known SIDs common to all computers</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -533,313 +536,313 @@ authority, eg a machine or a domain.</p>
 <col width="52%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Name</th>
+<tr class="row-odd"><th class="head">Name</th>
 <th class="head">Val</th>
 <th class="head">Win32</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>Null</td>
+<tr class="row-even"><td>Null</td>
 <td>0</td>
 <td>WinNullSid</td>
 </tr>
-<tr><td>World</td>
+<tr class="row-odd"><td>World</td>
 <td>1</td>
 <td>WinWorldSid</td>
 </tr>
-<tr><td>Batch</td>
+<tr class="row-even"><td>Batch</td>
 <td>10</td>
 <td>WinBatchSid</td>
 </tr>
-<tr><td>Interactive</td>
+<tr class="row-odd"><td>Interactive</td>
 <td>11</td>
 <td>WinInteractiveSid</td>
 </tr>
-<tr><td>Service</td>
+<tr class="row-even"><td>Service</td>
 <td>12</td>
 <td>WinServiceSid</td>
 </tr>
-<tr><td>Anonymous</td>
+<tr class="row-odd"><td>Anonymous</td>
 <td>13</td>
 <td>WinAnonymousSid</td>
 </tr>
-<tr><td>Proxy</td>
+<tr class="row-even"><td>Proxy</td>
 <td>14</td>
 <td>WinProxySid</td>
 </tr>
-<tr><td>EnterpriseControllers</td>
+<tr class="row-odd"><td>EnterpriseControllers</td>
 <td>15</td>
 <td>WinEnterpriseControllersSid</td>
 </tr>
-<tr><td>Self</td>
+<tr class="row-even"><td>Self</td>
 <td>16</td>
 <td>WinSelfSid</td>
 </tr>
-<tr><td>AuthenticatedUser</td>
+<tr class="row-odd"><td>AuthenticatedUser</td>
 <td>17</td>
 <td>WinAuthenticatedUserSid</td>
 </tr>
-<tr><td>RestrictedCode</td>
+<tr class="row-even"><td>RestrictedCode</td>
 <td>18</td>
 <td>WinRestrictedCodeSid</td>
 </tr>
-<tr><td>TerminalServer</td>
+<tr class="row-odd"><td>TerminalServer</td>
 <td>19</td>
 <td>WinTerminalServerSid</td>
 </tr>
-<tr><td>Local</td>
+<tr class="row-even"><td>Local</td>
 <td>2</td>
 <td>WinLocalSid</td>
 </tr>
-<tr><td>RemoteLogonId</td>
+<tr class="row-odd"><td>RemoteLogonId</td>
 <td>20</td>
 <td>WinRemoteLogonIdSid</td>
 </tr>
-<tr><td>LogonIds</td>
+<tr class="row-even"><td>LogonIds</td>
 <td>21</td>
 <td>WinLogonIdsSid</td>
 </tr>
-<tr><td>LocalSystem</td>
+<tr class="row-odd"><td>LocalSystem</td>
 <td>22</td>
 <td>WinLocalSystemSid</td>
 </tr>
-<tr><td>LocalService</td>
+<tr class="row-even"><td>LocalService</td>
 <td>23</td>
 <td>WinLocalServiceSid</td>
 </tr>
-<tr><td>NetworkService</td>
+<tr class="row-odd"><td>NetworkService</td>
 <td>24</td>
 <td>WinNetworkServiceSid</td>
 </tr>
-<tr><td>BuiltinDomain</td>
+<tr class="row-even"><td>BuiltinDomain</td>
 <td>25</td>
 <td>WinBuiltinDomainSid</td>
 </tr>
-<tr><td>BuiltinAdministrators</td>
+<tr class="row-odd"><td>BuiltinAdministrators</td>
 <td>26</td>
 <td>WinBuiltinAdministratorsSid</td>
 </tr>
-<tr><td>BuiltinUsers</td>
+<tr class="row-even"><td>BuiltinUsers</td>
 <td>27</td>
 <td>WinBuiltinUsersSid</td>
 </tr>
-<tr><td>BuiltinGuests</td>
+<tr class="row-odd"><td>BuiltinGuests</td>
 <td>28</td>
 <td>WinBuiltinGuestsSid</td>
 </tr>
-<tr><td>BuiltinPowerUsers</td>
+<tr class="row-even"><td>BuiltinPowerUsers</td>
 <td>29</td>
 <td>WinBuiltinPowerUsersSid</td>
 </tr>
-<tr><td>CreatorOwner</td>
+<tr class="row-odd"><td>CreatorOwner</td>
 <td>3</td>
 <td>WinCreatorOwnerSid</td>
 </tr>
-<tr><td>BuiltinAccountOperators</td>
+<tr class="row-even"><td>BuiltinAccountOperators</td>
 <td>30</td>
 <td>WinBuiltinAccountOperatorsSid</td>
 </tr>
-<tr><td>BuiltinSystemOperators</td>
+<tr class="row-odd"><td>BuiltinSystemOperators</td>
 <td>31</td>
 <td>WinBuiltinSystemOperatorsSid</td>
 </tr>
-<tr><td>BuiltinPrintOperators</td>
+<tr class="row-even"><td>BuiltinPrintOperators</td>
 <td>32</td>
 <td>WinBuiltinPrintOperatorsSid</td>
 </tr>
-<tr><td>BuiltinBackupOperators</td>
+<tr class="row-odd"><td>BuiltinBackupOperators</td>
 <td>33</td>
 <td>WinBuiltinBackupOperatorsSid</td>
 </tr>
-<tr><td>BuiltinReplicator</td>
+<tr class="row-even"><td>BuiltinReplicator</td>
 <td>34</td>
 <td>WinBuiltinReplicatorSid</td>
 </tr>
-<tr><td>BuiltinPreWindows2000CompatibleAccess</td>
+<tr class="row-odd"><td>BuiltinPreWindows2000CompatibleAccess</td>
 <td>35</td>
 <td>WinBuiltinPreWindows2000CompatibleAccessSid</td>
 </tr>
-<tr><td>BuiltinRemoteDesktopUsers</td>
+<tr class="row-even"><td>BuiltinRemoteDesktopUsers</td>
 <td>36</td>
 <td>WinBuiltinRemoteDesktopUsersSid</td>
 </tr>
-<tr><td>BuiltinNetworkConfigurationOperators</td>
+<tr class="row-odd"><td>BuiltinNetworkConfigurationOperators</td>
 <td>37</td>
 <td>WinBuiltinNetworkConfigurationOperatorsSid</td>
 </tr>
-<tr><td>AccountAdministrator</td>
+<tr class="row-even"><td>AccountAdministrator</td>
 <td>38</td>
 <td>WinAccountAdministratorSid</td>
 </tr>
-<tr><td>AccountGuest</td>
+<tr class="row-odd"><td>AccountGuest</td>
 <td>39</td>
 <td>WinAccountGuestSid</td>
 </tr>
-<tr><td>CreatorGroup</td>
+<tr class="row-even"><td>CreatorGroup</td>
 <td>4</td>
 <td>WinCreatorGroupSid</td>
 </tr>
-<tr><td>AccountKrbtgt</td>
+<tr class="row-odd"><td>AccountKrbtgt</td>
 <td>40</td>
 <td>WinAccountKrbtgtSid</td>
 </tr>
-<tr><td>AccountDomainAdmins</td>
+<tr class="row-even"><td>AccountDomainAdmins</td>
 <td>41</td>
 <td>WinAccountDomainAdminsSid</td>
 </tr>
-<tr><td>AccountDomainUsers</td>
+<tr class="row-odd"><td>AccountDomainUsers</td>
 <td>42</td>
 <td>WinAccountDomainUsersSid</td>
 </tr>
-<tr><td>AccountDomainGuests</td>
+<tr class="row-even"><td>AccountDomainGuests</td>
 <td>43</td>
 <td>WinAccountDomainGuestsSid</td>
 </tr>
-<tr><td>AccountComputers</td>
+<tr class="row-odd"><td>AccountComputers</td>
 <td>44</td>
 <td>WinAccountComputersSid</td>
 </tr>
-<tr><td>AccountControllers</td>
+<tr class="row-even"><td>AccountControllers</td>
 <td>45</td>
 <td>WinAccountControllersSid</td>
 </tr>
-<tr><td>AccountCertAdmins</td>
+<tr class="row-odd"><td>AccountCertAdmins</td>
 <td>46</td>
 <td>WinAccountCertAdminsSid</td>
 </tr>
-<tr><td>AccountSchemaAdmins</td>
+<tr class="row-even"><td>AccountSchemaAdmins</td>
 <td>47</td>
 <td>WinAccountSchemaAdminsSid</td>
 </tr>
-<tr><td>AccountEnterpriseAdmins</td>
+<tr class="row-odd"><td>AccountEnterpriseAdmins</td>
 <td>48</td>
 <td>WinAccountEnterpriseAdminsSid</td>
 </tr>
-<tr><td>AccountPolicyAdmins</td>
+<tr class="row-even"><td>AccountPolicyAdmins</td>
 <td>49</td>
 <td>WinAccountPolicyAdminsSid</td>
 </tr>
-<tr><td>CreatorOwnerServer</td>
+<tr class="row-odd"><td>CreatorOwnerServer</td>
 <td>5</td>
 <td>WinCreatorOwnerServerSid</td>
 </tr>
-<tr><td>AccountRasAndIasServers</td>
+<tr class="row-even"><td>AccountRasAndIasServers</td>
 <td>50</td>
 <td>WinAccountRasAndIasServersSid</td>
 </tr>
-<tr><td>NTLMAuthentication</td>
+<tr class="row-odd"><td>NTLMAuthentication</td>
 <td>51</td>
 <td>WinNTLMAuthenticationSid</td>
 </tr>
-<tr><td>DigestAuthentication</td>
+<tr class="row-even"><td>DigestAuthentication</td>
 <td>52</td>
 <td>WinDigestAuthenticationSid</td>
 </tr>
-<tr><td>SChannelAuthentication</td>
+<tr class="row-odd"><td>SChannelAuthentication</td>
 <td>53</td>
 <td>WinSChannelAuthenticationSid</td>
 </tr>
-<tr><td>ThisOrganization</td>
+<tr class="row-even"><td>ThisOrganization</td>
 <td>54</td>
 <td>WinThisOrganizationSid</td>
 </tr>
-<tr><td>OtherOrganization</td>
+<tr class="row-odd"><td>OtherOrganization</td>
 <td>55</td>
 <td>WinOtherOrganizationSid</td>
 </tr>
-<tr><td>BuiltinIncomingForestTrustBuilders</td>
+<tr class="row-even"><td>BuiltinIncomingForestTrustBuilders</td>
 <td>56</td>
 <td>WinBuiltinIncomingForestTrustBuildersSid</td>
 </tr>
-<tr><td>BuiltinPerfMonitoringUsers</td>
+<tr class="row-odd"><td>BuiltinPerfMonitoringUsers</td>
 <td>57</td>
 <td>WinBuiltinPerfMonitoringUsersSid</td>
 </tr>
-<tr><td>BuiltinPerfLoggingUsers</td>
+<tr class="row-even"><td>BuiltinPerfLoggingUsers</td>
 <td>58</td>
 <td>WinBuiltinPerfLoggingUsersSid</td>
 </tr>
-<tr><td>BuiltinAuthorizationAccess</td>
+<tr class="row-odd"><td>BuiltinAuthorizationAccess</td>
 <td>59</td>
 <td>WinBuiltinAuthorizationAccessSid</td>
 </tr>
-<tr><td>CreatorGroupServer</td>
+<tr class="row-even"><td>CreatorGroupServer</td>
 <td>6</td>
 <td>WinCreatorGroupServerSid</td>
 </tr>
-<tr><td>BuiltinTerminalServerLicenseServers</td>
+<tr class="row-odd"><td>BuiltinTerminalServerLicenseServers</td>
 <td>60</td>
 <td>WinBuiltinTerminalServerLicenseServersSid</td>
 </tr>
-<tr><td>BuiltinDCOMUsers</td>
+<tr class="row-even"><td>BuiltinDCOMUsers</td>
 <td>61</td>
 <td>WinBuiltinDCOMUsersSid</td>
 </tr>
-<tr><td>BuiltinIUsers</td>
+<tr class="row-odd"><td>BuiltinIUsers</td>
 <td>62</td>
 <td>WinBuiltinIUsersSid</td>
 </tr>
-<tr><td>IUser</td>
+<tr class="row-even"><td>IUser</td>
 <td>63</td>
 <td>WinIUserSid</td>
 </tr>
-<tr><td>BuiltinCryptoOperators</td>
+<tr class="row-odd"><td>BuiltinCryptoOperators</td>
 <td>64</td>
 <td>WinBuiltinCryptoOperatorsSid</td>
 </tr>
-<tr><td>UntrustedLabel</td>
+<tr class="row-even"><td>UntrustedLabel</td>
 <td>65</td>
 <td>WinUntrustedLabelSid</td>
 </tr>
-<tr><td>LowLabel</td>
+<tr class="row-odd"><td>LowLabel</td>
 <td>66</td>
 <td>WinLowLabelSid</td>
 </tr>
-<tr><td>MediumLabel</td>
+<tr class="row-even"><td>MediumLabel</td>
 <td>67</td>
 <td>WinMediumLabelSid</td>
 </tr>
-<tr><td>HighLabel</td>
+<tr class="row-odd"><td>HighLabel</td>
 <td>68</td>
 <td>WinHighLabelSid</td>
 </tr>
-<tr><td>SystemLabel</td>
+<tr class="row-even"><td>SystemLabel</td>
 <td>69</td>
 <td>WinSystemLabelSid</td>
 </tr>
-<tr><td>NtAuthority</td>
+<tr class="row-odd"><td>NtAuthority</td>
 <td>7</td>
 <td>WinNtAuthoritySid</td>
 </tr>
-<tr><td>WriteRestrictedCode</td>
+<tr class="row-even"><td>WriteRestrictedCode</td>
 <td>70</td>
 <td>WinWriteRestrictedCodeSid</td>
 </tr>
-<tr><td>CreatorOwnerRights</td>
+<tr class="row-odd"><td>CreatorOwnerRights</td>
 <td>71</td>
 <td>WinCreatorOwnerRightsSid</td>
 </tr>
-<tr><td>CacheablePrincipalsGroup</td>
+<tr class="row-even"><td>CacheablePrincipalsGroup</td>
 <td>72</td>
 <td>WinCacheablePrincipalsGroupSid</td>
 </tr>
-<tr><td>NonCacheablePrincipalsGroup</td>
+<tr class="row-odd"><td>NonCacheablePrincipalsGroup</td>
 <td>73</td>
 <td>WinNonCacheablePrincipalsGroupSid</td>
 </tr>
-<tr><td>EnterpriseReadonlyControllers</td>
+<tr class="row-even"><td>EnterpriseReadonlyControllers</td>
 <td>74</td>
 <td>WinEnterpriseReadonlyControllersSid</td>
 </tr>
-<tr><td>AccountReadonlyControllers</td>
+<tr class="row-odd"><td>AccountReadonlyControllers</td>
 <td>75</td>
 <td>WinAccountReadonlyControllersSid</td>
 </tr>
-<tr><td>Dialup</td>
+<tr class="row-even"><td>Dialup</td>
 <td>8</td>
 <td>WinDialupSid</td>
 </tr>
-<tr><td>Network</td>
+<tr class="row-odd"><td>Network</td>
 <td>9</td>
 <td>WinNetworkSid</td>
 </tr>
@@ -849,7 +852,7 @@ authority, eg a machine or a domain.</p>
 
 <dl class="data">
 <dt id="accounts.USER_PRIV">
-<tt class="descclassname">accounts.</tt><tt class="descname">USER_PRIV</tt><a class="headerlink" href="#accounts.USER_PRIV" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">USER_PRIV</tt><em class="property"> = &lt;Constants: {u'ADMIN': 2, u'GUEST': 0, u'USER': 1}&gt;</em><a class="headerlink" href="#accounts.USER_PRIV" title="Permalink to this definition">¶</a></dt>
 <dd><p>User-types for creating new users</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -858,21 +861,21 @@ authority, eg a machine or a domain.</p>
 <col width="65%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Name</th>
+<tr class="row-odd"><th class="head">Name</th>
 <th class="head">Val</th>
 <th class="head">Win32</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>GUEST</td>
+<tr class="row-even"><td>GUEST</td>
 <td>0</td>
 <td>USER_PRIV_GUEST</td>
 </tr>
-<tr><td>USER</td>
+<tr class="row-odd"><td>USER</td>
 <td>1</td>
 <td>USER_PRIV_USER</td>
 </tr>
-<tr><td>ADMIN</td>
+<tr class="row-even"><td>ADMIN</td>
 <td>2</td>
 <td>USER_PRIV_ADMIN</td>
 </tr>
@@ -882,7 +885,7 @@ authority, eg a machine or a domain.</p>
 
 <dl class="data">
 <dt id="accounts.UF">
-<tt class="descclassname">accounts.</tt><tt class="descname">UF</tt><a class="headerlink" href="#accounts.UF" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">UF</tt><em class="property"> = &lt;Constants: {'ACCOUNT_TYPE_MASK': 15104, 'WORKSTATION_TRUST_ACCOUNT': 4096, 'INTERDOMAIN_TRUST_ACCOUNT': 2048, 'SCRIPT': 1, 'DONT_EXPIRE_PASSWD': 65536, 'MNS_LOGON_ACCOUNT': 131072, 'PASSWD_CANT_CHANGE': 64, 'HOMEDIR_REQUIRED': 8, 'SERVER_TRUST_ACCOUNT': 8192, 'PASSWD_NOTREQD': 32, 'LOCKOUT': 16, 'ACCOUNTDISABLE': 2, 'NORMAL_ACCOUNT': 512, 'SETTABLE_BITS': 211835, 'TEMP_DUPLICATE_ACCOUNT': 256, 'MACHINE_ACCOUNT_MASK': 14336}&gt;</em><a class="headerlink" href="#accounts.UF" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flags for creating new users</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -891,73 +894,73 @@ authority, eg a machine or a domain.</p>
 <col width="47%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Name</th>
+<tr class="row-odd"><th class="head">Name</th>
 <th class="head">Val</th>
 <th class="head">Win32</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>SCRIPT</td>
+<tr class="row-even"><td>SCRIPT</td>
 <td>1</td>
 <td>UF_SCRIPT</td>
 </tr>
-<tr><td>MNS_LOGON_ACCOUNT</td>
+<tr class="row-odd"><td>MNS_LOGON_ACCOUNT</td>
 <td>131072</td>
 <td>UF_MNS_LOGON_ACCOUNT</td>
 </tr>
-<tr><td>MACHINE_ACCOUNT_MASK</td>
+<tr class="row-even"><td>MACHINE_ACCOUNT_MASK</td>
 <td>14336</td>
 <td>UF_MACHINE_ACCOUNT_MASK</td>
 </tr>
-<tr><td>ACCOUNT_TYPE_MASK</td>
+<tr class="row-odd"><td>ACCOUNT_TYPE_MASK</td>
 <td>15104</td>
 <td>UF_ACCOUNT_TYPE_MASK</td>
 </tr>
-<tr><td>LOCKOUT</td>
+<tr class="row-even"><td>LOCKOUT</td>
 <td>16</td>
 <td>UF_LOCKOUT</td>
 </tr>
-<tr><td>ACCOUNTDISABLE</td>
+<tr class="row-odd"><td>ACCOUNTDISABLE</td>
 <td>2</td>
 <td>UF_ACCOUNTDISABLE</td>
 </tr>
-<tr><td>INTERDOMAIN_TRUST_ACCOUNT</td>
+<tr class="row-even"><td>INTERDOMAIN_TRUST_ACCOUNT</td>
 <td>2048</td>
 <td>UF_INTERDOMAIN_TRUST_ACCOUNT</td>
 </tr>
-<tr><td>SETTABLE_BITS</td>
+<tr class="row-odd"><td>SETTABLE_BITS</td>
 <td>211835</td>
 <td>UF_SETTABLE_BITS</td>
 </tr>
-<tr><td>TEMP_DUPLICATE_ACCOUNT</td>
+<tr class="row-even"><td>TEMP_DUPLICATE_ACCOUNT</td>
 <td>256</td>
 <td>UF_TEMP_DUPLICATE_ACCOUNT</td>
 </tr>
-<tr><td>PASSWD_NOTREQD</td>
+<tr class="row-odd"><td>PASSWD_NOTREQD</td>
 <td>32</td>
 <td>UF_PASSWD_NOTREQD</td>
 </tr>
-<tr><td>WORKSTATION_TRUST_ACCOUNT</td>
+<tr class="row-even"><td>WORKSTATION_TRUST_ACCOUNT</td>
 <td>4096</td>
 <td>UF_WORKSTATION_TRUST_ACCOUNT</td>
 </tr>
-<tr><td>NORMAL_ACCOUNT</td>
+<tr class="row-odd"><td>NORMAL_ACCOUNT</td>
 <td>512</td>
 <td>UF_NORMAL_ACCOUNT</td>
 </tr>
-<tr><td>PASSWD_CANT_CHANGE</td>
+<tr class="row-even"><td>PASSWD_CANT_CHANGE</td>
 <td>64</td>
 <td>UF_PASSWD_CANT_CHANGE</td>
 </tr>
-<tr><td>DONT_EXPIRE_PASSWD</td>
+<tr class="row-odd"><td>DONT_EXPIRE_PASSWD</td>
 <td>65536</td>
 <td>UF_DONT_EXPIRE_PASSWD</td>
 </tr>
-<tr><td>HOMEDIR_REQUIRED</td>
+<tr class="row-even"><td>HOMEDIR_REQUIRED</td>
 <td>8</td>
 <td>UF_HOMEDIR_REQUIRED</td>
 </tr>
-<tr><td>SERVER_TRUST_ACCOUNT</td>
+<tr class="row-odd"><td>SERVER_TRUST_ACCOUNT</td>
 <td>8192</td>
 <td>UF_SERVER_TRUST_ACCOUNT</td>
 </tr>
@@ -967,7 +970,7 @@ authority, eg a machine or a domain.</p>
 
 <dl class="data">
 <dt id="accounts.SID_NAME_USE">
-<tt class="descclassname">accounts.</tt><tt class="descname">SID_NAME_USE</tt><a class="headerlink" href="#accounts.SID_NAME_USE" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">SID_NAME_USE</tt><em class="property"> = &lt;Constants: {'Domain': 3, 'Group': 2, 'Unknown': 8, 'Invalid': 7, 'Label': 10, 'Alias': 4, 'DeletedAccount': 6, 'Computer': 9, 'User': 1, 'WellKnownGroup': 5}&gt;</em><a class="headerlink" href="#accounts.SID_NAME_USE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Types of accounts for which SIDs exist</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -976,49 +979,49 @@ authority, eg a machine or a domain.</p>
 <col width="55%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Name</th>
+<tr class="row-odd"><th class="head">Name</th>
 <th class="head">Val</th>
 <th class="head">Win32</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>User</td>
+<tr class="row-even"><td>User</td>
 <td>1</td>
 <td>SidTypeUser</td>
 </tr>
-<tr><td>Label</td>
+<tr class="row-odd"><td>Label</td>
 <td>10</td>
 <td>SidTypeLabel</td>
 </tr>
-<tr><td>Group</td>
+<tr class="row-even"><td>Group</td>
 <td>2</td>
 <td>SidTypeGroup</td>
 </tr>
-<tr><td>Domain</td>
+<tr class="row-odd"><td>Domain</td>
 <td>3</td>
 <td>SidTypeDomain</td>
 </tr>
-<tr><td>Alias</td>
+<tr class="row-even"><td>Alias</td>
 <td>4</td>
 <td>SidTypeAlias</td>
 </tr>
-<tr><td>WellKnownGroup</td>
+<tr class="row-odd"><td>WellKnownGroup</td>
 <td>5</td>
 <td>SidTypeWellKnownGroup</td>
 </tr>
-<tr><td>DeletedAccount</td>
+<tr class="row-even"><td>DeletedAccount</td>
 <td>6</td>
 <td>SidTypeDeletedAccount</td>
 </tr>
-<tr><td>Invalid</td>
+<tr class="row-odd"><td>Invalid</td>
 <td>7</td>
 <td>SidTypeInvalid</td>
 </tr>
-<tr><td>Unknown</td>
+<tr class="row-even"><td>Unknown</td>
 <td>8</td>
 <td>SidTypeUnknown</td>
 </tr>
-<tr><td>Computer</td>
+<tr class="row-odd"><td>Computer</td>
 <td>9</td>
 <td>SidTypeComputer</td>
 </tr>
@@ -1028,7 +1031,7 @@ authority, eg a machine or a domain.</p>
 
 <dl class="data">
 <dt id="accounts.FILTER">
-<tt class="descclassname">accounts.</tt><tt class="descname">FILTER</tt><a class="headerlink" href="#accounts.FILTER" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">accounts.</tt><tt class="descname">FILTER</tt><em class="property"> = &lt;Constants: {'WORKSTATION_TRUST_ACCOUNT': 16, 'INTERDOMAIN_TRUST_ACCOUNT': 8, 'TEMP_DUPLICATE_ACCOUNT': 1, 'SERVER_TRUST_ACCOUNT': 32, 'NORMAL_ACCOUNT': 2}&gt;</em><a class="headerlink" href="#accounts.FILTER" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters when enumerating users</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -1037,29 +1040,29 @@ authority, eg a machine or a domain.</p>
 <col width="53%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Name</th>
+<tr class="row-odd"><th class="head">Name</th>
 <th class="head">Val</th>
 <th class="head">Win32</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>TEMP_DUPLICATE_ACCOUNT</td>
+<tr class="row-even"><td>TEMP_DUPLICATE_ACCOUNT</td>
 <td>1</td>
 <td>FILTER_TEMP_DUPLICATE_ACCOUNT</td>
 </tr>
-<tr><td>WORKSTATION_TRUST_ACCOUNT</td>
+<tr class="row-odd"><td>WORKSTATION_TRUST_ACCOUNT</td>
 <td>16</td>
 <td>FILTER_WORKSTATION_TRUST_ACCOUNT</td>
 </tr>
-<tr><td>NORMAL_ACCOUNT</td>
+<tr class="row-even"><td>NORMAL_ACCOUNT</td>
 <td>2</td>
 <td>FILTER_NORMAL_ACCOUNT</td>
 </tr>
-<tr><td>SERVER_TRUST_ACCOUNT</td>
+<tr class="row-odd"><td>SERVER_TRUST_ACCOUNT</td>
 <td>32</td>
 <td>FILTER_SERVER_TRUST_ACCOUNT</td>
 </tr>
-<tr><td>INTERDOMAIN_TRUST_ACCOUNT</td>
+<tr class="row-even"><td>INTERDOMAIN_TRUST_ACCOUNT</td>
 <td>8</td>
 <td>FILTER_INTERDOMAIN_TRUST_ACCOUNT</td>
 </tr>
@@ -1131,7 +1134,7 @@ authority, eg a machine or a domain.</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -1160,12 +1163,12 @@ authority, eg a machine or a domain.</p>
         <li class="right" >
           <a href="exc.html" title="exc – Exceptions"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
     </div>
   </body>
 </html>

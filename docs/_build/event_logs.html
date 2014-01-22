@@ -3,13 +3,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>event_logs – Event Logs &mdash; WinSys v0.5beta documentation</title>
+    <title>event_logs – Event Logs &mdash; WinSys 0.5beta documentation</title>
+    
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -23,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.5beta documentation" href="index.html" />
+    <link rel="top" title="WinSys 0.5beta documentation" href="index.html" />
     <link rel="next" title="fs – Files, Directories, &amp;c." href="fs.html" />
     <link rel="prev" title="dialogs – Dialog boxes" href="dialogs.html" /> 
   </head>
@@ -43,7 +46,7 @@
         <li class="right" >
           <a href="dialogs.html" title="dialogs – Dialog boxes"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -97,7 +100,7 @@ log does not exist.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>log</strong> &#8211; one of None, an <a class="reference internal" href="#event_logs.EventLog" title="event_logs.EventLog"><tt class="xref py py-class docutils literal"><span class="pre">EventLog</span></tt></a> instance, or a [\\computer\]name moniker</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>log</strong> &#8211; one of None, an <a class="reference internal" href="#event_logs.EventLog" title="event_logs.EventLog"><tt class="xref py py-class docutils literal"><span class="pre">EventLog</span></tt></a> instance, or a [\\computer\]name moniker</td>
 </tr>
 </tbody>
 </table>
@@ -119,7 +122,7 @@ source does not exist.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>source</strong> &#8211; one of None, an <a class="reference internal" href="#event_logs.EventSource" title="event_logs.EventSource"><tt class="xref py py-class docutils literal"><span class="pre">EventSource</span></tt></a> instance, or a [[\\computer]\log\]name moniker</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>source</strong> &#8211; one of None, an <a class="reference internal" href="#event_logs.EventSource" title="event_logs.EventSource"><tt class="xref py py-class docutils literal"><span class="pre">EventSource</span></tt></a> instance, or a [[\\computer]\log\]name moniker</td>
 </tr>
 </tbody>
 </table>
@@ -133,7 +136,7 @@ source does not exist.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>source</strong> &#8211; anything accepted by <a class="reference internal" href="#event_logs.event_source" title="event_logs.event_source"><tt class="xref py py-func docutils literal"><span class="pre">event_source()</span></tt></a></li>
 <li><strong>type</strong> &#8211; an <a class="reference internal" href="#event_logs.EVENTLOG_TYPE" title="event_logs.EVENTLOG_TYPE"><tt class="xref py py-data docutils literal"><span class="pre">EVENTLOG_TYPE</span></tt></a></li>
 <li><strong>message</strong> &#8211; a string or list of strings</li>
@@ -373,7 +376,7 @@ Return the event source so you can log against it.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>name</strong> &#8211; name of the new event source</li>
 <li><strong>log_name</strong> &#8211; name of the associated event log</li>
 </ul>
@@ -413,7 +416,7 @@ event source.</p>
 <h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
 <dl class="data">
 <dt id="event_logs.EVENTLOG_READ">
-<tt class="descclassname">event_logs.</tt><tt class="descname">EVENTLOG_READ</tt><a class="headerlink" href="#event_logs.EVENTLOG_READ" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">event_logs.</tt><tt class="descname">EVENTLOG_READ</tt><em class="property"> = &lt;Constants: {'BACKWARDS': 8, 'SEEK': 2, 'FORWARDS': 4, 'SEQUENTIAL': 1}&gt;</em><a class="headerlink" href="#event_logs.EVENTLOG_READ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ways of reading event logs</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -422,25 +425,25 @@ event source.</p>
 <col width="65%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Name</th>
+<tr class="row-odd"><th class="head">Name</th>
 <th class="head">Val</th>
 <th class="head">Win32</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>SEQUENTIAL</td>
+<tr class="row-even"><td>SEQUENTIAL</td>
 <td>1</td>
 <td>EVENTLOG_SEQUENTIAL_READ</td>
 </tr>
-<tr><td>SEEK</td>
+<tr class="row-odd"><td>SEEK</td>
 <td>2</td>
 <td>EVENTLOG_SEEK_READ</td>
 </tr>
-<tr><td>FORWARDS</td>
+<tr class="row-even"><td>FORWARDS</td>
 <td>4</td>
 <td>EVENTLOG_FORWARDS_READ</td>
 </tr>
-<tr><td>BACKWARDS</td>
+<tr class="row-odd"><td>BACKWARDS</td>
 <td>8</td>
 <td>EVENTLOG_BACKWARDS_READ</td>
 </tr>
@@ -450,7 +453,7 @@ event source.</p>
 
 <dl class="data">
 <dt id="event_logs.EVENTLOG_TYPE">
-<tt class="descclassname">event_logs.</tt><tt class="descname">EVENTLOG_TYPE</tt><a class="headerlink" href="#event_logs.EVENTLOG_TYPE" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">event_logs.</tt><tt class="descname">EVENTLOG_TYPE</tt><em class="property"> = &lt;Constants: {'INFORMATION': 4, 'AUDIT_FAILURE': 16, 'WARNING': 2, 'EVENTLOG_SUCCESS': 0, 'ERROR': 1, 'AUDIT_SUCCESS': 8}&gt;</em><a class="headerlink" href="#event_logs.EVENTLOG_TYPE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Types of records in event logs</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -459,33 +462,33 @@ event source.</p>
 <col width="57%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Name</th>
+<tr class="row-odd"><th class="head">Name</th>
 <th class="head">Val</th>
 <th class="head">Win32</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>EVENTLOG_SUCCESS</td>
+<tr class="row-even"><td>EVENTLOG_SUCCESS</td>
 <td>0</td>
 <td>EVENTLOG_SUCCESS</td>
 </tr>
-<tr><td>ERROR</td>
+<tr class="row-odd"><td>ERROR</td>
 <td>1</td>
 <td>EVENTLOG_ERROR_TYPE</td>
 </tr>
-<tr><td>AUDIT_FAILURE</td>
+<tr class="row-even"><td>AUDIT_FAILURE</td>
 <td>16</td>
 <td>AUDIT_FAILURE</td>
 </tr>
-<tr><td>WARNING</td>
+<tr class="row-odd"><td>WARNING</td>
 <td>2</td>
 <td>EVENTLOG_WARNING_TYPE</td>
 </tr>
-<tr><td>INFORMATION</td>
+<tr class="row-even"><td>INFORMATION</td>
 <td>4</td>
 <td>EVENTLOG_INFORMATION_TYPE</td>
 </tr>
-<tr><td>AUDIT_SUCCESS</td>
+<tr class="row-odd"><td>AUDIT_SUCCESS</td>
 <td>8</td>
 <td>AUDIT_SUCCESS</td>
 </tr>
@@ -552,7 +555,7 @@ event source.</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -581,12 +584,12 @@ event source.</p>
         <li class="right" >
           <a href="dialogs.html" title="dialogs – Dialog boxes"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
     </div>
   </body>
 </html>
