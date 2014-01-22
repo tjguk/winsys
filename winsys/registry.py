@@ -138,9 +138,9 @@ def _parse_moniker (moniker, accept_value=True):
     -> "", 0x80000001, "Software\Python", ""
   """
   if accept_value:
-    moniker_parser = re.compile ("(?:\\\\([^\\]+)\\)?([^:]+)(:?)(.*)", re.UNICODE)
+    moniker_parser = re.compile (r"(?:\\\\([^\\]+)\\)?([^:]+)(:?)(.*)", re.UNICODE)
   else:
-    moniker_parser = re.compile ("(?:\\\\([^\\]+)\\)?(.*)", re.UNICODE)
+    moniker_parser = re.compile (r"(?:\\\\([^\\]+)\\)?(.*)", re.UNICODE)
 
   matcher = moniker_parser.match (moniker)
   if not matcher:
@@ -196,7 +196,7 @@ def create_moniker (computer, root, path, value=None):
     root = REGISTRY_HIVE.name_from_value (root)
   fullpath = sep.join ([root] + path.split (sep))
   if computer:
-    moniker = "\\%s\%s" % (computer, fullpath)
+    moniker = r"\\%s\%s" % (computer, fullpath)
   else:
     moniker = fullpath
   if value:

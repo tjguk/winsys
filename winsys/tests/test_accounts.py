@@ -22,13 +22,13 @@ from winsys import accounts
 class TestAccounts (unittest.TestCase):
 
   def setUp (self):
-    utils.create_user ("alice", "Passw0rd")
-    utils.create_group ("winsys")
-    utils.add_user_to_group ("alice", "winsys")
+    testutils.create_user ("alice", "Passw0rd")
+    testutils.create_group ("winsys")
+    testutils.add_user_to_group ("alice", "winsys")
 
   def tearDown (self):
-    utils.delete_user ("alice")
-    utils.delete_group ("winsys")
+    testutils.delete_user ("alice")
+    testutils.delete_group ("winsys")
 
   def test_principal_None (self):
     assert accounts.principal (None) is None

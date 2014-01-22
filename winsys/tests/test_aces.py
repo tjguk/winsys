@@ -30,7 +30,7 @@ administrators = accounts.principal ("Administrators")
 class TestAces (unittest.TestCase):
 
   def setUp (self):
-    utils.change_priv (win32security.SE_SECURITY_NAME, True)
+    testutils.change_priv (win32security.SE_SECURITY_NAME, True)
     self.filehandle, self.filename = tempfile.mkstemp ()
     dacl = win32security.ACL ()
     dacl.AddAccessAllowedAceEx (win32security.ACL_REVISION_DS, 0, ntsecuritycon.FILE_READ_DATA, everyone)
@@ -45,7 +45,7 @@ class TestAces (unittest.TestCase):
   def tearDown (self):
     os.close (self.filehandle)
     os.unlink (self.filename)
-    utils.change_priv (win32security.SE_SECURITY_NAME, False)
+    testutils.change_priv (win32security.SE_SECURITY_NAME, False)
 
   def test_dace_dace (self):
     dace = _aces.DACE (everyone, "F", "ALLOW")

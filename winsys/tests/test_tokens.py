@@ -25,15 +25,15 @@ class TestTokens (unittest.TestCase):
   me, _, _ = win32security.LookupAccountName (None, win32api.GetUserName ())
 
   def setUp (self):
-    utils.create_user ("alice", "Passw0rd")
-    utils.create_group ("winsys")
-    utils.add_user_to_group ("alice", "winsys")
+    testutils.create_user ("alice", "Passw0rd")
+    testutils.create_group ("winsys")
+    testutils.add_user_to_group ("alice", "winsys")
     self.token0 = win32security.OpenProcessToken (win32api.GetCurrentProcess (), ntsecuritycon.MAXIMUM_ALLOWED)
     self.alice, _, _ = win32security.LookupAccountName (None, "alice")
 
   def tearDown (self):
-    utils.delete_user ("alice")
-    utils.delete_group ("winsys")
+    testutils.delete_user ("alice")
+    testutils.delete_group ("winsys")
 
   def test_token_None (self):
     assert _tokens.token (None) is None
