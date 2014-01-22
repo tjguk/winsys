@@ -1,4 +1,6 @@
+from __future__ import unicode_literals
 from __future__ import with_statement
+
 import os, sys
 import contextlib
 import tempfile

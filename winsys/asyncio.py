@@ -1,9 +1,11 @@
 # -*- coding: iso-8859-1 -*-
-u"""AsyncIO objects wrap the Win32 Overlapped API. They are instantiated by
+from __future__ import unicode_literalsu"""AsyncIO objects wrap the Win32 Overlapped API. They are instantiated by
 passing a handle which has been opened for Overlapped IO. They can be waited
 on by the functions in the :mod:`ipc` module and are True when complete,
 False otherwise.
 """
+from __future__ import unicode_literals
+
 import pywintypes
 import winerror
 import win32event

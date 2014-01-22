@@ -1,4 +1,5 @@
 # -*- coding: iso-8859-1 -*-
+from __future__ import unicode_literals
 from __future__ import with_statement
 import os, sys
 
@@ -7,7 +8,7 @@ import win32api
 import winerror
 import pywintypes
 
-from winsys import accounts, constants, core, exc, utils 
+from winsys import accounts, constants, core, exc, utils
 from winsys._security import _privileges, _aces, _acls
 
 __all__ = ['Token', 'token', 'x_token', 'x_no_token']
@@ -33,15 +34,15 @@ def _from_sid_and_attribute (data):
   # so ignore them!
   #
   return accounts.principal (sid)
-  
+
 def _from_sid_and_attributes (data):
   return [_from_sid_and_attribute (d) for d in data]
-  
+
 def _from_privileges (data):
   return [_privileges.Privilege (*d) for d in data]
 
 class Token (core._WinSysObject):
-  
+
   _MAP = {
     "User" : _from_sid_and_attribute,
     "Owner" : accounts.principal,
@@ -57,7 +58,7 @@ class Token (core._WinSysObject):
     self.hToken = hToken
     self.hProcess = hProcess
     self.hThread = hThread
-    
+
   def __getattr__ (self, attr):
     info_type = getattr (win32security, u"Token" + attr)
     fn = self._MAP.get (attr, lambda x : x)
@@ -65,7 +66,7 @@ class Token (core._WinSysObject):
 
   def as_string (self):
     return u"%s in process/thread %s/%s" % (self.User, self.hProcess, self.hThread)
-    
+
   def dumped (self, level):
     output = []
     output.append (u"user: %s" % self.User)
@@ -80,7 +81,7 @@ class Token (core._WinSysObject):
     output.append (u"session_id: %s" % self.SessionId)
     output.append (u"statistics:\n%s" % utils.dumped_dict (self.Statistics, level))
     return utils.dumped (u"\n".join (output), level)
-    
+
   def pyobject (self):
     return self.hToken
 
@@ -102,14 +103,14 @@ class Token (core._WinSysObject):
       [_privileges.privilege (priv) for (priv, status) in old_privs if status == _privileges.PRIVILEGE_ATTRIBUTE.ENABLED],
       [_privileges.privilege (priv) for (priv, status) in old_privs if status == 0]
     )
-      
+
   def impersonate (self):
     wrapped (win32security.ImpersonateLoggedOnUser, self.hToken)
     return self
 
   def unimpersonate (self):
     wrapped (win32security.RevertToSelf)
-    
+
 def token (token=core.UNSET):
   if token is None:
     return None

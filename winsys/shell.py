@@ -9,6 +9,8 @@ Implemented so far:
 * Standard folders: commonly-accessed shell folders are exposed at module level, eg :func:`desktop`,
   :func:`startup`, :func:`recent`
 """
+from __future__ import unicode_literals
+
 import os, sys
 import binascii
 

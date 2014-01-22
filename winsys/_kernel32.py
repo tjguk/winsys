@@ -1,6 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 u"""Provide functions unavailable via pywin32 which reside in kernel32.dll
 """
+from __future__ import unicode_literals
+
 import winerror
 from ctypes import windll, wintypes
 import ctypes
@@ -61,12 +63,12 @@ def FindVolumeClose (hSearch):
   if kernel32.FindVolumeClose (hSearch) == 0:
       return error (x_kernel32, "FindVolumeClose")
 
-u"""The Find[First|Next]VolumeMountPoint and FindVolumeMountPointClose 
-set provide for a list of volume mount points which the system recognises. 
+u"""The Find[First|Next]VolumeMountPoint and FindVolumeMountPointClose
+set provide for a list of volume mount points which the system recognises.
 They are wrapped as an iterator by functions in the fs module.
 """
 def FindFirstVolumeMountPoint (volume_name):
-  u"""Find the first volume mount point which the system recognises. 
+  u"""Find the first volume mount point which the system recognises.
   If none is found, raise x_kernel32. Otherwise return the
   search handle and the volume mount point name.
   """
@@ -76,7 +78,7 @@ def FindFirstVolumeMountPoint (volume_name):
     return error (x_kernel32, "FindFirstVolumeMountPoint")
   else:
     return hSearch, volume_mount_point_name.value
-  
+
 def FindNextVolumeMountPoint (hSearch):
   u"""Find the next volume mount point which the system recognises in
   the set provided by a search handle returned by FindFirstVolumeMountPoint.
@@ -102,7 +104,7 @@ def FindVolumeMountPointClose (hSearch):
 def GetCompressedFileSize (filepath):
   u"""Return the size in bytes of a file. If the file is compressed,
   return the compressed size, otherwise return the regular size.
-  
+
   Altho' this function is already exposed by pywin32, there is a
   bug in the implementation such that non-trivial unicode causes
   an error.

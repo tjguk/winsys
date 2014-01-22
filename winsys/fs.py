@@ -6,6 +6,9 @@ making it possible to act on large directory structures without
 loading them all into memory.
 """
 from __future__ import with_statement
+from __future__ import print_function
+from __future__ import unicode_literals
+
 import os, sys
 import codecs
 import collections
@@ -31,14 +34,11 @@ import win32net
 import win32netcon
 import winioctlcon
 
-try:
-    reduce
-except NameError:
-    from functools import reduce
 
 if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
   winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
+from winsys._compat import *
 from winsys import constants, core, exc, handles, security as security_, utils, _kernel32
 
 sep = unicode (os.sep)
@@ -857,7 +857,7 @@ class Entry (FilePath, core._WinSysObject):
     if show_security:
       try:
         s = self.security ()
-      except win32file.error, exception:
+      except win32file.error(exception):
         (errno, errctx, errmsg) = exception.args
         if errno == winerror.ERROR_ACCESS_DENIED:
           pass
@@ -1863,7 +1863,7 @@ def _files (pattern="*", ignore=[u".", u".."], error_handler=None):
   dirpath = parts[0] + sep.join (parts[1:-1])
   while True:
     try:
-      file_info = iterator.next ()
+      file_info = next(iterator)
       filename = file_info[8]
       if filename in ignore:
         continue
@@ -1942,7 +1942,7 @@ def file (filepath):
   if isinstance (f, File):
     return f
   elif isinstance (f, Dir) and f:
-    raise x_fs, (None, u"file", u"%s exists but is a directory" % filepath)
+    raise x_fs((None, u"file", u"%s exists but is a directory" % filepath))
   else:
     return File (unicode (filepath))
 
@@ -2310,11 +2310,11 @@ def watch (
   return _DirWatcher (unicode (root), subdirs, watch_for, buffer_size)
 
 if __name__ == '__main__':
-  print "Watching", os.path.abspath (".")
+  print("Watching", os.path.abspath ("."))
   watcher = watch (".", True)
   try:
     for action, old_filename, new_filename in watcher:
       if action in (FILE_ACTION.ADDED, FILE_ACTION.MODIFIED):
-        print "%10s %s %d" % (FILE_ACTION.name_from_value (action), new_filename, entry (new_filename).size)
+        print("%10s %s %d" % (FILE_ACTION.name_from_value (action), new_filename, entry (new_filename).size))
   except KeyboardInterrupt:
     watcher.stop ()

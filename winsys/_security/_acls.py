@@ -1,4 +1,5 @@
 # -*- coding: iso-8859-1 -*-
+from __future__ import unicode_literals
 import os, sys
 
 import win32security
@@ -15,7 +16,7 @@ PyACL = pywintypes.ACLType
 
 class x_acl (exc.x_winsys):
   "Base for all ACL-related exceptions"
-  
+
 class x_value_not_set (x_acl):
   "Raised when iterating over an ACL which has not been set"
 
@@ -31,7 +32,7 @@ class ACL (core._WinSysObject):
   ACL (which is effectively completely restrictive). A NULL ACL is
   completely unrestrictive. This is mapped by holding None and treating
   this specially where needed.
-  
+
   DACL & SACL subclasses are defined to cope with the slightly different
   ways in which the structures are manipulated, but the core functionality
   is in this base class. This class need rarely be instantiated directly;
@@ -48,7 +49,7 @@ class ACL (core._WinSysObject):
     else:
       self._list = list (self._ACE.from_ace (acl.GetAce (index)) for index in range (acl.GetAceCount ()))
     self.inherited = inherited
-    
+
     #
     # Used when inheritance is broken to keep
     # a copy of the inherited list.
@@ -107,7 +108,7 @@ class ACL (core._WinSysObject):
 
   def as_string (self):
     return repr (self._list)
-  
+
   def __contains__ (self, a):
     return self._ACE.ace (a) in (self._list or [])
 
@@ -117,7 +118,7 @@ class ACL (core._WinSysObject):
     for a in aces:
       acl.append (cls._ACE.ace (a))
     return acl
-    
+
   def break_inheritance (self, copy_first):
     core.debug ("About to break_inheritance for %s with _list %s and copy_first %s", (self.__class__, self._list, copy_first))
     if self._list is not None:
@@ -148,7 +149,7 @@ class DACL (ACL):
   def pyobject (self, include_inherited=False):
     if self._list is None:
       return None
-    
+
     acl = wrapped (win32security.ACL)
     aces = sorted (a for a in self._list if not a.inherited or include_inherited)
     for ace in aces:
@@ -156,19 +157,19 @@ class DACL (ACL):
       if adder_fn:
         adder = getattr (acl, adder_fn)
         adder (
-          REVISION.ACL_REVISION_DS, 
-          ace.flags, 
-          ace.access, 
+          REVISION.ACL_REVISION_DS,
+          ace.flags,
+          ace.access,
           ace.trustee.pyobject ()
         )
       else:
-        raise NotImplementedError, ace.type
+        raise NotImplementedError(ace.type)
     return acl
-    
+
   @classmethod
   def public (cls):
     return cls.from_list ([(u"Everyone", u"F", u"ALLOW")])
-    
+
   @classmethod
   def private (cls):
     return cls.from_list ([("", u"F", u"ALLOW")])
@@ -178,11 +179,11 @@ class SACL (ACL):
   _ACE_MAP = {
     _aces.ACE_TYPE.SYSTEM_AUDIT : u"AddAuditAccessAceEx",
   }
-  
+
   def pyobject (self, include_inherited=False):
     if self._list is None:
       return None
-    
+
     acl = wrapped (win32security.ACL)
     aces = sorted (a for a in self._list if not a.inherited or include_inherited)
     for ace in aces:
@@ -190,21 +191,21 @@ class SACL (ACL):
       if adder_fn:
         adder = getattr (acl, adder_fn)
         adder (
-          REVISION.ACL_REVISION_DS, 
+          REVISION.ACL_REVISION_DS,
           ace.flags,
-          ace.access, 
-          ace.trustee.pyobject (), 
-          ace.audit_success, 
+          ace.access,
+          ace.trustee.pyobject (),
+          ace.audit_success,
           ace.audit_failure
         )
       else:
-        raise NotImplementedError, ace.type
+        raise NotImplementedError(ace.type)
     return acl
-    
+
 
 def acl (acl, klass=core.UNSET, inherited=True):
   if klass is core.UNSET: klass = DACL
-    
+
   if acl is None:
     return klass (None, inherited)
   elif type (acl) is PyACL:

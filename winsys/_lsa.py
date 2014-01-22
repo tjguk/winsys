@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import win32security
 
 from winsys import accounts, constants, core, exc, utils

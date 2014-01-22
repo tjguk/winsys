@@ -4,6 +4,8 @@ little is expected to be here, only methods which are clearly common
 to all such as default implementations of __str__ and fill-in comparison
 functions to ensure total ordering.
 """
+from __future__ import unicode_literals
+
 import sys
 import logging
 import tempfile

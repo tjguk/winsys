@@ -30,6 +30,8 @@ traceback or other bulky text for which a message box might be awkward.
 It displays multiline text in a readonly edit control which can be
 scrolled and select-copied.
 """
+from __future__ import unicode_literals
+
 import os, sys
 import datetime
 import functools

@@ -12,6 +12,8 @@ or :func:`me` functions. Although the module is designed to be used
 standalone, it is imported directly into the :mod:`security` module's
 namespace so its functionality can also be accessed from there.
 """
+from __future__ import unicode_literals
+
 import os, sys
 import contextlib
 import socket
@@ -27,6 +29,7 @@ import win32net
 import win32netcon
 import winerror
 
+from winsys._compat import *
 from winsys import constants, core, exc, utils
 from winsys import _advapi32
 

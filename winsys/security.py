@@ -16,7 +16,9 @@ via the :func:`principal` function. :class:`Privilege` objects
 refer to process privileges and are reached through the :func:`principal`
 function, or through the :attr:`Privileges` attribute of a :class:`Token`.
 """
+from __future__ import unicode_literals
 from __future__ import with_statement
+
 import os, sys
 import contextlib
 import operator

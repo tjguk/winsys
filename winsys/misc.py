@@ -1,4 +1,6 @@
 # -*- coding: iso-8859-1 -*-
+from __future__ import unicode_literals
+
 import os, sys
 import time
 import uuid

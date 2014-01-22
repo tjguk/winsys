@@ -13,6 +13,8 @@ is useful when displaying Win32 structures.
 For useful documentation, each :class:`Constants` generates a readable
 docstring tabulating its names & values.
 """
+from __future__ import unicode_literals
+
 import operator
 import re
 
@@ -21,6 +23,7 @@ import win32event
 import ntsecuritycon
 import fnmatch
 
+from winsys._compat import *
 from winsys import core, utils
 
 def from_pattern (pattern, name):
@@ -48,7 +51,7 @@ class Constants (core._WinSysObject):
     COMPRESSION_ENGINE.update (dict (
       EXTRA_VALUE = 5
     ))
-    print COMPRESSION_ENGINE.MAXIMUM
+    print(COMPRESSION_ENGINE.MAXIMUM)
     COMPRESSION_ENGINE.dump ()
 
   The convention is to name the set of constants after the common
@@ -71,7 +74,7 @@ class Constants (core._WinSysObject):
       "*_ACE_TYPE",
       namespace=win32con
     )
-    print ACE_TYPES.name_from_value (ACE_TYPES.ACCESS_ALLOWED)
+    print(ACE_TYPES.name_from_value (ACE_TYPES.ACCESS_ALLOWED))
   """
 
   def __init__ (self, dict_initialiser={}):
@@ -116,26 +119,25 @@ class Constants (core._WinSysObject):
     namelen, valuelen, aliaslen = (len (h) for h in headers)
 
     namelen = max (namelen, len (max (self._dict, key=len)))
-    aliaslen = max (aliaslen, len (max (self._key_dict.itervalues (), key=len)))
+    aliaslen = max (aliaslen, len (max (self._key_dict.values (), key=len)))
     try:
-      int (self._dict.itervalues ()[0])
+      int (self._dict.values ()[0])
     except:
-      valuelen = max (valuelen, len (max ((unicode (v) for v in self._dict.itervalues ()), key=len)))
+      valuelen = max (valuelen, len (max ((unicode (v) for v in self._dict.values ()), key=len)))
       prefix = ""
       row_format = "|%%-%ds|%%-%ds|%%-%ds|" % (namelen, valuelen, aliaslen)
       converter = unicode
     else:
-      valuelen = max (valuelen, 2 * ((1 + len ("%x" % max (self._dict.itervalues ()))) // 2))
+      valuelen = max (valuelen, 2 * ((1 + len ("%x" % max (self._dict.values ()))) // 2))
       prefix = "0x"
       row_format = "|%%-%ds|%s%%0%dX|%%-%ds|" % (namelen, prefix, valuelen, aliaslen)
-      print "row_format:", row_format
       converter = utils.signed_to_unsigned
     header_format = "|%%-%ds|%%-%ds|%%-%ds|" % (namelen, len (prefix) + valuelen, aliaslen)
 
     separator = "+" + namelen * "-" + "+" + (len (prefix) + valuelen) * "-" + "+" + aliaslen * "-" + "+"
     header = "+" + namelen * "=" + "+" + (len (prefix) + valuelen) * "=" + "+" + aliaslen * "=" + "+"
     row = row_format + "\n" + separator
-    rows = ((name, converter (value), self._key_dict[value]) for (name, value) in self._dict.iteritems ())
+    rows = ((name, converter (value), self._key_dict[value]) for (name, value) in self._dict.items())
     table = "\n".join ([
       separator,
       header_format % headers,
@@ -163,9 +165,9 @@ class Constants (core._WinSysObject):
 
       from winsys.security import SD_CONTROL
 
-      print SD_CONTROL.constant (["dacl_protected", "sacl_protected"])
-      print SD_CONTROL.DACL_PROTECTED | SD_CONTROL.SACL_PROTECTED
-      print SD_CONTROL.constant (12288)
+      print(SD_CONTROL.constant (["dacl_protected", "sacl_protected"]))
+      print(SD_CONTROL.DACL_PROTECTED | SD_CONTROL.SACL_PROTECTED)
+      print(SD_CONTROL.constant (12288))
 
     ..  note::
         No attempt is made to verify that the number passed in represents
@@ -189,11 +191,11 @@ class Constants (core._WinSysObject):
     u"""Act as a dict for updates so that several constant sets may
     be merged into one.
     """
-    self.init ((key, key, value) for key, value in other.iteritems ())
+    self.init ((key, key, value) for key, value in other.items ())
 
   def items (self):
-    return self._dict.iteritems ()
-  iteritems = items
+    return self._dict.items ()
+  items = items
 
   def keys (self):
     return self._dict.iterkeys ()
@@ -203,8 +205,8 @@ class Constants (core._WinSysObject):
     return iter (self._dict)
 
   def values (self):
-    return self._dict.itervalues ()
-  itervalues = values
+    return self._dict.values ()
+  values = values
 
   @classmethod
   def from_dict (cls, d, pattern=None):
@@ -212,7 +214,7 @@ class Constants (core._WinSysObject):
     If a pattern is passed in, use the distinguished part of the name (the part
     which matches the wildcard) as the key name.
     """
-    return cls ((key, from_pattern (pattern, key), value) for (key, value) in d.iteritems ())
+    return cls ((key, from_pattern (pattern, key), value) for (key, value) in d.items ())
 
   @classmethod
   def from_list (cls, keys, namespace, pattern=None):
@@ -262,7 +264,7 @@ class Constants (core._WinSysObject):
         return name
     else:
       if default is core.UNSET:
-        raise KeyError, u"No constant matching name %s and value %s" % (patterns, value)
+        raise KeyError(u"No constant matching name %s and value %s" % (patterns, value))
       else:
         return default
 

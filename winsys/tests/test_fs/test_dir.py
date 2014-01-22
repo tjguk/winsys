@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from winsys import fs
 import os, sys
 import glob

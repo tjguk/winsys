@@ -18,6 +18,8 @@ and the system and user objects supply an additional :meth:`Persistent.broadcast
 method which sends a message to top-level windows, such as the shell, to
 indicate that the environment has changed.
 """
+from __future__ import unicode_literals
+
 import os, sys
 import win32api
 import win32profile

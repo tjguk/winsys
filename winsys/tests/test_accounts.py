@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import os, sys
 import unittest as unittest0
 try:

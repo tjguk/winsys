@@ -27,6 +27,8 @@ most of the useful functionality in the module. However, the same
 functionality is replicated at module level in many cases for
 convenience.
 """
+from __future__ import unicode_literals
+
 import os, sys
 import operator
 import re
