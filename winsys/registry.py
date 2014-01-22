@@ -1,5 +1,5 @@
 # -*- coding: iso-8859-1 -*-
-ur"""
+u"""
 The registry consists of a series of roots from each of which descends
 a tree of keys and values. Each key has an anonymous (default) value
 and optionally a set of named values, each of which has a particular
@@ -136,9 +136,9 @@ def _parse_moniker (moniker, accept_value=True):
     -> "", 0x80000001, "Software\Python", ""
   """
   if accept_value:
-    moniker_parser = re.compile (ur"(?:\\\\([^\\]+)\\)?([^:]+)(:?)(.*)", re.UNICODE)
+    moniker_parser = re.compile (u"(?:\\\\([^\\]+)\\)?([^:]+)(:?)(.*)", re.UNICODE)
   else:
-    moniker_parser = re.compile (ur"(?:\\\\([^\\]+)\\)?(.*)", re.UNICODE)
+    moniker_parser = re.compile (u"(?:\\\\([^\\]+)\\)?(.*)", re.UNICODE)
 
   matcher = moniker_parser.match (moniker)
   if not matcher:
@@ -194,7 +194,7 @@ def create_moniker (computer, root, path, value=None):
     root = REGISTRY_HIVE.name_from_value (root)
   fullpath = sep.join ([root] + path.split (sep))
   if computer:
-    moniker = ur"\\%s\%s" % (computer, fullpath)
+    moniker = u"\\%s\%s" % (computer, fullpath)
   else:
     moniker = fullpath
   if value:
@@ -203,7 +203,7 @@ def create_moniker (computer, root, path, value=None):
     return moniker
 
 class Registry (core._WinSysObject):
-  ur"""
+  u"""
   Represent a registry key (including one of the roots) giving
   access to its subkeys and values as well as its security and walking
   its subtrees. The key is True if it exists, False otherwise.

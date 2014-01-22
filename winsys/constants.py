@@ -24,7 +24,7 @@ import fnmatch
 from winsys import core, utils
 
 def from_pattern (pattern, name):
-  ur"""Helper function to find the common pattern among a group
+  u"""Helper function to find the common pattern among a group
   of like-named constants. eg if the pattern is FILE_ACCESS_*
   then the part of the name after FILE_ACCESS_ will be returned.
   """
@@ -34,7 +34,7 @@ def from_pattern (pattern, name):
     return re.search (pattern.replace ("*", r"(\w+)"), name).group (1)
 
 class Constants (core._WinSysObject):
-  ur"""Provide a dict-like interface for a group of related
+  u"""Provide a dict-like interface for a group of related
   constants. These can come from a module or other namespace according
   to a wildcard name, or can be added as a list of (unrelated) names from
   a namespace or can simply be a raw dictionary of name-value pairs::

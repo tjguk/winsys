@@ -1,5 +1,5 @@
 # -*- coding: iso-8859-1 -*-
-ur"""All security in windows is handled via Security Principals. These can
+u"""All security in windows is handled via Security Principals. These can
 be a user (the most common case), a group of users, a computer, or something
 else. Security principals are uniquely identified by their SID: a binary code
 represented by a string S-a-b-cd-efg... where each of the segments represents
@@ -66,7 +66,7 @@ def _win32net_enum (win32_fn, system_or_domain):
     if resume == 0: break
 
 def principal (principal, cls=core.UNSET):
-  ur"""Factory function for the :class:`Principal` class. This is the most
+  u"""Factory function for the :class:`Principal` class. This is the most
   common way to create a :class:`Principal` object::
 
     from winsys import accounts
@@ -91,29 +91,29 @@ def principal (principal, cls=core.UNSET):
     return cls.from_string (unicode (principal))
 
 def user (name):
-  ur"""If you know you're after a user, use this. Particularly
+  u"""If you know you're after a user, use this. Particularly
   useful when a system user is defined as an alias type
   """
   return principal (name, cls=User)
 
 def group (name):
-  ur"""If you know you're after a group, use this. Particularly
+  u"""If you know you're after a group, use this. Particularly
   useful when a system group is defined as an alias type
   """
   return principal (name, cls=Group)
 
 def local_group (name):
-  ur"""If you know you're after a local group, use this.
+  u"""If you know you're after a local group, use this.
   """
   return principal (name, cls=LocalGroup)
 
 def global_group (name):
-  ur"""If you know you're after a global group, use this.
+  u"""If you know you're after a global group, use this.
   """
   return principal (name, cls=GlobalGroup)
 
 def me ():
-  ur"""Convenience function for the common case of getting the
+  u"""Convenience function for the common case of getting the
   logged-on user's account.
   """
   return Principal.me ()
@@ -129,7 +129,7 @@ def domain_controller (domain=None):
   return wrapped (win32net.NetGetAnyDCName, None, domain)
 
 def users (system=None):
-  ur"""Convenience function to yield each of the local users
+  u"""Convenience function to yield each of the local users
   on a system.
 
   :param system: optional security authority
@@ -138,7 +138,7 @@ def users (system=None):
   return iter (_LocalUsers (system))
 
 class Principal (core._WinSysObject):
-  ur"""Object wrapping a Windows security principal, represented by a SID
+  u"""Object wrapping a Windows security principal, represented by a SID
   and, where possible, a name. :class:`Principal` compares and hashes
   by SID so can be sorted and used as a dictionary key, set element, etc.
 
@@ -179,7 +179,7 @@ class Principal (core._WinSysObject):
     return self.sid < principal (other).sid
 
   def pyobject (self):
-    ur"""Return the internal representation of this object.
+    u"""Return the internal representation of this object.
 
     :returns: pywin32 SID
     """
@@ -187,7 +187,7 @@ class Principal (core._WinSysObject):
 
   def as_string (self):
     if self.domain:
-      return ur"%s\%s" % (self.domain, self.name)
+      return u"%s\%s" % (self.domain, self.name)
     else:
       return self.name or str (self.sid)
 
@@ -228,7 +228,7 @@ class Principal (core._WinSysObject):
 
   @classmethod
   def from_string (cls, string, system=None):
-    ur"""Return a :class:`Principal` based on a name and a
+    u"""Return a :class:`Principal` based on a name and a
     security authority. If `string` is blank, the logged-on user is assumed.
 
     :param string: name of an account in the form "domain\name". domain is optional so the simplest form is simply "name"
@@ -247,7 +247,7 @@ class Principal (core._WinSysObject):
 
   @classmethod
   def from_sid (cls, sid, system=None):
-    ur"""Return a :class:`Principal` based on a sid and a security authority.
+    u"""Return a :class:`Principal` based on a sid and a security authority.
 
     :param sid: a PySID
     :param system_name: optional name of a security authority
@@ -266,7 +266,7 @@ class Principal (core._WinSysObject):
 
   @classmethod
   def from_well_known (cls, well_known, domain=None):
-    ur"""Return a :class:`Principal` based on one of the :const:`WELL_KNOWN_SID` values.
+    u"""Return a :class:`Principal` based on one of the :const:`WELL_KNOWN_SID` values.
 
     :param well_known: one of the :const:`WELL_KNOWN_SID`
     :param domain: anything accepted by :func:`principal` and corresponding to a domain
@@ -315,7 +315,7 @@ class User (Principal):
 
   @classmethod
   def create (cls, username, password, system=None):
-    ur"""Create a new user with `username` and `password`. Return
+    u"""Create a new user with `username` and `password`. Return
     a :class:`User` for the new user.
 
     :param username: username of the new user. Must not already exist on `system`
@@ -353,7 +353,7 @@ class User (Principal):
       yield group (group_name)
 
   def join (self, other_group):
-    ur"""Add this user to a group
+    u"""Add this user to a group
 
     :param other_group: anything accepted by :func:`group`
     :returns: self
@@ -361,7 +361,7 @@ class User (Principal):
     return group (other_group).add (self)
 
   def leave (self, other_group):
-    ur"""Remove this user from a group
+    u"""Remove this user from a group
 
     :param other_group: anything accepted by :func:`group`
     :returns: self
@@ -369,7 +369,7 @@ class User (Principal):
     return group (other_group).remove (self)
 
   def runas (self, command_line, password=core.UNSET, load_profile=False):
-    ur"""Run a command logged on as this user
+    u"""Run a command logged on as this user
 
     :param command_line: command line to run, quoted as necessary
     :param password: password; if not supplied, standard Windows prompt
@@ -397,7 +397,7 @@ class Group (Principal):
   SID_NAME_USE_MAP = {}
 
   def __contains__ (self, member):
-    ur"""Crudely, iterate over the group's members until you hit `member`
+    u"""Crudely, iterate over the group's members until you hit `member`
     """
     member = principal (member)
     return any (member == m for m in self)
@@ -408,7 +408,7 @@ class GlobalGroup (Group):
 
   @classmethod
   def create (cls, groupname, domain=None):
-    ur"""Create a new group. Return a :class:`Group` for the new group.
+    u"""Create a new group. Return a :class:`Group` for the new group.
 
     :param groupname: name of the new group. Must not already exist on `system`
     :param system: optional security authority
@@ -419,14 +419,14 @@ class GlobalGroup (Group):
     return cls.from_string (groupname, system)
 
   def delete (self):
-    ur"""Delete this group from `system`.
+    u"""Delete this group from `system`.
 
     :param system: optional security authority
     """
     wrapped (win32net.NetGroupDel, self.system, self.name)
 
   def add (self, member):
-    ur"""Add a :class:`Principal` to this local group
+    u"""Add a :class:`Principal` to this local group
 
     :param member: anything accepted by :func:`principal`
     :returns: :class:`Principal` for `member`
@@ -436,7 +436,7 @@ class GlobalGroup (Group):
     return member
 
   def remove (self, member):
-    ur"""Remove a :class:`Principal` from this local group. The
+    u"""Remove a :class:`Principal` from this local group. The
     principal must already be a member of the group.
 
     :param member: anything accepted by :func:`principal`
@@ -447,7 +447,7 @@ class GlobalGroup (Group):
     return member
 
   def __iter__ (self):
-    ur"""Yield the list of members of this group.
+    u"""Yield the list of members of this group.
 
     :returns: yield a :class:`Principal` or subclass corresponding to each member
               of this group
@@ -463,7 +463,7 @@ class LocalGroup (Group):
 
   @classmethod
   def create (cls, groupname, system=None):
-    ur"""Create a new group. Return a :class:`Group` for the new group.
+    u"""Create a new group. Return a :class:`Group` for the new group.
 
     :param groupname: name of the new group. Must not already exist on `system`
     :param system: optional security authority
@@ -473,14 +473,14 @@ class LocalGroup (Group):
     return cls.from_string (groupname, system)
 
   def delete (self):
-    ur"""Delete this group from `system`.
+    u"""Delete this group from `system`.
 
     :param system: optional security authority
     """
     wrapped (win32net.NetLocalGroupDel, self.system, self.name)
 
   def add (self, member):
-    ur"""Add a :class:`Principal` to this local group
+    u"""Add a :class:`Principal` to this local group
 
     :param member: anything accepted by :func:`principal`
     :returns: :class:`Principal` for `member`
@@ -490,7 +490,7 @@ class LocalGroup (Group):
     return member
 
   def remove (self, member):
-    ur"""Remove a :class:`Principal` from this local group. The
+    u"""Remove a :class:`Principal` from this local group. The
     principal must already be a member of the group.
 
     :param member: anything accepted by :func:`principal`
@@ -501,7 +501,7 @@ class LocalGroup (Group):
     return member
 
   def __iter__ (self):
-    ur"""Yield the list of members of this group.
+    u"""Yield the list of members of this group.
 
     :returns: yield a :class:`Principal` or subclass corresponding to each member
               of this group
@@ -520,7 +520,7 @@ Principal.SID_NAME_USE_MAP = {
 }
 
 def local_groups (system=None):
-  ur"""Convenience function to yield each of the local users
+  u"""Convenience function to yield each of the local users
   on a system.
 
   :param system: optional security authority
@@ -530,7 +530,7 @@ def local_groups (system=None):
     yield LocalGroup.from_string (group['name'])
 
 def global_groups (domain=None):
-  ur"""Convenience function to yield each of the local users
+  u"""Convenience function to yield each of the local users
   on a system.
 
   :param domain: optional security domain

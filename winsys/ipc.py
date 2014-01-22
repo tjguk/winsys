@@ -51,7 +51,7 @@ def _unserialised (data):
   return data
 
 class Mailslot (core._WinSysObject):
-  ur"""A mailslot is a mechanism for passing small datasets (up to about
+  u"""A mailslot is a mechanism for passing small datasets (up to about
   400 bytes) between machines in the same network. For transport and
   name resolution it uses NetBIOS so you can't, for example, use a
   machine's IP address when specifying the location of a mailslot.
@@ -338,20 +338,20 @@ class Event (core._WinSysObject):
     return self._hEvent
 
   def pulse (self):
-    ur"Cause the event to set and reset immediately"
+    u"Cause the event to set and reset immediately"
     wrapped (win32event.PulseEvent, self._handle ())
 
   def set (self):
-    ur"Signal the event"
+    u"Signal the event"
     wrapped (win32event.SetEvent, self._handle ())
 
   def clear (self):
-    ur"Reset the event"
+    u"Reset the event"
     wrapped (win32event.ResetEvent, self._handle ())
   reset = clear
 
   def wait (self, timeout_s=WAIT.INFINITE):
-    ur"""Wait, optionally timing out, for the event to fire. cf also the :func:`any` and
+    u"""Wait, optionally timing out, for the event to fire. cf also the :func:`any` and
     :func:`all` convenience functions which take an iterable of events or other objects.
 
     :param timeout_s: how many seconds to wait before timing out.
@@ -376,7 +376,7 @@ class Event (core._WinSysObject):
     return self.isSet ()
 
 class Mutex (core._WinSysObject):
-  ur"""A Mutex is a kernel object which can only be held by one thread or process
+  u"""A Mutex is a kernel object which can only be held by one thread or process
   at a time. Its usual application is to protect shared data structures or to
   prevent more than one instance of an application from running simultaneously.
   Mutexes can be named or anonymous. Anonymous mutexes can be used between
@@ -414,7 +414,7 @@ class Mutex (core._WinSysObject):
     return self.name or str (int (self._handle))
 
   def acquire (self, timeout_ms=WAIT.INFINITE):
-    ur"""Acquire the mutex waiting for `timeout_ms` milliseconds before failing
+    u"""Acquire the mutex waiting for `timeout_ms` milliseconds before failing
 
     :param timeout_ms: how many milliseconds to wait before giving up
     :raises: :exc:`x_ipc_timeout` if timeout expires
@@ -424,13 +424,13 @@ class Mutex (core._WinSysObject):
       raise x_ipc_timeout (None, "Mutex.acquire", "timed out")
 
   def release (self):
-    ur"""Release the mutex. Consider using the object as a context manager
+    u"""Release the mutex. Consider using the object as a context manager
     instead.
     """
     wrapped (win32event.ReleaseMutex, self._handle)
 
 class Pipe (core._WinSysObject):
-  ur"""A pipe is a kernel object which allows communication between two parts
+  u"""A pipe is a kernel object which allows communication between two parts
   of a process or two separate processes, possibly on separate machines. A
   pipe can be named or anonymous. The former can span processes and machines;
   the latter are typically used within one process although they can cross
@@ -470,7 +470,7 @@ class AnonymousPipe (Pipe):
     return self._whandle.duplicate (processes.process (process))
 
   def read (self):
-    ur"""Read bytes from the pipe.
+    u"""Read bytes from the pipe.
 
     :returns: any bytes waiting in the pipe. Will block if nothing is ready.
     """
@@ -484,7 +484,7 @@ class AnonymousPipe (Pipe):
     return data
 
   def write (self, data):
-    ur"""Writes `data` to the pipe. Will block if the internal buffer fills up.
+    u"""Writes `data` to the pipe. Will block if the internal buffer fills up.
     """
     handle = self._whandle.pyobject ()
     wrapped (win32file.WriteFile, handle, data)
@@ -534,7 +534,7 @@ class NamedPipe (Pipe):
 # Module-level convenience functions
 #
 def mailslot (mailslot, marshalled=True, message_size=0, timeout_ms=-1):
-  ur"""Return a :class:`Mailslot` instance based on the name in `mailslot`.
+  u"""Return a :class:`Mailslot` instance based on the name in `mailslot`.
   If the name is not a fully-qualified mailslot name (\\.\mailslot) then
   it is assumed to be on the local machine and is prefixed accordingly.
 
@@ -556,12 +556,12 @@ def mailslot (mailslot, marshalled=True, message_size=0, timeout_ms=-1):
       serialiser = marshal.dumps, marshal.loads
     else:
       serialiser = _unserialised, _unserialised
-    if not re.match (ur"\\\\[^\\]+\\mailslot\\", unicode (mailslot), re.UNICODE):
-      mailslot = ur"\\.\mailslot\%s" % mailslot
+    if not re.match (u"\\\\[^\\]+\\mailslot\\", unicode (mailslot), re.UNICODE):
+      mailslot = u"\\.\mailslot\%s" % mailslot
     return Mailslot (mailslot, serialiser, message_size, timeout_ms)
 
 def event (name=None, initially_set=False, needs_manual_reset=False, security=None):
-  ur"""Return a :class:`Event` instance, named or anonymous, unset by default
+  u"""Return a :class:`Event` instance, named or anonymous, unset by default
   and with automatic reset.
 
   :param name: a valid event name. If `None` (the default) then an anonymous
@@ -578,7 +578,7 @@ def event (name=None, initially_set=False, needs_manual_reset=False, security=No
   return Event (security, needs_manual_reset, initially_set, name)
 
 def mutex (name=None, take_initial_ownership=False):
-  ur"""Return a :class:`Mutex` instance, named or anonymous, not initially owned
+  u"""Return a :class:`Mutex` instance, named or anonymous, not initially owned
   by default.
 
   :param name: a valid mutex name. If `None` (the default) then an anonymous
@@ -591,8 +591,8 @@ def mutex (name=None, take_initial_ownership=False):
   return Mutex (name, take_initial_ownership)
 
 def open_pipe (name, mode="rw", timeout_ms=WAIT.INFINITE):
-  if not name.startswith (ur"\\\\"):
-    name = ur"\\.\pipe\%s" % name
+  if not name.startswith (u"\\\\"):
+    name = u"\\.\pipe\%s" % name
 
   result = win32pipe.WaitNamedPipe (name, timeout_ms)
   read_mode = 0
@@ -604,7 +604,7 @@ def open_pipe (name, mode="rw", timeout_ms=WAIT.INFINITE):
   #~ win32pipe.
 
 def pipe (name=None):
-  ur"""Return a pipe. If name is given a :class:`NamedPipe` is returned, otherwise
+  u"""Return a pipe. If name is given a :class:`NamedPipe` is returned, otherwise
   an :class:`AnonymousPipe`. If name is not in the correct form for a pipe
   (\\\\<machine>\\pipe\\<name>) it is assumed to be a local pipe and renamed
   as such.
@@ -612,12 +612,12 @@ def pipe (name=None):
   if name is None:
     return AnonymousPipe ()
   else:
-    if not name.startswith (ur"\\\\"):
-      name = ur"\\.\pipe\%s" % name
+    if not name.startswith (u"\\\\"):
+      name = u"\\.\pipe\%s" % name
     return NamedPipe (name)
 
 def wait (object, timeout_ms=WAIT.INFINITE):
-  ur"""Wait for one synchronisation object to fire.
+  u"""Wait for one synchronisation object to fire.
 
   :param object: an object whose `pyobject` method returns a handle to a synchronisation object
   :param timeout_ms: how many milliseconds to wait

@@ -120,7 +120,7 @@ class IADs (core._WinSysObject):
         break
 
   def walk (self, depthfirst=False):
-    ur"""Mimic os.walk, iterating over each container and the items within
+    u"""Mimic os.walk, iterating over each container and the items within
     in. Each iteration yields:
 
       container, (iterator for items)

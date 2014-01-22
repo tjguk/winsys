@@ -1,5 +1,5 @@
 # -*- coding: iso-8859-1 -*-
-ur"""Windows manages security by granting rights -- such as the
+u"""Windows manages security by granting rights -- such as the
 ability to read or write an object -- in the form of
 Access Control Lists (ACLs) of Access Control Entries (ACEs)
 to specific security principals: users, groups or other entities.
@@ -99,7 +99,7 @@ WINERROR_MAP = {
 wrapped = exc.wrapper (WINERROR_MAP, x_security)
 
 class Security (core._WinSysObject):
-  ur"""The heart of the :mod:`security` module, this class represents the security
+  u"""The heart of the :mod:`security` module, this class represents the security
   descriptor of a file, kernel object or any other securable object. It's most
   commonly instantiated from an object's security method (eg `fs.File.security`)
   or by means of the :func:`security` function which can take the name or handle
@@ -178,7 +178,7 @@ class Security (core._WinSysObject):
     originating_object=core.UNSET,
     originating_object_type=core.UNSET
   ):
-    ur"""Create a new :class:`Security` object from its component pieces,
+    u"""Create a new :class:`Security` object from its component pieces,
     all optional. You won't often need to call this as you can do most
     useful things via the :func:`security` function, but to create a simple
     security descriptor for immediate use, you can instantiate it directly.
@@ -257,7 +257,7 @@ class Security (core._WinSysObject):
     return utils.indented (u"\n".join (output), level)
 
   def break_inheritance (self, copy_first=True, break_dacl=True, break_sacl=True):
-    ur"""Cause this security object to start a new thread of inheritance. By
+    u"""Cause this security object to start a new thread of inheritance. By
     default, assume that DACL & SACL inheritance are both to be broken and
     that existing permissions are to be retained, although uninherited.
 
@@ -273,7 +273,7 @@ class Security (core._WinSysObject):
     return self
 
   def restore_inheritance (self, copy_back=True, restore_dacl=True, restore_sacl=True):
-    ur"""Cause this security object to regain its inhertance from its parents.
+    u"""Cause this security object to regain its inhertance from its parents.
     By default, assume that DACL & SACL inheritance are both to be recovered and
     that existing permissions are to be copied back in.
 
@@ -344,7 +344,7 @@ class Security (core._WinSysObject):
 
   @classmethod
   def security_options (cls, options):
-    ur"""Accept either an integer representing a bitmask combination
+    u"""Accept either an integer representing a bitmask combination
     or :const:`SECURITY_INFORMATION` values; or a string whose
     characters map, via :const:`OPTIONS` to the same values.
     The following have the same result:
@@ -361,7 +361,7 @@ class Security (core._WinSysObject):
       return reduce (operator.or_, (cls.OPTIONS[opt] for opt in options.upper ()), 0)
 
   def to_object (self, obj=core.UNSET, object_type=core.UNSET, options=core.UNSET):
-    ur"""Write the current state of the object as the security settings
+    u"""Write the current state of the object as the security settings
     on a Windows object, typically a file. This is most often called
     implicitly when the :class:`Security` object is used as a context
     manager, but can be called explicitly, especially to copy one object's
@@ -466,7 +466,7 @@ class Security (core._WinSysObject):
 
   @classmethod
   def from_object (cls, obj, object_type=core.UNSET, options=core.UNSET):
-    ur"""Constructs a :class:`Security` object from a PyHANDLE or an object name.
+    u"""Constructs a :class:`Security` object from a PyHANDLE or an object name.
     Almost never called directly; use :func:`security`.
     """
     if object_type is core.UNSET: object_type = SE_OBJECT_TYPE.FILE_OBJECT
@@ -498,7 +498,7 @@ class Security (core._WinSysObject):
     originating_object_type=core.UNSET,
     options=core.UNSET
   ):
-    ur"""Constructs a :class:`Security` object from a PySECURITY_DESCRIPTOR object.
+    u"""Constructs a :class:`Security` object from a PySECURITY_DESCRIPTOR object.
     Almost never called directly; use :func:`security` unless you need some
     slightly special handling with inherited handles.
     """
@@ -540,7 +540,7 @@ class Security (core._WinSysObject):
 
   @classmethod
   def from_string (cls, sddl, options=core.UNSET):
-    ur"""Constructs a :class:`Security` object from an SDDL string.
+    u"""Constructs a :class:`Security` object from an SDDL string.
     Useful for round-tripping, since the :meth:`__str__` method produces
     an SDDL string.
     """
@@ -556,7 +556,7 @@ class Security (core._WinSysObject):
     )
 
 def security (obj=core.UNSET, obj_type=core.UNSET, options=core.UNSET):
-  ur"""Return a :class:`Security` object representing the security attributes
+  u"""Return a :class:`Security` object representing the security attributes
   of a named object (eg a file, registry key) or a kernel object (eg a process,
   a pipe). With no parameters, an empty :class:`Security` object is returned which can then be
   set up with appropriate attributes and applied to other objects via its
@@ -603,7 +603,7 @@ def security (obj=core.UNSET, obj_type=core.UNSET, options=core.UNSET):
 #
 @contextlib.contextmanager
 def impersonate (user, password=core.UNSET):
-  ur"""Context-manager which impersonates a user with a password
+  u"""Context-manager which impersonates a user with a password
   and then reverts to the current user::
 
     from __future__ import with_statement
@@ -624,7 +624,7 @@ def impersonate (user, password=core.UNSET):
 
 @contextlib.contextmanager
 def change_privileges (enable_privs=[], disable_privs=[], _token=core.UNSET):
-  ur"""Context manager which temporarily enables/disables privs within the
+  u"""Context manager which temporarily enables/disables privs within the
   current token, reverting when done to the previous situation::
 
     from __future__ import with_statement
