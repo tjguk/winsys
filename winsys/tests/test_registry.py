@@ -132,42 +132,42 @@ class TestRegistry (unittest.TestCase):
       registry._parse_moniker (r"<nonsense>")
 
   def test_moniker_slash_and_root (self):
-    self.assertEquals (registry._parse_moniker (r"\HKLM"), (None, win32con.HKEY_LOCAL_MACHINE, "", None))
+    self.assertEqual (registry._parse_moniker (r"\HKLM"), (None, win32con.HKEY_LOCAL_MACHINE, "", None))
 
   def test_moniker_root_only (self):
-    self.assertEquals (registry._parse_moniker ("HKLM"), (None, win32con.HKEY_LOCAL_MACHINE, "", None))
+    self.assertEqual (registry._parse_moniker ("HKLM"), (None, win32con.HKEY_LOCAL_MACHINE, "", None))
 
   def test_moniker_computer_and_root (self):
-    self.assertEquals (registry._parse_moniker (r"\\COMPUTER\HKLM"), ("COMPUTER", win32con.HKEY_LOCAL_MACHINE, "", None))
+    self.assertEqual (registry._parse_moniker (r"\\COMPUTER\HKLM"), ("COMPUTER", win32con.HKEY_LOCAL_MACHINE, "", None))
 
   def test_moniker_root_and_body (self):
-    self.assertEquals (registry._parse_moniker (r"HKLM\Software\Microsoft"), (None, win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", None))
+    self.assertEqual (registry._parse_moniker (r"HKLM\Software\Microsoft"), (None, win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", None))
 
   def test_moniker_computer_root_and_body (self):
-    self.assertEquals (registry._parse_moniker (r"\\COMPUTER\HKLM\Software\Microsoft"), ("COMPUTER", win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", None))
+    self.assertEqual (registry._parse_moniker (r"\\COMPUTER\HKLM\Software\Microsoft"), ("COMPUTER", win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", None))
 
   def test_moniker_body_only (self):
     with self.assertRaises (registry.x_moniker_no_root):
       registry._parse_moniker (r"Software\Microsoft")
 
   def test_moniker_default_value (self):
-    self.assertEquals (registry._parse_moniker (r"HKLM\Software\Microsoft:"), (None, win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", ""))
+    self.assertEqual (registry._parse_moniker (r"HKLM\Software\Microsoft:"), (None, win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", ""))
 
   def test_moniker_value (self):
-    self.assertEquals (registry._parse_moniker (r"HKLM\Software\Microsoft:value"), (None, win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", "value"))
+    self.assertEqual (registry._parse_moniker (r"HKLM\Software\Microsoft:value"), (None, win32con.HKEY_LOCAL_MACHINE, r"Software\Microsoft", "value"))
 
   def test_moniker_create (self):
     parts = "COMPUTER", win32con.HKEY_LOCAL_MACHINE, "PATH", "VALUE"
-    self.assertEquals (registry._parse_moniker (registry.create_moniker (*parts)), parts)
+    self.assertEqual (registry._parse_moniker (registry.create_moniker (*parts)), parts)
 
   def test_moniker_create_named_root (self):
     parts = "COMPUTER", "HKLM", "PATH", "VALUE"
     result = "COMPUTER", win32con.HKEY_LOCAL_MACHINE, "PATH", "VALUE"
-    self.assertEquals (registry._parse_moniker (registry.create_moniker (*parts)), result)
+    self.assertEqual (registry._parse_moniker (registry.create_moniker (*parts)), result)
 
   def test_moniker_create (self):
     parts = "COMPUTER", win32con.HKEY_LOCAL_MACHINE, "PATH", None
-    self.assertEquals (registry._parse_moniker (registry.create_moniker (*parts)), parts)
+    self.assertEqual (registry._parse_moniker (registry.create_moniker (*parts)), parts)
 
   def test_registry_None (self):
     self.assertIs(registry.registry (None), None)
@@ -177,13 +177,13 @@ class TestRegistry (unittest.TestCase):
     self.assertIs(registry.registry (key), key)
 
   def test_registry_key_no_value (self):
-    self.assertEquals(registry.registry (TEST_KEY + r"\win:sys3", accept_value=False).winsys3, GUID)
+    self.assertEqual(registry.registry (TEST_KEY + r"\win:sys3", accept_value=False).winsys3, GUID)
 
   def test_registry_value (self):
-    self.assertEquals(registry.registry (TEST_KEY + r":winsys1"), GUID)
+    self.assertEqual(registry.registry (TEST_KEY + r":winsys1"), GUID)
 
   def test_registry_string (self):
-    self.assertEquals(registry.registry (TEST_KEY).winsys1, GUID)
+    self.assertEqual(registry.registry (TEST_KEY).winsys1, GUID)
 
   def test_registry_other (self):
     with self.assertRaises (registry.x_registry):
@@ -192,8 +192,8 @@ class TestRegistry (unittest.TestCase):
 
   def test_values (self):
     values = registry.values (TEST_KEY)
-    self.assertEquals(next (values), ('winsys1', GUID))
-    self.assertEquals(next (values), ('winsys2', GUID))
+    self.assertEqual(next (values), ('winsys1', GUID))
+    self.assertEqual(next (values), ('winsys2', GUID))
 
   def test_values_access_denied (self):
     with self.assertRaises (registry.exc.x_access_denied):
@@ -203,11 +203,11 @@ class TestRegistry (unittest.TestCase):
   def test_values_ignore_access_denied (self):
     key = registry.registry (TEST_KEY, win32con.KEY_ENUMERATE_SUB_KEYS)
     values = registry.values (key, ignore_access_errors=True)
-    self.assertEquals(list (values), [])
+    self.assertEqual(list (values), [])
 
   def test_keys (self):
     keys = registry.keys (TEST_KEY)
-    self.assertEquals(next (keys), registry.registry (TEST_KEY) + r"win:sys3")
+    self.assertEqual(next (keys), registry.registry (TEST_KEY) + r"win:sys3")
 
   def test_keys_access_denied (self):
     with self.assertRaises (registry.exc.x_access_denied):
@@ -218,7 +218,7 @@ class TestRegistry (unittest.TestCase):
   def test_keys_ignore_access_denied (self):
     key = registry.registry (TEST_KEY, win32con.KEY_NOTIFY)
     keys = registry.keys (key, ignore_access_errors=True)
-    self.assertEquals(list (keys), [])
+    self.assertEqual(list (keys), [])
 
   def test_copy_does_not_exist (self):
     key0 = TEST_KEY
@@ -229,7 +229,7 @@ class TestRegistry (unittest.TestCase):
     finally:
       registry.delete (key1)
 
-  @unittest.skip("2and3")
+  #~ @unittest.skip("2and3")
   def test_copy_exists_empty (self):
     key0 = registry.registry (TEST_KEY)
     key1 = registry.registry (TEST_KEY1)
@@ -242,7 +242,7 @@ class TestRegistry (unittest.TestCase):
     finally:
       key1.delete ()
 
-  @unittest.skip("2and3")
+  #~ @unittest.skip("2and3")
   def test_copy_exists_not_empty_keys (self):
     key0 = registry.registry (TEST_KEY)
     key1 = registry.registry (TEST_KEY1)
@@ -256,7 +256,7 @@ class TestRegistry (unittest.TestCase):
     finally:
       key1.delete ()
 
-  @unittest.skip("2and3")
+  #~ @unittest.skip("2and3")
   def test_copy_exists_not_empty_values (self):
     key0 = registry.registry (TEST_KEY)
     key1 = registry.registry (TEST_KEY1)
@@ -266,13 +266,13 @@ class TestRegistry (unittest.TestCase):
     try:
       key1.winsys4 = GUID
       registry.copy (key0, key1)
-      self.assertEquals(set (set (key1.flat ()) - set (key0.flat ())),
+      self.assertEqual(set (set (key1.flat ()) - set (key0.flat ())),
         set ([("winsys4", GUID), key1, key1 + "win:sys3", key1 + "winsys2"])
       )
     finally:
       key1.delete ()
 
-  @unittest.skip("2and3")
+  #~ @unittest.skip("2and3")
   def test_create_does_not_exist (self):
     key1 = registry.registry (TEST_KEY1)
     self.assertFalse(key1)
@@ -282,7 +282,7 @@ class TestRegistry (unittest.TestCase):
     finally:
       key1.delete ()
 
-  @unittest.skip("2and3")
+  #~ @unittest.skip("2and3")
   def test_create_does_not_exist_deep (self):
     key1 = registry.registry (TEST_KEY1)
     key2 = registry.registry (TEST_KEY2)
@@ -304,13 +304,13 @@ class TestRegistry (unittest.TestCase):
   def test_walk (self):
     walker = registry.walk (TEST_KEY)
     key, subkeys, values = next (walker)
-    self.assertEquals(key, registry.registry (TEST_KEY))
-    self.assertEquals(list (values), [("winsys1", GUID), ("winsys2", GUID)])
+    self.assertEqual(key, registry.registry (TEST_KEY))
+    self.assertEqual(list (values), [("winsys1", GUID), ("winsys2", GUID)])
     key, subkeys, values = next (walker)
-    self.assertEquals(key, registry.registry (TEST_KEY) + "win:sys3")
+    self.assertEqual(key, registry.registry (TEST_KEY) + "win:sys3")
     key, subkeys, values = next (walker)
-    self.assertEquals(key, registry.registry (TEST_KEY) + "winsys2")
-    self.assertEquals(list (values), [("winsys2", GUID)])
+    self.assertEqual(key, registry.registry (TEST_KEY) + "winsys2")
+    self.assertEqual(list (values), [("winsys2", GUID)])
 
   def test_walk_access_denied (self):
     with self.assertRaises (registry.exc.x_access_denied):
@@ -327,7 +327,7 @@ class TestRegistry (unittest.TestCase):
 
   def test_flat (self):
     key = registry.registry (TEST_KEY)
-    self.assertEquals(
+    self.assertEqual(
       list (registry.flat (key)),
       [
         key,
@@ -349,7 +349,7 @@ class TestRegistry (unittest.TestCase):
     remove_access (r"software\winsys\winsys2")
     try:
       key = registry.registry (TEST_KEY)
-      self.assertEquals(
+      self.assertEqual(
         list (registry.flat (key, ignore_access_errors=True)),
         [
         key,
@@ -362,7 +362,7 @@ class TestRegistry (unittest.TestCase):
       restore_access (r"software\winsys\winsys2")
 
   def test_parent (self):
-    self.assertEquals(registry.parent (TEST_KEY + r"\winsys2"), registry.registry (TEST_KEY))
+    self.assertEqual(registry.parent (TEST_KEY + r"\winsys2"), registry.registry (TEST_KEY))
 
   def test_identical_functions (self):
     functions = "values keys delete create walk flat copy parent".split ()
@@ -371,38 +371,38 @@ class TestRegistry (unittest.TestCase):
 
   def test_Registry_init (self):
     key = registry.Registry (TEST_KEY, access=win32con.KEY_ALL_ACCESS)
-    self.assertEquals(key.moniker, TEST_KEY)
-    self.assertEquals(key.name, "winsys")
-    self.assertEquals(key.access, win32con.KEY_ALL_ACCESS)
-    self.assertEquals(key.id, registry._parse_moniker (TEST_KEY.lower ()))
+    self.assertEqual(key.moniker, TEST_KEY)
+    self.assertEqual(key.name, "winsys")
+    self.assertEqual(key.access, win32con.KEY_ALL_ACCESS)
+    self.assertEqual(key.id, registry._parse_moniker (TEST_KEY.lower ()))
 
   def test_Registry_init_access (self):
     for k, v in registry.Registry.ACCESS.items ():
-      self.assertEquals(registry.registry (TEST_KEY, k).access, v)
+      self.assertEqual(registry.registry (TEST_KEY, k).access, v)
 
   def test_Registry_access (self):
     access = registry.Registry._access
     self.assertIs(access (None), None)
-    self.assertEquals(access (1), 1)
+    self.assertEqual(access (1), 1)
     for k, v in registry.Registry.ACCESS.items ():
-      self.assertEquals(registry.registry (TEST_KEY, k).access, v)
+      self.assertEqual(registry.registry (TEST_KEY, k).access, v)
 
   def test_Registry_eq (self):
-    self.assertEquals(registry.registry (TEST_KEY.upper (), access="R"), registry.registry (TEST_KEY.lower (), access="R"))
+    self.assertEqual(registry.registry (TEST_KEY.upper (), access="R"), registry.registry (TEST_KEY.lower (), access="R"))
 
   def test_Registry_neq (self):
-    self.assertNotEquals(
+    self.assertNotEqual(
       registry.registry (TEST_KEY.upper (), access="R"),
       registry.registry (TEST_KEY.lower (), access="W")
     )
 
   def test_Registry_add (self):
-    self.assertEquals(registry.registry (TEST_KEY) + "test", registry.registry (TEST_KEY + registry.sep + "test"))
+    self.assertEqual(registry.registry (TEST_KEY) + "test", registry.registry (TEST_KEY + registry.sep + "test"))
 
   def test_Registry_pyobject (self):
     self.assertIsInstance(registry.registry (TEST_KEY).pyobject (), pywintypes.HANDLEType)
 
-  @unittest.skip("2and3")
+  #~ @unittest.skip("2and3")
   def test_Registry_pyobject_not_exists (self):
     with self.assertRaises (registry.exc.x_not_found):
       self.assertFalse(registry.registry (TEST_KEY + "xxx"))
@@ -410,7 +410,7 @@ class TestRegistry (unittest.TestCase):
 
   def test_Registry_as_string (self):
     key = registry.registry (TEST_KEY)
-    self.assertEquals(key.as_string (), key.moniker)
+    self.assertEqual(key.as_string (), key.moniker)
 
   def test_Registry_security (self):
     security_information = win32security.OWNER_SECURITY_INFORMATION | win32security.DACL_SECURITY_INFORMATION
@@ -421,7 +421,7 @@ class TestRegistry (unittest.TestCase):
       win32security.SE_REGISTRY_KEY,
       security_information
     )
-    self.assertEquals(
+    self.assertEqual(
       security.as_string (),
       win32security.ConvertSecurityDescriptorToStringSecurityDescriptor (
         sd,
@@ -437,7 +437,7 @@ class TestRegistry (unittest.TestCase):
     finally:
       win32api.RegDeleteKey (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"Software"), "winsys1")
 
-  @unittest.skip("2and3")
+  #~ @unittest.skip("2and3")
   def test_Registry_nonzero_not_exists (self):
     try:
       win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"Software\winsys1")
@@ -457,29 +457,29 @@ class TestRegistry (unittest.TestCase):
     dump = registry.registry ("HKLM").dumped ()
 
   def test_Registry_get_value (self):
-    self.assertEquals(
+    self.assertEqual(
       registry.registry (TEST_KEY).get_value ("winsys1"),
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys1")[0]
     )
 
   def test_Registry_get_key (self):
-    self.assertEquals(
+    self.assertEqual(
       registry.registry (TEST_KEY).get_key ("winsys1"),
       registry.registry (TEST_KEY + r"\winsys1")
     )
 
   def test_Registry_getattr_value (self):
     value, type = win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys1")
-    self.assertEquals(registry.registry (TEST_KEY).winsys1, value)
+    self.assertEqual(registry.registry (TEST_KEY).winsys1, value)
 
   def test_Registry_getattr_value_shadows_key (self):
     value, type = win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys2")
-    self.assertEquals(registry.registry (TEST_KEY).winsys2, value)
+    self.assertEqual(registry.registry (TEST_KEY).winsys2, value)
 
   def test_Registry_getattr_key (self):
     win32api.RegCreateKey (win32con.HKEY_CURRENT_USER, r"software\winsys\winsys3")
     try:
-      self.assertEquals(registry.registry (TEST_KEY).winsys3, registry.registry (TEST_KEY).get_key ("winsys3"))
+      self.assertEqual(registry.registry (TEST_KEY).winsys3, registry.registry (TEST_KEY).get_key ("winsys3"))
     finally:
       win32api.RegDeleteKey (win32con.HKEY_CURRENT_USER, r"Software\winsys\winsys3")
 
@@ -504,7 +504,7 @@ class TestRegistry (unittest.TestCase):
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_type (self):
     registry.registry (TEST_KEY).set_value ("winsys4", b"abc", win32con.REG_BINARY)
-    self.assertEquals(
+    self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       (b"abc", win32con.REG_BINARY)
     )
@@ -512,7 +512,7 @@ class TestRegistry (unittest.TestCase):
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_int (self):
     registry.registry (TEST_KEY).set_value ("winsys4", 1)
-    self.assertEquals(
+    self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       (1, win32con.REG_DWORD)
     )
@@ -520,7 +520,7 @@ class TestRegistry (unittest.TestCase):
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_multi (self):
     registry.registry (TEST_KEY).set_value ("winsys4", ['a', 'b', 'c'])
-    self.assertEquals(
+    self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       (['a', 'b', 'c'], win32con.REG_MULTI_SZ)
     )
@@ -528,7 +528,7 @@ class TestRegistry (unittest.TestCase):
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_expand_even_percent (self):
     registry.registry (TEST_KEY).set_value ("winsys4", "%TEMP%")
-    self.assertEquals(
+    self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       ("%TEMP%", win32con.REG_EXPAND_SZ)
     )
@@ -536,7 +536,7 @@ class TestRegistry (unittest.TestCase):
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_expand_odd_percent (self):
     registry.registry (TEST_KEY).set_value ("winsys4", "50%")
-    self.assertEquals(
+    self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       ("50%", win32con.REG_SZ)
     )
@@ -544,7 +544,7 @@ class TestRegistry (unittest.TestCase):
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_empty_string (self):
     registry.registry (TEST_KEY).set_value ("winsys4", "")
-    self.assertEquals(
+    self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       ("", win32con.REG_SZ)
     )
@@ -552,7 +552,7 @@ class TestRegistry (unittest.TestCase):
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_non_empty_string (self):
     registry.registry (TEST_KEY).set_value ("winsys4", "winsys")
-    self.assertEquals(
+    self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       ("winsys", win32con.REG_SZ)
     )
@@ -560,7 +560,7 @@ class TestRegistry (unittest.TestCase):
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_none (self):
     registry.registry (TEST_KEY).set_value ("winsys4", None)
-    self.assertEquals(
+    self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       ("", win32con.REG_SZ)
     )
@@ -568,7 +568,7 @@ class TestRegistry (unittest.TestCase):
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_default (self):
     registry.registry (TEST_KEY).set_value ("", "test")
-    self.assertEquals(
+    self.assertEqual(
         win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), None),
         ("test", win32con.REG_SZ)
     )
@@ -576,16 +576,16 @@ class TestRegistry (unittest.TestCase):
   def test_Registry_add (self):
     key0 = registry.registry (TEST_KEY)
     new_key = key0.create ("winsys1")
-    self.assertEquals(new_key, key0 + "winsys1")
+    self.assertEqual(new_key, key0 + "winsys1")
 
   def test_Registry_from_string (self):
     key = registry.Registry.from_string (TEST_KEY)
-    self.assertEquals(key.moniker, TEST_KEY)
-    self.assertEquals(key.access, registry.Registry._access (registry.Registry.DEFAULT_ACCESS))
-    self.assertEquals(key.id, registry._parse_moniker (TEST_KEY.lower ()))
+    self.assertEqual(key.moniker, TEST_KEY)
+    self.assertEqual(key.access, registry.Registry._access (registry.Registry.DEFAULT_ACCESS))
+    self.assertEqual(key.id, registry._parse_moniker (TEST_KEY.lower ()))
 
   def test_Registry_from_string_value (self):
-    self.assertEquals(
+    self.assertEqual(
       registry.Registry.from_string (TEST_KEY + ":winsys1"),
       registry.Registry.from_string (TEST_KEY).get_value ("winsys1")
     )

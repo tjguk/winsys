@@ -41,7 +41,24 @@ import pywintypes
 from winsys._compat import *
 from winsys import constants, core, exc, security, utils
 
-REGISTRY_HIVE = constants.Constants.from_list ([
+class RegistryConstants(constants.Constants):
+
+  def name_from_value (self, value, default=core.UNSET, patterns=["*"]):
+    """Find the longest name in the set of constants (optionally qualified by pattern)
+    which matches value.
+    """
+    try:
+      return max(
+        (name for name in self.names(patterns) if self[name] == value),
+        key=len
+      )
+    except ValueError:
+      if default is core.UNSET:
+        raise KeyError("No constant matching name %s and value %s" % (patterns, value))
+      else:
+        return default
+
+REGISTRY_HIVE = RegistryConstants.from_list ([
   "HKEY_CLASSES_ROOT",
   "HKEY_CURRENT_CONFIG",
   "HKEY_CURRENT_USER",
@@ -363,6 +380,7 @@ class Registry (core._WinSysObject):
     """
     hKey, _, _ = self._from_string (self.moniker, accept_value=False)
     return bool (hKey)
+  __bool__ = __nonzero__
 
   def dumped (self, level=0):
     output = []
