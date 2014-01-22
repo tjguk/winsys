@@ -15,10 +15,7 @@ else:
   unittest = unittest0
 del unittest0
 
-from winsys.tests import utils
-if not utils.i_am_admin ():
-  raise RuntimeError ("These tests must be run as Administrator")
-
+from winsys.tests import utils as testutils
 from winsys import core, accounts
 from winsys._security import _aces
 
@@ -26,6 +23,7 @@ everyone, _, _ = win32security.LookupAccountName (None, "Everyone")
 me = accounts.me ()
 administrators = accounts.principal ("Administrators")
 
+@unittest.skipUnless(testutils.i_am_admin(), "These tests must be run as Administrator")
 class TestAces (unittest.TestCase):
 
   def setUp (self):

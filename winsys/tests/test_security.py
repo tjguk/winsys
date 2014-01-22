@@ -22,9 +22,7 @@ import win32security
 import ntsecuritycon
 import pywintypes
 
-from winsys.tests import utils
-if not utils.i_am_admin ():
-  raise RuntimeError ("These tests must be run as Administrator")
+from winsys.tests import utils as testutils
 from winsys import security
 
 OPTIONS = \
@@ -59,6 +57,7 @@ def as_string (sd):
 def equal (sd, security):
   return as_string (sd) == str (security)
 
+@unittest.skipUnless(testutils.i_am_admin(), "These tests must be run as Administrator")
 class TestSecurity (unittest.TestCase):
 
   #

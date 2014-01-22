@@ -17,9 +17,7 @@ import win32evtlog
 import win32security
 import pywintypes
 
-from winsys.tests import utils
-if not utils.i_am_admin ():
-  raise RuntimeError ("These tests must be run as Administrator")
+from winsys.tests import utils as testutils
 from winsys import event_logs, registry, utils
 
 
@@ -50,6 +48,7 @@ def yield_logs (computer=None, log_name=LOG_NAME):
 # TESTS
 #
 
+@unittest.skipUnless(testutils.i_am_admin(), "These tests must be run as Administrator")
 class TestEventLogs (unittest.TestCase):
 
   #

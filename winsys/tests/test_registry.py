@@ -16,9 +16,7 @@ import win32con
 import win32security
 import pywintypes
 
-from winsys.tests import utils
-if not utils.i_am_admin ():
-  raise RuntimeError ("These tests must be run as Administrator")
+from winsys.tests import utils as testutils
 from winsys import registry, utils
 
 GUID = str (uuid.uuid1 ())
@@ -69,6 +67,7 @@ def key0_subset_of_key1 (key0, key1):
   s1 = set ((utils.relative_to (key.moniker, key1), frozenset (values)) for key, subkeys, values in registry.walk (key1))
   return s0 < s1
 
+@unittest.skipUnless(testutils.i_am_admin(), "These tests must be run as Administrator")
 class TestRegistry (unittest.TestCase):
 
   #
