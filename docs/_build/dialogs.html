@@ -3,13 +3,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>dialogs – Dialog boxes &mdash; WinSys v0.5beta documentation</title>
+    <title>dialogs – Dialog boxes &mdash; WinSys 0.5beta documentation</title>
+    
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -23,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.5beta documentation" href="index.html" />
+    <link rel="top" title="WinSys 0.5beta documentation" href="index.html" />
     <link rel="next" title="event_logs – Event Logs" href="event_logs.html" />
     <link rel="prev" title="accounts – Users, Groups, SIDs &amp;c." href="accounts.html" /> 
   </head>
@@ -43,7 +46,7 @@
         <li class="right" >
           <a href="accounts.html" title="accounts – Users, Groups, SIDs &amp;c."
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -111,13 +114,13 @@ available as <a class="reference internal" href="#dialogs.get_filename" title="d
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>title</strong> &#8211; any string to use as the title of the dialog</li>
 <li><strong>fields</strong> &#8211; series of 2-tuples consisting of a name and a default value.</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the values entered by the user in the order of <cite>fields</cite></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the values entered by the user in the order of <cite>fields</cite></p>
 </td>
 </tr>
 </tbody>
@@ -167,14 +170,14 @@ display a human-redable version of each directory size:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>title</strong> &#8211; any string to use as the title of the dialog</li>
 <li><strong>progress_callback</strong> &#8211; a function accepting values as per <cite>fields</cite> and yielding progress as strings</li>
 <li><strong>fields</strong> &#8211; series of 2-tuples consisting of a name and a default value</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the values entered by the user in the order of <cite>fields</cite></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the values entered by the user in the order of <cite>fields</cite></p>
 </td>
 </tr>
 </tbody>
@@ -199,7 +202,7 @@ selected and copied:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>title</strong> &#8211; any string to use as the title of the dialog</li>
 <li><strong>info</strong> &#8211; any (possibly multiline) string to display in the body of the dialog</li>
 <li><strong>parent_hwnd</strong> &#8211; optional window handle</li>
@@ -236,6 +239,86 @@ which examines the incoming fields and tries to place them according
 to their various options.</p>
 <p>Initialise the dialog with a title and a list of fields of
 the form [(label, default), ...].</p>
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.BUTTONS">
+<tt class="descname">BUTTONS</tt><em class="property"> = [('Cancel', 2), ('Ok', 1)]</em><a class="headerlink" href="#dialogs.BaseDialog.BUTTONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.BUTTON_W">
+<tt class="descname">BUTTON_W</tt><em class="property"> = 36</em><a class="headerlink" href="#dialogs.BaseDialog.BUTTON_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.CALLBACK_W">
+<tt class="descname">CALLBACK_W</tt><em class="property"> = 12</em><a class="headerlink" href="#dialogs.BaseDialog.CALLBACK_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.CONTROL_H">
+<tt class="descname">CONTROL_H</tt><em class="property"> = 12</em><a class="headerlink" href="#dialogs.BaseDialog.CONTROL_H" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.FIELD_W">
+<tt class="descname">FIELD_W</tt><em class="property"> = 159</em><a class="headerlink" href="#dialogs.BaseDialog.FIELD_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.GUTTER_H">
+<tt class="descname">GUTTER_H</tt><em class="property"> = 5</em><a class="headerlink" href="#dialogs.BaseDialog.GUTTER_H" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.GUTTER_W">
+<tt class="descname">GUTTER_W</tt><em class="property"> = 5</em><a class="headerlink" href="#dialogs.BaseDialog.GUTTER_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.IDC_CALLBACK_BASE">
+<tt class="descname">IDC_CALLBACK_BASE</tt><em class="property"> = 3025</em><a class="headerlink" href="#dialogs.BaseDialog.IDC_CALLBACK_BASE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.IDC_FIELD_BASE">
+<tt class="descname">IDC_FIELD_BASE</tt><em class="property"> = 2025</em><a class="headerlink" href="#dialogs.BaseDialog.IDC_FIELD_BASE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.IDC_LABEL_BASE">
+<tt class="descname">IDC_LABEL_BASE</tt><em class="property"> = 1025</em><a class="headerlink" href="#dialogs.BaseDialog.IDC_LABEL_BASE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.LABEL_W">
+<tt class="descname">LABEL_W</tt><em class="property"> = 36</em><a class="headerlink" href="#dialogs.BaseDialog.LABEL_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.MAX_H">
+<tt class="descname">MAX_H</tt><em class="property"> = 480</em><a class="headerlink" href="#dialogs.BaseDialog.MAX_H" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.MAX_W">
+<tt class="descname">MAX_W</tt><em class="property"> = 640</em><a class="headerlink" href="#dialogs.BaseDialog.MAX_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.W">
+<tt class="descname">W</tt><em class="property"> = 210</em><a class="headerlink" href="#dialogs.BaseDialog.W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.WM_PROGRESS_COMPLETE">
+<tt class="descname">WM_PROGRESS_COMPLETE</tt><em class="property"> = 1026</em><a class="headerlink" href="#dialogs.BaseDialog.WM_PROGRESS_COMPLETE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.BaseDialog.WM_PROGRESS_MESSAGE">
+<tt class="descname">WM_PROGRESS_MESSAGE</tt><em class="property"> = 1025</em><a class="headerlink" href="#dialogs.BaseDialog.WM_PROGRESS_MESSAGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -338,6 +421,86 @@ kicks off the dialog&#8217;s message loop, finally returning via the EndDialog c
 in OnCommand</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="dialogs.Dialog.BUTTONS">
+<tt class="descname">BUTTONS</tt><em class="property"> = [('Cancel', 2), ('Ok', 1)]</em><a class="headerlink" href="#dialogs.Dialog.BUTTONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.BUTTON_W">
+<tt class="descname">BUTTON_W</tt><em class="property"> = 36</em><a class="headerlink" href="#dialogs.Dialog.BUTTON_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.CALLBACK_W">
+<tt class="descname">CALLBACK_W</tt><em class="property"> = 12</em><a class="headerlink" href="#dialogs.Dialog.CALLBACK_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.CONTROL_H">
+<tt class="descname">CONTROL_H</tt><em class="property"> = 12</em><a class="headerlink" href="#dialogs.Dialog.CONTROL_H" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.FIELD_W">
+<tt class="descname">FIELD_W</tt><em class="property"> = 159</em><a class="headerlink" href="#dialogs.Dialog.FIELD_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.GUTTER_H">
+<tt class="descname">GUTTER_H</tt><em class="property"> = 5</em><a class="headerlink" href="#dialogs.Dialog.GUTTER_H" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.GUTTER_W">
+<tt class="descname">GUTTER_W</tt><em class="property"> = 5</em><a class="headerlink" href="#dialogs.Dialog.GUTTER_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.IDC_CALLBACK_BASE">
+<tt class="descname">IDC_CALLBACK_BASE</tt><em class="property"> = 3025</em><a class="headerlink" href="#dialogs.Dialog.IDC_CALLBACK_BASE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.IDC_FIELD_BASE">
+<tt class="descname">IDC_FIELD_BASE</tt><em class="property"> = 2025</em><a class="headerlink" href="#dialogs.Dialog.IDC_FIELD_BASE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.IDC_LABEL_BASE">
+<tt class="descname">IDC_LABEL_BASE</tt><em class="property"> = 1025</em><a class="headerlink" href="#dialogs.Dialog.IDC_LABEL_BASE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.LABEL_W">
+<tt class="descname">LABEL_W</tt><em class="property"> = 36</em><a class="headerlink" href="#dialogs.Dialog.LABEL_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.MAX_H">
+<tt class="descname">MAX_H</tt><em class="property"> = 480</em><a class="headerlink" href="#dialogs.Dialog.MAX_H" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.MAX_W">
+<tt class="descname">MAX_W</tt><em class="property"> = 640</em><a class="headerlink" href="#dialogs.Dialog.MAX_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.W">
+<tt class="descname">W</tt><em class="property"> = 210</em><a class="headerlink" href="#dialogs.Dialog.W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.WM_PROGRESS_COMPLETE">
+<tt class="descname">WM_PROGRESS_COMPLETE</tt><em class="property"> = 1026</em><a class="headerlink" href="#dialogs.Dialog.WM_PROGRESS_COMPLETE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.Dialog.WM_PROGRESS_MESSAGE">
+<tt class="descname">WM_PROGRESS_MESSAGE</tt><em class="property"> = 1025</em><a class="headerlink" href="#dialogs.Dialog.WM_PROGRESS_MESSAGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -430,6 +593,86 @@ kicks off the dialog&#8217;s message loop, finally returning via the EndDialog c
 in OnCommand</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.BUTTONS">
+<tt class="descname">BUTTONS</tt><em class="property"> = [('Cancel', 2), ('Ok', 1)]</em><a class="headerlink" href="#dialogs.InfoDialog.BUTTONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.BUTTON_W">
+<tt class="descname">BUTTON_W</tt><em class="property"> = 36</em><a class="headerlink" href="#dialogs.InfoDialog.BUTTON_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.CALLBACK_W">
+<tt class="descname">CALLBACK_W</tt><em class="property"> = 12</em><a class="headerlink" href="#dialogs.InfoDialog.CALLBACK_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.CONTROL_H">
+<tt class="descname">CONTROL_H</tt><em class="property"> = 12</em><a class="headerlink" href="#dialogs.InfoDialog.CONTROL_H" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.FIELD_W">
+<tt class="descname">FIELD_W</tt><em class="property"> = 159</em><a class="headerlink" href="#dialogs.InfoDialog.FIELD_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.GUTTER_H">
+<tt class="descname">GUTTER_H</tt><em class="property"> = 5</em><a class="headerlink" href="#dialogs.InfoDialog.GUTTER_H" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.GUTTER_W">
+<tt class="descname">GUTTER_W</tt><em class="property"> = 5</em><a class="headerlink" href="#dialogs.InfoDialog.GUTTER_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.IDC_CALLBACK_BASE">
+<tt class="descname">IDC_CALLBACK_BASE</tt><em class="property"> = 3025</em><a class="headerlink" href="#dialogs.InfoDialog.IDC_CALLBACK_BASE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.IDC_FIELD_BASE">
+<tt class="descname">IDC_FIELD_BASE</tt><em class="property"> = 2025</em><a class="headerlink" href="#dialogs.InfoDialog.IDC_FIELD_BASE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.IDC_LABEL_BASE">
+<tt class="descname">IDC_LABEL_BASE</tt><em class="property"> = 1025</em><a class="headerlink" href="#dialogs.InfoDialog.IDC_LABEL_BASE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.LABEL_W">
+<tt class="descname">LABEL_W</tt><em class="property"> = 36</em><a class="headerlink" href="#dialogs.InfoDialog.LABEL_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.MAX_H">
+<tt class="descname">MAX_H</tt><em class="property"> = 480</em><a class="headerlink" href="#dialogs.InfoDialog.MAX_H" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.MAX_W">
+<tt class="descname">MAX_W</tt><em class="property"> = 640</em><a class="headerlink" href="#dialogs.InfoDialog.MAX_W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.W">
+<tt class="descname">W</tt><em class="property"> = 210</em><a class="headerlink" href="#dialogs.InfoDialog.W" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.WM_PROGRESS_COMPLETE">
+<tt class="descname">WM_PROGRESS_COMPLETE</tt><em class="property"> = 1026</em><a class="headerlink" href="#dialogs.InfoDialog.WM_PROGRESS_COMPLETE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dialogs.InfoDialog.WM_PROGRESS_MESSAGE">
+<tt class="descname">WM_PROGRESS_MESSAGE</tt><em class="property"> = 1025</em><a class="headerlink" href="#dialogs.InfoDialog.WM_PROGRESS_MESSAGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>
@@ -437,7 +680,7 @@ in OnCommand</p>
 <h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
 <dl class="data">
 <dt id="dialogs.BIF">
-<tt class="descclassname">dialogs.</tt><tt class="descname">BIF</tt><a class="headerlink" href="#dialogs.BIF" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dialogs.</tt><tt class="descname">BIF</tt><em class="property"> = &lt;Constants: {'BROWSEINCLUDEURLS': 128, 'RETURNONLYFSDIRS': 1, 'EDITBOX': 16, 'STATUSTEXT': 4, 'USENEWUI': 80, 'UAHINT': 256, 'BROWSEINCLUDEFILES': 16384, 'NEWDIALOGSTYLE': 64, 'NONEWFOLDERBUTTON': 512, 'BROWSEFORPRINTER': 8192, 'NOTRANSLATETARGETS': 1024, 'SHAREABLE': 32768, 'RETURNFSANCESTORS': 8, 'DONTGOBELOWDOMAIN': 2, 'VALIDATE': 32, 'BROWSEFORCOMPUTER': 4096}&gt;</em><a class="headerlink" href="#dialogs.BIF" title="Permalink to this definition">¶</a></dt>
 <dd><p>Styles for browsing for a folder</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -446,73 +689,73 @@ in OnCommand</p>
 <col width="49%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Name</th>
+<tr class="row-odd"><th class="head">Name</th>
 <th class="head">Val</th>
 <th class="head">Win32</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>RETURNONLYFSDIRS</td>
+<tr class="row-even"><td>RETURNONLYFSDIRS</td>
 <td>1</td>
 <td>BIF_RETURNONLYFSDIRS</td>
 </tr>
-<tr><td>NOTRANSLATETARGETS</td>
+<tr class="row-odd"><td>NOTRANSLATETARGETS</td>
 <td>1024</td>
 <td>BIF_NOTRANSLATETARGETS</td>
 </tr>
-<tr><td>BROWSEINCLUDEURLS</td>
+<tr class="row-even"><td>BROWSEINCLUDEURLS</td>
 <td>128</td>
 <td>BIF_BROWSEINCLUDEURLS</td>
 </tr>
-<tr><td>EDITBOX</td>
+<tr class="row-odd"><td>EDITBOX</td>
 <td>16</td>
 <td>BIF_EDITBOX</td>
 </tr>
-<tr><td>BROWSEINCLUDEFILES</td>
+<tr class="row-even"><td>BROWSEINCLUDEFILES</td>
 <td>16384</td>
 <td>BIF_BROWSEINCLUDEFILES</td>
 </tr>
-<tr><td>DONTGOBELOWDOMAIN</td>
+<tr class="row-odd"><td>DONTGOBELOWDOMAIN</td>
 <td>2</td>
 <td>BIF_DONTGOBELOWDOMAIN</td>
 </tr>
-<tr><td>UAHINT</td>
+<tr class="row-even"><td>UAHINT</td>
 <td>256</td>
 <td>BIF_UAHINT</td>
 </tr>
-<tr><td>VALIDATE</td>
+<tr class="row-odd"><td>VALIDATE</td>
 <td>32</td>
 <td>BIF_VALIDATE</td>
 </tr>
-<tr><td>SHAREABLE</td>
+<tr class="row-even"><td>SHAREABLE</td>
 <td>32768</td>
 <td>BIF_SHAREABLE</td>
 </tr>
-<tr><td>STATUSTEXT</td>
+<tr class="row-odd"><td>STATUSTEXT</td>
 <td>4</td>
 <td>BIF_STATUSTEXT</td>
 </tr>
-<tr><td>BROWSEFORCOMPUTER</td>
+<tr class="row-even"><td>BROWSEFORCOMPUTER</td>
 <td>4096</td>
 <td>BIF_BROWSEFORCOMPUTER</td>
 </tr>
-<tr><td>NONEWFOLDERBUTTON</td>
+<tr class="row-odd"><td>NONEWFOLDERBUTTON</td>
 <td>512</td>
 <td>BIF_NONEWFOLDERBUTTON</td>
 </tr>
-<tr><td>NEWDIALOGSTYLE</td>
+<tr class="row-even"><td>NEWDIALOGSTYLE</td>
 <td>64</td>
 <td>BIF_NEWDIALOGSTYLE</td>
 </tr>
-<tr><td>RETURNFSANCESTORS</td>
+<tr class="row-odd"><td>RETURNFSANCESTORS</td>
 <td>8</td>
 <td>BIF_RETURNFSANCESTORS</td>
 </tr>
-<tr><td>USENEWUI</td>
+<tr class="row-even"><td>USENEWUI</td>
 <td>80</td>
 <td>USENEWUI</td>
 </tr>
-<tr><td>BROWSEFORPRINTER</td>
+<tr class="row-odd"><td>BROWSEFORPRINTER</td>
 <td>8192</td>
 <td>BIF_BROWSEFORPRINTER</td>
 </tr>
@@ -522,7 +765,7 @@ in OnCommand</p>
 
 <dl class="data">
 <dt id="dialogs.BFFM">
-<tt class="descclassname">dialogs.</tt><tt class="descname">BFFM</tt><a class="headerlink" href="#dialogs.BFFM" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dialogs.</tt><tt class="descname">BFFM</tt><em class="property"> = &lt;Constants: {'ENABLEOK': 1125, 'SETSELECTIONW': 1127, 'SETSTATUSTEXTA': 1124, 'SETSELECTION': 1126, 'VALIDATEFAILEDA': 3, 'SETSTATUSTEXT': 1124, 'SETSTATUSTEXTW': 1128, 'SETSELECTIONA': 1126, 'VALIDATEFAILED': 3, 'INITIALIZED': 1, 'SELCHANGED': 2, 'VALIDATEFAILEDW': 4}&gt;</em><a class="headerlink" href="#dialogs.BFFM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Part of the browse-for-folder shell mechanism</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -531,57 +774,57 @@ in OnCommand</p>
 <col width="51%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Name</th>
+<tr class="row-odd"><th class="head">Name</th>
 <th class="head">Val</th>
 <th class="head">Win32</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>INITIALIZED</td>
+<tr class="row-even"><td>INITIALIZED</td>
 <td>1</td>
 <td>BFFM_INITIALIZED</td>
 </tr>
-<tr><td>SETSTATUSTEXTA</td>
+<tr class="row-odd"><td>SETSTATUSTEXTA</td>
 <td>1124</td>
 <td>BFFM_SETSTATUSTEXTA</td>
 </tr>
-<tr><td>SETSTATUSTEXT</td>
+<tr class="row-even"><td>SETSTATUSTEXT</td>
 <td>1124</td>
 <td>BFFM_SETSTATUSTEXTA</td>
 </tr>
-<tr><td>ENABLEOK</td>
+<tr class="row-odd"><td>ENABLEOK</td>
 <td>1125</td>
 <td>BFFM_ENABLEOK</td>
 </tr>
-<tr><td>SETSELECTION</td>
+<tr class="row-even"><td>SETSELECTION</td>
 <td>1126</td>
 <td>BFFM_SETSELECTIONA</td>
 </tr>
-<tr><td>SETSELECTIONA</td>
+<tr class="row-odd"><td>SETSELECTIONA</td>
 <td>1126</td>
 <td>BFFM_SETSELECTIONA</td>
 </tr>
-<tr><td>SETSELECTIONW</td>
+<tr class="row-even"><td>SETSELECTIONW</td>
 <td>1127</td>
 <td>BFFM_SETSELECTIONW</td>
 </tr>
-<tr><td>SETSTATUSTEXTW</td>
+<tr class="row-odd"><td>SETSTATUSTEXTW</td>
 <td>1128</td>
 <td>BFFM_SETSTATUSTEXTW</td>
 </tr>
-<tr><td>SELCHANGED</td>
+<tr class="row-even"><td>SELCHANGED</td>
 <td>2</td>
 <td>BFFM_SELCHANGED</td>
 </tr>
-<tr><td>VALIDATEFAILEDA</td>
+<tr class="row-odd"><td>VALIDATEFAILEDA</td>
 <td>3</td>
 <td>BFFM_VALIDATEFAILEDA</td>
 </tr>
-<tr><td>VALIDATEFAILED</td>
+<tr class="row-even"><td>VALIDATEFAILED</td>
 <td>3</td>
 <td>BFFM_VALIDATEFAILEDA</td>
 </tr>
-<tr><td>VALIDATEFAILEDW</td>
+<tr class="row-odd"><td>VALIDATEFAILEDW</td>
 <td>4</td>
 <td>BFFM_VALIDATEFAILEDW</td>
 </tr>
@@ -646,7 +889,7 @@ in OnCommand</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -675,12 +918,12 @@ in OnCommand</p>
         <li class="right" >
           <a href="accounts.html" title="accounts – Users, Groups, SIDs &amp;c."
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
     </div>
   </body>
 </html>

@@ -31,6 +31,11 @@ import win32net
 import win32netcon
 import winioctlcon
 
+try:
+    reduce
+except NameError:
+    from functools import reduce
+
 if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
   winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
@@ -577,7 +582,7 @@ class Drive (core._WinSysObject):
     :param vol: anything accepted by :func:`volume`
     :returns: `self`
     """
-    self.root ().mount (vol)
+    self.root.mount (vol)
     return self
 
   def dismount (self):
@@ -585,7 +590,7 @@ class Drive (core._WinSysObject):
 
     :returns: `self`
     """
-    self.root ().dismount ()
+    self.root.dismount ()
     return self
 
   def dumped (self, level):
@@ -1340,6 +1345,15 @@ class File (Entry):
     )
     return file (target_filepath)
 
+  def equal_contents (self, other):
+    ur"""Compare only the contents of the two files, ignoring
+    everything else. Note that filecmp.cmp fails early.
+
+    :param other: anything accepted by :func:`file`
+    :returns: True if the files are equal in contents
+    """
+    return filecmp.cmp(self, other, False)
+
   def equals (self, other, compare_contents=False):
     ur"""Is this file equal in size, dates and attributes to another.
     if `compare_contents` is True, use filecmp to compare the contents
@@ -1694,6 +1708,10 @@ class Dir (Entry):
     for f in self.flat (includedirs=True):
       raise x_fs (errctx="Dir.mount", errmsg="You can't mount to a non-empty directory")
     vol = volume (vol)
+    #~ for m in vol.mounts:
+      #~ if not m.dirname:
+        #~ raise x_fs (errctx="Dir.mount", errmsg=u"Volume %s already has a drive letter %s" % (vol, m.root))
+
     wrapped (win32file.SetVolumeMountPoint, self, vol.name)
     return self
 

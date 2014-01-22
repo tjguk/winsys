@@ -3,13 +3,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>fs &mdash; WinSys v0.5beta documentation</title>
+    <title>fs &mdash; WinSys 0.5beta documentation</title>
+    
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -23,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys v0.5beta documentation" href="../index.html" />
+    <link rel="top" title="WinSys 0.5beta documentation" href="../index.html" />
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body>
@@ -36,7 +39,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -121,7 +124,6 @@
 <span class="n">wrapped</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="n">wrapper</span> <span class="p">(</span><span class="n">WINERROR_MAP</span><span class="p">,</span> <span class="n">x_fs</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">ignore_access_errors</span> <span class="p">(</span><span class="n">exc_info</span><span class="p">):</span>
-  <span class="k">print</span> <span class="n">exc_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
   <span class="k">return</span> <span class="n">exc_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_access_denied</span>
 
 <span class="n">PyHANDLE</span> <span class="o">=</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">HANDLEType</span>
@@ -1808,6 +1810,7 @@
       <span class="c"># If the error_handler chooses to swallow this error, carry on</span>
       <span class="c">#</span>
       <span class="k">if</span> <span class="n">error_handler</span> <span class="ow">and</span> <span class="n">error_handler</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span> <span class="p">()):</span>
+        <span class="n">core</span><span class="o">.</span><span class="n">warn</span> <span class="p">(</span><span class="s">&quot;Error </span><span class="si">%s</span><span class="s"> ignored&quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span> <span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">continue</span>
       <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span>
@@ -2225,7 +2228,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -2248,13 +2251,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
           <li><a href="index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
     </div>
   </body>
 </html>

@@ -3,13 +3,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The File class &mdash; WinSys v0.5beta documentation</title>
+    <title>The File class &mdash; WinSys 0.5beta documentation</title>
+    
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -23,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys v0.5beta documentation" href="index.html" />
+    <link rel="top" title="WinSys 0.5beta documentation" href="index.html" />
     <link rel="up" title="fs – Files, Directories, &amp;c." href="fs.html" />
     <link rel="next" title="The Dir class" href="fs_dir.html" />
     <link rel="prev" title="The Entry class" href="fs_entry.html" /> 
@@ -44,7 +47,7 @@
         <li class="right" >
           <a href="fs_entry.html" title="The Entry class"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
+        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
           <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>  
@@ -70,14 +73,14 @@ is copied over it.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.entry" title="fs.entry"><tt class="xref py py-func docutils literal"><span class="pre">entry()</span></tt></a></li>
 <li><strong>callback</strong> &#8211; function receiving total size, total so far, callback_data</li>
 <li><strong>callback_data</strong> &#8211; passed to callback</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object representing other</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object representing other</p>
 </td>
 </tr>
 </tbody>
@@ -93,9 +96,9 @@ file already exists it will not be overwritten.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>security</strong> &#8211; a <a class="reference internal" href="security.html#security.Security" title="security.Security"><tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt></a> object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>security</strong> &#8211; a <a class="reference internal" href="security.html#security.Security" title="security.Security"><tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt></a> object</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">this object</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">this object</td>
 </tr>
 </tbody>
 </table>
@@ -109,7 +112,7 @@ file already exists it will not be overwritten.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self</td>
 </tr>
 </tbody>
 </table>
@@ -125,12 +128,12 @@ of the files. Note that filecmp.cmp fails early.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><tt class="xref py py-func docutils literal"><span class="pre">file()</span></tt></a></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><tt class="xref py py-func docutils literal"><span class="pre">file()</span></tt></a></td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Compare_contents :</th></tr>
-<tr><td>&nbsp;</td><td class="field-body">True to compare contents, False otherwise</td>
+<tr class="field-even field"><th class="field-name" colspan="2">Compare_contents :</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">True to compare contents, False otherwise</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">True if the files are equal in size, modification date, attributes and contents</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the files are equal in size, modification date, attributes and contents</td>
 </tr>
 </tbody>
 </table>
@@ -144,9 +147,9 @@ of the files. Note that filecmp.cmp fails early.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><tt class="xref py py-func docutils literal"><span class="pre">file()</span></tt></a></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><tt class="xref py py-func docutils literal"><span class="pre">file()</span></tt></a></td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">this <a class="reference internal" href="#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">this <a class="reference internal" href="#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object</td>
 </tr>
 </tbody>
 </table>
@@ -160,9 +163,9 @@ of the files. Note that filecmp.cmp fails early.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><tt class="xref py py-func docutils literal"><span class="pre">file()</span></tt></a></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><tt class="xref py py-func docutils literal"><span class="pre">file()</span></tt></a></td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object corresponding to <cite>other</cite></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object corresponding to <cite>other</cite></td>
 </tr>
 </tbody>
 </table>
@@ -178,7 +181,7 @@ the codecs function.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>mode</strong> &#8211; any of the usual Python modes</li>
 <li><strong>attributes</strong> &#8211; anything accepted by <a class="reference internal" href="fs_constants.html#fs.FILE_ATTRIBUTE" title="fs.FILE_ATTRIBUTE"><tt class="xref py py-const docutils literal"><span class="pre">FILE_ATTRIBUTE</span></tt></a></li>
 <li><strong>sec</strong> &#8211; anything accepted by <tt class="xref py py-func docutils literal"><span class="pre">Security.security()</span></tt></li>
@@ -198,9 +201,9 @@ file already exists it will not be overwritten.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>security</strong> &#8211; a <a class="reference internal" href="security.html#security.Security" title="security.Security"><tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt></a> object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>security</strong> &#8211; a <a class="reference internal" href="security.html#security.Security" title="security.Security"><tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt></a> object</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">this object</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">this object</td>
 </tr>
 </tbody>
 </table>
@@ -220,7 +223,7 @@ can be appended to (if it exists) by specifying &#8220;a&#8221; as the mode para
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>zip_filename</strong> &#8211; The name of the resulting zipfile [this file with the extension changed to .zip]</li>
 <li><strong>mode</strong> &#8211; mode (usually &#8220;w&#8221;) to pass to the zipfile constructor</li>
 <li><strong>compression</strong> &#8211; compression level (usually DEFLATED)</li>
@@ -228,7 +231,7 @@ can be appended to (if it exists) by specifying &#8220;a&#8221; as the mode para
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object corresponding to the zipfile created</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object corresponding to the zipfile created</p>
 </td>
 </tr>
 </tbody>
@@ -262,7 +265,7 @@ can be appended to (if it exists) by specifying &#8220;a&#8221; as the mode para
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -291,13 +294,13 @@ can be appended to (if it exists) by specifying &#8220;a&#8221; as the mode para
         <li class="right" >
           <a href="fs_entry.html" title="The Entry class"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys v0.5beta documentation</a> &raquo;</li>
+        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
           <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
     </div>
   </body>
 </html>
