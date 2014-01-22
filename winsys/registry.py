@@ -594,7 +594,7 @@ def keys (root, ignore_access_errors=False):
       raise
 iterkeys = keys
 
-def copy (from_key, to_key):
+def copy (from_key, to_key, use_access="F"):
   """Copy one registry key to another, returning the target. If the
   target doesn't already exist it will be created.
 
@@ -603,14 +603,22 @@ def copy (from_key, to_key):
   :returns: a :class:`Registry` object for `to_key`
   """
   source = registry (from_key, accept_value=False)
-  target = registry (to_key, accept_value=False)
+  target = registry (to_key, access=use_access, accept_value=False)
   if not target:
     target.create ()
 
   for root, subkeys, subvalues in walk (source, _want_types=True):
-    target_root = registry (target.moniker + utils.relative_to (root.moniker, source.moniker), accept_value=False)
+    target_root = registry(
+        target.moniker + utils.relative_to (root.moniker, source.moniker),
+        access=use_access,
+        accept_value=False
+    )
     for k in subkeys:
-      target_key = registry (target.moniker + utils.relative_to (k.moniker, source.moniker), accept_value=False)
+      target_key = registry(
+        target.moniker + utils.relative_to (k.moniker, source.moniker),
+        accept_value=False,
+        access=use_access
+      )
       target_key.create ()
     for name, value, type in subvalues:
       target_root.set_value (name, value, type)

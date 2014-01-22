@@ -31,10 +31,10 @@ TEST_KEY2 = r"HKEY_CURRENT_USER\Software\winsys1\winsys2"
 # Utility functions
 #
 def remove_key (root, key):
-  hkey = win32api.RegOpenKey (root, key)
-  for name, reserved, klass, last_written in win32api.RegEnumKeyEx (hkey):
-    remove_key (hkey, name)
-  win32api.RegDeleteKey (root, key)
+  hkey = win32api.RegOpenKeyEx(root, key, 0, win32con.KEY_ALL_ACCESS)
+  for name, reserved, klass, last_written in win32api.RegEnumKeyEx(hkey):
+    remove_key(hkey, name)
+  win32api.RegDeleteKey(root, key)
 
 def remove_access (path=r"software\winsys"):
   hKey = win32api.RegOpenKeyEx (
@@ -255,10 +255,10 @@ class TestRegistry (unittest.TestCase):
       key1.delete ()
 
   def test_copy_exists_not_empty_values (self):
-    key0 = registry.registry (TEST_KEY)
-    key1 = registry.registry (TEST_KEY1)
+    key0 = registry.registry(TEST_KEY)
+    key1 = registry.registry(TEST_KEY1, access="F")
     self.assertFalse(key1)
-    key1.create ()
+    key1.create()
     self.assertTrue(key1)
     try:
       key1.winsys4 = GUID
@@ -429,7 +429,7 @@ class TestRegistry (unittest.TestCase):
     try:
       self.assertTrue(registry.registry (TEST_KEY1))
     finally:
-      win32api.RegDeleteKey (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"Software"), "winsys1")
+      remove_key(win32con.HKEY_CURRENT_USER, r"Software\winsys1")
 
   def test_Registry_nonzero_not_exists (self):
     try:
@@ -496,15 +496,15 @@ class TestRegistry (unittest.TestCase):
 
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_type (self):
-    registry.registry (TEST_KEY).set_value ("winsys4", b"abc", win32con.REG_BINARY)
+    registry.registry (TEST_KEY, access="F").set_value ("winsys4", b"abc", win32con.REG_BINARY)
     self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       (b"abc", win32con.REG_BINARY)
     )
 
   #~ @with_setup (setup_set_value)
-  def test_Registry_set_value_int (self):
-    registry.registry (TEST_KEY).set_value ("winsys4", 1)
+  def test_Registry_set_value_int(self):
+    registry.registry(TEST_KEY, access="F").set_value ("winsys4", 1)
     self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       (1, win32con.REG_DWORD)
@@ -512,7 +512,7 @@ class TestRegistry (unittest.TestCase):
 
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_multi (self):
-    registry.registry (TEST_KEY).set_value ("winsys4", ['a', 'b', 'c'])
+    registry.registry (TEST_KEY, access="F").set_value ("winsys4", ['a', 'b', 'c'])
     self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       (['a', 'b', 'c'], win32con.REG_MULTI_SZ)
@@ -520,7 +520,7 @@ class TestRegistry (unittest.TestCase):
 
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_expand_even_percent (self):
-    registry.registry (TEST_KEY).set_value ("winsys4", "%TEMP%")
+    registry.registry(TEST_KEY, access="F").set_value ("winsys4", "%TEMP%")
     self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       ("%TEMP%", win32con.REG_EXPAND_SZ)
@@ -528,7 +528,7 @@ class TestRegistry (unittest.TestCase):
 
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_expand_odd_percent (self):
-    registry.registry (TEST_KEY).set_value ("winsys4", "50%")
+    registry.registry(TEST_KEY, access="F").set_value ("winsys4", "50%")
     self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       ("50%", win32con.REG_SZ)
@@ -536,7 +536,7 @@ class TestRegistry (unittest.TestCase):
 
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_empty_string (self):
-    registry.registry (TEST_KEY).set_value ("winsys4", "")
+    registry.registry (TEST_KEY, "F").set_value ("winsys4", "")
     self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       ("", win32con.REG_SZ)
@@ -544,7 +544,7 @@ class TestRegistry (unittest.TestCase):
 
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_non_empty_string (self):
-    registry.registry (TEST_KEY).set_value ("winsys4", "winsys")
+    registry.registry(TEST_KEY, access="F").set_value ("winsys4", "winsys")
     self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       ("winsys", win32con.REG_SZ)
@@ -552,7 +552,7 @@ class TestRegistry (unittest.TestCase):
 
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_none (self):
-    registry.registry (TEST_KEY).set_value ("winsys4", None)
+    registry.registry (TEST_KEY, access="F").set_value ("winsys4", None)
     self.assertEqual(
       win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), "winsys4"),
       ("", win32con.REG_SZ)
@@ -560,14 +560,14 @@ class TestRegistry (unittest.TestCase):
 
   #~ @with_setup (setup_set_value)
   def test_Registry_set_value_default (self):
-    registry.registry (TEST_KEY).set_value ("", "test")
+    registry.registry(TEST_KEY, access="F").set_value("", "test")
     self.assertEqual(
         win32api.RegQueryValueEx (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"software\winsys"), None),
         ("test", win32con.REG_SZ)
     )
 
   def test_Registry_add (self):
-    key0 = registry.registry (TEST_KEY)
+    key0 = registry.registry(TEST_KEY, access="F")
     new_key = key0.create ("winsys1")
     self.assertEqual(new_key, key0 + "winsys1")
 
