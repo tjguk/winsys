@@ -19,7 +19,3 @@ Create shortcut
 
 unit test
 
-
-Python 3 port
-
-from __future__ import print_function

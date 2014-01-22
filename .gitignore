@@ -3,3 +3,5 @@
 /docs/_build/.doctrees
 
 *.bak
+/MANIFEST
+/dist

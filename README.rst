@@ -21,7 +21,7 @@ and packages wherever possible:
 * Provide sensible defaults for the common cases, always allowing for more complex scenarios
 * Put all constants into one place, grouping them according to their API usage
 * Use the pywin32 functionality where available, supplementing it with ctypes where needed
-* Assume a recent version of Python (2.5 at least)
+* Assume a recent version of Python (tested on 2.6, 2.7, 3.2, 3.3)
 * Make good use of context managers (with-statements)
 * Have each object able to dump its contents and that of its children cleanly
 * Maintain an object approach, but provide convenient module-level functions

@@ -1,8 +1,0 @@
-include *.txt
-include README.rst
-include setup.py
-recursive-include winsys *.py
-recursive-include docs *.rst
-recursive-include cookbook *.py
-prune dist
-prune build

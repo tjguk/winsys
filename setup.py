@@ -1,11 +1,5 @@
 import os, sys
 from distutils.core import setup, Extension
-if sys.version_info >= (3,):
-  import lib2to3.refactor
-  fixers = lib2to3.refactor.get_fixers_from_package ("lib2to3.fixes")
-  refactorer = lib2to3.refactor.RefactoringTool (fixers)
-else:
-  refactorer = None
 
 import winsys
 
@@ -16,13 +10,10 @@ ext_modules = [
 version = open ("VERSION.txt").read ().strip ()
 
 if __name__ == '__main__':
-  if refactorer:
-    refactorer.refactor_dir (".", write=True)
   setup (
-      name='WinSys-%d.x' % (sys.version_info[0]),
+      name='WinSys',
       version=version,
-      url='http://code.google.com/p/winsys',
-      #~ download_url='http://timgolden.me.uk/python/downloads/winsys',
+      url='http://github.com/tjg/winsys',
       license='LICENSE.txt',
       author='Tim Golden',
       author_email='mail@timgolden.me.uk',
