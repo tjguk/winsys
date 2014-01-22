@@ -1,2 +1,2 @@
-# -*- coding: iso-8859-1 -*-
-__version__ = '0.5beta'
+# -*- coding: utf-8 -*-
+__version__ = '1.0b1'
