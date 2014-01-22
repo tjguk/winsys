@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 u"""All security in windows is handled via Security Principals. These can
 be a user (the most common case), a group of users, a computer, or something
 else. Security principals are uniquely identified by their SID: a binary code

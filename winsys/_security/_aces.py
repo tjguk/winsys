@@ -1,5 +1,6 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
 import os, sys
 import operator
 

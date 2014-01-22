@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 u"""Each process has an environment block (which may be empty). It
 consists of a set of key-value pairs, each of which is a string.
 The value string may be formed partly or wholly from other environment

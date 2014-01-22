@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 u"""
 The registry consists of a series of roots from each of which descends
 a tree of keys and values. Each key has an anonymous (default) value

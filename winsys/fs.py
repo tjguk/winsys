@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 """Provide a wrapper around common filesystem operations, including
 iterating over the files in a directory structure and copying,
 moving and linking them. Wherever possible iterators are used,

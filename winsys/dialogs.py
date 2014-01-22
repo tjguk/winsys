@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 u"""Provides for simple dialog boxes, doing just enough to return input
 from the user using edit controls, dropdown lists and checkboxes. Most
 interaction is via the :func:`dialog`, :func:`progress_dialog` or

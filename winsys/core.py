@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 """Provide functionality common to all classes in the package. Very
 little is expected to be here, only methods which are clearly common
 to all such as default implementations of __str__ and fill-in comparison

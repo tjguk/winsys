@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 u"""Provide unified access to the different sets of constants used by
 the winsys module. Some of them are provided by modules within the
 pywin32 package. Others belong to those sets but are not present in

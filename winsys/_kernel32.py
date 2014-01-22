@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 u"""Provide functions unavailable via pywin32 which reside in kernel32.dll
 """
 from __future__ import unicode_literals

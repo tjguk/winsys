@@ -1,4 +1,4 @@
-#-*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 ur"""Wrappers around standard functionality from the semi-independent Windows Shell
 subsystem which powers the desktop, shortcuts, special folders, property sheets &c.
 

@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 u"""Windows manages security by granting rights -- such as the
 ability to read or write an object -- in the form of
 Access Control Lists (ACLs) of Access Control Entries (ACEs)
