@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import os, sys
 import operator
 
@@ -16,16 +19,14 @@ else:
   unittest = unittest0
 del unittest0
 
-from winsys.tests import utils
-if not utils.i_am_admin ():
-  raise RuntimeError ("These tests must be run as Administrator")
-
+from winsys.tests import utils as testutils
 from winsys import accounts
 from winsys._security import _aces, _acls
 
 everyone, _, _ = win32security.LookupAccountName (None, "Everyone")
 me, _, _ = win32security.LookupAccountName (None, win32api.GetUserNameEx (win32con.NameSamCompatible))
 
+@unittest.skipUnless(testutils.i_am_admin(), "These tests must be run as Administrator")
 class TestACLs (unittest.TestCase):
 
   def test_acl_None (self):

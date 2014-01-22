@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import os, sys
 import functools
 import operator
@@ -15,10 +18,7 @@ else:
   unittest = unittest0
 del unittest0
 
-from winsys.tests import utils
-if not utils.i_am_admin ():
-  raise RuntimeError ("These tests must be run as Administrator")
-
+from winsys.tests import utils as testutils
 from winsys import core, accounts
 from winsys._security import _aces
 
@@ -26,10 +26,11 @@ everyone, _, _ = win32security.LookupAccountName (None, "Everyone")
 me = accounts.me ()
 administrators = accounts.principal ("Administrators")
 
+@unittest.skipUnless(testutils.i_am_admin(), "These tests must be run as Administrator")
 class TestAces (unittest.TestCase):
 
   def setUp (self):
-    utils.change_priv (win32security.SE_SECURITY_NAME, True)
+    testutils.change_priv (win32security.SE_SECURITY_NAME, True)
     self.filehandle, self.filename = tempfile.mkstemp ()
     dacl = win32security.ACL ()
     dacl.AddAccessAllowedAceEx (win32security.ACL_REVISION_DS, 0, ntsecuritycon.FILE_READ_DATA, everyone)
@@ -44,7 +45,7 @@ class TestAces (unittest.TestCase):
   def tearDown (self):
     os.close (self.filehandle)
     os.unlink (self.filename)
-    utils.change_priv (win32security.SE_SECURITY_NAME, False)
+    testutils.change_priv (win32security.SE_SECURITY_NAME, False)
 
   def test_dace_dace (self):
     dace = _aces.DACE (everyone, "F", "ALLOW")

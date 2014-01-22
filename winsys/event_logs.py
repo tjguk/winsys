@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 from __future__ import with_statement
 import os, sys
 import contextlib
@@ -13,11 +13,12 @@ import win32evtlog
 import win32evtlogutil
 import pywintypes
 
+from winsys._compat import *
 from winsys import accounts, constants, core, exc, registry, utils
 
-EVENTLOG_READ = constants.Constants.from_pattern (u"EVENTLOG_*_READ", namespace=win32evtlog)
+EVENTLOG_READ = constants.Constants.from_pattern ("EVENTLOG_*_READ", namespace=win32evtlog)
 EVENTLOG_READ.doc ("Ways of reading event logs")
-EVENTLOG_TYPE = constants.Constants.from_pattern (u"EVENTLOG_*_TYPE", namespace=win32evtlog)
+EVENTLOG_TYPE = constants.Constants.from_pattern ("EVENTLOG_*_TYPE", namespace=win32evtlog)
 EVENTLOG_TYPE.update (dict (
   EVENTLOG_SUCCESS = 0,
   AUDIT_FAILURE = win32evtlog.EVENTLOG_AUDIT_FAILURE,
@@ -80,18 +81,18 @@ class _EventLogEntry (core._WinSysObject):
 
   def dumped (self, level=0):
     output = []
-    output.append (u"record_number: %s" % self.record_number)
-    output.append (u"time_generated: %s" % self.time_generated)
-    output.append (u"time_written: %s" % self.time_written)
-    output.append (u"event_id: %s" % self.event_id)
-    output.append (u"source_name: %s" % self.source_name)
-    output.append (u"event_type: %s" % EVENTLOG_TYPE.name_from_value (self.event_type))
-    output.append (u"event_category: %s" % self.event_category)
-    output.append (u"sid: %s" % self.sid)
-    output.append (u"computer_name: %s" % self.computer_name)
-    output.append (u"data: %s" % repr (self.data))
-    output.append (u"message: %s" % self.message)
-    return utils.dumped (u"\n".join (output), level)
+    output.append ("record_number: %s" % self.record_number)
+    output.append ("time_generated: %s" % self.time_generated)
+    output.append ("time_written: %s" % self.time_written)
+    output.append ("event_id: %s" % self.event_id)
+    output.append ("source_name: %s" % self.source_name)
+    output.append ("event_type: %s" % EVENTLOG_TYPE.name_from_value (self.event_type))
+    output.append ("event_category: %s" % self.event_category)
+    output.append ("sid: %s" % self.sid)
+    output.append ("computer_name: %s" % self.computer_name)
+    output.append ("data: %s" % repr (self.data))
+    output.append ("message: %s" % self.message)
+    return utils.dumped ("\n".join (output), level)
 
   def _get_message (self):
     if self._message is None:
@@ -126,7 +127,7 @@ class EventLog (core._WinSysObject):
     self.name = name
     try:
       key = registry.registry (self.REG_ROOT % self.computer).get_key (self.name)
-    except exc.x_winsys, err:
+    except exc.x_winsys(err):
       warnings.warn ("Registry access failed with error: %s; log access may still be possible" % err.args[-1])
       values = dict ()
     else:
@@ -151,16 +152,16 @@ class EventLog (core._WinSysObject):
 
   def dumped (self, level=0):
     output = []
-    if self.auto_backup_log_files: output.append (u"auto_backup_log_files: %s" % self.auto_backup_log_files)
-    if self.display_name_file: output.append (u"display_name_file: %s" % self.display_name_file)
-    if self.display_name_id: output.append (u"display_name_id: %s" % self.display_name_id)
-    if self.file: output.append (u"file: %s" % self.file)
-    if self.max_size is not None: output.append (u"max_size: %s" % utils.size_as_mb (self.max_size))
-    if self.primary_module: output.append (u"primary_module: %s" % self.primary_module)
-    if self.restrict_guest_access: output.append (u"restrict_guest_access: %s" % self.restrict_guest_access)
-    if self.retention: output.append (u"retention: %s" % utils.secs_as_string (self.retention))
-    if self.sources: output.append (u"sources: %s" % utils.dumped_list (self.sources, level))
-    return utils.dumped (u"\n".join (output), level)
+    if self.auto_backup_log_files: output.append ("auto_backup_log_files: %s" % self.auto_backup_log_files)
+    if self.display_name_file: output.append ("display_name_file: %s" % self.display_name_file)
+    if self.display_name_id: output.append ("display_name_id: %s" % self.display_name_id)
+    if self.file: output.append ("file: %s" % self.file)
+    if self.max_size is not None: output.append ("max_size: %s" % utils.size_as_mb (self.max_size))
+    if self.primary_module: output.append ("primary_module: %s" % self.primary_module)
+    if self.restrict_guest_access: output.append ("restrict_guest_access: %s" % self.restrict_guest_access)
+    if self.retention: output.append ("retention: %s" % utils.secs_as_string (self.retention))
+    if self.sources: output.append ("sources: %s" % utils.dumped_list (self.sources, level))
+    return utils.dumped ("\n".join (output), level)
 
   @contextlib.contextmanager
   def _temp_handle (self):
@@ -373,7 +374,7 @@ def event_logs (computer="."):
     yield EventLog (computer, key.name)
 
 def event_log (log):
-  ur"""Convenience function to return an :class:`EventLog` object representing
+  """Convenience function to return an :class:`EventLog` object representing
   one of the existing event logs. Will raise :exc:`x_not_found` if the event
   log does not exist.
 

@@ -1,4 +1,6 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from __future__ import with_statement
 import os, sys
 import datetime
@@ -53,7 +55,7 @@ def timedelta_to_days (timedelta):
   return timedelta.days
 
 def string_to_timedelta (string):
-  u"""Match a time interval string of the form <wks>w <days>d <hrs>h <mins>'
+  """Match a time interval string of the form <wks>w <days>d <hrs>h <mins>'
   and convert to a timedelta.
   """
   if string is None:
@@ -63,10 +65,10 @@ def string_to_timedelta (string):
 
   match = re.match (r"(?:(\d+)w)?\W+(?:(\d+)d)?\W*(?:(\d+)h)?\W*(?:(\d+)')?", string)
   if not match:
-    raise RuntimeError, u"Interval string must be [<wks>w] [<days>d] [<hours>h] [<mins>']"
+    raise RuntimeError, "Interval string must be [<wks>w] [<days>d] [<hours>h] [<mins>']"
   else:
     w, d, h, m = [int (i or 0) for i in match.groups ()]
-    print u"string_to_minutes: %dd %dh %d'" % (d, h, m)
+    print "string_to_minutes: %dd %dh %d'" % (d, h, m)
     return datetime.timedelta (weeks=w, days=d, hours=h, minutes=m)
 
 def timedelta_to_minutes (timedelta):
@@ -114,7 +116,7 @@ def enum_as_number (enum):
   if isinstance (enum, int):
     return enum
   else:
-    return words_to_flags (enum, u"TASK_")
+    return words_to_flags (enum, "TASK_")
 
 def days_as_bits (days):
   if days is None:
@@ -227,7 +229,7 @@ class Schedule (object):
     self,
     trigger
   ):
-    _set (self, u"trigger", trigger)
+    _set (self, "trigger", trigger)
 
   def __getattr__ (self, attr):
     return getattr (self.trigger, attr)
@@ -299,12 +301,12 @@ class Task (object):
   priority = property (get_priority, set_priority)
 
   def get_task_flags (self):
-    return flags_to_words (self.task.GetTaskFlags (), prefix=u"TASK_FLAG_")
+    return flags_to_words (self.task.GetTaskFlags (), prefix="TASK_FLAG_")
   def set_task_flags (self, task_flags):
     try:
       flags = int (task_flags)
     except (ValueError, TypeError):
-      flags = self.words_to_flags (task_flags, u"TASK_FLAG_")
+      flags = self.words_to_flags (task_flags, "TASK_FLAG_")
     self.task.SetTaskFlags (flags)
   task_flags = property (get_task_flags, set_task_flags)
 
@@ -356,7 +358,7 @@ class Task (object):
   idle_wait = property (get_idle_wait, set_idle_wait)
 
   def get_status (self):
-    return flag_to_word (self.task.GetStatus (), u"SCHED_S_")
+    return flag_to_word (self.task.GetStatus (), "SCHED_S_")
   status = property (get_status)
 
   def get_exit_code (self):
@@ -366,7 +368,7 @@ class Task (object):
   @staticmethod
   def _int_to_ext (internal_attribute):
     words = internal_attribute.split ("_")
-    return u"Get" + "".join (word.title () for word in words)
+    return "Get" + "".join (word.title () for word in words)
 
   def _ext_to_int (external_attribute):
     words = re.findall ("Get((?:[A-Z][a-z]+)+)", external_attribute)
@@ -388,8 +390,8 @@ class Tasks (object):
       taskscheduler.IID_ITaskScheduler
     )
     if computer:
-      if not computer.startswith (u"\\\\"):
-        computer = u"\\\\" + computer
+      if not computer.startswith ("\\\\"):
+        computer = "\\\\" + computer
       self.tasks.SetTargetComputer (computer)
 
   def __iter__ (self):

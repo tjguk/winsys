@@ -1,5 +1,5 @@
-# -*- coding: iso-8859-1 -*-
-ur"""
+# -*- coding: utf-8 -*-
+"""
 The registry consists of a series of roots from each of which descends
 a tree of keys and values. Each key has an anonymous (default) value
 and optionally a set of named values, each of which has a particular
@@ -27,6 +27,8 @@ most of the useful functionality in the module. However, the same
 functionality is replicated at module level in many cases for
 convenience.
 """
+from __future__ import unicode_literals
+
 import os, sys
 import operator
 import re
@@ -36,18 +38,36 @@ import win32api
 import win32con
 import pywintypes
 
+from winsys._compat import *
 from winsys import constants, core, exc, security, utils
 
-REGISTRY_HIVE = constants.Constants.from_list ([
-  u"HKEY_CLASSES_ROOT",
-  u"HKEY_CURRENT_CONFIG",
-  u"HKEY_CURRENT_USER",
-  u"HKEY_DYN_DATA",
-  u"HKEY_LOCAL_MACHINE",
-  u"HKEY_PERFORMANCE_DATA",
-  u"HKEY_PERFORMANCE_NLSTEXT",
-  u"HKEY_PERFORMANCE_TEXT",
-  u"HKEY_USERS",
+class RegistryConstants(constants.Constants):
+
+  def name_from_value (self, value, default=core.UNSET, patterns=["*"]):
+    """Find the longest name in the set of constants (optionally qualified by pattern)
+    which matches value.
+    """
+    try:
+      return max(
+        (name for name in self.names(patterns) if self[name] == value),
+        key=len
+      )
+    except ValueError:
+      if default is core.UNSET:
+        raise KeyError("No constant matching name %s and value %s" % (patterns, value))
+      else:
+        return default
+
+REGISTRY_HIVE = RegistryConstants.from_list ([
+  "HKEY_CLASSES_ROOT",
+  "HKEY_CURRENT_CONFIG",
+  "HKEY_CURRENT_USER",
+  "HKEY_DYN_DATA",
+  "HKEY_LOCAL_MACHINE",
+  "HKEY_PERFORMANCE_DATA",
+  "HKEY_PERFORMANCE_NLSTEXT",
+  "HKEY_PERFORMANCE_TEXT",
+  "HKEY_USERS",
 ], namespace=win32con)
 REGISTRY_HIVE.update (dict (
   HKLM = REGISTRY_HIVE.HKEY_LOCAL_MACHINE,
@@ -57,32 +77,32 @@ REGISTRY_HIVE.update (dict (
 ))
 REGISTRY_HIVE.doc ("Registry hives (root keys) including common aliases (HKCU, HKLM, etc.)")
 REGISTRY_ACCESS = constants.Constants.from_list ([
-  u"KEY_ALL_ACCESS",
-  u"KEY_CREATE_LINK",
-  u"KEY_CREATE_SUB_KEY",
-  u"KEY_ENUMERATE_SUB_KEYS",
-  u"KEY_EXECUTE",
-  u"KEY_NOTIFY",
-  u"KEY_QUERY_VALUE",
-  u"KEY_READ",
-  u"KEY_SET_VALUE",
-  u"KEY_WOW64_32KEY",
-  u"KEY_WOW64_64KEY",
-  u"KEY_WRITE",
+  "KEY_ALL_ACCESS",
+  "KEY_CREATE_LINK",
+  "KEY_CREATE_SUB_KEY",
+  "KEY_ENUMERATE_SUB_KEYS",
+  "KEY_EXECUTE",
+  "KEY_NOTIFY",
+  "KEY_QUERY_VALUE",
+  "KEY_READ",
+  "KEY_SET_VALUE",
+  "KEY_WOW64_32KEY",
+  "KEY_WOW64_64KEY",
+  "KEY_WRITE",
 ], namespace=win32con)
 REGISTRY_ACCESS.doc ("Registry-specific access rights")
 REGISTRY_VALUE_TYPE = constants.Constants.from_list ([
-  u"REG_BINARY",
-  u"REG_DWORD",
-  u"REG_DWORD_LITTLE_ENDIAN",
-  u"REG_DWORD_BIG_ENDIAN",
-  u"REG_EXPAND_SZ",
-  u"REG_LINK",
-  u"REG_MULTI_SZ",
-  u"REG_NONE",
-  u"REG_QWORD",
-  u"REG_QWORD_LITTLE_ENDIAN",
-  u"REG_SZ",
+  "REG_BINARY",
+  "REG_DWORD",
+  "REG_DWORD_LITTLE_ENDIAN",
+  "REG_DWORD_BIG_ENDIAN",
+  "REG_EXPAND_SZ",
+  "REG_LINK",
+  "REG_MULTI_SZ",
+  "REG_NONE",
+  "REG_QWORD",
+  "REG_QWORD_LITTLE_ENDIAN",
+  "REG_SZ",
 ], namespace=win32con)
 REGISTRY_VALUE_TYPE.doc ("Registry value data types")
 
@@ -100,7 +120,7 @@ class x_moniker_ill_formed (x_moniker):
 class x_moniker_no_root (x_moniker):
   "Raised when a moniker has no Hive in the first or second position"
 
-sep = u"\\"
+sep = "\\"
 
 WINERROR_MAP = {
   winerror.ERROR_PATH_NOT_FOUND : exc.x_not_found,
@@ -136,13 +156,13 @@ def _parse_moniker (moniker, accept_value=True):
     -> "", 0x80000001, "Software\Python", ""
   """
   if accept_value:
-    moniker_parser = re.compile (ur"(?:\\\\([^\\]+)\\)?([^:]+)(:?)(.*)", re.UNICODE)
+    moniker_parser = re.compile (r"(?:\\\\([^\\]+)\\)?([^:]+)(:?)(.*)", re.UNICODE)
   else:
-    moniker_parser = re.compile (ur"(?:\\\\([^\\]+)\\)?(.*)", re.UNICODE)
+    moniker_parser = re.compile (r"(?:\\\\([^\\]+)\\)?(.*)", re.UNICODE)
 
   matcher = moniker_parser.match (moniker)
   if not matcher:
-    raise x_moniker_ill_formed (errctx=u"_parse_moniker", errmsg=u"Ill-formed moniker: %s" % moniker)
+    raise x_moniker_ill_formed (errctx="_parse_moniker", errmsg="Ill-formed moniker: %s" % moniker)
 
   if accept_value:
     computer, keypath, colon, value = matcher.groups ()
@@ -167,7 +187,7 @@ def _parse_moniker (moniker, accept_value=True):
       root = None
 
   if root is None:
-    raise x_moniker_no_root (errctx=u"_parse_moniker", errmsg=u"A registry hive must be the first or second segment in moniker")
+    raise x_moniker_no_root (errctx="_parse_moniker", errmsg="A registry hive must be the first or second segment in moniker")
 
   path = sep.join (keys)
 
@@ -176,7 +196,7 @@ def _parse_moniker (moniker, accept_value=True):
   # use "" to indicate that the default value is requested.
   # Otherwise use None to indicate that no value is requested
   #
-  if value == u"" and not colon:
+  if value == "" and not colon:
     value = None
   return computer, root, path, value
 
@@ -194,7 +214,7 @@ def create_moniker (computer, root, path, value=None):
     root = REGISTRY_HIVE.name_from_value (root)
   fullpath = sep.join ([root] + path.split (sep))
   if computer:
-    moniker = ur"\\%s\%s" % (computer, fullpath)
+    moniker = r"\\%s\%s" % (computer, fullpath)
   else:
     moniker = fullpath
   if value:
@@ -203,7 +223,7 @@ def create_moniker (computer, root, path, value=None):
     return moniker
 
 class Registry (core._WinSysObject):
-  ur"""
+  """
   Represent a registry key (including one of the roots) giving
   access to its subkeys and values as well as its security and walking
   its subtrees. The key is True if it exists, False otherwise.
@@ -261,13 +281,13 @@ class Registry (core._WinSysObject):
   """
 
   ACCESS = {
-    u"Q" : REGISTRY_ACCESS.KEY_QUERY_VALUE,
-    u"D" : constants.ACCESS.DELETE,
-    u"R" : REGISTRY_ACCESS.KEY_READ,
-    u"W" : REGISTRY_ACCESS.KEY_WRITE,
-    u"C" : REGISTRY_ACCESS.KEY_READ | REGISTRY_ACCESS.KEY_WRITE,
-    u"F" : REGISTRY_ACCESS.KEY_ALL_ACCESS,
-    u"S" : constants.ACCESS.READ_CONTROL | constants.ACCESS.WRITE_DAC,
+    "Q" : REGISTRY_ACCESS.KEY_QUERY_VALUE,
+    "D" : constants.ACCESS.DELETE,
+    "R" : REGISTRY_ACCESS.KEY_READ,
+    "W" : REGISTRY_ACCESS.KEY_WRITE,
+    "C" : REGISTRY_ACCESS.KEY_READ | REGISTRY_ACCESS.KEY_WRITE,
+    "F" : REGISTRY_ACCESS.KEY_ALL_ACCESS,
+    "S" : constants.ACCESS.READ_CONTROL | constants.ACCESS.WRITE_DAC,
   }
   """Mapping between characters and access rights:
 
@@ -279,7 +299,7 @@ class Registry (core._WinSysObject):
   * F - Full Control
   * S - Security
   """
-  DEFAULT_ACCESS = u"F"
+  DEFAULT_ACCESS = "R"
 
   def __init__ (self, moniker, access=DEFAULT_ACCESS):
     core._WinSysObject.__init__ (self)
@@ -334,7 +354,7 @@ class Registry (core._WinSysObject):
       hKey, moniker, _ = self._from_string (self.moniker, access=self.access, accept_value=False)
       utils._set (self, "hKey", hKey)
       if self.hKey is None:
-        raise exc.x_not_found (errctx=u"Registry.pyobject", errmsg=u"Registry path %s not found" % moniker)
+        raise exc.x_not_found (errctx="Registry.pyobject", errmsg="Registry path %s not found" % moniker)
     return self.hKey
 
   def as_string (self):
@@ -360,15 +380,16 @@ class Registry (core._WinSysObject):
     """
     hKey, _, _ = self._from_string (self.moniker, accept_value=False)
     return bool (hKey)
+  __bool__ = __nonzero__
 
   def dumped (self, level=0):
     output = []
     output.append (self.as_string ())
-    output.append (u"access: %s" % self.access)
+    output.append ("access: %s" % self.access)
     if bool (self):
-      output.append (u"keys:\n%s" % utils.dumped_list ((key.name for key in self.iterkeys (ignore_access_errors=True)), level))
-      output.append (u"values:\n%s" % utils.dumped_dict (dict ((name or u"(Default)", repr (value)) for (name, value) in self.itervalues (ignore_access_errors=True)), level))
-      output.append (u"security:\n%s" % utils.dumped (self.security ().dumped (level), level))
+      output.append ("keys:\n%s" % utils.dumped_list ((key.name for key in self.iterkeys (ignore_access_errors=True)), level))
+      output.append ("values:\n%s" % utils.dumped_dict (dict ((name or "(Default)", repr (value)) for (name, value) in self.itervalues (ignore_access_errors=True)), level))
+      output.append ("security:\n%s" % utils.dumped (self.security ().dumped (level), level))
     return utils.dumped ("\n".join (output), level)
 
   def __getattr__ (self, attr):
@@ -445,7 +466,7 @@ class Registry (core._WinSysObject):
       if isinstance (value, list):
         return REGISTRY_VALUE_TYPE.REG_MULTI_SZ
       value = unicode (value)
-      if u"%" in value and value.count (u"%") % 2 == 0:
+      if "%" in value and value.count ("%") % 2 == 0:
         return REGISTRY_VALUE_TYPE.REG_EXPAND_SZ
       return REGISTRY_VALUE_TYPE.REG_SZ
 
@@ -505,7 +526,7 @@ def registry (root, access=Registry.DEFAULT_ACCESS, accept_value=True):
   elif isinstance (root, basestring):
     return Registry.from_string (root, access=access, accept_value=accept_value)
   else:
-    raise x_registry (errctx=u"registry", errmsg=u"root must be None, an existing key or a moniker")
+    raise x_registry (errctx="registry", errmsg="root must be None, an existing key or a moniker")
 
 def values (root, ignore_access_errors=False, _want_types=False):
   """Yield the values of a registry key as (name, value). This is convenient
@@ -573,7 +594,7 @@ def keys (root, ignore_access_errors=False):
       raise
 iterkeys = keys
 
-def copy (from_key, to_key):
+def copy (from_key, to_key, use_access="F"):
   """Copy one registry key to another, returning the target. If the
   target doesn't already exist it will be created.
 
@@ -582,14 +603,22 @@ def copy (from_key, to_key):
   :returns: a :class:`Registry` object for `to_key`
   """
   source = registry (from_key, accept_value=False)
-  target = registry (to_key, accept_value=False)
+  target = registry (to_key, access=use_access, accept_value=False)
   if not target:
     target.create ()
 
   for root, subkeys, subvalues in walk (source, _want_types=True):
-    target_root = registry (target.moniker + utils.relative_to (root.moniker, source.moniker), accept_value=False)
+    target_root = registry(
+        target.moniker + utils.relative_to (root.moniker, source.moniker),
+        access=use_access,
+        accept_value=False
+    )
     for k in subkeys:
-      target_key = registry (target.moniker + utils.relative_to (k.moniker, source.moniker), accept_value=False)
+      target_key = registry(
+        target.moniker + utils.relative_to (k.moniker, source.moniker),
+        accept_value=False,
+        access=use_access
+      )
       target_key.create ()
     for name, value, type in subvalues:
       target_root.set_value (name, value, type)
@@ -707,7 +736,7 @@ def parent (key):
   if ppath:
     return registry (parent_moniker, key.access, accept_value=False)
   else:
-    raise x_registry (errctx=u"parent", errmsg=u"%s has no parent" % key.moniker)
+    raise x_registry (errctx="parent", errmsg="%s has no parent" % key.moniker)
 
 def hklm ():
   return registry ("hklm")

@@ -1,5 +1,5 @@
-# -*- coding: iso-8859-1 -*-
-ur"""Each process has an environment block (which may be empty). It
+# -*- coding: utf-8 -*-
+"""Each process has an environment block (which may be empty). It
 consists of a set of key-value pairs, each of which is a string.
 The value string may be formed partly or wholly from other environment
 variables using the %envvar% notation. By default, this module will
@@ -18,6 +18,8 @@ and the system and user objects supply an additional :meth:`Persistent.broadcast
 method which sends a message to top-level windows, such as the shell, to
 indicate that the environment has changed.
 """
+from __future__ import unicode_literals
+
 import os, sys
 import win32api
 import win32profile
@@ -36,7 +38,7 @@ WINERROR_MAP = {
 wrapped = exc.wrapper (WINERROR_MAP, x_environment)
 
 class _DelimitedText (list):
-  ur"""Helper class for values such as PATH and PATHEXT which are
+  """Helper class for values such as PATH and PATHEXT which are
   consistently semicolon-delimited text but which can helpfully
   be treated as a list of individual values. Subclasseed from
   list, it keeps track of the delimited list while exposing
@@ -106,7 +108,7 @@ class _DelimitedText (list):
     return item
 
 class _DelimitedPath (_DelimitedText):
-  ur"""Subclass of delimited text to ensure that valid filesystem paths
+  """Subclass of delimited text to ensure that valid filesystem paths
   are stored in the env var
   """
 
@@ -114,12 +116,12 @@ class _DelimitedPath (_DelimitedText):
     return os.path.normpath (item).rstrip ("\\")
 
 class Env (core._WinSysObject):
-  ur"""Semi-abstract base class for all environment classes. Outlines
+  """Semi-abstract base class for all environment classes. Outlines
   a dict-like interface which relies on subclasses to implement simple
   :meth:`_get` and :meth:`_items` methods.
   """
   def __getitem__ (self, item):
-    ur"""Get environment strings like dictionary items::
+    """Get environment strings like dictionary items::
 
       from winsys import environment
 
@@ -128,7 +130,7 @@ class Env (core._WinSysObject):
     raise NotImplementedError
 
   def __setitem__ (self, item, value):
-    ur"""Set environment strings like dictionary items::
+    """Set environment strings like dictionary items::
 
       from winsys import environment
 
@@ -137,7 +139,7 @@ class Env (core._WinSysObject):
     raise NotImplementedError
 
   def __delitem__ (self, item):
-    ur"""Remove an item from the environment::
+    """Remove an item from the environment::
 
       from winsys import environment
 
@@ -253,7 +255,7 @@ class Process (Env):
     wrapped (win32api.SetEnvironmentVariable, item, None)
 
 class Persistent (Env):
-  ur"""Represent persistent (registry-based) environment variables. These
+  """Represent persistent (registry-based) environment variables. These
   are held at system and at user level, the latter overriding the former
   when an process environment is put together. Don't instantiate this
   class directly: use the :func:`user` and :func:`system` functions.
@@ -261,7 +263,7 @@ class Persistent (Env):
 
   @staticmethod
   def broadcast (timeout_ms=2000):
-    ur"""Broadcast a message to all top-level windows informing them that
+    """Broadcast a message to all top-level windows informing them that
     an environment change has occurred. The message must be sent, not posted,
     and times out after `timeout_ms` ms since some top-level windows handle this
     badly. NB This is a static method.
@@ -302,13 +304,13 @@ class Persistent (Env):
     del self.registry[item]
 
 def process ():
-  ur"""Return a dict-like object representing the environment block of the
+  """Return a dict-like object representing the environment block of the
   current process.
   """
   return Process ()
 
 def system (machine=None):
-  ur"""Return a dict-like object representing the system-level persistent
+  """Return a dict-like object representing the system-level persistent
   environment variables, optionally selecting a different machine.
 
   :param machine: name or address of a different machine whose system
@@ -322,12 +324,12 @@ def system (machine=None):
   return Persistent (root)
 
 def user ():
-  ur"""Return a dict-like object representing the user-level persistent
+  """Return a dict-like object representing the user-level persistent
   environment for the logged-on user.
 
   TODO: include alternate user functionality via logon token
   """
-  return Persistent (ur"HKCU\Environment")
+  return Persistent ("HKCU\Environment")
 
 
 def broadcast (timeout_ms=2000):

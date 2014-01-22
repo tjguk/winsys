@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import sys
 import unittest as unittest0
 try:
@@ -17,9 +20,7 @@ import win32evtlog
 import win32security
 import pywintypes
 
-from winsys.tests import utils
-if not utils.i_am_admin ():
-  raise RuntimeError ("These tests must be run as Administrator")
+from winsys.tests import utils as testutils
 from winsys import event_logs, registry, utils
 
 
@@ -50,6 +51,7 @@ def yield_logs (computer=None, log_name=LOG_NAME):
 # TESTS
 #
 
+@unittest.skipUnless(testutils.i_am_admin(), "These tests must be run as Administrator")
 class TestEventLogs (unittest.TestCase):
 
   #
@@ -90,7 +92,7 @@ class TestEventLogs (unittest.TestCase):
 
   def test_event_sources (self):
     log_name = "System"
-    self.assertEquals (
+    self.assertEqual (
       set (s.name for s in event_logs.event_sources (log_name)),
       set (r.name for r in self.registry_root + log_name)
     )
@@ -142,7 +144,7 @@ class TestEventLogs (unittest.TestCase):
   # Event logs
   #
   def test_event_logs (self):
-    self.assertEquals (
+    self.assertEqual (
       set (s.name for s in event_logs.event_logs ()),
       set (r.name for r in self.registry_root.keys ())
     )
@@ -179,7 +181,7 @@ class TestEventLogs (unittest.TestCase):
       log.log_event (source, message="hello")
       self.assertNotEquals (win32evtlog.GetNumberOfEventLogRecords (hLog), 0)
       log.clear ()
-      self.assertEquals (win32evtlog.GetNumberOfEventLogRecords (hLog), 0)
+      self.assertEqual (win32evtlog.GetNumberOfEventLogRecords (hLog), 0)
     finally:
       win32evtlog.CloseEventLog (hLog)
       source.delete ()
@@ -194,7 +196,7 @@ class TestEventLogs (unittest.TestCase):
       log.log_event (source, message="hello")
       self.assertNotEquals (win32evtlog.GetNumberOfEventLogRecords (hLog), 0)
       log.clear ()
-      self.assertEquals (win32evtlog.GetNumberOfEventLogRecords (hLog), 0)
+      self.assertEqual (win32evtlog.GetNumberOfEventLogRecords (hLog), 0)
     finally:
       win32evtlog.CloseEventLog (hLog)
       source.delete ()

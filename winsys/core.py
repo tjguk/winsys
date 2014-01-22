@@ -1,9 +1,11 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 """Provide functionality common to all classes in the package. Very
 little is expected to be here, only methods which are clearly common
 to all such as default implementations of __str__ and fill-in comparison
 functions to ensure total ordering.
 """
+from __future__ import unicode_literals
+
 import sys
 import logging
 import tempfile
@@ -57,10 +59,13 @@ class _WinSysObject (object):
   def __le__ (self, other):
     return self < other or self == other
 
-
 class Unset (object):
   def __repr__ (self):
     return "<Unset>"
+  def __str__(self):
+    return "<Unset>"
+  def __bool__(self):
+    return False
   def __nonzero__ (self):
     return False
 
@@ -73,8 +78,10 @@ class NullHandler (logging.Handler):
 #
 # Create a logger without any handlers.
 #
-_logger = logging.getLogger (u"winsys")
+_logger = logging.getLogger ("winsys")
 _logger.addHandler (NullHandler ())
+#~ _logger.addHandler(logging.StreamHandler())
+#~ _logger.setLevel(logging.DEBUG)
 
 debug = _logger.debug
 log = _logger.log

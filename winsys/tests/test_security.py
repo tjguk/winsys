@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from __future__ import with_statement
+
 import os, sys
 import contextlib
 import tempfile
@@ -22,9 +25,7 @@ import win32security
 import ntsecuritycon
 import pywintypes
 
-from winsys.tests import utils
-if not utils.i_am_admin ():
-  raise RuntimeError ("These tests must be run as Administrator")
+from winsys.tests import utils as testutils
 from winsys import security
 
 OPTIONS = \
@@ -59,6 +60,7 @@ def as_string (sd):
 def equal (sd, security):
   return as_string (sd) == str (security)
 
+@unittest.skipUnless(testutils.i_am_admin(), "These tests must be run as Administrator")
 class TestSecurity (unittest.TestCase):
 
   #
@@ -69,10 +71,12 @@ class TestSecurity (unittest.TestCase):
     # If you don't enable SeSecurity, you won't be able to
     # read SACL in this process.
     #
-    utils.change_priv (win32security.SE_SECURITY_NAME, True)
+    testutils.change_priv (win32security.SE_SECURITY_NAME, True)
     self.GUID = str (uuid.uuid1 ())
     self.TEST_ROOT = tempfile.mkdtemp (prefix="winsys-")
     assert os.path.isdir (self.TEST_ROOT)
+
+  def setUpSACL(self):
     sacl = win32security.ACL ()
     sid, _, _ = win32security.LookupAccountName (None, win32api.GetUserName ())
     sacl.AddAuditAccessAceEx (
@@ -87,6 +91,7 @@ class TestSecurity (unittest.TestCase):
       win32security.SACL_SECURITY_INFORMATION,
       None, None, None, sacl
     )
+
 
   @staticmethod
   def restore_access (filepath):
@@ -113,7 +118,6 @@ class TestSecurity (unittest.TestCase):
     yield filepath
     if os.path.exists (filepath):
       os.remove (filepath)
-
 
   #
   # The security function should convert its argument to something
@@ -368,15 +372,21 @@ class TestSecurity (unittest.TestCase):
     assert equal (sd, s)
 
   def test_Security_break_dacl_inheritance_no_copy (self):
+    #
+    # This is currently failing because, within the test folder,
+    # the file created doesn't have inherited ACEs at the point
+    # at which the inheritance is broken. Since unherited ACEs are
+    # copied regardless, the test fails.
+    #
     with self.test_file () as filepath:
       s = security.security (filepath, options=OPTIONS)
       assert s.dacl.inherited
       s.break_inheritance (copy_first=False, break_dacl=True, break_sacl=False)
       s.to_object ()
       sd = win32security.GetNamedSecurityInfo (filepath, win32security.SE_FILE_OBJECT, OPTIONS)
-      assert (sd.GetSecurityDescriptorControl ()[0] & win32security.SE_DACL_PROTECTED)
-      assert (not sd.GetSecurityDescriptorControl ()[0] & win32security.SE_SACL_PROTECTED)
-      assert sd.GetSecurityDescriptorDacl ().GetAceCount () == 0
+      self.assertTrue(sd.GetSecurityDescriptorControl ()[0] & win32security.SE_DACL_PROTECTED)
+      self.assertTrue(not sd.GetSecurityDescriptorControl ()[0] & win32security.SE_SACL_PROTECTED)
+      self.assertEqual(sd.GetSecurityDescriptorDacl ().GetAceCount (), 0)
 
   def test_Security_break_dacl_inheritance_copy (self):
     with self.test_file () as TEST_FILE:
@@ -391,6 +401,7 @@ class TestSecurity (unittest.TestCase):
       assert sd.GetSecurityDescriptorDacl ().GetAceCount () == n_aces
 
   def test_Security_break_sacl_inheritance_no_copy (self):
+    self.setUpSACL()
     with self.test_file () as TEST_FILE:
       s = security.security (TEST_FILE, options=OPTIONS)
       assert s.sacl.inherited
@@ -402,6 +413,7 @@ class TestSecurity (unittest.TestCase):
       assert sd.GetSecurityDescriptorSacl ().GetAceCount () == 0
 
   def test_Security_break_sacl_inheritance_copy (self):
+    self.setUpSACL()
     with self.test_file () as TEST_FILE:
       s = security.security (TEST_FILE, options=OPTIONS)
       n_aces = len (s.sacl)

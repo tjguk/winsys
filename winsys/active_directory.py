@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import os, sys
 import re
 
@@ -28,9 +31,9 @@ Special chars (must be substituted): *()\\NUL/
 class x_active_directory (exc.x_winsys):
   "Base for all AD-related exceptions"
 
-SEARCHPREF = constants.Constants.from_pattern (u"ADS_SEARCHPREF_*", namespace=adsicon)
+SEARCHPREF = constants.Constants.from_pattern ("ADS_SEARCHPREF_*", namespace=adsicon)
 SEARCHPREF.doc ("Preferences for searching AD")
-SCOPE = constants.Constants.from_pattern (u"ADS_SCOPE_*", namespace=adsicon)
+SCOPE = constants.Constants.from_pattern ("ADS_SCOPE_*", namespace=adsicon)
 SCOPE.doc ("Scope for searching AD trees")
 
 WINERROR_MAP = {
@@ -120,7 +123,7 @@ class IADs (core._WinSysObject):
         break
 
   def walk (self, depthfirst=False):
-    ur"""Mimic os.walk, iterating over each container and the items within
+    """Mimic os.walk, iterating over each container and the items within
     in. Each iteration yields:
 
       container, (iterator for items)

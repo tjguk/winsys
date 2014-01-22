@@ -1,4 +1,6 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import win32api
 import win32con
 import win32process

@@ -1,11 +1,15 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 from __future__ import with_statement
+from __future__ import unicode_literals
+
 import os, sys
 from datetime import datetime, timedelta
 import re
 import struct
 import threading
 import winxpgui as win32gui
+
+from winsys._compat import *
 
 #
 # Small support functions
@@ -22,11 +26,11 @@ else:
 
 def signed_to_unsigned (signed):
   """Convert a (possibly signed) long to unsigned hex"""
-  unsigned, = struct.unpack ("L", struct.pack ("l", signed))
+  unsigned, = struct.unpack (b"L", struct.pack (b"l", signed))
   return unsigned
 
 def mask_as_string (mask, length=32):
-  return "".join (u"01"[bool (mask & (1 << i))] for i in range (length)[::-1])
+  return "".join ("01"[bool (mask & (1 << i))] for i in range (length)[::-1])
 
 def mask_as_list (mask, length=32):
   return [i for i in range (length) if ((1 << i) & mask)]
@@ -82,20 +86,20 @@ def size_as_mb (n_bytes):
 #
 def indented (text, level, indent=2):
   """Take a multiline text and indent it as a block"""
-  return u"\n".join (u"%s%s" % (level * indent * u" ", s) for s in text.splitlines ())
+  return "\n".join ("%s%s" % (level * indent * " ", s) for s in text.splitlines ())
 
 def dumped (text, level, indent=2):
   """Put curly brackets round an indented text"""
-  return indented (u"{\n%s\n}" % indented (text, level+1, indent) or "None", level, indent)
+  return indented ("{\n%s\n}" % indented (text, level+1, indent) or "None", level, indent)
 
 def dumped_list (l, level, indent=2):
-  return dumped (u"\n".join (unicode (i)  for i in l), level, indent)
+  return dumped ("\n".join (unicode (i)  for i in l), level, indent)
 
 def dumped_dict (d, level, indent=2):
-  return dumped (u"\n".join (u"%s => %r" % (k, v) for (k, v) in d.iteritems ()), level, indent)
+  return dumped ("\n".join ("%s => %r" % (k, v) for (k, v) in d.items ()), level, indent)
 
 def dumped_flags (f, lookups, level, indent=2):
-  return dumped (u"\n".join (lookups.names_from_value (f)) or u"None", level, indent)
+  return dumped ("\n".join (lookups.names_from_value (f)) or "None", level, indent)
 
 def pythonised (string):
   """Convert from initial caps to lowercase with underscores.

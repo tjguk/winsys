@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import os, sys
 import unittest as unittest0
 try:
@@ -12,21 +15,20 @@ del unittest0
 import win32api
 import win32security
 
-from winsys.tests import utils
-if not utils.i_am_admin ():
-  raise RuntimeError ("These tests must be run as Administrator")
+from winsys.tests import utils as testutils
 from winsys import accounts
 
+@unittest.skipUnless(testutils.i_am_admin(), "These tests must be run as Administrator")
 class TestAccounts (unittest.TestCase):
 
   def setUp (self):
-    utils.create_user ("alice", "Passw0rd")
-    utils.create_group ("winsys")
-    utils.add_user_to_group ("alice", "winsys")
+    testutils.create_user ("alice", "Passw0rd")
+    testutils.create_group ("winsys")
+    testutils.add_user_to_group ("alice", "winsys")
 
   def tearDown (self):
-    utils.delete_user ("alice")
-    utils.delete_group ("winsys")
+    testutils.delete_user ("alice")
+    testutils.delete_group ("winsys")
 
   def test_principal_None (self):
     assert accounts.principal (None) is None

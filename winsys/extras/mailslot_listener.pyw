@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+## -*- coding: iso-8859-1 -*-
 import os, sys
 import marshal
 import threading
@@ -18,7 +18,7 @@ WINERROR_MAP = {
 wrapped = exceptions.wrapper (WINERROR_MAP)
 
 class MainWindow:
-  
+
   def __init__ (self, title):
     wc = win32gui.WNDCLASS ()
     hinst = wc.hInstance = win32api.GetModuleHandle (None)
@@ -30,16 +30,16 @@ class MainWindow:
     self.hEdit = None
     self.hwnd = win32gui.CreateWindowEx (
       win32con.WS_EX_CLIENTEDGE | win32con.WS_EX_APPWINDOW,
-      win32gui.RegisterClass (wc), 
-      title, 
-      win32con.WS_OVERLAPPEDWINDOW, 
+      win32gui.RegisterClass (wc),
+      title,
+      win32con.WS_OVERLAPPEDWINDOW,
       0, 0, win32con.CW_USEDEFAULT, win32con.CW_USEDEFAULT,
-      0, 0, 
-      hinst, 
+      0, 0,
+      hinst,
       None
     )
     self.hEdit = win32gui.CreateWindow (
-      "EDIT", 
+      "EDIT",
       None,
       win32con.WS_CHILD | win32con.WS_VISIBLE | win32con.WS_VSCROLL | win32con.ES_LEFT | win32con.ES_MULTILINE | win32con.ES_AUTOVSCROLL,
       0, 0, 0, 0,
@@ -81,7 +81,7 @@ def handle_mailslot (hwnd, mailslot_name):
       break
     else:
       win32gui.SendMessage (hwnd, win32con.WM_SETTEXT, 0, utils.string_as_pointer (text + "\n"))
-      
+
 def main (mailslot_name):
   window = MainWindow ("Listening to mailslot %s" % mailslot_name)
   threading.Thread (target=handle_mailslot, args=(window.hwnd, mailslot_name)).start ()
@@ -100,5 +100,5 @@ if __name__=='__main__':
       mailslot_name = results[0]
     else:
       sys.exit ()
-  
+
   main (mailslot_name)
