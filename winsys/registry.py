@@ -716,7 +716,7 @@ def hklm ():
   return registry ("hklm")
 
 def hkcu ():
-  return registry ("hkc")
+  return registry ("hkcu")
 
 Registry.values = values
 Registry.itervalues = itervalues
