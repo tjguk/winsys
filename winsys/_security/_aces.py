@@ -14,10 +14,10 @@ class x_unknown_value (x_ace):
   pass
 
 ACE_FLAG = constants.Constants.from_list ([
-  u"CONTAINER_INHERIT_ACE", 
-  u"INHERIT_ONLY_ACE", 
-  u"INHERITED_ACE", 
-  u"NO_PROPAGATE_INHERIT_ACE", 
+  u"CONTAINER_INHERIT_ACE",
+  u"INHERIT_ONLY_ACE",
+  u"INHERITED_ACE",
+  u"NO_PROPAGATE_INHERIT_ACE",
   u"OBJECT_INHERIT_ACE",
   u"FAILED_ACCESS_ACE_FLAG",
   u"SUCCESSFUL_ACCESS_ACE_FLAG"
@@ -36,7 +36,7 @@ class ACE (core._WinSysObject):
     u"F" : constants.GENERIC_ACCESS.ALL
   }
   FLAGS = ACE_FLAG.OBJECT_INHERIT | ACE_FLAG.CONTAINER_INHERIT
-  
+
   def __init__ (self, trustee, access, type, flags=core.UNSET, object_type=core.UNSET, inherited_object_type=core.UNSET):
     u"""Construct a new ACE
 
@@ -47,14 +47,14 @@ class ACE (core._WinSysObject):
     """
     core._WinSysObject.__init__ (self)
     if flags is core.UNSET: flags = self.FLAGS
-    
+
     self.type = type
     self._trustee = trustee
     self._access_mask = access
     self.flags = flags
     self.object_type = object_type
     self.inherited_object_type = inherited_object_type
-    
+
   def _id (self):
     return (self.trustee, self.access, self.type)
 
@@ -72,7 +72,7 @@ class ACE (core._WinSysObject):
     if self.flags:
       output.append (u"flags:\n%s" % utils.dumped_flags (self.flags, ACE_FLAG, level))
     return utils.dumped (u"\n".join (output), level)
-  
+
   def _get_inherited (self):
     return bool (self.flags & ACE_FLAG.INHERITED)
   def _set_inherited (self, switch):
@@ -81,7 +81,7 @@ class ACE (core._WinSysObject):
     else:
       self.flags &= ~ACE_FLAG.INHERITED
   inherited = property (_get_inherited, _set_inherited)
-  
+
   def _get_containers_inherit (self):
     return bool (self.flags & ACE_FLAG.CONTAINER_INHERIT)
   def _set_containers_inherit (self, switch):
@@ -92,7 +92,7 @@ class ACE (core._WinSysObject):
     else:
       self.flags &= ~ACE_FLAG.CONTAINER_INHERIT
   containers_inherit = property (_get_containers_inherit, _set_containers_inherit)
-  
+
   def _get_objects_inherit (self):
     return bool (self.flags & ACE_FLAG.OBJECT_INHERIT)
   def _set_objects_inherit (self, switch):
@@ -103,7 +103,7 @@ class ACE (core._WinSysObject):
     else:
       self.flags &= ~ACE_FLAG.OBJECT_INHERIT
   objects_inherit = property (_get_objects_inherit, _set_objects_inherit)
-  
+
   def _get_access (self):
     return self._access_mask
   def _set_access (self, access):
@@ -111,7 +111,7 @@ class ACE (core._WinSysObject):
       raise exc.x_access_denied (errctx=u"ACE._set_access", errmsg=u"Cannot change an inherited ACE")
     self._access_mask = self._access (access)
   access = property (_get_access, _set_access)
-  
+
   def _get_trustee (self):
     return self._trustee
   def _set_trustee (self, trustee):
@@ -119,7 +119,7 @@ class ACE (core._WinSysObject):
       raise exc.x_access_denied (errctx=u"ACE._get_trustee", errmsg=u"Cannot change an inherited ACE")
     self._trustee = accounts.principal (trustee)
   trustee = property (_get_trustee, _set_trustee)
-  
+
   @classmethod
   def from_ace (cls, ace):
     (type, flags) = ace[0]
@@ -151,18 +151,18 @@ class ACE (core._WinSysObject):
         return reduce (operator.or_, (cls.ACCESS[a] for a in access.upper ()), 0)
       except KeyError:
         raise x_unknown_value (errctx=u"ACE._access", errmsg=u"%s is not a valid access string" % access)
-        
+
 class DACE (ACE):
-  
+
   TYPES = {
     u"ALLOW" : ACE_TYPE.ACCESS_ALLOWED,
     u"DENY" : ACE_TYPE.ACCESS_DENIED,
   }
 
   def __init__ (
-    self, 
-    trustee, access, type, 
-    flags=core.UNSET, 
+    self,
+    trustee, access, type,
+    flags=core.UNSET,
     object_type=core.UNSET, inherited_object_type=core.UNSET
   ):
     ACE.__init__ (self, trustee, access, type, flags, object_type, inherited_object_type)
@@ -189,18 +189,21 @@ class DACE (ACE):
         return cls.TYPES[type.upper ()]
       except KeyError:
         raise x_unknown_value (errctx=u"ACE._type", errmsg=u"%s is not a valid type string" % type)
-  
+
+  def __hash__(self):
+    return hash((self.trustee, self.access, self.type))
+
   def __eq__ (self, other):
     other = self.ace (other)
     return (self.trustee, self.access, self.type) == (other.trustee, other.access, other.type)
-    
+
   def __lt__ (self, other):
     u"""Deny comes first, then what?"""
     other = self.ace (other)
     return (self.is_allowed < other.is_allowed)
-    
+
 class SACE (ACE):
-  
+
   AUDIT_WHAT = {
     "SUCCESS" : (1, 0),
     "FAILURE" : (0, 1),
@@ -209,9 +212,9 @@ class SACE (ACE):
 
   def __init__ (
     self,
-    trustee, access, type, 
+    trustee, access, type,
     flags=core.UNSET,
-    audit_success=core.UNSET, audit_failure=core.UNSET, 
+    audit_success=core.UNSET, audit_failure=core.UNSET,
     object_type=core.UNSET, inherited_object_type=core.UNSET
   ):
     ACE.__init__ (self, trustee, access, type, flags, object_type, inherited_object_type)
@@ -221,16 +224,16 @@ class SACE (ACE):
   @classmethod
   def ace (cls, ace):
     return sace (ace)
-  
+
   @classmethod
   def from_tuple (cls, ace_info):
     (trustee, access, audit_what) = ace_info
     audit_success, audit_failure = cls._audit_what (audit_what)
     return cls (
-      trustee=accounts.principal (trustee), 
-      access=cls._access (access), 
-      type=ACE_TYPE.SYSTEM_AUDIT, 
-      audit_success=audit_success, 
+      trustee=accounts.principal (trustee),
+      access=cls._access (access),
+      type=ACE_TYPE.SYSTEM_AUDIT,
+      audit_success=audit_success,
       audit_failure=audit_failure
     )
 
@@ -241,14 +244,17 @@ class SACE (ACE):
     except (ValueError, TypeError):
       audit_success, audit_failure = cls.AUDIT_WHAT[audit_what.upper ()]
     return audit_success, audit_failure
-  
+
   def as_tuple (self):
     return self.trustee, self.access, self.type, self.flags, (self.audit_success, self.audit_failure)
+
+  def __hash__(self):
+    return hash(self.as_tuple())
 
   def __eq__ (self, other):
     other = self.ace (other)
     return self.as_tuple () == other.as_tuple ()
-    
+
   def __lt__ (self, other):
     """Failure before success"""
     other = self.ace (other)

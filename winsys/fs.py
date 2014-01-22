@@ -31,6 +31,11 @@ import win32net
 import win32netcon
 import winioctlcon
 
+try:
+    reduce
+except NameError:
+    from functools import reduce
+
 if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
   winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
