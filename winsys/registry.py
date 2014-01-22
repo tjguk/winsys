@@ -38,6 +38,7 @@ import win32api
 import win32con
 import pywintypes
 
+from winsys._compat import *
 from winsys import constants, core, exc, security, utils
 
 REGISTRY_HIVE = constants.Constants.from_list ([

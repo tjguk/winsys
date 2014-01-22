@@ -102,7 +102,7 @@ class Constants (core._WinSysObject):
     return "<Constants: %r>" % self._dict
 
   def __str__ (self):
-    return "<Constants: %s>" % ", ".join (self._dict.iterkeys ())
+    return "<Constants: %s>" % ", ".join (self._dict.keys ())
 
   def init (self, dict_initialiser):
     items = list (dict_initialiser)
@@ -198,7 +198,7 @@ class Constants (core._WinSysObject):
   items = items
 
   def keys (self):
-    return self._dict.iterkeys ()
+    return self._dict.keys ()
   iterkeys = keys
 
   def __iter__ (self):
@@ -243,7 +243,7 @@ class Constants (core._WinSysObject):
     """
     if isinstance (patterns, basestring):
       patterns = [patterns]
-    for name in self._dict.iterkeys ():
+    for name in self._dict.keys ():
       for pattern in patterns:
         if fnmatch.fnmatch (name, pattern):
           yield name

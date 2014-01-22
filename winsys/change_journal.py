@@ -112,7 +112,7 @@ class USN_RECORD (Data):
 
 def main ():
   hVolume = CreateFile  (
-    "\\.\c:",
+    r"\\.\c:",
     GENERIC_READ,
     FILE_SHARE_READ | FILE_SHARE_WRITE,
     None,

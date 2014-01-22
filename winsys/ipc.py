@@ -558,8 +558,8 @@ def mailslot (mailslot, marshalled=True, message_size=0, timeout_ms=-1):
       serialiser = marshal.dumps, marshal.loads
     else:
       serialiser = _unserialised, _unserialised
-    if not re.match ("\\\\[^\\]+\\mailslot\\", unicode (mailslot), re.UNICODE):
-      mailslot = "\\.\mailslot\%s" % mailslot
+    if not re.match (r"\\\\[^\\]+\\mailslot\\", unicode (mailslot), re.UNICODE):
+      mailslot = r"\\.\mailslot\%s" % mailslot
     return Mailslot (mailslot, serialiser, message_size, timeout_ms)
 
 def event (name=None, initially_set=False, needs_manual_reset=False, security=None):
@@ -594,7 +594,7 @@ def mutex (name=None, take_initial_ownership=False):
 
 def open_pipe (name, mode="rw", timeout_ms=WAIT.INFINITE):
   if not name.startswith ("\\\\"):
-    name = "\\.\pipe\%s" % name
+    name = r"\\.\pipe\%s" % name
 
   result = win32pipe.WaitNamedPipe (name, timeout_ms)
   read_mode = 0
@@ -615,7 +615,7 @@ def pipe (name=None):
     return AnonymousPipe ()
   else:
     if not name.startswith ("\\\\"):
-      name = "\\.\pipe\%s" % name
+      name = r"\\.\pipe\%s" % name
     return NamedPipe (name)
 
 def wait (object, timeout_ms=WAIT.INFINITE):

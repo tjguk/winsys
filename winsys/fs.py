@@ -2153,7 +2153,7 @@ def volume (volume):
     return None
   elif isinstance (volume, Volume):
     return volume
-  elif volume.startswith ("\\?\Volume"):
+  elif volume.startswith (r"\\?\Volume"):
     return Volume (volume)
   else:
     return Volume (wrapped (win32file.GetVolumeNameForVolumeMountPoint, volume.rstrip (sep) + sep))

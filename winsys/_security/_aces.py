@@ -5,6 +5,8 @@ import os, sys
 import operator
 
 import win32security
+
+from winsys._compat import *
 from winsys import core, exc, utils, accounts, constants
 
 __all__ = ['x_ace', 'x_unknown_value', 'ACE_FLAG', 'ACE_TYPE', 'DACE_TYPE', 'SACE_TYPE', 'ACE', 'DACE', 'SACE', 'dace', 'sace', 'ace']
