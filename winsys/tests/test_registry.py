@@ -229,7 +229,6 @@ class TestRegistry (unittest.TestCase):
     finally:
       registry.delete (key1)
 
-  #~ @unittest.skip("2and3")
   def test_copy_exists_empty (self):
     key0 = registry.registry (TEST_KEY)
     key1 = registry.registry (TEST_KEY1)
@@ -242,7 +241,6 @@ class TestRegistry (unittest.TestCase):
     finally:
       key1.delete ()
 
-  #~ @unittest.skip("2and3")
   def test_copy_exists_not_empty_keys (self):
     key0 = registry.registry (TEST_KEY)
     key1 = registry.registry (TEST_KEY1)
@@ -256,7 +254,6 @@ class TestRegistry (unittest.TestCase):
     finally:
       key1.delete ()
 
-  #~ @unittest.skip("2and3")
   def test_copy_exists_not_empty_values (self):
     key0 = registry.registry (TEST_KEY)
     key1 = registry.registry (TEST_KEY1)
@@ -272,7 +269,6 @@ class TestRegistry (unittest.TestCase):
     finally:
       key1.delete ()
 
-  #~ @unittest.skip("2and3")
   def test_create_does_not_exist (self):
     key1 = registry.registry (TEST_KEY1)
     self.assertFalse(key1)
@@ -282,7 +278,6 @@ class TestRegistry (unittest.TestCase):
     finally:
       key1.delete ()
 
-  #~ @unittest.skip("2and3")
   def test_create_does_not_exist_deep (self):
     key1 = registry.registry (TEST_KEY1)
     key2 = registry.registry (TEST_KEY2)
@@ -402,7 +397,6 @@ class TestRegistry (unittest.TestCase):
   def test_Registry_pyobject (self):
     self.assertIsInstance(registry.registry (TEST_KEY).pyobject (), pywintypes.HANDLEType)
 
-  #~ @unittest.skip("2and3")
   def test_Registry_pyobject_not_exists (self):
     with self.assertRaises (registry.exc.x_not_found):
       self.assertFalse(registry.registry (TEST_KEY + "xxx"))
@@ -437,7 +431,6 @@ class TestRegistry (unittest.TestCase):
     finally:
       win32api.RegDeleteKey (win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"Software"), "winsys1")
 
-  #~ @unittest.skip("2and3")
   def test_Registry_nonzero_not_exists (self):
     try:
       win32api.RegOpenKey (win32con.HKEY_CURRENT_USER, r"Software\winsys1")

@@ -67,7 +67,6 @@ class TestEventLogs (unittest.TestCase):
   #
   # Event Source
   #
-  @unittest.skipIf(sys.version_info[0] > 2, "2and3")
   def test_create_source (self):
     log_name = "System"
     guid = "_winsys-test_create_source-%s" % uuid.uuid1 ()
@@ -80,7 +79,6 @@ class TestEventLogs (unittest.TestCase):
       source.delete ()
       self.assertFalse (bool (self.registry_root + log_name + guid))
 
-  @unittest.skipIf(sys.version_info[0] > 2, "2and3")
   def test_create_source_at_default (self):
     guid = "_winsys-test_create_source_at_default-%s" % uuid.uuid1 ()
     try:
@@ -92,16 +90,14 @@ class TestEventLogs (unittest.TestCase):
       source.delete ()
       self.assertFalse (bool (self.registry_root + event_logs.DEFAULT_LOG_NAME + guid))
 
-  @unittest.skip("2and3")
   def test_event_sources (self):
     log_name = "System"
-    self.assertEquals (
+    self.assertEqual (
       set (s.name for s in event_logs.event_sources (log_name)),
       set (r.name for r in self.registry_root + log_name)
     )
     self.assertTrue (all (isinstance (s, event_logs.EventSource) for s in event_logs.event_sources (log_name)))
 
-  @unittest.skip("2and3")
   def test_event_source_from_event_source (self):
     for s in event_logs.event_sources ():
       self.assertTrue (isinstance (s, event_logs.EventSource))
@@ -148,7 +144,7 @@ class TestEventLogs (unittest.TestCase):
   # Event logs
   #
   def test_event_logs (self):
-    self.assertEquals (
+    self.assertEqual (
       set (s.name for s in event_logs.event_logs ()),
       set (r.name for r in self.registry_root.keys ())
     )
@@ -185,7 +181,7 @@ class TestEventLogs (unittest.TestCase):
       log.log_event (source, message="hello")
       self.assertNotEquals (win32evtlog.GetNumberOfEventLogRecords (hLog), 0)
       log.clear ()
-      self.assertEquals (win32evtlog.GetNumberOfEventLogRecords (hLog), 0)
+      self.assertEqual (win32evtlog.GetNumberOfEventLogRecords (hLog), 0)
     finally:
       win32evtlog.CloseEventLog (hLog)
       source.delete ()
@@ -200,7 +196,7 @@ class TestEventLogs (unittest.TestCase):
       log.log_event (source, message="hello")
       self.assertNotEquals (win32evtlog.GetNumberOfEventLogRecords (hLog), 0)
       log.clear ()
-      self.assertEquals (win32evtlog.GetNumberOfEventLogRecords (hLog), 0)
+      self.assertEqual (win32evtlog.GetNumberOfEventLogRecords (hLog), 0)
     finally:
       win32evtlog.CloseEventLog (hLog)
       source.delete ()

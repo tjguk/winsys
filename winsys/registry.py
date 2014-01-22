@@ -299,7 +299,7 @@ class Registry (core._WinSysObject):
   * F - Full Control
   * S - Security
   """
-  DEFAULT_ACCESS = "F"
+  DEFAULT_ACCESS = "R"
 
   def __init__ (self, moniker, access=DEFAULT_ACCESS):
     core._WinSysObject.__init__ (self)
