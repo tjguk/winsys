@@ -7,6 +7,7 @@ import winerror
 import win32api
 import win32security
 
+from winsys._compat import *
 from winsys import constants, core, exc, utils
 
 __all__ = ['PRIVILEGE_ATTRIBUTE', 'PRIVILEGE', 'Privilege', 'privilege', 'x_privilege', 'x_privilege_no_token']

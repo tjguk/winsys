@@ -13,6 +13,7 @@ import win32evtlog
 import win32evtlogutil
 import pywintypes
 
+from winsys._compat import *
 from winsys import accounts, constants, core, exc, registry, utils
 
 EVENTLOG_READ = constants.Constants.from_pattern ("EVENTLOG_*_READ", namespace=win32evtlog)

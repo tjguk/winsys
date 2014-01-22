@@ -59,10 +59,13 @@ class _WinSysObject (object):
   def __le__ (self, other):
     return self < other or self == other
 
-
 class Unset (object):
   def __repr__ (self):
     return "<Unset>"
+  def __str__(self):
+    return "<Unset>"
+  def __bool__(self):
+    return False
   def __nonzero__ (self):
     return False
 

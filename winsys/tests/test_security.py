@@ -369,7 +369,7 @@ class TestSecurity (unittest.TestCase):
     sd.SetSecurityDescriptorSacl (1, sacl, 0)
     assert equal (sd, s)
 
-  @unittest.skip("Skipping for now until we understand why it breaks")
+  @unittest.skip("2and3")
   def test_Security_break_dacl_inheritance_no_copy (self):
     with self.test_file () as filepath:
       s = security.security (filepath, options=OPTIONS)

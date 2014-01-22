@@ -39,6 +39,7 @@ import winerror
 # classes, constants, etc. However, they may each be
 # imported individually if needs be.
 #
+from winsys._compat import *
 from winsys import constants, core, exc, utils
 from winsys._security.core import REVISION
 from winsys._security._tokens import *

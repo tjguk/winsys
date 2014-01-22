@@ -9,6 +9,8 @@ import struct
 import threading
 import winxpgui as win32gui
 
+from winsys._compat import *
+
 #
 # Small support functions
 #
@@ -94,7 +96,7 @@ def dumped_list (l, level, indent=2):
   return dumped ("\n".join (unicode (i)  for i in l), level, indent)
 
 def dumped_dict (d, level, indent=2):
-  return dumped ("\n".join ("%s => %r" % (k, v) for (k, v) in d.iteritems ()), level, indent)
+  return dumped ("\n".join ("%s => %r" % (k, v) for (k, v) in d.items ()), level, indent)
 
 def dumped_flags (f, lookups, level, indent=2):
   return dumped ("\n".join (lookups.names_from_value (f)) or "None", level, indent)

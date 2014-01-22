@@ -882,6 +882,7 @@ class Entry (FilePath, core._WinSysObject):
     it can be checked with if fs.entry ("..."):
     """
     return (wrapped (win32file.GetFileAttributesW, self._normpath) != -1)
+  __bool__ = __nonzero__
 
   @classmethod
   def factory (cls, filepath):
@@ -2281,6 +2282,7 @@ class _DirWatcher (object):
 
       if self._changes:
         return self._changes.popleft ()
+  __next__ = next
 
   def stop (self):
     self.hDir.close ()

@@ -32,7 +32,7 @@ class LogonSession (core._WinSysObject):
     core._WinSysObject.__init__ (self)
     self._session_id = session_id
     self._session_info = dict (session_id = self._session_id)
-    for k, v in wrapped (win32security.LsaGetLogonSessionData, session_id).iteritems ():
+    for k, v in wrapped (win32security.LsaGetLogonSessionData, session_id).items ():
       mapper = self._MAP.get (k)
       if mapper: v = mapper (v)
       self._session_info[k] = v
