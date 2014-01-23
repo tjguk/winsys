@@ -35,34 +35,34 @@ import win32netcon
 import winioctlcon
 
 
-if not hasattr (winerror, 'ERROR_BAD_RECOVERY_POLICY'):
+if not hasattr(winerror, 'ERROR_BAD_RECOVERY_POLICY'):
     winerror.ERROR_BAD_RECOVERY_POLICY = 6012
 
 from winsys._compat import *
 from winsys import constants, core, exc, handles, security as security_, utils, _kernel32
 
-sep = unicode (os.sep)
+sep = unicode(os.sep)
 seps = "/\\"
 
-class x_fs (exc.x_winsys):
+class x_fs(exc.x_winsys):
     "Base for all fs-related exceptions"
 
-class x_no_such_file (x_fs):
+class x_no_such_file(x_fs):
     "Raised when a file could not be found"
 
-class x_too_many_files (x_fs):
+class x_too_many_files(x_fs):
     "Raised when more than one file matches a name"
 
-class x_invalid_name (x_fs):
+class x_invalid_name(x_fs):
     "Raised when a filename contains invalid characters"
 
-class x_no_certificate (x_fs):
+class x_no_certificate(x_fs):
     "Raised when encryption is attempted without a certificate"
 
-class x_not_ready (x_fs):
+class x_not_ready(x_fs):
     "Raised when a device is not ready"
 
-class x_sharing_violation (x_fs):
+class x_sharing_violation(x_fs):
     "Raised when a sharing violation occurs"
 
 WINERROR_MAP = {
@@ -77,58 +77,58 @@ WINERROR_MAP = {
     winerror.ERROR_SHARING_VIOLATION : x_sharing_violation,
     2310 : x_no_such_file,
 }
-wrapped = exc.wrapper (WINERROR_MAP, x_fs)
+wrapped = exc.wrapper(WINERROR_MAP, x_fs)
 
-def ignore_access_errors (exc_info):
+def ignore_access_errors(exc_info):
     return exc_info[0] is exc.x_access_denied
 
 PyHANDLE = pywintypes.HANDLEType
 
-FILE_ACCESS = constants.Constants.from_pattern ("FILE_*", namespace=ntsecuritycon)
-FILE_ACCESS.update (constants.STANDARD_ACCESS)
-FILE_ACCESS.update (constants.GENERIC_ACCESS)
-FILE_ACCESS.update (constants.ACCESS)
-FILE_ACCESS.doc ("File-specific access rights")
+FILE_ACCESS = constants.Constants.from_pattern("FILE_*", namespace=ntsecuritycon)
+FILE_ACCESS.update(constants.STANDARD_ACCESS)
+FILE_ACCESS.update(constants.GENERIC_ACCESS)
+FILE_ACCESS.update(constants.ACCESS)
+FILE_ACCESS.doc("File-specific access rights")
 
-FILE_SHARE = constants.Constants.from_pattern ("FILE_SHARE_*", namespace=win32file)
-FILE_SHARE.doc ("Ways of sharing a file for reading, writing, &c.")
+FILE_SHARE = constants.Constants.from_pattern("FILE_SHARE_*", namespace=win32file)
+FILE_SHARE.doc("Ways of sharing a file for reading, writing, &c.")
 
-FILE_CREATION = constants.Constants.from_list ([
+FILE_CREATION = constants.Constants.from_list([
     "CREATE_ALWAYS",
     "CREATE_NEW",
     "OPEN_ALWAYS",
     "OPEN_EXISTING",
     "TRUNCATE_EXISTING"
 ], namespace=win32con)
-FILE_CREATION.doc ("Options when creating a file")
+FILE_CREATION.doc("Options when creating a file")
 
-FILE_FLAG = constants.Constants.from_pattern ("FILE_FLAG_*", namespace=win32con)
-FILE_FLAG.doc ("File flags")
+FILE_FLAG = constants.Constants.from_pattern("FILE_FLAG_*", namespace=win32con)
+FILE_FLAG.doc("File flags")
 
-FILE_NOTIFY_CHANGE = constants.Constants.from_pattern ("FILE_NOTIFY_CHANGE_*", namespace=win32con)
-FILE_NOTIFY_CHANGE.doc ("Notification types to watch for when a file changes")
-FILE_ACTION = constants.Constants.from_dict (dict (
+FILE_NOTIFY_CHANGE = constants.Constants.from_pattern("FILE_NOTIFY_CHANGE_*", namespace=win32con)
+FILE_NOTIFY_CHANGE.doc("Notification types to watch for when a file changes")
+FILE_ACTION = constants.Constants.from_dict(dict(
     ADDED = 1,
     REMOVED = 2,
     MODIFIED = 3,
     RENAMED_OLD_NAME = 4,
     RENAMED_NEW_NAME = 5
 ))
-FILE_ACTION.doc ("Results of a file change")
-FILE_ATTRIBUTE = constants.Constants.from_pattern ("FILE_ATTRIBUTE_*", namespace=win32file)
-FILE_ATTRIBUTE.update (dict (
+FILE_ACTION.doc("Results of a file change")
+FILE_ATTRIBUTE = constants.Constants.from_pattern("FILE_ATTRIBUTE_*", namespace=win32file)
+FILE_ATTRIBUTE.update(dict(
     ENCRYPTED=0x00004000,
     REPARSE_POINT=0x00000400,
     SPARSE_FILE=0x00000200,
     VIRTUAL=0x00010000,
     NOT_CONTENT_INDEXES=0x00002000,
 ))
-FILE_ATTRIBUTE.doc ("Attributes applying to any file")
-PROGRESS = constants.Constants.from_pattern ("PROGRESS_*", namespace=win32file)
-PROGRESS.doc ("States within a file move/copy progress")
-MOVEFILE = constants.Constants.from_pattern ("MOVEFILE_*", namespace=win32file)
-MOVEFILE.doc ("Options when moving a file")
-VOLUME_FLAG = constants.Constants.from_dict (dict (
+FILE_ATTRIBUTE.doc("Attributes applying to any file")
+PROGRESS = constants.Constants.from_pattern("PROGRESS_*", namespace=win32file)
+PROGRESS.doc("States within a file move/copy progress")
+MOVEFILE = constants.Constants.from_pattern("MOVEFILE_*", namespace=win32file)
+MOVEFILE.doc("Options when moving a file")
+VOLUME_FLAG = constants.Constants.from_dict(dict(
     FILE_CASE_SENSITIVE_SEARCH            = 0x00000001,
     FILE_CASE_PRESERVED_NAMES             = 0x00000002,
     FILE_UNICODE_ON_DISK                        = 0x00000004,
@@ -146,18 +146,18 @@ VOLUME_FLAG = constants.Constants.from_dict (dict (
     FILE_SEQUENTIAL_WRITE_ONCE            = 0x00100000,
     FILE_SUPPORTS_TRANSACTIONS            = 0x00200000
 ), pattern="FILE_*")
-VOLUME_FLAG.doc ("Characteristics of a volume")
-DRIVE_TYPE = constants.Constants.from_pattern ("DRIVE_*", namespace=win32file)
-DRIVE_TYPE.doc ("Types of drive")
-COMPRESSION_FORMAT = constants.Constants.from_dict (dict (
+VOLUME_FLAG.doc("Characteristics of a volume")
+DRIVE_TYPE = constants.Constants.from_pattern("DRIVE_*", namespace=win32file)
+DRIVE_TYPE.doc("Types of drive")
+COMPRESSION_FORMAT = constants.Constants.from_dict(dict(
     NONE = 0x0000,
     DEFAULT = 0x0001,
     LZNT1 = 0x0002
 ))
-COMPRESSION_FORMAT.doc ("Ways in which a file can be compressed")
-FSCTL = constants.Constants.from_pattern ("FSCTL_*", namespace=winioctlcon)
-FSCTL.doc ("Types of fsctl operation")
-STYPE = constants.Constants.from_pattern ("STYPE_*", namespace=win32netcon)
+COMPRESSION_FORMAT.doc("Ways in which a file can be compressed")
+FSCTL = constants.Constants.from_pattern("FSCTL_*", namespace=winioctlcon)
+FSCTL.doc("Types of fsctl operation")
+STYPE = constants.Constants.from_pattern("STYPE_*", namespace=win32netcon)
 
 PyHANDLE = pywintypes.HANDLEType
 
@@ -176,7 +176,7 @@ PATHSEG = "(" + LEGAL_FILECHARS + ")" + sep * 2 + "?"
 PATHSEGS = "(?:%s)*" % PATHSEG
 FILEPATH = PREFIX + PATHSEGS
 
-def get_parts (filepath):
+def get_parts(filepath):
     """Helper function to regularise a file path and then
     to pick out its drive and path components.
 
@@ -219,32 +219,32 @@ def get_parts (filepath):
 
         from winsys import fs
         filepath = "c:/temp/abc.txt"
-        parts = fs.get_parts (filepath)
-        assert parts[0] + "\\".join (parts[1:]) == filepath
+        parts = fs.get_parts(filepath)
+        assert parts[0] + "\\".join(parts[1:]) == filepath
 
     The exception is when a root (UNC or volume) is given without
     a trailing slash. This is added in. Or if a directory is given
     with a trailing slash. This is stripped off.
     """
-    filepath = filepath.replace ("/", sep)
-    prefix_match = re.match (PREFIX, filepath)
+    filepath = filepath.replace("/", sep)
+    prefix_match = re.match(PREFIX, filepath)
 
     if prefix_match:
-        prefix = prefix_match.group (1)
-        rest = filepath[len (prefix):].rstrip (sep)
+        prefix = prefix_match.group(1)
+        rest = filepath[len(prefix):].rstrip(sep)
         #
         # Special-case the un-rooted drive letter
         # so that paths of the form <drive>:<path>
         # are still valid, indicating <path> in the
         # current directory on <drive>
         #
-        if prefix.startswith ("\\") or not prefix.endswith (":"):
-            prefix = prefix.rstrip (sep) + sep
-        return [prefix] + rest.split (sep)
+        if prefix.startswith("\\") or not prefix.endswith(":"):
+            prefix = prefix.rstrip(sep) + sep
+        return [prefix] + rest.split(sep)
     else:
-        return [""] + filepath.split (sep)
+        return [""] + filepath.split(sep)
 
-def normalised (filepath):
+def normalised(filepath):
     """Convert any path or path-like object into the
     length-unlimited unicode equivalent. This should avoid
     issues with maximum path length and the like.
@@ -254,19 +254,19 @@ def normalised (filepath):
     # for the root directory and a non-sep-terminated
     # string for all other paths.
     #
-    filepath = unicode (filepath)
-    if filepath.startswith (2 * sep):
+    filepath = unicode(filepath)
+    if filepath.startswith(2 * sep):
         return filepath
     else:
         is_dir = filepath[-1] in seps
-        abspath = os.path.abspath (filepath)
-        return ("\\\\?\\" + abspath) + (sep if is_dir and not abspath.endswith (sep) else "")
+        abspath = os.path.abspath(filepath)
+        return ("\\\\?\\" + abspath) + (sep if is_dir and not abspath.endswith(sep) else "")
 
 
-def read (handle):
-    wrapped (win32file.ReadFile, handle)
+def read(handle):
+    wrapped(win32file.ReadFile, handle)
 
-def handle (filepath, write=False, exclusive=False, async=False, attributes=None, sec=None):
+def handle(filepath, write=False, exclusive=False, async=False, attributes=None, sec=None):
     """Return a file handle either for querying
     (the default case) or for writing -- including writing directories
 
@@ -275,14 +275,14 @@ def handle (filepath, write=False, exclusive=False, async=False, attributes=None
     :param attributes: anything accepted by :const:`FILE_ATTRIBUTE`
     :return: an open file handle for reading or writing, including directories
     """
-    attributes = FILE_ATTRIBUTE.constant (attributes)
+    attributes = FILE_ATTRIBUTE.constant(attributes)
     if attributes is None:
         attributes = FILE_ATTRIBUTE.NORMAL | FILE_FLAG.BACKUP_SEMANTICS
     if async:
         attributes |= FILE_FLAG.OVERLAPPED
-    return wrapped (
+    return wrapped(
         win32file.CreateFile,
-        normalised (filepath),
+        normalised(filepath),
         (FILE_ACCESS.READ | FILE_ACCESS.WRITE) if write else FILE_ACCESS.READ,
         0 if exclusive else (FILE_SHARE.READ | FILE_SHARE.WRITE) if write else FILE_SHARE.READ,
         sec,
@@ -292,26 +292,26 @@ def handle (filepath, write=False, exclusive=False, async=False, attributes=None
     )
 
 @contextlib.contextmanager
-def Handle (handle_or_filepath, write=False):
+def Handle(handle_or_filepath, write=False):
     """Return the handle passed or on newly-created for
     the filepath, making sure to close it afterwards.
 
     :param handle_or_filepath: an existing handle or something accepted by :func:`handle`
     :param write: passed through to :func:`handle`
     """
-    if isinstance (handle_or_filepath, PyHANDLE):
+    if isinstance(handle_or_filepath, PyHANDLE):
         handle_supplied = True
         hFile = handle_or_filepath
     else:
         handle_supplied = False
-        hFile = handle (handle_or_filepath, write)
+        hFile = handle(handle_or_filepath, write)
 
     yield hFile
 
     if not handle_supplied:
-        hFile.close ()
+        hFile.close()
 
-def relative_to (filepath1, filepath2):
+def relative_to(filepath1, filepath2):
     """Return filepath2 relative to filepath1. Both names
     are normalised first.
 
@@ -333,9 +333,9 @@ def relative_to (filepath1, filepath2):
     # filepath2 must always be a directory; filepath1 may
     # be a file or a directory.
     #
-    return utils.relative_to (filepath1, filepath2.rstrip (seps) + sep)
+    return utils.relative_to(filepath1, filepath2.rstrip(seps) + sep)
 
-class FilePath (unicode):
+class FilePath(unicode):
     """A unicode subtype which knows about path structures on Windows.
     The path itself need not exist on any filesystem, but it has to match
     the rules which would make it possible.
@@ -371,8 +371,8 @@ class FilePath (unicode):
     a.txt                             _                    a.txt         a.txt         _                 _                     x_fs                a         .txt
     =================== ========== ========= ========= ========= =========== =========== ===== ====
     """
-    def __new__ (meta, filepath):
-        fp = unicode.__new__ (meta, filepath.replace ("/", sep))
+    def __new__(meta, filepath):
+        fp = unicode.__new__(meta, filepath.replace("/", sep))
         fp._parts = None
         fp._root = None
         fp._filename = None
@@ -384,135 +384,135 @@ class FilePath (unicode):
         fp._ext = None
         return fp
 
-    def dump (self, level=0):
-        sys.stdout.write (self.dumped (level=level))
+    def dump(self, level=0):
+        sys.stdout.write(self.dumped(level=level))
 
-    def dumped (self, level=0):
+    def dumped(self, level=0):
         output = []
-        output.append (self)
-        output.append ("parts: %s" % self.parts)
-        output.append ("root: %s" % self.root)
-        output.append ("dirname: %s" % self.dirname)
-        output.append ("name: %s" % self.name)
-        output.append ("path: %s" % self.path)
-        output.append ("filename: %s" % self.filename)
-        output.append ("base: %s" % self.base)
-        output.append ("ext: %s" % self.ext)
+        output.append(self)
+        output.append("parts: %s" % self.parts)
+        output.append("root: %s" % self.root)
+        output.append("dirname: %s" % self.dirname)
+        output.append("name: %s" % self.name)
+        output.append("path: %s" % self.path)
+        output.append("filename: %s" % self.filename)
+        output.append("base: %s" % self.base)
+        output.append("ext: %s" % self.ext)
         if self.root and self.parent:
-            output.append ("parent: %s" % self.parent)
-        return utils.dumped ("\n".join (output), level)
+            output.append("parent: %s" % self.parent)
+        return utils.dumped("\n".join(output), level)
 
     @classmethod
-    def factory (cls, filepath):
+    def factory(cls, filepath):
         """Designed to be redefined in a subclass so that the :meth:`__add__` and :meth:`__radd__`
         methods can return the appropriate type.
         """
-        return cls (filepath)
+        return cls(filepath)
 
-    def __add__ (self, other):
+    def __add__(self, other):
         """Have FilepathA + FilepathB return FilepathA/FilepathB::
 
         from winsys import fs
 
-        fs.dir (r"c:\windows") + "notepad.exe"
-        # returns fs.File ("c:/windows/notepad.exe")
+        fs.dir(r"c:\windows") + "notepad.exe"
+        # returns fs.File("c:/windows/notepad.exe")
         """
-        return self.__class__.factory (os.path.join (unicode (self), unicode (other)))
+        return self.__class__.factory(os.path.join(unicode(self), unicode(other)))
 
-    def __eq__ (self, other):
+    def __eq__(self, other):
         """Files compare equal if their case-insensitive paths are equal
         """
-        return self.lower () == unicode (other).lower ()
+        return self.lower() == unicode(other).lower()
 
-    def __hash__ (self):
+    def __hash__(self):
         """Entries hash equal equal if their case-insensitive paths hash equal
         """
-        return hash (self.lower ())
+        return hash(self.lower())
 
-    def __repr__ (self):
+    def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self)
 
-    def __radd__ (self, other):
-        return self.__class__.factory (os.path.join (unicode (other), unicode (self)))
+    def __radd__(self, other):
+        return self.__class__.factory(os.path.join(unicode(other), unicode(self)))
 
-    def _get_parts (self):
+    def _get_parts(self):
         if self._parts is None:
-            self._parts = get_parts (self)
+            self._parts = get_parts(self)
         return self._parts
-    parts = property (_get_parts)
+    parts = property(_get_parts)
 
-    def _get_root (self):
+    def _get_root(self):
         if self._root is None:
-            self._root = self.__class__.factory (self.parts[0])
+            self._root = self.__class__.factory(self.parts[0])
         return self._root
-    root = property (_get_root)
+    root = property(_get_root)
 
-    def _get_filename (self):
+    def _get_filename(self):
         if self._filename is None:
             self._filename = self.parts[-1]
         return self._filename
-    filename = property (_get_filename)
+    filename = property(_get_filename)
 
-    def _get_dirname (self):
+    def _get_dirname(self):
         if self._dirname is None:
-            self._dirname = sep.join (self.parts[1:-1])
+            self._dirname = sep.join(self.parts[1:-1])
         return self._dirname
-    dirname = property (_get_dirname)
+    dirname = property(_get_dirname)
 
-    def _get_path (self):
+    def _get_path(self):
         if self._path is None:
-            self._path = self.__class__.factory ((self.root or "") + self.dirname)
+            self._path = self.__class__.factory((self.root or "") + self.dirname)
         return self._path
-    path = property (_get_path)
+    path = property(_get_path)
 
-    def _get_parent (self):
-        if self.is_relative ():
-            raise x_fs (None, "FilePath.parent", "Cannot find parent for relative path")
+    def _get_parent(self):
+        if self.is_relative():
+            raise x_fs(None, "FilePath.parent", "Cannot find parent for relative path")
         if self._parent is None:
             parent_dir = [p for p in self.parts if p][:-1]
             if parent_dir:
-                self._parent = self.__class__.factory (parent_dir[0] + sep.join (parent_dir[1:]))
+                self._parent = self.__class__.factory(parent_dir[0] + sep.join(parent_dir[1:]))
             else:
                 self._parent = None
         return self._parent
-    parent = property (_get_parent)
+    parent = property(_get_parent)
 
-    def _get_name (self):
+    def _get_name(self):
         if self._name is None:
             self._name = self.parts[-1] or self.parts[-2]
         return self._name
-    name = property (_get_name)
+    name = property(_get_name)
 
-    def _get_base (self):
+    def _get_base(self):
         if self._base is None:
-            self._base = os.path.splitext (self.filename)[0]
+            self._base = os.path.splitext(self.filename)[0]
         return self._base
-    base = property (_get_base)
+    base = property(_get_base)
 
-    def _get_ext (self):
+    def _get_ext(self):
         if self._ext is None:
-            self._ext = os.path.splitext (self.filename)[1]
+            self._ext = os.path.splitext(self.filename)[1]
         return self._ext
-    ext = property (_get_ext)
+    ext = property(_get_ext)
 
-    def is_relative (self):
+    def is_relative(self):
         """A filepath is relative if it has no root or if its
         root is a drive letter only (without a directory backslash)."""
-        return not self.root.endswith (sep)
+        return not self.root.endswith(sep)
 
-    def relative_to (self, other):
+    def relative_to(self, other):
         """Return this filepath as relative to another. cf :func:`utils.relative_to`
         """
-        return self.__class__.factory (relative_to (self, unicode (other)))
+        return self.__class__.factory(relative_to(self, unicode(other)))
 
-    def absolute (self):
+    def absolute(self):
         """Return an absolute version of the current FilePath, whether
         relative or not. Use :func:`os.path.abspath` semantics.
         """
-        return self.__class__.factory (os.path.abspath (self))
+        return self.__class__.factory(os.path.abspath(self))
     abspath = absolute
 
-    def changed (self, root=None, dirname=None, filename=None, base=None, infix=None, ext=None):
+    def changed(self, root=None, dirname=None, filename=None, base=None, infix=None, ext=None):
         """Return a new :class:`FilePath` with one or more parts changed. This is particularly
         convenient for, say, changing the extension of a file or producing a version on
         another path, eg::
@@ -520,90 +520,90 @@ class FilePath (unicode):
             from winsys import fs, shell
 
             BACKUP_DRIVE = "D:\\"
-            for f in fs.flat (shell.special_folder ("personal"), "*.doc"):
-                f.copy (f.changed (root=BACKUP_DRIVE))
+            for f in fs.flat(shell.special_folder("personal"), "*.doc"):
+                f.copy(f.changed(root=BACKUP_DRIVE))
         """
         if filename and (base or ext or infix):
-            raise x_fs (None, "FilePath.changed", "You cannot change filename *and* base or ext or infix")
+            raise x_fs(None, "FilePath.changed", "You cannot change filename *and* base or ext or infix")
 
-        if ext: ext = "." + ext.lstrip (".")
+        if ext: ext = "." + ext.lstrip(".")
         parts = self.parts
         _filename = parts[-1]
-        _base, _ext = os.path.splitext (_filename)
+        _base, _ext = os.path.splitext(_filename)
         if not (base or ext):
-            base, ext = os.path.splitext (filename or _filename)
+            base, ext = os.path.splitext(filename or _filename)
         if infix:
             base += infix
-        return self.__class__.from_parts (root or parts[0], dirname or sep.join (parts[1:-1]), base or _base, ext or _ext)
+        return self.__class__.from_parts(root or parts[0], dirname or sep.join(parts[1:-1]), base or _base, ext or _ext)
 
     @classmethod
-    def from_parts (cls, root, dirname, base, ext):
+    def from_parts(cls, root, dirname, base, ext):
         """Recreate a filepath from its constituent parts. No real validation is done;
         it is assumed that the parameters are valid parts of a filepath.
         """
-        return cls (root + sep.join (os.path.normpath (dirname).split (sep) + [base+ext]))
+        return cls(root + sep.join(os.path.normpath(dirname).split(sep) + [base+ext]))
 
 filepath = FilePath
 
-class Drive (core._WinSysObject):
+class Drive(core._WinSysObject):
     """Wraps a drive letter, offering access to its :attr:`Drive.volume`
     and the ability to :meth:`mount` or :meth:`dismount` it on a particular
     volume.
     """
 
-    def __init__ (self, drive):
-        self.name = drive.lower ().rstrip (seps).rstrip (":") + ":" + sep
-        self.type = wrapped (win32file.GetDriveTypeW, self.name)
+    def __init__(self, drive):
+        self.name = drive.lower().rstrip(seps).rstrip(":") + ":" + sep
+        self.type = wrapped(win32file.GetDriveTypeW, self.name)
 
-    def as_string (self):
+    def as_string(self):
         return "Drive %s" % self.name
 
-    def _get_root (self):
+    def _get_root(self):
         """Return a :class:`fs.Dir` object corresponding to the
         root directory of this drive.
         """
-        return Dir (self.name)
-    root = property (_get_root)
+        return Dir(self.name)
+    root = property(_get_root)
 
-    def _get_volume (self):
+    def _get_volume(self):
         """Any volume currently mounted on this drive root. NB A drive
         can be referred to without a volume mounted, eg to call its :meth:`mount`
         method.
         """
         try:
-            return volume (self.name)
+            return volume(self.name)
         except x_no_such_file:
             return None
-    volume = property (_get_volume)
+    volume = property(_get_volume)
 
-    def mount (self, vol):
+    def mount(self, vol):
         """Mount the specified volume in this drive.
 
         :param vol: anything accepted by :func:`volume`
         :returns: `self`
         """
-        self.root.mount (vol)
+        self.root.mount(vol)
         return self
 
-    def dismount (self):
+    def dismount(self):
         """Dismount this drive from its volume
 
         :returns: `self`
         """
-        self.root.dismount ()
+        self.root.dismount()
         return self
 
-    def dumped (self, level):
+    def dumped(self, level):
         output = []
-        output.append ("name: %s" % self.name)
-        output.append ("type (DRIVE_TYPE): %s" % DRIVE_TYPE.name_from_value (self.type))
+        output.append("name: %s" % self.name)
+        output.append("type (DRIVE_TYPE): %s" % DRIVE_TYPE.name_from_value(self.type))
         if self.volume:
-            output.append ("volume:\n%s" % self.volume.dumped (level))
-        mount_points = [(mount_point, volume) for (mount_point, volume) in mounts () if mount_point.startswith (self.name)]
-        output.append ("mount_points:\n%s" % utils.dumped_list (("%s => %s" % i for i in mount_points), level))
-        return utils.dumped ("\n".join (output), level)
+            output.append("volume:\n%s" % self.volume.dumped(level))
+        mount_points = [(mount_point, volume) for (mount_point, volume) in mounts() if mount_point.startswith(self.name)]
+        output.append("mount_points:\n%s" % utils.dumped_list(("%s => %s" % i for i in mount_points), level))
+        return utils.dumped("\n".join(output), level)
 
-class Volume (core._WinSysObject):
+class Volume(core._WinSysObject):
     """Wraps a filesystem volume, giving access to useful
     information such as the filesystem and a list of drives
     mounted on it. Also offers the ability to mount or dismount.
@@ -618,155 +618,155 @@ class Volume (core._WinSysObject):
     * :attr:`mounts`
     """
 
-    def __init__ (self, volume):
+    def __init__(self, volume):
         self.name = volume
 
-    def as_string (self):
+    def as_string(self):
         return self.name
 
-    def _get_info (self):
+    def _get_info(self):
         try:
-            return wrapped (win32api.GetVolumeInformation, self.name)
+            return wrapped(win32api.GetVolumeInformation, self.name)
         except x_not_ready:
             return [None, None, None, 0, None]
 
-    def _get_label (self):
+    def _get_label(self):
         """The user-assigned label set by the DOS LABEL command
         """
-        return self._get_info ()[0]
-    label = property (_get_label)
+        return self._get_info()[0]
+    label = property(_get_label)
 
-    def _get_serial_number (self):
+    def _get_serial_number(self):
         """A software serial number, not the hardware serial
         number assigned by the device manufacturer.
         """
-        value = self._get_info ()[1]
+        value = self._get_info()[1]
         if value is None:
             return None
         else:
-            serial_number, = struct.unpack ("L", struct.pack ("l", value))
+            serial_number, = struct.unpack("L", struct.pack("l", value))
             return serial_number
-    serial_number = property (_get_serial_number)
+    serial_number = property(_get_serial_number)
 
-    def _get_maximum_component_length (self):
+    def _get_maximum_component_length(self):
         """The maximum length any one component of the file system
         name can reach. For NTFS this is 255, meaning that any one
         segment of of the path can be no longer than 255 chars.
         """
-        return self._get_info ()[2]
-    maximum_component_length = property (_get_maximum_component_length)
+        return self._get_info()[2]
+    maximum_component_length = property(_get_maximum_component_length)
 
-    def _get_flags (self):
+    def _get_flags(self):
         """An attribute set corresponding to some combination of :const:`VOLUME_FLAG`"""
-        return constants.Attributes (self._get_info ()[3], VOLUME_FLAG)
-    flags = property (_get_flags)
+        return constants.Attributes(self._get_info()[3], VOLUME_FLAG)
+    flags = property(_get_flags)
 
-    def _get_file_system_name (self):
+    def _get_file_system_name(self):
         """The name of the file system present on this volume, eg NTFS"""
-        return self._get_info ()[4]
-    file_system_name = property (_get_file_system_name)
+        return self._get_info()[4]
+    file_system_name = property(_get_file_system_name)
 
-    def _get_mounts (self):
+    def _get_mounts(self):
         """An iterator of the :class:`Dir` objects which mount this volume. NB Windows
         restrictions mean that no more than one drive root directory can mount the same
         volume simultaneously. But it is possible for a volume to be mounted on, eg,
         e:\ and c:\mounts\e at the same time.
         """
-        return (dir (m) for m in wrapped (win32file.GetVolumePathNamesForVolumeName, self.name))
-    mounts = property (_get_mounts)
+        return (dir(m) for m in wrapped(win32file.GetVolumePathNamesForVolumeName, self.name))
+    mounts = property(_get_mounts)
 
-    def dumped (self, level):
+    def dumped(self, level):
         output = []
-        output.append ("volume: %s" % self.name)
-        output.append ("mounted at:\n%s" % utils.dumped_list (self.mounts, level))
-        output.append ("label: %s" % self.label)
+        output.append("volume: %s" % self.name)
+        output.append("mounted at:\n%s" % utils.dumped_list(self.mounts, level))
+        output.append("label: %s" % self.label)
         if self.serial_number is not None:
-            output.append ("serial_number: %08x" % self.serial_number)
-        output.append ("maximum_component_length: %s" % self.maximum_component_length)
-        output.append ("flags (VOLUME_FLAG):\n%s" % self.flags.dumped (level))
-        output.append ("file_system_name: %s" % self.file_system_name)
-        return utils.dumped ("\n".join (output), level)
+            output.append("serial_number: %08x" % self.serial_number)
+        output.append("maximum_component_length: %s" % self.maximum_component_length)
+        output.append("flags (VOLUME_FLAG):\n%s" % self.flags.dumped(level))
+        output.append("file_system_name: %s" % self.file_system_name)
+        return utils.dumped("\n".join(output), level)
 
-    def mount (self, filepath):
+    def mount(self, filepath):
         """Mount this volume on a particular filepath
 
         :param filepath: anything accepted by :func:`dir`
         """
-        return mount (filepath, self)
+        return mount(filepath, self)
 
-    def dismount (self, filepath):
+    def dismount(self, filepath):
         """Dismount this volume from a particular filepath
 
         :param filepath: anything accepted by :func:`dir`
         """
-        dir (filepath).dismount ()
+        dir(filepath).dismount()
 
-class Share (core._WinSysObject):
+class Share(core._WinSysObject):
     """Wraps a drive share
     """
 
-    def __init__ (self, servername, sharename):
-        self.servername = (servername or ".").strip ("\\")
-        self.sharename = sharename.strip ("\\")
+    def __init__(self, servername, sharename):
+        self.servername =(servername or ".").strip("\\")
+        self.sharename = sharename.strip("\\")
 
-    def as_string (self):
+    def as_string(self):
         return r"\\%s\%s" % (self.servername, self.sharename)
 
-    def __bool__ (self):
+    def __bool__(self):
         try:
-            wrapped (win32net.NetShareGetInfo, self.servername, self.sharename, 2)
+            wrapped(win32net.NetShareGetInfo, self.servername, self.sharename, 2)
         except x_no_such_file:
             return False
         else:
             return True
     __nonzero__ = __bool__
 
-    def __getattr__ (self, attr):
-        info = self._get_info ()
+    def __getattr__(self, attr):
+        info = self._get_info()
         try:
             return info[attr]
         except KeyError:
             raise AttributeError
 
-    def _get_info (self):
-        return wrapped (win32net.NetShareGetInfo, self.servername, self.sharename, 502)
+    def _get_info(self):
+        return wrapped(win32net.NetShareGetInfo, self.servername, self.sharename, 502)
 
-    def _get_path (self):
-        return dir (self._get_info ().get ("path"))
-    path = property (_get_path)
+    def _get_path(self):
+        return dir(self._get_info().get("path"))
+    path = property(_get_path)
 
-    def _get_security (self):
-        return security_.security (self._get_info ().get ('security_descriptor'))
-    security = property (_get_security)
+    def _get_security(self):
+        return security_.security(self._get_info().get('security_descriptor'))
+    security = property(_get_security)
 
-    def dumped (self, level=0, show_security=True):
+    def dumped(self, level=0, show_security=True):
         output = []
-        output.append (self.as_string ())
-        output.append ("type: (%d) %s" % (self.type, STYPE.names_from_value (self.type)))
-        output.append ("remark: %s" % self.remark)
-        output.append ("path: %s" % self.path)
+        output.append(self.as_string())
+        output.append("type: (%d) %s" % (self.type, STYPE.names_from_value(self.type)))
+        output.append("remark: %s" % self.remark)
+        output.append("path: %s" % self.path)
         if show_security:
             security = self.security
             if security:
-                output.append (security_.dumped (level))
-        return utils.dumped ("\n".join (output), level)
+                output.append(security_.dumped(level))
+        return utils.dumped("\n".join(output), level)
 
-    def create (self, servername, sharename, path, remark=core.UNSET, security=core.UNSET):
+    def create(self, servername, sharename, path, remark=core.UNSET, security=core.UNSET):
         remark = "" if remark is core.UNSET else remark
-        security = security_.security (None if security is core.UNSET else security)
-        info = dict (
+        security = security_.security(None if security is core.UNSET else security)
+        info = dict(
             netname=sharename,
             path=path,
             remark=remark,
-            security=security.pyobject ().SECURITY_DESCRIPTOR if security else None
+            security=security.pyobject().SECURITY_DESCRIPTOR if security else None
         )
-        wrapped (win32net.NetShareAdd, servername, 502, info)
-        return self.__class__ (servername, sharename)
+        wrapped(win32net.NetShareAdd, servername, 502, info)
+        return self.__class__(servername, sharename)
 
-    def clone (self, servername=core.UNSET, sharename=core.UNSET, path=core.UNSET, remark=core.UNSET, security=core.UNSET):
+    def clone(self, servername=core.UNSET, sharename=core.UNSET, path=core.UNSET, remark=core.UNSET, security=core.UNSET):
         if servername is core.UNSET and sharename is core.UNSET:
-            raise x_fs ("At least one of servername and sharename must be specified")
-        return self.__class__.create (
+            raise x_fs("At least one of servername and sharename must be specified")
+        return self.__class__.create(
             servername = self.servername if servername is core.UNSET else servername,
             sharename = self.sharename if sharename is core.UNSET else sharename,
             path = self.path if path is core.UNSET else path,
@@ -774,10 +774,10 @@ class Share (core._WinSysObject):
             security = self.security if security is core.UNSET else security
         )
 
-    def delete (self):
-        wrapped (win32net.NetShareDel, self.servername, self.sharename)
+    def delete(self):
+        wrapped(win32net.NetShareDel, self.servername, self.sharename)
 
-class Entry (FilePath, core._WinSysObject):
+class Entry(FilePath, core._WinSysObject):
     """Heart of the fs module. This is a subtype of :class:`FilePath` and
     therefore of the base unicode type and is the parent of the
     :class:`Dir` and :class:`File` classes and contains all the
@@ -805,9 +805,9 @@ class Entry (FilePath, core._WinSysObject):
     * The str representation is the filepath utf8-encoded; unicode is the filepath itself
     * Adding one path to another will use os.path.join semantics
     """
-    def __new__ (meta, filepath, _file_info=core.UNSET):
-        fp = FilePath.__new__ (meta, filepath)
-        fp._normpath = normalised (fp)
+    def __new__(meta, filepath, _file_info=core.UNSET):
+        fp = FilePath.__new__(meta, filepath)
+        fp._normpath = normalised(fp)
         #
         # An Entry can be initialised from a Win32 FIND_FILES object, in which
         # case cache the information available for speed.
@@ -820,307 +820,307 @@ class Entry (FilePath, core._WinSysObject):
             fp._size = core.UNSET
             fp._reparse_tag = core.UNSET
         else:
-            fp._attributes = constants.Attributes (_file_info[0], FILE_ATTRIBUTE)
-            fp._created_at = utils.from_pytime (_file_info[1])
-            fp._accessed_at = utils.from_pytime (_file_info[2])
-            fp._written_at = utils.from_pytime (_file_info[3])
-            fp._size = utils._longword (_file_info[5], _file_info[4])
+            fp._attributes = constants.Attributes(_file_info[0], FILE_ATTRIBUTE)
+            fp._created_at = utils.from_pytime(_file_info[1])
+            fp._accessed_at = utils.from_pytime(_file_info[2])
+            fp._written_at = utils.from_pytime(_file_info[3])
+            fp._size = utils._longword(_file_info[5], _file_info[4])
             fp._reparse_tag = _file_info[6]
         return fp
 
-    def as_string (self):
-        return self.encode ("utf8")
+    def as_string(self):
+        return self.encode("utf8")
 
-    def dumped (self, level=0, show_security=False):
+    def dumped(self, level=0, show_security=False):
         output = []
-        output.append (self)
-        output.append (super (Entry, self).dumped (level))
-        output.append ("readable: %s" % self.readable)
+        output.append(self)
+        output.append(super(Entry, self).dumped(level))
+        output.append("readable: %s" % self.readable)
         if self.readable:
-            output.append ("id: %s" % self.id)
-            output.append ("n_links: %s" % self.n_links)
-            output.append ("created_at: %s" % self.created_at)
-            output.append ("accessed_at: %s" % self.accessed_at)
-            output.append ("written_at: %s" % self.written_at)
-            output.append ("uncompressed_size: %s" % self.uncompressed_size)
-            output.append ("size: %s" % self.size)
-            output.append ("Attributes:")
-            output.append (self.attributes.dumped (level))
+            output.append("id: %s" % self.id)
+            output.append("n_links: %s" % self.n_links)
+            output.append("created_at: %s" % self.created_at)
+            output.append("accessed_at: %s" % self.accessed_at)
+            output.append("written_at: %s" % self.written_at)
+            output.append("uncompressed_size: %s" % self.uncompressed_size)
+            output.append("size: %s" % self.size)
+            output.append("Attributes:")
+            output.append(self.attributes.dumped(level))
             is_directory = self.attributes.directory
         else:
             is_directory = False
         if is_directory:
-            vol = self.mounted_by ()
+            vol = self.mounted_by()
             if vol:
-                output.append ("Mount point for:")
-                output.append (vol.dumped (level))
+                output.append("Mount point for:")
+                output.append(vol.dumped(level))
         if show_security:
             try:
-                s = self.security ()
+                s = self.security()
             except win32file.error(exception):
                 (errno, errctx, errmsg) = exception.args
                 if errno == winerror.ERROR_ACCESS_DENIED:
                     pass
             else:
-                output.append ("Security:\n" + s.dumped (level))
+                output.append("Security:\n" + s.dumped(level))
         if is_directory:
-            vol = self.mounted_by ()
+            vol = self.mounted_by()
             if vol:
-                output.append ("Mount point for:")
-                output.append (vol.dumped (level))
-        return utils.dumped ("\n".join (output), level)
+                output.append("Mount point for:")
+                output.append(vol.dumped(level))
+        return utils.dumped("\n".join(output), level)
 
-    def __add__ (self, other):
-        return entry (super (Entry, self).__add__ (other))
+    def __add__(self, other):
+        return entry(super(Entry, self).__add__(other))
 
-    def __radd__ (self, other):
-        return entry (super (Entry, self).__radd__ (other))
+    def __radd__(self, other):
+        return entry(super(Entry, self).__radd__(other))
 
-    def __nonzero__ (self):
+    def __nonzero__(self):
         """Determine whether the file exists (at least from
         the POV of the current user) on the filesystem so that
         it can be checked with if fs.entry ("..."):
         """
-        return (wrapped (win32file.GetFileAttributesW, self._normpath) != -1)
+        return(wrapped(win32file.GetFileAttributesW, self._normpath) != -1)
     __bool__ = __nonzero__
 
     @classmethod
-    def factory (cls, filepath):
-        return entry (filepath)
+    def factory(cls, filepath):
+        return entry(filepath)
 
-    def _get_readable (self):
+    def _get_readable(self):
         #
         # Check whether the user has at least enough
         # permissions to open the file for reading.
         #
         try:
-            with Handle (self): pass
+            with Handle(self): pass
         except:
             return False
         else:
             return True
-    readable = property (_get_readable)
+    readable = property(_get_readable)
 
-    def get_created_at (self):
+    def get_created_at(self):
         """Get and store the latest creation time from the filesystem. Note that this forces a
         re-read of the metadata."""
-        self._created_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self._normpath)[1])
+        self._created_at = utils.from_pytime(wrapped(win32file.GetFileAttributesExW, self._normpath)[1])
         return self._created_at
-    def _get_created_at (self):
+    def _get_created_at(self):
         """Get the creation time from the original file read or the latest from
         the filesystem if none was stored."""
         if self._created_at is core.UNSET:
-            return self.get_created_at ()
+            return self.get_created_at()
         else:
             return self._created_at
-    def _set_created_at (self, created_at, handle=None):
-        with Handle (handle or self.normapth, True) as handle:
-            created_at = pywintypes.Time (time.mktime (created_at.timetuple ()))
-            wrapped (win32file.SetFileTime, handle, created_at, None, None)
-    created_at = property (_get_created_at, _set_created_at)
+    def _set_created_at(self, created_at, handle=None):
+        with Handle(handle or self.normapth, True) as handle:
+            created_at = pywintypes.Time(time.mktime(created_at.timetuple()))
+            wrapped(win32file.SetFileTime, handle, created_at, None, None)
+    created_at = property(_get_created_at, _set_created_at)
 
-    def get_accessed_at (self):
+    def get_accessed_at(self):
         """Get and store the latest access time from the filesystem. Note that this
         forces a re-read of the metadata"""
-        self._accessed_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self._normpath)[3])
+        self._accessed_at = utils.from_pytime(wrapped(win32file.GetFileAttributesExW, self._normpath)[3])
         return self._accessed_at
-    def _get_accessed_at (self):
+    def _get_accessed_at(self):
         """Get the access time from the original file read or the latest from
         the filesystem if none was stored."""
         if self._accessed_at is core.UNSET:
-            return self.get_accessed_at ()
+            return self.get_accessed_at()
         else:
             return self._accessed_at
-    def _set_accessed_at (self, accessed_at, handle=None):
-        with Handle (handle or self, True) as handle:
-            accessed_at = pywintypes.Time (time.mktime (accessed_at.timetuple ()))
-            wrapped (win32file.SetFileTime, handle, None, accessed_at, None)
-    accessed_at = property (_get_accessed_at, _set_accessed_at)
+    def _set_accessed_at(self, accessed_at, handle=None):
+        with Handle(handle or self, True) as handle:
+            accessed_at = pywintypes.Time(time.mktime(accessed_at.timetuple()))
+            wrapped(win32file.SetFileTime, handle, None, accessed_at, None)
+    accessed_at = property(_get_accessed_at, _set_accessed_at)
 
-    def get_written_at (self):
+    def get_written_at(self):
         """Get and store the latest modification time from the filesystem. Note that this
         forces a re-read of the metadata"""
-        self._written_at = utils.from_pytime (wrapped (win32file.GetFileAttributesExW, self._normpath)[2])
+        self._written_at = utils.from_pytime(wrapped(win32file.GetFileAttributesExW, self._normpath)[2])
         return self._written_at
-    def _get_written_at (self):
+    def _get_written_at(self):
         """Get and store the modification time from the original file read or the latest from
         the filesystem if none was stored."""
         if self._written_at is core.UNSET:
-            return self.get_written_at ()
+            return self.get_written_at()
         else:
             return self._written_at
-    def _set_written_at (self, written_at, handle=None):
-        with Handle (handle or self, True) as handle:
-            written_at = pywintypes.Time (time.mktime (written_at.timetuple ()))
-            wrapped (win32file.SetFileTime, handle, None, None, written_at)
-    written_at = property (_get_written_at, _set_written_at)
+    def _set_written_at(self, written_at, handle=None):
+        with Handle(handle or self, True) as handle:
+            written_at = pywintypes.Time(time.mktime(written_at.timetuple()))
+            wrapped(win32file.SetFileTime, handle, None, None, written_at)
+    written_at = property(_get_written_at, _set_written_at)
 
-    def _get_uncompressed_size (self, handle=None):
+    def _get_uncompressed_size(self, handle=None):
         """Get the size of the file data, ignoring any filesystem
         compression which may have been applied.
         """
-        with Handle (handle or self) as handle:
-            return wrapped (win32file.GetFileSize, handle)
-    uncompressed_size = property (_get_uncompressed_size)
+        with Handle(handle or self) as handle:
+            return wrapped(win32file.GetFileSize, handle)
+    uncompressed_size = property(_get_uncompressed_size)
 
-    def get_size (self):
+    def get_size(self):
         """Get and store the latest (possibly compressed) size from the filesystem. Note that this
         forces a re-read of the metadata"""
-        self._size = wrapped (_kernel32.GetCompressedFileSize, self._normpath)
+        self._size = wrapped(_kernel32.GetCompressedFileSize, self._normpath)
         return self._size
-    def _get_size (self):
+    def _get_size(self):
         """Get and store the (possibly compressed) size from the original file read or the latest from
         the filesystem if none was stored."""
         if self._size is core.UNSET:
-            return self.get_size ()
+            return self.get_size()
         else:
             return self._size
-    size = property (_get_size)
+    size = property(_get_size)
 
-    def get_attributes (self):
+    def get_attributes(self):
         """Get and store the latest file attributes from the filesystem. Note that this
         forces a re-read of the metadata"""
-        self._attributes = constants.Attributes (wrapped (win32file.GetFileAttributesExW, self._normpath)[0], FILE_ATTRIBUTE)
+        self._attributes = constants.Attributes(wrapped(win32file.GetFileAttributesExW, self._normpath)[0], FILE_ATTRIBUTE)
         return self._attributes
-    def _get_attributes (self):
+    def _get_attributes(self):
         """Get and store the file attributes from the original file read or the latest from
         the filesystem if none was stored."""
         if self._attributes is core.UNSET:
-            return self.get_attributes ()
+            return self.get_attributes()
         else:
             return self._attributes
-    attributes = property (_get_attributes)
+    attributes = property(_get_attributes)
 
-    def _get_id (self):
+    def _get_id(self):
         """Return an id for this file which can be used to compare it to another while
         both files are open to determine if both are the same physical file."""
-        with Handle (self) as hFile:
-            file_information = wrapped (win32file.GetFileInformationByHandle, hFile)
+        with Handle(self) as hFile:
+            file_information = wrapped(win32file.GetFileInformationByHandle, hFile)
             volume_serial_number = file_information[4]
             index_lo, index_hi = file_information[8:10]
-            return volume_serial_number + (utils._longword (index_hi, index_lo) * 2 << 31)
-    id = property (_get_id)
+            return volume_serial_number + (utils._longword(index_hi, index_lo) * 2 << 31)
+    id = property(_get_id)
 
-    def _get_n_links (self):
+    def _get_n_links(self):
         """Determine how many links point to this file. >1 indicates that
         the file is hardlinked.
         """
-        with Handle (self) as hFile:
-            file_information = wrapped (win32file.GetFileInformationByHandle, hFile)
+        with Handle(self) as hFile:
+            file_information = wrapped(win32file.GetFileInformationByHandle, hFile)
             return file_information[7]
-    n_links = property (_get_n_links)
+    n_links = property(_get_n_links)
 
-    def _set_file_attribute (self, key, value):
+    def _set_file_attribute(self, key, value):
         try:
-            attr = FILE_ATTRIBUTE.constant (key)
+            attr = FILE_ATTRIBUTE.constant(key)
         except KeyError:
-            raise AttributeError (key)
+            raise AttributeError(key)
         if value:
-            wrapped (win32file.SetFileAttributesW, normalised (self), self.attributes.flags | attr)
+            wrapped(win32file.SetFileAttributesW, normalised(self), self.attributes.flags | attr)
         else:
-            wrapped (win32file.SetFileAttributesW, normalised (self), self.attributes.flags & ~attr)
+            wrapped(win32file.SetFileAttributesW, normalised(self), self.attributes.flags & ~attr)
 
-    def _get_archive (self):
+    def _get_archive(self):
         "Is the archive bit set on the file?"
         return self.attributes.archive
-    def _set_archive (self, value):
-        self._set_file_attribute ("archive", value)
-    archive = property (_get_archive, _set_archive)
+    def _set_archive(self, value):
+        self._set_file_attribute("archive", value)
+    archive = property(_get_archive, _set_archive)
 
-    def _get_compressed (self):
+    def _get_compressed(self):
         "Is the file compressed?"
         return self.attributes.compressed
-    compressed = property (_get_compressed)
+    compressed = property(_get_compressed)
 
-    def _get_directory (self):
+    def _get_directory(self):
         "Is the file a directory?"
         return self.attributes.directory
-    directory = property (_get_directory)
+    directory = property(_get_directory)
 
-    def _get_encrypted (self):
+    def _get_encrypted(self):
         "Is the file encrypted?"
         return self.attributes.encrypted
-    encrypted = property (_get_encrypted)
+    encrypted = property(_get_encrypted)
 
-    def _get_hidden (self):
+    def _get_hidden(self):
         "Is the file hidden?"
         return self.attributes.hidden
-    def _set_hidden (self, value):
-        self._set_file_attribute ("hidden", value)
-    hidden = property (_get_hidden, _set_hidden)
+    def _set_hidden(self, value):
+        self._set_file_attribute("hidden", value)
+    hidden = property(_get_hidden, _set_hidden)
 
-    def _get_normal (self):
+    def _get_normal(self):
         "Is the file normal?"
         return self.attributes.normal
-    def _set_normal (self, value):
-        wrapped (win32file.SetFileAttributesW, normalised (self), FILE_ATTRIBUTE.NORMAL)
-    normal = property (_get_normal, _set_normal)
+    def _set_normal(self, value):
+        wrapped(win32file.SetFileAttributesW, normalised(self), FILE_ATTRIBUTE.NORMAL)
+    normal = property(_get_normal, _set_normal)
 
-    def _get_not_content_indexed (self):
+    def _get_not_content_indexed(self):
         "Should the file's content not be indexed?"
         return self.attributes.not_content_indexed
-    def _set_not_content_indexed (self, value):
-        self._set_file_attribute ("not_content_indexed", value)
-    not_content_indexed = property (_get_not_content_indexed, _set_not_content_indexed)
+    def _set_not_content_indexed(self, value):
+        self._set_file_attribute("not_content_indexed", value)
+    not_content_indexed = property(_get_not_content_indexed, _set_not_content_indexed)
 
-    def _get_offline (self):
+    def _get_offline(self):
         "Is the file offline?"
         return self.attributes.offline
-    def _set_offline (self, value):
-        self._set_file_attribute ("offline", value)
-    offline = property (_get_offline, _set_offline)
+    def _set_offline(self, value):
+        self._set_file_attribute("offline", value)
+    offline = property(_get_offline, _set_offline)
 
-    def _get_readonly (self):
+    def _get_readonly(self):
         "Is the file readonly?"
         return self.attributes.readonly
-    def _set_readonly (self, value):
-        self._set_file_attribute ("readonly", value)
-    readonly = property (_get_readonly, _set_readonly)
+    def _set_readonly(self, value):
+        self._set_file_attribute("readonly", value)
+    readonly = property(_get_readonly, _set_readonly)
 
-    def _get_reparse_point (self):
+    def _get_reparse_point(self):
         "Is the file a reparse point?"
         return self.attributes.reparse_point
-    reparse_point = property (_get_reparse_point)
+    reparse_point = property(_get_reparse_point)
 
-    def _get_sparse_file (self):
+    def _get_sparse_file(self):
         "Is the file sparse?"
         return self.attributes.sparse_file
-    sparse_file = property (_get_sparse_file)
+    sparse_file = property(_get_sparse_file)
 
-    def _get_system (self):
+    def _get_system(self):
         "Is the file a system file?"
         return self.attributes.system
-    def _set_system (self, value):
-        self._set_file_attribute ("system", value)
-    system = property (_get_system, _set_system)
+    def _set_system(self, value):
+        self._set_file_attribute("system", value)
+    system = property(_get_system, _set_system)
 
-    def _get_temporary (self):
+    def _get_temporary(self):
         "Is the file a temporary file?"
         return self.attributes.temporary
-    def _set_temporary (self, value):
-        self._set_file_attribute ("temporary", value)
-    temporary = property (_get_temporary, _set_temporary)
+    def _set_temporary(self, value):
+        self._set_file_attribute("temporary", value)
+    temporary = property(_get_temporary, _set_temporary)
 
-    def _get_virtual (self):
+    def _get_virtual(self):
         "Is the file a virtual file?"
         return self.attributes.virtual
-    virtual = property (_get_virtual)
+    virtual = property(_get_virtual)
 
-    def like (self, pattern):
+    def like(self, pattern):
         """Return true if this filename's name (not the path) matches
         `pattern` according to `fnmatch`, eg::
 
             from winsys import fs
             for f in fs.files ():
-                if f.directory and f.like ("test_*"):
+                if f.directory and f.like("test_*"):
                     print f
 
         :param pattern: an `fnmatch` pattern
         :returns: True if this file matches `pattern`
         """
-        return fnmatch.fnmatch (self.name, pattern)
+        return fnmatch.fnmatch(self.name, pattern)
 
-    def ancestors (self):
+    def ancestors(self):
         """Iterate over this entry's ancestors, yielding the :class:`Dir` object
         corresponding to each one.
 
@@ -1128,13 +1128,13 @@ class Entry (FilePath, core._WinSysObject):
         """
         if self.parent:
             yield self.parent
-            for ancestor in self.parent.ancestors ():
+            for ancestor in self.parent.ancestors():
                 yield ancestor
 
-    def handle (self, mode="r"):
-        return handles.handle (handle (self, write="w" in mode, exclusive="x" in mode))
+    def handle(self, mode="r"):
+        return handles.handle(handle(self, write="w" in mode, exclusive="x" in mode))
 
-    def security (self, options=security_.Security.DEFAULT_OPTIONS):
+    def security(self, options=security_.Security.DEFAULT_OPTIONS):
         """Return a :class:`security_.Security` object corresponding to this
         entry's security attributes. Note that the returning object is a context
         manager so a common pattern is::
@@ -1144,66 +1144,66 @@ class Entry (FilePath, core._WinSysObject):
             # the owner has any access.
             #
             from winsys import fs
-            for f in fs.flat ("*.ppk"):
-                with f.security () as s:
-                    s.break_inheritance ()
+            for f in fs.flat("*.ppk"):
+                with f.security() as s:
+                    s.break_inheritance()
                     s.dacl = [(s.owner, "F", "ALLOW")]
 
         :param options: cf :func:`security_.security`
         :returns: a :class:`security_.Security` object which may be used as a context manager
         """
-        return security_.security (self, options=options)
+        return security_.security(self, options=options)
 
-    def compress (self):
+    def compress(self):
         """Compress this entry; if it is a file, it will be compressed, if it
         is a directory it will be marked so that any new files added to it will
         be compressed automatically.
 
         :returns: self
         """
-        with Handle (self, True) as hFile:
-            compression_type = struct.pack ("H", COMPRESSION_FORMAT.DEFAULT)
-            wrapped (win32file.DeviceIoControl, hFile, FSCTL.SET_COMPRESSION, compression_type, None, None)
+        with Handle(self, True) as hFile:
+            compression_type = struct.pack("H", COMPRESSION_FORMAT.DEFAULT)
+            wrapped(win32file.DeviceIoControl, hFile, FSCTL.SET_COMPRESSION, compression_type, None, None)
             return self
 
-    def uncompress (self):
+    def uncompress(self):
         """Uncompress this entry; if it is a file, it will be uncompressed, if it
         is a directory it will be marked so that any new files added to it will
         not be compressed automatically.
 
         :returns: self
         """
-        with Handle (self, True) as hFile:
-            compression_type = struct.pack ("H", COMPRESSION_FORMAT.NONE)
-            wrapped (win32file.DeviceIoControl, hFile, FSCTL.SET_COMPRESSION, compression_type, None, None)
+        with Handle(self, True) as hFile:
+            compression_type = struct.pack("H", COMPRESSION_FORMAT.NONE)
+            wrapped(win32file.DeviceIoControl, hFile, FSCTL.SET_COMPRESSION, compression_type, None, None)
             return self
 
-    def encrypt (self):
+    def encrypt(self):
         """FIXME: Need to work out how to create certificates for this
 
         :returns: self
         """
-        wrapped (win32file.EncryptFile, self._normpath)
+        wrapped(win32file.EncryptFile, self._normpath)
         return self
 
-    def unencrypt (self):
+    def unencrypt(self):
         """FIXME: Need to work out how to create certificates for this
 
         :returns: self
         """
-        wrapped (win32file.DecryptFile, self._normpath)
+        wrapped(win32file.DecryptFile, self._normpath)
         return self
 
-    def encryption_users (self):
+    def encryption_users(self):
         """FIXME: Need to work out how to create certificates for this
         """
         return (
-            (security_.principal (sid), hashblob, info)
+            (security_.principal(sid), hashblob, info)
                 for (sid, hashblob, info)
-                in wrapped (win32file.QueryUsersOnEncryptedFile, self._normpath)
+                in wrapped(win32file.QueryUsersOnEncryptedFile, self._normpath)
         )
 
-    def move (self, other, callback=None, callback_data=None, clobber=False):
+    def move(self, other, callback=None, callback_data=None, clobber=False):
         """Move this entry to the file/directory represented by other.
         If other is a directory, self
 
@@ -1213,7 +1213,7 @@ class Entry (FilePath, core._WinSysObject):
         :param clobber: whether to overwrite the other file if it exists
         :returns: a :class:`File` object corresponding to the target file
         """
-        other_file = entry (other)
+        other_file = entry(other)
         #
         # If the target is already a directory, the result of the move will
         # be a file or a directory inside that directory. Otherwise the
@@ -1221,24 +1221,24 @@ class Entry (FilePath, core._WinSysObject):
         # parent.
         #
         if other_file and other_file.directory:
-            target_filepath = self.factory (other_file + self.filename)
+            target_filepath = self.factory(other_file + self.filename)
         else:
-            target_filepath = self.factory (other_file)
+            target_filepath = self.factory(other_file)
         flags = MOVEFILE.WRITE_THROUGH
         if clobber:
             flags |= MOVEFILE.REPLACE_EXISTING
-        wrapped (
+        wrapped(
             win32file.MoveFileWithProgress,
             self._normpath,
-            normalised (target_filepath),
-            progress_wrapper (callback),
+            normalised(target_filepath),
+            progress_wrapper(callback),
             callback_data,
             flags
         )
-        return entry (unicode (target_filepath))
+        return entry(unicode(target_filepath))
     rename = move
 
-    def take_control (self, principal=core.UNSET):
+    def take_control(self, principal=core.UNSET):
         """Give the logged-on user full control to a file. This may
         need to be preceded by a call to :func:`take_ownership` so that the
         user gains WRITE_DAC permissions.
@@ -1246,15 +1246,15 @@ class Entry (FilePath, core._WinSysObject):
         :param principal: anything accepted by :func:`principal` [logged-on user]
         """
         if principal is core.UNSET:
-            principal = security_.me ()
+            principal = security_.me()
         #
         # Specify only DACL when reading as we may have no more rights
         # than that, and we don't need any more.
         #
-        with self.security (options="D") as s:
-            s.dacl.append ((principal, "F", "ALLOW"))
+        with self.security(options="D") as s:
+            s.dacl.append((principal, "F", "ALLOW"))
 
-    def take_ownership (self, principal=core.UNSET):
+    def take_ownership(self, principal=core.UNSET):
         """Set the new owner of the file to be the logged-on user.
         This is no more than a slight shortcut to the equivalent
         security operations.
@@ -1267,25 +1267,25 @@ class Entry (FilePath, core._WinSysObject):
 
             from winsys import fs, security
 
-            f = fs.file ("c:/temp/temp.txt")
+            f = fs.file("c:/temp/temp.txt")
             assert f
-            with security_.change_privileges (["take_ownership"]):
-                f.take_ownership ()
-                f.take_control ()
+            with security_.change_privileges(["take_ownership"]):
+                f.take_ownership()
+                f.take_control()
 
         :param principal: anything accepted by :func:`principal` [logged-on user]
         """
         if principal is core.UNSET:
-            principal = security_.me ()
+            principal = security_.me()
         #
         # Specify no options when reading as we may have no rights
         # whatsoever on the security descriptor and be relying on
         # the take_ownership privilege.
         #
-        with self.security (options=None) as s:
+        with self.security(options=None) as s:
             s.owner = principal
 
-class File (Entry):
+class File(Entry):
 
     ##
     ## 3 ways in which 2 files can be equal:
@@ -1293,7 +1293,7 @@ class File (Entry):
     ##     Their ids (inodes) are equal
     ##     Their contents are equal
     ##
-    def open_ (self, mode="r", attributes=None, sec=None):
+    def open_(self, mode="r", attributes=None, sec=None):
         """EXPERIMENTAL: Use the `codecs.open` function to open this file as a Python file
         object. Positional and keyword arguments are passed straight through to
         the codecs function.
@@ -1302,8 +1302,8 @@ class File (Entry):
         :param attributes: anything accepted by :const:`FILE_ATTRIBUTE`
         :param sec: anything accepted by :func:`Security.security`
         """
-        mode = mode.lower () if mode else "r"
-        self.hFile = handle (self, "r" not in mode, sec)
+        mode = mode.lower() if mode else "r"
+        self.hFile = handle(self, "r" not in mode, sec)
         flags = 0
         if "t" in mode or "b" not in mode:
             flags |= os.O_TEXT
@@ -1311,18 +1311,18 @@ class File (Entry):
             flags |= os.O_RDONLY
         elif "a" in mode or "w" in mode:
             flags |= os.O_APPEND
-        self.fd = msvcrt.open_osfhandle (self.hFile, flags)
-        return os.fdopen (self.fd, mode)
+        self.fd = msvcrt.open_osfhandle(self.hFile, flags)
+        return os.fdopen(self.fd, mode)
 
-    def delete (self):
+    def delete(self):
         """Delete this file
 
         :returns: self
         """
-        wrapped (win32file.DeleteFileW, self._normpath)
+        wrapped(win32file.DeleteFileW, self._normpath)
         return self
 
-    def copy (self, other, callback=None, callback_data=None):
+    def copy(self, other, callback=None, callback_data=None):
         """Copy this file to another file or directory. If other is
         a directory, this file is copied into it, otherwise this file
         is copied over it.
@@ -1332,21 +1332,21 @@ class File (Entry):
         :param callback_data: passed to callback
         :returns: :class:`File` object representing other
         """
-        other_file = entry (other)
+        other_file = entry(other)
         if other_file and other_file.directory:
             target_filepath = other_file + self.filename
         else:
             target_filepath = other_file
-        wrapped (
+        wrapped(
             win32file.CopyFileEx,
             self._normpath,
-            normalised (target_filepath),
-            progress_wrapper (callback),
+            normalised(target_filepath),
+            progress_wrapper(callback),
             callback_data
         )
-        return file (target_filepath)
+        return file(target_filepath)
 
-    def equal_contents (self, other):
+    def equal_contents(self, other):
         """Compare only the contents of the two files, ignoring
         everything else. Note that filecmp.cmp fails early.
 
@@ -1355,7 +1355,7 @@ class File (Entry):
         """
         return filecmp.cmp(self, other, False)
 
-    def equals (self, other, compare_contents=False):
+    def equals(self, other, compare_contents=False):
         """Is this file equal in size, dates and attributes to another.
         if `compare_contents` is True, use filecmp to compare the contents
         of the files. Note that filecmp.cmp fails early.
@@ -1364,7 +1364,7 @@ class File (Entry):
         :compare_contents: True to compare contents, False otherwise
         :returns: True if the files are equal in size, modification date, attributes and contents
         """
-        other = entry (other)
+        other = entry(other)
         if self.size != other.size:
             return False
         if self.written_at != other.written_at:
@@ -1372,58 +1372,58 @@ class File (Entry):
         if self.attributes != other.attributes:
             return False
         if compare_contents:
-            if not filecmp.cmp (self, other, False):
+            if not filecmp.cmp(self, other, False):
                 return False
         return True
 
-    def hard_link_to (self, other):
+    def hard_link_to(self, other):
         """Create `other` as a hard link to this file.
 
         :param other: anything accepted by :func:`file`
         :returns: :class:`File` object corresponding to `other`
         """
-        other = file (other)
-        wrapped (
+        other = file(other)
+        wrapped(
             win32file.CreateHardLink,
             other._normpath,
             self._normpath
         )
         return other
 
-    def hard_link_from (self, other):
+    def hard_link_from(self, other):
         """Create this file as a hard link from other
 
         :param other: anything accepted by :func:`file`
         :returns: this :class:`File` object
         """
-        other = file (other)
-        wrapped (
+        other = file(other)
+        wrapped(
             win32file.CreateHardLink,
             self._normpath,
             other._normpath
         )
         return self
 
-    def create (self, security=None):
+    def create(self, security=None):
         """Create this file optionally with specific security_. If the
         file already exists it will not be overwritten.
 
         :param security: a :class:`security_.Security` object
         :returns: this object
         """
-        wrapped (
+        wrapped(
             win32file.CreateFile,
             self._normpath,
             FILE_ACCESS.WRITE,
             0,
-            None if security is None else security_.pyobject (),
+            None if security is None else security_.pyobject(),
             FILE_CREATION.OPEN_ALWAYS,
             0,
             None
-        ).close ()
+        ).close()
         return self
 
-    def zip (self, zip_filename=core.UNSET, mode="w", compression=zipfile.ZIP_DEFLATED, allow_zip64=False):
+    def zip(self, zip_filename=core.UNSET, mode="w", compression=zipfile.ZIP_DEFLATED, allow_zip64=False):
         """Zip the file up into a zipfile. By default, the zipfile will have the
         name of the file with ".zip" appended and will be a sibling of the file.
         Also by default a new zipfile will be created, overwriting any existing one, and
@@ -1440,42 +1440,42 @@ class File (Entry):
         :returns: a :class:`File` object corresponding to the zipfile created
         """
         if zip_filename is core.UNSET:
-            zip_filename = self.changed (ext=".zip")
+            zip_filename = self.changed(ext=".zip")
 
-        z = zipfile.ZipFile (zip_filename, mode, compression, allow_zip64)
-        z.write (self, arcname=self.filename)
-        z.close ()
+        z = zipfile.ZipFile(zip_filename, mode, compression, allow_zip64)
+        z.write(self, arcname=self.filename)
+        z.close()
 
-        return file (zip_filename)
+        return file(zip_filename)
 
-    def bytes (self):
+    def bytes(self):
         """Return the contents of the file as a bytes object (str in 2.x)
 
         :returns: a bytes/str object corresponding to the contents of the file
         """
-        with open (self, "rb") as f:
-            return f.read ()
+        with open(self, "rb") as f:
+            return f.read()
 
-    def text (self, encoding="ascii"):
+    def text(self, encoding="ascii"):
         """Return the contents of the file as a text object (unicode in 2.x)
 
         :param encoding: valid encoding to pass to codecs.open
         :returns: a text/unicode object corresponding to the contents of the file
         """
-        with codecs.open (self, "r", encoding=encoding) as f:
-            return f.read ()
+        with codecs.open(self, "r", encoding=encoding) as f:
+            return f.read()
 
     touch = create
 
-class Dir (Entry):
+class Dir(Entry):
 
-    def __new__ (meta, filepath, *args, **kwargs):
+    def __new__(meta, filepath, *args, **kwargs):
         #
         # Ensure that a directory always ends in a backslash
         #
-        return Entry.__new__ (meta, filepath.rstrip (seps) + sep, *args, **kwargs)
+        return Entry.__new__(meta, filepath.rstrip(seps) + sep, *args, **kwargs)
 
-    def is_empty (self):
+    def is_empty(self):
         r"""Returns True if this directory is empty, False otherwise. Will fail
         if the directory does not yet exist.
         """
@@ -1484,7 +1484,7 @@ class Dir (Entry):
         else:
             return False
 
-    def compress (self, apply_to_contents=True, callback=None):
+    def compress(self, apply_to_contents=True, callback=None):
         """Flag this directory so that any new files are automatically
         compressed. If apply_to_contents is True, iterate over all subdirectories
         and their files, compressing likewise.
@@ -1494,19 +1494,19 @@ class Dir (Entry):
         :param callback: called for each subdirectory / file compressed
         :returns: this directory
         """
-        Entry.compress (self)
+        Entry.compress(self)
         if apply_to_contents:
-            for dirpath, dirs, files in self.walk ():
+            for dirpath, dirs, files in self.walk():
                 for dir in dirs:
-                    if callback: callback (dir)
-                    dir.compress (False)
+                    if callback: callback(dir)
+                    dir.compress(False)
                 for file in files:
-                    if callback: callback (file)
-                    file.compress ()
+                    if callback: callback(file)
+                    file.compress()
 
         return self
 
-    def uncompress (self, apply_to_contents=True, callback=None):
+    def uncompress(self, apply_to_contents=True, callback=None):
         """Flag this directory so that any new files are automatically
         not compressed. If apply_to_contents is True, iterate over all
         subdirectories and their files, uncompressing likewise.
@@ -1516,49 +1516,49 @@ class Dir (Entry):
         :param callback: called for each subdirectory / file uncompressed
         :returns: this directory
         """
-        Entry.uncompress (self)
+        Entry.uncompress(self)
         if apply_to_contents:
-            for dirpath, dirs, files in self.walk ():
+            for dirpath, dirs, files in self.walk():
                 for dir in dirs:
-                    if callback: callback (dir)
-                    dir.uncompress (False)
+                    if callback: callback(dir)
+                    dir.uncompress(False)
                 for file in files:
-                    if callback: callback (file)
-                    file.uncompress ()
+                    if callback: callback(file)
+                    file.uncompress()
 
         return self
 
-    def encrypt (self, apply_to_contents=True):
-        Entry.encrypt (self)
+    def encrypt(self, apply_to_contents=True):
+        Entry.encrypt(self)
         if apply_to_contents:
-            for dirpath, dirs, files in self.walk ():
+            for dirpath, dirs, files in self.walk():
                 for dir in dirs:
-                    dir.encrypt (False)
+                    dir.encrypt(False)
                 for file in files:
-                    file.encrypt ()
+                    file.encrypt()
 
         return self
 
-    def unencrypt (self, apply_to_contents=True):
-        Entry.unencrypt (self)
+    def unencrypt(self, apply_to_contents=True):
+        Entry.unencrypt(self)
         if apply_to_contents:
-            for dirpath, dirs, files in self.walk ():
+            for dirpath, dirs, files in self.walk():
                 for dir in dirs:
-                    dir.unencrypt (False)
+                    dir.unencrypt(False)
                 for file in files:
-                    file.unencrypt ()
+                    file.unencrypt()
 
         return self
 
-    def disable_encryption (self):
-        wrapped (win32security.EncryptionDisable, self._normpath, True)
+    def disable_encryption(self):
+        wrapped(win32security.EncryptionDisable, self._normpath, True)
         return self
 
-    def enable_encryption (self):
-        wrapped (win32security.EncryptionDisable, self._normpath, False)
+    def enable_encryption(self):
+        wrapped(win32security.EncryptionDisable, self._normpath, False)
         return self
 
-    def create (self, security_descriptor=None):
+    def create(self, security_descriptor=None):
         """Create this directory, optionally specifying a security descriptor.
         If the directory already exists, silently succeed.
         All intervening directories are automatically created if they do not
@@ -1568,26 +1568,26 @@ class Dir (Entry):
         :param security_descriptor: anything accepted by :func:`security_.security`
         :returns: a :class:`Dir` representing the newly-created directory
         """
-        security_descriptor = security_.security (security_descriptor)
+        security_descriptor = security_.security(security_descriptor)
         parts = self.parts
         root, pieces = parts[0], parts[1:]
 
-        for i, piece in enumerate (pieces):
-            path = normalised (root + sep.join (pieces[:i+1]))
-            f = entry (path)
+        for i, piece in enumerate(pieces):
+            path = normalised(root + sep.join(pieces[:i+1]))
+            f = entry(path)
             if f:
                 if not f.directory:
-                    raise x_fs (errctx="Dir.create", errmsg="%s exists and is not a directory" % f)
+                    raise x_fs(errctx="Dir.create", errmsg="%s exists and is not a directory" % f)
             else:
-                wrapped (
+                wrapped(
                     win32file.CreateDirectory,
                     path,
-                    security_descriptor.pyobject () if security_descriptor else None
+                    security_descriptor.pyobject() if security_descriptor else None
                 )
 
-        return self.factory (path)
+        return self.factory(path)
 
-    def mkdir (self, dirname, security_descriptor=None):
+    def mkdir(self, dirname, security_descriptor=None):
         r"""Create :dirname: as a subdirectory of this directory, specifying a
         security descriptor. This is implemented in terms of :meth:`create`
         by concatenating this directory and dirname and calling .create on the
@@ -1597,46 +1597,46 @@ class Dir (Entry):
         :param security_descriptor: anything accepted by :func:`security_.security`
         :returns: a :class:`Dir` representing the newly-created directory
         """
-        return self.dir (dirname).create (security_descriptor=security_descriptor)
+        return self.dir(dirname).create(security_descriptor=security_descriptor)
 
-    def entries (self, pattern="*", *args, **kwargs):
+    def entries(self, pattern="*", *args, **kwargs):
         r"""Iterate over all entries -- files & directories -- in this directory.
         Implemented via :func:`files`
 
         :param pattern: a \|-separated list of wildcards to match
         """
-        return files ("|".join (self + p for p in pattern.split ("|")), *args, **kwargs)
+        return files("|".join(self + p for p in pattern.split("|")), *args, **kwargs)
     __iter__ = entries
 
-    def file (self, name):
+    def file(self, name):
         """Return a :class:`File` object representing a file called name inside
         this directory.
         """
-        return file (self + name)
+        return file(self + name)
 
-    def dir (self, name):
+    def dir(self, name):
         """Return a :class:`Dir` object representing a Directory called name inside
         this directory.
         """
-        return dir (self + name)
+        return dir(self + name)
 
-    def files (self, pattern="*", *args, **kwargs):
+    def files(self, pattern="*", *args, **kwargs):
         """Iterate over all files in this directory which match pattern, yielding
         a :class:`File` object for each one. Implemented via :meth:`Dir.entries`.
 
         :param pattern: a \|-separated list of wildcards to match
         """
-        return (f for f in self.entries (pattern, *args, **kwargs) if isinstance (f, File))
+        return (f for f in self.entries(pattern, *args, **kwargs) if isinstance(f, File))
 
-    def dirs (self, pattern="*", *args, **kwargs):
+    def dirs(self, pattern="*", *args, **kwargs):
         """Iterate over all directories in this directory which match pattern, yielding
         a :class:`Dir` object for each one. Implemented via :meth:`Dir.entries`.
 
         :param pattern: a \|-separated list of wildcards to match
         """
-        return (f for f in self.entries (pattern, *args, **kwargs) if isinstance (f, Dir))
+        return (f for f in self.entries(pattern, *args, **kwargs) if isinstance(f, Dir))
 
-    def walk (self, depthfirst=False, error_handler=None):
+    def walk(self, depthfirst=False, error_handler=None):
         """Mimic os.walk, iterating over each directory and the files within
         in. Each iteration yields:
 
@@ -1647,19 +1647,19 @@ class Dir (Entry):
         """
         top = self
         dirs, nondirs = [], []
-        for f in self.entries (error_handler=error_handler):
-            if isinstance (f, Dir):
-                dirs.append (f)
+        for f in self.entries(error_handler=error_handler):
+            if isinstance(f, Dir):
+                dirs.append(f)
             else:
-                nondirs.append (f)
+                nondirs.append(f)
 
         if not depthfirst: yield top, dirs, nondirs
         for d in dirs:
-            for x in d.walk (depthfirst=depthfirst, error_handler=error_handler):
+            for x in d.walk(depthfirst=depthfirst, error_handler=error_handler):
                 yield x
         if depthfirst: yield top, dirs, nondirs
 
-    def flat (self, pattern="*", includedirs=False, depthfirst=False, error_handler=None):
+    def flat(self, pattern="*", includedirs=False, depthfirst=False, error_handler=None):
         """Iterate over this directory and all its subdirectories, yielding one
         :class:`File` object on each iteration, and optionally :class:`Dir` objects
         as well.
@@ -1669,8 +1669,8 @@ class Dir (Entry):
         :depthfirst: as for :meth:`Dir.walk`
         :error_handler: as for :meth:`Dir.walk`
         """
-        patterns = pattern.split ("|")
-        walker = self.walk (
+        patterns = pattern.split("|")
+        walker = self.walk(
             depthfirst=depthfirst,
             error_handler=error_handler
         )
@@ -1678,53 +1678,53 @@ class Dir (Entry):
             if includedirs:
                 for dir in dirs:
                     for pattern in patterns:
-                        if dir.like (pattern):
+                        if dir.like(pattern):
                             yield dir
                             break
             for file in files:
                 for pattern in patterns:
-                    if file.like (pattern):
+                    if file.like(pattern):
                         yield file
                         break
 
-    def mounted_by (self):
+    def mounted_by(self):
         """Return the volume mounted on this directory, or None.
 
         :returns: a :class:`Volume` object or :const:`None`
         """
-        for dir, vol in mounts ():
+        for dir, vol in mounts():
             if dir == self:
                 return vol
 
-    def mount (self, vol):
+    def mount(self, vol):
         """Mount a volume on this directory. The directory must be empty or
         an exception is raised. eg::
 
             from winsys import fs
-            fs.dir ("c:/temp").mkdir ("c_drive").mount ("c:")
+            fs.dir("c:/temp").mkdir("c_drive").mount("c:")
 
         :param vol: anything accepted by :func:`volume`
         :returns: this :class:`Dir`
         """
-        for f in self.flat (includedirs=True):
-            raise x_fs (errctx="Dir.mount", errmsg="You can't mount to a non-empty directory")
-        vol = volume (vol)
+        for f in self.flat(includedirs=True):
+            raise x_fs(errctx="Dir.mount", errmsg="You can't mount to a non-empty directory")
+        vol = volume(vol)
         #~ for m in vol.mounts:
             #~ if not m.dirname:
-                #~ raise x_fs (errctx="Dir.mount", errmsg="Volume %s already has a drive letter %s" % (vol, m.root))
+                #~ raise x_fs(errctx="Dir.mount", errmsg="Volume %s already has a drive letter %s" %(vol, m.root))
 
-        wrapped (win32file.SetVolumeMountPoint, self, vol.name)
+        wrapped(win32file.SetVolumeMountPoint, self, vol.name)
         return self
 
-    def dismount (self):
+    def dismount(self):
         """Dismount whatever volume is mounted at this directory
 
         :returns: this :class:`Dir`
         """
-        wrapped (win32file.DeleteVolumeMountPoint, self._normpath)
+        wrapped(win32file.DeleteVolumeMountPoint, self._normpath)
         return self
 
-    def copy (self, target_filepath, callback=None, callback_data=None):
+    def copy(self, target_filepath, callback=None, callback_data=None):
         """Copy this directory to another, which must be a directory if it
         exists. If it does exist, this directory's contents will be copied
         inside it; if it does not exist, this directory will become it.
@@ -1736,44 +1736,44 @@ class Dir (Entry):
         :param callback_data: cf :meth:`File.copy`
         :returns: a :class:`Dir` object representing target_filepath
         """
-        target = entry (target_filepath.rstrip (sep) + sep)
+        target = entry(target_filepath.rstrip(sep) + sep)
         if target and not target.directory:
-            raise x_no_such_file (None, "Dir.copy", "%s exists but is not a directory")
+            raise x_no_such_file(None, "Dir.copy", "%s exists but is not a directory")
         if not target:
-            target.create ()
+            target.create()
 
-        for dirpath, dirs, files in self.walk ():
+        for dirpath, dirs, files in self.walk():
             for d in dirs:
-                target_dir = Dir (target + d.relative_to (self))
-                target_dir.create ()
+                target_dir = Dir(target + d.relative_to(self))
+                target_dir.create()
             for f in files:
-                target_file = File (target + f.relative_to (self))
-                f.copy (target_file, callback, callback_data)
+                target_file = File(target + f.relative_to(self))
+                f.copy(target_file, callback, callback_data)
 
         return target
 
-    def delete (self, recursive=False):
+    def delete(self, recursive=False):
         """Delete this directory, optionally including its children.
 
         :param recursive: whether to remove all subdirectories and files first
         :returns: this :class:`Dir`
         """
         if recursive:
-            for dirpath, dirs, files in self.walk (depthfirst=True):
+            for dirpath, dirs, files in self.walk(depthfirst=True):
                 for d in dirs:
-                    d.delete (recursive=True)
+                    d.delete(recursive=True)
                 for f in files:
-                    f.delete ()
+                    f.delete()
 
-        wrapped (win32file.RemoveDirectory, self._normpath)
+        wrapped(win32file.RemoveDirectory, self._normpath)
         return self
 
-    def watch (self, *args, **kwargs):
+    def watch(self, *args, **kwargs):
         """Return a directory watcher, as per :func:`watch`
         """
-        return watch (self, *args, **kwargs)
+        return watch(self, *args, **kwargs)
 
-    def zip (self, zip_filename=core.UNSET, mode="w", compression=zipfile.ZIP_DEFLATED):
+    def zip(self, zip_filename=core.UNSET, mode="w", compression=zipfile.ZIP_DEFLATED):
         """Zip the directory up into a zip file. By default, the file will have the
         name of the directory with ".zip" appended and will be a sibling of the directory.
         Also by default a new zipfile will be created, overwriting any existing one, and
@@ -1791,32 +1791,32 @@ class Dir (Entry):
         :returns: a :class:`File` object representing the resulting zip file
         """
         if zip_filename is core.UNSET:
-            zip_filename = os.path.join (self.parent, self.name + ".zip")
+            zip_filename = os.path.join(self.parent, self.name + ".zip")
 
-        z = zipfile.ZipFile (zip_filename, mode=mode, compression=compression)
+        z = zipfile.ZipFile(zip_filename, mode=mode, compression=compression)
         try:
-            for f in self.flat ():
-                z.write (f, f.relative_to (self))
+            for f in self.flat():
+                z.write(f, f.relative_to(self))
         finally:
-            z.close ()
+            z.close()
 
-        return file (zip_filename)
+        return file(zip_filename)
 
     rmdir = delete
 
-class SharedDir (Dir):
+class SharedDir(Dir):
 
-    def mounted_by (self):
+    def mounted_by(self):
         raise NotImplementedError
 
-    def mount (self, vol):
+    def mount(self, vol):
         raise NotImplementedError
 
-    def dumped (self, level=0):
+    def dumped(self, level=0):
         raise NotImplementedError
 
 
-def files (pattern="*", ignore=[".", ".."], error_handler=None):
+def files(pattern="*", ignore=[".", ".."], error_handler=None):
     """Iterate over files and directories matching pattern, which can include
     a path. Calls win32file.FindFilesIterator under the covers, which uses
     FindFirstFile / FindNextFile.
@@ -1825,11 +1825,11 @@ def files (pattern="*", ignore=[".", ".."], error_handler=None):
     :ignore: A container of specific paths to ignore
     :error_handler: a callable which returns True if the iteration is to continue, false otherwise
     """
-    for p in pattern.split ("|"):
-        for f in _files (p, ignore=ignore, error_handler=error_handler):
+    for p in pattern.split("|"):
+        for f in _files(p, ignore=ignore, error_handler=error_handler):
             yield f
 
-def _files (pattern="*", ignore=[".", ".."], error_handler=None):
+def _files(pattern="*", ignore=[".", ".."], error_handler=None):
     #
     # special-case ".": FindFilesIterator treats a directory
     # name as an invitation to return only that directory.
@@ -1837,39 +1837,39 @@ def _files (pattern="*", ignore=[".", ".."], error_handler=None):
     # in that directory
     #
     if pattern == '.':
-        yield Dir (".")
+        yield Dir(".")
         raise StopIteration
 
     try:
-        iterator = wrapped (win32file.FindFilesIterator, pattern)
+        iterator = wrapped(win32file.FindFilesIterator, pattern)
     except x_no_such_file:
         #
         # If this occurs, it means there's a bizarre problem
         # with a filename windows won't handle. Just stop
         # iteration.
         #
-        core.warn ("Ignored no-such-file on first iteration of %s", pattern)
+        core.warn("Ignored no-such-file on first iteration of %s", pattern)
         raise StopIteration
     except:
         #
         # If we get a trappable error at this point, there's nowhere
         # else to go: raise StopIteration to exit cleanly
         #
-        if error_handler and error_handler (sys.exc_info ()):
+        if error_handler and error_handler(sys.exc_info()):
             raise StopIteration
         else:
             raise
 
-    parts = get_parts (unicode (pattern))
-    dirpath = parts[0] + sep.join (parts[1:-1])
+    parts = get_parts(unicode(pattern))
+    dirpath = parts[0] + sep.join(parts[1:-1])
     while True:
         try:
             file_info = next(iterator)
             filename = file_info[8]
             if filename in ignore:
                 continue
-            filepath = os.path.join (dirpath, filename)
-            yield entry (filepath, file_info)
+            filepath = os.path.join(dirpath, filename)
+            yield entry(filepath, file_info)
         except StopIteration:
             break
         except x_no_such_file:
@@ -1878,19 +1878,19 @@ def _files (pattern="*", ignore=[".", ".."], error_handler=None):
             # with a filename windows won't handle. Just stop
             # iteration.
             #
-            core.warn ("Ignored no-such-file on first iteration of %s", pattern)
+            core.warn("Ignored no-such-file on first iteration of %s", pattern)
             raise StopIteration
         except:
             #
             # If the error_handler chooses to swallow this error, carry on
             #
-            if error_handler and error_handler (sys.exc_info ()):
-                core.warn ("Error %s ignored", sys.exc_info ()[0])
+            if error_handler and error_handler(sys.exc_info()):
+                core.warn("Error %s ignored", sys.exc_info()[0])
                 continue
             else:
                 raise
 
-def entry (filepath, _file_info=core.UNSET):
+def entry(filepath, _file_info=core.UNSET):
     """Return a :class:`File` or :class:`Dir` object representing this
     filepath.
 
@@ -1905,85 +1905,85 @@ def entry (filepath, _file_info=core.UNSET):
                                                                                     :class:`File` otherwise
     ======================================= ==================================================
     """
-    def _guess (filepath):
+    def _guess(filepath):
         """If the path doesn't exist on the filesystem,
         guess whether it's intended to be a dir or a file
         by looking for a trailing slash.
         """
-        if filepath.endswith (sep):
-            return Dir (filepath)
+        if filepath.endswith(sep):
+            return Dir(filepath)
         else:
-            return File (filepath)
+            return File(filepath)
 
     if filepath is None or filepath == "":
         return None
-    elif isinstance (filepath, Entry):
+    elif isinstance(filepath, Entry):
         return filepath
     else:
-        filepath = unicode (filepath)
+        filepath = unicode(filepath)
         if _file_info is core.UNSET:
-            attributes = wrapped (win32file.GetFileAttributesW, normalised (filepath))
+            attributes = wrapped(win32file.GetFileAttributesW, normalised(filepath))
         else:
             attributes = _file_info[0]
         if attributes == -1:
-            return _guess (filepath)
+            return _guess(filepath)
         elif attributes & FILE_ATTRIBUTE.DIRECTORY:
-            return Dir (filepath, _file_info)
+            return Dir(filepath, _file_info)
         else:
-            return File (filepath, _file_info)
+            return File(filepath, _file_info)
 
-def file (filepath):
+def file(filepath):
     """Return a :class:`File` object representing this filepath on
     the filepath. If filepath is already a :class:`File` object, return
     it unchanged otherwise ensure that the filepath doesn't point to
     an existing directory and return a :class:`File` object which
     represents it.
     """
-    f = entry (filepath)
-    if isinstance (f, File):
+    f = entry(filepath)
+    if isinstance(f, File):
         return f
-    elif isinstance (f, Dir) and f:
+    elif isinstance(f, Dir) and f:
         raise x_fs((None, "file", "%s exists but is a directory" % filepath))
     else:
-        return File (unicode (filepath))
+        return File(unicode(filepath))
 
-def dir (filepath):
+def dir(filepath):
     """Return a :class:`Dir` object representing this filepath on
     the filepath. If filepath is already a :class:`Dir` object, return
     it unchanged otherwise ensure that the filepath doesn't point to
     an existing file and return a :class:`Dir` object which
     represents it.
     """
-    f = entry (filepath)
-    if isinstance (f, Dir):
+    f = entry(filepath)
+    if isinstance(f, Dir):
         return f
-    elif isinstance (f, File) and f:
-        raise x_fs (None, "dir", "%s exists but is a file" % filepath)
+    elif isinstance(f, File) and f:
+        raise x_fs(None, "dir", "%s exists but is a file" % filepath)
     else:
-        if re.match (UNC, f.root):
-            return SharedDir (unicode (filepath))
+        if re.match(UNC, f.root):
+            return SharedDir(unicode(filepath))
         else:
-            return Dir (unicode (filepath))
+            return Dir(unicode(filepath))
 
-def glob (pattern):
+def glob(pattern):
     """Mimic the built-in glob.glob functionality as a generator,
     optionally ignoring access errors.
 
     :param pattern: passed to :func:`files`
     :returns: yields a :class:`FilePath` object for each matching file
     """
-    return files (pattern)
+    return files(pattern)
 
-def listdir (d):
+def listdir(d):
     """Mimic the built-in os.list functionality as a generator,
     optionally ignoring access errors.
 
     :param d: anything accepted by :func:`dir`
     :returns: yield the name of each file in directory d
     """
-    return (f.name for f in files (dir (d) + "*"))
+    return (f.name for f in files(dir(d) + "*"))
 
-def walk (root, depthfirst=False, error_handler=None):
+def walk(root, depthfirst=False, error_handler=None):
     """Walk the directory tree starting from root, optionally ignoring
     access errors.
 
@@ -1992,9 +1992,9 @@ def walk (root, depthfirst=False, error_handler=None):
     :param error_handler: passed to :meth:`Dir.walk`
     :returns: as :meth:`Dir.walk`
     """
-    return dir (root).walk (depthfirst=depthfirst, error_handler=error_handler)
+    return dir(root).walk(depthfirst=depthfirst, error_handler=error_handler)
 
-def flat (root, pattern="*", includedirs=False, depthfirst=False, error_handler=None):
+def flat(root, pattern="*", includedirs=False, depthfirst=False, error_handler=None):
     """Iterate over a flattened version of the directory tree starting
     from root. Implemented via :meth:`Dir.flat`.
 
@@ -2005,23 +2005,23 @@ def flat (root, pattern="*", includedirs=False, depthfirst=False, error_handler=
     :param error_handler: passed to :meth:`Dir.flat`
     :returns: as :meth:`Dir.flat`
     """
-    return dir (root).flat (
+    return dir(root).flat(
         pattern,
         includedirs=includedirs,
         depthfirst=depthfirst,
         error_handler=error_handler
     )
 
-def progress_wrapper (callback):
+def progress_wrapper(callback):
 
-    def _progress_wrapper (
+    def _progress_wrapper(
         TotalFileSize, TotalBytesTransferred,
         StreamSize, StreamBytesTransferred, StreamNumber,
         CallbackReason,
         SourceFile, DestinationFile,
         data
     ):
-        if callback (TotalFileSize, TotalBytesTransferred, data):
+        if callback(TotalFileSize, TotalBytesTransferred, data):
             return PROGRESS.CANCEL
         else:
             return PROGRESS.CONTINUE
@@ -2031,88 +2031,88 @@ def progress_wrapper (callback):
     else:
         return None
 
-def move (source_filepath, *args, **kwargs):
+def move(source_filepath, *args, **kwargs):
     """Move one :class:`Entry` object to another, implemented via :meth:`File.move` or :meth:`Dir.move`
 
     :param source_filepath: anything accepted by :func:`entry`
     """
-    return entry (source_filepath).move (*args, **kwargs)
+    return entry(source_filepath).move(*args, **kwargs)
 
-def copy (source_filepath, *args, **kwargs):
+def copy(source_filepath, *args, **kwargs):
     """Copy one :class:`Entry` object to another, implemented via :meth:`File.copy` or :meth:`Dir.copy`
 
     :param source_filepath: anything accepted by :func:`entry`
     """
-    return entry (source_filepath).copy (*args, **kwargs)
+    return entry(source_filepath).copy(*args, **kwargs)
 
-def delete (filepath):
+def delete(filepath):
     """Deletes a :class:`Entry` object, implemented via :meth:`File.delete` or :meth:`Dir.delete`
 
     :param filepath: anything accepted by :func:`entry`
     """
-    return entry (filepath).delete ()
+    return entry(filepath).delete()
 
-def rmdir (filepath, recursive=False):
+def rmdir(filepath, recursive=False):
     """Mimic the os.rmdir functionality, optionally recursing
 
     :param filepath: anything accepted by :func:`dir`
     :param recursive: passed to :meth:`Dir.delete`
     """
-    return dir (filepath).delete (recursive=recursive)
+    return dir(filepath).delete(recursive=recursive)
 
-def attributes (filepath):
+def attributes(filepath):
     """Return an :class:`constants.Attributes` object representing the file attributes
     of filepath, implemented via :meth:`Entry.attributes`
 
     :param filepath: anything accepted by :func:`entry`
     :returns: an :class:`constants.Attributes` object
     """
-    return entry (filepath).attributes
+    return entry(filepath).attributes
 
-def exists (filepath):
+def exists(filepath):
     """Mimic os.path.exists, implemented via the :class:`Entry` boolean mechanism
 
     :param filepath: anything accepted by :func:`entry`
     :returns: :const:`True` if filepath exists, :const:`False` otherwise
     """
-    return bool (entry (filepath))
+    return bool(entry(filepath))
 
-def mkdir (dirpath, *args, **kwargs):
+def mkdir(dirpath, *args, **kwargs):
     """Mimic os.mkdir, implemented via :meth:`Dir.create`
     """
-    return dir (dirpath).create (*args, **kwargs)
+    return dir(dirpath).create(*args, **kwargs)
 
-def touch (filepath):
+def touch(filepath):
     """Update a file's modification time, creating it if it
     does not exist, implemented via :meth:`File.create`
 
     :param filepath: anything accepted by :func:`file`
     """
-    return file (filepath).create ()
+    return file(filepath).create()
 
-def mount (filepath, vol):
+def mount(filepath, vol):
     """Mount vol at filepath, implemented via :meth:`Dir.mount`
 
     :param filepath: anything accepted by :func:`dir`
     :param vol: passed to :meth:`Dir.mount`
     """
-    return dir (filepath).mount (vol)
+    return dir(filepath).mount(vol)
 
-def dismount (filepath):
+def dismount(filepath):
     """Dismount the volume at filepath, implemented via :meth:`Dir.dismount`
 
     :param filepath: anything accepted by :func:`dir`
     """
-    return dir (filepath).dismount ()
+    return dir(filepath).dismount()
 
-def zip (filepath, *args, **kwargs):
+def zip(filepath, *args, **kwargs):
     """Create and return a zip archive of filepath, implemented via :meth:`File.zip` or :meth:`Dir.zip`
 
     :param filepath: anything accepted by :func:`entry`
     """
-    return entry (filepath).zip (*args, **kwargs)
+    return entry(filepath).zip(*args, **kwargs)
 
-def drive (drive):
+def drive(drive):
     """Return a :class:`Drive` object representing drive
 
     ======================================= ==================================================
@@ -2125,19 +2125,19 @@ def drive (drive):
     """
     if drive is None:
         return None
-    elif isinstance (drive, Drive):
+    elif isinstance(drive, Drive):
         return drive
     else:
-        return Drive (drive)
+        return Drive(drive)
 
-def drives ():
+def drives():
     """Iterate over all the drive letters in the system, yielding a :class:`Drive` object
     representing each one.
     """
-    for drive in wrapped (win32api.GetLogicalDriveStrings).strip ("\x00").split ("\x00"):
-        yield Drive (drive)
+    for drive in wrapped(win32api.GetLogicalDriveStrings).strip("\x00").split("\x00"):
+        yield Drive(drive)
 
-def volume (volume):
+def volume(volume):
     """Return a :class:`Volume` object corresponding to volume
 
     ======================================= ==================================================
@@ -2152,79 +2152,79 @@ def volume (volume):
     """
     if volume is None:
         return None
-    elif isinstance (volume, Volume):
+    elif isinstance(volume, Volume):
         return volume
-    elif volume.startswith (r"\\?\Volume"):
-        return Volume (volume)
+    elif volume.startswith(r"\\?\Volume"):
+        return Volume(volume)
     else:
-        return Volume (wrapped (win32file.GetVolumeNameForVolumeMountPoint, volume.rstrip (sep) + sep))
+        return Volume(wrapped(win32file.GetVolumeNameForVolumeMountPoint, volume.rstrip(sep) + sep))
 
-def volumes ():
+def volumes():
     """Iterate over all the volumes in the system, yielding a :class:`Volume` object
     representing each one.
     """
-    hSearch, volume_name = _kernel32.FindFirstVolume ()
-    yield Volume (volume_name)
+    hSearch, volume_name = _kernel32.FindFirstVolume()
+    yield Volume(volume_name)
     while True:
-        volume_name = _kernel32.FindNextVolume (hSearch)
+        volume_name = _kernel32.FindNextVolume(hSearch)
         if volume_name is None:
             break
         else:
-            yield Volume (volume_name)
+            yield Volume(volume_name)
 
-def share (share):
+def share(share):
     """Return a :class:`Share` object corresponding to share
     """
     if share is None:
         return None
-    elif isinstance (share, Share):
+    elif isinstance(share, Share):
         return share
     else:
-        match = re.match (sep * 4 + "(" + LEGAL_FILECHARS + ")" + sep * 2 + "(" + LEGAL_FILECHARS + ")", share)
+        match = re.match(sep * 4 + "(" + LEGAL_FILECHARS + ")" + sep * 2 + "(" + LEGAL_FILECHARS + ")", share)
         if match:
-            return Share (*match.groups ())
+            return Share(*match.groups())
         else:
-            raise x_fs ("Invalid share name: %s" % share)
+            raise x_fs("Invalid share name: %s" % share)
 
-def shares (servername="."):
+def shares(servername="."):
     """Iterate over all the shares in a system, yielding a :class:`Share` object
     representing each one
     """
-    infos, total, hResume = wrapped (win32net.NetShareEnum, servername, 0)
+    infos, total, hResume = wrapped(win32net.NetShareEnum, servername, 0)
     for info in infos:
-        yield Share (servername, info['netname'])
+        yield Share(servername, info['netname'])
     while hResume > 0:
-        infos, total, hResume = wrapped (win32net.NetShareEnum, servername, 0, hResume)
+        infos, total, hResume = wrapped(win32net.NetShareEnum, servername, 0, hResume)
         for info in infos:
-            yield Share (servername, info['netname'])
+            yield Share(servername, info['netname'])
 
-def mounts ():
+def mounts():
     """Iterate over all mounted volume mountpoints in the system, yielding a
     (:class:`Dir`, :class:`Volume`) pair for each one, eg::
 
         from winsys import fs
-        drive_volumes = dict (fs.mounts ())
+        drive_volumes = dict(fs.mounts())
     """
-    for v in volumes ():
+    for v in volumes():
         for m in v.mounts:
-            yield Dir (m), v
+            yield Dir(m), v
 
-class _DirWatcher (object):
+class _DirWatcher(object):
 
-    WATCH_FOR = reduce (operator.or_, FILE_NOTIFY_CHANGE.values ())
+    WATCH_FOR = reduce(operator.or_, FILE_NOTIFY_CHANGE.values())
     BUFFER_SIZE = 8192
     TIMEOUT = 500
 
-    def __init__ (self, root, subdirs=False, watch_for=WATCH_FOR, buffer_size=BUFFER_SIZE):
+    def __init__(self, root, subdirs=False, watch_for=WATCH_FOR, buffer_size=BUFFER_SIZE):
         self.root = root
         self.subdirs = subdirs
         self.watch_for = watch_for
-        self.overlapped = wrapped (pywintypes.OVERLAPPED)
-        self.overlapped.hEvent = wrapped (win32event.CreateEvent, None, 0, 0, None)
-        self.buffer = wrapped (win32file.AllocateReadBuffer, buffer_size)
-        self.hDir = wrapped (
+        self.overlapped = wrapped(pywintypes.OVERLAPPED)
+        self.overlapped.hEvent = wrapped(win32event.CreateEvent, None, 0, 0, None)
+        self.buffer = wrapped(win32file.AllocateReadBuffer, buffer_size)
+        self.hDir = wrapped(
             win32file.CreateFile,
-            normalised (root),
+            normalised(root),
             FILE_ACCESS.LIST_DIRECTORY,
             #
             # This must allow RWD otherwises files in
@@ -2236,13 +2236,13 @@ class _DirWatcher (object):
             FILE_FLAG.BACKUP_SEMANTICS | FILE_FLAG.OVERLAPPED,
             None
         )
-        self._changes = collections.deque ()
+        self._changes = collections.deque()
 
-    def __iter__ (self):
+    def __iter__(self):
         return self
 
-    def next (self):
-        wrapped (
+    def next(self):
+        wrapped(
             win32file.ReadDirectoryChangesW,
             self.hDir,
             self.buffer,
@@ -2251,43 +2251,43 @@ class _DirWatcher (object):
             self.overlapped
         )
         while True:
-            if wrapped (
+            if wrapped(
                     win32event.WaitForSingleObject,
                     self.overlapped.hEvent,
                     self.TIMEOUT
             ) == win32event.WAIT_OBJECT_0:
-                n_bytes = wrapped (win32file.GetOverlappedResult, self.hDir, self.overlapped, True)
+                n_bytes = wrapped(win32file.GetOverlappedResult, self.hDir, self.overlapped, True)
                 if n_bytes == 0:
                     continue
 
                 last_result = None
                 old_file = new_file = None
-                for action, filename in wrapped (win32file.FILE_NOTIFY_INFORMATION, self.buffer, n_bytes):
+                for action, filename in wrapped(win32file.FILE_NOTIFY_INFORMATION, self.buffer, n_bytes):
                     if action == FILE_ACTION.ADDED:
-                        new_file = entry (os.path.join (self.root, filename))
+                        new_file = entry(os.path.join(self.root, filename))
                     elif action == FILE_ACTION.REMOVED:
-                        old_file = entry (os.path.join (self.root, filename))
+                        old_file = entry(os.path.join(self.root, filename))
                     elif action == FILE_ACTION.MODIFIED:
-                        old_file = new_file = entry (os.path.join (self.root, filename))
+                        old_file = new_file = entry(os.path.join(self.root, filename))
                     elif action == FILE_ACTION.RENAMED_OLD_NAME:
-                        old_file = entry (os.path.join (self.root, filename))
+                        old_file = entry(os.path.join(self.root, filename))
                         action = None
                     elif action == FILE_ACTION.RENAMED_NEW_NAME:
-                        new_file = entry (os.path.join (self.root, filename))
+                        new_file = entry(os.path.join(self.root, filename))
 
                     if action:
-                        result = (action, old_file, new_file)
+                        result =(action, old_file, new_file)
                         if result != last_result:
-                            self._changes.append (result)
+                            self._changes.append(result)
 
             if self._changes:
-                return self._changes.popleft ()
+                return self._changes.popleft()
     __next__ = next
 
-    def stop (self):
-        self.hDir.close ()
+    def stop(self):
+        self.hDir.close()
 
-def watch (
+def watch(
     root,
     subdirs=False,
     watch_for=_DirWatcher.WATCH_FOR,
@@ -2302,21 +2302,21 @@ def watch (
     be different::
 
         from winsys import fs
-        watcher = fs.watch ("c:/temp", subdirs=True)
+        watcher = fs.watch("c:/temp", subdirs=True)
         for action, old_filename, new_filename in watcher:
             if action == fs.FILE_ACTION.ADDED:
                 print new_filename, "added"
             elif action == fs.FILE_ACTION.REMOVED:
                 print old_filename, "removed"
     """
-    return _DirWatcher (unicode (root), subdirs, watch_for, buffer_size)
+    return _DirWatcher(unicode(root), subdirs, watch_for, buffer_size)
 
 if __name__ == '__main__':
-    print("Watching", os.path.abspath ("."))
-    watcher = watch (".", True)
+    print("Watching", os.path.abspath("."))
+    watcher = watch(".", True)
     try:
         for action, old_filename, new_filename in watcher:
             if action in (FILE_ACTION.ADDED, FILE_ACTION.MODIFIED):
-                print("%10s %s %d" % (FILE_ACTION.name_from_value (action), new_filename, entry (new_filename).size))
+                print("%10s %s %d" % (FILE_ACTION.name_from_value(action), new_filename, entry(new_filename).size))
     except KeyboardInterrupt:
-        watcher.stop ()
+        watcher.stop()
