@@ -120,15 +120,17 @@ class Constants(core._WinSysObject):
 
         namelen = max(namelen, len(max(self._dict, key=len)))
         aliaslen = max(aliaslen, len(max(self._key_dict.values(), key=len)))
+
+        values = self._dict.values()
         try:
-            int(self._dict.values()[0])
-        except:
-            valuelen = max(valuelen, len(max((unicode(v) for v in self._dict.values()), key=len)))
+            int(values[0])
+        except (ValueError, TypeError):
+            valuelen = max(valuelen, len(max((unicode(v) for v in values), key=len)))
             prefix = ""
             row_format = "|%%-%ds|%%-%ds|%%-%ds|" % (namelen, valuelen, aliaslen)
             converter = unicode
         else:
-            valuelen = max(valuelen, 2 *((1 + len("%x" % max(self._dict.values()))) // 2))
+            valuelen = max(valuelen, 2 *((1 + max(len("%x" % utils.signed_to_unsigned(v)) for v in values)) // 2))
             prefix = "0x"
             row_format = "|%%-%ds|%s%%0%dX|%%-%ds|" % (namelen, prefix, valuelen, aliaslen)
             converter = utils.signed_to_unsigned

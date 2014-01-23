@@ -336,7 +336,7 @@ def relative_to(filepath1, filepath2):
     return utils.relative_to(filepath1, filepath2.rstrip(seps) + sep)
 
 class FilePath(unicode):
-    """A unicode subtype which knows about path structures on Windows.
+    r"""A unicode subtype which knows about path structures on Windows.
     The path itself need not exist on any filesystem, but it has to match
     the rules which would make it possible.
 
@@ -361,12 +361,12 @@ class FilePath(unicode):
     =================== ========== ========= ========= ========= =========== =========== ===== ====
     Path                root       filename  name      dirname   path        parent      base  ext
     =================== ========== ========= ========= ========= =========== =========== ===== ====
-    \\\\a\\b\\c\\d.txt  \\\\a\\b\\ d.txt     d.txt     c         \\\\a\\b\\c \\\\a\\b\\c d     .txt
+    \\\\a\b\c\d.txt     \\\\a\b\   d.txt     d.txt     c         \\\\a\b\c   \\\\a\b\c d       .txt
     c:\\boot.ini        c:\\       boot.ini  boot.ini  _         c:\\        c:\\        boot  .ini
     boot.ini            _          boot.ini  boot.ini  _         _           x_fs        boot  .ini
     c:\\t               c:\\       t         t         _         c:\\        c:\\        t     _
-    c:\\t\\             c:\\       t         t         _         c:\\        c:\\        t     _
-    c:\\t\\a.txt        c:\\       a.txt     a.txt     t         c:\\t       c:\\t       a     .txt
+    c:\\t\              c:\\       t         t         _         c:\\        c:\\        t     _
+    c:\\t\a.txt         c:\\       a.txt     a.txt     t         c:\\t       c:\\t       a     .txt
     c:a.txt             c:         a.txt     a.txt     _         c:          x_fs        a     .txt
     a.txt               _          a.txt     a.txt     _         _           x_fs        a     .txt
     =================== ========== ========= ========= ========= =========== =========== ===== ====
@@ -2138,14 +2138,14 @@ def drives():
         yield Drive(drive)
 
 def volume(volume):
-    """Return a :class:`Volume` object corresponding to volume
+    r"""Return a :class:`Volume` object corresponding to volume
 
     ======================================= ==================================================
     volume                                  Result
     ======================================= ==================================================
     :const:`None`                           :const:`None`
     an :class:`Volume` or subclass object   the same object
-    a volume name \\\\?\\Volume...          a :class:`Volume` object representing that volume
+    a volume name \\?\Volume...             a :class:`Volume` object representing that volume
     a directory name                        a :class:`Volume` object representing the volume
                                             at that mountpoint
     ======================================= ==================================================
