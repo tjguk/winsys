@@ -26,7 +26,7 @@ def main (test_directory="."):
     for dirname in dirnames:
       add_tests_from_directory (suite, os.path.join (dirpath, dirname))
 
-  result = unittest.TextTestRunner (verbosity=0, failfast=True).run (suite)
+  result = unittest.TextTestRunner (verbosity=1, failfast=False).run (suite)
   if result.errors or result.failures:
     sys.exit(1)
   else:

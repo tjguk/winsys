@@ -5,12 +5,12 @@ import winsys
 
 packages = ['winsys', 'winsys.tests', 'winsys._security', 'winsys.extras']
 ext_modules = [
-  Extension ("winsys._change_journal", ["src/_change_journal.c"]),
+  Extension("winsys._change_journal", ["src/_change_journal.c"]),
 ]
 version = open ("VERSION.txt").read ().strip ()
 
 if __name__ == '__main__':
-  setup (
+  setup(
       name='WinSys',
       version=version,
       url='http://github.com/tjg/winsys',
@@ -18,7 +18,7 @@ if __name__ == '__main__':
       author='Tim Golden',
       author_email='mail@timgolden.me.uk',
       description='Python tools for the Windows sysadmin',
-      long_description=open ("README.rst").read (),
+      long_description=open("README.rst").read(),
       classifiers=[
           'Development Status :: 4 - Beta',
           'Environment :: Console',
