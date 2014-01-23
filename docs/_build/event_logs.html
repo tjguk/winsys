@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>event_logs – Event Logs &mdash; WinSys 0.5beta documentation</title>
+    <title>event_logs – Event Logs &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.5beta',
+        URL_ROOT:    './',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
     <link rel="next" title="fs – Files, Directories, &amp;c." href="fs.html" />
     <link rel="prev" title="dialogs – Dialog boxes" href="dialogs.html" /> 
   </head>
@@ -46,7 +44,7 @@
         <li class="right" >
           <a href="dialogs.html" title="dialogs – Dialog boxes"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -100,7 +98,7 @@ log does not exist.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>log</strong> &#8211; one of None, an <a class="reference internal" href="#event_logs.EventLog" title="event_logs.EventLog"><tt class="xref py py-class docutils literal"><span class="pre">EventLog</span></tt></a> instance, or a [\\computer\]name moniker</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>log</strong> &#8211; one of None, an <a class="reference internal" href="#event_logs.EventLog" title="event_logs.EventLog"><tt class="xref py py-class docutils literal"><span class="pre">EventLog</span></tt></a> instance, or a [\computer]name moniker</td>
 </tr>
 </tbody>
 </table>
@@ -234,10 +232,10 @@ and the corresponding strings filled in.</p>
 <em class="property">class </em><tt class="descclassname">event_logs.</tt><tt class="descname">EventLog</tt><big>(</big><em>computer</em>, <em>name</em><big>)</big><a class="reference internal" href="_modules/event_logs.html#EventLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#event_logs.EventLog" title="Permalink to this definition">¶</a></dt>
 <dd><p>An Event Log is a sequential database managed through API calls
 with a number of different Event Sources, against which events can
-be logged. The log can be read backwards (using the reversed () builtin)
+be logged. The log can be read backwards (using the reversed() builtin)
 or forwards but only sequentially.
 (We simulate random access by reading sequentially until a record is hit).</p>
-<p>You can use the builtin len () to determine the current size of
+<p>You can use the builtin len() to determine the current size of
 this log (which may or may not correspond to the maximum record
 number). Item access is possible from either end by subscripting
 the log in the usual way. It should be noted that this uses iteration,
@@ -420,9 +418,9 @@ event source.</p>
 <dd><p>Ways of reading event logs</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="27%" />
-<col width="8%" />
-<col width="65%" />
+<col width="26%" />
+<col width="13%" />
+<col width="62%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Name</th>
@@ -432,19 +430,19 @@ event source.</p>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>SEQUENTIAL</td>
-<td>1</td>
+<td>0x001</td>
 <td>EVENTLOG_SEQUENTIAL_READ</td>
 </tr>
 <tr class="row-odd"><td>SEEK</td>
-<td>2</td>
+<td>0x002</td>
 <td>EVENTLOG_SEEK_READ</td>
 </tr>
 <tr class="row-even"><td>FORWARDS</td>
-<td>4</td>
+<td>0x004</td>
 <td>EVENTLOG_FORWARDS_READ</td>
 </tr>
 <tr class="row-odd"><td>BACKWARDS</td>
-<td>8</td>
+<td>0x008</td>
 <td>EVENTLOG_BACKWARDS_READ</td>
 </tr>
 </tbody>
@@ -457,9 +455,9 @@ event source.</p>
 <dd><p>Types of records in event logs</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="36%" />
-<col width="7%" />
-<col width="57%" />
+<col width="35%" />
+<col width="11%" />
+<col width="54%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Name</th>
@@ -469,28 +467,28 @@ event source.</p>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>EVENTLOG_SUCCESS</td>
-<td>0</td>
+<td>0x000</td>
 <td>EVENTLOG_SUCCESS</td>
 </tr>
 <tr class="row-odd"><td>ERROR</td>
-<td>1</td>
+<td>0x001</td>
 <td>EVENTLOG_ERROR_TYPE</td>
 </tr>
-<tr class="row-even"><td>AUDIT_FAILURE</td>
-<td>16</td>
-<td>AUDIT_FAILURE</td>
-</tr>
-<tr class="row-odd"><td>WARNING</td>
-<td>2</td>
+<tr class="row-even"><td>WARNING</td>
+<td>0x002</td>
 <td>EVENTLOG_WARNING_TYPE</td>
 </tr>
-<tr class="row-even"><td>INFORMATION</td>
-<td>4</td>
+<tr class="row-odd"><td>INFORMATION</td>
+<td>0x004</td>
 <td>EVENTLOG_INFORMATION_TYPE</td>
 </tr>
-<tr class="row-odd"><td>AUDIT_SUCCESS</td>
-<td>8</td>
+<tr class="row-even"><td>AUDIT_SUCCESS</td>
+<td>0x008</td>
 <td>AUDIT_SUCCESS</td>
+</tr>
+<tr class="row-odd"><td>AUDIT_FAILURE</td>
+<td>0x010</td>
+<td>AUDIT_FAILURE</td>
 </tr>
 </tbody>
 </table>
@@ -499,7 +497,7 @@ event source.</p>
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
 <dt><a class="reference external" href="http://msdn.microsoft.com/en-us/library/FIXME.aspx">Event Logs</a></dt>
@@ -543,7 +541,7 @@ event source.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="dialogs.html"
-                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">dialogs</span></tt> &#8211; Dialog boxes</a></p>
+                        title="previous chapter"><tt class="docutils literal"><span class="pre">dialogs</span></tt> &#8211; Dialog boxes</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="fs.html"
                         title="next chapter"><tt class="docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a></p>
@@ -584,12 +582,12 @@ event source.</p>
         <li class="right" >
           <a href="dialogs.html" title="dialogs – Dialog boxes"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ipc &mdash; WinSys 0.5beta documentation</title>
+    <title>ipc &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.5beta',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="../index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="../index.html" />
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body>
@@ -39,7 +37,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -50,7 +48,9 @@
           <div class="body">
             
   <h1>Source code for ipc</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: iso-8859-1 -*-</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+
 <span class="kn">import</span> <span class="nn">marshal</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -65,652 +65,652 @@
 
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">constants</span><span class="p">,</span> <span class="n">core</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">security</span><span class="p">,</span> <span class="n">utils</span><span class="p">,</span> <span class="n">handles</span>
 
-<span class="n">WAIT</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span><span class="s">u&quot;WAIT_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32event</span><span class="p">)</span>
-<span class="n">WAIT</span><span class="o">.</span><span class="n">update</span> <span class="p">(</span><span class="nb">dict</span> <span class="p">(</span><span class="n">INFINITE</span><span class="o">=</span><span class="n">win32event</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">))</span>
-<span class="n">PIPE_ACCESS</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span><span class="s">u&quot;PIPE_ACCESS_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32pipe</span><span class="p">)</span>
-<span class="n">PIPE_TYPE</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span><span class="s">u&quot;PIPE_TYPE_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32pipe</span><span class="p">)</span>
-<span class="n">NMPWAIT</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span><span class="s">u&quot;NMPWAIT_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32pipe</span><span class="p">)</span>
+<span class="n">WAIT</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span><span class="p">(</span><span class="s">&quot;WAIT_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32event</span><span class="p">)</span>
+<span class="n">WAIT</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">INFINITE</span><span class="o">=</span><span class="n">win32event</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">))</span>
+<span class="n">PIPE_ACCESS</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span><span class="p">(</span><span class="s">&quot;PIPE_ACCESS_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32pipe</span><span class="p">)</span>
+<span class="n">PIPE_TYPE</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span><span class="p">(</span><span class="s">&quot;PIPE_TYPE_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32pipe</span><span class="p">)</span>
+<span class="n">NMPWAIT</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span><span class="p">(</span><span class="s">&quot;NMPWAIT_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32pipe</span><span class="p">)</span>
 
 <span class="n">PyHANDLE</span> <span class="o">=</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">HANDLEType</span>
 
-<div class="viewcode-block" id="x_ipc"><a class="viewcode-back" href="../ipc.html#ipc.x_ipc">[docs]</a><span class="k">class</span> <span class="nc">x_ipc</span> <span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">x_winsys</span><span class="p">):</span>
-  <span class="k">pass</span>
+<div class="viewcode-block" id="x_ipc"><a class="viewcode-back" href="../ipc.html#ipc.x_ipc">[docs]</a><span class="k">class</span> <span class="nc">x_ipc</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">x_winsys</span><span class="p">):</span>
+    <span class="k">pass</span>
 </div>
-<span class="k">class</span> <span class="nc">x_ipc_timeout</span> <span class="p">(</span><span class="n">x_ipc</span><span class="p">):</span>
-  <span class="k">pass</span>
+<span class="k">class</span> <span class="nc">x_ipc_timeout</span><span class="p">(</span><span class="n">x_ipc</span><span class="p">):</span>
+    <span class="k">pass</span>
 
-<div class="viewcode-block" id="x_mailslot"><a class="viewcode-back" href="../ipc.html#ipc.x_mailslot">[docs]</a><span class="k">class</span> <span class="nc">x_mailslot</span> <span class="p">(</span><span class="n">x_ipc</span><span class="p">):</span>
-  <span class="k">pass</span>
+<div class="viewcode-block" id="x_mailslot"><a class="viewcode-back" href="../ipc.html#ipc.x_mailslot">[docs]</a><span class="k">class</span> <span class="nc">x_mailslot</span><span class="p">(</span><span class="n">x_ipc</span><span class="p">):</span>
+    <span class="k">pass</span>
 </div>
-<div class="viewcode-block" id="x_mailslot_invalid_use"><a class="viewcode-back" href="../ipc.html#ipc.x_mailslot_invalid_use">[docs]</a><span class="k">class</span> <span class="nc">x_mailslot_invalid_use</span> <span class="p">(</span><span class="n">x_mailslot</span><span class="p">):</span>
-  <span class="k">pass</span>
+<div class="viewcode-block" id="x_mailslot_invalid_use"><a class="viewcode-back" href="../ipc.html#ipc.x_mailslot_invalid_use">[docs]</a><span class="k">class</span> <span class="nc">x_mailslot_invalid_use</span><span class="p">(</span><span class="n">x_mailslot</span><span class="p">):</span>
+    <span class="k">pass</span>
 </div>
-<div class="viewcode-block" id="x_mailslot_empty"><a class="viewcode-back" href="../ipc.html#ipc.x_mailslot_empty">[docs]</a><span class="k">class</span> <span class="nc">x_mailslot_empty</span> <span class="p">(</span><span class="n">x_mailslot</span><span class="p">):</span>
-  <span class="k">pass</span>
+<div class="viewcode-block" id="x_mailslot_empty"><a class="viewcode-back" href="../ipc.html#ipc.x_mailslot_empty">[docs]</a><span class="k">class</span> <span class="nc">x_mailslot_empty</span><span class="p">(</span><span class="n">x_mailslot</span><span class="p">):</span>
+    <span class="k">pass</span>
 </div>
-<div class="viewcode-block" id="x_mailslot_message_too_big"><a class="viewcode-back" href="../ipc.html#ipc.x_mailslot_message_too_big">[docs]</a><span class="k">class</span> <span class="nc">x_mailslot_message_too_big</span> <span class="p">(</span><span class="n">x_mailslot</span><span class="p">):</span>
-  <span class="k">pass</span>
+<div class="viewcode-block" id="x_mailslot_message_too_big"><a class="viewcode-back" href="../ipc.html#ipc.x_mailslot_message_too_big">[docs]</a><span class="k">class</span> <span class="nc">x_mailslot_message_too_big</span><span class="p">(</span><span class="n">x_mailslot</span><span class="p">):</span>
+    <span class="k">pass</span>
 </div>
-<div class="viewcode-block" id="x_mailslot_message_too_complex"><a class="viewcode-back" href="../ipc.html#ipc.x_mailslot_message_too_complex">[docs]</a><span class="k">class</span> <span class="nc">x_mailslot_message_too_complex</span> <span class="p">(</span><span class="n">x_mailslot</span><span class="p">):</span>
-  <span class="k">pass</span>
+<div class="viewcode-block" id="x_mailslot_message_too_complex"><a class="viewcode-back" href="../ipc.html#ipc.x_mailslot_message_too_complex">[docs]</a><span class="k">class</span> <span class="nc">x_mailslot_message_too_complex</span><span class="p">(</span><span class="n">x_mailslot</span><span class="p">):</span>
+    <span class="k">pass</span>
 </div>
 <span class="n">WINERROR_MAP</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="n">winerror</span><span class="o">.</span><span class="n">ERROR_FILE_NOT_FOUND</span> <span class="p">:</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">,</span>
+    <span class="n">winerror</span><span class="o">.</span><span class="n">ERROR_FILE_NOT_FOUND</span> <span class="p">:</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">,</span>
 <span class="p">}</span>
-<span class="n">wrapped</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="n">wrapper</span> <span class="p">(</span><span class="n">WINERROR_MAP</span><span class="p">,</span> <span class="n">x_ipc</span><span class="p">)</span>
+<span class="n">wrapped</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="n">wrapper</span><span class="p">(</span><span class="n">WINERROR_MAP</span><span class="p">,</span> <span class="n">x_ipc</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">_unserialised</span> <span class="p">(</span><span class="n">data</span><span class="p">):</span>
-  <span class="k">return</span> <span class="n">data</span>
+<span class="k">def</span> <span class="nf">_unserialised</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">data</span>
 
-<div class="viewcode-block" id="Mailslot"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot">[docs]</a><span class="k">class</span> <span class="nc">Mailslot</span> <span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
-  <span class="sd">ur&quot;&quot;&quot;A mailslot is a mechanism for passing small datasets (up to about</span>
-<span class="sd">  400 bytes) between machines in the same network. For transport and</span>
-<span class="sd">  name resolution it uses NetBIOS so you can&#39;t, for example, use a</span>
-<span class="sd">  machine&#39;s IP address when specifying the location of a mailslot.</span>
-<span class="sd">  You can, however, use &quot;*&quot; in order to broadcast your message to</span>
-<span class="sd">  all listening machines.</span>
+<div class="viewcode-block" id="Mailslot"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot">[docs]</a><span class="k">class</span> <span class="nc">Mailslot</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A mailslot is a mechanism for passing small datasets (up to about</span>
+<span class="sd">    400 bytes) between machines in the same network. For transport and</span>
+<span class="sd">    name resolution it uses NetBIOS so you can&#39;t, for example, use a</span>
+<span class="sd">    machine&#39;s IP address when specifying the location of a mailslot.</span>
+<span class="sd">    You can, however, use &quot;*&quot; in order to broadcast your message to</span>
+<span class="sd">    all listening machines.</span>
 
-<span class="sd">  A mailslot is either read-only or write-only. The typical case</span>
-<span class="sd">  is that one machine starts up a reading mailslot, say for trace</span>
-<span class="sd">  output, and all other machines write to that mailslot either by</span>
-<span class="sd">  specifying the machine name directly or by broadcasting. This is</span>
-<span class="sd">  particularly convenient as the writing machines have no need to</span>
-<span class="sd">  determine where the trace-collecting mailslot is running or even</span>
-<span class="sd">  if it is running at all.</span>
+<span class="sd">    A mailslot is either read-only or write-only. The typical case</span>
+<span class="sd">    is that one machine starts up a reading mailslot, say for trace</span>
+<span class="sd">    output, and all other machines write to that mailslot either by</span>
+<span class="sd">    specifying the machine name directly or by broadcasting. This is</span>
+<span class="sd">    particularly convenient as the writing machines have no need to</span>
+<span class="sd">    determine where the trace-collecting mailslot is running or even</span>
+<span class="sd">    if it is running at all.</span>
 
-<span class="sd">  The format for mailslot names is \\\\&lt;computer&gt;\\mailslot\\&lt;path&gt;\\&lt;to&gt;\\&lt;mailslot&gt;</span>
-<span class="sd">  The computer name can be &quot;.&quot; for the local computer, a Windows</span>
-<span class="sd">  computer name, a domain name, or an asterisk to indicate a broadcast.</span>
-<span class="sd">  It&#39;s not necessary to have a complex path for the mailslot but it is</span>
-<span class="sd">  supported and could be used to segregate functionally similar</span>
-<span class="sd">  mailslots on the same or different machines.</span>
+<span class="sd">    The format for mailslot names is \\\\&lt;computer&gt;\\mailslot\\&lt;path&gt;\\&lt;to&gt;\\&lt;mailslot&gt;</span>
+<span class="sd">    The computer name can be &quot;.&quot; for the local computer, a Windows</span>
+<span class="sd">    computer name, a domain name, or an asterisk to indicate a broadcast.</span>
+<span class="sd">    It&#39;s not necessary to have a complex path for the mailslot but it is</span>
+<span class="sd">    supported and could be used to segregate functionally similar</span>
+<span class="sd">    mailslots on the same or different machines.</span>
 
-<span class="sd">  This class deliberately wraps the mailslot API in a Python</span>
-<span class="sd">  API which is plug-compatible with that of the Python Queue</span>
-<span class="sd">  mechanism with the following notes:</span>
+<span class="sd">    This class deliberately wraps the mailslot API in a Python</span>
+<span class="sd">    API which is plug-compatible with that of the Python Queue</span>
+<span class="sd">    mechanism with the following notes:</span>
 
-<span class="sd">  * A mailslot is either read-only or write-only. Generally,</span>
-<span class="sd">    the first action taken on it determines which it is, although</span>
-<span class="sd">    remote mailslots can only be written to so this is predetermined.</span>
+<span class="sd">    * A mailslot is either read-only or write-only. Generally,</span>
+<span class="sd">        the first action taken on it determines which it is, although</span>
+<span class="sd">        remote mailslots can only be written to so this is predetermined.</span>
 
-<span class="sd">  * A mailslot can be context-managed so that it is opened and</span>
-<span class="sd">    closed correctly regardless of any errors.</span>
+<span class="sd">    * A mailslot can be context-managed so that it is opened and</span>
+<span class="sd">        closed correctly regardless of any errors.</span>
 
-<span class="sd">  * A mailslot is its own iterator (strictly: generator)</span>
+<span class="sd">    * A mailslot is its own iterator (strictly: generator)</span>
 
-<span class="sd">  * By default the data through a mailslot is expected to be</span>
-<span class="sd">    text, and is passed through untouched. Alternative</span>
-<span class="sd">    serialisers can be provided, for example marshal.dumps and</span>
-<span class="sd">    marshal.loads to allow simple objects to be transmitted via</span>
-<span class="sd">    the mailslot. Note that the maximum message size still applies</span>
-<span class="sd">    so it&#39;s not possible to send very complex datasets this way.</span>
+<span class="sd">    * By default the data through a mailslot is expected to be</span>
+<span class="sd">        text, and is passed through untouched. Alternative</span>
+<span class="sd">        serialisers can be provided, for example marshal.dumps and</span>
+<span class="sd">        marshal.loads to allow simple objects to be transmitted via</span>
+<span class="sd">        the mailslot. Note that the maximum message size still applies</span>
+<span class="sd">        so it&#39;s not possible to send very complex datasets this way.</span>
 
-<span class="sd">  Since a mailslot will always return immediately if passed to one</span>
-<span class="sd">  of the Wait... functions, events or other synchronisation objects</span>
-<span class="sd">  will be needed to coordinate between mailslots.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-
-  <span class="n">MAX_MESSAGE_SIZE</span> <span class="o">=</span> <span class="mi">420</span>
-
-  <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span>
-    <span class="n">name</span><span class="p">,</span>
-    <span class="n">serialiser</span><span class="o">=</span><span class="p">(</span><span class="n">_unserialised</span><span class="p">,</span> <span class="n">_unserialised</span><span class="p">),</span>
-    <span class="n">message_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">timeout_ms</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
-    <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-  <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Set up a mailslot of the given name, which must be valid according to</span>
-<span class="sd">    the Microsoft docs.</span>
-
-<span class="sd">    :param serialiser: a pair of callable which will be used to</span>
-<span class="sd">                       encode &amp; decode data respectively. Typical</span>
-<span class="sd">                       serialisers would be (marshal.dumps, marshal.loads).</span>
-<span class="sd">    :type serialiser: a pair of callables each taking one param and returning bytes</span>
-<span class="sd">    :param message_size: the maximum size of a message to this mailslot,</span>
-<span class="sd">                         up to the system-defined maximum of about 400 bytes</span>
-<span class="sd">                         if passing between computers.</span>
-<span class="sd">    :param timeout_ms: how many milliseconds to wait when reading from</span>
-<span class="sd">                       this mailslot</span>
+<span class="sd">    Since a mailslot will always return immediately if passed to one</span>
+<span class="sd">    of the Wait... functions, events or other synchronisation objects</span>
+<span class="sd">    will be needed to coordinate between mailslots.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">serialiser</span> <span class="o">=</span> <span class="n">serialiser</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span> <span class="o">=</span> <span class="n">message_size</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">timeout_ms</span> <span class="o">=</span> <span class="n">timeout_ms</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="c">#</span>
-    <span class="c"># If the name is a local mailslot it could conceivably</span>
-    <span class="c"># be used for reading or for writing. If it is a</span>
-    <span class="c"># remote (including domain) mailslot, it can only</span>
-    <span class="c"># be written to.</span>
-    <span class="c">#</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span> <span class="p">(</span><span class="s">r&quot;</span><span class="se">\\</span><span class="s">.&quot;</span><span class="p">):</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_handle</span> <span class="p">()</span>
-      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAX_MESSAGE_SIZE</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span> <span class="p">(</span>
-          <span class="s">&quot;You have specified a message size of </span><span class="si">%d</span><span class="s"> for a remote mailslot.&quot;</span>
-          <span class="s">&quot;Messages over </span><span class="si">%d</span><span class="s"> in size will probably fail&quot;</span> <span class="o">%</span> \
-          <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAX_MESSAGE_SIZE</span><span class="p">)</span>
+
+    <span class="n">MAX_MESSAGE_SIZE</span> <span class="o">=</span> <span class="mi">420</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">,</span>
+        <span class="n">serialiser</span><span class="o">=</span><span class="p">(</span><span class="n">_unserialised</span><span class="p">,</span> <span class="n">_unserialised</span><span class="p">),</span>
+        <span class="n">message_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">timeout_ms</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set up a mailslot of the given name, which must be valid according to</span>
+<span class="sd">        the Microsoft docs.</span>
+
+<span class="sd">        :param serialiser: a pair of callable which will be used to</span>
+<span class="sd">                                             encode &amp; decode data respectively. Typical</span>
+<span class="sd">                                             serialisers would be (marshal.dumps, marshal.loads).</span>
+<span class="sd">        :type serialiser: a pair of callables each taking one param and returning bytes</span>
+<span class="sd">        :param message_size: the maximum size of a message to this mailslot,</span>
+<span class="sd">                                                 up to the system-defined maximum of about 400 bytes</span>
+<span class="sd">                                                 if passing between computers.</span>
+<span class="sd">        :param timeout_ms: how many milliseconds to wait when reading from</span>
+<span class="sd">                                             this mailslot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serialiser</span> <span class="o">=</span> <span class="n">serialiser</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span> <span class="o">=</span> <span class="n">message_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout_ms</span> <span class="o">=</span> <span class="n">timeout_ms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c">#</span>
+        <span class="c"># If the name is a local mailslot it could conceivably</span>
+        <span class="c"># be used for reading or for writing. If it is a</span>
+        <span class="c"># remote (including domain) mailslot, it can only</span>
+        <span class="c"># be written to.</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">r&quot;</span><span class="se">\\</span><span class="s">.&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_handle</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAX_MESSAGE_SIZE</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s">&quot;You have specified a message size of </span><span class="si">%d</span><span class="s"> for a remote mailslot.&quot;</span>
+                    <span class="s">&quot;Messages over </span><span class="si">%d</span><span class="s"> in size will probably fail&quot;</span> <span class="o">%</span> \
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAX_MESSAGE_SIZE</span><span class="p">)</span>
+                <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_read_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_mailslot_invalid_use</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;Mailslot._read_handle&quot;</span><span class="p">,</span> <span class="s">&quot;Cannot read from this mailslot; it is used for writing&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">CreateMailslot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout_ms</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span>
+
+    <span class="k">def</span> <span class="nf">_write_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_mailslot_invalid_use</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;Mailslot._write_handle&quot;</span><span class="p">,</span> <span class="s">&quot;Cannot write to this mailslot; it is used for reading&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span>
+                <span class="n">win32file</span><span class="o">.</span><span class="n">CreateFile</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">fs</span><span class="o">.</span><span class="n">FILE_ACCESS</span><span class="o">.</span><span class="n">GENERIC_WRITE</span><span class="p">,</span>
+                <span class="n">fs</span><span class="o">.</span><span class="n">FILE_SHARE</span><span class="o">.</span><span class="n">READ</span><span class="p">,</span>
+                <span class="bp">None</span><span class="p">,</span>
+                <span class="n">fs</span><span class="o">.</span><span class="n">FILE_CREATION</span><span class="o">.</span><span class="n">OPEN_EXISTING</span><span class="p">,</span>
+                <span class="n">fs</span><span class="o">.</span><span class="n">FILE_ATTRIBUTE</span><span class="o">.</span><span class="n">NORMAL</span><span class="p">,</span>
+                <span class="bp">None</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span>
+
+<div class="viewcode-block" id="Mailslot.pyobject"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.pyobject">[docs]</a>    <span class="k">def</span> <span class="nf">pyobject</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :returns: the underlying PyHANDLE object</span>
+<span class="sd">        :raises: :exc:`x_mailslot` if the mailslot has not yet been determined for reading or for writing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_mailslot</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;Mailslot.pyobject&quot;</span><span class="p">,</span> <span class="s">&quot;Mailslot has not yet been used for reading or writing&quot;</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Mailslot.as_string"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.as_string">[docs]</a>    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+</div>
+<div class="viewcode-block" id="Mailslot.dumped"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.dumped">[docs]</a>    <span class="k">def</span> <span class="nf">dumped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;name: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;message_size: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;timeout_ms: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout_ms</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;in use for reading&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;in use for writing&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;not yet used for reading or writing&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">level</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Mailslot.qsize"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.qsize">[docs]</a>    <span class="k">def</span> <span class="nf">qsize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :returns: the number of messages waiting in the mailslot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">maxsize</span><span class="p">,</span> <span class="n">nextsize</span><span class="p">,</span> <span class="n">message_count</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">GetMailslotInfo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_handle</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">message_count</span>
+</div>
+<div class="viewcode-block" id="Mailslot.empty"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.empty">[docs]</a>    <span class="k">def</span> <span class="nf">empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :returns: `True` if there is nothing waiting to be read</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">maxsize</span><span class="p">,</span> <span class="n">nextsize</span><span class="p">,</span> <span class="n">message_count</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">GetMailslotInfo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_handle</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">message_count</span> <span class="o">==</span> <span class="mi">0</span>
+</div>
+<div class="viewcode-block" id="Mailslot.full"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.full">[docs]</a>    <span class="k">def</span> <span class="nf">full</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :returns: `True` if the number of messages waiting to be read has reached the maximum size for the mailslot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">maxsize</span><span class="p">,</span> <span class="n">nextsize</span><span class="p">,</span> <span class="n">message_count</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">GetMailslotInfo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_handle</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">message_count</span> <span class="o">==</span> <span class="n">maxsize</span>
+</div>
+<div class="viewcode-block" id="Mailslot.get"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Attempt to read from the mailslot, optionally blocking and timing out if nothing is found.</span>
+
+<span class="sd">        :param block: whether to wait `timeout_ms` milliseconds before raising `x_mailslot_empty`</span>
+<span class="sd">        :param timeout_ms: how many milliseconds to wait before timing out if blocking. None =&gt; wait forever</span>
+<span class="sd">        :returns: the first message from the mailslot queue serialised according to the class&#39;s `serialiser`</span>
+<span class="sd">        :raises: :exc:`x_mailslot_empty` if timed out or unblocked</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hMailslot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_handle</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">timeout_ms</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">timeout_ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout_ms</span>
+        <span class="k">if</span> <span class="n">timeout_ms</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">timeout</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout_ms</span> <span class="o">/</span> <span class="mf">1000.0</span>
+
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">maxsize</span><span class="p">,</span> <span class="n">nextsize</span><span class="p">,</span> <span class="n">message_count</span><span class="p">,</span> <span class="n">default_timeout</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">GetMailslotInfo</span><span class="p">,</span> <span class="n">hMailslot</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">message_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">block</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">timeout</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">x_mailslot_empty</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span> <span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">x_mailslot_empty</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">hr</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">ReadFile</span><span class="p">,</span> <span class="n">hMailslot</span><span class="p">,</span> <span class="n">nextsize</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                <span class="n">serialiser_in</span><span class="p">,</span> <span class="n">serialiser_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">serialiser</span>
+                <span class="k">return</span> <span class="n">serialiser_out</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Mailslot.get_nowait"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.get_nowait">[docs]</a>    <span class="k">def</span> <span class="nf">get_nowait</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&quot;Convenience wrapper which calls :meth:`get` without blocking&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Mailslot.put"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.put">[docs]</a>    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Attempt to write to the mailslot</span>
+
+<span class="sd">        :param data: data to be written to the mailslot via its serialisers</span>
+<span class="sd">        :raises: :exc:`x_mailslot_message_too_big` if the serialised message</span>
+<span class="sd">                         exceeds the mailslot&#39;s maximum size</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">serialiser_in</span><span class="p">,</span> <span class="n">serialiser_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">serialiser</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">serialiser_in</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_mailslot_message_too_big</span><span class="p">(</span>
+                <span class="bp">None</span><span class="p">,</span>
+                <span class="s">&quot;</span><span class="si">%s</span><span class="s">.put&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
+                <span class="s">&quot;Mailslot messages must be &lt;= </span><span class="si">%d</span><span class="s"> bytes&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span>
+            <span class="p">)</span>
+        <span class="n">wrapped</span><span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">WriteFile</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_handle</span><span class="p">(),</span> <span class="n">data</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Mailslot.close"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close the mailslot for reading or writing. This will be called automatically</span>
+<span class="sd">        if the mailslot is being context-managed. Closing a mailslot which has not been</span>
+<span class="sd">        used (and which therefore has no open handles) will succeed silently.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">wrapped</span><span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">wrapped</span><span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Event"><a class="viewcode-back" href="../events.html#ipc.Event">[docs]</a><span class="k">class</span> <span class="nc">Event</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An event object is an interprocess (but not intermachine) synchronisation</span>
+<span class="sd">    mechanism which allows one or more threads of control to wait on others.</span>
+<span class="sd">    The most common configuration is given by the defaults: anonymous,</span>
+<span class="sd">    not set initially, and automatically reset once set (ie only set for long</span>
+<span class="sd">    enough to release any waiting threads and then reset. A common</span>
+<span class="sd">    variant is a named event which can then be referred to easily by other</span>
+<span class="sd">    processes without having to pass handles around. This is why the :func:`ipc.event`</span>
+<span class="sd">    function reverses the order of parameters and takes the name first.</span>
+
+<span class="sd">    The Event class mimics Python&#39;s Event objects which are in any case very</span>
+<span class="sd">    close to the semantics of the underlying Windows object. For that reason,</span>
+<span class="sd">    although :meth:`clear` is used to reset the event, :meth:`reset` is also</span>
+<span class="sd">    provided as an alias, matching the Windows API.</span>
+
+<span class="sd">    An event is Truthful if it is currently set</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">security</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">needs_manual_reset</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">initially_set</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">security</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">needs_manual_reset</span> <span class="o">=</span> <span class="n">needs_manual_reset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initially_set</span> <span class="o">=</span> <span class="n">initially_set</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hEvent</span> <span class="o">=</span> <span class="bp">None</span>
+
+<div class="viewcode-block" id="Event.as_string"><a class="viewcode-back" href="../events.html#ipc.Event.as_string">[docs]</a>    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">()))</span>
+</div>
+<div class="viewcode-block" id="Event.dumped"><a class="viewcode-back" href="../events.html#ipc.Event.dumped">[docs]</a>    <span class="k">def</span> <span class="nf">dumped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;name: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="s">&quot;anonymous&quot;</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;needs_manual_reset: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">needs_manual_reset</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;initially_set: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">initially_set</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">level</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Event.pyobject"><a class="viewcode-back" href="../events.html#ipc.Event.pyobject">[docs]</a>    <span class="k">def</span> <span class="nf">pyobject</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">()</span>
+</div>
+    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hEvent</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hEvent</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span>
+                <span class="n">win32event</span><span class="o">.</span><span class="n">CreateEvent</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">security</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">needs_manual_reset</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">initially_set</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hEvent</span>
+
+<div class="viewcode-block" id="Event.pulse"><a class="viewcode-back" href="../events.html#ipc.Event.pulse">[docs]</a>    <span class="k">def</span> <span class="nf">pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&quot;Cause the event to set and reset immediately&quot;</span>
+        <span class="n">wrapped</span><span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">PulseEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">())</span>
+</div>
+<div class="viewcode-block" id="Event.set"><a class="viewcode-back" href="../events.html#ipc.Event.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&quot;Signal the event&quot;</span>
+        <span class="n">wrapped</span><span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">SetEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">())</span>
+</div>
+<div class="viewcode-block" id="Event.clear"><a class="viewcode-back" href="../events.html#ipc.Event.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&quot;Reset the event&quot;</span>
+        <span class="n">wrapped</span><span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">ResetEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">())</span></div>
+    <span class="n">reset</span> <span class="o">=</span> <span class="n">clear</span>
+
+<div class="viewcode-block" id="Event.wait"><a class="viewcode-back" href="../events.html#ipc.Event.wait">[docs]</a>    <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout_s</span><span class="o">=</span><span class="n">WAIT</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Wait, optionally timing out, for the event to fire. cf also the :func:`any` and</span>
+<span class="sd">        :func:`all` convenience functions which take an iterable of events or other objects.</span>
+
+<span class="sd">        :param timeout_s: how many seconds to wait before timing out.</span>
+<span class="sd">        :type timeout_s: float</span>
+<span class="sd">        :returns: `True` if the event fired, `False` otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">timeout_s</span> <span class="o">==</span> <span class="n">WAIT</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">:</span>
+            <span class="n">timeout_ms</span> <span class="o">=</span> <span class="n">timeout_s</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">timeout_ms</span> <span class="o">=</span> <span class="n">timeout_s</span> <span class="o">*</span> <span class="mf">1000.0</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">WaitForSingleObject</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">(),</span> <span class="nb">int</span><span class="p">(</span><span class="n">timeout_ms</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">WAIT</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="Event.isSet"><a class="viewcode-back" href="../events.html#ipc.Event.isSet">[docs]</a>    <span class="k">def</span> <span class="nf">isSet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&quot;Detect whether the event is currently set (by waiting without blocking)&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">__nonzero__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">isSet</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Mutex"><a class="viewcode-back" href="../mutexes.html#ipc.Mutex">[docs]</a><span class="k">class</span> <span class="nc">Mutex</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A Mutex is a kernel object which can only be held by one thread or process</span>
+<span class="sd">    at a time. Its usual application is to protect shared data structures or to</span>
+<span class="sd">    prevent more than one instance of an application from running simultaneously.</span>
+<span class="sd">    Mutexes can be named or anonymous. Anonymous mutexes can be used between</span>
+<span class="sd">    processes by passing their handle from one process to the other on the</span>
+<span class="sd">    command line.</span>
+
+<span class="sd">    This is very similar to a Python threading.Lock object. (In fact the Python</span>
+<span class="sd">    objects are implemented as Semaphores on Windows, presumably for re-entrancy).</span>
+<span class="sd">    For this reason, the :meth:`acquire` and :meth:`release` names have been</span>
+<span class="sd">    used for methods.</span>
+
+<span class="sd">    The mutex is its own context manager, so a typical usage would be::</span>
+
+<span class="sd">        from winsys import ipc</span>
+
+<span class="sd">        with ipc.mutex(&quot;ONLYONCE&quot;):</span>
+<span class="sd">            # do stuff</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">take_initial_ownership</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">CreateMutex</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">take_initial_ownership</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Mutex.pyobject"><a class="viewcode-back" href="../mutexes.html#ipc.Mutex.pyobject">[docs]</a>    <span class="k">def</span> <span class="nf">pyobject</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handler</span>
+</div>
+<div class="viewcode-block" id="Mutex.as_string"><a class="viewcode-back" href="../mutexes.html#ipc.Mutex.as_string">[docs]</a>    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="Mutex.acquire"><a class="viewcode-back" href="../mutexes.html#ipc.Mutex.acquire">[docs]</a>    <span class="k">def</span> <span class="nf">acquire</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">WAIT</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Acquire the mutex waiting for `timeout_ms` milliseconds before failing</span>
+
+<span class="sd">        :param timeout_ms: how many milliseconds to wait before giving up</span>
+<span class="sd">        :raises: :exc:`x_ipc_timeout` if timeout expires</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">WaitForSingleObject</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">WAIT</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_ipc_timeout</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;Mutex.acquire&quot;</span><span class="p">,</span> <span class="s">&quot;timed out&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Mutex.release"><a class="viewcode-back" href="../mutexes.html#ipc.Mutex.release">[docs]</a>    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Release the mutex. Consider using the object as a context manager</span>
+<span class="sd">        instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">wrapped</span><span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">ReleaseMutex</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Pipe"><a class="viewcode-back" href="../pipes.html#ipc.Pipe">[docs]</a><span class="k">class</span> <span class="nc">Pipe</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A pipe is a kernel object which allows communication between two parts</span>
+<span class="sd">    of a process or two separate processes, possibly on separate machines. A</span>
+<span class="sd">    pipe can be named or anonymous. The former can span processes and machines;</span>
+<span class="sd">    the latter are typically used within one process although they can cross</span>
+<span class="sd">    processes with some effort.</span>
+
+<span class="sd">    Named pipes have one particular characteristic which makes them especially</span>
+<span class="sd">    interesting for handing off between a client and a server: the server can</span>
+<span class="sd">    transparently impersonate the security context of the client. This makes</span>
+<span class="sd">    them ideal for, eg, a server which accepts requests from a client and</span>
+<span class="sd">    actions them on the client&#39;s behalf.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DEFAULT_IN_BUFFER_SIZE</span> <span class="o">=</span> <span class="mi">4096</span>
+    <span class="n">DEFAULT_OUT_BUFFER_SIZE</span> <span class="o">=</span> <span class="mi">4096</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">inheritable</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">inheritable</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sa</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">SECURITY_ATTRIBUTES</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sa</span><span class="o">.</span><span class="n">bInheritHandle</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sa</span> <span class="o">=</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="AnonymousPipe"><a class="viewcode-back" href="../pipes.html#ipc.AnonymousPipe">[docs]</a><span class="k">class</span> <span class="nc">AnonymousPipe</span><span class="p">(</span><span class="n">Pipe</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inheritable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">buffer_size</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">Pipe</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">inheritable</span><span class="p">)</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32pipe</span><span class="o">.</span><span class="n">CreatePipe</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sa</span><span class="p">,</span> <span class="n">buffer_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rhandle</span> <span class="o">=</span> <span class="n">handles</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_whandle</span> <span class="o">=</span> <span class="n">handles</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AnonymousPipe.reader"><a class="viewcode-back" href="../pipes.html#ipc.AnonymousPipe.reader">[docs]</a>    <span class="k">def</span> <span class="nf">reader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rhandle</span><span class="o">.</span><span class="n">duplicate</span><span class="p">(</span><span class="n">processes</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">process</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="AnonymousPipe.writer"><a class="viewcode-back" href="../pipes.html#ipc.AnonymousPipe.writer">[docs]</a>    <span class="k">def</span> <span class="nf">writer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_whandle</span><span class="o">.</span><span class="n">duplicate</span><span class="p">(</span><span class="n">processes</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">process</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="AnonymousPipe.read"><a class="viewcode-back" href="../pipes.html#ipc.AnonymousPipe.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read bytes from the pipe.</span>
+
+<span class="sd">        :returns: any bytes waiting in the pipe. Will block if nothing is ready.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rhandle</span><span class="o">.</span><span class="n">pyobject</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">hr</span><span class="p">,</span> <span class="n">_data</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">ReadFile</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">Pipe</span><span class="o">.</span><span class="n">DEFAULT_IN_BUFFER_SIZE</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">+=</span> <span class="n">_data</span>
+            <span class="k">if</span> <span class="n">hr</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">data</span>
+</div>
+<div class="viewcode-block" id="AnonymousPipe.write"><a class="viewcode-back" href="../pipes.html#ipc.AnonymousPipe.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Writes `data` to the pipe. Will block if the internal buffer fills up.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_whandle</span><span class="o">.</span><span class="n">pyobject</span><span class="p">()</span>
+        <span class="n">wrapped</span><span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">WriteFile</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="NamedPipe"><a class="viewcode-back" href="../pipes.html#ipc.NamedPipe">[docs]</a><span class="k">class</span> <span class="nc">NamedPipe</span><span class="p">(</span><span class="n">Pipe</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="n">PIPE_ACCESS</span><span class="o">.</span><span class="n">DUPLEX</span> <span class="o">|</span> <span class="n">fs</span><span class="o">.</span><span class="n">FILE_FLAG</span><span class="o">.</span><span class="n">OVERLAPPED</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="n">PIPE_TYPE</span><span class="o">.</span><span class="n">BYTE</span><span class="p">,</span>
+        <span class="n">max_instances</span><span class="o">=</span><span class="n">win32pipe</span><span class="o">.</span><span class="n">PIPE_UNLIMITED_INSTANCES</span><span class="p">,</span>
+        <span class="n">in_buffer_size</span><span class="o">=</span><span class="n">Pipe</span><span class="o">.</span><span class="n">DEFAULT_IN_BUFFER_SIZE</span><span class="p">,</span>
+        <span class="n">out_buffer_size</span><span class="o">=</span><span class="n">Pipe</span><span class="o">.</span><span class="n">DEFAULT_OUT_BUFFER_SIZE</span><span class="p">,</span>
+        <span class="n">default_timeout</span><span class="o">=</span><span class="n">NMPWAIT</span><span class="o">.</span><span class="n">USE_DEFAULT_WAIT</span><span class="p">,</span>
+        <span class="n">inheritable</span><span class="o">=</span><span class="bp">False</span>
+
+    <span class="p">):</span>
+        <span class="n">Pipe</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">inheritable</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipe</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipe</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span>
+            <span class="n">win32pipe</span><span class="o">.</span><span class="n">CreateNamedPipe</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">mode</span><span class="p">,</span>
+            <span class="nb">type</span><span class="p">,</span>
+            <span class="n">max_instances</span><span class="p">,</span>
+            <span class="n">in_buffer_size</span><span class="p">,</span>
+            <span class="n">out_buffer_size</span><span class="p">,</span>
+            <span class="n">default_timeout</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sa</span>
         <span class="p">)</span>
 
-  <span class="k">def</span> <span class="nf">_read_handle</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="n">x_mailslot_invalid_use</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;Mailslot._read_handle&quot;</span><span class="p">,</span> <span class="s">&quot;Cannot read from this mailslot; it is used for writing&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">CreateMailslot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout_ms</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span>
-
-  <span class="k">def</span> <span class="nf">_write_handle</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="n">x_mailslot_invalid_use</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;Mailslot._write_handle&quot;</span><span class="p">,</span> <span class="s">u&quot;Cannot write to this mailslot; it is used for reading&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span>
-        <span class="n">win32file</span><span class="o">.</span><span class="n">CreateFile</span><span class="p">,</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-        <span class="n">fs</span><span class="o">.</span><span class="n">FILE_ACCESS</span><span class="o">.</span><span class="n">GENERIC_WRITE</span><span class="p">,</span>
-        <span class="n">fs</span><span class="o">.</span><span class="n">FILE_SHARE</span><span class="o">.</span><span class="n">READ</span><span class="p">,</span>
-        <span class="bp">None</span><span class="p">,</span>
-        <span class="n">fs</span><span class="o">.</span><span class="n">FILE_CREATION</span><span class="o">.</span><span class="n">OPEN_EXISTING</span><span class="p">,</span>
-        <span class="n">fs</span><span class="o">.</span><span class="n">FILE_ATTRIBUTE</span><span class="o">.</span><span class="n">NORMAL</span><span class="p">,</span>
-        <span class="bp">None</span>
-      <span class="p">)</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span>
-
-<div class="viewcode-block" id="Mailslot.pyobject"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.pyobject">[docs]</a>  <span class="k">def</span> <span class="nf">pyobject</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    :returns: the underlying PyHANDLE object</span>
-<span class="sd">    :raises: :exc:`x_mailslot` if the mailslot has not yet been determined for reading or for writing</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span><span class="p">:</span>
-      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span>
-    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span><span class="p">:</span>
-      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="n">x_mailslot</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;Mailslot.pyobject&quot;</span><span class="p">,</span> <span class="s">&quot;Mailslot has not yet been used for reading or writing&quot;</span><span class="p">)</span>
-</div>
-  <span class="k">def</span> <span class="nf">__iter__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-      <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span> <span class="p">()</span>
-
-  <span class="k">def</span> <span class="nf">__enter__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span>
-
-  <span class="k">def</span> <span class="nf">__exit__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">close</span> <span class="p">()</span>
-
-<div class="viewcode-block" id="Mailslot.as_string"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.as_string">[docs]</a>  <span class="k">def</span> <span class="nf">as_string</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
-</div>
-<div class="viewcode-block" id="Mailslot.dumped"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.dumped">[docs]</a>  <span class="k">def</span> <span class="nf">dumped</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">output</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&quot;name: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-    <span class="n">output</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&quot;message_size: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span><span class="p">)</span>
-    <span class="n">output</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&quot;timeout_ms: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout_ms</span><span class="p">)</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span><span class="p">:</span>
-      <span class="n">output</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&quot;in use for reading&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span><span class="p">:</span>
-      <span class="n">output</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&quot;in use for writing&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">output</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&quot;not yet used for reading or writing&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span> <span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">level</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Mailslot.qsize"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.qsize">[docs]</a>  <span class="k">def</span> <span class="nf">qsize</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    :returns: the number of messages waiting in the mailslot</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">maxsize</span><span class="p">,</span> <span class="n">nextsize</span><span class="p">,</span> <span class="n">message_count</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">GetMailslotInfo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_handle</span> <span class="p">())</span>
-    <span class="k">return</span> <span class="n">message_count</span>
-</div>
-<div class="viewcode-block" id="Mailslot.empty"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.empty">[docs]</a>  <span class="k">def</span> <span class="nf">empty</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    :returns: `True` if there is nothing waiting to be read</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">maxsize</span><span class="p">,</span> <span class="n">nextsize</span><span class="p">,</span> <span class="n">message_count</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">GetMailslotInfo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_handle</span> <span class="p">())</span>
-    <span class="k">return</span> <span class="n">message_count</span> <span class="o">==</span> <span class="mi">0</span>
-</div>
-<div class="viewcode-block" id="Mailslot.full"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.full">[docs]</a>  <span class="k">def</span> <span class="nf">full</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    :returns: `True` if the number of messages waiting to be read has reached the maximum size for the mailslot</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">maxsize</span><span class="p">,</span> <span class="n">nextsize</span><span class="p">,</span> <span class="n">message_count</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">GetMailslotInfo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_handle</span> <span class="p">())</span>
-    <span class="k">return</span> <span class="n">message_count</span> <span class="o">==</span> <span class="n">maxsize</span>
-</div>
-<div class="viewcode-block" id="Mailslot.get"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.get">[docs]</a>  <span class="k">def</span> <span class="nf">get</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Attempt to read from the mailslot, optionally blocking and timing out if nothing is found.</span>
-
-<span class="sd">    :param block: whether to wait `timeout_ms` milliseconds before raising `x_mailslot_empty`</span>
-<span class="sd">    :param timeout_ms: how many milliseconds to wait before timing out if blocking. None =&gt; wait forever</span>
-<span class="sd">    :returns: the first message from the mailslot queue serialised according to the class&#39;s `serialiser`</span>
-<span class="sd">    :raises: :exc:`x_mailslot_empty` if timed out or unblocked</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">hMailslot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_handle</span> <span class="p">()</span>
-    <span class="k">if</span> <span class="n">timeout_ms</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="n">timeout_ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout_ms</span>
-    <span class="k">if</span> <span class="n">timeout_ms</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-      <span class="n">timeout</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout_ms</span> <span class="o">/</span> <span class="mf">1000.0</span>
-
-    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span> <span class="p">()</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-      <span class="n">maxsize</span><span class="p">,</span> <span class="n">nextsize</span><span class="p">,</span> <span class="n">message_count</span><span class="p">,</span> <span class="n">default_timeout</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">GetMailslotInfo</span><span class="p">,</span> <span class="n">hMailslot</span><span class="p">)</span>
-      <span class="k">if</span> <span class="n">message_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">block</span><span class="p">:</span>
-          <span class="k">if</span> <span class="p">(</span><span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span> <span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">timeout</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">x_mailslot_empty</span>
-          <span class="k">else</span><span class="p">:</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span> <span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+<div class="viewcode-block" id="NamedPipe.listen"><a class="viewcode-back" href="../pipes.html#ipc.NamedPipe.listen">[docs]</a>    <span class="k">def</span> <span class="nf">listen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">async</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">async</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">asyncio</span>
+            <span class="n">waiter</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">AsyncIO</span><span class="p">()</span>
+            <span class="n">overlapped</span> <span class="o">=</span> <span class="n">waiter</span><span class="o">.</span><span class="n">overlapped</span>
         <span class="k">else</span><span class="p">:</span>
-          <span class="k">raise</span> <span class="n">x_mailslot_empty</span>
-      <span class="k">else</span><span class="p">:</span>
-        <span class="n">hr</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">ReadFile</span><span class="p">,</span> <span class="n">hMailslot</span><span class="p">,</span> <span class="n">nextsize</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-        <span class="n">serialiser_in</span><span class="p">,</span> <span class="n">serialiser_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">serialiser</span>
-        <span class="k">return</span> <span class="n">serialiser_out</span> <span class="p">(</span><span class="n">data</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Mailslot.get_nowait"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.get_nowait">[docs]</a>  <span class="k">def</span> <span class="nf">get_nowait</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="s">&quot;Convenience wrapper which calls :meth:`get` without blocking&quot;</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span> <span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Mailslot.put"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.put">[docs]</a>  <span class="k">def</span> <span class="nf">put</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Attempt to write to the mailslot</span>
+            <span class="n">overlapped</span> <span class="o">=</span> <span class="bp">None</span>
 
-<span class="sd">    :param data: data to be written to the mailslot via its serialisers</span>
-<span class="sd">    :raises: :exc:`x_mailslot_message_too_big` if the serialised message</span>
-<span class="sd">             exceeds the mailslot&#39;s maximum size</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">serialiser_in</span><span class="p">,</span> <span class="n">serialiser_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">serialiser</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">serialiser_in</span> <span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span> <span class="ow">and</span> <span class="nb">len</span> <span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="n">x_mailslot_message_too_big</span> <span class="p">(</span>
-        <span class="bp">None</span><span class="p">,</span>
-        <span class="s">&quot;</span><span class="si">%s</span><span class="s">.put&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
-        <span class="s">&quot;Mailslot messages must be &lt;= </span><span class="si">%d</span><span class="s"> bytes&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_size</span>
-      <span class="p">)</span>
-    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">WriteFile</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_handle</span> <span class="p">(),</span> <span class="n">data</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Mailslot.close"><a class="viewcode-back" href="../mailslots.html#ipc.Mailslot.close">[docs]</a>  <span class="k">def</span> <span class="nf">close</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Close the mailslot for reading or writing. This will be called automatically</span>
-<span class="sd">    if the mailslot is being context-managed. Closing a mailslot which has not been</span>
-<span class="sd">    used (and which therefore has no open handles) will succeed silently.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hRead</span><span class="p">)</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hWrite</span><span class="p">)</span>
-</div></div>
-<div class="viewcode-block" id="Event"><a class="viewcode-back" href="../events.html#ipc.Event">[docs]</a><span class="k">class</span> <span class="nc">Event</span> <span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
-  <span class="sd">&quot;&quot;&quot;An event object is an interprocess (but not intermachine) synchronisation</span>
-<span class="sd">  mechanism which allows one or more threads of control to wait on others.</span>
-<span class="sd">  The most common configuration is given by the defaults: anonymous,</span>
-<span class="sd">  not set initially, and automatically reset once set (ie only set for long</span>
-<span class="sd">  enough to release any waiting threads and then reset. A common</span>
-<span class="sd">  variant is a named event which can then be referred to easily by other</span>
-<span class="sd">  processes without having to pass handles around. This is why the :func:`ipc.event`</span>
-<span class="sd">  function reverses the order of parameters and takes the name first.</span>
+        <span class="n">wrapped</span><span class="p">(</span><span class="n">win32pipe</span><span class="o">.</span><span class="n">ConnectNamedPipe</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pipe</span><span class="p">,</span> <span class="n">overlapped</span><span class="p">)</span>
 
-<span class="sd">  The Event class mimics Python&#39;s Event objects which are in any case very</span>
-<span class="sd">  close to the semantics of the underlying Windows object. For that reason,</span>
-<span class="sd">  although :meth:`clear` is used to reset the event, :meth:`reset` is also</span>
-<span class="sd">  provided as an alias, matching the Windows API.</span>
-
-<span class="sd">  An event is Truthful if it is currently set</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-
-  <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">security</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">needs_manual_reset</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">initially_set</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">security</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">needs_manual_reset</span> <span class="o">=</span> <span class="n">needs_manual_reset</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">initially_set</span> <span class="o">=</span> <span class="n">initially_set</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_hEvent</span> <span class="o">=</span> <span class="bp">None</span>
-
-<div class="viewcode-block" id="Event.as_string"><a class="viewcode-back" href="../events.html#ipc.Event.as_string">[docs]</a>  <span class="k">def</span> <span class="nf">as_string</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="nb">str</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="p">()))</span>
-</div>
-<div class="viewcode-block" id="Event.dumped"><a class="viewcode-back" href="../events.html#ipc.Event.dumped">[docs]</a>  <span class="k">def</span> <span class="nf">dumped</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">output</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&quot;name: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="s">&quot;anonymous&quot;</span><span class="p">)</span>
-    <span class="n">output</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&quot;needs_manual_reset: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">needs_manual_reset</span><span class="p">)</span>
-    <span class="n">output</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&quot;initially_set: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">initially_set</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span> <span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">level</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Event.pyobject"><a class="viewcode-back" href="../events.html#ipc.Event.pyobject">[docs]</a>  <span class="k">def</span> <span class="nf">pyobject</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="p">()</span>
-</div>
-  <span class="k">def</span> <span class="nf">_handle</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hEvent</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_hEvent</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span>
-        <span class="n">win32event</span><span class="o">.</span><span class="n">CreateEvent</span><span class="p">,</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">security</span><span class="p">,</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">needs_manual_reset</span><span class="p">,</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">initially_set</span><span class="p">,</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
-      <span class="p">)</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hEvent</span>
-
-<div class="viewcode-block" id="Event.pulse"><a class="viewcode-back" href="../events.html#ipc.Event.pulse">[docs]</a>  <span class="k">def</span> <span class="nf">pulse</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="s">ur&quot;Cause the event to set and reset immediately&quot;</span>
-    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">PulseEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="p">())</span>
-</div>
-<div class="viewcode-block" id="Event.set"><a class="viewcode-back" href="../events.html#ipc.Event.set">[docs]</a>  <span class="k">def</span> <span class="nf">set</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="s">ur&quot;Signal the event&quot;</span>
-    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">SetEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="p">())</span>
-</div>
-<div class="viewcode-block" id="Event.clear"><a class="viewcode-back" href="../events.html#ipc.Event.clear">[docs]</a>  <span class="k">def</span> <span class="nf">clear</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="s">ur&quot;Reset the event&quot;</span>
-    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">ResetEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="p">())</span></div>
-  <span class="n">reset</span> <span class="o">=</span> <span class="n">clear</span>
-
-<div class="viewcode-block" id="Event.wait"><a class="viewcode-back" href="../events.html#ipc.Event.wait">[docs]</a>  <span class="k">def</span> <span class="nf">wait</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout_s</span><span class="o">=</span><span class="n">WAIT</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">):</span>
-    <span class="sd">ur&quot;&quot;&quot;Wait, optionally timing out, for the event to fire. cf also the :func:`any` and</span>
-<span class="sd">    :func:`all` convenience functions which take an iterable of events or other objects.</span>
-
-<span class="sd">    :param timeout_s: how many seconds to wait before timing out.</span>
-<span class="sd">    :type timeout_s: float</span>
-<span class="sd">    :returns: `True` if the event fired, `False` otherwise</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">timeout_s</span> <span class="o">==</span> <span class="n">WAIT</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">:</span>
-      <span class="n">timeout_ms</span> <span class="o">=</span> <span class="n">timeout_s</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">timeout_ms</span> <span class="o">=</span> <span class="n">timeout_s</span> <span class="o">*</span> <span class="mf">1000.0</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">WaitForSingleObject</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="p">(),</span> <span class="nb">int</span> <span class="p">(</span><span class="n">timeout_ms</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">WAIT</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">:</span>
-      <span class="k">return</span> <span class="bp">False</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="k">return</span> <span class="bp">True</span>
-</div>
-<div class="viewcode-block" id="Event.isSet"><a class="viewcode-back" href="../events.html#ipc.Event.isSet">[docs]</a>  <span class="k">def</span> <span class="nf">isSet</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="s">u&quot;Detect whether the event is currently set (by waiting without blocking)&quot;</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wait</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</div>
-  <span class="k">def</span> <span class="nf">__nonzero__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">isSet</span> <span class="p">()</span>
-</div>
-<div class="viewcode-block" id="Mutex"><a class="viewcode-back" href="../mutexes.html#ipc.Mutex">[docs]</a><span class="k">class</span> <span class="nc">Mutex</span> <span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
-  <span class="sd">ur&quot;&quot;&quot;A Mutex is a kernel object which can only be held by one thread or process</span>
-<span class="sd">  at a time. Its usual application is to protect shared data structures or to</span>
-<span class="sd">  prevent more than one instance of an application from running simultaneously.</span>
-<span class="sd">  Mutexes can be named or anonymous. Anonymous mutexes can be used between</span>
-<span class="sd">  processes by passing their handle from one process to the other on the</span>
-<span class="sd">  command line.</span>
-
-<span class="sd">  This is very similar to a Python threading.Lock object. (In fact the Python</span>
-<span class="sd">  objects are implemented as Semaphores on Windows, presumably for re-entrancy).</span>
-<span class="sd">  For this reason, the :meth:`acquire` and :meth:`release` names have been</span>
-<span class="sd">  used for methods.</span>
-
-<span class="sd">  The mutex is its own context manager, so a typical usage would be::</span>
-
-<span class="sd">    from winsys import ipc</span>
-
-<span class="sd">    with ipc.mutex (&quot;ONLYONCE&quot;):</span>
-<span class="sd">      # do stuff</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">take_initial_ownership</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">CreateMutex</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">take_initial_ownership</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-
-  <span class="k">def</span> <span class="nf">__enter__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">acquire</span> <span class="p">()</span>
-    <span class="k">return</span> <span class="bp">self</span>
-
-  <span class="k">def</span> <span class="nf">__exit__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">release</span> <span class="p">()</span>
-
-<div class="viewcode-block" id="Mutex.pyobject"><a class="viewcode-back" href="../mutexes.html#ipc.Mutex.pyobject">[docs]</a>  <span class="k">def</span> <span class="nf">pyobject</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handler</span>
-</div>
-<div class="viewcode-block" id="Mutex.as_string"><a class="viewcode-back" href="../mutexes.html#ipc.Mutex.as_string">[docs]</a>  <span class="k">def</span> <span class="nf">as_string</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="nb">str</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">))</span>
-</div>
-<div class="viewcode-block" id="Mutex.acquire"><a class="viewcode-back" href="../mutexes.html#ipc.Mutex.acquire">[docs]</a>  <span class="k">def</span> <span class="nf">acquire</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">WAIT</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">):</span>
-    <span class="sd">ur&quot;&quot;&quot;Acquire the mutex waiting for `timeout_ms` milliseconds before failing</span>
-
-<span class="sd">    :param timeout_ms: how many milliseconds to wait before giving up</span>
-<span class="sd">    :raises: :exc:`x_ipc_timeout` if timeout expires</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">WaitForSingleObject</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">WAIT</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="n">x_ipc_timeout</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;Mutex.acquire&quot;</span><span class="p">,</span> <span class="s">&quot;timed out&quot;</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Mutex.release"><a class="viewcode-back" href="../mutexes.html#ipc.Mutex.release">[docs]</a>  <span class="k">def</span> <span class="nf">release</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">ur&quot;&quot;&quot;Release the mutex. Consider using the object as a context manager</span>
-<span class="sd">    instead.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">ReleaseMutex</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
-</div></div>
-<div class="viewcode-block" id="Pipe"><a class="viewcode-back" href="../pipes.html#ipc.Pipe">[docs]</a><span class="k">class</span> <span class="nc">Pipe</span> <span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
-  <span class="sd">ur&quot;&quot;&quot;A pipe is a kernel object which allows communication between two parts</span>
-<span class="sd">  of a process or two separate processes, possibly on separate machines. A</span>
-<span class="sd">  pipe can be named or anonymous. The former can span processes and machines;</span>
-<span class="sd">  the latter are typically used within one process although they can cross</span>
-<span class="sd">  processes with some effort.</span>
-
-<span class="sd">  Named pipes have one particular characteristic which makes them especially</span>
-<span class="sd">  interesting for handing off between a client and a server: the server can</span>
-<span class="sd">  transparently impersonate the security context of the client. This makes</span>
-<span class="sd">  them ideal for, eg, a server which accepts requests from a client and</span>
-<span class="sd">  actions them on the client&#39;s behalf.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-
-  <span class="n">DEFAULT_IN_BUFFER_SIZE</span> <span class="o">=</span> <span class="mi">4096</span>
-  <span class="n">DEFAULT_OUT_BUFFER_SIZE</span> <span class="o">=</span> <span class="mi">4096</span>
-
-  <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">inheritable</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-    <span class="k">if</span> <span class="n">inheritable</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">sa</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">SECURITY_ATTRIBUTES</span><span class="p">)</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">sa</span><span class="o">.</span><span class="n">bInheritHandle</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">sa</span> <span class="o">=</span> <span class="bp">None</span>
-</div>
-<div class="viewcode-block" id="AnonymousPipe"><a class="viewcode-back" href="../pipes.html#ipc.AnonymousPipe">[docs]</a><span class="k">class</span> <span class="nc">AnonymousPipe</span> <span class="p">(</span><span class="n">Pipe</span><span class="p">):</span>
-
-  <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inheritable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">buffer_size</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="n">Pipe</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">inheritable</span><span class="p">)</span>
-    <span class="n">r</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32pipe</span><span class="o">.</span><span class="n">CreatePipe</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sa</span><span class="p">,</span> <span class="n">buffer_size</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_rhandle</span> <span class="o">=</span> <span class="n">handles</span><span class="o">.</span><span class="n">handle</span> <span class="p">(</span><span class="n">r</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_whandle</span> <span class="o">=</span> <span class="n">handles</span><span class="o">.</span><span class="n">handle</span> <span class="p">(</span><span class="n">w</span><span class="p">)</span>
-
-<div class="viewcode-block" id="AnonymousPipe.reader"><a class="viewcode-back" href="../pipes.html#ipc.AnonymousPipe.reader">[docs]</a>  <span class="k">def</span> <span class="nf">reader</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rhandle</span><span class="o">.</span><span class="n">duplicate</span> <span class="p">(</span><span class="n">processes</span><span class="o">.</span><span class="n">process</span> <span class="p">(</span><span class="n">process</span><span class="p">))</span>
-</div>
-<div class="viewcode-block" id="AnonymousPipe.writer"><a class="viewcode-back" href="../pipes.html#ipc.AnonymousPipe.writer">[docs]</a>  <span class="k">def</span> <span class="nf">writer</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_whandle</span><span class="o">.</span><span class="n">duplicate</span> <span class="p">(</span><span class="n">processes</span><span class="o">.</span><span class="n">process</span> <span class="p">(</span><span class="n">process</span><span class="p">))</span>
-</div>
-<div class="viewcode-block" id="AnonymousPipe.read"><a class="viewcode-back" href="../pipes.html#ipc.AnonymousPipe.read">[docs]</a>  <span class="k">def</span> <span class="nf">read</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">ur&quot;&quot;&quot;Read bytes from the pipe.</span>
-
-<span class="sd">    :returns: any bytes waiting in the pipe. Will block if nothing is ready.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rhandle</span><span class="o">.</span><span class="n">pyobject</span> <span class="p">()</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-      <span class="n">hr</span><span class="p">,</span> <span class="n">_data</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">ReadFile</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">Pipe</span><span class="o">.</span><span class="n">DEFAULT_IN_BUFFER_SIZE</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-      <span class="n">data</span> <span class="o">+=</span> <span class="n">_data</span>
-      <span class="k">if</span> <span class="n">hr</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">break</span>
-    <span class="k">return</span> <span class="n">data</span>
-</div>
-<div class="viewcode-block" id="AnonymousPipe.write"><a class="viewcode-back" href="../pipes.html#ipc.AnonymousPipe.write">[docs]</a>  <span class="k">def</span> <span class="nf">write</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="sd">ur&quot;&quot;&quot;Writes `data` to the pipe. Will block if the internal buffer fills up.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_whandle</span><span class="o">.</span><span class="n">pyobject</span> <span class="p">()</span>
-    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">WriteFile</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-</div></div>
-<div class="viewcode-block" id="NamedPipe"><a class="viewcode-back" href="../pipes.html#ipc.NamedPipe">[docs]</a><span class="k">class</span> <span class="nc">NamedPipe</span> <span class="p">(</span><span class="n">Pipe</span><span class="p">):</span>
-
-  <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span>
-    <span class="n">name</span><span class="p">,</span>
-    <span class="n">mode</span><span class="o">=</span><span class="n">PIPE_ACCESS</span><span class="o">.</span><span class="n">DUPLEX</span> <span class="o">|</span> <span class="n">fs</span><span class="o">.</span><span class="n">FILE_FLAG</span><span class="o">.</span><span class="n">OVERLAPPED</span><span class="p">,</span>
-    <span class="nb">type</span><span class="o">=</span><span class="n">PIPE_TYPE</span><span class="o">.</span><span class="n">BYTE</span><span class="p">,</span>
-    <span class="n">max_instances</span><span class="o">=</span><span class="n">win32pipe</span><span class="o">.</span><span class="n">PIPE_UNLIMITED_INSTANCES</span><span class="p">,</span>
-    <span class="n">in_buffer_size</span><span class="o">=</span><span class="n">Pipe</span><span class="o">.</span><span class="n">DEFAULT_IN_BUFFER_SIZE</span><span class="p">,</span>
-    <span class="n">out_buffer_size</span><span class="o">=</span><span class="n">Pipe</span><span class="o">.</span><span class="n">DEFAULT_OUT_BUFFER_SIZE</span><span class="p">,</span>
-    <span class="n">default_timeout</span><span class="o">=</span><span class="n">NMPWAIT</span><span class="o">.</span><span class="n">USE_DEFAULT_WAIT</span><span class="p">,</span>
-    <span class="n">inheritable</span><span class="o">=</span><span class="bp">False</span>
-
-  <span class="p">):</span>
-    <span class="n">Pipe</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">inheritable</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_pipe</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_pipe</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span>
-      <span class="n">win32pipe</span><span class="o">.</span><span class="n">CreateNamedPipe</span><span class="p">,</span>
-      <span class="n">name</span><span class="p">,</span>
-      <span class="n">mode</span><span class="p">,</span>
-      <span class="nb">type</span><span class="p">,</span>
-      <span class="n">max_instances</span><span class="p">,</span>
-      <span class="n">in_buffer_size</span><span class="p">,</span>
-      <span class="n">out_buffer_size</span><span class="p">,</span>
-      <span class="n">default_timeout</span><span class="p">,</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">sa</span>
-    <span class="p">)</span>
-
-<div class="viewcode-block" id="NamedPipe.listen"><a class="viewcode-back" href="../pipes.html#ipc.NamedPipe.listen">[docs]</a>  <span class="k">def</span> <span class="nf">listen</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">async</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">async</span><span class="p">:</span>
-      <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">asyncio</span>
-      <span class="n">waiter</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">AsyncIO</span> <span class="p">()</span>
-      <span class="n">overlapped</span> <span class="o">=</span> <span class="n">waiter</span><span class="o">.</span><span class="n">overlapped</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">overlapped</span> <span class="o">=</span> <span class="bp">None</span>
-
-    <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32pipe</span><span class="o">.</span><span class="n">ConnectNamedPipe</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pipe</span><span class="p">,</span> <span class="n">overlapped</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">async</span><span class="p">:</span>
-      <span class="k">return</span> <span class="n">waiter</span>
+        <span class="k">if</span> <span class="n">async</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">waiter</span>
 
 <span class="c">#</span>
 <span class="c"># Module-level convenience functions</span>
 <span class="c">#</span></div></div>
-<div class="viewcode-block" id="mailslot"><a class="viewcode-back" href="../ipc.html#ipc.mailslot">[docs]</a><span class="k">def</span> <span class="nf">mailslot</span> <span class="p">(</span><span class="n">mailslot</span><span class="p">,</span> <span class="n">marshalled</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">message_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
-  <span class="sd">ur&quot;&quot;&quot;Return a :class:`Mailslot` instance based on the name in `mailslot`.</span>
-<span class="sd">  If the name is not a fully-qualified mailslot name (\\.\mailslot) then</span>
-<span class="sd">  it is assumed to be on the local machine and is prefixed accordingly.</span>
+<div class="viewcode-block" id="mailslot"><a class="viewcode-back" href="../ipc.html#ipc.mailslot">[docs]</a><span class="k">def</span> <span class="nf">mailslot</span><span class="p">(</span><span class="n">mailslot</span><span class="p">,</span> <span class="n">marshalled</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">message_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a :class:`Mailslot` instance based on the name in `mailslot`.</span>
+<span class="sd">    If the name is not a fully-qualified mailslot name (\\.\mailslot) then</span>
+<span class="sd">    it is assumed to be on the local machine and is prefixed accordingly.</span>
 
-<span class="sd">  :param mailslot: a valid mailslot name, with the convenience that if it</span>
-<span class="sd">                   is unqualified it is suitably prefixed to form a local</span>
-<span class="sd">                   mailslot identifier.</span>
-<span class="sd">  :param marshalled: whether the data is to be marshalled or simply passed</span>
-<span class="sd">                     along unchanged.</span>
-<span class="sd">  :param message_size: what message should be used; 0 to use the system default</span>
-<span class="sd">  :param timeout_ms: how many milliseconds should a read wait before giving up?</span>
-<span class="sd">                     -1 to wait forever.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">if</span> <span class="n">mailslot</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="bp">None</span>
-  <span class="k">elif</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">mailslot</span><span class="p">,</span> <span class="n">Mailslot</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">mailslot</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">marshalled</span><span class="p">:</span>
-      <span class="n">serialiser</span> <span class="o">=</span> <span class="n">marshal</span><span class="o">.</span><span class="n">dumps</span><span class="p">,</span> <span class="n">marshal</span><span class="o">.</span><span class="n">loads</span>
+<span class="sd">    :param mailslot: a valid mailslot name, with the convenience that if it</span>
+<span class="sd">                                     is unqualified it is suitably prefixed to form a local</span>
+<span class="sd">                                     mailslot identifier.</span>
+<span class="sd">    :param marshalled: whether the data is to be marshalled or simply passed</span>
+<span class="sd">                                         along unchanged.</span>
+<span class="sd">    :param message_size: what message should be used; 0 to use the system default</span>
+<span class="sd">    :param timeout_ms: how many milliseconds should a read wait before giving up?</span>
+<span class="sd">                                         -1 to wait forever.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">mailslot</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mailslot</span><span class="p">,</span> <span class="n">Mailslot</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">mailslot</span>
     <span class="k">else</span><span class="p">:</span>
-      <span class="n">serialiser</span> <span class="o">=</span> <span class="n">_unserialised</span><span class="p">,</span> <span class="n">_unserialised</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span> <span class="p">(</span><span class="s">ur&quot;</span><span class="se">\\\\</span><span class="s">[^</span><span class="se">\\</span><span class="s">]+</span><span class="se">\\</span><span class="s">mailslot</span><span class="se">\\</span><span class="s">&quot;</span><span class="p">,</span> <span class="nb">unicode</span> <span class="p">(</span><span class="n">mailslot</span><span class="p">),</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">):</span>
-      <span class="n">mailslot</span> <span class="o">=</span> <span class="s">ur&quot;</span><span class="se">\\</span><span class="s">.\mailslot\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">mailslot</span>
-    <span class="k">return</span> <span class="n">Mailslot</span> <span class="p">(</span><span class="n">mailslot</span><span class="p">,</span> <span class="n">serialiser</span><span class="p">,</span> <span class="n">message_size</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">marshalled</span><span class="p">:</span>
+            <span class="n">serialiser</span> <span class="o">=</span> <span class="n">marshal</span><span class="o">.</span><span class="n">dumps</span><span class="p">,</span> <span class="n">marshal</span><span class="o">.</span><span class="n">loads</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">serialiser</span> <span class="o">=</span> <span class="n">_unserialised</span><span class="p">,</span> <span class="n">_unserialised</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s">r&quot;</span><span class="se">\\\\</span><span class="s">[^</span><span class="se">\\</span><span class="s">]+</span><span class="se">\\</span><span class="s">mailslot</span><span class="se">\\</span><span class="s">&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">mailslot</span><span class="p">),</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">):</span>
+            <span class="n">mailslot</span> <span class="o">=</span> <span class="s">r&quot;</span><span class="se">\\</span><span class="s">.\mailslot\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">mailslot</span>
+        <span class="k">return</span> <span class="n">Mailslot</span><span class="p">(</span><span class="n">mailslot</span><span class="p">,</span> <span class="n">serialiser</span><span class="p">,</span> <span class="n">message_size</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="event"><a class="viewcode-back" href="../ipc.html#ipc.event">[docs]</a><span class="k">def</span> <span class="nf">event</span> <span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">initially_set</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">needs_manual_reset</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">security</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-  <span class="sd">ur&quot;&quot;&quot;Return a :class:`Event` instance, named or anonymous, unset by default</span>
-<span class="sd">  and with automatic reset.</span>
+<div class="viewcode-block" id="event"><a class="viewcode-back" href="../ipc.html#ipc.event">[docs]</a><span class="k">def</span> <span class="nf">event</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">initially_set</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">needs_manual_reset</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">security</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a :class:`Event` instance, named or anonymous, unset by default</span>
+<span class="sd">    and with automatic reset.</span>
 
-<span class="sd">  :param name: a valid event name. If `None` (the default) then an anonymous</span>
-<span class="sd">               event is created which may be passed to threads which need to</span>
-<span class="sd">               synchronise.</span>
-<span class="sd">  :param initially_set: whether the event is set on creation. [False]</span>
-<span class="sd">  :param needs_manual_reset: whether the event needs to be reset manually once it</span>
-<span class="sd">                             has fired. The alternative is that, once the event has</span>
-<span class="sd">                             fired, it falls back to an unset state.</span>
-<span class="sd">  :param security: what security to apply to the new event</span>
-<span class="sd">  :type security: anything accepted by :func:`security.security`</span>
-<span class="sd">  :returns: a :class:`Event` instance</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">return</span> <span class="n">Event</span> <span class="p">(</span><span class="n">security</span><span class="p">,</span> <span class="n">needs_manual_reset</span><span class="p">,</span> <span class="n">initially_set</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+<span class="sd">    :param name: a valid event name. If `None` (the default) then an anonymous</span>
+<span class="sd">                             event is created which may be passed to threads which need to</span>
+<span class="sd">                             synchronise.</span>
+<span class="sd">    :param initially_set: whether the event is set on creation. [False]</span>
+<span class="sd">    :param needs_manual_reset: whether the event needs to be reset manually once it</span>
+<span class="sd">                                                         has fired. The alternative is that, once the event has</span>
+<span class="sd">                                                         fired, it falls back to an unset state.</span>
+<span class="sd">    :param security: what security to apply to the new event</span>
+<span class="sd">    :type security: anything accepted by :func:`security.security`</span>
+<span class="sd">    :returns: a :class:`Event` instance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Event</span><span class="p">(</span><span class="n">security</span><span class="p">,</span> <span class="n">needs_manual_reset</span><span class="p">,</span> <span class="n">initially_set</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="mutex"><a class="viewcode-back" href="../ipc.html#ipc.mutex">[docs]</a><span class="k">def</span> <span class="nf">mutex</span> <span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">take_initial_ownership</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-  <span class="sd">ur&quot;&quot;&quot;Return a :class:`Mutex` instance, named or anonymous, not initially owned</span>
-<span class="sd">  by default.</span>
+<div class="viewcode-block" id="mutex"><a class="viewcode-back" href="../ipc.html#ipc.mutex">[docs]</a><span class="k">def</span> <span class="nf">mutex</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">take_initial_ownership</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a :class:`Mutex` instance, named or anonymous, not initially owned</span>
+<span class="sd">    by default.</span>
 
-<span class="sd">  :param name: a valid mutex name. If `None` (the default) then an anonymous</span>
-<span class="sd">               mutex is created which may be passed to threads which need to</span>
-<span class="sd">               synchronise.</span>
-<span class="sd">  :param take_initial_ownership: whether the mutex just created is to be owned</span>
-<span class="sd">                                 by the creating thread.</span>
-<span class="sd">  :returns: a :class:`Mutex` instance</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">return</span> <span class="n">Mutex</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">take_initial_ownership</span><span class="p">)</span>
+<span class="sd">    :param name: a valid mutex name. If `None` (the default) then an anonymous</span>
+<span class="sd">                             mutex is created which may be passed to threads which need to</span>
+<span class="sd">                             synchronise.</span>
+<span class="sd">    :param take_initial_ownership: whether the mutex just created is to be owned</span>
+<span class="sd">                                                                 by the creating thread.</span>
+<span class="sd">    :returns: a :class:`Mutex` instance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Mutex</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">take_initial_ownership</span><span class="p">)</span>
 </div>
-<span class="k">def</span> <span class="nf">open_pipe</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&quot;rw&quot;</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">WAIT</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">):</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span> <span class="p">(</span><span class="s">ur&quot;</span><span class="se">\\\\</span><span class="s">&quot;</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s">ur&quot;</span><span class="se">\\</span><span class="s">.\pipe\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">name</span>
+<span class="k">def</span> <span class="nf">open_pipe</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&quot;rw&quot;</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">WAIT</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\\\\</span><span class="s">&quot;</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">r&quot;</span><span class="se">\\</span><span class="s">.\pipe\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">name</span>
 
-  <span class="n">result</span> <span class="o">=</span> <span class="n">win32pipe</span><span class="o">.</span><span class="n">WaitNamedPipe</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
-  <span class="n">read_mode</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="k">if</span> <span class="s">&quot;r&quot;</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
-    <span class="n">read_mode</span> <span class="o">|=</span> <span class="n">constants</span><span class="o">.</span><span class="n">GENERIC_ACCESS</span><span class="o">.</span><span class="n">READ</span>
-  <span class="k">if</span> <span class="s">&quot;w&quot;</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
-    <span class="n">read_mode</span> <span class="o">|=</span> <span class="n">constants</span><span class="o">.</span><span class="n">GENERIC_ACCESS</span><span class="o">.</span><span class="n">WRITE</span>
-  <span class="n">hPipe</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">CreateFile</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">read_mode</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">fs</span><span class="o">.</span><span class="n">FILE_CREATION</span><span class="o">.</span><span class="n">OPEN_EXISTING</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-  <span class="c">#~ win32pipe.</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">win32pipe</span><span class="o">.</span><span class="n">WaitNamedPipe</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
+    <span class="n">read_mode</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="s">&quot;r&quot;</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
+        <span class="n">read_mode</span> <span class="o">|=</span> <span class="n">constants</span><span class="o">.</span><span class="n">GENERIC_ACCESS</span><span class="o">.</span><span class="n">READ</span>
+    <span class="k">if</span> <span class="s">&quot;w&quot;</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
+        <span class="n">read_mode</span> <span class="o">|=</span> <span class="n">constants</span><span class="o">.</span><span class="n">GENERIC_ACCESS</span><span class="o">.</span><span class="n">WRITE</span>
+    <span class="n">hPipe</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32file</span><span class="o">.</span><span class="n">CreateFile</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">read_mode</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">fs</span><span class="o">.</span><span class="n">FILE_CREATION</span><span class="o">.</span><span class="n">OPEN_EXISTING</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="c">#~ win32pipe.</span>
 
-<div class="viewcode-block" id="pipe"><a class="viewcode-back" href="../ipc.html#ipc.pipe">[docs]</a><span class="k">def</span> <span class="nf">pipe</span> <span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-  <span class="sd">ur&quot;&quot;&quot;Return a pipe. If name is given a :class:`NamedPipe` is returned, otherwise</span>
-<span class="sd">  an :class:`AnonymousPipe`. If name is not in the correct form for a pipe</span>
-<span class="sd">  (\\\\&lt;machine&gt;\\pipe\\&lt;name&gt;) it is assumed to be a local pipe and renamed</span>
-<span class="sd">  as such.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">AnonymousPipe</span> <span class="p">()</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span> <span class="p">(</span><span class="s">ur&quot;</span><span class="se">\\\\</span><span class="s">&quot;</span><span class="p">):</span>
-      <span class="n">name</span> <span class="o">=</span> <span class="s">ur&quot;</span><span class="se">\\</span><span class="s">.\pipe\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">name</span>
-    <span class="k">return</span> <span class="n">NamedPipe</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<div class="viewcode-block" id="pipe"><a class="viewcode-back" href="../ipc.html#ipc.pipe">[docs]</a><span class="k">def</span> <span class="nf">pipe</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a pipe. If name is given a :class:`NamedPipe` is returned, otherwise</span>
+<span class="sd">    an :class:`AnonymousPipe`. If name is not in the correct form for a pipe</span>
+<span class="sd">    (\\\\&lt;machine&gt;\\pipe\\&lt;name&gt;) it is assumed to be a local pipe and renamed</span>
+<span class="sd">    as such.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">AnonymousPipe</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\\\\</span><span class="s">&quot;</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s">r&quot;</span><span class="se">\\</span><span class="s">.\pipe\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">name</span>
+        <span class="k">return</span> <span class="n">NamedPipe</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </div>
-<span class="k">def</span> <span class="nf">wait</span> <span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">WAIT</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">):</span>
-  <span class="sd">ur&quot;&quot;&quot;Wait for one synchronisation object to fire.</span>
+<span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">WAIT</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wait for one synchronisation object to fire.</span>
 
-<span class="sd">  :param object: an object whose `pyobject` method returns a handle to a synchronisation object</span>
-<span class="sd">  :param timeout_ms: how many milliseconds to wait</span>
-<span class="sd">  :raises: :exc:`x_ipc_timeout` if `timeout_ms` is exceeded</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="n">result</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">WaitForSingleObject</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="n">pyobject</span> <span class="p">(),</span> <span class="n">timeout_ms</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">WAIT</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="n">x_ipc_timeout</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;wait&quot;</span><span class="p">,</span> <span class="s">&quot;wait timed out&quot;</span><span class="p">)</span>
+<span class="sd">    :param object: an object whose `pyobject` method returns a handle to a synchronisation object</span>
+<span class="sd">    :param timeout_ms: how many milliseconds to wait</span>
+<span class="sd">    :raises: :exc:`x_ipc_timeout` if `timeout_ms` is exceeded</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">WaitForSingleObject</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="n">pyobject</span><span class="p">(),</span> <span class="n">timeout_ms</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">WAIT</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">x_ipc_timeout</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;wait&quot;</span><span class="p">,</span> <span class="s">&quot;wait timed out&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="any"><a class="viewcode-back" href="../ipc.html#ipc.any">[docs]</a><span class="k">def</span> <span class="nf">any</span> <span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">WAIT</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">):</span>
-  <span class="sd">&quot;&quot;&quot;Wait for any of the Windows synchronisation objects in the list to fire.</span>
-<span class="sd">  The objects must be winsys synchronisation objects (or, at least, have</span>
-<span class="sd">  a pyobject method which returns a PyHANDLE object). The one which</span>
-<span class="sd">  fires will be returned unless a timeout occurs in which case x_ipc_timeout</span>
-<span class="sd">  will be raised.</span>
+<div class="viewcode-block" id="any"><a class="viewcode-back" href="../ipc.html#ipc.any">[docs]</a><span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">WAIT</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wait for any of the Windows synchronisation objects in the list to fire.</span>
+<span class="sd">    The objects must be winsys synchronisation objects (or, at least, have</span>
+<span class="sd">    a pyobject method which returns a PyHANDLE object). The one which</span>
+<span class="sd">    fires will be returned unless a timeout occurs in which case x_ipc_timeout</span>
+<span class="sd">    will be raised.</span>
 
-<span class="sd">  :param objects: an iterable of winsys objects each of which has a waitable handle</span>
-<span class="sd">  :param timeout_ms: how many milliseconds to wait</span>
-<span class="sd">  :returns: the object which fired</span>
-<span class="sd">  :raises: :exc:`x_ipc_timeout` if `timeout_ms` is exceeded</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="n">handles</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">pyobject</span> <span class="p">()</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">]</span>
-  <span class="n">result</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">WaitForMultipleObjects</span><span class="p">,</span> <span class="n">handles</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">WAIT</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="n">x_ipc_timeout</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;any&quot;</span><span class="p">,</span> <span class="s">&quot;Wait timed out&quot;</span><span class="p">)</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">objects</span><span class="p">[</span><span class="n">result</span> <span class="o">-</span> <span class="n">WAIT</span><span class="o">.</span><span class="n">OBJECT_0</span><span class="p">]</span>
+<span class="sd">    :param objects: an iterable of winsys objects each of which has a waitable handle</span>
+<span class="sd">    :param timeout_ms: how many milliseconds to wait</span>
+<span class="sd">    :returns: the object which fired</span>
+<span class="sd">    :raises: :exc:`x_ipc_timeout` if `timeout_ms` is exceeded</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">handles</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">pyobject</span><span class="p">()</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">]</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">WaitForMultipleObjects</span><span class="p">,</span> <span class="n">handles</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">WAIT</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">x_ipc_timeout</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;any&quot;</span><span class="p">,</span> <span class="s">&quot;Wait timed out&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">objects</span><span class="p">[</span><span class="n">result</span> <span class="o">-</span> <span class="n">WAIT</span><span class="o">.</span><span class="n">OBJECT_0</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="all"><a class="viewcode-back" href="../ipc.html#ipc.all">[docs]</a><span class="k">def</span> <span class="nf">all</span> <span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">WAIT</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">):</span>
-  <span class="sd">&quot;&quot;&quot;Wait for all of the Windows synchronisation objects in the list to fire.</span>
-<span class="sd">  The objects must be winsys synchronisation objects (or, at least, have</span>
-<span class="sd">  a pyobject method which returns a PyHANDLE object).</span>
+<div class="viewcode-block" id="all"><a class="viewcode-back" href="../ipc.html#ipc.all">[docs]</a><span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">WAIT</span><span class="o">.</span><span class="n">INFINITE</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wait for all of the Windows synchronisation objects in the list to fire.</span>
+<span class="sd">    The objects must be winsys synchronisation objects(or, at least, have</span>
+<span class="sd">    a pyobject method which returns a PyHANDLE object).</span>
 
-<span class="sd">  :param objects: an iterable of winsys objects each of which has a waitable handle</span>
-<span class="sd">  :param timeout_ms: how many milliseconds to wait</span>
-<span class="sd">  :raises: :exc:`x_ipc_timeout` if `timeout_ms` is exceeded</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="n">handles</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">pyobject</span> <span class="p">()</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">]</span>
-  <span class="n">result</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">WaitForMultipleObjects</span><span class="p">,</span> <span class="n">handles</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">WAIT</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="n">x_ipc_timeout</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;all&quot;</span><span class="p">,</span> <span class="s">&quot;Wait timed out&quot;</span><span class="p">)</span></div>
+<span class="sd">    :param objects: an iterable of winsys objects each of which has a waitable handle</span>
+<span class="sd">    :param timeout_ms: how many milliseconds to wait</span>
+<span class="sd">    :raises: :exc:`x_ipc_timeout` if `timeout_ms` is exceeded</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">handles</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">pyobject</span><span class="p">()</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">]</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32event</span><span class="o">.</span><span class="n">WaitForMultipleObjects</span><span class="p">,</span> <span class="n">handles</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">WAIT</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">x_ipc_timeout</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;all&quot;</span><span class="p">,</span> <span class="s">&quot;Wait timed out&quot;</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -747,13 +747,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
           <li><a href="index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

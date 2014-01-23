@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using the fs module &mdash; WinSys 0.5beta documentation</title>
+    <title>Using the fs module &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.5beta',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="../index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="../index.html" />
     <link rel="up" title="Cookbook" href="../cookbook.html" />
     <link rel="next" title="Using the ipc module" href="ipc.html" />
     <link rel="prev" title="Using the event_logs module" href="event_logs.html" /> 
@@ -47,7 +45,7 @@
         <li class="right" >
           <a href="event_logs.html" title="Using the event_logs module"
              accesskey="P">previous</a> |</li>
-        <li><a href="../contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
           <li><a href="../cookbook.html" accesskey="U">Cookbook</a> &raquo;</li> 
       </ul>
     </div>  
@@ -72,11 +70,11 @@
 8</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">security</span><span class="p">,</span> <span class="n">fs</span>
 
-<span class="n">f</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span> <span class="p">(</span><span class="s">&quot;c:/temp/tim.txt&quot;</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">security</span><span class="o">.</span><span class="n">change_privileges</span> <span class="p">([</span><span class="n">security</span><span class="o">.</span><span class="n">PRIVILEGE</span><span class="o">.</span><span class="n">TAKE_OWNERSHIP</span><span class="p">]):</span>
-  <span class="n">f</span><span class="o">.</span><span class="n">take_ownership</span> <span class="p">()</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span><span class="p">(</span><span class="s">&quot;c:/temp/tim.txt&quot;</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">security</span><span class="o">.</span><span class="n">change_privileges</span><span class="p">([</span><span class="n">security</span><span class="o">.</span><span class="n">PRIVILEGE</span><span class="o">.</span><span class="n">TAKE_OWNERSHIP</span><span class="p">]):</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">take_ownership</span><span class="p">()</span>
 
-<span class="k">assert</span> <span class="n">f</span><span class="o">.</span><span class="n">security</span> <span class="p">(</span><span class="s">&quot;O&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span> <span class="o">==</span> <span class="n">security</span><span class="o">.</span><span class="n">me</span> <span class="p">()</span>
+<span class="k">assert</span> <span class="n">f</span><span class="o">.</span><span class="n">security</span><span class="p">(</span><span class="s">&quot;O&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span> <span class="o">==</span> <span class="n">security</span><span class="o">.</span><span class="n">me</span><span class="p">()</span>
 </pre></div>
 </td></tr></table></div>
 <p>The <a class="reference internal" href="../fs_entry.html#fs.Entry.take_ownership" title="fs.Entry.take_ownership"><tt class="xref py py-meth docutils literal"><span class="pre">Entry.take_ownership()</span></tt></a> method assumes that you have no existing
@@ -108,17 +106,17 @@ in descending order of size.</p>
 14</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">operator</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">utils</span>
 
-<span class="p">[</span><span class="n">root</span><span class="p">]</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span>
-  <span class="s">&quot;Find top-level sizes&quot;</span><span class="p">,</span>
-  <span class="p">(</span><span class="s">&quot;Start from&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">get_folder</span><span class="p">)</span>
+<span class="p">[</span><span class="n">root</span><span class="p">]</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span><span class="p">(</span>
+    <span class="s">&quot;Find top-level sizes&quot;</span><span class="p">,</span>
+    <span class="p">(</span><span class="s">&quot;Start from&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">get_folder</span><span class="p">)</span>
 <span class="p">)</span>
 
-<span class="n">sizes</span> <span class="o">=</span> <span class="nb">dict</span> <span class="p">(</span>
-  <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="nb">sum</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">flat</span> <span class="p">()))</span> 
-    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">dir</span> <span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">dirs</span> <span class="p">()</span>
+<span class="n">sizes</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+   <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">flat</span><span class="p">()))</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">dir</span><span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">dirs</span><span class="p">()</span>
 <span class="p">)</span>
-<span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">sorted</span> <span class="p">(</span><span class="n">sizes</span><span class="o">.</span><span class="n">items</span> <span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span> <span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-  <span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;=&gt;&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_as_mb</span> <span class="p">(</span><span class="n">size</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">sizes</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;=&gt;&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_as_mb</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
 <p>The <a class="reference internal" href="../dialogs.html#dialogs.dialog" title="dialogs.dialog"><tt class="xref py py-func docutils literal"><span class="pre">dialogs.dialog()</span></tt></a> function sets up a simple dialog box
@@ -194,13 +192,13 @@ version of a number of bytes.</p>
         <li class="right" >
           <a href="event_logs.html" title="Using the event_logs module"
              >previous</a> |</li>
-        <li><a href="../contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
           <li><a href="../cookbook.html" >Cookbook</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

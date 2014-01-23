@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using the ipc module &mdash; WinSys 0.5beta documentation</title>
+    <title>Using the ipc module &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.5beta',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="../index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="../index.html" />
     <link rel="up" title="Cookbook" href="../cookbook.html" />
     <link rel="next" title="Using the registry module" href="registry.html" />
     <link rel="prev" title="Using the fs module" href="fs.html" /> 
@@ -47,7 +45,7 @@
         <li class="right" >
           <a href="fs.html" title="Using the fs module"
              accesskey="P">previous</a> |</li>
-        <li><a href="../contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
           <li><a href="../cookbook.html" accesskey="U">Cookbook</a> &raquo;</li> 
       </ul>
     </div>  
@@ -85,21 +83,21 @@ without needing to know which server is hosting it.</p>
 
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">ipc</span>
 
-<span class="k">def</span> <span class="nf">logger</span> <span class="p">():</span>
-  <span class="k">with</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span> <span class="p">(</span><span class="s">&quot;logger&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">l</span><span class="p">:</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-      <span class="n">word</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get</span> <span class="p">()</span>
-      <span class="k">if</span> <span class="n">word</span> <span class="o">==</span> <span class="s">&quot;STOP&quot;</span><span class="p">:</span>
-        <span class="k">break</span>
-      <span class="k">else</span><span class="p">:</span>
-        <span class="k">print</span> <span class="n">word</span>
+<span class="k">def</span> <span class="nf">logger</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span><span class="p">(</span><span class="s">&quot;logger&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">l</span><span class="p">:</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">word</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">word</span> <span class="o">==</span> <span class="s">&quot;STOP&quot;</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">print</span> <span class="n">word</span>
 
-<span class="n">threading</span><span class="o">.</span><span class="n">Thread</span> <span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span><span class="o">.</span><span class="n">start</span> <span class="p">()</span>
+<span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
-<span class="k">with</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span> <span class="p">(</span><span class="s">r&quot;</span><span class="se">\\</span><span class="s">*\mailslot\logger&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logging_mailslot</span><span class="p">:</span>
-  <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="s">&quot;the quick brown fox&quot;</span><span class="o">.</span><span class="n">split</span> <span class="p">():</span>
-    <span class="n">logging_mailslot</span><span class="o">.</span><span class="n">put</span> <span class="p">(</span><span class="n">word</span><span class="p">)</span>
-  <span class="n">logging_mailslot</span><span class="o">.</span><span class="n">put</span> <span class="p">(</span><span class="s">&quot;STOP&quot;</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span><span class="p">(</span><span class="s">r&quot;</span><span class="se">\\</span><span class="s">*\mailslot\logger&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logging_mailslot</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="s">&quot;the quick brown fox&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+        <span class="n">logging_mailslot</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+    <span class="n">logging_mailslot</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;STOP&quot;</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
 <p>This is where mailslots really score over named pipes, sockets, etc. You can
@@ -148,26 +146,26 @@ a separate machine within the same domain.</p>
 
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">ipc</span>
 
-<span class="n">reader</span> <span class="o">=</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span> <span class="p">(</span><span class="s">&quot;reader&quot;</span><span class="p">)</span>
-<span class="n">writer</span> <span class="o">=</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span> <span class="p">(</span><span class="s">&quot;reader&quot;</span><span class="p">)</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span><span class="p">(</span><span class="s">&quot;reader&quot;</span><span class="p">)</span>
+<span class="n">writer</span> <span class="o">=</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span><span class="p">(</span><span class="s">&quot;reader&quot;</span><span class="p">)</span>
 
-<span class="n">message</span> <span class="o">=</span> <span class="nb">list</span> <span class="p">(</span><span class="nb">reversed</span> <span class="p">(</span><span class="s">&quot;the quick brown fox jumps over the lazy dog&quot;</span><span class="o">.</span><span class="n">split</span> <span class="p">()))</span>
+<span class="n">message</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="s">&quot;the quick brown fox jumps over the lazy dog&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
 
 <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-  <span class="k">try</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get</span> <span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s">&quot;STOP&quot;</span><span class="p">:</span>
-      <span class="k">break</span>
-  <span class="k">except</span> <span class="n">ipc</span><span class="o">.</span><span class="n">x_mailslot_empty</span><span class="p">:</span>
-    <span class="k">pass</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span> <span class="n">data</span>
-
-  <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">95</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
-      <span class="n">writer</span><span class="o">.</span><span class="n">put</span> <span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">pop</span> <span class="p">())</span>
-    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-      <span class="n">writer</span><span class="o">.</span><span class="n">put</span> <span class="p">(</span><span class="s">&quot;STOP&quot;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s">&quot;STOP&quot;</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="k">except</span> <span class="n">ipc</span><span class="o">.</span><span class="n">x_mailslot_empty</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">data</span>
+
+    <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">95</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;STOP&quot;</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
 <p>Although the most likely application of mailslots is from separate threads or processes
@@ -185,6 +183,9 @@ both ends release their respective mailslot handles.</p>
 <div class="section" id="mailslot-as-an-iterable">
 <h2>Mailslot as an iterable<a class="headerlink" href="#mailslot-as-an-iterable" title="Permalink to this headline">¶</a></h2>
 <p>Iterate over the contents of a mailslot</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">ipc</span>
+</pre></div>
+</td></tr></table></div>
 </div>
 </div>
 
@@ -250,13 +251,13 @@ both ends release their respective mailslot handles.</p>
         <li class="right" >
           <a href="fs.html" title="Using the fs module"
              >previous</a> |</li>
-        <li><a href="../contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
           <li><a href="../cookbook.html" >Cookbook</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

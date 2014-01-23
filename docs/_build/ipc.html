@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ipc – Interprocess Communication &mdash; WinSys 0.5beta documentation</title>
+    <title>ipc – Interprocess Communication &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.5beta',
+        URL_ROOT:    './',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
     <link rel="next" title="The Mailslot class" href="mailslots.html" />
     <link rel="prev" title="fs Constants" href="fs_constants.html" /> 
   </head>
@@ -46,7 +44,7 @@
         <li class="right" >
           <a href="fs_constants.html" title="fs Constants"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -73,7 +71,7 @@ the rest are definitely on the way.</p>
 <dt id="ipc.mailslot">
 <tt class="descclassname">ipc.</tt><tt class="descname">mailslot</tt><big>(</big><em>mailslot</em>, <em>marshalled=True</em>, <em>message_size=0</em>, <em>timeout_ms=-1</em><big>)</big><a class="reference internal" href="_modules/ipc.html#mailslot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.mailslot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a <a class="reference internal" href="mailslots.html#ipc.Mailslot" title="ipc.Mailslot"><tt class="xref py py-class docutils literal"><span class="pre">Mailslot</span></tt></a> instance based on the name in <cite>mailslot</cite>.
-If the name is not a fully-qualified mailslot name (\.mailslot) then
+If the name is not a fully-qualified mailslot name (.mailslot) then
 it is assumed to be on the local machine and is prefixed accordingly.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -153,7 +151,7 @@ by the creating thread.</li>
 <tt class="descclassname">ipc.</tt><tt class="descname">pipe</tt><big>(</big><em>name=None</em><big>)</big><a class="reference internal" href="_modules/ipc.html#pipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.pipe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a pipe. If name is given a <a class="reference internal" href="pipes.html#ipc.NamedPipe" title="ipc.NamedPipe"><tt class="xref py py-class docutils literal"><span class="pre">NamedPipe</span></tt></a> is returned, otherwise
 an <a class="reference internal" href="pipes.html#ipc.AnonymousPipe" title="ipc.AnonymousPipe"><tt class="xref py py-class docutils literal"><span class="pre">AnonymousPipe</span></tt></a>. If name is not in the correct form for a pipe
-(\\&lt;machine&gt;\pipe\&lt;name&gt;) it is assumed to be a local pipe and renamed
+(\&lt;machine&gt;pipe&lt;name&gt;) it is assumed to be a local pipe and renamed
 as such.</p>
 </dd></dl>
 
@@ -181,7 +179,7 @@ will be raised.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the object which fired</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first last"><tt class="xref py py-exc docutils literal"><span class="pre">x_ipc_timeout</span></tt> if <cite>timeout_ms</cite> is exceeded</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><tt class="xref py py-exc docutils literal"><span class="pre">x_ipc_timeout</span></tt> if <cite>timeout_ms</cite> is exceeded</p>
 </td>
 </tr>
 </tbody>
@@ -192,7 +190,7 @@ will be raised.</p>
 <dt id="ipc.all">
 <tt class="descclassname">ipc.</tt><tt class="descname">all</tt><big>(</big><em>objects</em>, <em>timeout_ms=-1</em><big>)</big><a class="reference internal" href="_modules/ipc.html#all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait for all of the Windows synchronisation objects in the list to fire.
-The objects must be winsys synchronisation objects (or, at least, have
+The objects must be winsys synchronisation objects(or, at least, have
 a pyobject method which returns a PyHANDLE object).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -204,7 +202,7 @@ a pyobject method which returns a PyHANDLE object).</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises :</th><td class="field-body"><p class="first last"><tt class="xref py py-exc docutils literal"><span class="pre">x_ipc_timeout</span></tt> if <cite>timeout_ms</cite> is exceeded</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><tt class="xref py py-exc docutils literal"><span class="pre">x_ipc_timeout</span></tt> if <cite>timeout_ms</cite> is exceeded</p>
 </td>
 </tr>
 </tbody>
@@ -231,9 +229,9 @@ a pyobject method which returns a PyHANDLE object).</p>
 <tt class="descclassname">ipc.</tt><tt class="descname">WAIT</tt><em class="property"> = &lt;Constants: {'ABANDONED': 128, 'ABANDONED_0': 128, 'IO_COMPLETION': 192, 'OBJECT_0': 0, 'FAILED': -1, 'TIMEOUT': 258, 'INFINITE': -1}&gt;</em><a class="headerlink" href="#ipc.WAIT" title="Permalink to this definition">¶</a></dt>
 <dd><table border="1" class="docutils">
 <colgroup>
-<col width="38%" />
-<col width="9%" />
-<col width="53%" />
+<col width="32%" />
+<col width="24%" />
+<col width="44%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Name</th>
@@ -242,33 +240,33 @@ a pyobject method which returns a PyHANDLE object).</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>FAILED</td>
-<td>-1</td>
-<td>INFINITE</td>
-</tr>
-<tr class="row-odd"><td>INFINITE</td>
-<td>-1</td>
-<td>INFINITE</td>
-</tr>
 <tr class="row-even"><td>OBJECT_0</td>
-<td>0</td>
+<td>0x00000000</td>
 <td>WAIT_OBJECT_0</td>
 </tr>
 <tr class="row-odd"><td>ABANDONED</td>
-<td>128</td>
+<td>0x00000080</td>
 <td>WAIT_ABANDONED_0</td>
 </tr>
 <tr class="row-even"><td>ABANDONED_0</td>
-<td>128</td>
+<td>0x00000080</td>
 <td>WAIT_ABANDONED_0</td>
 </tr>
 <tr class="row-odd"><td>IO_COMPLETION</td>
-<td>192</td>
+<td>0x000000C0</td>
 <td>WAIT_IO_COMPLETION</td>
 </tr>
 <tr class="row-even"><td>TIMEOUT</td>
-<td>258</td>
+<td>0x00000102</td>
 <td>WAIT_TIMEOUT</td>
+</tr>
+<tr class="row-odd"><td>FAILED</td>
+<td>0xFFFFFFFF</td>
+<td>INFINITE</td>
+</tr>
+<tr class="row-even"><td>INFINITE</td>
+<td>0xFFFFFFFF</td>
+<td>INFINITE</td>
 </tr>
 </tbody>
 </table>
@@ -310,7 +308,7 @@ a pyobject method which returns a PyHANDLE object).</p>
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
 <dt><a class="reference external" href="http://msdn.microsoft.com/en-us/library/ms686353(VS.85).aspx">Synchronisation</a></dt>
@@ -348,9 +346,7 @@ a pyobject method which returns a PyHANDLE object).</p>
 <li><a class="reference internal" href="#helpers">Helpers</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#classes">Classes</a><ul>
-</ul>
-</li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#constants">Constants</a></li>
 <li><a class="reference internal" href="#exceptions">Exceptions</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
@@ -402,12 +398,12 @@ a pyobject method which returns a PyHANDLE object).</p>
         <li class="right" >
           <a href="fs_constants.html" title="fs Constants"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

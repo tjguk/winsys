@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The FilePath class &mdash; WinSys 0.5beta documentation</title>
+    <title>The FilePath class &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.5beta',
+        URL_ROOT:    './',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
     <link rel="up" title="fs – Files, Directories, &amp;c." href="fs.html" />
     <link rel="next" title="The Entry class" href="fs_entry.html" />
     <link rel="prev" title="The Drive class" href="fs_drive_vol.html" /> 
@@ -47,8 +45,8 @@
         <li class="right" >
           <a href="fs_drive_vol.html" title="The Drive class"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -71,17 +69,29 @@ the root attribute is empty for relative paths. They can be added
 to each other or to other unicode strings which will use os.path.join
 semantics.</p>
 <p>A FilePath offers quick access to the different parts of the path:</p>
-<ul class="simple">
-<li>parts - a list of the components (cf <a class="reference internal" href="fs.html#fs.get_parts" title="fs.get_parts"><tt class="xref py py-func docutils literal"><span class="pre">fs.get_parts()</span></tt></a>)</li>
-<li>root - the drive or UNC server/share ending in a backslash unless a drive-relative path</li>
-<li>filename - final component</li>
-<li>name - same as filename (convenience)</li>
-<li>dirname - all path components before the last</li>
-<li>path - combination of root and dirname</li>
-<li>parent - combination of root and all path components before second penultimate; raises
-an exception is FilePath is relative.</li>
-<li>base - base part of filename (ie the piece before the dot)</li>
-<li>ext - ext part of filename (ie the dot and the piece after)</li>
+<ul>
+<li><p class="first">parts - a list of the components (cf <a class="reference internal" href="fs.html#fs.get_parts" title="fs.get_parts"><tt class="xref py py-func docutils literal"><span class="pre">fs.get_parts()</span></tt></a>)</p>
+</li>
+<li><p class="first">root - the drive or UNC server/share ending in a backslash unless a drive-relative path</p>
+</li>
+<li><p class="first">filename - final component</p>
+</li>
+<li><p class="first">name - same as filename (convenience)</p>
+</li>
+<li><p class="first">dirname - all path components before the last</p>
+</li>
+<li><p class="first">path - combination of root and dirname</p>
+</li>
+<li><dl class="first docutils">
+<dt>parent - combination of root and all path components before second penultimate; raises</dt>
+<dd><p class="first last">an exception is FilePath is relative.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">base - base part of filename (ie the piece before the dot)</p>
+</li>
+<li><p class="first">ext - ext part of filename (ie the dot and the piece after)</p>
+</li>
 </ul>
 <table border="1" class="docutils">
 <colgroup>
@@ -108,14 +118,14 @@ an exception is FilePath is relative.</li>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>\\a\b\c\d.txt</td>
-<td>\\a\b\</td>
+<tr class="row-even"><td>\\abcd.txt</td>
+<td>\\ab</td>
 <td>d.txt</td>
 <td>d.txt</td>
 <td>c</td>
-<td>\\a\b\c</td>
-<td>\\a\b\c</td>
-<td>d</td>
+<td>\\abc</td>
+<td>\\abc d</td>
+<td>&nbsp;</td>
 <td>.txt</td>
 </tr>
 <tr class="row-odd"><td>c:\boot.ini</td>
@@ -148,7 +158,7 @@ an exception is FilePath is relative.</li>
 <td>t</td>
 <td>_</td>
 </tr>
-<tr class="row-even"><td>c:\t\</td>
+<tr class="row-even"><td>c:\t</td>
 <td>c:\</td>
 <td>t</td>
 <td>t</td>
@@ -158,7 +168,7 @@ an exception is FilePath is relative.</li>
 <td>t</td>
 <td>_</td>
 </tr>
-<tr class="row-odd"><td>c:\t\a.txt</td>
+<tr class="row-odd"><td>c:\ta.txt</td>
 <td>c:\</td>
 <td>a.txt</td>
 <td>a.txt</td>
@@ -210,11 +220,11 @@ relative or not. Use <tt class="xref py py-func docutils literal"><span class="p
 <dd><p>Return a new <a class="reference internal" href="#fs.FilePath" title="fs.FilePath"><tt class="xref py py-class docutils literal"><span class="pre">FilePath</span></tt></a> with one or more parts changed. This is particularly
 convenient for, say, changing the extension of a file or producing a version on
 another path, eg:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span><span class="p">,</span> <span class="n">shell</span>
+<div class="highlight-python"><div class="highlight"><pre>from winsys import fs, shell
 
-<span class="n">BACKUP_DRIVE</span> <span class="o">=</span> <span class="s">&quot;D:</span><span class="se">\\</span><span class="s">&quot;</span>
-<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">flat</span> <span class="p">(</span><span class="n">shell</span><span class="o">.</span><span class="n">special_folder</span> <span class="p">(</span><span class="s">&quot;personal&quot;</span><span class="p">),</span> <span class="s">&quot;*.doc&quot;</span><span class="p">):</span>
-  <span class="n">f</span><span class="o">.</span><span class="n">copy</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">changed</span> <span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">BACKUP_DRIVE</span><span class="p">))</span>
+BACKUP_DRIVE = &quot;D:\&quot;
+for f in fs.flat(shell.special_folder(&quot;personal&quot;), &quot;*.doc&quot;):
+    f.copy(f.changed(root=BACKUP_DRIVE))
 </pre></div>
 </div>
 </dd></dl>
@@ -302,13 +312,13 @@ root is a drive letter only (without a directory backslash).</p>
         <li class="right" >
           <a href="fs_drive_vol.html" title="The Drive class"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
+          <li><a href="fs.html" ><tt class="docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

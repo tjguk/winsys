@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The Mailslot class &mdash; WinSys 0.5beta documentation</title>
+    <title>The Mailslot class &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.5beta',
+        URL_ROOT:    './',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
     <link rel="up" title="ipc – Interprocess Communication" href="ipc.html" />
     <link rel="next" title="The Event class" href="events.html" />
     <link rel="prev" title="ipc – Interprocess Communication" href="ipc.html" /> 
@@ -47,8 +45,8 @@
         <li class="right" >
           <a href="ipc.html" title="ipc – Interprocess Communication"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
+          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -61,7 +59,7 @@
 <h1>The Mailslot class<a class="headerlink" href="#the-mailslot-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="ipc.Mailslot">
-<em class="property">class </em><tt class="descclassname">ipc.</tt><tt class="descname">Mailslot</tt><big>(</big><em>name</em>, <em>serialiser=(&lt;function _unserialised at 0x03AD7C70&gt;</em>, <em>&lt;function _unserialised at 0x03AD7C70&gt;)</em>, <em>message_size=0</em>, <em>timeout_ms=-1</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">ipc.</tt><tt class="descname">Mailslot</tt><big>(</big><em>name</em>, <em>serialiser=(&lt;function _unserialised at 0x04430AB0&gt;</em>, <em>&lt;function _unserialised at 0x04430AB0&gt;)</em>, <em>message_size=0</em>, <em>timeout_ms=-1</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Mailslot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Mailslot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
 <p>A mailslot is a mechanism for passing small datasets (up to about
 400 bytes) between machines in the same network. For transport and
@@ -76,7 +74,7 @@ specifying the machine name directly or by broadcasting. This is
 particularly convenient as the writing machines have no need to
 determine where the trace-collecting mailslot is running or even
 if it is running at all.</p>
-<p>The format for mailslot names is \\&lt;computer&gt;\mailslot\&lt;path&gt;\&lt;to&gt;\&lt;mailslot&gt;
+<p>The format for mailslot names is \&lt;computer&gt;mailslot&lt;path&gt;&lt;to&gt;&lt;mailslot&gt;
 The computer name can be &#8221;.&#8221; for the local computer, a Windows
 computer name, a domain name, or an asterisk to indicate a broadcast.
 It&#8217;s not necessary to have a complex path for the mailslot but it is
@@ -85,19 +83,32 @@ mailslots on the same or different machines.</p>
 <p>This class deliberately wraps the mailslot API in a Python
 API which is plug-compatible with that of the Python Queue
 mechanism with the following notes:</p>
-<ul class="simple">
-<li>A mailslot is either read-only or write-only. Generally,
-the first action taken on it determines which it is, although
-remote mailslots can only be written to so this is predetermined.</li>
-<li>A mailslot can be context-managed so that it is opened and
-closed correctly regardless of any errors.</li>
-<li>A mailslot is its own iterator (strictly: generator)</li>
-<li>By default the data through a mailslot is expected to be
-text, and is passed through untouched. Alternative
+<ul>
+<li><dl class="first docutils">
+<dt>A mailslot is either read-only or write-only. Generally,</dt>
+<dd><p class="first last">the first action taken on it determines which it is, although
+remote mailslots can only be written to so this is predetermined.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>A mailslot can be context-managed so that it is opened and</dt>
+<dd><p class="first last">closed correctly regardless of any errors.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">A mailslot is its own iterator (strictly: generator)</p>
+</li>
+<li><dl class="first docutils">
+<dt>By default the data through a mailslot is expected to be</dt>
+<dd><p class="first last">text, and is passed through untouched. Alternative
 serialisers can be provided, for example marshal.dumps and
 marshal.loads to allow simple objects to be transmitted via
 the mailslot. Note that the maximum message size still applies
-so it&#8217;s not possible to send very complex datasets this way.</li>
+so it&#8217;s not possible to send very complex datasets this way.</p>
+</dd>
+</dl>
+</li>
 </ul>
 <p>Since a mailslot will always return immediately if passed to one
 of the Wait... functions, events or other synchronisation objects
@@ -183,7 +194,7 @@ used (and which therefore has no open handles) will succeed silently.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the first message from the mailslot queue serialised according to the class&#8217;s <cite>serialiser</cite></p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first last"><a class="reference internal" href="ipc.html#ipc.x_mailslot_empty" title="ipc.x_mailslot_empty"><tt class="xref py py-exc docutils literal"><span class="pre">x_mailslot_empty</span></tt></a> if timed out or unblocked</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="ipc.html#ipc.x_mailslot_empty" title="ipc.x_mailslot_empty"><tt class="xref py py-exc docutils literal"><span class="pre">x_mailslot_empty</span></tt></a> if timed out or unblocked</p>
 </td>
 </tr>
 </tbody>
@@ -206,7 +217,7 @@ used (and which therefore has no open handles) will succeed silently.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> &#8211; data to be written to the mailslot via its serialisers</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises :</th><td class="field-body"><a class="reference internal" href="ipc.html#ipc.x_mailslot_message_too_big" title="ipc.x_mailslot_message_too_big"><tt class="xref py py-exc docutils literal"><span class="pre">x_mailslot_message_too_big</span></tt></a> if the serialised message
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="ipc.html#ipc.x_mailslot_message_too_big" title="ipc.x_mailslot_message_too_big"><tt class="xref py py-exc docutils literal"><span class="pre">x_mailslot_message_too_big</span></tt></a> if the serialised message
 exceeds the mailslot&#8217;s maximum size</td>
 </tr>
 </tbody>
@@ -222,7 +233,7 @@ exceeds the mailslot&#8217;s maximum size</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the underlying PyHANDLE object</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises :</th><td class="field-body"><a class="reference internal" href="ipc.html#ipc.x_mailslot" title="ipc.x_mailslot"><tt class="xref py py-exc docutils literal"><span class="pre">x_mailslot</span></tt></a> if the mailslot has not yet been determined for reading or for writing</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="ipc.html#ipc.x_mailslot" title="ipc.x_mailslot"><tt class="xref py py-exc docutils literal"><span class="pre">x_mailslot</span></tt></a> if the mailslot has not yet been determined for reading or for writing</td>
 </tr>
 </tbody>
 </table>
@@ -261,7 +272,7 @@ exceeds the mailslot&#8217;s maximum size</td>
             </a></p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="ipc.html"
-                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a></p>
+                        title="previous chapter"><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="events.html"
                         title="next chapter">The Event class</a></p>
@@ -302,13 +313,13 @@ exceeds the mailslot&#8217;s maximum size</td>
         <li class="right" >
           <a href="ipc.html" title="ipc – Interprocess Communication"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
+          <li><a href="ipc.html" ><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

@@ -1,6 +1,7 @@
 :mod:`shell` -- Shell functionality
 ===================================
 
+..  module:: shell
 ..  automodule:: shell
     :synopsis: Shell functionality
 ..  moduleauthor:: Tim Golden <mail@timgolden.me.uk>

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The Mutex class &mdash; WinSys 0.5beta documentation</title>
+    <title>The Mutex class &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.5beta',
+        URL_ROOT:    './',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
     <link rel="up" title="ipc – Interprocess Communication" href="ipc.html" />
     <link rel="next" title="The Pipe classes" href="pipes.html" />
     <link rel="prev" title="The Event class" href="events.html" /> 
@@ -47,8 +45,8 @@
         <li class="right" >
           <a href="events.html" title="The Event class"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
+          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -74,10 +72,11 @@ objects are implemented as Semaphores on Windows, presumably for re-entrancy).
 For this reason, the <a class="reference internal" href="#ipc.Mutex.acquire" title="ipc.Mutex.acquire"><tt class="xref py py-meth docutils literal"><span class="pre">acquire()</span></tt></a> and <a class="reference internal" href="#ipc.Mutex.release" title="ipc.Mutex.release"><tt class="xref py py-meth docutils literal"><span class="pre">release()</span></tt></a> names have been
 used for methods.</p>
 <p>The mutex is its own context manager, so a typical usage would be:</p>
-<div class="highlight-python"><pre>from winsys import ipc
+<div class="highlight-python"><div class="highlight"><pre>from winsys import ipc
 
-with ipc.mutex ("ONLYONCE"):
-  # do stuff</pre>
+with ipc.mutex(&quot;ONLYONCE&quot;):
+    # do stuff
+</pre></div>
 </div>
 <dl class="method">
 <dt id="ipc.Mutex.acquire">
@@ -89,7 +88,7 @@ with ipc.mutex ("ONLYONCE"):
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout_ms</strong> &#8211; how many milliseconds to wait before giving up</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises :</th><td class="field-body"><tt class="xref py py-exc docutils literal"><span class="pre">x_ipc_timeout</span></tt> if timeout expires</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><tt class="xref py py-exc docutils literal"><span class="pre">x_ipc_timeout</span></tt> if timeout expires</td>
 </tr>
 </tbody>
 </table>
@@ -168,13 +167,13 @@ instead.</p>
         <li class="right" >
           <a href="events.html" title="The Event class"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
+          <li><a href="ipc.html" ><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

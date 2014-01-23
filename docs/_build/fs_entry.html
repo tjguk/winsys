@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The Entry class &mdash; WinSys 0.5beta documentation</title>
+    <title>The Entry class &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.5beta',
+        URL_ROOT:    './',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
     <link rel="up" title="fs – Files, Directories, &amp;c." href="fs.html" />
     <link rel="next" title="The File class" href="fs_file.html" />
     <link rel="prev" title="The FilePath class" href="fs_filepath.html" /> 
@@ -47,8 +45,8 @@
         <li class="right" >
           <a href="fs_filepath.html" title="The FilePath class"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
+          <li><a href="fs.html" accesskey="U"><tt class="docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -81,12 +79,19 @@ altho&#8217; it&#8217;s possible to do so.</p>
 * <a class="reference internal" href="#fs.Entry.n_links" title="fs.Entry.n_links"><tt class="xref py py-attr docutils literal"><span class="pre">n_links</span></tt></a>
 * <tt class="xref py py-attr docutils literal"><span class="pre">attributes</span> <span class="pre">-</span> <span class="pre">an</span> <span class="pre">:class:`constants.Attributes</span></tt> object representing combinations of <a class="reference internal" href="fs_constants.html#fs.FILE_ATTRIBUTE" title="fs.FILE_ATTRIBUTE"><tt class="xref py py-const docutils literal"><span class="pre">FILE_ATTRIBUTE</span></tt></a></p>
 <p>Common functionality:</p>
-<ul class="simple">
-<li>Entries compare (eq, lt, etc.) according to their full case-insensitive filepath.
-To do a content-wise comparison, use <tt class="xref py py-meth docutils literal"><span class="pre">equal_contents()</span></tt>.</li>
-<li>Entries are True according to their existence on a filesystem</li>
-<li>The str representation is the filepath utf8-encoded; unicode is the filepath itself</li>
-<li>Adding one path to another will use os.path.join semantics</li>
+<ul>
+<li><dl class="first docutils">
+<dt>Entries compare (eq, lt, etc.) according to their full case-insensitive filepath.</dt>
+<dd><p class="first last">To do a content-wise comparison, use <tt class="xref py py-meth docutils literal"><span class="pre">equal_contents()</span></tt>.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Entries are True according to their existence on a filesystem</p>
+</li>
+<li><p class="first">The str representation is the filepath utf8-encoded; unicode is the filepath itself</p>
+</li>
+<li><p class="first">Adding one path to another will use os.path.join semantics</p>
+</li>
 </ul>
 <dl class="method">
 <dt id="fs.Entry.ancestors">
@@ -191,7 +196,7 @@ forces a re-read of the metadata</p>
 
 <dl class="method">
 <dt id="fs.Entry.handle">
-<tt class="descname">handle</tt><big>(</big><em>mode='r'</em><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.handle" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle</tt><big>(</big><em>mode=u'r'</em><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.handle" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -201,8 +206,8 @@ forces a re-read of the metadata</p>
 <cite>pattern</cite> according to <cite>fnmatch</cite>, eg:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
 <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">files</span> <span class="p">():</span>
-  <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">directory</span> <span class="ow">and</span> <span class="n">f</span><span class="o">.</span><span class="n">like</span> <span class="p">(</span><span class="s">&quot;test_*&quot;</span><span class="p">):</span>
-    <span class="k">print</span> <span class="n">f</span>
+    <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">directory</span> <span class="ow">and</span> <span class="n">f</span><span class="o">.</span><span class="n">like</span><span class="p">(</span><span class="s">&quot;test_*&quot;</span><span class="p">):</span>
+        <span class="k">print</span> <span class="n">f</span>
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -268,7 +273,7 @@ If other is a directory, self</p>
 <dl class="method">
 <dt id="fs.Entry.security">
 <tt class="descname">security</tt><big>(</big><em>options=u'OD'</em><big>)</big><a class="reference internal" href="_modules/fs.html#Entry.security"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.Entry.security" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <a class="reference internal" href="security.html#security.Security" title="security.Security"><tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt></a> object corresponding to this
+<dd><p>Return a <tt class="xref py py-class docutils literal"><span class="pre">security_.Security</span></tt> object corresponding to this
 entry&#8217;s security attributes. Note that the returning object is a context
 manager so a common pattern is:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#</span>
@@ -276,19 +281,19 @@ manager so a common pattern is:</p>
 <span class="c"># the owner has any access.</span>
 <span class="c">#</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
-<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">flat</span> <span class="p">(</span><span class="s">&quot;*.ppk&quot;</span><span class="p">):</span>
-  <span class="k">with</span> <span class="n">f</span><span class="o">.</span><span class="n">security</span> <span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
-    <span class="n">s</span><span class="o">.</span><span class="n">break_inheritance</span> <span class="p">()</span>
-    <span class="n">s</span><span class="o">.</span><span class="n">dacl</span> <span class="o">=</span> <span class="p">[(</span><span class="n">s</span><span class="o">.</span><span class="n">owner</span><span class="p">,</span> <span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">)]</span>
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">flat</span><span class="p">(</span><span class="s">&quot;*.ppk&quot;</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">f</span><span class="o">.</span><span class="n">security</span><span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">break_inheritance</span><span class="p">()</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">dacl</span> <span class="o">=</span> <span class="p">[(</span><span class="n">s</span><span class="o">.</span><span class="n">owner</span><span class="p">,</span> <span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">)]</span>
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>options</strong> &#8211; cf <a class="reference internal" href="security.html#security.security" title="security.security"><tt class="xref py py-func docutils literal"><span class="pre">security.security()</span></tt></a></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>options</strong> &#8211; cf <tt class="xref py py-func docutils literal"><span class="pre">security_.security()</span></tt></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a <a class="reference internal" href="security.html#security.Security" title="security.Security"><tt class="xref py py-class docutils literal"><span class="pre">security.Security</span></tt></a> object which may be used as a context manager</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a <tt class="xref py py-class docutils literal"><span class="pre">security_.Security</span></tt> object which may be used as a context manager</td>
 </tr>
 </tbody>
 </table>
@@ -323,11 +328,11 @@ if that user has not been granted the appropriate security by
 the ACL:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span><span class="p">,</span> <span class="n">security</span>
 
-<span class="n">f</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span> <span class="p">(</span><span class="s">&quot;c:/temp/temp.txt&quot;</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span><span class="p">(</span><span class="s">&quot;c:/temp/temp.txt&quot;</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">f</span>
-<span class="k">with</span> <span class="n">security</span><span class="o">.</span><span class="n">change_privileges</span> <span class="p">([</span><span class="s">&quot;take_ownership&quot;</span><span class="p">]):</span>
-  <span class="n">f</span><span class="o">.</span><span class="n">take_ownership</span> <span class="p">()</span>
-  <span class="n">f</span><span class="o">.</span><span class="n">take_control</span> <span class="p">()</span>
+<span class="k">with</span> <span class="n">security_</span><span class="o">.</span><span class="n">change_privileges</span><span class="p">([</span><span class="s">&quot;take_ownership&quot;</span><span class="p">]):</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">take_ownership</span><span class="p">()</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">take_control</span><span class="p">()</span>
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -571,13 +576,13 @@ the filesystem if none was stored.</p>
         <li class="right" >
           <a href="fs_filepath.html" title="The FilePath class"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
+          <li><a href="fs.html" ><tt class="docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>
