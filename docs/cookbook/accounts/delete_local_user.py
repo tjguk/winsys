@@ -1,3 +1,3 @@
 from winsys import accounts
 
-accounts.principal ("python").delete ()
+accounts.principal("python").delete()
