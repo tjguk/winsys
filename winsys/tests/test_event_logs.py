@@ -2,15 +2,7 @@
 from __future__ import unicode_literals
 
 import sys
-import unittest as unittest0
-try:
-  unittest0.skipUnless
-  unittest0.skip
-except AttributeError:
-  import unittest2 as unittest
-else:
-  unittest = unittest0
-del unittest0
+from winsys._compat import unittest
 import uuid
 
 import winerror
