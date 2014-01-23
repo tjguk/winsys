@@ -129,22 +129,22 @@ PROGRESS.doc("States within a file move/copy progress")
 MOVEFILE = constants.Constants.from_pattern("MOVEFILE_*", namespace=win32file)
 MOVEFILE.doc("Options when moving a file")
 VOLUME_FLAG = constants.Constants.from_dict(dict(
-    FILE_CASE_SENSITIVE_SEARCH            = 0x00000001,
-    FILE_CASE_PRESERVED_NAMES             = 0x00000002,
-    FILE_UNICODE_ON_DISK                        = 0x00000004,
-    FILE_PERSISTENT_ACLS                        = 0x00000008,
-    FILE_FILE_COMPRESSION                     = 0x00000010,
-    FILE_VOLUME_QUOTAS                            = 0x00000020,
-    FILE_SUPPORTS_SPARSE_FILES            = 0x00000040,
-    FILE_SUPPORTS_REPARSE_POINTS        = 0x00000080,
-    FILE_SUPPORTS_REMOTE_STORAGE        = 0x00000100,
-    FILE_VOLUME_IS_COMPRESSED             = 0x00008000,
-    FILE_SUPPORTS_OBJECT_IDS                = 0x00010000,
-    FILE_SUPPORTS_ENCRYPTION                = 0x00020000,
-    FILE_NAMED_STREAMS                            = 0x00040000,
-    FILE_READ_ONLY_VOLUME                     = 0x00080000,
-    FILE_SEQUENTIAL_WRITE_ONCE            = 0x00100000,
-    FILE_SUPPORTS_TRANSACTIONS            = 0x00200000
+  FILE_CASE_SENSITIVE_SEARCH      = 0x00000001,
+  FILE_CASE_PRESERVED_NAMES       = 0x00000002,
+  FILE_UNICODE_ON_DISK            = 0x00000004,
+  FILE_PERSISTENT_ACLS            = 0x00000008,
+  FILE_FILE_COMPRESSION           = 0x00000010,
+  FILE_VOLUME_QUOTAS              = 0x00000020,
+  FILE_SUPPORTS_SPARSE_FILES      = 0x00000040,
+  FILE_SUPPORTS_REPARSE_POINTS    = 0x00000080,
+  FILE_SUPPORTS_REMOTE_STORAGE    = 0x00000100,
+  FILE_VOLUME_IS_COMPRESSED       = 0x00008000,
+  FILE_SUPPORTS_OBJECT_IDS        = 0x00010000,
+  FILE_SUPPORTS_ENCRYPTION        = 0x00020000,
+  FILE_NAMED_STREAMS              = 0x00040000,
+  FILE_READ_ONLY_VOLUME           = 0x00080000,
+  FILE_SEQUENTIAL_WRITE_ONCE      = 0x00100000,
+  FILE_SUPPORTS_TRANSACTIONS      = 0x00200000
 ), pattern="FILE_*")
 VOLUME_FLAG.doc("Characteristics of a volume")
 DRIVE_TYPE = constants.Constants.from_pattern("DRIVE_*", namespace=win32file)
@@ -177,7 +177,7 @@ PATHSEGS = "(?:%s)*" % PATHSEG
 FILEPATH = PREFIX + PATHSEGS
 
 def get_parts(filepath):
-    """Helper function to regularise a file path and then
+    r"""Helper function to regularise a file path and then
     to pick out its drive and path components.
 
     Attempt to match the first part of the string against
@@ -193,17 +193,17 @@ def get_parts(filepath):
     ============================= ======================================
     Path                                                    Parts
     ============================= ======================================
-    c:/                                                     ["c:\\", ""]
-    c:/t                                                    ["c:\\", "t"]
-    c:/t/                                                 ["c:\\", "t"]
-    c:/t/test.txt                                 ["c:\\", "t", "test.txt"]
-    c:/t/s/test.txt                             ["c:\\", "t", "s", "test.txt"]
-    c:test.txt                                        ["c:", "test.txt"]
-    s/test.txt                                        ["", "s", "test.txt"]
-    \\\\server\\share                         ["\\\\server\\share\\", ""]
-    \\\\server\\share\\a.txt            ["\\\\server\\share\\", "a.txt"]
-    \\\\server\\share\\t\\a.txt     ["\\\\server\\share\\", "t", "a.txt"]
-    \\\\?\\c:\test.txt                        ["\\\\?\\c:\\", "test.txt"]
+    c:/                           ["c:\\", ""]
+    c:/t                          ["c:\\", "t"]
+    c:/t/                         ["c:\\", "t"]
+    c:/t/test.txt                 ["c:\\", "t", "test.txt"]
+    c:/t/s/test.txt               ["c:\\", "t", "s", "test.txt"]
+    c:test.txt                    ["c:", "test.txt"]
+    s/test.txt                    ["", "s", "test.txt"]
+    \\\\server\\share             ["\\\\server\\share\\", ""]
+    \\\\server\\share\\a.txt      ["\\\\server\\share\\", "a.txt"]
+    \\\\server\\share\\t\\a.txt   ["\\\\server\\share\\", "t", "a.txt"]
+    \\\\?\\c:\test.txt            ["\\\\?\\c:\\", "test.txt"]
     \\\\?\\Volume{xxxx-..}\\t.txt ["\\\\?\Volume{xxxx-..}\\", "t.txt"]
     ============================= ======================================
 
@@ -316,13 +316,13 @@ def relative_to(filepath1, filepath2):
     are normalised first.
 
     ================ ================ ================
-    filepath1                filepath2                result
+    filepath1        filepath2        result
     ================ ================ ================
-    c:/a/b.txt             c:/a                         b.txt
+    c:/a/b.txt       c:/a             b.txt
     ---------------- ---------------- ----------------
-    c:/a/b/c.txt         c:/a                         b/c.txt
+    c:/a/b/c.txt     c:/a             b/c.txt
     ---------------- ---------------- ----------------
-    c:/a/b/c.txt         c:/a/b                     c.txt
+    c:/a/b/c.txt     c:/a/b           c.txt
     ================ ================ ================
 
     :param filepath1: a file or directory
@@ -359,16 +359,16 @@ class FilePath(unicode):
     * ext - ext part of filename (ie the dot and the piece after)
 
     =================== ========== ========= ========= ========= =========== =========== ===== ====
-    Path                                root             filename    name            dirname     path                parent            base    ext
+    Path                root       filename  name      dirname   path        parent      base  ext
     =================== ========== ========= ========= ========= =========== =========== ===== ====
-    \\\\a\\b\\c\\d.txt    \\\\a\\b\\ d.txt         d.txt         c                 \\\\a\\b\\c \\\\a\\b\\c d         .txt
-    c:\\boot.ini                c:\\             boot.ini    boot.ini    _                 c:\\                c:\\                boot    .ini
-    boot.ini                        _                    boot.ini    boot.ini    _                 _                     x_fs                boot    .ini
-    c:\\t                             c:\\             t                 t                 _                 c:\\                c:\\                t         _
-    c:\\t\\                         c:\\             t                 t                 _                 c:\\                c:\\                t         _
-    c:\\t\\a.txt                c:\\             a.txt         a.txt         t                 c:\\t             c:\\t             a         .txt
-    c:a.txt                         c:                 a.txt         a.txt         _                 c:                    x_fs                a         .txt
-    a.txt                             _                    a.txt         a.txt         _                 _                     x_fs                a         .txt
+    \\\\a\\b\\c\\d.txt  \\\\a\\b\\ d.txt     d.txt     c         \\\\a\\b\\c \\\\a\\b\\c d     .txt
+    c:\\boot.ini        c:\\       boot.ini  boot.ini  _         c:\\        c:\\        boot  .ini
+    boot.ini            _          boot.ini  boot.ini  _         _           x_fs        boot  .ini
+    c:\\t               c:\\       t         t         _         c:\\        c:\\        t     _
+    c:\\t\\             c:\\       t         t         _         c:\\        c:\\        t     _
+    c:\\t\\a.txt        c:\\       a.txt     a.txt     t         c:\\t       c:\\t       a     .txt
+    c:a.txt             c:         a.txt     a.txt     _         c:          x_fs        a     .txt
+    a.txt               _          a.txt     a.txt     _         _           x_fs        a     .txt
     =================== ========== ========= ========= ========= =========== =========== ===== ====
     """
     def __new__(meta, filepath):
@@ -1895,14 +1895,14 @@ def entry(filepath, _file_info=core.UNSET):
     filepath.
 
     ======================================= ==================================================
-    filepath                                                                Result
+    filepath                                Result
     ======================================= ==================================================
-    :const:`None` or ""                                         :const:`None`
-    an :class:`Entry` or subclass object        the same object
-    an existing file name                                     a :class:`File` object representing that file
-    an existing directory name                            a :class:`Dir` object representing that directory
-    a file name which doesn't exist                 a :class:`Dir` if filepath ends with \\,
-                                                                                    :class:`File` otherwise
+    :const:`None` or ""                     :const:`None`
+    an :class:`Entry` or subclass object    the same object
+    an existing file name                   a :class:`File` object representing that file
+    an existing directory name              a :class:`Dir` object representing that directory
+    a file name which doesn't exist         a :class:`Dir` if filepath ends with \\,
+                                            :class:`File` otherwise
     ======================================= ==================================================
     """
     def _guess(filepath):
@@ -2116,11 +2116,11 @@ def drive(drive):
     """Return a :class:`Drive` object representing drive
 
     ======================================= ==================================================
-    drive                                                                     Result
+    drive                                   Result
     ======================================= ==================================================
-    :const:`None`                                                     :const:`None`
-    an :class:`Drive` or subclass object        the same object
-    a drive letter                                                    a :class:`Drive` object
+    :const:`None`                           :const:`None`
+    an :class:`Drive` or subclass object    the same object
+    a drive letter                          a :class:`Drive` object
     ======================================= ==================================================
     """
     if drive is None:
@@ -2141,13 +2141,13 @@ def volume(volume):
     """Return a :class:`Volume` object corresponding to volume
 
     ======================================= ==================================================
-    volume                                                                    Result
+    volume                                  Result
     ======================================= ==================================================
-    :const:`None`                                                     :const:`None`
-    an :class:`Volume` or subclass object     the same object
-    a volume name \\\\?\\Volume...                    a :class:`Volume` object representing that volume
-    a directory name                                                a :class:`Volume` object representing the volume
-                                                                                    at that mountpoint
+    :const:`None`                           :const:`None`
+    an :class:`Volume` or subclass object   the same object
+    a volume name \\\\?\\Volume...          a :class:`Volume` object representing that volume
+    a directory name                        a :class:`Volume` object representing the volume
+                                            at that mountpoint
     ======================================= ==================================================
     """
     if volume is None:

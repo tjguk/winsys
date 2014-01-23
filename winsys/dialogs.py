@@ -172,7 +172,7 @@ def _register_wndclass():
     wc.hCursor = wrapped(win32gui.LoadCursor, 0, win32con.IDC_ARROW)
     wc.hbrBackground = win32con.COLOR_WINDOW + 1
     wc.lpfnWndProc = {}
-    wc.cbWndExtra = win32con.DLGWINDOWEXTRA + struct.calcsize("Pi")
+    wc.cbWndExtra = win32con.DLGWINDOWEXTRA + struct.calcsize(b"Pi")
     icon_flags = win32con.LR_LOADFROMFILE | win32con.LR_DEFAULTSIZE
 
     python_exe = wrapped(win32api.GetModuleHandle, None)
@@ -592,7 +592,7 @@ class Dialog(BaseDialog):
         # the window's current height and write the data back into
         # the same place.
         #
-        POINT_FORMAT = "LL"
+        POINT_FORMAT = b"LL"
         MINMAXINO_FORMAT = 5 * POINT_FORMAT
         data = win32gui.PyGetString(lparam, struct.calcsize(MINMAXINO_FORMAT))
         minmaxinfo = list(struct.unpack(MINMAXINO_FORMAT, data))
