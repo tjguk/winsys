@@ -26,5 +26,5 @@ class TestEnvironmentBasic(unittest.TestCase):
         self.assertTrue(environment.process())
 
 if __name__ == "__main__":
-  unittest.main ()
-  if sys.stdout.isatty (): raw_input ("Press enter...")
+  unittest.main()
+  if sys.stdout.isatty(): raw_input("Press enter...")

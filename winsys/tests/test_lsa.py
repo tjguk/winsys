@@ -9,13 +9,13 @@ from winsys import _lsa
 from winsys.tests import utils
 
 @unittest.skipUnless(testutils.i_am_admin(), "These tests must be run as Administrator")
-class TestLSA (unittest.TestCase):
+class TestLSA(unittest.TestCase):
 
-  def test_LSA_logon_sessions (self):
-    with utils.fake_stdout ():
-      for logon_session in _lsa.LSA.logon_sessions ():
-        logon_session.dump ()
+    def test_LSA_logon_sessions(self):
+        with utils.fake_stdout():
+            for logon_session in _lsa.LSA.logon_sessions():
+                logon_session.dump()
 
 if __name__ == "__main__":
-  unittest.main ()
-  if sys.stdout.isatty (): raw_input ("Press enter...")
+    unittest.main()
+    if sys.stdout.isatty(): raw_input("Press enter...")
