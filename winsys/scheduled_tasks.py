@@ -11,7 +11,7 @@ import time
 import pythoncom
 from win32com.taskscheduler import taskscheduler
 
-from constants import *
+from winsys.constants import *
 
 def _set(obj, key, value):
     obj.__dict__[key] = value
@@ -65,10 +65,9 @@ def string_to_timedelta(string):
 
     match = re.match(r"(?:(\d+)w)?\W+(?:(\d+)d)?\W*(?:(\d+)h)?\W*(?:(\d+)')?", string)
     if not match:
-        raise RuntimeError, "Interval string must be [<wks>w] [<days>d] [<hours>h] [<mins>']"
+        raise RuntimeError("Interval string must be [<wks>w] [<days>d] [<hours>h] [<mins>']")
     else:
         w, d, h, m = [int(i or 0) for i in match.groups()]
-        print "string_to_minutes: %dd %dh %d'" % (d, h, m)
         return datetime.timedelta(weeks=w, days=d, hours=h, minutes=m)
 
 def timedelta_to_minutes(timedelta):
@@ -270,7 +269,7 @@ class Task(object):
         self.name = name
         self.task = task
         self.schedules = Schedules(self)
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             setattr(self, k, v)
 
     def add_schedule(self, schedule):
@@ -425,7 +424,7 @@ def remove(name):
 
 if __name__ == '__main__':
     for task in tasks():
-        print task
+        print(task)
         for schedule in task.schedules:
-            print "    ", schedule
+            print("    ", schedule)
         print
