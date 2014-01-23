@@ -83,20 +83,20 @@ the details of the new top-level key, including its security.</p>
 17</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">registry</span><span class="p">,</span> <span class="n">accounts</span>
 
-<span class="n">new_key</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">copy</span> <span class="p">(</span><span class="s">r&quot;HKLM\Software\Python&quot;</span><span class="p">,</span> <span class="s">r&quot;HKLM\Software\WinsysPython&quot;</span><span class="p">)</span>
+<span class="n">new_key</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s">r&quot;HKLM\Software\Python&quot;</span><span class="p">,</span> <span class="s">r&quot;HKLM\Software\WinsysPython&quot;</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
-  <span class="k">with</span> <span class="n">new_key</span><span class="o">.</span><span class="n">security</span> <span class="p">()</span> <span class="k">as</span> <span class="n">sec</span><span class="p">:</span>
-    <span class="n">sec</span><span class="o">.</span><span class="n">break_inheritance</span> <span class="p">(</span><span class="n">copy_first</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">sec</span><span class="o">.</span><span class="n">dacl</span> <span class="o">+=</span> <span class="p">[</span>
-      <span class="p">(</span><span class="s">&quot;Users&quot;</span><span class="p">,</span> <span class="s">&quot;R&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">),</span>
-      <span class="p">(</span><span class="n">accounts</span><span class="o">.</span><span class="n">me</span> <span class="p">(),</span> <span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">),</span>
-    <span class="p">]</span>
-    <span class="n">sec</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
+    <span class="k">with</span> <span class="n">new_key</span><span class="o">.</span><span class="n">security</span><span class="p">()</span> <span class="k">as</span> <span class="n">sec</span><span class="p">:</span>
+        <span class="n">sec</span><span class="o">.</span><span class="n">break_inheritance</span><span class="p">(</span><span class="n">copy_first</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">sec</span><span class="o">.</span><span class="n">dacl</span> <span class="o">+=</span> <span class="p">[</span>
+           <span class="p">(</span><span class="s">&quot;Users&quot;</span><span class="p">,</span> <span class="s">&quot;R&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">),</span>
+           <span class="p">(</span><span class="n">accounts</span><span class="o">.</span><span class="n">me</span><span class="p">(),</span> <span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;ALLOW&quot;</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">sec</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>
 
 <span class="k">finally</span><span class="p">:</span>
-  <span class="k">print</span> <span class="s">&quot;***&quot;</span>
-  <span class="n">new_key</span><span class="o">.</span><span class="n">security</span> <span class="p">()</span><span class="o">.</span><span class="n">dump</span> <span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;***&quot;</span>
+    <span class="n">new_key</span><span class="o">.</span><span class="n">security</span><span class="p">()</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>
 </pre></div>
 </td></tr></table></div>
 <div class="section" id="discussion">
@@ -145,21 +145,21 @@ name and the value itself.</p>
 16
 17</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">registry</span>
 
-<span class="n">root</span><span class="p">,</span> <span class="n">term</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span>
-  <span class="s">&quot;Search the Registry&quot;</span><span class="p">,</span>
-  <span class="p">(</span><span class="s">&quot;Root&quot;</span><span class="p">,</span> <span class="n">registry</span><span class="o">.</span><span class="n">REGISTRY_HIVE</span><span class="o">.</span><span class="n">keys</span> <span class="p">()),</span>
-  <span class="p">(</span><span class="s">&quot;Term&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+<span class="n">root</span><span class="p">,</span> <span class="n">term</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span><span class="p">(</span>
+    <span class="s">&quot;Search the Registry&quot;</span><span class="p">,</span>
+    <span class="p">(</span><span class="s">&quot;Root&quot;</span><span class="p">,</span> <span class="n">registry</span><span class="o">.</span><span class="n">REGISTRY_HIVE</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s">&quot;Term&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
 <span class="p">)</span>
 
-<span class="n">root</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="n">root</span><span class="p">)</span>
-<span class="n">term</span> <span class="o">=</span> <span class="n">term</span><span class="o">.</span><span class="n">lower</span> <span class="p">()</span>
-<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">subkeys</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">walk</span> <span class="p">(</span><span class="n">ignore_access_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-  <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="nb">str</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span> <span class="p">():</span>
-      <span class="k">print</span> <span class="n">key</span><span class="o">.</span><span class="n">moniker</span><span class="o">.</span><span class="n">encode</span> <span class="p">(</span><span class="s">&quot;utf8&quot;</span><span class="p">)</span>
-      <span class="k">print</span> <span class="n">name</span><span class="o">.</span><span class="n">encode</span> <span class="p">(</span><span class="s">&quot;utf8&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s">&quot;(Default)&quot;</span>
-      <span class="k">print</span> <span class="nb">unicode</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span> <span class="p">(</span><span class="s">&quot;utf8&quot;</span><span class="p">)</span>
-      <span class="k">print</span>
+<span class="n">root</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+<span class="n">term</span> <span class="o">=</span> <span class="n">term</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">subkeys</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">ignore_access_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="k">print</span> <span class="n">key</span><span class="o">.</span><span class="n">moniker</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&quot;utf8&quot;</span><span class="p">)</span>
+            <span class="k">print</span> <span class="n">name</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&quot;utf8&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s">&quot;(Default)&quot;</span>
+            <span class="k">print</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&quot;utf8&quot;</span><span class="p">)</span>
+            <span class="k">print</span>
 </pre></div>
 </td></tr></table></div>
 <div class="section" id="id2">

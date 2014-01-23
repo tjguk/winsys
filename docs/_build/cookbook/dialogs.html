@@ -66,7 +66,7 @@ control with [Ok] and [Cancel].</p>
 2
 3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span>
 
-<span class="n">name</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span><span class="s">&quot;What is your name?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">))</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span><span class="p">(</span><span class="s">&quot;What is your name?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">))</span>
 </pre></div>
 </td></tr></table></div>
 </div>
@@ -92,15 +92,15 @@ Explorer, or select from a dialog box.</p>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">fs</span>
 
 <span class="n">DEFAULT</span> <span class="o">=</span> <span class="s">&quot;temp.csv&quot;</span>
-<span class="n">filename</span><span class="p">,</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span>
-  <span class="s">&quot;Open a filename&quot;</span><span class="p">,</span>
-  <span class="p">(</span><span class="s">&quot;Filename&quot;</span><span class="p">,</span> <span class="n">DEFAULT</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">get_filename</span><span class="p">)</span>
+<span class="n">filename</span><span class="p">,</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span><span class="p">(</span>
+    <span class="s">&quot;Open a filename&quot;</span><span class="p">,</span>
+   <span class="p">(</span><span class="s">&quot;Filename&quot;</span><span class="p">,</span> <span class="n">DEFAULT</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">get_filename</span><span class="p">)</span>
 <span class="p">)</span>
 
-<span class="k">if</span> <span class="ow">not</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span> <span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-  <span class="k">raise</span> <span class="ne">RuntimeError</span> <span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> does not exist&quot;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> does not exist&quot;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-  <span class="n">os</span><span class="o">.</span><span class="n">startfile</span> <span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">startfile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
 <div class="section" id="discussion">
