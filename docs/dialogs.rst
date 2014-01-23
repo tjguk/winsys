@@ -1,6 +1,7 @@
 :mod:`dialogs` -- Dialog boxes
 ==============================
 
+..  module:: fs
 ..  automodule:: dialogs
     :synopsis: Dialog boxes
     :show-inheritance:
@@ -20,17 +21,17 @@ Classes
     :members:
     :undoc-members:
     :inherited-members:
-    
+
 ..  autoclass:: Dialog
     :members:
     :undoc-members:
     :inherited-members:
-    
+
 ..  autoclass:: InfoDialog
     :members:
     :undoc-members:
     :inherited-members:
-    
+
 Constants
 ---------
 ..  autodata:: BIF

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>environment – Environment Block &mdash; WinSys 0.5beta documentation</title>
+    <title>environment – Environment Block &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.5beta',
+        URL_ROOT:    './',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
     <link rel="up" title="Miscellaneous" href="misc.html" />
     <link rel="next" title="Cookbook" href="cookbook.html" />
     <link rel="prev" title="logging_handlers – Additional Logging Handlers" href="logging_handlers.html" /> 
@@ -47,7 +45,7 @@
         <li class="right" >
           <a href="logging_handlers.html" title="logging_handlers – Additional Logging Handlers"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
           <li><a href="misc.html" accesskey="U">Miscellaneous</a> &raquo;</li> 
       </ul>
     </div>  
@@ -203,9 +201,12 @@ This default is expanded if <cite>expand</cite> is True.</li>
 <tt class="descname">update</tt><big>(</big><em>dict_initialiser</em><big>)</big><a class="reference internal" href="_modules/environment.html#Env.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#environment.Env.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update this environment from a dict-like object, typically
 another environment:</p>
-<p>from winsys import environment</p>
-<p>penv = environment.process ()
-penv.update (environment.system ())</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">environment</span>
+
+<span class="n">penv</span> <span class="o">=</span> <span class="n">environment</span><span class="o">.</span><span class="n">process</span><span class="p">()</span>
+<span class="n">penv</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">environment</span><span class="o">.</span><span class="n">system</span><span class="p">())</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="attribute">
@@ -316,9 +317,12 @@ This default is expanded if <cite>expand</cite> is True.</li>
 <tt class="descname">update</tt><big>(</big><em>dict_initialiser</em><big>)</big><a class="headerlink" href="#environment.Persistent.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update this environment from a dict-like object, typically
 another environment:</p>
-<p>from winsys import environment</p>
-<p>penv = environment.process ()
-penv.update (environment.system ())</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">environment</span>
+
+<span class="n">penv</span> <span class="o">=</span> <span class="n">environment</span><span class="o">.</span><span class="n">process</span><span class="p">()</span>
+<span class="n">penv</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">environment</span><span class="o">.</span><span class="n">system</span><span class="p">())</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="attribute">
@@ -331,7 +335,7 @@ penv.update (environment.system ())</p>
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
 <dt><a class="reference internal" href="cookbook/environment.html"><em>Using the environment module</em></a></dt>
@@ -403,13 +407,13 @@ penv.update (environment.system ())</p>
         <li class="right" >
           <a href="logging_handlers.html" title="logging_handlers – Additional Logging Handlers"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
           <li><a href="misc.html" >Miscellaneous</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

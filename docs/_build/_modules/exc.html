@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>exc &mdash; WinSys 0.5beta documentation</title>
+    <title>exc &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.5beta',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="../index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="../index.html" />
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body>
@@ -39,7 +37,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -50,66 +48,67 @@
           <div class="body">
             
   <h1>Source code for exc</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: iso-8859-1 -*-</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">pywintypes</span>
+<span class="kn">from</span> <span class="nn">winsys._compat</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">utils</span>
 
-<div class="viewcode-block" id="x_winsys"><a class="viewcode-back" href="../exc.html#exc.x_winsys">[docs]</a><span class="k">class</span> <span class="nc">x_winsys</span> <span class="p">(</span><span class="n">pywintypes</span><span class="o">.</span><span class="n">error</span><span class="p">):</span>
-  <span class="sd">u&quot;&quot;&quot;Base for all WinSys exception. Subclasses pywintypes.error so that</span>
-<span class="sd">  except pywintypes.error clauses can be used to catch all relevant exceptions.</span>
-<span class="sd">  Note that the __init__ is specified so that exception invocations can pass</span>
-<span class="sd">  just an error message by keyword.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">errno</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">errctx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="c">#</span>
-    <span class="c"># Attempt to ensure that the correct sequence of arguments is</span>
-    <span class="c"># passed to the exception: this makes for more sane error-trapping</span>
-    <span class="c"># at the cost of a certain flexibility.</span>
-    <span class="c">#</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">errno</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">errno</span> <span class="ow">is</span> <span class="bp">None</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">errctx</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="ow">or</span> <span class="n">errctx</span> <span class="ow">is</span> <span class="bp">None</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">errmsg</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="ow">or</span> <span class="n">errmsg</span> <span class="ow">is</span> <span class="bp">None</span>
-    <span class="n">pywintypes</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">errno</span><span class="p">,</span> <span class="n">errctx</span><span class="p">,</span> <span class="n">errmsg</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="x_access_denied"><a class="viewcode-back" href="../exc.html#exc.x_access_denied">[docs]</a><span class="k">class</span> <span class="nc">x_access_denied</span> <span class="p">(</span><span class="n">x_winsys</span><span class="p">):</span>
-  <span class="s">u&quot;General purpose access-denied exception&quot;</span>
-</div>
-<div class="viewcode-block" id="x_not_found"><a class="viewcode-back" href="../exc.html#exc.x_not_found">[docs]</a><span class="k">class</span> <span class="nc">x_not_found</span> <span class="p">(</span><span class="n">x_winsys</span><span class="p">):</span>
-  <span class="s">u&quot;General purpose not-found exception&quot;</span>
-</div>
-<div class="viewcode-block" id="x_invalid_handle"><a class="viewcode-back" href="../exc.html#exc.x_invalid_handle">[docs]</a><span class="k">class</span> <span class="nc">x_invalid_handle</span> <span class="p">(</span><span class="n">x_winsys</span><span class="p">):</span>
-  <span class="s">u&quot;General purpose invalid-handle exception&quot;</span>
-</div>
-<div class="viewcode-block" id="wrapper"><a class="viewcode-back" href="../exc.html#exc.wrapper">[docs]</a><span class="k">def</span> <span class="nf">wrapper</span> <span class="p">(</span><span class="n">winerror_map</span><span class="p">,</span> <span class="n">default_exception</span><span class="o">=</span><span class="n">x_winsys</span><span class="p">):</span>
-  <span class="sd">u&quot;&quot;&quot;Used by each module to map specific windows error codes onto</span>
-<span class="sd">  Python exceptions. Always includes a default which is raised if</span>
-<span class="sd">  no specific exception is found.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">def</span> <span class="nf">_wrapped</span> <span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">u&quot;&quot;&quot;Call a Windows API with parameters, and handle any</span>
-<span class="sd">    exception raised either by mapping it to a module-specific</span>
-<span class="sd">    one or by passing it back up the chain.</span>
+<div class="viewcode-block" id="x_winsys"><a class="viewcode-back" href="../exc.html#exc.x_winsys">[docs]</a><span class="k">class</span> <span class="nc">x_winsys</span><span class="p">(</span><span class="n">pywintypes</span><span class="o">.</span><span class="n">error</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base for all WinSys exception. Subclasses pywintypes.error so that</span>
+<span class="sd">    except pywintypes.error clauses can be used to catch all relevant exceptions.</span>
+<span class="sd">    Note that the __init__ is specified so that exception invocations can pass</span>
+<span class="sd">    just an error message by keyword.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-      <span class="k">return</span> <span class="n">function</span> <span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">com_error</span><span class="p">,</span> <span class="n">exception_info</span><span class="p">:</span>
-      <span class="p">(</span><span class="n">hresult_code</span><span class="p">,</span> <span class="n">hresult_name</span><span class="p">,</span> <span class="n">additional_info</span><span class="p">,</span> <span class="n">parameter_in_error</span><span class="p">)</span> <span class="o">=</span> <span class="n">exception_info</span><span class="o">.</span><span class="n">args</span>
-      <span class="n">exception_string</span> <span class="o">=</span> <span class="p">[</span><span class="s">u&quot;</span><span class="si">%08X</span><span class="s"> - </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">signed_to_unsigned</span> <span class="p">(</span><span class="n">hresult_code</span><span class="p">),</span> <span class="n">hresult_name</span><span class="o">.</span><span class="n">decode</span> <span class="p">(</span><span class="s">&quot;mbcs&quot;</span><span class="p">))]</span>
-      <span class="k">if</span> <span class="n">additional_info</span><span class="p">:</span>
-        <span class="n">wcode</span><span class="p">,</span> <span class="n">source_of_error</span><span class="p">,</span> <span class="n">error_description</span><span class="p">,</span> <span class="n">whlp_file</span><span class="p">,</span> <span class="n">whlp_context</span><span class="p">,</span> <span class="n">scode</span> <span class="o">=</span> <span class="n">additional_info</span>
-        <span class="n">exception_string</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">u&quot;  Error in: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">source_of_error</span><span class="o">.</span><span class="n">decode</span> <span class="p">(</span><span class="s">&quot;mbcs&quot;</span><span class="p">))</span>
-        <span class="n">exception_string</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">u&quot;  </span><span class="si">%08X</span><span class="s"> - </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">signed_to_unsigned</span> <span class="p">(</span><span class="n">scode</span><span class="p">),</span> <span class="p">(</span><span class="n">error_description</span> <span class="ow">or</span> <span class="s">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span> <span class="p">(</span><span class="s">&quot;mbcs&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span> <span class="p">()))</span>
-      <span class="n">exception</span> <span class="o">=</span> <span class="n">winerror_map</span><span class="o">.</span><span class="n">get</span> <span class="p">(</span><span class="n">hresult_code</span><span class="p">,</span> <span class="n">default_exception</span><span class="p">)</span>
-      <span class="k">raise</span> <span class="n">exception</span> <span class="p">(</span><span class="n">hresult_code</span><span class="p">,</span> <span class="n">hresult_name</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">exception_string</span><span class="p">))</span>
-    <span class="k">except</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">error</span><span class="p">,</span> <span class="n">exception_info</span><span class="p">:</span>
-      <span class="p">(</span><span class="n">errno</span><span class="p">,</span> <span class="n">errctx</span><span class="p">,</span> <span class="n">errmsg</span><span class="p">)</span> <span class="o">=</span> <span class="n">exception_info</span><span class="o">.</span><span class="n">args</span>
-      <span class="n">exception</span> <span class="o">=</span> <span class="n">winerror_map</span><span class="o">.</span><span class="n">get</span> <span class="p">(</span><span class="n">errno</span><span class="p">,</span> <span class="n">default_exception</span><span class="p">)</span>
-      <span class="k">raise</span> <span class="n">exception</span> <span class="p">(</span><span class="n">errno</span><span class="p">,</span> <span class="n">errctx</span><span class="p">,</span> <span class="n">errmsg</span><span class="p">)</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">WindowsError</span><span class="p">,</span> <span class="ne">IOError</span><span class="p">),</span> <span class="n">exception_info</span><span class="p">:</span>
-      <span class="n">exception</span> <span class="o">=</span> <span class="n">winerror_map</span><span class="o">.</span><span class="n">get</span> <span class="p">(</span><span class="n">exception_info</span><span class="o">.</span><span class="n">errno</span><span class="p">,</span> <span class="n">default_exception</span><span class="p">)</span>
-      <span class="k">if</span> <span class="n">exception</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">exception</span> <span class="p">(</span><span class="n">exception_info</span><span class="o">.</span><span class="n">errno</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">exception_info</span><span class="o">.</span><span class="n">strerror</span><span class="p">)</span>
-  <span class="k">return</span> <span class="n">_wrapped</span></div>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">errno</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">errctx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="c">#</span>
+        <span class="c"># Attempt to ensure that the correct sequence of arguments is</span>
+        <span class="c"># passed to the exception: this makes for more sane error-trapping</span>
+        <span class="c"># at the cost of a certain flexibility.</span>
+        <span class="c">#</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">errno</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">errno</span> <span class="ow">is</span> <span class="bp">None</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">errctx</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="ow">or</span> <span class="n">errctx</span> <span class="ow">is</span> <span class="bp">None</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">errmsg</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="ow">or</span> <span class="n">errmsg</span> <span class="ow">is</span> <span class="bp">None</span>
+        <span class="n">pywintypes</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">errno</span><span class="p">,</span> <span class="n">errctx</span><span class="p">,</span> <span class="n">errmsg</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="x_access_denied"><a class="viewcode-back" href="../exc.html#exc.x_access_denied">[docs]</a><span class="k">class</span> <span class="nc">x_access_denied</span><span class="p">(</span><span class="n">x_winsys</span><span class="p">):</span>
+    <span class="s">&quot;General purpose access-denied exception&quot;</span>
+</div>
+<div class="viewcode-block" id="x_not_found"><a class="viewcode-back" href="../exc.html#exc.x_not_found">[docs]</a><span class="k">class</span> <span class="nc">x_not_found</span><span class="p">(</span><span class="n">x_winsys</span><span class="p">):</span>
+    <span class="s">&quot;General purpose not-found exception&quot;</span>
+</div>
+<div class="viewcode-block" id="x_invalid_handle"><a class="viewcode-back" href="../exc.html#exc.x_invalid_handle">[docs]</a><span class="k">class</span> <span class="nc">x_invalid_handle</span><span class="p">(</span><span class="n">x_winsys</span><span class="p">):</span>
+    <span class="s">&quot;General purpose invalid-handle exception&quot;</span>
+</div>
+<div class="viewcode-block" id="wrapper"><a class="viewcode-back" href="../exc.html#exc.wrapper">[docs]</a><span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">winerror_map</span><span class="p">,</span> <span class="n">default_exception</span><span class="o">=</span><span class="n">x_winsys</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Used by each module to map specific windows error codes onto</span>
+<span class="sd">    Python exceptions. Always includes a default which is raised if</span>
+<span class="sd">    no specific exception is found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_wrapped</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Call a Windows API with parameters, and handle any</span>
+<span class="sd">        exception raised either by mapping it to a module-specific</span>
+<span class="sd">        one or by passing it back up the chain.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">com_error</span> <span class="k">as</span> <span class="n">exception_info</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">hresult_code</span><span class="p">,</span> <span class="n">hresult_name</span><span class="p">,</span> <span class="n">additional_info</span><span class="p">,</span> <span class="n">parameter_in_error</span><span class="p">)</span> <span class="o">=</span> <span class="n">exception_info</span><span class="o">.</span><span class="n">args</span>
+            <span class="n">exception_string</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%08X</span><span class="s"> - </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">signed_to_unsigned</span><span class="p">(</span><span class="n">hresult_code</span><span class="p">),</span> <span class="n">hresult_name</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&quot;mbcs&quot;</span><span class="p">))]</span>
+            <span class="k">if</span> <span class="n">additional_info</span><span class="p">:</span>
+                <span class="n">wcode</span><span class="p">,</span> <span class="n">source_of_error</span><span class="p">,</span> <span class="n">error_description</span><span class="p">,</span> <span class="n">whlp_file</span><span class="p">,</span> <span class="n">whlp_context</span><span class="p">,</span> <span class="n">scode</span> <span class="o">=</span> <span class="n">additional_info</span>
+                <span class="n">exception_string</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;    Error in: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">source_of_error</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&quot;mbcs&quot;</span><span class="p">))</span>
+                <span class="n">exception_string</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;    </span><span class="si">%08X</span><span class="s"> - </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">signed_to_unsigned</span><span class="p">(</span><span class="n">scode</span><span class="p">),</span> <span class="p">(</span><span class="n">error_description</span> <span class="ow">or</span> <span class="s">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&quot;mbcs&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+            <span class="n">exception</span> <span class="o">=</span> <span class="n">winerror_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">hresult_code</span><span class="p">,</span> <span class="n">default_exception</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">exception</span><span class="p">(</span><span class="n">hresult_code</span><span class="p">,</span> <span class="n">hresult_name</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">exception_string</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">exception_info</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">errno</span><span class="p">,</span> <span class="n">errctx</span><span class="p">,</span> <span class="n">errmsg</span><span class="p">)</span> <span class="o">=</span> <span class="n">exception_info</span><span class="o">.</span><span class="n">args</span>
+            <span class="n">exception</span> <span class="o">=</span> <span class="n">winerror_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">errno</span><span class="p">,</span> <span class="n">default_exception</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">exception</span><span class="p">(</span><span class="n">errno</span><span class="p">,</span> <span class="n">errctx</span><span class="p">,</span> <span class="n">errmsg</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">WindowsError</span><span class="p">,</span> <span class="ne">IOError</span><span class="p">)</span> <span class="k">as</span> <span class="n">exception_info</span><span class="p">:</span>
+            <span class="n">exception</span> <span class="o">=</span> <span class="n">winerror_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">exception_info</span><span class="o">.</span><span class="n">errno</span><span class="p">,</span> <span class="n">default_exception</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">exception</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exception</span><span class="p">(</span><span class="n">exception_info</span><span class="o">.</span><span class="n">errno</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">exception_info</span><span class="o">.</span><span class="n">strerror</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_wrapped</span></div>
 </pre></div>
 
           </div>
@@ -146,13 +145,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
           <li><a href="index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

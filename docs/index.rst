@@ -1,5 +1,5 @@
-BETA: WinSys - Python tools for the Windows Administrator
-=========================================================
+WinSys - Python tools for the Windows Administrator
+===================================================
 
 *We read MSDN so you don't have to*
 

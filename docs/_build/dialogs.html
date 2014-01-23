@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>dialogs – Dialog boxes &mdash; WinSys 0.5beta documentation</title>
+    <title>dialogs – Dialog boxes &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.5beta',
+        URL_ROOT:    './',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
     <link rel="next" title="event_logs – Event Logs" href="event_logs.html" />
     <link rel="prev" title="accounts – Users, Groups, SIDs &amp;c." href="accounts.html" /> 
   </head>
@@ -46,7 +44,7 @@
         <li class="right" >
           <a href="accounts.html" title="accounts – Users, Groups, SIDs &amp;c."
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -55,9 +53,9 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-dialogs">
-<span id="dialogs-dialog-boxes"></span><h1><a class="reference internal" href="#module-dialogs" title="dialogs: Dialog boxes"><tt class="xref py py-mod docutils literal"><span class="pre">dialogs</span></tt></a> &#8211; Dialog boxes<a class="headerlink" href="#module-dialogs" title="Permalink to this headline">¶</a></h1>
-<p>Provides for simple dialog boxes, doing just enough to return input
+  <div class="section" id="module-fs">
+<span id="dialogs-dialog-boxes"></span><h1><a class="reference internal" href="#module-dialogs" title="dialogs: Dialog boxes"><tt class="xref py py-mod docutils literal"><span class="pre">dialogs</span></tt></a> &#8211; Dialog boxes<a class="headerlink" href="#module-fs" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-dialogs"></span><p>Provides for simple dialog boxes, doing just enough to return input
 from the user using edit controls, dropdown lists and checkboxes. Most
 interaction is via the <a class="reference internal" href="#dialogs.dialog" title="dialogs.dialog"><tt class="xref py py-func docutils literal"><span class="pre">dialog()</span></tt></a>, <a class="reference internal" href="#dialogs.progress_dialog" title="dialogs.progress_dialog"><tt class="xref py py-func docutils literal"><span class="pre">progress_dialog()</span></tt></a> or
 <a class="reference internal" href="#dialogs.info_dialog" title="dialogs.info_dialog"><tt class="xref py py-func docutils literal"><span class="pre">info_dialog()</span></tt></a> functions. This example offers the user a drop-down
@@ -65,12 +63,12 @@ list of installed Python directories, a text box to enter a size threshold and a
 checkbox to indicate whether to email the result:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">registry</span>
 <span class="n">SIZE_THRESHOLD_MB</span> <span class="o">=</span> <span class="s">&quot;100&quot;</span>
-<span class="n">PYTHONREG</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span> <span class="p">(</span><span class="s">r&quot;hklm\software\python\pythoncore&quot;</span><span class="p">)</span>
-<span class="n">version</span><span class="p">,</span> <span class="n">size_threshold_mb</span><span class="p">,</span> <span class="n">email_result</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span> <span class="p">(</span>
-  <span class="s">&quot;Find big files in Python&quot;</span><span class="p">,</span>
-  <span class="p">(</span><span class="s">&quot;Version&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">InstallPath</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">PYTHONREG</span><span class="o">.</span><span class="n">keys</span> <span class="p">()]),</span>
-  <span class="p">(</span><span class="s">&quot;Bigger than (Mb)&quot;</span><span class="p">,</span> <span class="n">SIZE_THRESHOLD_MB</span><span class="p">),</span>
-  <span class="p">(</span><span class="s">&quot;Email?&quot;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="n">PYTHONREG</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span><span class="p">(</span><span class="s">r&quot;hklm\software\python\pythoncore&quot;</span><span class="p">)</span>
+<span class="n">version</span><span class="p">,</span> <span class="n">size_threshold_mb</span><span class="p">,</span> <span class="n">email_result</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span><span class="p">(</span>
+    <span class="s">&quot;Find big files in Python&quot;</span><span class="p">,</span>
+    <span class="p">(</span><span class="s">&quot;Version&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">InstallPath</span><span class="o">.</span><span class="n">get_value</span> <span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">PYTHONREG</span><span class="o">.</span><span class="n">keys</span><span class="p">()]),</span>
+    <span class="p">(</span><span class="s">&quot;Bigger than (Mb)&quot;</span><span class="p">,</span> <span class="n">SIZE_THRESHOLD_MB</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&quot;Email?&quot;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -151,19 +149,19 @@ display a human-redable version of each directory size:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">utils</span>
 
 <span class="n">sizes</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">def</span> <span class="nf">sizer</span> <span class="p">(</span><span class="n">root</span><span class="p">):</span>
-  <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">dir</span> <span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">dirs</span> <span class="p">():</span>
-    <span class="k">yield</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span>
-    <span class="n">sizes</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">flat</span> <span class="p">())</span>
+<span class="k">def</span> <span class="nf">sizer</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">dir</span><span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">dirs</span><span class="p">():</span>
+        <span class="k">yield</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">sizes</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">flat</span><span class="p">())</span>
 
-<span class="n">dialogs</span><span class="o">.</span><span class="n">progress_dialog</span> <span class="p">(</span>
-  <span class="s">&quot;Sizer&quot;</span><span class="p">,</span>
-  <span class="n">sizer</span><span class="p">,</span>
-  <span class="p">(</span><span class="s">&quot;Root&quot;</span><span class="p">,</span> <span class="s">&quot;c:/temp&quot;</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">get_folder</span><span class="p">)</span>
+<span class="n">dialogs</span><span class="o">.</span><span class="n">progress_dialog</span><span class="p">(</span>
+    <span class="s">&quot;Sizer&quot;</span><span class="p">,</span>
+    <span class="n">sizer</span><span class="p">,</span>
+    <span class="p">(</span><span class="s">&quot;Root&quot;</span><span class="p">,</span> <span class="s">&quot;c:/temp&quot;</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">get_folder</span><span class="p">)</span>
 <span class="p">)</span>
 
-<span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">sorted</span> <span class="p">(</span><span class="n">sizes</span><span class="o">.</span><span class="n">items</span> <span class="p">()):</span>
-  <span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;=&gt;&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_as_mb</span> <span class="p">(</span><span class="n">size</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">sizes</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+    <span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;=&gt;&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_as_mb</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -194,8 +192,8 @@ After that the user may scroll with the keyboard. The text can be
 selected and copied:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span>
-<span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;LICENSE.txt&quot;</span><span class="p">)</span>
-<span class="n">dialogs</span><span class="o">.</span><span class="n">info_dialog</span> <span class="p">(</span><span class="s">&quot;LICENSE.txt&quot;</span><span class="p">,</span> <span class="nb">open</span> <span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="o">.</span><span class="n">read</span> <span class="p">())</span>
+<span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;LICENSE.txt&quot;</span><span class="p">)</span>
+<span class="n">dialogs</span><span class="o">.</span><span class="n">info_dialog</span><span class="p">(</span><span class="s">&quot;LICENSE.txt&quot;</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -241,7 +239,7 @@ to their various options.</p>
 the form [(label, default), ...].</p>
 <dl class="attribute">
 <dt id="dialogs.BaseDialog.BUTTONS">
-<tt class="descname">BUTTONS</tt><em class="property"> = [('Cancel', 2), ('Ok', 1)]</em><a class="headerlink" href="#dialogs.BaseDialog.BUTTONS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">BUTTONS</tt><em class="property"> = [(u'Cancel', 2), (u'Ok', 1)]</em><a class="headerlink" href="#dialogs.BaseDialog.BUTTONS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -423,7 +421,7 @@ in OnCommand</p>
 
 <dl class="attribute">
 <dt id="dialogs.Dialog.BUTTONS">
-<tt class="descname">BUTTONS</tt><em class="property"> = [('Cancel', 2), ('Ok', 1)]</em><a class="headerlink" href="#dialogs.Dialog.BUTTONS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">BUTTONS</tt><em class="property"> = [(u'Cancel', 2), (u'Ok', 1)]</em><a class="headerlink" href="#dialogs.Dialog.BUTTONS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -595,7 +593,7 @@ in OnCommand</p>
 
 <dl class="attribute">
 <dt id="dialogs.InfoDialog.BUTTONS">
-<tt class="descname">BUTTONS</tt><em class="property"> = [('Cancel', 2), ('Ok', 1)]</em><a class="headerlink" href="#dialogs.InfoDialog.BUTTONS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">BUTTONS</tt><em class="property"> = [(u'Cancel', 2), (u'Ok', 1)]</em><a class="headerlink" href="#dialogs.InfoDialog.BUTTONS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -684,9 +682,9 @@ in OnCommand</p>
 <dd><p>Styles for browsing for a folder</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="40%" />
-<col width="11%" />
-<col width="49%" />
+<col width="39%" />
+<col width="13%" />
+<col width="48%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Name</th>
@@ -696,68 +694,68 @@ in OnCommand</p>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>RETURNONLYFSDIRS</td>
-<td>1</td>
+<td>0x0001</td>
 <td>BIF_RETURNONLYFSDIRS</td>
 </tr>
-<tr class="row-odd"><td>NOTRANSLATETARGETS</td>
-<td>1024</td>
-<td>BIF_NOTRANSLATETARGETS</td>
-</tr>
-<tr class="row-even"><td>BROWSEINCLUDEURLS</td>
-<td>128</td>
-<td>BIF_BROWSEINCLUDEURLS</td>
-</tr>
-<tr class="row-odd"><td>EDITBOX</td>
-<td>16</td>
-<td>BIF_EDITBOX</td>
-</tr>
-<tr class="row-even"><td>BROWSEINCLUDEFILES</td>
-<td>16384</td>
-<td>BIF_BROWSEINCLUDEFILES</td>
-</tr>
 <tr class="row-odd"><td>DONTGOBELOWDOMAIN</td>
-<td>2</td>
+<td>0x0002</td>
 <td>BIF_DONTGOBELOWDOMAIN</td>
 </tr>
-<tr class="row-even"><td>UAHINT</td>
-<td>256</td>
-<td>BIF_UAHINT</td>
-</tr>
-<tr class="row-odd"><td>VALIDATE</td>
-<td>32</td>
-<td>BIF_VALIDATE</td>
-</tr>
-<tr class="row-even"><td>SHAREABLE</td>
-<td>32768</td>
-<td>BIF_SHAREABLE</td>
-</tr>
-<tr class="row-odd"><td>STATUSTEXT</td>
-<td>4</td>
+<tr class="row-even"><td>STATUSTEXT</td>
+<td>0x0004</td>
 <td>BIF_STATUSTEXT</td>
 </tr>
-<tr class="row-even"><td>BROWSEFORCOMPUTER</td>
-<td>4096</td>
-<td>BIF_BROWSEFORCOMPUTER</td>
-</tr>
-<tr class="row-odd"><td>NONEWFOLDERBUTTON</td>
-<td>512</td>
-<td>BIF_NONEWFOLDERBUTTON</td>
-</tr>
-<tr class="row-even"><td>NEWDIALOGSTYLE</td>
-<td>64</td>
-<td>BIF_NEWDIALOGSTYLE</td>
-</tr>
 <tr class="row-odd"><td>RETURNFSANCESTORS</td>
-<td>8</td>
+<td>0x0008</td>
 <td>BIF_RETURNFSANCESTORS</td>
 </tr>
-<tr class="row-even"><td>USENEWUI</td>
-<td>80</td>
+<tr class="row-even"><td>EDITBOX</td>
+<td>0x0010</td>
+<td>BIF_EDITBOX</td>
+</tr>
+<tr class="row-odd"><td>VALIDATE</td>
+<td>0x0020</td>
+<td>BIF_VALIDATE</td>
+</tr>
+<tr class="row-even"><td>NEWDIALOGSTYLE</td>
+<td>0x0040</td>
+<td>BIF_NEWDIALOGSTYLE</td>
+</tr>
+<tr class="row-odd"><td>USENEWUI</td>
+<td>0x0050</td>
 <td>USENEWUI</td>
 </tr>
+<tr class="row-even"><td>BROWSEINCLUDEURLS</td>
+<td>0x0080</td>
+<td>BIF_BROWSEINCLUDEURLS</td>
+</tr>
+<tr class="row-odd"><td>UAHINT</td>
+<td>0x0100</td>
+<td>BIF_UAHINT</td>
+</tr>
+<tr class="row-even"><td>NONEWFOLDERBUTTON</td>
+<td>0x0200</td>
+<td>BIF_NONEWFOLDERBUTTON</td>
+</tr>
+<tr class="row-odd"><td>NOTRANSLATETARGETS</td>
+<td>0x0400</td>
+<td>BIF_NOTRANSLATETARGETS</td>
+</tr>
+<tr class="row-even"><td>BROWSEFORCOMPUTER</td>
+<td>0x1000</td>
+<td>BIF_BROWSEFORCOMPUTER</td>
+</tr>
 <tr class="row-odd"><td>BROWSEFORPRINTER</td>
-<td>8192</td>
+<td>0x2000</td>
 <td>BIF_BROWSEFORPRINTER</td>
+</tr>
+<tr class="row-even"><td>BROWSEINCLUDEFILES</td>
+<td>0x4000</td>
+<td>BIF_BROWSEINCLUDEFILES</td>
+</tr>
+<tr class="row-odd"><td>SHAREABLE</td>
+<td>0x8000</td>
+<td>BIF_SHAREABLE</td>
 </tr>
 </tbody>
 </table>
@@ -769,9 +767,9 @@ in OnCommand</p>
 <dd><p>Part of the browse-for-folder shell mechanism</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="38%" />
-<col width="10%" />
-<col width="51%" />
+<col width="37%" />
+<col width="15%" />
+<col width="49%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Name</th>
@@ -781,52 +779,52 @@ in OnCommand</p>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>INITIALIZED</td>
-<td>1</td>
+<td>0x0001</td>
 <td>BFFM_INITIALIZED</td>
 </tr>
+<tr class="row-odd"><td>SELCHANGED</td>
+<td>0x0002</td>
+<td>BFFM_SELCHANGED</td>
+</tr>
+<tr class="row-even"><td>VALIDATEFAILEDA</td>
+<td>0x0003</td>
+<td>BFFM_VALIDATEFAILEDA</td>
+</tr>
+<tr class="row-odd"><td>VALIDATEFAILED</td>
+<td>0x0003</td>
+<td>BFFM_VALIDATEFAILEDA</td>
+</tr>
+<tr class="row-even"><td>VALIDATEFAILEDW</td>
+<td>0x0004</td>
+<td>BFFM_VALIDATEFAILEDW</td>
+</tr>
 <tr class="row-odd"><td>SETSTATUSTEXTA</td>
-<td>1124</td>
+<td>0x0464</td>
 <td>BFFM_SETSTATUSTEXTA</td>
 </tr>
 <tr class="row-even"><td>SETSTATUSTEXT</td>
-<td>1124</td>
+<td>0x0464</td>
 <td>BFFM_SETSTATUSTEXTA</td>
 </tr>
 <tr class="row-odd"><td>ENABLEOK</td>
-<td>1125</td>
+<td>0x0465</td>
 <td>BFFM_ENABLEOK</td>
 </tr>
 <tr class="row-even"><td>SETSELECTION</td>
-<td>1126</td>
+<td>0x0466</td>
 <td>BFFM_SETSELECTIONA</td>
 </tr>
 <tr class="row-odd"><td>SETSELECTIONA</td>
-<td>1126</td>
+<td>0x0466</td>
 <td>BFFM_SETSELECTIONA</td>
 </tr>
 <tr class="row-even"><td>SETSELECTIONW</td>
-<td>1127</td>
+<td>0x0467</td>
 <td>BFFM_SETSELECTIONW</td>
 </tr>
 <tr class="row-odd"><td>SETSTATUSTEXTW</td>
-<td>1128</td>
+<td>0x0468</td>
 <td>BFFM_SETSTATUSTEXTW</td>
-</tr>
-<tr class="row-even"><td>SELCHANGED</td>
-<td>2</td>
-<td>BFFM_SELCHANGED</td>
-</tr>
-<tr class="row-odd"><td>VALIDATEFAILEDA</td>
-<td>3</td>
-<td>BFFM_VALIDATEFAILEDA</td>
-</tr>
-<tr class="row-even"><td>VALIDATEFAILED</td>
-<td>3</td>
-<td>BFFM_VALIDATEFAILEDA</td>
-</tr>
-<tr class="row-odd"><td>VALIDATEFAILEDW</td>
-<td>4</td>
-<td>BFFM_VALIDATEFAILEDW</td>
 </tr>
 </tbody>
 </table>
@@ -844,7 +842,7 @@ in OnCommand</p>
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
 <dt><a class="reference internal" href="cookbook/dialogs.html"><em>Using the dialogs module</em></a></dt>
@@ -877,7 +875,7 @@ in OnCommand</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="accounts.html"
-                        title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">accounts</span></tt> &#8211; Users, Groups, SIDs &amp;c.</a></p>
+                        title="previous chapter"><tt class="docutils literal"><span class="pre">accounts</span></tt> &#8211; Users, Groups, SIDs &amp;c.</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="event_logs.html"
                         title="next chapter"><tt class="docutils literal"><span class="pre">event_logs</span></tt> &#8211; Event Logs</a></p>
@@ -918,12 +916,12 @@ in OnCommand</p>
         <li class="right" >
           <a href="accounts.html" title="accounts – Users, Groups, SIDs &amp;c."
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

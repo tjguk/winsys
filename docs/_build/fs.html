@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>fs – Files, Directories, &amp;c. &mdash; WinSys 0.5beta documentation</title>
+    <title>fs – Files, Directories, &amp;c. &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.5beta',
+        URL_ROOT:    './',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
     <link rel="next" title="The Drive class" href="fs_drive_vol.html" />
     <link rel="prev" title="event_logs – Event Logs" href="event_logs.html" /> 
   </head>
@@ -46,7 +44,7 @@
         <li class="right" >
           <a href="event_logs.html" title="event_logs – Event Logs"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -102,7 +100,7 @@ filepath.</p>
 <td>a <a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> object representing that directory</td>
 </tr>
 <tr class="row-even"><td>a file name which doesn&#8217;t exist</td>
-<td>a <a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> if filepath ends with \,
+<td>a <a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a> if filepath ends with ,
 <a class="reference internal" href="fs_file.html#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> otherwise</td>
 </tr>
 </tbody>
@@ -178,7 +176,7 @@ represents it.</p>
 <tr class="row-odd"><td>an <a class="reference internal" href="fs_drive_vol.html#fs.Volume" title="fs.Volume"><tt class="xref py py-class docutils literal"><span class="pre">Volume</span></tt></a> or subclass object</td>
 <td>the same object</td>
 </tr>
-<tr class="row-even"><td>a volume name \\?\Volume...</td>
+<tr class="row-even"><td>a volume name \?Volume...</td>
 <td>a <a class="reference internal" href="fs_drive_vol.html#fs.Volume" title="fs.Volume"><tt class="xref py py-class docutils literal"><span class="pre">Volume</span></tt></a> object representing that volume</td>
 </tr>
 <tr class="row-odd"><td>a directory name</td>
@@ -277,7 +275,7 @@ access errors.</p>
 
 <dl class="function">
 <dt id="fs.flat">
-<tt class="descclassname">fs.</tt><tt class="descname">flat</tt><big>(</big><em>root</em>, <em>pattern='*'</em>, <em>includedirs=False</em>, <em>depthfirst=False</em>, <em>error_handler=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#flat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.flat" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">fs.</tt><tt class="descname">flat</tt><big>(</big><em>root</em>, <em>pattern=u'*'</em>, <em>includedirs=False</em>, <em>depthfirst=False</em>, <em>error_handler=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#flat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.flat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over a flattened version of the directory tree starting
 from root. Implemented via <a class="reference internal" href="fs_dir.html#fs.Dir.flat" title="fs.Dir.flat"><tt class="xref py py-meth docutils literal"><span class="pre">Dir.flat()</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -397,10 +395,11 @@ does not exist, implemented via <a class="reference internal" href="fs_file.html
 to pick out its drive and path components.</p>
 <p>Attempt to match the first part of the string against
 known path leaders:</p>
-<div class="highlight-python"><pre>&lt;drive&gt;:\
+<div class="highlight-python"><div class="highlight"><pre>&lt;drive&gt;:\
 \\?\&lt;drive&gt;:\
 \\?\Volume{xxxx-...}\
-\\server\share\</pre>
+\\server\share\
+</pre></div>
 </div>
 <p>If that fails, assume the path is relative.</p>
 <table border="1" class="docutils">
@@ -461,8 +460,8 @@ the way. The last item is the filename or directory name.</p>
 <p>The original filepath can usually be reconstructed as:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
 <span class="n">filepath</span> <span class="o">=</span> <span class="s">&quot;c:/temp/abc.txt&quot;</span>
-<span class="n">parts</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">get_parts</span> <span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">==</span> <span class="n">filepath</span>
+<span class="n">parts</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">get_parts</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">==</span> <span class="n">filepath</span>
 </pre></div>
 </div>
 <p>The exception is when a root (UNC or volume) is given without
@@ -621,8 +620,10 @@ representing each one.</p>
 <tt class="descclassname">fs.</tt><tt class="descname">mounts</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#mounts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.mounts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over all mounted volume mountpoints in the system, yielding a
 (<a class="reference internal" href="fs_dir.html#fs.Dir" title="fs.Dir"><tt class="xref py py-class docutils literal"><span class="pre">Dir</span></tt></a>, <a class="reference internal" href="fs_drive_vol.html#fs.Volume" title="fs.Volume"><tt class="xref py py-class docutils literal"><span class="pre">Volume</span></tt></a>) pair for each one, eg:</p>
-<p>from winsys import fs
-drive_volumes = dict (fs.mounts ())</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
+<span class="n">drive_volumes</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">mounts</span><span class="p">())</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -636,12 +637,12 @@ updated. If the file is new, old_filename will be None; if it has been
 deleted, new_filename will be None; if it has been renamed, they will
 be different:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
-<span class="n">watcher</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">watch</span> <span class="p">(</span><span class="s">&quot;c:/temp&quot;</span><span class="p">,</span> <span class="n">subdirs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">watcher</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">watch</span><span class="p">(</span><span class="s">&quot;c:/temp&quot;</span><span class="p">,</span> <span class="n">subdirs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">action</span><span class="p">,</span> <span class="n">old_filename</span><span class="p">,</span> <span class="n">new_filename</span> <span class="ow">in</span> <span class="n">watcher</span><span class="p">:</span>
-  <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="n">fs</span><span class="o">.</span><span class="n">FILE_ACTION</span><span class="o">.</span><span class="n">ADDED</span><span class="p">:</span>
-    <span class="k">print</span> <span class="n">new_filename</span><span class="p">,</span> <span class="s">&quot;added&quot;</span>
-  <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="n">fs</span><span class="o">.</span><span class="n">FILE_ACTION</span><span class="o">.</span><span class="n">REMOVED</span><span class="p">:</span>
-    <span class="k">print</span> <span class="n">old_filename</span><span class="p">,</span> <span class="s">&quot;removed&quot;</span>
+    <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="n">fs</span><span class="o">.</span><span class="n">FILE_ACTION</span><span class="o">.</span><span class="n">ADDED</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">new_filename</span><span class="p">,</span> <span class="s">&quot;added&quot;</span>
+    <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="n">fs</span><span class="o">.</span><span class="n">FILE_ACTION</span><span class="o">.</span><span class="n">REMOVED</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">old_filename</span><span class="p">,</span> <span class="s">&quot;removed&quot;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -710,7 +711,7 @@ be different:</p>
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
 <dt><a class="reference internal" href="cookbook/fs.html"><em>Using the fs module</em></a></dt>
@@ -740,12 +741,8 @@ be different:</p>
 <li><a class="reference internal" href="#additional-filesystem-operations">Additional Filesystem Operations</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#classes">Classes</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#constants">Constants</a><ul>
-</ul>
-</li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#constants">Constants</a></li>
 <li><a class="reference internal" href="#exceptions">Exceptions</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
@@ -754,7 +751,7 @@ be different:</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="event_logs.html"
-                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">event_logs</span></tt> &#8211; Event Logs</a></p>
+                        title="previous chapter"><tt class="docutils literal"><span class="pre">event_logs</span></tt> &#8211; Event Logs</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="fs_drive_vol.html"
                         title="next chapter">The Drive class</a></p>
@@ -795,12 +792,12 @@ be different:</p>
         <li class="right" >
           <a href="event_logs.html" title="event_logs – Event Logs"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 0.5beta documentation</a> &raquo;</li> 
+        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

@@ -17,7 +17,6 @@ Contents
     event_logs
     fs
     ipc
-    asyncio
     registry
     security
     misc

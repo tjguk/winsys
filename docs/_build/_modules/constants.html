@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>constants &mdash; WinSys 0.5beta documentation</title>
+    <title>constants &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.5beta',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="../index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="../index.html" />
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body>
@@ -39,7 +37,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -50,8 +48,8 @@
           <div class="body">
             
   <h1>Source code for constants</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: iso-8859-1 -*-</span>
-<span class="sd">u&quot;&quot;&quot;Provide unified access to the different sets of constants used by</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Provide unified access to the different sets of constants used by</span>
 <span class="sd">the winsys module. Some of them are provided by modules within the</span>
 <span class="sd">pywin32 package. Others belong to those sets but are not present in</span>
 <span class="sd">the modules. Still others are not present at all within pywin32 and</span>
@@ -65,6 +63,8 @@
 <span class="sd">For useful documentation, each :class:`Constants` generates a readable</span>
 <span class="sd">docstring tabulating its names &amp; values.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+
 <span class="kn">import</span> <span class="nn">operator</span>
 <span class="kn">import</span> <span class="nn">re</span>
 
@@ -73,314 +73,316 @@
 <span class="kn">import</span> <span class="nn">ntsecuritycon</span>
 <span class="kn">import</span> <span class="nn">fnmatch</span>
 
+<span class="kn">from</span> <span class="nn">winsys._compat</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">core</span><span class="p">,</span> <span class="n">utils</span>
 
-<span class="k">def</span> <span class="nf">from_pattern</span> <span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-  <span class="sd">ur&quot;&quot;&quot;Helper function to find the common pattern among a group</span>
-<span class="sd">  of like-named constants. eg if the pattern is FILE_ACCESS_*</span>
-<span class="sd">  then the part of the name after FILE_ACCESS_ will be returned.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">if</span> <span class="n">pattern</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">name</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span> <span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">replace</span> <span class="p">(</span><span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="s">r&quot;(\w+)&quot;</span><span class="p">),</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">group</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Constants"><a class="viewcode-back" href="../constants.html#constants.Constants">[docs]</a><span class="k">class</span> <span class="nc">Constants</span> <span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
-  <span class="sd">ur&quot;&quot;&quot;Provide a dict-like interface for a group of related</span>
-<span class="sd">  constants. These can come from a module or other namespace according</span>
-<span class="sd">  to a wildcard name, or can be added as a list of (unrelated) names from</span>
-<span class="sd">  a namespace or can simply be a raw dictionary of name-value pairs::</span>
-
-<span class="sd">    import win32con</span>
-<span class="sd">    from winsys import constants</span>
-<span class="sd">    COMPRESSION_ENGINE = constants.Constants.from_pattern (</span>
-<span class="sd">      &quot;COMPRESSION_ENGINE_*&quot;,</span>
-<span class="sd">      namespace=win32con</span>
-<span class="sd">    )</span>
-<span class="sd">    COMPRESSION_ENGINE.update (dict (</span>
-<span class="sd">      EXTRA_VALUE = 5</span>
-<span class="sd">    ))</span>
-<span class="sd">    print COMPRESSION_ENGINE.MAXIMUM</span>
-<span class="sd">    COMPRESSION_ENGINE.dump ()</span>
-
-<span class="sd">  The convention is to name the set of constants after the common</span>
-<span class="sd">  prefix of the constant names, as in the example above, but it&#39;s</span>
-<span class="sd">  just a convention. The pattern parameter to the various factory</span>
-<span class="sd">  functions will be used to rename the constants on the way in,</span>
-<span class="sd">  but it can be empty.</span>
-
-<span class="sd">  The constants can be accessed as attributes or as items. In addition,</span>
-<span class="sd">  passing a name or a value to the :meth:`constant` method will return</span>
-<span class="sd">  the value. This is done automatically by most functions which expect</span>
-<span class="sd">  a parameter based on one of these constants sets.</span>
-
-<span class="sd">  To retrieve the name or names corresponding to a value, use the</span>
-<span class="sd">  :meth:`name_from_value` or :meth:`names_from_value` function::</span>
-
-<span class="sd">    import win32con</span>
-<span class="sd">    from winsys import constants</span>
-<span class="sd">    ACE_TYPES = constants.Constants.from_pattern (</span>
-<span class="sd">      &quot;*_ACE_TYPE&quot;,</span>
-<span class="sd">      namespace=win32con</span>
-<span class="sd">    )</span>
-<span class="sd">    print ACE_TYPES.name_from_value (ACE_TYPES.ACCESS_ALLOWED)</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-
-  <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dict_initialiser</span><span class="o">=</span><span class="p">{}):</span>
-    <span class="sd">u&quot;&quot;&quot;Build an internal structure from a dictionary-like</span>
-<span class="sd">    set of initial values.</span>
+<span class="k">def</span> <span class="nf">from_pattern</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Helper function to find the common pattern among a group</span>
+<span class="sd">    of like-named constants. eg if the pattern is FILE_ACCESS_*</span>
+<span class="sd">    then the part of the name after FILE_ACCESS_ will be returned.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">preamble</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_key_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="p">(</span><span class="n">dict_initialiser</span><span class="p">)</span>
-
-  <span class="k">def</span> <span class="nf">__getitem__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
-    <span class="sd">u&quot;&quot;&quot;Act as a dictionary and as a namespace so that calls like</span>
-<span class="sd">    FILE_ACCESS[&quot;READ&quot;] and FILE_ACCESS.READ will both succeed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span>
-
-  <span class="k">def</span> <span class="nf">__getattr__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span>
-    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="ne">AttributeError</span>
-
-  <span class="k">def</span> <span class="nf">__repr__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s">&quot;&lt;Constants: </span><span class="si">%r</span><span class="s">&gt;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span>
-
-  <span class="k">def</span> <span class="nf">__str__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s">&quot;&lt;Constants: </span><span class="si">%s</span><span class="s">&gt;&quot;</span> <span class="o">%</span> <span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">iterkeys</span> <span class="p">())</span>
-
-<div class="viewcode-block" id="Constants.init"><a class="viewcode-back" href="../constants.html#constants.Constants.init">[docs]</a>  <span class="k">def</span> <span class="nf">init</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dict_initialiser</span><span class="p">):</span>
-    <span class="n">items</span> <span class="o">=</span> <span class="nb">list</span> <span class="p">(</span><span class="n">dict_initialiser</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">update</span> <span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_key_dict</span><span class="o">.</span><span class="n">update</span> <span class="p">((</span><span class="n">value</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">reset_doc</span> <span class="p">()</span>
-</div>
-<div class="viewcode-block" id="Constants.reset_doc"><a class="viewcode-back" href="../constants.html#constants.Constants.reset_doc">[docs]</a>  <span class="k">def</span> <span class="nf">reset_doc</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-      <span class="k">return</span>
-
-    <span class="n">headers</span> <span class="o">=</span> <span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="s">&quot;Val&quot;</span><span class="p">,</span> <span class="s">&quot;Win32&quot;</span>
-    <span class="n">namelen</span><span class="p">,</span> <span class="n">valuelen</span><span class="p">,</span> <span class="n">aliaslen</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span> <span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">)</span>
-
-    <span class="n">namelen</span> <span class="o">=</span> <span class="nb">max</span> <span class="p">(</span><span class="n">namelen</span><span class="p">,</span> <span class="nb">len</span> <span class="p">(</span><span class="nb">max</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)))</span>
-    <span class="n">aliaslen</span> <span class="o">=</span> <span class="nb">max</span> <span class="p">(</span><span class="n">aliaslen</span><span class="p">,</span> <span class="nb">len</span> <span class="p">(</span><span class="nb">max</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_key_dict</span><span class="o">.</span><span class="n">itervalues</span> <span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)))</span>
-    <span class="k">try</span><span class="p">:</span>
-      <span class="nb">int</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">itervalues</span> <span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">except</span><span class="p">:</span>
-      <span class="n">valuelen</span> <span class="o">=</span> <span class="nb">max</span> <span class="p">(</span><span class="n">valuelen</span><span class="p">,</span> <span class="nb">len</span> <span class="p">(</span><span class="nb">max</span> <span class="p">((</span><span class="nb">unicode</span> <span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">itervalues</span> <span class="p">()),</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)))</span>
-      <span class="n">prefix</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-      <span class="n">row_format</span> <span class="o">=</span> <span class="s">&quot;|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">namelen</span><span class="p">,</span> <span class="n">valuelen</span><span class="p">,</span> <span class="n">aliaslen</span><span class="p">)</span>
-      <span class="n">converter</span> <span class="o">=</span> <span class="nb">unicode</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">valuelen</span> <span class="o">=</span> <span class="nb">max</span> <span class="p">(</span><span class="n">valuelen</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span> <span class="p">(</span><span class="s">&quot;</span><span class="si">%x</span><span class="s">&quot;</span> <span class="o">%</span> <span class="nb">max</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">itervalues</span> <span class="p">())))</span> <span class="o">//</span> <span class="mi">2</span><span class="p">))</span>
-      <span class="n">prefix</span> <span class="o">=</span> <span class="s">&quot;0x&quot;</span>
-      <span class="n">row_format</span> <span class="o">=</span> <span class="s">&quot;|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|</span><span class="si">%s%%</span><span class="s">0</span><span class="si">%d</span><span class="s">X|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">namelen</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">valuelen</span><span class="p">,</span> <span class="n">aliaslen</span><span class="p">)</span>
-      <span class="k">print</span> <span class="s">&quot;row_format:&quot;</span><span class="p">,</span> <span class="n">row_format</span>
-      <span class="n">converter</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">signed_to_unsigned</span>
-    <span class="n">header_format</span> <span class="o">=</span> <span class="s">&quot;|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">namelen</span><span class="p">,</span> <span class="nb">len</span> <span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="o">+</span> <span class="n">valuelen</span><span class="p">,</span> <span class="n">aliaslen</span><span class="p">)</span>
-
-    <span class="n">separator</span> <span class="o">=</span> <span class="s">&quot;+&quot;</span> <span class="o">+</span> <span class="n">namelen</span> <span class="o">*</span> <span class="s">&quot;-&quot;</span> <span class="o">+</span> <span class="s">&quot;+&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="nb">len</span> <span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="o">+</span> <span class="n">valuelen</span><span class="p">)</span> <span class="o">*</span> <span class="s">&quot;-&quot;</span> <span class="o">+</span> <span class="s">&quot;+&quot;</span> <span class="o">+</span> <span class="n">aliaslen</span> <span class="o">*</span> <span class="s">&quot;-&quot;</span> <span class="o">+</span> <span class="s">&quot;+&quot;</span>
-    <span class="n">header</span> <span class="o">=</span> <span class="s">&quot;+&quot;</span> <span class="o">+</span> <span class="n">namelen</span> <span class="o">*</span> <span class="s">&quot;=&quot;</span> <span class="o">+</span> <span class="s">&quot;+&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="nb">len</span> <span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="o">+</span> <span class="n">valuelen</span><span class="p">)</span> <span class="o">*</span> <span class="s">&quot;=&quot;</span> <span class="o">+</span> <span class="s">&quot;+&quot;</span> <span class="o">+</span> <span class="n">aliaslen</span> <span class="o">*</span> <span class="s">&quot;=&quot;</span> <span class="o">+</span> <span class="s">&quot;+&quot;</span>
-    <span class="n">row</span> <span class="o">=</span> <span class="n">row_format</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">+</span> <span class="n">separator</span>
-    <span class="n">rows</span> <span class="o">=</span> <span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">converter</span> <span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key_dict</span><span class="p">[</span><span class="n">value</span><span class="p">])</span> <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">iteritems</span> <span class="p">())</span>
-    <span class="n">table</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">([</span>
-      <span class="n">separator</span><span class="p">,</span>
-      <span class="n">header_format</span> <span class="o">%</span> <span class="n">headers</span><span class="p">,</span>
-      <span class="n">header</span><span class="p">,</span>
-      <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">row</span> <span class="o">%</span> <span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">sorted</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span> <span class="p">(</span><span class="mi">1</span><span class="p">))),</span>
-    <span class="p">])</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preamble</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span> <span class="o">+</span> <span class="n">table</span>
-</div>
-<div class="viewcode-block" id="Constants.doc"><a class="viewcode-back" href="../constants.html#constants.Constants.doc">[docs]</a>  <span class="k">def</span> <span class="nf">doc</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preamble</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">preamble</span> <span class="o">=</span> <span class="n">preamble</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">reset_doc</span> <span class="p">()</span>
-</div>
-<div class="viewcode-block" id="Constants.dumped"><a class="viewcode-back" href="../constants.html#constants.Constants.dumped">[docs]</a>  <span class="k">def</span> <span class="nf">dumped</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__doc__</span>
-</div>
-  <span class="k">def</span> <span class="nf">__contains__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span>
-
-<div class="viewcode-block" id="Constants.constant"><a class="viewcode-back" href="../constants.html#constants.Constants.constant">[docs]</a>  <span class="k">def</span> <span class="nf">constant</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;From a value, which may be a string or an integer, determine</span>
-<span class="sd">    the corresponding value in this set of constants. If the value</span>
-<span class="sd">    is a number, it is passed straight back out. If not, it is</span>
-<span class="sd">    assumed to be a single string or a list of strings, each string</span>
-<span class="sd">    corresponding to one of the constants in this set of constants::</span>
-
-<span class="sd">      from winsys.security import SD_CONTROL</span>
-
-<span class="sd">      print SD_CONTROL.constant ([&quot;dacl_protected&quot;, &quot;sacl_protected&quot;])</span>
-<span class="sd">      print SD_CONTROL.DACL_PROTECTED | SD_CONTROL.SACL_PROTECTED</span>
-<span class="sd">      print SD_CONTROL.constant (12288)</span>
-
-<span class="sd">    ..  note::</span>
-<span class="sd">        No attempt is made to verify that the number passed in represents</span>
-<span class="sd">        a combination of the constants in this set.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="k">return</span> <span class="bp">None</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-      <span class="k">return</span> <span class="nb">reduce</span> <span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">or_</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="nb">unicode</span> <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">strip</span> <span class="p">()</span><span class="o">.</span><span class="n">upper</span> <span class="p">())]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="p">))</span>
-    <span class="k">elif</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key_dict</span><span class="p">:</span>
-      <span class="k">return</span> <span class="n">value</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-      <span class="k">return</span> <span class="n">value</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
-      <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
-      <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span> <span class="p">()</span><span class="o">.</span><span class="n">upper</span> <span class="p">()]</span>
-</div>
-<div class="viewcode-block" id="Constants.update"><a class="viewcode-back" href="../constants.html#constants.Constants.update">[docs]</a>  <span class="k">def</span> <span class="nf">update</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-    <span class="sd">u&quot;&quot;&quot;Act as a dict for updates so that several constant sets may</span>
-<span class="sd">    be merged into one.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">iteritems</span> <span class="p">())</span>
-</div>
-<div class="viewcode-block" id="Constants.items"><a class="viewcode-back" href="../constants.html#constants.Constants.items">[docs]</a>  <span class="k">def</span> <span class="nf">items</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">iteritems</span> <span class="p">()</span></div>
-  <span class="n">iteritems</span> <span class="o">=</span> <span class="n">items</span>
-
-<div class="viewcode-block" id="Constants.keys"><a class="viewcode-back" href="../constants.html#constants.Constants.keys">[docs]</a>  <span class="k">def</span> <span class="nf">keys</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">iterkeys</span> <span class="p">()</span></div>
-  <span class="n">iterkeys</span> <span class="o">=</span> <span class="n">keys</span>
-
-  <span class="k">def</span> <span class="nf">__iter__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">iter</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Constants.values"><a class="viewcode-back" href="../constants.html#constants.Constants.values">[docs]</a>  <span class="k">def</span> <span class="nf">values</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">itervalues</span> <span class="p">()</span></div>
-  <span class="n">itervalues</span> <span class="o">=</span> <span class="n">values</span>
-
-  <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Constants.from_dict"><a class="viewcode-back" href="../constants.html#constants.Constants.from_dict">[docs]</a>  <span class="k">def</span> <span class="nf">from_dict</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">u&quot;&quot;&quot;Factory method to return a class instance from a dictionary-like set of values.</span>
-<span class="sd">    If a pattern is passed in, use the distinguished part of the name (the part</span>
-<span class="sd">    which matches the wildcard) as the key name.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">cls</span> <span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">from_pattern</span> <span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">iteritems</span> <span class="p">())</span>
-</div>
-  <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Constants.from_list"><a class="viewcode-back" href="../constants.html#constants.Constants.from_list">[docs]</a>  <span class="k">def</span> <span class="nf">from_list</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">u&quot;&quot;&quot;Factory method to return a class instance from a list-like set of values</span>
-<span class="sd">    within a namespace. Hands off to the from_dict factory.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">cls</span> <span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">from_pattern</span> <span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="nb">getattr</span> <span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">)</span>
-</div>
-  <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Constants.from_pattern"><a class="viewcode-back" href="../constants.html#constants.Constants.from_pattern">[docs]</a>  <span class="k">def</span> <span class="nf">from_pattern</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s">u&quot;*&quot;</span><span class="p">,</span> <span class="n">excluded</span><span class="o">=</span><span class="p">[],</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32con</span><span class="p">):</span>
-    <span class="sd">u&quot;&quot;&quot;Factory method to return a class instance from a wildcard name pattern. This is</span>
-<span class="sd">    the most common method of constructing a list of constants by passing in, eg,</span>
-<span class="sd">    FILE_ATTRIBUTE_* and the win32file module as the namespace.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">cls</span> <span class="p">(</span>
-      <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">from_pattern</span> <span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="nb">getattr</span> <span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span> <span class="k">for</span> \
-        <span class="n">key</span> <span class="ow">in</span> <span class="nb">dir</span> <span class="p">(</span><span class="n">namespace</span><span class="p">)</span> <span class="k">if</span> \
-        <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span> <span class="ow">and</span> \
-        <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excluded</span>
-    <span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Constants.names"><a class="viewcode-back" href="../constants.html#constants.Constants.names">[docs]</a>  <span class="k">def</span> <span class="nf">names</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="p">[</span><span class="s">u&quot;*&quot;</span><span class="p">]):</span>
-    <span class="sd">u&quot;&quot;&quot;From a list of patterns, return the matching names from the</span>
-<span class="sd">    list of constants. A single string is considered as though a</span>
-<span class="sd">    list of one.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">patterns</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
-      <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="n">patterns</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">iterkeys</span> <span class="p">():</span>
-      <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
-          <span class="k">yield</span> <span class="n">name</span>
-</div>
-<div class="viewcode-block" id="Constants.names_from_value"><a class="viewcode-back" href="../constants.html#constants.Constants.names_from_value">[docs]</a>  <span class="k">def</span> <span class="nf">names_from_value</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="p">[</span><span class="s">u&quot;*&quot;</span><span class="p">]):</span>
-    <span class="sd">u&quot;&quot;&quot;From a number representing the or-ing of several integer values,</span>
-<span class="sd">    work out which of the constants make up the number using the pattern</span>
-<span class="sd">    to filter the &quot;classes&quot; or constants present in the dataset.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="p">(</span><span class="n">patterns</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]]</span>
-</div>
-<div class="viewcode-block" id="Constants.name_from_value"><a class="viewcode-back" href="../constants.html#constants.Constants.name_from_value">[docs]</a>  <span class="k">def</span> <span class="nf">name_from_value</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="p">[</span><span class="s">u&quot;*&quot;</span><span class="p">]):</span>
-    <span class="sd">u&quot;&quot;&quot;Find the one name in the set of constants (optionally qualified by pattern)</span>
-<span class="sd">    which matches value.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="p">(</span><span class="n">patterns</span><span class="p">):</span>
-      <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">pattern</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">name</span>
     <span class="k">else</span><span class="p">:</span>
-      <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="s">u&quot;No constant matching name </span><span class="si">%s</span><span class="s"> and value </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">patterns</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-      <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">default</span>
-</div>
-<div class="viewcode-block" id="Constants.values_from_value"><a class="viewcode-back" href="../constants.html#constants.Constants.values_from_value">[docs]</a>  <span class="k">def</span> <span class="nf">values_from_value</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;*&quot;</span><span class="p">]):</span>
-    <span class="sd">&quot;&quot;&quot;Return the list of values which make up the combined value</span>
+        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="s">r&quot;(\w+)&quot;</span><span class="p">),</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Constants"><a class="viewcode-back" href="../constants.html#constants.Constants">[docs]</a><span class="k">class</span> <span class="nc">Constants</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Provide a dict-like interface for a group of related</span>
+<span class="sd">    constants. These can come from a module or other namespace according</span>
+<span class="sd">    to a wildcard name, or can be added as a list of (unrelated) names from</span>
+<span class="sd">    a namespace or can simply be a raw dictionary of name-value pairs::</span>
+
+<span class="sd">        import win32con</span>
+<span class="sd">        from winsys import constants</span>
+<span class="sd">        COMPRESSION_ENGINE = constants.Constants.from_pattern (</span>
+<span class="sd">            &quot;COMPRESSION_ENGINE_*&quot;,</span>
+<span class="sd">            namespace=win32con</span>
+<span class="sd">        )</span>
+<span class="sd">        COMPRESSION_ENGINE.update(dict(</span>
+<span class="sd">            EXTRA_VALUE = 5</span>
+<span class="sd">        ))</span>
+<span class="sd">        print(COMPRESSION_ENGINE.MAXIMUM)</span>
+<span class="sd">        COMPRESSION_ENGINE.dump()</span>
+
+<span class="sd">    The convention is to name the set of constants after the common</span>
+<span class="sd">    prefix of the constant names, as in the example above, but it&#39;s</span>
+<span class="sd">    just a convention. The pattern parameter to the various factory</span>
+<span class="sd">    functions will be used to rename the constants on the way in,</span>
+<span class="sd">    but it can be empty.</span>
+
+<span class="sd">    The constants can be accessed as attributes or as items. In addition,</span>
+<span class="sd">    passing a name or a value to the :meth:`constant` method will return</span>
+<span class="sd">    the value. This is done automatically by most functions which expect</span>
+<span class="sd">    a parameter based on one of these constants sets.</span>
+
+<span class="sd">    To retrieve the name or names corresponding to a value, use the</span>
+<span class="sd">    :meth:`name_from_value` or :meth:`names_from_value` function::</span>
+
+<span class="sd">        import win32con</span>
+<span class="sd">        from winsys import constants</span>
+<span class="sd">        ACE_TYPES = constants.Constants.from_pattern(</span>
+<span class="sd">            &quot;*_ACE_TYPE&quot;,</span>
+<span class="sd">            namespace=win32con</span>
+<span class="sd">        )</span>
+<span class="sd">        print(ACE_TYPES.name_from_value(ACE_TYPES.ACCESS_ALLOWED))</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names_from_value</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">patterns</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dict_initialiser</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">&quot;&quot;&quot;Build an internal structure from a dictionary-like</span>
+<span class="sd">        set of initial values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preamble</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_key_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">dict_initialiser</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Act as a dictionary and as a namespace so that calls like</span>
+<span class="sd">        FILE_ACCESS[&quot;READ&quot;] and FILE_ACCESS.READ will both succeed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;&lt;Constants: </span><span class="si">%r</span><span class="s">&gt;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;&lt;Constants: </span><span class="si">%s</span><span class="s">&gt;&quot;</span> <span class="o">%</span> <span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+<div class="viewcode-block" id="Constants.init"><a class="viewcode-back" href="../constants.html#constants.Constants.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dict_initialiser</span><span class="p">):</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dict_initialiser</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">update</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_key_dict</span><span class="o">.</span><span class="n">update</span><span class="p">((</span><span class="n">value</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_doc</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Constants.reset_doc"><a class="viewcode-back" href="../constants.html#constants.Constants.reset_doc">[docs]</a>    <span class="k">def</span> <span class="nf">reset_doc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+            <span class="k">return</span>
+
+        <span class="n">headers</span> <span class="o">=</span> <span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="s">&quot;Val&quot;</span><span class="p">,</span> <span class="s">&quot;Win32&quot;</span>
+        <span class="n">namelen</span><span class="p">,</span> <span class="n">valuelen</span><span class="p">,</span> <span class="n">aliaslen</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span> <span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">)</span>
+
+        <span class="n">namelen</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">namelen</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)))</span>
+        <span class="n">aliaslen</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">aliaslen</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_key_dict</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)))</span>
+
+        <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="n">valuelen</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">valuelen</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">max</span><span class="p">((</span><span class="nb">unicode</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)))</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+            <span class="n">row_format</span> <span class="o">=</span> <span class="s">&quot;|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">namelen</span><span class="p">,</span> <span class="n">valuelen</span><span class="p">,</span> <span class="n">aliaslen</span><span class="p">)</span>
+            <span class="n">converter</span> <span class="o">=</span> <span class="nb">unicode</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">valuelen</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">valuelen</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%x</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">signed_to_unsigned</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">))</span> <span class="o">//</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="s">&quot;0x&quot;</span>
+            <span class="n">row_format</span> <span class="o">=</span> <span class="s">&quot;|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|</span><span class="si">%s%%</span><span class="s">0</span><span class="si">%d</span><span class="s">X|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">namelen</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">valuelen</span><span class="p">,</span> <span class="n">aliaslen</span><span class="p">)</span>
+            <span class="n">converter</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">signed_to_unsigned</span>
+        <span class="n">header_format</span> <span class="o">=</span> <span class="s">&quot;|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s|&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">namelen</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="o">+</span> <span class="n">valuelen</span><span class="p">,</span> <span class="n">aliaslen</span><span class="p">)</span>
+
+        <span class="n">separator</span> <span class="o">=</span> <span class="s">&quot;+&quot;</span> <span class="o">+</span> <span class="n">namelen</span> <span class="o">*</span> <span class="s">&quot;-&quot;</span> <span class="o">+</span> <span class="s">&quot;+&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="o">+</span> <span class="n">valuelen</span><span class="p">)</span> <span class="o">*</span> <span class="s">&quot;-&quot;</span> <span class="o">+</span> <span class="s">&quot;+&quot;</span> <span class="o">+</span> <span class="n">aliaslen</span> <span class="o">*</span> <span class="s">&quot;-&quot;</span> <span class="o">+</span> <span class="s">&quot;+&quot;</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="s">&quot;+&quot;</span> <span class="o">+</span> <span class="n">namelen</span> <span class="o">*</span> <span class="s">&quot;=&quot;</span> <span class="o">+</span> <span class="s">&quot;+&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="o">+</span> <span class="n">valuelen</span><span class="p">)</span> <span class="o">*</span> <span class="s">&quot;=&quot;</span> <span class="o">+</span> <span class="s">&quot;+&quot;</span> <span class="o">+</span> <span class="n">aliaslen</span> <span class="o">*</span> <span class="s">&quot;=&quot;</span> <span class="o">+</span> <span class="s">&quot;+&quot;</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">row_format</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">+</span> <span class="n">separator</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">converter</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key_dict</span><span class="p">[</span><span class="n">value</span><span class="p">])</span> <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+            <span class="n">separator</span><span class="p">,</span>
+            <span class="n">header_format</span> <span class="o">%</span> <span class="n">headers</span><span class="p">,</span>
+            <span class="n">header</span><span class="p">,</span>
+            <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span> <span class="o">%</span> <span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))),</span>
+        <span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preamble</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span> <span class="o">+</span> <span class="n">table</span>
+</div>
+<div class="viewcode-block" id="Constants.doc"><a class="viewcode-back" href="../constants.html#constants.Constants.doc">[docs]</a>    <span class="k">def</span> <span class="nf">doc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preamble</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preamble</span> <span class="o">=</span> <span class="n">preamble</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_doc</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Constants.dumped"><a class="viewcode-back" href="../constants.html#constants.Constants.dumped">[docs]</a>    <span class="k">def</span> <span class="nf">dumped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__doc__</span>
+</div>
+    <span class="k">def</span> <span class="nf">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span>
+
+<div class="viewcode-block" id="Constants.constant"><a class="viewcode-back" href="../constants.html#constants.Constants.constant">[docs]</a>    <span class="k">def</span> <span class="nf">constant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;From a value, which may be a string or an integer, determine</span>
+<span class="sd">        the corresponding value in this set of constants. If the value</span>
+<span class="sd">        is a number, it is passed straight back out. If not, it is</span>
+<span class="sd">        assumed to be a single string or a list of strings, each string</span>
+<span class="sd">        corresponding to one of the constants in this set of constants::</span>
+
+<span class="sd">            from winsys.security import SD_CONTROL</span>
+
+<span class="sd">            print(SD_CONTROL.constant([&quot;dacl_protected&quot;, &quot;sacl_protected&quot;]))</span>
+<span class="sd">            print(SD_CONTROL.DACL_PROTECTED | SD_CONTROL.SACL_PROTECTED)</span>
+<span class="sd">            print(SD_CONTROL.constant(12288))</span>
+
+<span class="sd">        ..    note::</span>
+<span class="sd">                No attempt is made to verify that the number passed in represents</span>
+<span class="sd">                a combination of the constants in this set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">or_</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="nb">unicode</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">())]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key_dict</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
+</div>
+<div class="viewcode-block" id="Constants.update"><a class="viewcode-back" href="../constants.html#constants.Constants.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Act as a dict for updates so that several constant sets may</span>
+<span class="sd">        be merged into one.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+</div>
+<div class="viewcode-block" id="Constants.items"><a class="viewcode-back" href="../constants.html#constants.Constants.items">[docs]</a>    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span></div>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">items</span>
+
+<div class="viewcode-block" id="Constants.keys"><a class="viewcode-back" href="../constants.html#constants.Constants.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
+    <span class="n">iterkeys</span> <span class="o">=</span> <span class="n">keys</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Constants.values"><a class="viewcode-back" href="../constants.html#constants.Constants.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()</span></div>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">values</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Constants.from_dict"><a class="viewcode-back" href="../constants.html#constants.Constants.from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Factory method to return a class instance from a dictionary-like set of values.</span>
+<span class="sd">        If a pattern is passed in, use the distinguished part of the name (the part</span>
+<span class="sd">        which matches the wildcard) as the key name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">from_pattern</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Constants.from_list"><a class="viewcode-back" href="../constants.html#constants.Constants.from_list">[docs]</a>    <span class="k">def</span> <span class="nf">from_list</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Factory method to return a class instance from a list-like set of values</span>
+<span class="sd">        within a namespace. Hands off to the from_dict factory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">from_pattern</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">)</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Constants.from_pattern"><a class="viewcode-back" href="../constants.html#constants.Constants.from_pattern">[docs]</a>    <span class="k">def</span> <span class="nf">from_pattern</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="n">excluded</span><span class="o">=</span><span class="p">[],</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32con</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Factory method to return a class instance from a wildcard name pattern. This is</span>
+<span class="sd">        the most common method of constructing a list of constants by passing in, eg,</span>
+<span class="sd">        FILE_ATTRIBUTE_* and the win32file module as the namespace.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">from_pattern</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span> <span class="k">for</span> \
+                <span class="n">key</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">namespace</span><span class="p">)</span> <span class="k">if</span> \
+                <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span> <span class="ow">and</span> \
+                <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excluded</span>
+        <span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Constants.names"><a class="viewcode-back" href="../constants.html#constants.Constants.names">[docs]</a>    <span class="k">def</span> <span class="nf">names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;*&quot;</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;From a list of patterns, return the matching names from the</span>
+<span class="sd">        list of constants. A single string is considered as though a</span>
+<span class="sd">        list of one.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">patterns</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+            <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="n">patterns</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+                    <span class="k">yield</span> <span class="n">name</span>
+</div>
+<div class="viewcode-block" id="Constants.names_from_value"><a class="viewcode-back" href="../constants.html#constants.Constants.names_from_value">[docs]</a>    <span class="k">def</span> <span class="nf">names_from_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;*&quot;</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;From a number representing the or-ing of several integer values,</span>
+<span class="sd">        work out which of the constants make up the number using the pattern</span>
+<span class="sd">        to filter the &quot;classes&quot; or constants present in the dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]]</span>
+</div>
+<div class="viewcode-block" id="Constants.name_from_value"><a class="viewcode-back" href="../constants.html#constants.Constants.name_from_value">[docs]</a>    <span class="k">def</span> <span class="nf">name_from_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;*&quot;</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;Find the one name in the set of constants (optionally qualified by pattern)</span>
+<span class="sd">        which matches value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">(</span><span class="n">patterns</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&quot;No constant matching name </span><span class="si">%s</span><span class="s"> and value </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">patterns</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">default</span>
+</div>
+<div class="viewcode-block" id="Constants.values_from_value"><a class="viewcode-back" href="../constants.html#constants.Constants.values_from_value">[docs]</a>    <span class="k">def</span> <span class="nf">values_from_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;*&quot;</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;Return the list of values which make up the combined value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names_from_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">patterns</span><span class="p">)]</span>
 </div></div>
-<span class="n">GENERAL</span> <span class="o">=</span> <span class="n">Constants</span><span class="o">.</span><span class="n">from_dict</span> <span class="p">(</span><span class="nb">dict</span> <span class="p">(</span>
-  <span class="n">MAXIMUM_ALLOWED</span><span class="o">=</span><span class="n">ntsecuritycon</span><span class="o">.</span><span class="n">MAXIMUM_ALLOWED</span><span class="p">,</span>
-  <span class="n">INFINITE</span><span class="o">=</span><span class="n">win32event</span><span class="o">.</span><span class="n">INFINITE</span>
+<span class="n">GENERAL</span> <span class="o">=</span> <span class="n">Constants</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">MAXIMUM_ALLOWED</span><span class="o">=</span><span class="n">ntsecuritycon</span><span class="o">.</span><span class="n">MAXIMUM_ALLOWED</span><span class="p">,</span>
+    <span class="n">INFINITE</span><span class="o">=</span><span class="n">win32event</span><span class="o">.</span><span class="n">INFINITE</span>
 <span class="p">))</span>
-<span class="n">TOKEN_FLAG</span> <span class="o">=</span> <span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span><span class="s">u&quot;TOKEN_*&quot;</span><span class="p">)</span>
+<span class="n">TOKEN_FLAG</span> <span class="o">=</span> <span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span><span class="p">(</span><span class="s">&quot;TOKEN_*&quot;</span><span class="p">)</span>
 
-<span class="n">ACCESS</span> <span class="o">=</span> <span class="n">Constants</span><span class="o">.</span><span class="n">from_list</span> <span class="p">([</span>
-  <span class="s">u&quot;DELETE&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;READ_CONTROL&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;WRITE_DAC&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;WRITE_OWNER&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SYNCHRONIZE&quot;</span>
+<span class="n">ACCESS</span> <span class="o">=</span> <span class="n">Constants</span><span class="o">.</span><span class="n">from_list</span><span class="p">([</span>
+    <span class="s">&quot;DELETE&quot;</span><span class="p">,</span>
+    <span class="s">&quot;READ_CONTROL&quot;</span><span class="p">,</span>
+    <span class="s">&quot;WRITE_DAC&quot;</span><span class="p">,</span>
+    <span class="s">&quot;WRITE_OWNER&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SYNCHRONIZE&quot;</span>
 <span class="p">],</span> <span class="n">namespace</span><span class="o">=</span><span class="n">ntsecuritycon</span><span class="p">)</span>
-<span class="n">ACCESS</span><span class="o">.</span><span class="n">update</span> <span class="p">(</span><span class="nb">dict</span> <span class="p">(</span>
-  <span class="n">ACCESS_SYSTEM_SECURITY</span> <span class="o">=</span> <span class="n">win32con</span><span class="o">.</span><span class="n">ACCESS_SYSTEM_SECURITY</span>
+<span class="n">ACCESS</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">ACCESS_SYSTEM_SECURITY</span> <span class="o">=</span> <span class="n">win32con</span><span class="o">.</span><span class="n">ACCESS_SYSTEM_SECURITY</span>
 <span class="p">))</span>
-<span class="n">GENERIC_ACCESS</span> <span class="o">=</span> <span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span><span class="s">u&quot;GENERIC_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">ntsecuritycon</span><span class="p">)</span>
-<span class="n">STANDARD_ACCESS</span> <span class="o">=</span> <span class="n">Constants</span><span class="o">.</span><span class="n">from_list</span> <span class="p">([</span><span class="s">u&quot;STANDARD_RIGHTS_READ&quot;</span><span class="p">,</span> <span class="s">u&quot;STANDARD_RIGHTS_WRITE&quot;</span><span class="p">,</span> <span class="s">u&quot;SYNCHRONIZE&quot;</span><span class="p">],</span> <span class="n">namespace</span><span class="o">=</span><span class="n">ntsecuritycon</span><span class="p">)</span>
+<span class="n">GENERIC_ACCESS</span> <span class="o">=</span> <span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span><span class="p">(</span><span class="s">&quot;GENERIC_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">ntsecuritycon</span><span class="p">)</span>
+<span class="n">STANDARD_ACCESS</span> <span class="o">=</span> <span class="n">Constants</span><span class="o">.</span><span class="n">from_list</span><span class="p">([</span><span class="s">&quot;STANDARD_RIGHTS_READ&quot;</span><span class="p">,</span> <span class="s">&quot;STANDARD_RIGHTS_WRITE&quot;</span><span class="p">,</span> <span class="s">&quot;SYNCHRONIZE&quot;</span><span class="p">],</span> <span class="n">namespace</span><span class="o">=</span><span class="n">ntsecuritycon</span><span class="p">)</span>
 
-<span class="c">#~ SCHEDULED_TASK_ERROR = Constants.from_pattern (u&quot;SCHED_E_*&quot;, namespace=taskscheduler)</span>
-<span class="c">#~ TASKPAGE = Constants.from_pattern (u&quot;TASKPAGE_*&quot;, namespace=taskscheduler)</span>
-<span class="c">#~ TASK = Constants.from_pattern (u&quot;TASK_*&quot;, namespace=taskscheduler)</span>
-<span class="c">#~ TASK_PRIORITY = Constants.from_pattern (u&quot;*_PRIORITY_CLASS&quot;, namespace=taskscheduler)</span>
+<span class="c">#~ SCHEDULED_TASK_ERROR = Constants.from_pattern(&quot;SCHED_E_*&quot;, namespace=taskscheduler)</span>
+<span class="c">#~ TASKPAGE = Constants.from_pattern(&quot;TASKPAGE_*&quot;, namespace=taskscheduler)</span>
+<span class="c">#~ TASK = Constants.from_pattern(&quot;TASK_*&quot;, namespace=taskscheduler)</span>
+<span class="c">#~ TASK_PRIORITY = Constants.from_pattern(&quot;*_PRIORITY_CLASS&quot;, namespace=taskscheduler)</span>
 
-<div class="viewcode-block" id="Attributes"><a class="viewcode-back" href="../constants.html#constants.Attributes">[docs]</a><span class="k">class</span> <span class="nc">Attributes</span> <span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
-  <span class="sd">u&quot;&quot;&quot;Simple class wrapper for the list of file attributes</span>
-<span class="sd">  (readonly, hidden, &amp;c.) It can be accessed by attribute</span>
-<span class="sd">  access, item access and the &quot;in&quot; operator::</span>
+<div class="viewcode-block" id="Attributes"><a class="viewcode-back" href="../constants.html#constants.Attributes">[docs]</a><span class="k">class</span> <span class="nc">Attributes</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Simple class wrapper for the list of file attributes</span>
+<span class="sd">    (readonly, hidden, &amp;c.) It can be accessed by attribute</span>
+<span class="sd">    access, item access and the &quot;in&quot; operator::</span>
 
-<span class="sd">    from winsys import fs</span>
-<span class="sd">    attributes = fs.file (fs.__file__).parent ().attributes</span>
-<span class="sd">    assert (attributes.directory)</span>
-<span class="sd">    assert (attributes[fs.FILE_ATTRIBUTE.DIRECTORY])</span>
-<span class="sd">    assert (&quot;directory&quot; in attributes)</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">const</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">const</span> <span class="o">=</span> <span class="n">const</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">flags</span> <span class="o">=</span> <span class="n">flags</span>
+<span class="sd">        from winsys import fs</span>
+<span class="sd">        attributes = fs.file (fs.__file__).parent().attributes</span>
+<span class="sd">        assert(attributes.directory)</span>
+<span class="sd">        assert(attributes[fs.FILE_ATTRIBUTE.DIRECTORY])</span>
+<span class="sd">        assert(&quot;directory&quot; in attributes)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">const</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">const</span> <span class="o">=</span> <span class="n">const</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flags</span> <span class="o">=</span> <span class="n">flags</span>
 
-  <span class="k">def</span> <span class="nf">__getitem__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">bool</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">const</span><span class="o">.</span><span class="n">constant</span> <span class="p">(</span><span class="n">item</span><span class="p">))</span>
-  <span class="n">__getattr__</span> <span class="o">=</span> <span class="n">__getitem__</span>
-  <span class="n">__contains__</span> <span class="o">=</span> <span class="n">__getitem__</span>
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">const</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+    <span class="n">__getattr__</span> <span class="o">=</span> <span class="n">__getitem__</span>
+    <span class="n">__contains__</span> <span class="o">=</span> <span class="n">__getitem__</span>
 
-  <span class="k">def</span> <span class="nf">__eq__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flags</span>
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flags</span>
 
-  <span class="k">def</span> <span class="nf">__hash__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">hash</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flags</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flags</span><span class="p">)</span>
 
-  <span class="k">def</span> <span class="nf">as_string</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s">&quot;</span><span class="si">%08x</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">flags</span>
+    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;</span><span class="si">%08x</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">flags</span>
 
-  <span class="k">def</span> <span class="nf">dumped</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span> <span class="p">(</span>
-      <span class="s">u&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="s">u&quot;</span><span class="si">%s</span><span class="s"> =&gt; </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">bool</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">const</span><span class="o">.</span><span class="n">items</span> <span class="p">())),</span>
-      <span class="n">level</span>
-    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">dumped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span>
+            <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> =&gt; </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">const</span><span class="o">.</span><span class="n">items</span><span class="p">())),</span>
+            <span class="n">level</span>
+        <span class="p">)</span>
 </pre></div></div>
 
           </div>
@@ -417,13 +419,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
           <li><a href="index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

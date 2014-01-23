@@ -55,4 +55,4 @@ Mailslot as an iterable
 -----------------------
 Iterate over the contents of a mailslot
 
-..  literalinclude:: ipc/iterable_mailslot.pyt
+..  literalinclude:: ipc/iterable_mailslot.py

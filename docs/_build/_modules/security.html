@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>security &mdash; WinSys 0.5beta documentation</title>
+    <title>security &mdash; WinSys 1.0beta documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.5beta',
+        VERSION:     '1.0beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys 0.5beta documentation" href="../index.html" />
+    <link rel="top" title="WinSys 1.0beta documentation" href="../index.html" />
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body>
@@ -39,7 +37,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -50,8 +48,8 @@
           <div class="body">
             
   <h1>Source code for security</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: iso-8859-1 -*-</span>
-<span class="sd">ur&quot;&quot;&quot;Windows manages security by granting rights -- such as the</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Windows manages security by granting rights -- such as the</span>
 <span class="sd">ability to read or write an object -- in the form of</span>
 <span class="sd">Access Control Lists (ACLs) of Access Control Entries (ACEs)</span>
 <span class="sd">to specific security principals: users, groups or other entities.</span>
@@ -68,7 +66,9 @@
 <span class="sd">refer to process privileges and are reached through the :func:`principal`</span>
 <span class="sd">function, or through the :attr:`Privileges` attribute of a :class:`Token`.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+
 <span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">contextlib</span>
 <span class="kn">import</span> <span class="nn">operator</span>
@@ -89,6 +89,7 @@
 <span class="c"># classes, constants, etc. However, they may each be</span>
 <span class="c"># imported individually if needs be.</span>
 <span class="c">#</span>
+<span class="kn">from</span> <span class="nn">winsys._compat</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">constants</span><span class="p">,</span> <span class="n">core</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">utils</span>
 <span class="kn">from</span> <span class="nn">winsys._security.core</span> <span class="kn">import</span> <span class="n">REVISION</span>
 <span class="kn">from</span> <span class="nn">winsys._security._tokens</span> <span class="kn">import</span> <span class="o">*</span>
@@ -97,606 +98,609 @@
 <span class="kn">from</span> <span class="nn">winsys._security._privileges</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">winsys.accounts</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">SE_OBJECT_TYPE</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_list</span> <span class="p">([</span>
-  <span class="s">u&quot;SE_UNKNOWN_OBJECT_TYPE&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_FILE_OBJECT&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_SERVICE&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_PRINTER&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_REGISTRY_KEY&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_LMSHARE&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_KERNEL_OBJECT&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_WINDOW_OBJECT&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_DS_OBJECT&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_DS_OBJECT_ALL&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_PROVIDER_DEFINED_OBJECT&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_WMIGUID_OBJECT&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_REGISTRY_WOW64_32KEY&quot;</span>
-<span class="p">],</span> <span class="n">pattern</span><span class="o">=</span><span class="s">u&quot;SE_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32security</span><span class="p">)</span>
-<span class="n">SE_OBJECT_TYPE</span><span class="o">.</span><span class="n">doc</span> <span class="p">(</span><span class="s">u&quot;Types of object which can be secured&quot;</span><span class="p">)</span>
-<span class="n">SECURITY_INFORMATION</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span>
-  <span class="s">u&quot;*_SECURITY_INFORMATION&quot;</span><span class="p">,</span>
-  <span class="n">namespace</span><span class="o">=</span><span class="n">win32security</span>
+<span class="n">SE_OBJECT_TYPE</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_list</span><span class="p">([</span>
+    <span class="s">&quot;SE_UNKNOWN_OBJECT_TYPE&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_FILE_OBJECT&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_SERVICE&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_PRINTER&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_REGISTRY_KEY&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_LMSHARE&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_KERNEL_OBJECT&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_WINDOW_OBJECT&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_DS_OBJECT&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_DS_OBJECT_ALL&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_PROVIDER_DEFINED_OBJECT&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_WMIGUID_OBJECT&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_REGISTRY_WOW64_32KEY&quot;</span>
+<span class="p">],</span> <span class="n">pattern</span><span class="o">=</span><span class="s">&quot;SE_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32security</span><span class="p">)</span>
+<span class="n">SE_OBJECT_TYPE</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="s">&quot;Types of object which can be secured&quot;</span><span class="p">)</span>
+<span class="n">SECURITY_INFORMATION</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span><span class="p">(</span>
+    <span class="s">&quot;*_SECURITY_INFORMATION&quot;</span><span class="p">,</span>
+    <span class="n">namespace</span><span class="o">=</span><span class="n">win32security</span>
 <span class="p">)</span>
-<span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">doc</span> <span class="p">(</span><span class="s">u&quot;Information held with a security descriptor body&quot;</span><span class="p">)</span>
-<span class="n">SD_CONTROL</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_list</span> <span class="p">([</span>
-  <span class="c">#~ &quot;SE_DACL_AUTO_INHERIT_REQ&quot;,</span>
-  <span class="s">u&quot;SE_DACL_AUTO_INHERITED&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_DACL_DEFAULTED&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_DACL_PRESENT&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_DACL_PROTECTED&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_GROUP_DEFAULTED&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_OWNER_DEFAULTED&quot;</span><span class="p">,</span>
-  <span class="c">#~ &quot;SE_RM_CONTROL_VALID&quot;,</span>
-  <span class="c">#~ &quot;SE_SACL_AUTO_INHERIT_REQ&quot;,</span>
-  <span class="s">u&quot;SE_SACL_AUTO_INHERITED&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_SACL_DEFAULTED&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_SACL_PRESENT&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_SACL_PROTECTED&quot;</span><span class="p">,</span>
-  <span class="s">u&quot;SE_SELF_RELATIVE&quot;</span>
-<span class="p">],</span> <span class="n">pattern</span><span class="o">=</span><span class="s">u&quot;SE_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32security</span><span class="p">)</span>
-<span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">doc</span> <span class="p">(</span><span class="s">u&quot;Information held with a security descriptor header&quot;</span><span class="p">)</span>
+<span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="s">&quot;Information held with a security descriptor body&quot;</span><span class="p">)</span>
+<span class="n">SD_CONTROL</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_list</span><span class="p">([</span>
+    <span class="c">#~ &quot;SE_DACL_AUTO_INHERIT_REQ&quot;,</span>
+    <span class="s">&quot;SE_DACL_AUTO_INHERITED&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_DACL_DEFAULTED&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_DACL_PRESENT&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_DACL_PROTECTED&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_GROUP_DEFAULTED&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_OWNER_DEFAULTED&quot;</span><span class="p">,</span>
+    <span class="c">#~ &quot;SE_RM_CONTROL_VALID&quot;,</span>
+    <span class="c">#~ &quot;SE_SACL_AUTO_INHERIT_REQ&quot;,</span>
+    <span class="s">&quot;SE_SACL_AUTO_INHERITED&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_SACL_DEFAULTED&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_SACL_PRESENT&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_SACL_PROTECTED&quot;</span><span class="p">,</span>
+    <span class="s">&quot;SE_SELF_RELATIVE&quot;</span>
+<span class="p">],</span> <span class="n">pattern</span><span class="o">=</span><span class="s">&quot;SE_*&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32security</span><span class="p">)</span>
+<span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="s">&quot;Information held with a security descriptor header&quot;</span><span class="p">)</span>
 
 <span class="n">PyHANDLE</span> <span class="o">=</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">HANDLEType</span>
 <span class="n">PySECURITY_ATTRIBUTES</span> <span class="o">=</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">SECURITY_ATTRIBUTESType</span>
-<span class="n">PySECURITY_DESCRIPTOR</span> <span class="o">=</span> <span class="nb">type</span> <span class="p">(</span><span class="n">pywintypes</span><span class="o">.</span><span class="n">SECURITY_DESCRIPTOR</span> <span class="p">())</span>
+<span class="n">PySECURITY_DESCRIPTOR</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">pywintypes</span><span class="o">.</span><span class="n">SECURITY_DESCRIPTOR</span><span class="p">())</span>
 
-<div class="viewcode-block" id="x_security"><a class="viewcode-back" href="../security.html#security.x_security">[docs]</a><span class="k">class</span> <span class="nc">x_security</span> <span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">x_winsys</span><span class="p">):</span>
-  <span class="s">u&quot;Base for security-related exceptions&quot;</span>
+<div class="viewcode-block" id="x_security"><a class="viewcode-back" href="../security.html#security.x_security">[docs]</a><span class="k">class</span> <span class="nc">x_security</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">x_winsys</span><span class="p">):</span>
+    <span class="s">&quot;Base for security-related exceptions&quot;</span>
 </div>
-<div class="viewcode-block" id="x_value_not_set"><a class="viewcode-back" href="../security.html#security.x_value_not_set">[docs]</a><span class="k">class</span> <span class="nc">x_value_not_set</span> <span class="p">(</span><span class="n">x_security</span><span class="p">):</span>
-  <span class="s">u&quot;Raised if an attempt is made to read a security value which hasn&#39;t been set&quot;</span>
+<div class="viewcode-block" id="x_value_not_set"><a class="viewcode-back" href="../security.html#security.x_value_not_set">[docs]</a><span class="k">class</span> <span class="nc">x_value_not_set</span><span class="p">(</span><span class="n">x_security</span><span class="p">):</span>
+    <span class="s">&quot;Raised if an attempt is made to read a security value which hasn&#39;t been set&quot;</span>
 </div>
 <span class="n">WINERROR_MAP</span> <span class="o">=</span> <span class="p">{</span>
 <span class="p">}</span>
-<span class="n">wrapped</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="n">wrapper</span> <span class="p">(</span><span class="n">WINERROR_MAP</span><span class="p">,</span> <span class="n">x_security</span><span class="p">)</span>
+<span class="n">wrapped</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="n">wrapper</span><span class="p">(</span><span class="n">WINERROR_MAP</span><span class="p">,</span> <span class="n">x_security</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Security"><a class="viewcode-back" href="../security.html#security.Security">[docs]</a><span class="k">class</span> <span class="nc">Security</span> <span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
-  <span class="sd">ur&quot;&quot;&quot;The heart of the :mod:`security` module, this class represents the security</span>
-<span class="sd">  descriptor of a file, kernel object or any other securable object. It&#39;s most</span>
-<span class="sd">  commonly instantiated from an object&#39;s security method (eg `fs.File.security`)</span>
-<span class="sd">  or by means of the :func:`security` function which can take the name or handle</span>
-<span class="sd">  of an object and return a corresponding :class:`Security` object.</span>
+<div class="viewcode-block" id="Security"><a class="viewcode-back" href="../security.html#security.Security">[docs]</a><span class="k">class</span> <span class="nc">Security</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The heart of the :mod:`security` module, this class represents the security</span>
+<span class="sd">    descriptor of a file, kernel object or any other securable object. It&#39;s most</span>
+<span class="sd">    commonly instantiated from an object&#39;s security method (eg `fs.File.security`)</span>
+<span class="sd">    or by means of the :func:`security` function which can take the name or handle</span>
+<span class="sd">    of an object and return a corresponding :class:`Security` object.</span>
 
-<span class="sd">  Key attributes are:</span>
+<span class="sd">    Key attributes are:</span>
 
-<span class="sd">  * owner - a :class:`Principal` object representing the object owner</span>
-<span class="sd">  * group - a :class:`Principal` object representing the object group</span>
-<span class="sd">  * dacl - a :class:`security.DACL` object representing the DACL</span>
-<span class="sd">  * sacl - an :class:`security.SACL` object representing the SACL</span>
+<span class="sd">    * owner - a :class:`Principal` object representing the object owner</span>
+<span class="sd">    * group - a :class:`Principal` object representing the object group</span>
+<span class="sd">    * dacl - a :class:`security.DACL` object representing the DACL</span>
+<span class="sd">    * sacl - an :class:`security.SACL` object representing the SACL</span>
 
-<span class="sd">  of which group and sacl are less likely to be used (group hardly at all).</span>
-<span class="sd">  These attributes are carefully-handled properties of the :class:`Security`</span>
-<span class="sd">  object and are intended to make it very easy to manipulate the ACLs and</span>
-<span class="sd">  ACEs of the Windows security model. The owner and group accept assignments</span>
-<span class="sd">  of anything accepted by :func:`principal` while the ACL attributes accept</span>
-<span class="sd">  anything accepted by :func:`acl`, in particular a list of :class:`ACE`</span>
-<span class="sd">  entries, themselves anything accepted by :func:`ace`. So a very simple</span>
-<span class="sd">  way to add the local administrator to the DACL with full control is::</span>
+<span class="sd">    of which group and sacl are less likely to be used (group hardly at all).</span>
+<span class="sd">    These attributes are carefully-handled properties of the :class:`Security`</span>
+<span class="sd">    object and are intended to make it very easy to manipulate the ACLs and</span>
+<span class="sd">    ACEs of the Windows security model. The owner and group accept assignments</span>
+<span class="sd">    of anything accepted by :func:`principal` while the ACL attributes accept</span>
+<span class="sd">    anything accepted by :func:`acl`, in particular a list of :class:`ACE`</span>
+<span class="sd">    entries, themselves anything accepted by :func:`ace`. So a very simple</span>
+<span class="sd">    way to add the local administrator to the DACL with full control is::</span>
 
-<span class="sd">    from winsys import security</span>
-<span class="sd">    with security.security (&quot;c:/temp/blah.txt&quot;) as s:</span>
-<span class="sd">      s.dacl.append ((&quot;Administrator&quot;, &quot;F&quot;, &quot;ALLOW&quot;))</span>
+<span class="sd">        from winsys import security</span>
+<span class="sd">        with security.security(&quot;c:/temp/blah.txt&quot;) as s:</span>
+<span class="sd">            s.dacl.append((&quot;Administrator&quot;, &quot;F&quot;, &quot;ALLOW&quot;))</span>
 
-<span class="sd">  or to give only the logged-on user rights to a particular file</span>
-<span class="sd">  while explicitly denying the local administrator::</span>
+<span class="sd">    or to give only the logged-on user rights to a particular file</span>
+<span class="sd">    while explicitly denying the local administrator::</span>
 
-<span class="sd">    from winsys import security</span>
-<span class="sd">    with security.security (&quot;c:/temp/secret.txt&quot;) as s:</span>
-<span class="sd">      s.dacl = [</span>
-<span class="sd">        (security.me (), &quot;F&quot;, &quot;ALLOW&quot;),</span>
-<span class="sd">        (&quot;Administrator&quot;, &quot;F&quot;, &quot;DENY&quot;)</span>
-<span class="sd">      ]</span>
-<span class="sd">      s.break_inheritance (copy_first=False)</span>
+<span class="sd">        from winsys import security</span>
+<span class="sd">        with security.security(&quot;c:/temp/secret.txt&quot;) as s:</span>
+<span class="sd">            s.dacl = [</span>
+<span class="sd">                (security.me(), &quot;F&quot;, &quot;ALLOW&quot;),</span>
+<span class="sd">                (&quot;Administrator&quot;, &quot;F&quot;, &quot;DENY&quot;)</span>
+<span class="sd">            ]</span>
+<span class="sd">            s.break_inheritance(copy_first=False)</span>
 
-<span class="sd">  By default, only Owner and Group</span>
-<span class="sd">  information is populated (although this can easily by changed by passing</span>
-<span class="sd">  other options when creating the object). And only those objects which are</span>
-<span class="sd">  populated, or explicitly requested will be updated when the security information</span>
-<span class="sd">  is written back to the underlying object or handle.</span>
+<span class="sd">    By default, only Owner and Group</span>
+<span class="sd">    information is populated (although this can easily by changed by passing</span>
+<span class="sd">    other options when creating the object). And only those objects which are</span>
+<span class="sd">    populated, or explicitly requested will be updated when the security information</span>
+<span class="sd">    is written back to the underlying object or handle.</span>
 
-<span class="sd">  A :class:`Security` object is its own context handler and this is the most</span>
-<span class="sd">  straightforward way to update security information, although the :meth:`Security.to_object`</span>
-<span class="sd">  method will let you write the security information back to any arbitrary object,</span>
-<span class="sd">  including the one it came from.</span>
+<span class="sd">    A :class:`Security` object is its own context handler and this is the most</span>
+<span class="sd">    straightforward way to update security information, although the :meth:`Security.to_object`</span>
+<span class="sd">    method will let you write the security information back to any arbitrary object,</span>
+<span class="sd">    including the one it came from.</span>
 
-<span class="sd">  For the purposes of serialisation, the standard SDDL format is used for</span>
-<span class="sd">  strings and can be round-tripped between :meth:`as_string` and :meth:`from_string`.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-
-  <span class="n">OPTIONS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">u&quot;O&quot;</span> <span class="p">:</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">OWNER</span><span class="p">,</span>
-    <span class="s">u&quot;G&quot;</span> <span class="p">:</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">GROUP</span><span class="p">,</span>
-    <span class="s">u&quot;D&quot;</span> <span class="p">:</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">DACL</span><span class="p">,</span>
-    <span class="s">u&quot;S&quot;</span> <span class="p">:</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">SACL</span>
-  <span class="p">}</span>
-  <span class="sd">u&quot;&quot;&quot;Mapping between characters and security info:</span>
-
-<span class="sd">  * O - Owner</span>
-<span class="sd">  * G - Group</span>
-<span class="sd">  * D - DACL</span>
-<span class="sd">  * S - SACL</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="n">DEFAULT_OPTIONS</span> <span class="o">=</span> <span class="s">u&quot;OD&quot;</span>
-  <span class="n">DEFAULT_CONTROL</span> <span class="o">=</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SELF_RELATIVE</span>
-
-  <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span>
-    <span class="n">control</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
-    <span class="n">owner</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
-    <span class="n">group</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
-    <span class="n">dacl</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
-    <span class="n">sacl</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
-    <span class="n">inherit_handle</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-    <span class="n">originating_object</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
-    <span class="n">originating_object_type</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-  <span class="p">):</span>
-    <span class="sd">ur&quot;&quot;&quot;Create a new :class:`Security` object from its component pieces,</span>
-<span class="sd">    all optional. You won&#39;t often need to call this as you can do most</span>
-<span class="sd">    useful things via the :func:`security` function, but to create a simple</span>
-<span class="sd">    security descriptor for immediate use, you can instantiate it directly.</span>
-
-<span class="sd">    None of the parameters need be specified; with the exceptions of</span>
-<span class="sd">    `originating_object` and `originating_object_type`, you can set</span>
-<span class="sd">    each one later, directly or indirectly.</span>
-
-<span class="sd">    :param control: any combination of :const:`SD_CONTROL`. Most commonly set,</span>
-<span class="sd">                    if at all, to &quot;dacl_protected&quot;</span>
-<span class="sd">    :param owner: anything accepted by :func:`principal`</span>
-<span class="sd">    :param group: anything accepted by :func:`principal`</span>
-<span class="sd">    :param dacl: anything accepted by :func:`dacl`</span>
-<span class="sd">    :param sacl: anything accepted by :func:`sacl`</span>
-<span class="sd">    :param inherit_handle: whether this handle is inherited by child processes</span>
-<span class="sd">    :param originating_object: name or handle of the object this security currently applies to, if any</span>
-<span class="sd">    :param originating_object_type: one of :const:`SE_OBJECT_TYPE` referring to the type of object</span>
-<span class="sd">                                    this security currently applies to, if any.</span>
+<span class="sd">    For the purposes of serialisation, the standard SDDL format is used for</span>
+<span class="sd">    strings and can be round-tripped between :meth:`as_string` and :meth:`from_string`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span> <span class="n">control</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_CONTROL</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_control</span> <span class="o">=</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span> <span class="p">(</span><span class="n">control</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">inherit_handle</span> <span class="o">=</span> <span class="n">inherit_handle</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_originating_object</span> <span class="o">=</span> <span class="n">originating_object</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_originating_object_type</span> <span class="o">=</span> <span class="n">originating_object_type</span>
 
-    <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">owner</span>
-    <span class="k">if</span> <span class="n">group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="n">group</span>
-    <span class="k">if</span> <span class="n">dacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span> <span class="o">=</span> <span class="n">dacl</span>
-    <span class="k">if</span> <span class="n">sacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span> <span class="o">=</span> <span class="n">sacl</span>
+    <span class="n">OPTIONS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&quot;O&quot;</span> <span class="p">:</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">OWNER</span><span class="p">,</span>
+        <span class="s">&quot;G&quot;</span> <span class="p">:</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">GROUP</span><span class="p">,</span>
+        <span class="s">&quot;D&quot;</span> <span class="p">:</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">DACL</span><span class="p">,</span>
+        <span class="s">&quot;S&quot;</span> <span class="p">:</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">SACL</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Mapping between characters and security info:</span>
 
-  <span class="k">def</span> <span class="nf">__eq__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span> <span class="p">(</span><span class="n">other</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Security.as_string"><a class="viewcode-back" href="../security.html#security.Security.as_string">[docs]</a>  <span class="k">def</span> <span class="nf">as_string</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="n">security_information</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="n">security_information</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">OWNER</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="n">security_information</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">GROUP</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="n">security_information</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">DACL</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="n">security_information</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">SACL</span>
-    <span class="n">sa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyobject</span> <span class="p">(</span><span class="n">include_inherited</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">wrapped</span> <span class="p">(</span>
-      <span class="n">win32security</span><span class="o">.</span><span class="n">ConvertSecurityDescriptorToStringSecurityDescriptor</span><span class="p">,</span>
-      <span class="n">sa</span><span class="o">.</span><span class="n">SECURITY_DESCRIPTOR</span><span class="p">,</span>
-      <span class="n">REVISION</span><span class="o">.</span><span class="n">SDDL_REVISION_1</span><span class="p">,</span>
-      <span class="n">security_information</span>
-    <span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Security.dumped"><a class="viewcode-back" href="../security.html#security.Security.dumped">[docs]</a>  <span class="k">def</span> <span class="nf">dumped</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_control</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="n">output</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">u&quot;control:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped_flags</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_control</span><span class="p">,</span> <span class="n">SD_CONTROL</span><span class="p">,</span> <span class="n">level</span><span class="p">))</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="n">output</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">u&quot;owner: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="p">)</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="n">output</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">u&quot;group: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">)</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="n">output</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">u&quot;dacl:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span><span class="o">.</span><span class="n">dumped</span> <span class="p">(</span><span class="n">level</span><span class="p">))</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="n">output</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">u&quot;sacl:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span><span class="o">.</span><span class="n">dumped</span> <span class="p">(</span><span class="n">level</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">indented</span> <span class="p">(</span><span class="s">u&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">level</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Security.break_inheritance"><a class="viewcode-back" href="../security.html#security.Security.break_inheritance">[docs]</a>  <span class="k">def</span> <span class="nf">break_inheritance</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">copy_first</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">break_dacl</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">break_sacl</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-    <span class="sd">ur&quot;&quot;&quot;Cause this security object to start a new thread of inheritance. By</span>
-<span class="sd">    default, assume that DACL &amp; SACL inheritance are both to be broken and</span>
-<span class="sd">    that existing permissions are to be retained, although uninherited.</span>
-
-<span class="sd">    :param copy_first: whether to retain existing permissions [True]</span>
-<span class="sd">    :param break_dacl: whether to break DACL inheritance [True]</span>
-<span class="sd">    :param break_sacl: whether to break SACL inheritance [True]</span>
-<span class="sd">    :returns: `self`</span>
+<span class="sd">    * O - Owner</span>
+<span class="sd">    * G - Group</span>
+<span class="sd">    * D - DACL</span>
+<span class="sd">    * S - SACL</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">break_dacl</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span><span class="o">.</span><span class="n">break_inheritance</span> <span class="p">(</span><span class="n">copy_first</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">break_sacl</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span><span class="o">.</span><span class="n">break_inheritance</span> <span class="p">(</span><span class="n">copy_first</span><span class="p">)</span>
-    <span class="k">return</span> <span class="bp">self</span>
+    <span class="n">DEFAULT_OPTIONS</span> <span class="o">=</span> <span class="s">&quot;OD&quot;</span>
+    <span class="n">DEFAULT_CONTROL</span> <span class="o">=</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SELF_RELATIVE</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">control</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
+        <span class="n">owner</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
+        <span class="n">group</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
+        <span class="n">dacl</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
+        <span class="n">sacl</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
+        <span class="n">inherit_handle</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">originating_object</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
+        <span class="n">originating_object_type</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new :class:`Security` object from its component pieces,</span>
+<span class="sd">        all optional. You won&#39;t often need to call this as you can do most</span>
+<span class="sd">        useful things via the :func:`security` function, but to create a simple</span>
+<span class="sd">        security descriptor for immediate use, you can instantiate it directly.</span>
+
+<span class="sd">        None of the parameters need be specified; with the exceptions of</span>
+<span class="sd">        `originating_object` and `originating_object_type`, you can set</span>
+<span class="sd">        each one later, directly or indirectly.</span>
+
+<span class="sd">        :param control: any combination of :const:`SD_CONTROL`. Most commonly set,</span>
+<span class="sd">                                        if at all, to &quot;dacl_protected&quot;</span>
+<span class="sd">        :param owner: anything accepted by :func:`principal`</span>
+<span class="sd">        :param group: anything accepted by :func:`principal`</span>
+<span class="sd">        :param dacl: anything accepted by :func:`dacl`</span>
+<span class="sd">        :param sacl: anything accepted by :func:`sacl`</span>
+<span class="sd">        :param inherit_handle: whether this handle is inherited by child processes</span>
+<span class="sd">        :param originating_object: name or handle of the object this security currently applies to, if any</span>
+<span class="sd">        :param originating_object_type: one of :const:`SE_OBJECT_TYPE` referring to the type of object</span>
+<span class="sd">                                                                        this security currently applies to, if any.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span> <span class="n">control</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_CONTROL</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control</span> <span class="o">=</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="n">control</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inherit_handle</span> <span class="o">=</span> <span class="n">inherit_handle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_originating_object</span> <span class="o">=</span> <span class="n">originating_object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_originating_object_type</span> <span class="o">=</span> <span class="n">originating_object_type</span>
+
+        <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">owner</span>
+        <span class="k">if</span> <span class="n">group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="n">group</span>
+        <span class="k">if</span> <span class="n">dacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span> <span class="o">=</span> <span class="n">dacl</span>
+        <span class="k">if</span> <span class="n">sacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span> <span class="o">=</span> <span class="n">sacl</span>
+
+    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Security.as_string"><a class="viewcode-back" href="../security.html#security.Security.as_string">[docs]</a>    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">security_information</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="n">security_information</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">OWNER</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="n">security_information</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">GROUP</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="n">security_information</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">DACL</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="n">security_information</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">SACL</span>
+        <span class="n">sa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyobject</span><span class="p">(</span><span class="n">include_inherited</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wrapped</span><span class="p">(</span>
+            <span class="n">win32security</span><span class="o">.</span><span class="n">ConvertSecurityDescriptorToStringSecurityDescriptor</span><span class="p">,</span>
+            <span class="n">sa</span><span class="o">.</span><span class="n">SECURITY_DESCRIPTOR</span><span class="p">,</span>
+            <span class="n">REVISION</span><span class="o">.</span><span class="n">SDDL_REVISION_1</span><span class="p">,</span>
+            <span class="n">security_information</span>
+        <span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Security.restore_inheritance"><a class="viewcode-back" href="../security.html#security.Security.restore_inheritance">[docs]</a>  <span class="k">def</span> <span class="nf">restore_inheritance</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">copy_back</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">restore_dacl</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">restore_sacl</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-    <span class="sd">ur&quot;&quot;&quot;Cause this security object to regain its inhertance from its parents.</span>
-<span class="sd">    By default, assume that DACL &amp; SACL inheritance are both to be recovered and</span>
-<span class="sd">    that existing permissions are to be copied back in.</span>
-
-<span class="sd">    :param copy_back: whether to copy back inherited permissions [True]</span>
-<span class="sd">    :param restore_dacl: whether to restore DACL inheritance [True]</span>
-<span class="sd">    :param restore_sacl: whether to restore SACL inheritance [True]</span>
-<span class="sd">    :returns: `self`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">restore_dacl</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span><span class="o">.</span><span class="n">restore_inheritance</span> <span class="p">(</span><span class="n">copy_back</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">restore_sacl</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span><span class="o">.</span><span class="n">restore_inheritance</span> <span class="p">(</span><span class="n">copy_back</span><span class="p">)</span>
-    <span class="k">return</span> <span class="bp">self</span>
+<div class="viewcode-block" id="Security.dumped"><a class="viewcode-back" href="../security.html#security.Security.dumped">[docs]</a>    <span class="k">def</span> <span class="nf">dumped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_control</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;control:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped_flags</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_control</span><span class="p">,</span> <span class="n">SD_CONTROL</span><span class="p">,</span> <span class="n">level</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;owner: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;group: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;dacl:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="n">level</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;sacl:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="n">level</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">indented</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">level</span><span class="p">)</span>
 </div>
-  <span class="k">def</span> <span class="nf">_get_owner</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="n">x_value_not_set</span> <span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">u&quot;Security._get_owner&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">u&quot;No Owner has been set for this Security object&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span>
-  <span class="k">def</span> <span class="nf">_set_owner</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="n">x_value_not_set</span> <span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">u&quot;Security._set_owner&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">u&quot;Cannot set owner to None for this Security object&quot;</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="o">=</span> <span class="n">principal</span> <span class="p">(</span><span class="n">owner</span><span class="p">)</span> <span class="ow">or</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-  <span class="n">owner</span> <span class="o">=</span> <span class="nb">property</span> <span class="p">(</span><span class="n">_get_owner</span><span class="p">,</span> <span class="n">_set_owner</span><span class="p">)</span>
+<div class="viewcode-block" id="Security.break_inheritance"><a class="viewcode-back" href="../security.html#security.Security.break_inheritance">[docs]</a>    <span class="k">def</span> <span class="nf">break_inheritance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">copy_first</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">break_dacl</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">break_sacl</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Cause this security object to start a new thread of inheritance. By</span>
+<span class="sd">        default, assume that DACL &amp; SACL inheritance are both to be broken and</span>
+<span class="sd">        that existing permissions are to be retained, although uninherited.</span>
 
-  <span class="k">def</span> <span class="nf">_get_group</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="n">x_value_not_set</span> <span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">u&quot;Security._get_group&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">u&quot;No Group has been set for this Security object&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span>
-  <span class="k">def</span> <span class="nf">_set_group</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">group</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="n">x_value_not_set</span> <span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">&quot;Security._set_group&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">u&quot;Cannot set group to None for this Security object&quot;</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="o">=</span> <span class="n">principal</span> <span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="ow">or</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-  <span class="n">group</span> <span class="o">=</span> <span class="nb">property</span> <span class="p">(</span><span class="n">_get_group</span><span class="p">,</span> <span class="n">_set_group</span><span class="p">)</span>
-
-  <span class="k">def</span> <span class="nf">_get_dacl</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="n">x_value_not_set</span> <span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">u&quot;Security.dacl&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">u&quot;No DACL has been set for this Security object&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span>
-  <span class="k">def</span> <span class="nf">_set_dacl</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dacl</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">dacl</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="o">=</span> <span class="n">acl</span> <span class="p">(</span><span class="n">dacl</span><span class="p">,</span> <span class="n">DACL</span><span class="p">,</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_control</span> <span class="o">&amp;</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PROTECTED</span><span class="p">)</span>
-  <span class="n">dacl</span> <span class="o">=</span> <span class="nb">property</span> <span class="p">(</span><span class="n">_get_dacl</span><span class="p">,</span> <span class="n">_set_dacl</span><span class="p">)</span>
-
-  <span class="k">def</span> <span class="nf">_get_sacl</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="n">x_value_not_set</span> <span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">u&quot;Security._get_sacl&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">u&quot;No SACL has been set for this Security object&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span>
-  <span class="k">def</span> <span class="nf">_set_sacl</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sacl</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">sacl</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="o">=</span> <span class="n">acl</span> <span class="p">(</span><span class="n">sacl</span><span class="p">,</span> <span class="n">SACL</span><span class="p">,</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_control</span> <span class="o">&amp;</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PROTECTED</span><span class="p">)</span>
-  <span class="n">sacl</span> <span class="o">=</span> <span class="nb">property</span> <span class="p">(</span><span class="n">_get_sacl</span><span class="p">,</span> <span class="n">_set_sacl</span><span class="p">)</span>
-
-  <span class="k">def</span> <span class="nf">__enter__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_originating_object</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="n">x_security</span> <span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">u&quot;Security.__enter__&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">u&quot;Cannot run anonymous security within a context&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="bp">self</span>
-
-  <span class="k">def</span> <span class="nf">__exit__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">exc_type</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">to_object</span> <span class="p">()</span>
-      <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="k">return</span> <span class="bp">False</span>
-
-  <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Security.security_options"><a class="viewcode-back" href="../security.html#security.Security.security_options">[docs]</a>  <span class="k">def</span> <span class="nf">security_options</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
-    <span class="sd">ur&quot;&quot;&quot;Accept either an integer representing a bitmask combination</span>
-<span class="sd">    or :const:`SECURITY_INFORMATION` values; or a string whose</span>
-<span class="sd">    characters map, via :const:`OPTIONS` to the same values.</span>
-<span class="sd">    The following have the same result:</span>
-
-<span class="sd">    * SECURITY_INFORMATION.OWNER | SECURITY_INFORMATION.DACL</span>
-<span class="sd">    * &quot;OD&quot;</span>
-<span class="sd">    * 0x05</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="k">return</span> <span class="bp">None</span>
-    <span class="k">try</span><span class="p">:</span>
-      <span class="k">return</span> <span class="nb">int</span> <span class="p">(</span><span class="n">options</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-      <span class="k">return</span> <span class="nb">reduce</span> <span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">or_</span><span class="p">,</span> <span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">OPTIONS</span><span class="p">[</span><span class="n">opt</span><span class="p">]</span> <span class="k">for</span> <span class="n">opt</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">upper</span> <span class="p">()),</span> <span class="mi">0</span><span class="p">)</span>
+<span class="sd">        :param copy_first: whether to retain existing permissions [True]</span>
+<span class="sd">        :param break_dacl: whether to break DACL inheritance [True]</span>
+<span class="sd">        :param break_sacl: whether to break SACL inheritance [True]</span>
+<span class="sd">        :returns: `self`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">break_dacl</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span><span class="o">.</span><span class="n">break_inheritance</span><span class="p">(</span><span class="n">copy_first</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">break_sacl</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span><span class="o">.</span><span class="n">break_inheritance</span><span class="p">(</span><span class="n">copy_first</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
 </div>
-<div class="viewcode-block" id="Security.to_object"><a class="viewcode-back" href="../security.html#security.Security.to_object">[docs]</a>  <span class="k">def</span> <span class="nf">to_object</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">object_type</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
-    <span class="sd">ur&quot;&quot;&quot;Write the current state of the object as the security settings</span>
-<span class="sd">    on a Windows object, typically a file. This is most often called</span>
-<span class="sd">    implicitly when the :class:`Security` object is used as a context</span>
-<span class="sd">    manager, but can be called explicitly, especially to copy one object&#39;s</span>
-<span class="sd">    security to another::</span>
+<div class="viewcode-block" id="Security.restore_inheritance"><a class="viewcode-back" href="../security.html#security.Security.restore_inheritance">[docs]</a>    <span class="k">def</span> <span class="nf">restore_inheritance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">copy_back</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">restore_dacl</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">restore_sacl</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Cause this security object to regain its inhertance from its parents.</span>
+<span class="sd">        By default, assume that DACL &amp; SACL inheritance are both to be recovered and</span>
+<span class="sd">        that existing permissions are to be copied back in.</span>
 
-<span class="sd">      from winsys import security</span>
-<span class="sd">      s = security.security (&quot;filea&quot;)</span>
-<span class="sd">      s.to_object (&quot;fileb&quot;)</span>
+<span class="sd">        :param copy_back: whether to copy back inherited permissions [True]</span>
+<span class="sd">        :param restore_dacl: whether to restore DACL inheritance [True]</span>
+<span class="sd">        :param restore_sacl: whether to restore SACL inheritance [True]</span>
+<span class="sd">        :returns: `self`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">restore_dacl</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span><span class="o">.</span><span class="n">restore_inheritance</span><span class="p">(</span><span class="n">copy_back</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">restore_sacl</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span><span class="o">.</span><span class="n">restore_inheritance</span><span class="p">(</span><span class="n">copy_back</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+    <span class="k">def</span> <span class="nf">_get_owner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_value_not_set</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">&quot;Security._get_owner&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">&quot;No Owner has been set for this Security object&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span>
+    <span class="k">def</span> <span class="nf">_set_owner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_value_not_set</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">&quot;Security._set_owner&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">&quot;Cannot set owner to None for this Security object&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="o">=</span> <span class="n">principal</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span> <span class="ow">or</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+    <span class="n">owner</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_owner</span><span class="p">,</span> <span class="n">_set_owner</span><span class="p">)</span>
 
-<span class="sd">    :param obj: (optional) object or object name to write security to if this :class:`Security` object</span>
-<span class="sd">                wasn&#39;t created from an object in the first place.</span>
-<span class="sd">    :param object_type:  an :const:`SE_OBJECT_TYPE` [:const:`file_object`]</span>
-<span class="sd">    :param options: anything accepted by :meth:`security_options`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">obj</span> <span class="o">=</span> <span class="n">obj</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_originating_object</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">obj</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="n">x_security</span> <span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">u&quot;Security.to_object&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">u&quot;No object to write security to&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">object_type</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="n">object_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_originating_object_type</span> <span class="ow">or</span> <span class="n">SE_OBJECT_TYPE</span><span class="o">.</span><span class="n">FILE_OBJECT</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">object_type</span> <span class="o">=</span> <span class="n">SE_OBJECT_TYPE</span><span class="o">.</span><span class="n">constant</span> <span class="p">(</span><span class="n">object_type</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_get_group</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_value_not_set</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">&quot;Security._get_group&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">&quot;No Group has been set for this Security object&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span>
+    <span class="k">def</span> <span class="nf">_set_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">group</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_value_not_set</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">&quot;Security._set_group&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">&quot;Cannot set group to None for this Security object&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="o">=</span> <span class="n">principal</span><span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="ow">or</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+    <span class="n">group</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_group</span><span class="p">,</span> <span class="n">_set_group</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-      <span class="n">options</span> <span class="o">=</span> <span class="mi">0</span>
-      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-        <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">OWNER</span>
-      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-        <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">GROUP</span>
-
-      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-        <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">DACL</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span><span class="o">.</span><span class="n">inherited</span><span class="p">:</span>
-          <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">UNPROTECTED_DACL</span>
+    <span class="k">def</span> <span class="nf">_get_dacl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_value_not_set</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">&quot;Security.dacl&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">&quot;No DACL has been set for this Security object&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span>
+    <span class="k">def</span> <span class="nf">_set_dacl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dacl</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">dacl</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
         <span class="k">else</span><span class="p">:</span>
-          <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">PROTECTED_DACL</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="o">=</span> <span class="n">acl</span><span class="p">(</span><span class="n">dacl</span><span class="p">,</span> <span class="n">DACL</span><span class="p">,</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_control</span> <span class="o">&amp;</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PROTECTED</span><span class="p">)</span>
+    <span class="n">dacl</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_dacl</span><span class="p">,</span> <span class="n">_set_dacl</span><span class="p">)</span>
 
-      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-        <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">SACL</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span><span class="o">.</span><span class="n">inherited</span><span class="p">:</span>
-          <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">UNPROTECTED_SACL</span>
+    <span class="k">def</span> <span class="nf">_get_sacl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_value_not_set</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">&quot;Security._get_sacl&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">&quot;No SACL has been set for this Security object&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span>
+    <span class="k">def</span> <span class="nf">_set_sacl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sacl</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sacl</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
         <span class="k">else</span><span class="p">:</span>
-          <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">PROTECTED_SACL</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="o">=</span> <span class="n">acl</span><span class="p">(</span><span class="n">sacl</span><span class="p">,</span> <span class="n">SACL</span><span class="p">,</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_control</span> <span class="o">&amp;</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PROTECTED</span><span class="p">)</span>
+    <span class="n">sacl</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_sacl</span><span class="p">,</span> <span class="n">_set_sacl</span><span class="p">)</span>
 
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">security_options</span> <span class="p">(</span><span class="n">options</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_originating_object</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_security</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">&quot;Security.__enter__&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">&quot;Cannot run anonymous security within a context&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="n">sa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyobject</span> <span class="p">()</span>
-    <span class="k">if</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">PyHANDLE</span><span class="p">):</span>
-      <span class="n">wrapped</span> <span class="p">(</span>
-        <span class="n">win32security</span><span class="o">.</span><span class="n">SetSecurityInfo</span><span class="p">,</span>
-        <span class="n">obj</span><span class="p">,</span> <span class="n">object_type</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span>
-        <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorOwner</span> <span class="p">(),</span>
-        <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorGroup</span> <span class="p">(),</span>
-        <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorDacl</span> <span class="p">(),</span>
-        <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorSacl</span> <span class="p">()</span>
-      <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">wrapped</span> <span class="p">(</span>
-        <span class="n">win32security</span><span class="o">.</span><span class="n">SetNamedSecurityInfo</span><span class="p">,</span>
-        <span class="n">obj</span><span class="p">,</span> <span class="n">object_type</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span>
-        <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorOwner</span> <span class="p">(),</span>
-        <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorGroup</span> <span class="p">(),</span>
-        <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorDacl</span> <span class="p">(),</span>
-        <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorSacl</span> <span class="p">()</span>
-      <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">exc_type</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">to_object</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Security.security_options"><a class="viewcode-back" href="../security.html#security.Security.security_options">[docs]</a>    <span class="k">def</span> <span class="nf">security_options</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Accept either an integer representing a bitmask combination</span>
+<span class="sd">        or :const:`SECURITY_INFORMATION` values; or a string whose</span>
+<span class="sd">        characters map, via :const:`OPTIONS` to the same values.</span>
+<span class="sd">        The following have the same result:</span>
+
+<span class="sd">        * SECURITY_INFORMATION.OWNER | SECURITY_INFORMATION.DACL</span>
+<span class="sd">        * &quot;OD&quot;</span>
+<span class="sd">        * 0x05</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">or_</span><span class="p">,</span> <span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">OPTIONS</span><span class="p">[</span><span class="n">opt</span><span class="p">]</span> <span class="k">for</span> <span class="n">opt</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">upper</span><span class="p">()),</span> <span class="mi">0</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Security.pyobject"><a class="viewcode-back" href="../security.html#security.Security.pyobject">[docs]</a>  <span class="k">def</span> <span class="nf">pyobject</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_inherited</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="n">sa</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">SECURITY_ATTRIBUTES</span><span class="p">)</span>
-    <span class="n">sa</span><span class="o">.</span><span class="n">bInheritHandle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inherit_handle</span>
-    <span class="n">owner</span> <span class="o">=</span> <span class="bp">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span><span class="o">.</span><span class="n">pyobject</span> <span class="p">()</span>
-    <span class="n">group</span> <span class="o">=</span> <span class="bp">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">pyobject</span> <span class="p">()</span>
-    <span class="n">dacl</span> <span class="o">=</span> <span class="bp">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span><span class="o">.</span><span class="n">pyobject</span> <span class="p">(</span><span class="n">include_inherited</span><span class="o">=</span><span class="n">include_inherited</span><span class="p">)</span>
-    <span class="n">sacl</span> <span class="o">=</span> <span class="bp">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span><span class="o">.</span><span class="n">pyobject</span> <span class="p">(</span><span class="n">include_inherited</span><span class="o">=</span><span class="n">include_inherited</span><span class="p">)</span>
-    <span class="n">dacl_inherited</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span><span class="o">.</span><span class="n">inherited</span> <span class="k">if</span> <span class="n">dacl</span> <span class="k">else</span> <span class="mi">0</span>
-    <span class="n">sacl_inherited</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span><span class="o">.</span><span class="n">inherited</span> <span class="k">if</span> <span class="n">sacl</span> <span class="k">else</span> <span class="mi">0</span>
+<div class="viewcode-block" id="Security.to_object"><a class="viewcode-back" href="../security.html#security.Security.to_object">[docs]</a>    <span class="k">def</span> <span class="nf">to_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">object_type</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write the current state of the object as the security settings</span>
+<span class="sd">        on a Windows object, typically a file. This is most often called</span>
+<span class="sd">        implicitly when the :class:`Security` object is used as a context</span>
+<span class="sd">        manager, but can be called explicitly, especially to copy one object&#39;s</span>
+<span class="sd">        security to another::</span>
 
-    <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorControl</span> <span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_AUTO_INHERITED</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_control</span> <span class="o">&amp;</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_AUTO_INHERITED</span><span class="p">)</span>
-    <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorControl</span> <span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_AUTO_INHERITED</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_control</span> <span class="o">&amp;</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_AUTO_INHERITED</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">dacl</span><span class="p">:</span>
-      <span class="k">if</span> <span class="n">dacl_inherited</span><span class="p">:</span>
-        <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorControl</span> <span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PROTECTED</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-      <span class="k">else</span><span class="p">:</span>
-        <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorControl</span> <span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PROTECTED</span><span class="p">,</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PROTECTED</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">sacl</span><span class="p">:</span>
-      <span class="k">if</span> <span class="n">sacl_inherited</span><span class="p">:</span>
-        <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorControl</span> <span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PROTECTED</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-      <span class="k">else</span><span class="p">:</span>
-        <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorControl</span> <span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PROTECTED</span><span class="p">,</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PROTECTED</span><span class="p">)</span>
+<span class="sd">            from winsys import security</span>
+<span class="sd">            s = security.security(&quot;filea&quot;)</span>
+<span class="sd">            s.to_object(&quot;fileb&quot;)</span>
 
-    <span class="k">if</span> <span class="n">owner</span><span class="p">:</span>
-      <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorOwner</span> <span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">group</span><span class="p">:</span>
-      <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorGroup</span> <span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="c">#</span>
-    <span class="c"># The first &amp; last flags on the Set...acl methods represent,</span>
-    <span class="c"># respectively, whether the ACL is present (!) and whether</span>
-    <span class="c"># it&#39;s the result of inheritance.</span>
-    <span class="c">#</span>
-    <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorDacl</span> <span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="n">dacl</span><span class="p">,</span> <span class="n">dacl_inherited</span><span class="p">)</span>
-    <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorSacl</span> <span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="n">sacl</span><span class="p">,</span> <span class="n">sacl_inherited</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">sa</span>
+<span class="sd">        :param obj: (optional) object or object name to write security to if this :class:`Security` object</span>
+<span class="sd">                                wasn&#39;t created from an object in the first place.</span>
+<span class="sd">        :param object_type:    an :const:`SE_OBJECT_TYPE` [:const:`file_object`]</span>
+<span class="sd">        :param options: anything accepted by :meth:`security_options`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">obj</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_originating_object</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">obj</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_security</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">&quot;Security.to_object&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">&quot;No object to write security to&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">object_type</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="n">object_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_originating_object_type</span> <span class="ow">or</span> <span class="n">SE_OBJECT_TYPE</span><span class="o">.</span><span class="n">FILE_OBJECT</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">object_type</span> <span class="o">=</span> <span class="n">SE_OBJECT_TYPE</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="n">object_type</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+                <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">OWNER</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+                <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">GROUP</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+                <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">DACL</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span><span class="o">.</span><span class="n">inherited</span><span class="p">:</span>
+                    <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">UNPROTECTED_DACL</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">PROTECTED_DACL</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+                <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">SACL</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span><span class="o">.</span><span class="n">inherited</span><span class="p">:</span>
+                    <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">UNPROTECTED_SACL</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">options</span> <span class="o">|=</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">PROTECTED_SACL</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">security_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+
+        <span class="n">sa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyobject</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">PyHANDLE</span><span class="p">):</span>
+            <span class="n">wrapped</span><span class="p">(</span>
+                <span class="n">win32security</span><span class="o">.</span><span class="n">SetSecurityInfo</span><span class="p">,</span>
+                <span class="n">obj</span><span class="p">,</span> <span class="n">object_type</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span>
+                <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorOwner</span><span class="p">(),</span>
+                <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorGroup</span><span class="p">(),</span>
+                <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorDacl</span><span class="p">(),</span>
+                <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorSacl</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">wrapped</span><span class="p">(</span>
+                <span class="n">win32security</span><span class="o">.</span><span class="n">SetNamedSecurityInfo</span><span class="p">,</span>
+                <span class="n">obj</span><span class="p">,</span> <span class="n">object_type</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span>
+                <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorOwner</span><span class="p">(),</span>
+                <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorGroup</span><span class="p">(),</span>
+                <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorDacl</span><span class="p">(),</span>
+                <span class="n">sa</span><span class="o">.</span><span class="n">GetSecurityDescriptorSacl</span><span class="p">()</span>
+            <span class="p">)</span>
 </div>
-  <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Security.from_object"><a class="viewcode-back" href="../security.html#security.Security.from_object">[docs]</a>  <span class="k">def</span> <span class="nf">from_object</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">object_type</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
-    <span class="sd">ur&quot;&quot;&quot;Constructs a :class:`Security` object from a PyHANDLE or an object name.</span>
-<span class="sd">    Almost never called directly; use :func:`security`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">object_type</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span> <span class="n">object_type</span> <span class="o">=</span> <span class="n">SE_OBJECT_TYPE</span><span class="o">.</span><span class="n">FILE_OBJECT</span>
-    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span> <span class="n">options</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">DEFAULT_OPTIONS</span>
+<div class="viewcode-block" id="Security.pyobject"><a class="viewcode-back" href="../security.html#security.Security.pyobject">[docs]</a>    <span class="k">def</span> <span class="nf">pyobject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_inherited</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="n">sa</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">SECURITY_ATTRIBUTES</span><span class="p">)</span>
+        <span class="n">sa</span><span class="o">.</span><span class="n">bInheritHandle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inherit_handle</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="bp">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span><span class="o">.</span><span class="n">pyobject</span><span class="p">()</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="bp">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">pyobject</span><span class="p">()</span>
+        <span class="n">dacl</span> <span class="o">=</span> <span class="bp">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dacl</span><span class="o">.</span><span class="n">pyobject</span><span class="p">(</span><span class="n">include_inherited</span><span class="o">=</span><span class="n">include_inherited</span><span class="p">)</span>
+        <span class="n">sacl</span> <span class="o">=</span> <span class="bp">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sacl</span><span class="o">.</span><span class="n">pyobject</span><span class="p">(</span><span class="n">include_inherited</span><span class="o">=</span><span class="n">include_inherited</span><span class="p">)</span>
+        <span class="n">dacl_inherited</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span><span class="o">.</span><span class="n">inherited</span> <span class="k">if</span> <span class="n">dacl</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">sacl_inherited</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span><span class="o">.</span><span class="n">inherited</span> <span class="k">if</span> <span class="n">sacl</span> <span class="k">else</span> <span class="mi">0</span>
 
-    <span class="n">options</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">security_options</span> <span class="p">(</span><span class="n">options</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="k">return</span> <span class="n">cls</span> <span class="p">(</span>
-        <span class="n">originating_object</span><span class="o">=</span><span class="n">obj</span><span class="p">,</span>
-        <span class="n">originating_object_type</span><span class="o">=</span><span class="n">object_type</span>
-      <span class="p">)</span>
-    <span class="k">if</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">PyHANDLE</span><span class="p">):</span>
-      <span class="n">sd</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">GetSecurityInfo</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">object_type</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">sd</span> <span class="o">=</span> <span class="n">wrapped</span> <span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">GetNamedSecurityInfo</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">object_type</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_security_descriptor</span> <span class="p">(</span>
-      <span class="n">sd</span><span class="p">,</span>
-      <span class="n">originating_object</span><span class="o">=</span><span class="n">obj</span><span class="p">,</span>
-      <span class="n">originating_object_type</span><span class="o">=</span><span class="n">object_type</span><span class="p">,</span>
-      <span class="n">options</span><span class="o">=</span><span class="n">options</span>
-    <span class="p">)</span>
+        <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorControl</span><span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_AUTO_INHERITED</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_control</span> <span class="o">&amp;</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_AUTO_INHERITED</span><span class="p">)</span>
+        <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorControl</span><span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_AUTO_INHERITED</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_control</span> <span class="o">&amp;</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_AUTO_INHERITED</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dacl</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dacl_inherited</span><span class="p">:</span>
+                <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorControl</span><span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PROTECTED</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorControl</span><span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PROTECTED</span><span class="p">,</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PROTECTED</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sacl</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sacl_inherited</span><span class="p">:</span>
+                <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorControl</span><span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PROTECTED</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorControl</span><span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PROTECTED</span><span class="p">,</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PROTECTED</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">owner</span><span class="p">:</span>
+            <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorOwner</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">group</span><span class="p">:</span>
+            <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorGroup</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+        <span class="c">#</span>
+        <span class="c"># The first &amp; last flags on the Set...acl methods represent,</span>
+        <span class="c"># respectively, whether the ACL is present (!) and whether</span>
+        <span class="c"># it&#39;s the result of inheritance.</span>
+        <span class="c">#</span>
+        <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorDacl</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="n">dacl</span><span class="p">,</span> <span class="n">dacl_inherited</span><span class="p">)</span>
+        <span class="n">sa</span><span class="o">.</span><span class="n">SetSecurityDescriptorSacl</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="n">sacl</span><span class="p">,</span> <span class="n">sacl_inherited</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sa</span>
 </div>
-  <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Security.from_security_descriptor"><a class="viewcode-back" href="../security.html#security.Security.from_security_descriptor">[docs]</a>  <span class="k">def</span> <span class="nf">from_security_descriptor</span> <span class="p">(</span>
-    <span class="n">cls</span><span class="p">,</span>
-    <span class="n">sd</span><span class="p">,</span>
-    <span class="n">inherit_handle</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-    <span class="n">originating_object</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
-    <span class="n">originating_object_type</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
-    <span class="n">options</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-  <span class="p">):</span>
-    <span class="sd">ur&quot;&quot;&quot;Constructs a :class:`Security` object from a PySECURITY_DESCRIPTOR object.</span>
-<span class="sd">    Almost never called directly; use :func:`security` unless you need some</span>
-<span class="sd">    slightly special handling with inherited handles.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span> <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_OPTIONS</span>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Security.from_object"><a class="viewcode-back" href="../security.html#security.Security.from_object">[docs]</a>    <span class="k">def</span> <span class="nf">from_object</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">object_type</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructs a :class:`Security` object from a PyHANDLE or an object name.</span>
+<span class="sd">        Almost never called directly; use :func:`security`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">object_type</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span> <span class="n">object_type</span> <span class="o">=</span> <span class="n">SE_OBJECT_TYPE</span><span class="o">.</span><span class="n">FILE_OBJECT</span>
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span> <span class="n">options</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">DEFAULT_OPTIONS</span>
 
-    <span class="n">options</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">security_options</span> <span class="p">(</span><span class="n">options</span><span class="p">)</span>
-    <span class="n">control</span><span class="p">,</span> <span class="n">revision</span> <span class="o">=</span> <span class="n">sd</span><span class="o">.</span><span class="n">GetSecurityDescriptorControl</span> <span class="p">()</span>
-    <span class="n">owner</span> <span class="o">=</span> <span class="n">sd</span><span class="o">.</span><span class="n">GetSecurityDescriptorOwner</span> <span class="p">()</span> <span class="k">if</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">OWNER</span> <span class="o">&amp;</span> <span class="n">options</span> <span class="k">else</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-    <span class="n">group</span> <span class="o">=</span> <span class="n">sd</span><span class="o">.</span><span class="n">GetSecurityDescriptorGroup</span> <span class="p">()</span> <span class="k">if</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">GROUP</span> <span class="o">&amp;</span> <span class="n">options</span> <span class="k">else</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-    <span class="c">#</span>
-    <span class="c"># These next couple of lines are tricky. We have, for each ACL, three</span>
-    <span class="c"># situations. An ACL which simply isn&#39;t present (often the SACL); an ACL</span>
-    <span class="c"># which is present but which is NULL (aka the NULL ACL); an ACL which is</span>
-    <span class="c"># present and which is not NULL, altho&#39; it may have nothing in it!</span>
-    <span class="c">#</span>
-    <span class="c"># For the first, we store core.UNSET; for the second we pass None to our ACL</span>
-    <span class="c"># class and for the third and third we pass the PyACL through to our ACL.</span>
-    <span class="c">#</span>
-    <span class="c"># This is more complicated, tho&#39;, because the pywin32 GetSecurityDescriptorDacl/Sacl</span>
-    <span class="c"># function returns None in the first *and* second cases, making it impossible</span>
-    <span class="c"># to determine whether there is or isn&#39;t a DACL found. This means we can&#39;t</span>
-    <span class="c"># really distinguish a NULL ACL from a non-existent ACL. For simplicity, assume</span>
-    <span class="c"># it&#39;s there and pass None through to the ACL.</span>
-    <span class="c">#</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">control</span> <span class="o">&amp;</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PRESENT</span><span class="p">:</span>
-      <span class="n">dacl</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">dacl</span> <span class="o">=</span> <span class="n">sd</span><span class="o">.</span><span class="n">GetSecurityDescriptorDacl</span> <span class="p">()</span> <span class="k">if</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">DACL</span> <span class="o">&amp;</span> <span class="n">options</span> <span class="k">else</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">control</span> <span class="o">&amp;</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PRESENT</span><span class="p">:</span>
-      <span class="n">sacl</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">sacl</span> <span class="o">=</span> <span class="n">sd</span><span class="o">.</span><span class="n">GetSecurityDescriptorSacl</span> <span class="p">()</span> <span class="k">if</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">SACL</span> <span class="o">&amp;</span> <span class="n">options</span> <span class="k">else</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
-    <span class="k">return</span> <span class="n">cls</span> <span class="p">(</span>
-      <span class="n">control</span><span class="p">,</span>
-      <span class="n">owner</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">dacl</span><span class="p">,</span> <span class="n">sacl</span><span class="p">,</span>
-      <span class="n">inherit_handle</span><span class="p">,</span>
-      <span class="n">originating_object</span><span class="p">,</span> <span class="n">originating_object_type</span>
-    <span class="p">)</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">security_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cls</span><span class="p">(</span>
+                <span class="n">originating_object</span><span class="o">=</span><span class="n">obj</span><span class="p">,</span>
+                <span class="n">originating_object_type</span><span class="o">=</span><span class="n">object_type</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">PyHANDLE</span><span class="p">):</span>
+            <span class="n">sd</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">GetSecurityInfo</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">object_type</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sd</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32security</span><span class="o">.</span><span class="n">GetNamedSecurityInfo</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">object_type</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_security_descriptor</span><span class="p">(</span>
+            <span class="n">sd</span><span class="p">,</span>
+            <span class="n">originating_object</span><span class="o">=</span><span class="n">obj</span><span class="p">,</span>
+            <span class="n">originating_object_type</span><span class="o">=</span><span class="n">object_type</span><span class="p">,</span>
+            <span class="n">options</span><span class="o">=</span><span class="n">options</span>
+        <span class="p">)</span>
 </div>
-  <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Security.from_string"><a class="viewcode-back" href="../security.html#security.Security.from_string">[docs]</a>  <span class="k">def</span> <span class="nf">from_string</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">sddl</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
-    <span class="sd">ur&quot;&quot;&quot;Constructs a :class:`Security` object from an SDDL string.</span>
-<span class="sd">    Useful for round-tripping, since the :meth:`__str__` method produces</span>
-<span class="sd">    an SDDL string.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span> <span class="n">options</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">DEFAULT_OPTIONS</span>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Security.from_security_descriptor"><a class="viewcode-back" href="../security.html#security.Security.from_security_descriptor">[docs]</a>    <span class="k">def</span> <span class="nf">from_security_descriptor</span><span class="p">(</span>
+        <span class="n">cls</span><span class="p">,</span>
+        <span class="n">sd</span><span class="p">,</span>
+        <span class="n">inherit_handle</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">originating_object</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
+        <span class="n">originating_object_type</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span>
+        <span class="n">options</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructs a :class:`Security` object from a PySECURITY_DESCRIPTOR object.</span>
+<span class="sd">        Almost never called directly; use :func:`security` unless you need some</span>
+<span class="sd">        slightly special handling with inherited handles.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span> <span class="n">options</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">DEFAULT_OPTIONS</span>
 
-    <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_security_descriptor</span> <span class="p">(</span>
-      <span class="n">sd</span><span class="o">=</span><span class="n">wrapped</span> <span class="p">(</span>
-        <span class="n">win32security</span><span class="o">.</span><span class="n">ConvertStringSecurityDescriptorToSecurityDescriptor</span><span class="p">,</span>
-        <span class="nb">unicode</span> <span class="p">(</span><span class="n">sddl</span><span class="p">),</span>
-        <span class="n">REVISION</span><span class="o">.</span><span class="n">SDDL_REVISION_1</span>
-      <span class="p">),</span>
-      <span class="n">options</span><span class="o">=</span><span class="n">options</span>
-    <span class="p">)</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">security_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+        <span class="n">control</span><span class="p">,</span> <span class="n">revision</span> <span class="o">=</span> <span class="n">sd</span><span class="o">.</span><span class="n">GetSecurityDescriptorControl</span><span class="p">()</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="n">sd</span><span class="o">.</span><span class="n">GetSecurityDescriptorOwner</span><span class="p">()</span> <span class="k">if</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">OWNER</span> <span class="o">&amp;</span> <span class="n">options</span> <span class="k">else</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="n">sd</span><span class="o">.</span><span class="n">GetSecurityDescriptorGroup</span><span class="p">()</span> <span class="k">if</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">GROUP</span> <span class="o">&amp;</span> <span class="n">options</span> <span class="k">else</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+        <span class="c">#</span>
+        <span class="c"># These next couple of lines are tricky. We have, for each ACL, three</span>
+        <span class="c"># situations. An ACL which simply isn&#39;t present (often the SACL); an ACL</span>
+        <span class="c"># which is present but which is NULL (aka the NULL ACL); an ACL which is</span>
+        <span class="c"># present and which is not NULL, altho&#39; it may have nothing in it!</span>
+        <span class="c">#</span>
+        <span class="c"># For the first, we store core.UNSET; for the second we pass None to our ACL</span>
+        <span class="c"># class and for the third and third we pass the PyACL through to our ACL.</span>
+        <span class="c">#</span>
+        <span class="c"># This is more complicated, tho&#39;, because the pywin32 GetSecurityDescriptorDacl/Sacl</span>
+        <span class="c"># function returns None in the first *and* second cases, making it impossible</span>
+        <span class="c"># to determine whether there is or isn&#39;t a DACL found. This means we can&#39;t</span>
+        <span class="c"># really distinguish a NULL ACL from a non-existent ACL. For simplicity, assume</span>
+        <span class="c"># it&#39;s there and pass None through to the ACL.</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">control</span> <span class="o">&amp;</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PRESENT</span><span class="p">:</span>
+            <span class="n">dacl</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dacl</span> <span class="o">=</span> <span class="n">sd</span><span class="o">.</span><span class="n">GetSecurityDescriptorDacl</span><span class="p">()</span> <span class="k">if</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">DACL</span> <span class="o">&amp;</span> <span class="n">options</span> <span class="k">else</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">control</span> <span class="o">&amp;</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PRESENT</span><span class="p">:</span>
+            <span class="n">sacl</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sacl</span> <span class="o">=</span> <span class="n">sd</span><span class="o">.</span><span class="n">GetSecurityDescriptorSacl</span><span class="p">()</span> <span class="k">if</span> <span class="n">SECURITY_INFORMATION</span><span class="o">.</span><span class="n">SACL</span> <span class="o">&amp;</span> <span class="n">options</span> <span class="k">else</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span>
+            <span class="n">control</span><span class="p">,</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">dacl</span><span class="p">,</span> <span class="n">sacl</span><span class="p">,</span>
+            <span class="n">inherit_handle</span><span class="p">,</span>
+            <span class="n">originating_object</span><span class="p">,</span> <span class="n">originating_object_type</span>
+        <span class="p">)</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Security.from_string"><a class="viewcode-back" href="../security.html#security.Security.from_string">[docs]</a>    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">sddl</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructs a :class:`Security` object from an SDDL string.</span>
+<span class="sd">        Useful for round-tripping, since the :meth:`__str__` method produces</span>
+<span class="sd">        an SDDL string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span> <span class="n">options</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">DEFAULT_OPTIONS</span>
+
+        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_security_descriptor</span><span class="p">(</span>
+            <span class="n">sd</span><span class="o">=</span><span class="n">wrapped</span><span class="p">(</span>
+                <span class="n">win32security</span><span class="o">.</span><span class="n">ConvertStringSecurityDescriptorToSecurityDescriptor</span><span class="p">,</span>
+                <span class="nb">unicode</span><span class="p">(</span><span class="n">sddl</span><span class="p">),</span>
+                <span class="n">REVISION</span><span class="o">.</span><span class="n">SDDL_REVISION_1</span>
+            <span class="p">),</span>
+            <span class="n">options</span><span class="o">=</span><span class="n">options</span>
+        <span class="p">)</span>
 </div></div>
-<div class="viewcode-block" id="security"><a class="viewcode-back" href="../security.html#security.security">[docs]</a><span class="k">def</span> <span class="nf">security</span> <span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">obj_type</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
-  <span class="sd">ur&quot;&quot;&quot;Return a :class:`Security` object representing the security attributes</span>
-<span class="sd">  of a named object (eg a file, registry key) or a kernel object (eg a process,</span>
-<span class="sd">  a pipe). With no parameters, an empty :class:`Security` object is returned which can then be</span>
-<span class="sd">  set up with appropriate attributes and applied to other objects via its</span>
-<span class="sd">  :meth:`to_object` method. :const:`None` and an existing :class:`Security`</span>
-<span class="sd">  object are passed through unchanged. A :const:`PySECURITY_DESCRIPTOR` is</span>
-<span class="sd">  converted to the corresponding :class:`Security` object. A pywin32 :const:`PyHANDLE`,</span>
-<span class="sd">  representing a kernel object finds the security attributes for that object.</span>
-<span class="sd">  Finally, a string finds the security attributes for the object of that name.</span>
+<div class="viewcode-block" id="security"><a class="viewcode-back" href="../security.html#security.security">[docs]</a><span class="k">def</span> <span class="nf">security</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">obj_type</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a :class:`Security` object representing the security attributes</span>
+<span class="sd">    of a named object (eg a file, registry key) or a kernel object (eg a process,</span>
+<span class="sd">    a pipe). With no parameters, an empty :class:`Security` object is returned which can then be</span>
+<span class="sd">    set up with appropriate attributes and applied to other objects via its</span>
+<span class="sd">    :meth:`to_object` method. :const:`None` and an existing :class:`Security`</span>
+<span class="sd">    object are passed through unchanged. A :const:`PySECURITY_DESCRIPTOR` is</span>
+<span class="sd">    converted to the corresponding :class:`Security` object. A pywin32 :const:`PyHANDLE`,</span>
+<span class="sd">    representing a kernel object finds the security attributes for that object.</span>
+<span class="sd">    Finally, a string finds the security attributes for the object of that name.</span>
 
-<span class="sd">  The most common use is to pass a filename. The :meth:`from_object` method</span>
-<span class="sd">  assumes that an unqualified string represents a file. If it represents</span>
-<span class="sd">  something else, you need to specify its type in the `obj_type` parameter::</span>
+<span class="sd">    The most common use is to pass a filename. The :meth:`from_object` method</span>
+<span class="sd">    assumes that an unqualified string represents a file. If it represents</span>
+<span class="sd">    something else, you need to specify its type in the `obj_type` parameter::</span>
 
-<span class="sd">    from winsys import security</span>
-<span class="sd">    s = security.security (&quot;c:/windows&quot;)</span>
-<span class="sd">    s.dump ()</span>
+<span class="sd">        from winsys import security</span>
+<span class="sd">        s = security.security(&quot;c:/windows&quot;)</span>
+<span class="sd">        s.dump()</span>
 
-<span class="sd">  Note that it may be necessary to create a :class:`Security` object tied to</span>
-<span class="sd">  an existing kernel object but without reading any of the object&#39;s security.</span>
-<span class="sd">  This can be done by passing `None` for the `options` parameter. (This is</span>
-<span class="sd">  done, eg, by the :meth:`fs.Entry.take_ownership` method).</span>
+<span class="sd">    Note that it may be necessary to create a :class:`Security` object tied to</span>
+<span class="sd">    an existing kernel object but without reading any of the object&#39;s security.</span>
+<span class="sd">    This can be done by passing `None` for the `options` parameter. (This is</span>
+<span class="sd">    done, eg, by the :meth:`fs.Entry.take_ownership` method).</span>
 
-<span class="sd">  :param obj: any of :const:`None`, a :class:`Security` object, a pywin32 :const:`PyHANDLE`,</span>
-<span class="sd">              a pywin32 :const:`PySECURITY_DESCRIPTOR`, or a string</span>
-<span class="sd">  :param obj_type: an :const:`SE_OBJECT_TYPE` [:const:`file_object`]</span>
-<span class="sd">  :param options: anything acccepted by :meth:`security_options` [:const:`DEFAULT_OPTIONS`]</span>
-<span class="sd">  :returns: a :class:`Security` object</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="bp">None</span>
-  <span class="k">elif</span> <span class="n">obj</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Security</span> <span class="p">()</span>
-  <span class="k">elif</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Security</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">obj</span>
-  <span class="k">elif</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">PyHANDLE</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">Security</span><span class="o">.</span><span class="n">from_object</span> <span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
-  <span class="k">elif</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">PySECURITY_DESCRIPTOR</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">Security</span><span class="o">.</span><span class="n">from_security_descriptor</span> <span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Security</span><span class="o">.</span><span class="n">from_object</span> <span class="p">(</span><span class="nb">unicode</span> <span class="p">(</span><span class="n">obj</span><span class="p">),</span> <span class="n">obj_type</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="sd">    :param obj: any of :const:`None`, a :class:`Security` object, a pywin32 :const:`PyHANDLE`,</span>
+<span class="sd">                            a pywin32 :const:`PySECURITY_DESCRIPTOR`, or a string</span>
+<span class="sd">    :param obj_type: an :const:`SE_OBJECT_TYPE` [:const:`file_object`]</span>
+<span class="sd">    :param options: anything acccepted by :meth:`security_options` [:const:`DEFAULT_OPTIONS`]</span>
+<span class="sd">    :returns: a :class:`Security` object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">elif</span> <span class="n">obj</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Security</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Security</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">obj</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">PyHANDLE</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Security</span><span class="o">.</span><span class="n">from_object</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">PySECURITY_DESCRIPTOR</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Security</span><span class="o">.</span><span class="n">from_security_descriptor</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Security</span><span class="o">.</span><span class="n">from_object</span><span class="p">(</span><span class="nb">unicode</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span> <span class="n">obj_type</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
 
 <span class="c">#</span>
 <span class="c"># Convenience functions</span>
 <span class="c">#</span></div>
 <span class="nd">@contextlib.contextmanager</span>
-<div class="viewcode-block" id="impersonate"><a class="viewcode-back" href="../security.html#security.impersonate">[docs]</a><span class="k">def</span> <span class="nf">impersonate</span> <span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
-  <span class="sd">ur&quot;&quot;&quot;Context-manager which impersonates a user with a password</span>
-<span class="sd">  and then reverts to the current user::</span>
+<div class="viewcode-block" id="impersonate"><a class="viewcode-back" href="../security.html#security.impersonate">[docs]</a><span class="k">def</span> <span class="nf">impersonate</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Context-manager which impersonates a user with a password</span>
+<span class="sd">    and then reverts to the current user::</span>
 
-<span class="sd">    from __future__ import with_statement</span>
-<span class="sd">    from winsys import security</span>
-<span class="sd">    with security.impersonate (&quot;Administrator&quot;, &quot;password&quot;):</span>
-<span class="sd">      print security.me ()</span>
+<span class="sd">        from __future__ import with_statement</span>
+<span class="sd">        from winsys import security</span>
+<span class="sd">        with security.impersonate(&quot;Administrator&quot;, &quot;password&quot;):</span>
+<span class="sd">            print security.me()</span>
 
-<span class="sd">  ..  note::</span>
-<span class="sd">      A :class:`accounts.Principal` object is its own context manager</span>
-<span class="sd">      although it&#39;s not then possible to pass in a password.</span>
+<span class="sd">    ..    note::</span>
+<span class="sd">            A :class:`accounts.Principal` object is its own context manager</span>
+<span class="sd">            although it&#39;s not then possible to pass in a password.</span>
 
-<span class="sd">  :param user: any valid username</span>
-<span class="sd">  :param password: username for that user; if not specified, user will be prompted</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="n">impersonation_token</span> <span class="o">=</span> <span class="n">token</span> <span class="p">(</span><span class="n">principal</span> <span class="p">(</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">logon</span> <span class="p">(</span><span class="n">password</span><span class="p">))</span><span class="o">.</span><span class="n">impersonate</span> <span class="p">()</span>
-  <span class="k">yield</span> <span class="n">impersonation_token</span>
-  <span class="n">impersonation_token</span><span class="o">.</span><span class="n">unimpersonate</span> <span class="p">()</span>
+<span class="sd">    :param user: any valid username</span>
+<span class="sd">    :param password: username for that user; if not specified, user will be prompted</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">impersonation_token</span> <span class="o">=</span> <span class="n">token</span><span class="p">(</span><span class="n">principal</span><span class="p">(</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">logon</span><span class="p">(</span><span class="n">password</span><span class="p">))</span><span class="o">.</span><span class="n">impersonate</span><span class="p">()</span>
+    <span class="k">yield</span> <span class="n">impersonation_token</span>
+    <span class="n">impersonation_token</span><span class="o">.</span><span class="n">unimpersonate</span><span class="p">()</span>
 </div>
 <span class="nd">@contextlib.contextmanager</span>
-<div class="viewcode-block" id="change_privileges"><a class="viewcode-back" href="../security.html#security.change_privileges">[docs]</a><span class="k">def</span> <span class="nf">change_privileges</span> <span class="p">(</span><span class="n">enable_privs</span><span class="o">=</span><span class="p">[],</span> <span class="n">disable_privs</span><span class="o">=</span><span class="p">[],</span> <span class="n">_token</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
-  <span class="sd">ur&quot;&quot;&quot;Context manager which temporarily enables/disables privs within the</span>
-<span class="sd">  current token, reverting when done to the previous situation::</span>
+<div class="viewcode-block" id="change_privileges"><a class="viewcode-back" href="../security.html#security.change_privileges">[docs]</a><span class="k">def</span> <span class="nf">change_privileges</span><span class="p">(</span><span class="n">enable_privs</span><span class="o">=</span><span class="p">[],</span> <span class="n">disable_privs</span><span class="o">=</span><span class="p">[],</span> <span class="n">_token</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Context manager which temporarily enables/disables privs within the</span>
+<span class="sd">    current token, reverting when done to the previous situation::</span>
 
-<span class="sd">    from __future__ import with_statement</span>
-<span class="sd">    from winsys import security, fs</span>
+<span class="sd">        from __future__ import with_statement</span>
+<span class="sd">        from winsys import security, fs</span>
 
-<span class="sd">    test = fs.file (&quot;test&quot;)</span>
-<span class="sd">    test.touch ()</span>
-<span class="sd">    with security.change_privileges ([&quot;restore&quot;]):</span>
-<span class="sd">      with test.security () as s:</span>
-<span class="sd">        print s.owner</span>
-<span class="sd">        s.owner = security.principal (&quot;Administrator&quot;)</span>
-<span class="sd">        print s.owner</span>
+<span class="sd">        test = fs.file(&quot;test&quot;)</span>
+<span class="sd">        test.touch()</span>
+<span class="sd">        with security.change_privileges([&quot;restore&quot;]):</span>
+<span class="sd">            with test.security() as s:</span>
+<span class="sd">                print s.owner</span>
+<span class="sd">                s.owner = security.principal(&quot;Administrator&quot;)</span>
+<span class="sd">                print s.owner</span>
 
-<span class="sd">  :param enable_privs: list of privileges to enable; each priv is anything accepted by :func:`privilege`</span>
-<span class="sd">  :param disable_privs: list of privileges to disable; each priv is anything accepted by :func:`privilege`</span>
-<span class="sd">  :param _token: (internal) a token to use if not the current one</span>
-<span class="sd">  :returns: yields re-privileged token object</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">if</span> <span class="n">_token</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-    <span class="n">_token</span> <span class="o">=</span> <span class="n">token</span> <span class="p">()</span>
-  <span class="n">old_enabled_privs</span><span class="p">,</span> <span class="n">old_disabled_privs</span> <span class="o">=</span> <span class="n">_token</span><span class="o">.</span><span class="n">change_privileges</span> <span class="p">(</span><span class="n">enable_privs</span><span class="p">,</span> <span class="n">disable_privs</span><span class="p">)</span>
-  <span class="k">yield</span> <span class="n">_token</span>
-  <span class="n">_token</span><span class="o">.</span><span class="n">change_privileges</span> <span class="p">(</span><span class="n">old_enabled_privs</span><span class="p">,</span> <span class="n">old_disabled_privs</span><span class="p">)</span></div>
+<span class="sd">    :param enable_privs: list of privileges to enable; each priv is anything accepted by :func:`privilege`</span>
+<span class="sd">    :param disable_privs: list of privileges to disable; each priv is anything accepted by :func:`privilege`</span>
+<span class="sd">    :param _token: (internal) a token to use if not the current one</span>
+<span class="sd">    :returns: yields re-privileged token object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_token</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
+        <span class="n">_token</span> <span class="o">=</span> <span class="n">token</span><span class="p">()</span>
+    <span class="n">old_enabled_privs</span><span class="p">,</span> <span class="n">old_disabled_privs</span> <span class="o">=</span> <span class="n">_token</span><span class="o">.</span><span class="n">change_privileges</span><span class="p">(</span><span class="n">enable_privs</span><span class="p">,</span> <span class="n">disable_privs</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">_token</span>
+    <span class="n">_token</span><span class="o">.</span><span class="n">change_privileges</span><span class="p">(</span><span class="n">old_enabled_privs</span><span class="p">,</span> <span class="n">old_disabled_privs</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -733,13 +737,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../contents.html">WinSys 0.5beta documentation</a> &raquo;</li>
+        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
           <li><a href="index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Tim Golden.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+        &copy; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>
