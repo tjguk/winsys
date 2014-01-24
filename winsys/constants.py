@@ -235,7 +235,8 @@ class Constants(core._WinSysObject):
             (key, from_pattern(pattern, key), getattr(namespace, key)) for \
                 key in dir(namespace) if \
                 fnmatch.fnmatch(key, pattern) and \
-                key not in excluded
+                key not in excluded and
+                not key.startswith("_")
         )
 
     def names(self, patterns=["*"]):
@@ -255,7 +256,7 @@ class Constants(core._WinSysObject):
         work out which of the constants make up the number using the pattern
         to filter the "classes" or constants present in the dataset.
         """
-        return [name for name in self.names(patterns) if value & self[name]]
+        return [name for name in self.names(patterns) if ((value & self[name]) or (value == 0 and self[name] == 0))]
 
     def name_from_value(self, value, default=core.UNSET, patterns=["*"]):
         """Find the one name in the set of constants (optionally qualified by pattern)
