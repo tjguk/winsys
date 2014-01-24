@@ -748,7 +748,7 @@ class Share(core._WinSysObject):
         if show_security:
             security = self.security
             if security:
-                output.append(security_.dumped(level))
+                output.append(security.dumped(level))
         return utils.dumped("\n".join(output), level)
 
     def create(self, servername, sharename, path, remark=core.UNSET, security=core.UNSET):

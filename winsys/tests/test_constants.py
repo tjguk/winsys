@@ -8,12 +8,13 @@ from winsys.tests import utils as testutils
 from winsys import constants
 
 class A(object):
+    zero = 0
     x = 1
     y = 2
-    z = 3
-    f_a = 4
-    f_b = 5
-    f_c = 6
+    z = 4
+    f_a = 8
+    f_b = 16
+    f_c = 32
 
 class TestBasic(unittest.TestCase):
     """
@@ -43,6 +44,19 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(c.a, A.f_a)
         self.assertEqual(c['c'], A.f_c)
         self.assertRaises(AttributeError, getattr, c, "b")
+
+    def test_name_from_value(self):
+        c = constants.Constants.from_pattern(namespace=A)
+        self.assertEqual(c.name_from_value(0), "zero")
+        self.assertEqual(c.name_from_value(32), "f_c")
+
+    def test_names_from_value_nonzero(self):
+        c = constants.Constants.from_pattern(namespace=A)
+        self.assertEqual(c.names_from_value(4), ["z"])
+
+    def test_names_from_value_zero(self):
+        c = constants.Constants.from_pattern(namespace=A)
+        self.assertEqual(c.names_from_value(0), ["zero"])
 
 if __name__ == "__main__":
   unittest.main()
