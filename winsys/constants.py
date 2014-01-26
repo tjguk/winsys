@@ -197,7 +197,7 @@ class Constants(core._WinSysObject):
 
     def items(self):
         return self._dict.items()
-    items = items
+    iteritems = items
 
     def keys(self):
         return self._dict.keys()
@@ -208,7 +208,7 @@ class Constants(core._WinSysObject):
 
     def values(self):
         return self._dict.values()
-    values = values
+    itervalues = values
 
     @classmethod
     def from_dict(cls, d, pattern=None):
@@ -256,7 +256,7 @@ class Constants(core._WinSysObject):
         work out which of the constants make up the number using the pattern
         to filter the "classes" or constants present in the dataset.
         """
-        return [name for name in self.names(patterns) if ((value & self[name]) or (value == 0 and self[name] == 0))]
+        return [name for name in self.names(patterns) if ((value & self[name]) or (value == self[name])]
 
     def name_from_value(self, value, default=core.UNSET, patterns=["*"]):
         """Find the one name in the set of constants (optionally qualified by pattern)
