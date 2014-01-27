@@ -256,7 +256,7 @@ class Constants(core._WinSysObject):
         work out which of the constants make up the number using the pattern
         to filter the "classes" or constants present in the dataset.
         """
-        return [name for name in self.names(patterns) if ((value & self[name]) or (value == self[name])]
+        return [name for name in self.names(patterns) if ((value & self[name]) or (value == self[name]))]
 
     def name_from_value(self, value, default=core.UNSET, patterns=["*"]):
         """Find the one name in the set of constants (optionally qualified by pattern)
