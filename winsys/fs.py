@@ -1643,7 +1643,7 @@ class Dir(Entry):
             :class:`Dir`, (generator for :class:`Dir` objects), (generator for :class:`File` objects)
 
         :param depthfirst: Whether to use breadth-first (the default) or depth-first traversal
-        :param error_handler: Whether to continue traversing in the face of access-denied errors
+        :param error_handler: a callable which is passed sys.exc_info and returns True if the iteration is to continue, False otherwise
         """
         top = self
         dirs, nondirs = [], []
@@ -1823,7 +1823,7 @@ def files(pattern="*", ignore=[".", ".."], error_handler=None):
 
     :pattern: A string with one or more wildcard patterns, pipe-separated
     :ignore: A container of specific paths to ignore
-    :error_handler: a callable which returns True if the iteration is to continue, false otherwise
+    :error_handler: a callable which is passed sys.exc_info and returns True if the iteration is to continue, False otherwise
     """
     for p in pattern.split("|"):
         for f in _files(p, ignore=ignore, error_handler=error_handler):
