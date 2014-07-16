@@ -1960,7 +1960,7 @@ def dir(filepath):
     elif isinstance(f, File) and f:
         raise x_fs(None, "dir", "%s exists but is a file" % filepath)
     else:
-        if re.match(UNC, f.root):
+        if re.match(UNC, unicode(f.root)):
             return SharedDir(unicode(filepath))
         else:
             return Dir(unicode(filepath))
