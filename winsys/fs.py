@@ -2215,7 +2215,7 @@ class _DirWatcher(object):
     BUFFER_SIZE = 8192
     TIMEOUT = 500
 
-    def __init__(self, root, subdirs=False, watch_for=WATCH_FOR, buffer_size=BUFFER_SIZE):
+    def __init__(self, root, subdirs=False, watch_for=WATCH_FOR, buffer_size=BUFFER_SIZE, stop_event=None):
         self.root = root
         self.subdirs = subdirs
         self.watch_for = watch_for
@@ -2236,6 +2236,9 @@ class _DirWatcher(object):
             FILE_FLAG.BACKUP_SEMANTICS | FILE_FLAG.OVERLAPPED,
             None
         )
+        self.events = [self.overlapped.hEvent]
+        if stop_event is not None:
+            self.events.append(stop_event.pyobject())
         self._changes = collections.deque()
 
     def __iter__(self):
@@ -2251,11 +2254,15 @@ class _DirWatcher(object):
             self.overlapped
         )
         while True:
-            if wrapped(
-                    win32event.WaitForSingleObject,
-                    self.overlapped.hEvent,
-                    self.TIMEOUT
-            ) == win32event.WAIT_OBJECT_0:
+            stopped_by = wrapped(
+                win32event.WaitForMultipleObjects,
+                self.events,
+                0,
+                self.TIMEOUT
+            )
+            if stopped_by == win32event.WAIT_OBJECT_0 + 1:
+                raise StopIteration
+            elif stopped_by == win32event.WAIT_OBJECT_0:
                 n_bytes = wrapped(win32file.GetOverlappedResult, self.hDir, self.overlapped, True)
                 if n_bytes == 0:
                     continue
@@ -2291,7 +2298,8 @@ def watch(
     root,
     subdirs=False,
     watch_for=_DirWatcher.WATCH_FOR,
-    buffer_size=_DirWatcher.BUFFER_SIZE
+    buffer_size=_DirWatcher.BUFFER_SIZE,
+    stop_event=None
 ):
     """Return an iterator which returns a file change on every iteration.
     The file change comes in the form: action, old_filename, new_filename.
@@ -2309,7 +2317,7 @@ def watch(
             elif action == fs.FILE_ACTION.REMOVED:
                 print old_filename, "removed"
     """
-    return _DirWatcher(unicode(root), subdirs, watch_for, buffer_size)
+    return _DirWatcher(unicode(root), subdirs, watch_for, buffer_size, stop_event)
 
 if __name__ == '__main__':
     print("Watching", os.path.abspath("."))
