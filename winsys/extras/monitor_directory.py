@@ -22,7 +22,7 @@ import win32timezone
 
 import error_handler
 from winsys import core, fs, misc
-print "Logging to", core.log_filepath
+print("Logging to %s" % core.log_filepath)
 
 def deltastamp(delta):
 
@@ -75,7 +75,7 @@ def get_files(path, size_threshold_mb, results, stop_event):
         for tlf in top_level_folders:
             for f in tlf.flat(ignore_access_errors=True):
                 if stop_event.isSet():
-                    print "stop event set"
+                    print("stop event set")
                     raise x_stop_exception
                 try:
                     if f.size > size_threshold:
@@ -113,7 +113,7 @@ def watch_files(path, size_threshold_mb, results, stop_event):
                 if old_file is not None:
                     if (not old_file) or (old_file and old_file.size > size_threshold):
                         results.put(old_file)
-                if new_file is not None and new_file <> old_file:
+                if new_file is not None and new_file != old_file:
                     if new_file and new_file.size > size_threshold:
                         results.put(new_file)
             except fs.exc.x_winsys:
@@ -124,7 +124,7 @@ def watch_files(path, size_threshold_mb, results, stop_event):
                 except:
                     pass
                 buffer_size = min(2 * buffer_size, MAX_BUFFER_SIZE)
-                print "Tripped up on a RuntimeError. Trying with buffer of", buffer_size
+                print("Tripped up on a RuntimeError. Trying with buffer of", buffer_size)
 
 class Path(object):
     """Keep track of the files and changes under a particular
@@ -364,6 +364,6 @@ if __name__ == '__main__':
     try:
         make_server('', PORT, app).serve_forever()
     except KeyboardInterrupt:
-        print "Shutting down gracefully..."
+        print("Shutting down gracefully...")
     finally:
         app.finish()

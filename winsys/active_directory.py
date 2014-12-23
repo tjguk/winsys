@@ -221,7 +221,8 @@ def _search(filter, root=None, server=None, username=None, password=None):
             else:
                 for value, type in column_values:
                     return value
-        except adsi.error, details:
+        except adsi.error:
+            details = sys.exc_info()[1]
             if details[0] == adsicon.E_ADS_COLUMN_NOT_SET:
                 return None
             else:
