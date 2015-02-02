@@ -1826,6 +1826,7 @@ def files(pattern="*", ignore=[".", ".."], error_handler=None):
     :error_handler: a callable which is passed sys.exc_info and returns True if the iteration is to continue, False otherwise
     """
     for p in pattern.split("|"):
+        p = p.rstrip("/\\")
         for f in _files(p, ignore=ignore, error_handler=error_handler):
             yield f
 
