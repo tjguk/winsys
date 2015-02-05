@@ -231,7 +231,7 @@ class Principal(core._WinSysObject):
 
     @classmethod
     def from_string(cls, string, system=None):
-        """Return a :class:`Principal` based on a name and a
+        r"""Return a :class:`Principal` based on a name and a
         security authority. If `string` is blank, the logged-on user is assumed.
 
         :param string: name of an account in the form "domain\name". domain is optional so the simplest form is simply "name"
