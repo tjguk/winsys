@@ -689,7 +689,10 @@ class Dialog(BaseDialog):
             value = self._get_item(self.IDC_FIELD_BASE + i)
             if isinstance(default_value, datetime.date):
                 try:
-                    value = datetime.datetime.strptime(value, "%d %b %Y").date()
+                    if value:
+                        value = datetime.datetime.strptime(value, "%d %b %Y").date()
+                    else:
+                        value = None
                 except ValueError:
                     win32api.MessageBox(
                         hwnd,
