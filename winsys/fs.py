@@ -257,6 +257,8 @@ def normalised(filepath):
     filepath = unicode(filepath)
     if filepath.startswith(2 * sep):
         return filepath
+    elif filepath.endswith("$"):
+        return filepath
     else:
         is_dir = filepath[-1] in seps
         abspath = os.path.abspath(filepath)
