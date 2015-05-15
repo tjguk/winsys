@@ -127,7 +127,7 @@ class EventLog(core._WinSysObject):
         self.name = name
         try:
             key = registry.registry(self.REG_ROOT % self.computer).get_key(self.name)
-        except exc.x_winsys(err):
+        except exc.x_winsys as err:
             warnings.warn("Registry access failed with error: %s; log access may still be possible" % err.args[-1])
             values = dict()
         else:
