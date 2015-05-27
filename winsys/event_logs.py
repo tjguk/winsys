@@ -228,7 +228,7 @@ class EventLog(core._WinSysObject):
         """Return an iterator which traverses this event log oldest record first"""
         return self._iterator(EVENTLOG_READ.BACKWARDS | EVENTLOG_READ.SEQUENTIAL)
 
-    def watcher(self):
+    def watcher(self, stop_event=None):
         """(EXPERIMENTAL) Unsure if this will be of any use. In principle, you can ask for an event
         to fire when a new record is written to this log. In practice, though, there's
         no way of determining which record was added and you have to do some housekeeping
@@ -236,9 +236,15 @@ class EventLog(core._WinSysObject):
 
         Probably quite inefficient since it has to keep iterating backwards over the
         log every time to find the last record to match against. Does work, though.
+        
+        Accepts an optional event that can be externally set that tells the watcher to exit
+        prematurely.
         """
         TIMEOUT_SECS = 2
         hEvent = win32event.CreateEvent(None, 1, 0, None)
+        events = [hEvent]
+        if stop_event is not None:
+            events.append(stop_event.pyobject())
 
         iterator = iter(self)
         last_record = self[-1]
@@ -249,7 +255,10 @@ class EventLog(core._WinSysObject):
         with self._temp_handle() as handle:
             wrapped(win32evtlog.NotifyChangeEventLog, self._handle, hEvent)
             while True:
-                if win32event.WaitForSingleObject(hEvent, 1000 * TIMEOUT_SECS) != win32event.WAIT_TIMEOUT:
+                stopped_by = win32event.WaitForMultipleObjects(events, 0, 1000 * TIMEOUT_SECS)
+                if stopped_by == win32event.WAIT_OBJECT_0 + 1:
+                    raise StopIteration
+                elif stopped_by == win32event.WAIT_OBJECT_0:
                     last_record = self[-1]
                     for i in iterator:
                         yield i
