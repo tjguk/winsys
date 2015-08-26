@@ -53,6 +53,7 @@ import threading
 import traceback
 import uuid
 
+from winsys._compat import *
 from winsys import core, constants, exc, utils
 
 BIF = constants.Constants.from_dict(dict(
@@ -592,9 +593,10 @@ class Dialog(BaseDialog):
         # the window's current height and write the data back into
         # the same place.
         #
-        POINT_FORMAT = b"LL"
+        POINT_FORMAT = "LL"
         MINMAXINO_FORMAT = 5 * POINT_FORMAT
         data = win32gui.PyGetString(lparam, struct.calcsize(MINMAXINO_FORMAT))
+        print(ascii(data))
         minmaxinfo = list(struct.unpack(MINMAXINO_FORMAT, data))
         minmaxinfo[9] = minmaxinfo[7] = dlg_b - dlg_t
         win32gui.PySetMemory(lparam, struct.pack(MINMAXINO_FORMAT, *minmaxinfo))
