@@ -150,8 +150,13 @@ class _DropTarget(win32com.server.policy.DesignatedWrapPolicy):
         """
         child_point = wrapped(win32gui.ScreenToClient, self.hwnd, point)
         child_hwnd = wrapped(win32gui.ChildWindowFromPoint, self.hwnd, child_point)
-        class_name = wrapped(win32gui.GetClassName, child_hwnd)
-        return shellcon.DROPEFFECT_COPY if class_name == "Edit" else shellcon.DROPEFFECT_NONE
+        if child_hwnd == 0:
+          return shellcon.DROPEFFECT_NONE
+        else:
+          if wrapped(win32gui.GetClassName, child_hwnd) == "Edit":
+            return shellcon.DROPEFFECT_COPY 
+          else :
+            return shellcon.DROPEFFECT_NONE
 
     def DragLeave(self):
         """Do nothing, but the method must be implemented.
