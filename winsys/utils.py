@@ -111,11 +111,14 @@ def pythonised(string):
 # Support functions for translating to/from the WinAPI
 #
 def string_as_pointer(string):
-    """Convert a Python string to a LPSTR for the WinAPI"""
-    if isinstance(string, unicode):
-        address, length = win32gui.PyGetBufferAddressAndLen(string.encode("mbcs"))
-    else:
-        address, length = win32gui.PyGetBufferAddressAndLen(string)
+    """Convert a Python string to a LPSTR for the WinAPI
+    
+    NB the 'string' must support the buffer interface, typically this
+    means it must be bytes rather than unicode. Since its memory
+    is being returned directly, it can't be temporarily converted
+    within this function
+    """
+    address, length = win32gui.PyGetBufferAddressAndLen(string)
     return address
 
 def pointer_as_string(pointer, length=0):
