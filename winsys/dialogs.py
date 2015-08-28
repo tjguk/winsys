@@ -521,15 +521,11 @@ class Dialog(BaseDialog):
         hwnd = wrapped(win32gui.GetDlgItem, self.hwnd, item_id)
         class_name = wrapped(win32gui.GetClassName, hwnd)
         if class_name == "Edit":
-            try:
-                #
-                # There is a bug/feature which prevents empty dialog items
-                # from having their text read. Assume any error means that
-                # the control is empty.
-                #
-                return wrapped(win32gui.GetDlgItemText, self.hwnd, item_id).decode("mbcs")
-            except:
-                return ""
+          value = wrapped(win32gui.GetDlgItemText, self.hwnd, item_id)
+          if isinstance(value, unicode):
+            return value
+          else:
+            return value.decode("mbcs")
         elif class_name == "Button":
             return bool(SendMessage(hwnd, win32con.BM_GETCHECK, 0, 0))
         elif class_name == "ComboBox":
@@ -582,7 +578,7 @@ class Dialog(BaseDialog):
         """
         dlg_l, dlg_t, dlg_r, dlg_b = wrapped(win32gui.GetWindowRect, hwnd)
         #
-        # If returning from minmization, do nothing
+        # If returning from minimization, do nothing
         #
         if wrapped(win32gui.GetClientRect, hwnd) == (0, 0, 0, 0):
             return 0
