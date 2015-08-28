@@ -112,7 +112,10 @@ def pythonised(string):
 #
 def string_as_pointer(string):
     """Convert a Python string to a LPSTR for the WinAPI"""
-    address, length = win32gui.PyGetBufferAddressAndLen(string.encode("mbcs"))
+    if isinstance(string, unicode):
+        address, length = win32gui.PyGetBufferAddressAndLen(string.encode("mbcs"))
+    else:
+        address, length = win32gui.PyGetBufferAddressAndLen(string)
     return address
 
 def pointer_as_string(pointer, length=0):
