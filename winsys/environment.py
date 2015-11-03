@@ -27,6 +27,7 @@ import win32gui
 import win32con
 import winerror
 
+from winsys._compat import *
 from winsys import core, exc, utils, registry
 
 class x_environment(exc.x_winsys):
