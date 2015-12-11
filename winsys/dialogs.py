@@ -139,13 +139,9 @@ class _DropTarget(win32com.server.policy.DesignatedWrapPolicy):
         data = data_object.GetData(self._data_format)
         n_files = shell.DragQueryFileW(data.data_handle, -1)
         if n_files:
-            files_string = shell.DragQueryFileW(data.data_handle, 0)
-            print(type(files_string), files_string)
-            address, _ = win32gui.PyGetBufferAddressAndLen(files_string.encode("mbcs"))
-            #~ pointer_to_string = utils.string_as_pointer(files_string)
             SendMessage(
                 child_hwnd, win32con.WM_SETTEXT, None,
-                win32gui.PyGetBufferAddressAndLen(memoryview(files_string.encode("mbcs")))[0]
+                utils.string_as_pointer(shell.DragQueryFileW(data.data_handle, 0).encode(ENCODING))
             )
 
     def DragOver(self, key_state, point, effect):
