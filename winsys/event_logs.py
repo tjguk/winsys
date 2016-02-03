@@ -239,6 +239,8 @@ class EventLog(core._WinSysObject):
         
         Accepts an optional event that can be externally set that tells the watcher to exit
         prematurely.
+        
+        NB Doesn't work with remote event logs
         """
         TIMEOUT_SECS = 2
         hEvent = win32event.CreateEvent(None, 1, 0, None)
@@ -253,7 +255,7 @@ class EventLog(core._WinSysObject):
                 break
 
         with self._temp_handle() as handle:
-            wrapped(win32evtlog.NotifyChangeEventLog, self._handle, hEvent)
+            wrapped(win32evtlog.NotifyChangeEventLog, handle, hEvent)
             while True:
                 stopped_by = win32event.WaitForMultipleObjects(events, 0, 1000 * TIMEOUT_SECS)
                 if stopped_by == win32event.WAIT_OBJECT_0 + 1:
