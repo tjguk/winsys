@@ -29,6 +29,7 @@ if __name__ == '__main__':
           'Topic :: Utilities',
       ],
       platforms='win32',
+      install_requires=['pypiwin32'],
       packages=packages,
       ext_modules=[] ## ext_modules
   )
