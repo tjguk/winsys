@@ -231,7 +231,7 @@ class Process(Env):
         super(Process, self).__init__()
 
     def keys(self):
-        return (k for k in wrapped(win32profile.GetEnvironmentStrings).iterkeys())
+        return (k for k in wrapped(win32profile.GetEnvironmentStrings).keys())
 
     def _items(self):
         return (item for item in wrapped(win32profile.GetEnvironmentStrings).iteritems())
