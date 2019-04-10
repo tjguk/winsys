@@ -158,7 +158,7 @@ class _DropTarget(win32com.server.policy.DesignatedWrapPolicy):
           return shellcon.DROPEFFECT_NONE
         else:
           if wrapped(win32gui.GetClassName, child_hwnd) == "Edit":
-            return shellcon.DROPEFFECT_COPY 
+            return shellcon.DROPEFFECT_COPY
           else :
             return shellcon.DROPEFFECT_NONE
 
@@ -564,7 +564,8 @@ class Dialog(BaseDialog):
             for item in value:
                 if isinstance(item, tuple):
                     item = item[0]
-                SendMessage(item_hwnd, win32con.CB_ADDSTRING, 0, utils.string_as_pointer(str(item)))
+                sitem = bytearray(str(item), encoding="utf-8")
+                SendMessage(item_hwnd, win32con.CB_ADDSTRING, 0, item)
             SendMessage(item_hwnd, win32con.CB_SETCURSEL, 0, 0)
         elif class_name == "Static":
             wrapped(win32gui.SetDlgItemText, self.hwnd, item_id, unicode(value))
