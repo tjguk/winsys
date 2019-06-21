@@ -11,7 +11,7 @@ version = open ("VERSION.txt").read ().strip ()
 
 if __name__ == '__main__':
   setup(
-      name='WinSys',
+      name='WinSys-EM',
       version=version,
       url='http://github.com/tjg/winsys',
       license='LICENSE.txt',
