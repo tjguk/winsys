@@ -158,7 +158,7 @@ class _DropTarget(win32com.server.policy.DesignatedWrapPolicy):
           return shellcon.DROPEFFECT_NONE
         else:
           if wrapped(win32gui.GetClassName, child_hwnd) == "Edit":
-            return shellcon.DROPEFFECT_COPY 
+            return shellcon.DROPEFFECT_COPY
           else :
             return shellcon.DROPEFFECT_NONE
 
@@ -564,7 +564,7 @@ class Dialog(BaseDialog):
             for item in value:
                 if isinstance(item, tuple):
                     item = item[0]
-                SendMessage(item_hwnd, win32con.CB_ADDSTRING, 0, utils.string_as_pointer(str(item)))
+                SendMessage(item_hwnd, win32con.CB_ADDSTRING, 0, item)
             SendMessage(item_hwnd, win32con.CB_SETCURSEL, 0, 0)
         elif class_name == "Static":
             wrapped(win32gui.SetDlgItemText, self.hwnd, item_id, unicode(value))
@@ -621,7 +621,7 @@ class Dialog(BaseDialog):
         a utf8-encoded string which is to be displayed in the
         dialog's progress static.
         """
-        message = marshal.loads(win32gui.PyGetString(lparam, wparam))
+        message = marshal.loads(win32gui.PyGetMemory(lparam, wparam))
         self._set_item(self._progress_id, message)
 
     def OnProgressComplete(self, hwnd, msg, wparam, lparam):
@@ -631,7 +631,7 @@ class Dialog(BaseDialog):
         the dialog.
         """
         try:
-            message = marshal.loads(win32gui.PyGetString(lparam, wparam))
+            message = marshal.loads(win32gui.PyGetMemory(lparam, wparam))
         except ValueError:
             message = "- Complete -"
         self._set_item(self._progress_id, message)
@@ -644,15 +644,13 @@ class Dialog(BaseDialog):
         """Convenience function to tell the dialog that progress is complete,
         passing a message along which will be displayed in the progress box
         """
-        _message = buffer(marshal.dumps(message))
-        address, length = win32gui.PyGetBufferAddressAndLen(_message)
+        address, length = win32gui.PyGetBufferAddressAndLen(marshal.dumps(message))
         PostMessage(self.hwnd, self.WM_PROGRESS_COMPLETE, length, address)
 
     def _progress_message(self, message):
         """Convenience function to send progress messages to the dialog
         """
-        _message = buffer(marshal.dumps(message))
-        address, length = win32gui.PyGetBufferAddressAndLen(_message)
+        address, length = win32gui.PyGetBufferAddressAndLen(marshal.dumps(message))
         SendMessage(self.hwnd, self.WM_PROGRESS_MESSAGE, length, address)
 
     def OnOk(self, hwnd):
