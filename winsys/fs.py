@@ -268,7 +268,7 @@ def normalised(filepath):
 def read(handle):
     wrapped(win32file.ReadFile, handle)
 
-def handle(filepath, write=False, exclusive=False, async=False, attributes=None, sec=None):
+def handle(filepath, write=False, exclusive=False, use_async=False, attributes=None, sec=None):
     """Return a file handle either for querying
     (the default case) or for writing -- including writing directories
 
@@ -280,7 +280,7 @@ def handle(filepath, write=False, exclusive=False, async=False, attributes=None,
     attributes = FILE_ATTRIBUTE.constant(attributes)
     if attributes is None:
         attributes = FILE_ATTRIBUTE.NORMAL | FILE_FLAG.BACKUP_SEMANTICS
-    if async:
+    if use_async:
         attributes |= FILE_FLAG.OVERLAPPED
     return wrapped(
         win32file.CreateFile,
