@@ -17,7 +17,7 @@ import win32security
 import ntsecuritycon
 import pywintypes
 
-from winsys.tests import utils as testutils
+from . import utils as testutils
 from winsys import security
 
 OPTIONS = \

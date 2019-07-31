@@ -7,7 +7,7 @@ from winsys._compat import unittest
 import win32api
 import win32security
 
-from winsys.tests import utils as testutils
+from . import utils as testutils
 from winsys import accounts
 
 @unittest.skipUnless(testutils.i_am_admin(), "These tests must be run as Administrator")

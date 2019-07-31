@@ -8,7 +8,7 @@ import win32api
 import win32security
 import ntsecuritycon
 
-from winsys.tests import utils as testutils
+from . import utils as testutils
 from winsys._security import _tokens
 
 @unittest.skipUnless(testutils.i_am_admin(), "These tests must be run as Administrator")

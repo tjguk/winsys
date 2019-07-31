@@ -11,7 +11,7 @@ from winsys._compat import unittest
 
 import win32file
 
-from winsys.tests.test_fs import utils
+from . import utils as fsutils
 
 FILE_ATTRIBUTE_ENCRYPTED = 0x00004000
 
@@ -19,118 +19,118 @@ class TestDir (unittest.TestCase):
 
   def setUp (self):
     self.filenames = ["%d" % i for i in range (5)]
-    utils.mktemp ()
+    fsutils.mktemp ()
     for filename in self.filenames:
-      open (os.path.join (utils.TEST_ROOT, filename), "w").close ()
-    os.mkdir (os.path.join (utils.TEST_ROOT, "d"))
+      open (os.path.join (fsutils.TEST_ROOT, filename), "w").close ()
+    os.mkdir (os.path.join (fsutils.TEST_ROOT, "d"))
     for filename in self.filenames:
-      open (os.path.join (utils.TEST_ROOT, "d", filename), "w").close ()
-    os.mkdir (os.path.join (utils.TEST_ROOT, "empty"))
+      open (os.path.join (fsutils.TEST_ROOT, "d", filename), "w").close ()
+    os.mkdir (os.path.join (fsutils.TEST_ROOT, "empty"))
 
   def tearDown (self):
-    utils.rmtemp ()
+    fsutils.rmtemp ()
 
   def test_unicode (self):
     path = str (os.path.dirname (sys.executable)).rstrip (fs.sep) + fs.sep
     self.assertEquals (path, fs.Dir (path))
 
   def test_compress (self):
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
 
-    self.assertFalse (utils.attributes (filepath) & win32file.FILE_ATTRIBUTE_COMPRESSED)
+    self.assertFalse (fsutils.attributes (filepath) & win32file.FILE_ATTRIBUTE_COMPRESSED)
     for filename in self.filenames:
-      self.assertFalse (utils.attributes (os.path.join (filepath, filename)) & win32file.FILE_ATTRIBUTE_COMPRESSED)
+      self.assertFalse (fsutils.attributes (os.path.join (filepath, filename)) & win32file.FILE_ATTRIBUTE_COMPRESSED)
 
     fs.Dir (filepath).compress ()
 
-    self.assertTrue (utils.attributes (filepath) & win32file.FILE_ATTRIBUTE_COMPRESSED)
+    self.assertTrue (fsutils.attributes (filepath) & win32file.FILE_ATTRIBUTE_COMPRESSED)
     for filename in self.filenames:
-      self.assertTrue (utils.attributes (os.path.join (filepath, filename)) & win32file.FILE_ATTRIBUTE_COMPRESSED)
+      self.assertTrue (fsutils.attributes (os.path.join (filepath, filename)) & win32file.FILE_ATTRIBUTE_COMPRESSED)
 
     fs.Dir (filepath).uncompress ()
 
-    self.assertFalse (utils.attributes (filepath) & win32file.FILE_ATTRIBUTE_COMPRESSED)
+    self.assertFalse (fsutils.attributes (filepath) & win32file.FILE_ATTRIBUTE_COMPRESSED)
     for filename in self.filenames:
-      self.assertFalse (utils.attributes (os.path.join (filepath, filename)) & win32file.FILE_ATTRIBUTE_COMPRESSED)
+      self.assertFalse (fsutils.attributes (os.path.join (filepath, filename)) & win32file.FILE_ATTRIBUTE_COMPRESSED)
 
   def test_compress_not_contents (self):
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
 
-    self.assertFalse (utils.attributes (filepath) & win32file.FILE_ATTRIBUTE_COMPRESSED)
+    self.assertFalse (fsutils.attributes (filepath) & win32file.FILE_ATTRIBUTE_COMPRESSED)
     for filename in self.filenames:
-      self.assertFalse (utils.attributes (os.path.join (filepath, filename)) & win32file.FILE_ATTRIBUTE_COMPRESSED)
+      self.assertFalse (fsutils.attributes (os.path.join (filepath, filename)) & win32file.FILE_ATTRIBUTE_COMPRESSED)
 
     fs.Dir (filepath).compress (apply_to_contents=False)
 
-    self.assertTrue (utils.attributes (filepath) & win32file.FILE_ATTRIBUTE_COMPRESSED)
+    self.assertTrue (fsutils.attributes (filepath) & win32file.FILE_ATTRIBUTE_COMPRESSED)
     for filename in self.filenames:
-      self.assertFalse (utils.attributes (os.path.join (filepath, filename)) & win32file.FILE_ATTRIBUTE_COMPRESSED)
+      self.assertFalse (fsutils.attributes (os.path.join (filepath, filename)) & win32file.FILE_ATTRIBUTE_COMPRESSED)
 
   def test_uncompress_not_contents (self):
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
 
     fs.Dir (filepath).compress ()
-    self.assertTrue (utils.attributes (filepath) & win32file.FILE_ATTRIBUTE_COMPRESSED)
+    self.assertTrue (fsutils.attributes (filepath) & win32file.FILE_ATTRIBUTE_COMPRESSED)
     for filename in self.filenames:
-      self.assertTrue (utils.attributes (os.path.join (filepath, filename)) & win32file.FILE_ATTRIBUTE_COMPRESSED)
+      self.assertTrue (fsutils.attributes (os.path.join (filepath, filename)) & win32file.FILE_ATTRIBUTE_COMPRESSED)
 
     fs.Dir (filepath).uncompress (apply_to_contents=False)
 
-    self.assertFalse (utils.attributes (filepath) & win32file.FILE_ATTRIBUTE_COMPRESSED)
+    self.assertFalse (fsutils.attributes (filepath) & win32file.FILE_ATTRIBUTE_COMPRESSED)
     for filename in self.filenames:
-      self.assertTrue (utils.attributes (os.path.join (filepath, filename)) & win32file.FILE_ATTRIBUTE_COMPRESSED)
+      self.assertTrue (fsutils.attributes (os.path.join (filepath, filename)) & win32file.FILE_ATTRIBUTE_COMPRESSED)
 
-  @unittest.skipUnless (utils.can_encrypt (), "No certificate available")
+  @unittest.skipUnless (fsutils.can_encrypt (), "No certificate available")
   def test_encrypt (self):
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
 
-    self.assertFalse (utils.attributes (filepath) & FILE_ATTRIBUTE_ENCRYPTED)
+    self.assertFalse (fsutils.attributes (filepath) & FILE_ATTRIBUTE_ENCRYPTED)
     for filename in self.filenames:
-      self.assertFalse (utils.attributes (os.path.join (filepath, filename)) & FILE_ATTRIBUTE_ENCRYPTED)
+      self.assertFalse (fsutils.attributes (os.path.join (filepath, filename)) & FILE_ATTRIBUTE_ENCRYPTED)
 
     fs.Dir (filepath).encrypt ()
 
-    self.assertTrue (utils.attributes (filepath) & FILE_ATTRIBUTE_ENCRYPTED)
+    self.assertTrue (fsutils.attributes (filepath) & FILE_ATTRIBUTE_ENCRYPTED)
     for filename in self.filenames:
-      self.assertTrue (utils.attributes (os.path.join (filepath, filename)) & FILE_ATTRIBUTE_ENCRYPTED)
+      self.assertTrue (fsutils.attributes (os.path.join (filepath, filename)) & FILE_ATTRIBUTE_ENCRYPTED)
 
     fs.Dir (filepath).unencrypt ()
 
-    self.assertFalse (utils.attributes (filepath) & FILE_ATTRIBUTE_ENCRYPTED)
+    self.assertFalse (fsutils.attributes (filepath) & FILE_ATTRIBUTE_ENCRYPTED)
     for filename in self.filenames:
-      self.assertFalse (utils.attributes (os.path.join (filepath, filename)) & FILE_ATTRIBUTE_ENCRYPTED)
+      self.assertFalse (fsutils.attributes (os.path.join (filepath, filename)) & FILE_ATTRIBUTE_ENCRYPTED)
 
-  @unittest.skipUnless (utils.can_encrypt (), "No certificate available")
+  @unittest.skipUnless (fsutils.can_encrypt (), "No certificate available")
   def test_encrypt_not_contents (self):
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
 
-    self.assertFalse (utils.attributes (filepath) & FILE_ATTRIBUTE_ENCRYPTED)
+    self.assertFalse (fsutils.attributes (filepath) & FILE_ATTRIBUTE_ENCRYPTED)
     for filename in self.filenames:
-      self.assertFalse (utils.attributes (os.path.join (filepath, filename)) & FILE_ATTRIBUTE_ENCRYPTED)
+      self.assertFalse (fsutils.attributes (os.path.join (filepath, filename)) & FILE_ATTRIBUTE_ENCRYPTED)
 
     fs.Dir (filepath).encrypt (apply_to_contents=False)
 
-    self.assertTrue (utils.attributes (filepath) & FILE_ATTRIBUTE_ENCRYPTED)
+    self.assertTrue (fsutils.attributes (filepath) & FILE_ATTRIBUTE_ENCRYPTED)
     for filename in self.filenames:
-      self.assertFalse (utils.attributes (os.path.join (filepath, filename)) & FILE_ATTRIBUTE_ENCRYPTED)
+      self.assertFalse (fsutils.attributes (os.path.join (filepath, filename)) & FILE_ATTRIBUTE_ENCRYPTED)
 
-  @unittest.skipUnless (utils.can_encrypt (), "No certificate available")
+  @unittest.skipUnless (fsutils.can_encrypt (), "No certificate available")
   def test_unencrypt_not_contents (self):
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
 
     fs.Dir (filepath).encrypt ()
-    self.assertTrue (utils.attributes (filepath) & FILE_ATTRIBUTE_ENCRYPTED)
+    self.assertTrue (fsutils.attributes (filepath) & FILE_ATTRIBUTE_ENCRYPTED)
     for filename in self.filenames:
-      self.assertTrue (utils.attributes (os.path.join (filepath, filename)) & FILE_ATTRIBUTE_ENCRYPTED)
+      self.assertTrue (fsutils.attributes (os.path.join (filepath, filename)) & FILE_ATTRIBUTE_ENCRYPTED)
 
     fs.Dir (filepath).unencrypt (apply_to_contents=False)
 
-    self.assertFalse (utils.attributes (filepath) & FILE_ATTRIBUTE_ENCRYPTED)
+    self.assertFalse (fsutils.attributes (filepath) & FILE_ATTRIBUTE_ENCRYPTED)
     for filename in self.filenames:
-      self.assertTrue (utils.attributes (os.path.join (filepath, filename)) & FILE_ATTRIBUTE_ENCRYPTED)
+      self.assertTrue (fsutils.attributes (os.path.join (filepath, filename)) & FILE_ATTRIBUTE_ENCRYPTED)
 
   def test_create (self):
-    filepath = os.path.join (utils.TEST_ROOT, uuid.uuid1 ().hex)
+    filepath = os.path.join (fsutils.TEST_ROOT, uuid.uuid1 ().hex)
     self.assertFalse (os.path.exists (filepath))
     fs.dir (filepath).create ()
     self.assertTrue (os.path.exists (filepath))
@@ -141,7 +141,7 @@ class TestDir (unittest.TestCase):
     # If the dir already exists, create will succeed silently
     # and will return the normalised path of the dir.
     #
-    filepath = os.path.join (utils.TEST_ROOT, uuid.uuid1 ().hex)
+    filepath = os.path.join (fsutils.TEST_ROOT, uuid.uuid1 ().hex)
     os.mkdir (filepath)
     self.assertTrue (os.path.isdir (filepath))
     d = fs.dir (filepath)
@@ -152,7 +152,7 @@ class TestDir (unittest.TestCase):
       #
       # If the name is already used by a file, create will raise x_fs
       #
-      filepath = os.path.join (utils.TEST_ROOT, uuid.uuid1 ().hex)
+      filepath = os.path.join (fsutils.TEST_ROOT, uuid.uuid1 ().hex)
       open (filepath, "w").close ()
       self.assertTrue (os.path.isfile (filepath))
       fs.dir (filepath).create ()
@@ -162,74 +162,74 @@ class TestDir (unittest.TestCase):
     pass
 
   def test_entries (self):
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
     self.assertEquals (
       set (fs.dir (filepath).entries ()),
-      utils.files_in (filepath) | utils.dirs_in (filepath)
+      fsutils.files_in (filepath) | fsutils.dirs_in (filepath)
     )
 
   def test_file (self):
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
     self.assertEquals (fs.dir (filepath).file ("1"), os.path.join (filepath, "1"))
 
   def test_dir (self):
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
     self.assertEquals (fs.dir (filepath).dir ("d"), os.path.join (filepath, "d\\"))
 
   def test_dirs (self):
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
     self.assertEquals (
       set (fs.dir (filepath).dirs ()),
-      utils.dirs_in (filepath)
+      fsutils.dirs_in (filepath)
     )
 
   def test_walk (self):
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
     walker = fs.dir (filepath).walk ()
     dirpath, dirs, files = next (walker)
     self.assertEquals (dirpath, filepath + "\\")
-    self.assertEquals (set (dirs), utils.dirs_in (filepath))
-    self.assertEquals (set (files), utils.files_in (filepath))
+    self.assertEquals (set (dirs), fsutils.dirs_in (filepath))
+    self.assertEquals (set (files), fsutils.files_in (filepath))
 
     filepath = os.path.join (filepath, "d")
     dirpath, dirs, files = next (walker)
     self.assertEquals (dirpath, filepath + "\\")
-    self.assertEquals (set (dirs), utils.dirs_in (filepath))
-    self.assertEquals (set (files), utils.files_in (filepath))
+    self.assertEquals (set (dirs), fsutils.dirs_in (filepath))
+    self.assertEquals (set (files), fsutils.files_in (filepath))
 
   def test_flat (self):
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
     self.assertEquals (
       set (fs.dir (filepath).flat ()),
-      utils.files_in (filepath) | utils.files_in (os.path.join (filepath, "d"))
+      fsutils.files_in (filepath) | fsutils.files_in (os.path.join (filepath, "d"))
     )
 
   def test_flat_with_dirs (self):
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
     filepath2 = os.path.join (filepath, "d")
     self.assertEquals (
       set (fs.dir (filepath).flat (includedirs=True)),
-      utils.dirs_in (filepath) | utils.files_in (filepath) | utils.dirs_in (filepath2) | utils.files_in (filepath2)
+      fsutils.dirs_in (filepath) | fsutils.files_in (filepath) | fsutils.dirs_in (filepath2) | fsutils.files_in (filepath2)
     )
 
   def test_dir_copy_to_new_dir (self):
     source_name = uuid.uuid1 ().hex
     target_name = uuid.uuid1 ().hex
-    source = os.path.join (utils.TEST_ROOT, source_name)
-    target = os.path.join (utils.TEST_ROOT, target_name)
+    source = os.path.join (fsutils.TEST_ROOT, source_name)
+    target = os.path.join (fsutils.TEST_ROOT, target_name)
     os.mkdir (source)
     for i in range (10):
       open (os.path.join (source, "%d.dat" % i), "w").close ()
     self.assertTrue (os.path.isdir (source))
     self.assertFalse (os.path.isdir (target))
     fs.copy (source, target)
-    self.assertTrue (*utils.dirs_are_equal (source, target))
+    self.assertTrue (*fsutils.dirs_are_equal (source, target))
 
   def test_dir_copy_to_existing_dir (self):
     source_name = uuid.uuid1 ().hex
     target_name = uuid.uuid1 ().hex
-    source = os.path.join (utils.TEST_ROOT, source_name)
-    target = os.path.join (utils.TEST_ROOT, target_name)
+    source = os.path.join (fsutils.TEST_ROOT, source_name)
+    target = os.path.join (fsutils.TEST_ROOT, target_name)
     os.mkdir (source)
     for i in range (10):
       open (os.path.join (source, "%d.dat" % i), "w").close ()
@@ -237,7 +237,7 @@ class TestDir (unittest.TestCase):
     self.assertTrue (os.path.isdir (source))
     self.assertTrue (os.path.isdir (target))
     fs.copy (source, target)
-    self.assertTrue (*utils.dirs_are_equal (source, target))
+    self.assertTrue (*fsutils.dirs_are_equal (source, target))
 
   def test_dir_copy_with_callback (self):
     callback_result = []
@@ -247,33 +247,33 @@ class TestDir (unittest.TestCase):
     source_name = uuid.uuid1 ().hex
     target_name = uuid.uuid1 ().hex
     callback_data = uuid.uuid1 ().hex
-    source = os.path.join (utils.TEST_ROOT, source_name)
-    target = os.path.join (utils.TEST_ROOT, target_name)
+    source = os.path.join (fsutils.TEST_ROOT, source_name)
+    target = os.path.join (fsutils.TEST_ROOT, target_name)
     os.mkdir (source)
     for i in range (10):
       open (os.path.join (source, "%d.dat" % i), "w").close ()
     self.assertTrue (os.path.isdir (source))
     self.assertFalse (os.path.isdir (target))
     fs.copy (source, target, _callback, callback_data)
-    self.assertTrue (*utils.dirs_are_equal (source, target))
+    self.assertTrue (*fsutils.dirs_are_equal (source, target))
     self.assertEquals (len (callback_result), 10)
     self.assertEquals (callback_result, [(0, 0, callback_data) for i in range (10)])
 
   def test_delete (self):
-    filepath = os.path.join (utils.TEST_ROOT, "empty")
+    filepath = os.path.join (fsutils.TEST_ROOT, "empty")
     self.assertTrue (os.path.exists (filepath))
     fs.Dir (filepath).delete ()
     self.assertFalse (os.path.exists (filepath))
 
   def test_delete_recursive (self):
-    filepath = os.path.join (utils.TEST_ROOT, "d")
+    filepath = os.path.join (fsutils.TEST_ROOT, "d")
     self.assertTrue (os.path.exists (filepath))
-    self.assertTrue (utils.files_in (filepath))
+    self.assertTrue (fsutils.files_in (filepath))
     fs.Dir (filepath).delete (recursive=True)
     self.assertFalse (os.path.exists (filepath))
 
   def test_watch (self):
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
     removed_filename = os.path.join (filepath, "1")
     added_filename = os.path.join (filepath, uuid.uuid1 ().hex)
     old_filename = os.path.join (filepath, "2")
@@ -293,9 +293,9 @@ class TestDir (unittest.TestCase):
 
   def test_zip (self):
     import zipfile
-    filepath = utils.TEST_ROOT
+    filepath = fsutils.TEST_ROOT
     zipped = fs.dir (filepath).zip ()
-    unzip_filepath = os.path.join (utils.TEST_ROOT2)
+    unzip_filepath = os.path.join (fsutils.TEST_ROOT2)
     os.mkdir (unzip_filepath)
     zipfile.ZipFile (zipped).extractall (unzip_filepath)
     self.assertEquals (

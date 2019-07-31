@@ -4,9 +4,8 @@ from __future__ import unicode_literals
 import os, sys
 from winsys._compat import unittest
 
-from winsys.tests import utils as testutils
 from winsys import _lsa
-from winsys.tests import utils
+from . import utils as testutils
 
 @unittest.skipUnless(testutils.i_am_admin(), "These tests must be run as Administrator")
 class TestLSA(unittest.TestCase):

@@ -12,7 +12,7 @@ import win32evtlog
 import win32security
 import pywintypes
 
-from winsys.tests import utils as testutils
+from . import utils as testutils
 from winsys import event_logs, registry, utils
 
 

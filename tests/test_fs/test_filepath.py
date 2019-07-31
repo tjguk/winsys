@@ -11,7 +11,7 @@ import uuid
 import win32file
 
 from winsys import fs
-from winsys.tests import utils
+from tests import utils as testutils
 
 def _test_parts (path, result, skip_rejoin=False):
   parts = fs.get_parts (path)
@@ -190,11 +190,11 @@ class TestFilepath (unittest.TestCase):
   # dumps
   #
   def test_dump_absolute (self):
-    with utils.fake_stdout ():
+    with testutils.fake_stdout ():
       fs.filepath (__file__).dump ()
 
   def test_dump_relative (self):
-    with utils.fake_stdout ():
+    with testutils.fake_stdout ():
       fs.filepath ("@@").dump ()
 
 if __name__ == "__main__":

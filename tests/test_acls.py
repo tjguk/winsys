@@ -11,7 +11,7 @@ import ntsecuritycon
 import tempfile
 from winsys._compat import unittest
 
-from winsys.tests import utils as testutils
+from . import utils as testutils
 from winsys import accounts
 from winsys._security import _aces, _acls
 
