@@ -1,5 +1,6 @@
 @echo off
-.venv\scripts\python -m winsys.tests
+.venv\scripts\python -mtests
 IF ERRORLEVEL 1 goto finish
 
 :finish
+PAUSE
