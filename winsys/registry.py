@@ -547,7 +547,7 @@ def values(root, ignore_access_errors=False, _want_types=False):
         hKey = root.pyobject()
     except exc.x_access_denied:
         if ignore_access_errors:
-            raise StopIteration
+            return
         else:
             raise
 
@@ -560,9 +560,11 @@ def values(root, ignore_access_errors=False, _want_types=False):
                 yield name, value, type
             else:
                 yield name, value
+        except StopIteration:
+            return
         except exc.x_access_denied:
             if ignore_access_errors:
-                raise StopIteration
+                return
             else:
                 raise
         i += 1
@@ -580,16 +582,18 @@ def keys(root, ignore_access_errors=False):
         hRoot = root.pyobject()
     except exc.x_access_denied:
         if ignore_access_errors:
-            raise StopIteration
+            return
         else:
             raise
 
     try:
         for subname, reserved, subclass, written_at in wrapped(win32api.RegEnumKeyExW, hRoot):
             yield registry(root.moniker + sep + subname, accept_value=False)
+    except StopIteration:
+        return
     except exc.x_access_denied:
         if ignore_access_errors:
-            raise StopIteration
+            return
         else:
             raise
 iterkeys = keys
