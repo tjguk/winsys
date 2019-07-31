@@ -5,6 +5,7 @@ import os, sys
 import win32file
 
 from winsys._compat import unittest
+raise unittest.SkipTest("Skip this entire module for now")
 from winsys._compat import *
 from . import utils as testutils
 from winsys import _kernel32

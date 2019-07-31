@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import sys
 from winsys._compat import unittest
+raise unittest.SkipTest("Skip this entire module for now")
 import uuid
 
 import winerror
