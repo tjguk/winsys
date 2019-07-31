@@ -1,5 +1,6 @@
 @echo off
-.venv\scripts\python -munittest discover
+cls
+.venv\scripts\python -munittest
 IF ERRORLEVEL 1 goto finish
 
 :finish
