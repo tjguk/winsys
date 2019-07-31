@@ -164,8 +164,8 @@ class TestDir (unittest.TestCase):
   def test_entries (self):
     filepath = fsutils.TEST_ROOT
     self.assertEqual (
-      set (fs.dir (filepath).entries ()),
-      fsutils.files_in (filepath) | fsutils.dirs_in (filepath)
+      set(str(i) for i in fs.dir(filepath).entries()),
+      fsutils.files_in(filepath) | fsutils.dirs_in(filepath)
     )
 
   def test_file (self):
@@ -179,37 +179,37 @@ class TestDir (unittest.TestCase):
   def test_dirs (self):
     filepath = fsutils.TEST_ROOT
     self.assertEqual (
-      set (fs.dir (filepath).dirs ()),
-      fsutils.dirs_in (filepath)
+      set(str(i) for i in fs.dir(filepath).dirs()),
+      fsutils.dirs_in(filepath)
     )
 
   def test_walk (self):
     filepath = fsutils.TEST_ROOT
     walker = fs.dir (filepath).walk ()
     dirpath, dirs, files = next (walker)
-    self.assertEqual (dirpath, filepath + "\\")
-    self.assertEqual (set (dirs), fsutils.dirs_in (filepath))
-    self.assertEqual (set (files), fsutils.files_in (filepath))
+    self.assertEqual(dirpath, filepath + "\\")
+    self.assertEqual(set(str(d) for d in dirs), fsutils.dirs_in(filepath))
+    self.assertEqual(set(str(f) for f in files), fsutils.files_in(filepath))
 
     filepath = os.path.join (filepath, "d")
     dirpath, dirs, files = next (walker)
-    self.assertEqual (dirpath, filepath + "\\")
-    self.assertEqual (set (dirs), fsutils.dirs_in (filepath))
-    self.assertEqual (set (files), fsutils.files_in (filepath))
+    self.assertEqual(dirpath, filepath + "\\")
+    self.assertEqual(set(str(d) for d in dirs), fsutils.dirs_in(filepath))
+    self.assertEqual(set(str(f) for f in files), fsutils.files_in(filepath))
 
   def test_flat (self):
     filepath = fsutils.TEST_ROOT
     self.assertEqual (
-      set (fs.dir (filepath).flat ()),
-      fsutils.files_in (filepath) | fsutils.files_in (os.path.join (filepath, "d"))
+      set(str(i) for i in fs.dir(filepath).flat()),
+      fsutils.files_in(filepath) | fsutils.files_in(os.path.join(filepath, "d"))
     )
 
   def test_flat_with_dirs (self):
     filepath = fsutils.TEST_ROOT
-    filepath2 = os.path.join (filepath, "d")
+    filepath2 = os.path.join(filepath, "d")
     self.assertEqual (
-      set (fs.dir (filepath).flat (includedirs=True)),
-      fsutils.dirs_in (filepath) | fsutils.files_in (filepath) | fsutils.dirs_in (filepath2) | fsutils.files_in (filepath2)
+      set (str(i) for i in fs.dir(filepath).flat(includedirs=True)),
+      fsutils.dirs_in(filepath) | fsutils.files_in(filepath) | fsutils.dirs_in(filepath2) | fsutils.files_in(filepath2)
     )
 
   def test_dir_copy_to_new_dir (self):
