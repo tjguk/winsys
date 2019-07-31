@@ -11,7 +11,7 @@ from . import utils as testutils
 class TestLSA(unittest.TestCase):
 
     def test_LSA_logon_sessions(self):
-        with utils.fake_stdout():
+        with testutils.fake_stdout():
             for logon_session in _lsa.LSA.logon_sessions():
                 logon_session.dump()
 
