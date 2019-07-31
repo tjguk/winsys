@@ -32,7 +32,7 @@ class TestDir (unittest.TestCase):
 
   def test_unicode (self):
     path = str (os.path.dirname (sys.executable)).rstrip (fs.sep) + fs.sep
-    self.assertEquals (path, fs.Dir (path))
+    self.assertEqual (path, fs.Dir (path))
 
   def test_compress (self):
     filepath = fsutils.TEST_ROOT
@@ -145,7 +145,7 @@ class TestDir (unittest.TestCase):
     os.mkdir (filepath)
     self.assertTrue (os.path.isdir (filepath))
     d = fs.dir (filepath)
-    self.assertEquals (fs.normalised (d), fs.normalised (d.create ()))
+    self.assertEqual (fs.normalised (d), fs.normalised (d.create ()))
 
   def test_create_already_exists_not_dir (self):
     with self.assertRaises (fs.x_fs):
@@ -163,22 +163,22 @@ class TestDir (unittest.TestCase):
 
   def test_entries (self):
     filepath = fsutils.TEST_ROOT
-    self.assertEquals (
+    self.assertEqual (
       set (fs.dir (filepath).entries ()),
       fsutils.files_in (filepath) | fsutils.dirs_in (filepath)
     )
 
   def test_file (self):
     filepath = fsutils.TEST_ROOT
-    self.assertEquals (fs.dir (filepath).file ("1"), os.path.join (filepath, "1"))
+    self.assertEqual (fs.dir (filepath).file ("1"), os.path.join (filepath, "1"))
 
   def test_dir (self):
     filepath = fsutils.TEST_ROOT
-    self.assertEquals (fs.dir (filepath).dir ("d"), os.path.join (filepath, "d\\"))
+    self.assertEqual (fs.dir (filepath).dir ("d"), os.path.join (filepath, "d\\"))
 
   def test_dirs (self):
     filepath = fsutils.TEST_ROOT
-    self.assertEquals (
+    self.assertEqual (
       set (fs.dir (filepath).dirs ()),
       fsutils.dirs_in (filepath)
     )
@@ -187,19 +187,19 @@ class TestDir (unittest.TestCase):
     filepath = fsutils.TEST_ROOT
     walker = fs.dir (filepath).walk ()
     dirpath, dirs, files = next (walker)
-    self.assertEquals (dirpath, filepath + "\\")
-    self.assertEquals (set (dirs), fsutils.dirs_in (filepath))
-    self.assertEquals (set (files), fsutils.files_in (filepath))
+    self.assertEqual (dirpath, filepath + "\\")
+    self.assertEqual (set (dirs), fsutils.dirs_in (filepath))
+    self.assertEqual (set (files), fsutils.files_in (filepath))
 
     filepath = os.path.join (filepath, "d")
     dirpath, dirs, files = next (walker)
-    self.assertEquals (dirpath, filepath + "\\")
-    self.assertEquals (set (dirs), fsutils.dirs_in (filepath))
-    self.assertEquals (set (files), fsutils.files_in (filepath))
+    self.assertEqual (dirpath, filepath + "\\")
+    self.assertEqual (set (dirs), fsutils.dirs_in (filepath))
+    self.assertEqual (set (files), fsutils.files_in (filepath))
 
   def test_flat (self):
     filepath = fsutils.TEST_ROOT
-    self.assertEquals (
+    self.assertEqual (
       set (fs.dir (filepath).flat ()),
       fsutils.files_in (filepath) | fsutils.files_in (os.path.join (filepath, "d"))
     )
@@ -207,7 +207,7 @@ class TestDir (unittest.TestCase):
   def test_flat_with_dirs (self):
     filepath = fsutils.TEST_ROOT
     filepath2 = os.path.join (filepath, "d")
-    self.assertEquals (
+    self.assertEqual (
       set (fs.dir (filepath).flat (includedirs=True)),
       fsutils.dirs_in (filepath) | fsutils.files_in (filepath) | fsutils.dirs_in (filepath2) | fsutils.files_in (filepath2)
     )
@@ -256,8 +256,8 @@ class TestDir (unittest.TestCase):
     self.assertFalse (os.path.isdir (target))
     fs.copy (source, target, _callback, callback_data)
     self.assertTrue (*fsutils.dirs_are_equal (source, target))
-    self.assertEquals (len (callback_result), 10)
-    self.assertEquals (callback_result, [(0, 0, callback_data) for i in range (10)])
+    self.assertEqual (len (callback_result), 10)
+    self.assertEqual (callback_result, [(0, 0, callback_data) for i in range (10)])
 
   def test_delete (self):
     filepath = os.path.join (fsutils.TEST_ROOT, "empty")
@@ -286,9 +286,9 @@ class TestDir (unittest.TestCase):
     watcher = fs.dir (filepath).watch ()
     t = threading.Timer (0.5, _change_dir)
     t.start ()
-    self.assertEquals (next (watcher), (fs.FILE_ACTION.REMOVED, removed_filename, None))
-    self.assertEquals (next (watcher), (fs.FILE_ACTION.ADDED, None, added_filename))
-    self.assertEquals (next (watcher), (fs.FILE_ACTION.RENAMED_NEW_NAME, old_filename, new_filename))
+    self.assertEqual (next (watcher), (fs.FILE_ACTION.REMOVED, removed_filename, None))
+    self.assertEqual (next (watcher), (fs.FILE_ACTION.ADDED, None, added_filename))
+    self.assertEqual (next (watcher), (fs.FILE_ACTION.RENAMED_NEW_NAME, old_filename, new_filename))
     t.join ()
 
   def test_zip (self):
@@ -298,7 +298,7 @@ class TestDir (unittest.TestCase):
     unzip_filepath = os.path.join (fsutils.TEST_ROOT2)
     os.mkdir (unzip_filepath)
     zipfile.ZipFile (zipped).extractall (unzip_filepath)
-    self.assertEquals (
+    self.assertEqual (
       set (f.relative_to (filepath) for f in fs.flat (filepath)),
       set (f.relative_to (unzip_filepath) for f in fs.flat (unzip_filepath))
     )

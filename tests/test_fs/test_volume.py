@@ -24,12 +24,12 @@ class TestVolume (unittest.TestCase):
   def test_name (self):
     volume = self.get_volume ()
     v = fs.Volume (volume)
-    self.assertEquals (v.name, volume)
+    self.assertEqual (v.name, volume)
 
   def test_label (self):
     volume = self.get_volume ()
     info = self.get_info (volume)
-    self.assertEquals (fs.Volume (volume).label, info[0])
+    self.assertEqual (fs.Volume (volume).label, info[0])
 
   def test_serial_number (self):
     volume = self.get_volume ()
@@ -38,26 +38,26 @@ class TestVolume (unittest.TestCase):
     # Convert signed to unsigned number
     #
     value, = struct.unpack ("L", struct.pack ("l", info[1]))
-    self.assertEquals (fs.Volume (volume).serial_number, value)
+    self.assertEqual (fs.Volume (volume).serial_number, value)
 
   def test_maximum_component_length (self):
     volume = self.get_volume ()
     info = self.get_info (volume)
-    self.assertEquals (fs.Volume (volume).maximum_component_length, info[2])
+    self.assertEqual (fs.Volume (volume).maximum_component_length, info[2])
 
   def test_flags (self):
     volume = self.get_volume ()
     info = self.get_info (volume)
-    self.assertEquals (fs.Volume (volume).flags.flags, info[3])
+    self.assertEqual (fs.Volume (volume).flags.flags, info[3])
 
   def test_file_system_name (self):
     volume = self.get_volume ()
     info = self.get_info (volume)
-    self.assertEquals (fs.Volume (volume).file_system_name, info[4])
+    self.assertEqual (fs.Volume (volume).file_system_name, info[4])
 
   def test_mounts (self):
     volume = self.get_volume ()
-    self.assertEquals (
+    self.assertEqual (
       list (fs.Volume (volume).mounts),
       [path.lower () for path in win32file.GetVolumePathNamesForVolumeName (volume)]
     )

@@ -27,13 +27,13 @@ class TestFS (unittest.TestCase):
   def test_glob (self):
     import glob
     pattern = os.path.join (fsutils.TEST_ROOT, "*")
-    self.assertEquals (list (fs.glob (pattern)), glob.glob (pattern))
+    self.assertEqual (list (fs.glob (pattern)), glob.glob (pattern))
 
   def test_listdir (self):
     import os
     fs_version = list (fs.listdir (fsutils.TEST_ROOT))
     os_version = os.listdir (fsutils.TEST_ROOT)
-    self.assertEquals (fs_version, os_version, "%s differs from %s" % (fs_version, os_version))
+    self.assertEqual (fs_version, os_version, "%s differs from %s" % (fs_version, os_version))
 
 #
 # All the other module-level functions are hand-offs

@@ -35,7 +35,7 @@ class TestAttributes (unittest.TestCase):
 
   def test_string (self):
     attributes = constants.Attributes (3, CONST)
-    self.assertEquals (attributes.as_string (), "%08X" % 3)
+    self.assertEqual (attributes.as_string (), "%08X" % 3)
 
 if __name__ == "__main__":
   unittest.main ()

@@ -67,9 +67,9 @@ class TestTokens(unittest.TestCase):
         )
         me = _tokens.token().Owner.pyobject()
         win32security.ImpersonateLoggedOnUser(_tokens.Token(hToken).pyobject())
-        self.assertEquals(_tokens.token().Owner.pyobject(), self.alice)
+        self.assertEqual(_tokens.token().Owner.pyobject(), self.alice)
         win32security.RevertToSelf()
-        self.assertEquals(_tokens.token().Owner.pyobject(), me)
+        self.assertEqual(_tokens.token().Owner.pyobject(), me)
 
     def test_Token_change_privileges_enable(self):
         for disabled_priv, status in win32security.GetTokenInformation(self.token0, win32security.TokenPrivileges):
