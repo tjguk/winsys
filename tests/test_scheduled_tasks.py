@@ -14,8 +14,8 @@ class TestBasic(unittest.TestCase):
     """
 
     def test_tasks(self):
-        t = iter(scheduled_tasks.tasks())
-        self.assertTrue(next(t))
+        for task in scheduled_tasks.tasks():
+            pass
 
 if __name__ == "__main__":
   unittest.main()
