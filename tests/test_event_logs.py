@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 import sys
 from winsys._compat import unittest
-raise unittest.SkipTest("Skip this entire module for now")
 import uuid
 
 import winerror
@@ -139,7 +138,7 @@ class TestEventLogs(unittest.TestCase):
     def test_event_logs(self):
         self.assertEqual(
             set(s.name for s in event_logs.event_logs()),
-            set(r.name for r in self.registry_root.keys())
+            set(r.name for r in self.registry_root.keys() if "DisplayNameID" in dict(r.values()))
         )
         self.assertTrue(all(isinstance(s, event_logs.EventLog) for s in event_logs.event_logs()))
 
@@ -172,7 +171,7 @@ class TestEventLogs(unittest.TestCase):
         hLog = win32evtlog.OpenEventLog(None, log_name)
         try:
             log.log_event(source, message="hello")
-            self.assertNotEquals(win32evtlog.GetNumberOfEventLogRecords(hLog), 0)
+            self.assertNotEqual(win32evtlog.GetNumberOfEventLogRecords(hLog), 0)
             log.clear()
             self.assertEqual(win32evtlog.GetNumberOfEventLogRecords(hLog), 0)
         finally:
@@ -187,7 +186,7 @@ class TestEventLogs(unittest.TestCase):
         hLog = win32evtlog.OpenEventLog(None, log_name)
         try:
             log.log_event(source, message="hello")
-            self.assertNotEquals(win32evtlog.GetNumberOfEventLogRecords(hLog), 0)
+            self.assertNotEqual(win32evtlog.GetNumberOfEventLogRecords(hLog), 0)
             log.clear()
             self.assertEqual(win32evtlog.GetNumberOfEventLogRecords(hLog), 0)
         finally:

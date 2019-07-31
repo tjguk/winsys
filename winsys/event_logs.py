@@ -236,10 +236,10 @@ class EventLog(core._WinSysObject):
 
         Probably quite inefficient since it has to keep iterating backwards over the
         log every time to find the last record to match against. Does work, though.
-        
+
         Accepts an optional event that can be externally set that tells the watcher to exit
         prematurely.
-        
+
         NB Doesn't work with remote event logs
         """
         TIMEOUT_SECS = 2
@@ -382,7 +382,8 @@ def event_logs(computer="."):
     """Simple iterator over all known event logs.
     """
     for key in registry.registry(EventLog.REG_ROOT % computer).keys():
-        yield EventLog(computer, key.name)
+        if "DisplayNameID" in dict(key.values()):
+            yield EventLog(computer, key.name)
 
 def event_log(log):
     """Convenience function to return an :class:`EventLog` object representing
