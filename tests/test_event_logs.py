@@ -12,7 +12,7 @@ import win32evtlog
 import win32security
 import pywintypes
 
-from winsys.tests import utils as testutils
+from . import utils as testutils
 from winsys import event_logs, registry, utils
 
 
@@ -138,7 +138,7 @@ class TestEventLogs(unittest.TestCase):
     def test_event_logs(self):
         self.assertEqual(
             set(s.name for s in event_logs.event_logs()),
-            set(r.name for r in self.registry_root.keys())
+            set(r.name for r in self.registry_root.keys() if "DisplayNameID" in dict(r.values()))
         )
         self.assertTrue(all(isinstance(s, event_logs.EventLog) for s in event_logs.event_logs()))
 
@@ -171,7 +171,7 @@ class TestEventLogs(unittest.TestCase):
         hLog = win32evtlog.OpenEventLog(None, log_name)
         try:
             log.log_event(source, message="hello")
-            self.assertNotEquals(win32evtlog.GetNumberOfEventLogRecords(hLog), 0)
+            self.assertNotEqual(win32evtlog.GetNumberOfEventLogRecords(hLog), 0)
             log.clear()
             self.assertEqual(win32evtlog.GetNumberOfEventLogRecords(hLog), 0)
         finally:
@@ -186,7 +186,7 @@ class TestEventLogs(unittest.TestCase):
         hLog = win32evtlog.OpenEventLog(None, log_name)
         try:
             log.log_event(source, message="hello")
-            self.assertNotEquals(win32evtlog.GetNumberOfEventLogRecords(hLog), 0)
+            self.assertNotEqual(win32evtlog.GetNumberOfEventLogRecords(hLog), 0)
             log.clear()
             self.assertEqual(win32evtlog.GetNumberOfEventLogRecords(hLog), 0)
         finally:

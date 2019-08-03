@@ -6,7 +6,7 @@ import win32api
 
 from winsys._compat import unittest
 from winsys._compat import *
-from winsys.tests import utils as testutils
+from . import utils as testutils
 from winsys import processes
 
 @unittest.skip("Not yet working")

@@ -17,7 +17,7 @@ import win32security
 import ntsecuritycon
 import pywintypes
 
-from winsys.tests import utils as testutils
+from . import utils as testutils
 from winsys import security
 
 OPTIONS = \
@@ -402,7 +402,7 @@ class TestSecurity(unittest.TestCase):
             sd = win32security.GetNamedSecurityInfo(TEST_FILE, win32security.SE_FILE_OBJECT, OPTIONS)
             assert(sd.GetSecurityDescriptorControl()[0] & win32security.SE_SACL_PROTECTED)
             assert(not sd.GetSecurityDescriptorControl()[0] & win32security.SE_DACL_PROTECTED)
-            assert sd.GetSecurityDescriptorSacl().GetAceCount() == 0
+            assert sd.GetSecurityDescriptorSacl() is None
 
     def test_Security_break_sacl_inheritance_copy(self):
         self.setUpSACL()

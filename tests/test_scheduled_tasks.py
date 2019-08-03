@@ -4,7 +4,7 @@ import os, sys
 
 from winsys._compat import unittest
 from winsys._compat import *
-from winsys.tests import utils as testutils
+from . import utils as testutils
 from winsys import scheduled_tasks
 
 class TestBasic(unittest.TestCase):
@@ -14,8 +14,8 @@ class TestBasic(unittest.TestCase):
     """
 
     def test_tasks(self):
-        t = iter(scheduled_tasks.tasks())
-        self.assertTrue(next(t))
+        for task in scheduled_tasks.tasks():
+            pass
 
 if __name__ == "__main__":
   unittest.main()

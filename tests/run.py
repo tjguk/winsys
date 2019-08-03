@@ -11,6 +11,7 @@ def add_tests_from_directory(suite, directory):
     skipped_modules = []
     for filepath in glob.glob(os.path.join(directory, "test_*.py")):
         module_name = os.path.basename(filepath).split(".")[0]
+        print("Loading", module_name)
         pymodule = imp.load_source(module_name, filepath)
         for item in dir(pymodule):
             obj = getattr(pymodule, item)

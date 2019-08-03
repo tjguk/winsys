@@ -18,17 +18,17 @@ class TestDrive (unittest.TestCase):
   def test_name (self):
     names = ["C", "C:", "C:/", "C:\\"]
     for name in names:
-      self.assertEquals (fs.drive (name).name, "c:\\")
-      self.assertEquals (fs.drive (name.lower ()).name, "c:\\")
+      self.assertEqual (fs.drive (name).name, "c:\\")
+      self.assertEqual (fs.drive (name.lower ()).name, "c:\\")
 
   def test_DriveType (self):
-    self.assertEquals (fs.drive ("C:").type, win32file.GetDriveTypeW ("C:"))
+    self.assertEqual (fs.drive ("C:").type, win32file.GetDriveTypeW ("C:"))
 
   def test_DriveRoot (self):
-    self.assertEquals (fs.drive ("C:").root, fs.dir ("C:\\"))
+    self.assertEqual (fs.drive ("C:").root, fs.dir ("C:\\"))
 
   def test_volume (self):
-    self.assertEquals (fs.drive ("C:").volume.name, win32file.GetVolumeNameForVolumeMountPoint ("C:\\"))
+    self.assertEqual (fs.drive ("C:").volume.name, win32file.GetVolumeNameForVolumeMountPoint ("C:\\"))
 
   @unittest.skip ("Skip destructive test")
   def test_mount (self):

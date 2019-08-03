@@ -519,8 +519,8 @@ class NamedPipe(Pipe):
             self.sa
         )
 
-    def listen(self, async=False):
-        if async:
+    def listen(self, use_async=False):
+        if use_async:
             from winsys import asyncio
             waiter = asyncio.AsyncIO()
             overlapped = waiter.overlapped
@@ -529,7 +529,7 @@ class NamedPipe(Pipe):
 
         wrapped(win32pipe.ConnectNamedPipe, self._pipe, overlapped)
 
-        if async:
+        if use_async:
             return waiter
 
 #

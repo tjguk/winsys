@@ -13,6 +13,15 @@ from winsys._compat import *
 from winsys import exc
 
 kernel32 = windll.kernel32
+_FindFirstVolume = kernel32.FindFirstVolumeW
+_FindFirstVolume.argtypes = [wintypes.LPWSTR, wintypes.DWORD]
+_FindFirstVolume.restype = wintypes.HANDLE
+
+_FindNextVolume = kernel32.FindNextVolumeW
+_FindNextVolume.argtypes = [wintypes.HANDLE, wintypes.LPWSTR, wintypes.DWORD]
+
+_FindVolumeClose = kernel32.FindVolumeClose
+_FindVolumeClose.argtypes = [wintypes.HANDLE]
 
 class x_kernel32(exc.x_winsys):
     pass
@@ -34,7 +43,7 @@ def FindFirstVolume():
     search handle and the volume name.
     """
     volume_name = ctypes.create_unicode_buffer(" " * VOLUME_NAME_LENGTH)
-    hSearch = kernel32.FindFirstVolumeW(volume_name, VOLUME_NAME_LENGTH)
+    hSearch = _FindFirstVolume(volume_name, VOLUME_NAME_LENGTH)
     if hSearch == win32file.INVALID_HANDLE_VALUE:
         return error(x_kernel32, "FindFirstVolume")
     else:
@@ -47,12 +56,12 @@ def FindNextVolume(hSearch):
     None.
     """
     volume_name = ctypes.create_unicode_buffer(" " * VOLUME_NAME_LENGTH)
-    if kernel32.FindNextVolumeW(hSearch, volume_name, VOLUME_NAME_LENGTH) != 0:
+    if _FindNextVolume(hSearch, volume_name, VOLUME_NAME_LENGTH) != 0:
         return volume_name.value
     else:
         errno = ctypes.GetLastError()
         if errno == winerror.ERROR_NO_MORE_FILES:
-            FindVolumeClose(hSearch)
+            _FindVolumeClose(hSearch)
             return None
         else:
             return error(x_kernel32, "FindNextVolume")
@@ -61,7 +70,7 @@ def FindVolumeClose(hSearch):
     """Close a search handle opened by FindFirstVolume, typically
     after the last volume has been returned.
     """
-    if kernel32.FindVolumeClose(hSearch) == 0:
+    if _FindVolumeClose(hSearch) == 0:
             return error(x_kernel32, "FindVolumeClose")
 
 """The Find[First|Next]VolumeMountPoint and FindVolumeMountPointClose

@@ -11,7 +11,7 @@ import uuid
 import win32file
 
 from winsys import fs
-from winsys.tests import utils
+from tests import utils as testutils
 
 def _test_parts (path, result, skip_rejoin=False):
   parts = fs.get_parts (path)
@@ -115,7 +115,7 @@ class TestFilepath (unittest.TestCase):
         else:
           if result == "_":
             result = ""
-          self.assertEquals (
+          self.assertEqual (
             result,
             getattr (fp, test_item),
             "Path: %s; Part %s; expected: %s; result: %s" % (path, test_item, result, getattr (fp, test_item))
@@ -129,12 +129,12 @@ class TestFilepath (unittest.TestCase):
   def test_add (self):
     for l in self.left:
       for r in self.right:
-        self.assertEquals (fs.filepath (l) + r, os.path.join (l, r))
+        self.assertEqual (fs.filepath (l) + r, os.path.join (l, r))
 
   def test_radd (self):
     for l in self.left:
       for r in self.right:
-        self.assertEquals (l + fs.filepath (r), os.path.join (l, r))
+        self.assertEqual (l + fs.filepath (r), os.path.join (l, r))
 
   def test_is_relative (self):
     for path, result in [
@@ -145,11 +145,11 @@ class TestFilepath (unittest.TestCase):
       (r"\\server\share", False),
       (r"\\server\share\d1", False)
     ]:
-      self.assertEquals (fs.filepath (path).is_relative (), result)
+      self.assertEqual (fs.filepath (path).is_relative (), result)
 
   def test_absolute (self):
     for path in ["c:/temp", "temp", "c:temp", r"\\server\share\d1"]:
-      self.assertEquals (fs.filepath (path).absolute ().lower (), os.path.abspath (path).lower ())
+      self.assertEqual (fs.filepath (path).absolute ().lower (), os.path.abspath (path).lower ())
 
   #
   # The .changed method returns a version of the filepath
@@ -169,32 +169,32 @@ class TestFilepath (unittest.TestCase):
       fs.filepath (".").changed (filename="test.txt", infix="-test-")
 
   def test_changed_root (self):
-    self.assertEquals (fs.filepath ("c:\\temp\\abc.txt").changed (root="d:\\"), "d:\\temp\\abc.txt")
+    self.assertEqual (fs.filepath ("c:\\temp\\abc.txt").changed (root="d:\\"), "d:\\temp\\abc.txt")
 
   def test_changed_dirname (self):
-    self.assertEquals (fs.filepath ("c:\\temp\\abc.txt").changed (dirname="temp2"), "c:\\temp2\\abc.txt")
+    self.assertEqual (fs.filepath ("c:\\temp\\abc.txt").changed (dirname="temp2"), "c:\\temp2\\abc.txt")
 
   def test_changed_filename (self):
-    self.assertEquals (fs.filepath ("c:\\temp\\abc.txt").changed (filename="def.ghi"), "c:\\temp\\def.ghi")
+    self.assertEqual (fs.filepath ("c:\\temp\\abc.txt").changed (filename="def.ghi"), "c:\\temp\\def.ghi")
 
   def test_changed_base (self):
-    self.assertEquals (fs.filepath ("c:\\temp\\abc.txt").changed (base="def"), "c:\\temp\\def.txt")
+    self.assertEqual (fs.filepath ("c:\\temp\\abc.txt").changed (base="def"), "c:\\temp\\def.txt")
 
   def test_changed_infix (self):
-    self.assertEquals (fs.filepath ("c:\\temp\\abc.txt").changed (infix=".infix"), "c:\\temp\\abc.infix.txt")
+    self.assertEqual (fs.filepath ("c:\\temp\\abc.txt").changed (infix=".infix"), "c:\\temp\\abc.infix.txt")
 
   def test_changed_ext (self):
-    self.assertEquals (fs.filepath ("c:\\temp\\abc.txt").changed (ext=".ext"), "c:\\temp\\abc.ext")
+    self.assertEqual (fs.filepath ("c:\\temp\\abc.txt").changed (ext=".ext"), "c:\\temp\\abc.ext")
 
   #
   # dumps
   #
   def test_dump_absolute (self):
-    with utils.fake_stdout ():
+    with testutils.fake_stdout ():
       fs.filepath (__file__).dump ()
 
   def test_dump_relative (self):
-    with utils.fake_stdout ():
+    with testutils.fake_stdout ():
       fs.filepath ("@@").dump ()
 
 if __name__ == "__main__":

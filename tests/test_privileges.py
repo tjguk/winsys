@@ -5,7 +5,7 @@ import os, sys
 import operator
 from winsys._compat import unittest
 
-from winsys.tests import utils as testutils
+from . import utils as testutils
 from winsys._security import _privileges
 import win32security
 
