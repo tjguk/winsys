@@ -3,7 +3,7 @@ from distutils.core import setup, Extension
 
 import winsys
 
-packages = ['winsys', 'winsys.tests', 'winsys._security', 'winsys.extras']
+packages = ['winsys', 'winsys._security', 'winsys.extras']
 ext_modules = [
   Extension("winsys._change_journal", ["src/_change_journal.c"]),
 ]
