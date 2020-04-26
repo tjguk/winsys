@@ -1,7 +1,8 @@
 Check out and install the latest version
 --------------------------------------
 
-git clone https://github.com/tjguk/winsys && cd winsys && py -3 -mvenv .venv && .venv\scripts\python -mpip install --upgrade pip && .venv\scripts\activate && pip install -e .[all]
+Probably from some temp directory:
+IF EXIST winsys rmdir /s/q winsys && git clone https://github.com/tjguk/winsys && cd winsys && py -3 -mvenv .venv && .venv\scripts\python -mpip install --upgrade pip && .venv\scripts\activate && pip install -e .[all]
 
 
 Build the distributables
