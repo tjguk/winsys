@@ -1,34 +1,65 @@
-import os, sys
-from distutils.core import setup, Extension
+import os
+import re
+from setuptools import setup
 
-import winsys
+#
+# setup.py framework shamelessly stolen from the
+# Mu editor setup
+#
+base_dir = os.path.dirname(__file__)
 
-packages = ['winsys', 'winsys._security', 'winsys.extras']
-ext_modules = [
-  Extension("winsys._change_journal", ["src/_change_journal.c"]),
+DUNDER_ASSIGN_RE = re.compile(r"""^__\w+__\s*=\s*['"].+['"]$""")
+about = {}
+with open(os.path.join(base_dir, "winsys", "__init__.py"), encoding="utf8") as f:
+    for line in f:
+        if DUNDER_ASSIGN_RE.search(line):
+            exec(line, about)
+
+with open(os.path.join(base_dir, "README.rst"), encoding="utf8") as f:
+    readme = f.read()
+
+#~ with open(os.path.join(base_dir, "CHANGES.rst"), encoding="utf8") as f:
+    #~ changes = f.read()
+changes = ""
+
+install_requires = [
+    "pywin32"
 ]
-version = open ("VERSION.txt").read ().strip ()
+extras_require = {
+    "tests": [
+        "pytest",
+    ],
+    "docs": ["sphinx"],
+    "package": [
+        # Wheel building and PyPI uploading
+        "wheel",
+        "twine",
+    ],
+}
 
-if __name__ == '__main__':
-  setup(
-      name='WinSys',
-      version=version,
-      url='http://github.com/tjg/winsys',
-      license='LICENSE.txt',
-      author='Tim Golden',
-      author_email='mail@timgolden.me.uk',
-      description='Python tools for the Windows sysadmin',
-      long_description=open("README.rst").read(),
-      classifiers=[
-          'Development Status :: 4 - Beta',
-          'Environment :: Console',
-          'Intended Audience :: System Administrators',
-          'License :: OSI Approved :: MIT License',
-          'Operating System :: Microsoft :: Windows :: Windows NT/2000',
-          'Programming Language :: Python :: 3',
-          'Topic :: Utilities',
-      ],
-      platforms='win32',
-      packages=packages,
-      ext_modules=[] ## ext_modules
-  )
+setup(
+    name=about["__title__"],
+    version=about["__version__"],
+    description=about["__description__"],
+    long_description="{}\n\n{}".format(readme, changes),
+    author=about["__author__"],
+    author_email=about["__email__"],
+    url=about["__url__"],
+    license=about["__license__"],
+    packages = ['winsys', 'winsys._security', 'winsys.extras'],
+    install_requires=install_requires,
+    extras_require=extras_require,
+    include_package_data=True,
+    zip_safe=False,
+    classifiers=[
+      'Development Status :: 4 - Beta',
+      'Environment :: Console',
+      'Intended Audience :: System Administrators',
+      'License :: OSI Approved :: MIT License',
+      'Operating System :: Microsoft :: Windows :: Windows NT/2000',
+      'Programming Language :: Python :: 3',
+      'Topic :: Utilities',
+    ],
+    platforms='win32'
+)
+
