@@ -15,9 +15,11 @@ with open(os.path.join(base_dir, "winsys", "__init__.py"), encoding="utf8") as f
         if DUNDER_ASSIGN_RE.search(line):
             exec(line, about)
 
+TO_STRIP = set(":class:", ":mod:", ":meth:", ":func:")
 with open(os.path.join(base_dir, "README.rst"), encoding="utf8") as f:
     readme = f.read()
-    readme = re.sub(r"\:[^:]+\:", "", readme)
+    for s in TO_STRIP:
+        readme = readme.replace(s, "")
 
 #~ with open(os.path.join(base_dir, "CHANGES.rst"), encoding="utf8") as f:
     #~ changes = f.read()
