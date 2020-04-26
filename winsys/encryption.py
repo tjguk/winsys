@@ -9,7 +9,7 @@ import marshal
 import win32crypt
 
 from winsys._compat import *
-from winsys import constants, core, exc, utils
+from winsys import constants, exc
 
 class x_encryption(exc.x_winsys):
     "Base exception for all env exceptions"
@@ -21,7 +21,7 @@ WINERROR_MAP = {
 }
 wrapped = exc.wrapper(WINERROR_MAP, x_encryption)
 
-def encrypted(obj, password=None, name=None, is_user=True):
+def encrypted(data, password=None, name=None, is_user=True):
     """Encrypt any Python object
 
     :param obj: any Python object which can be marshalled
@@ -33,7 +33,6 @@ def encrypted(obj, password=None, name=None, is_user=True):
     flags = 0
     if not is_user:
         flags |= PROTECT.LOCAL_MACHINE
-    data = marshal.dumps(obj)
     return wrapped(win32crypt.CryptProtectData, data, name, password, None, None, flags)
 
 def decrypted(data, password=None, is_user=True):
@@ -48,4 +47,12 @@ def decrypted(data, password=None, is_user=True):
     if not is_user:
         flags |= PROTECT.LOCAL_MACHINE
     name, data = wrapped(win32crypt.CryptUnprotectData, data, password, None, None, flags)
+    return data
+
+def dumps(obj):
+    data = marshal.dumps(obj)
+    return encrypted(data)
+
+def loads(encrypted_data):
+    data = decrypted(encrypted_data)
     return marshal.loads(data)
