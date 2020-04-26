@@ -17,6 +17,7 @@ with open(os.path.join(base_dir, "winsys", "__init__.py"), encoding="utf8") as f
 
 with open(os.path.join(base_dir, "README.rst"), encoding="utf8") as f:
     readme = f.read()
+    readme = re.sub(r"\:[^:]+\:", "", readme)
 
 #~ with open(os.path.join(base_dir, "CHANGES.rst"), encoding="utf8") as f:
     #~ changes = f.read()
@@ -50,6 +51,7 @@ setup(
     version=about["__version__"],
     description=about["__description__"],
     long_description="{}\n\n{}".format(readme, changes),
+    long_description_content_type = "text/x-rst",
     author=about["__author__"],
     author_email=about["__email__"],
     url=about["__url__"],
