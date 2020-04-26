@@ -36,6 +36,14 @@ extras_require = {
         "twine",
     ],
 }
+extras_require["dev"] = (
+    extras_require["tests"]
+    + extras_require["docs"]
+    + extras_require["package"]
+)
+extras_require["all"] = list(
+    {req for extra, reqs in extras_require.items() for req in reqs}
+)
 
 setup(
     name=about["__title__"],
