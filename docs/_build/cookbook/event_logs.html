@@ -1,36 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Using the event_logs module &mdash; WinSys 1.0beta documentation</title>
-    
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>Using the event_logs module &#8212; WinSys 1.0beta documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.0beta',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys 1.0beta documentation" href="../index.html" />
-    <link rel="up" title="Cookbook" href="../cookbook.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Using the fs module" href="fs.html" />
     <link rel="prev" title="Using the environment module" href="environment.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -45,25 +35,25 @@
         <li class="right" >
           <a href="environment.html" title="Using the environment module"
              accesskey="P">previous</a> |</li>
-        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="../cookbook.html" accesskey="U">Cookbook</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../cookbook.html" accesskey="U">Cookbook</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="using-the-event-logs-module">
 <h1>Using the event_logs module<a class="headerlink" href="#using-the-event-logs-module" title="Permalink to this headline">¶</a></h1>
-<p>The examples here all refer to the <a class="reference internal" href="../event_logs.html#module-event_logs" title="event_logs: Read and write event log entries"><tt class="xref py py-mod docutils literal"><span class="pre">event_logs</span></tt></a> module.</p>
+<p>The examples here all refer to the <a class="reference internal" href="../event_logs.html#module-event_logs" title="event_logs: Read and write event log entries"><code class="xref py py-mod docutils literal notranslate"><span class="pre">event_logs</span></code></a> module.</p>
 <div class="section" id="log-an-event-against-an-event-source">
 <h2>Log an event against an event source<a class="headerlink" href="#log-an-event-against-an-event-source" title="Permalink to this headline">¶</a></h2>
 <p>Log an information event against a WinSys event source,
 creating it if does not already exist. Once the event is written, remove
 the event source.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -73,15 +63,15 @@ the event source.</p>
  8
  9
 10
-11</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">event_logs</span>
+11</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">event_logs</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">source</span> <span class="o">=</span> <span class="n">event_logs</span><span class="o">.</span><span class="n">event_source</span><span class="p">(</span><span class="s">&quot;WinSys&quot;</span><span class="p">)</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="n">event_logs</span><span class="o">.</span><span class="n">event_source</span><span class="p">(</span><span class="s2">&quot;WinSys&quot;</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">event_logs</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">:</span>
-    <span class="n">source</span> <span class="o">=</span> <span class="n">event_logs</span><span class="o">.</span><span class="n">EventSource</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;WinSys&quot;</span><span class="p">)</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="n">event_logs</span><span class="o">.</span><span class="n">EventSource</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;WinSys&quot;</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">source</span><span class="o">.</span><span class="n">log_event</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&quot;information&quot;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s">&quot;Testing&quot;</span><span class="p">)</span>
+    <span class="n">source</span><span class="o">.</span><span class="n">log_event</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;information&quot;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;Testing&quot;</span><span class="p">)</span>
 <span class="k">finally</span><span class="p">:</span>
     <span class="n">source</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
 </pre></div>
@@ -94,13 +84,13 @@ demonstration, we attempt to pick up the event source if it already exists and t
 create it if it does not. We use the class-level convenience function to log the
 event against the source, which simply hands off to the module-level function of
 the same name.</p>
-<p>An event source can be deleted at any time: its records simply become &#8220;orphans&#8221;
+<p>An event source can be deleted at any time: its records simply become “orphans”
 in that the system will no longer be able to format their messages since it
-won&#8217;t know the location of the DLL which contains the corresponding strings.</p>
+won’t know the location of the DLL which contains the corresponding strings.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The logging library in Python&#8217;s stdlib already has an NTEventLog handler,
-so if all you want to do is to log events in a standard manner, then it&#8217;s
+<p class="admonition-title">Note</p>
+<p>The logging library in Python’s stdlib already has an NTEventLog handler,
+so if all you want to do is to log events in a standard manner, then it’s
 probably best to use that.</p>
 </div>
 </div>
@@ -109,7 +99,7 @@ probably best to use that.</p>
 <h2>List the 10 most recent records in each event log<a class="headerlink" href="#list-the-10-most-recent-records-in-each-event-log" title="Permalink to this headline">¶</a></h2>
 <p>Go through each event log on the system and list the 10 most recent
 events.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
 4
@@ -117,28 +107,28 @@ events.</p>
 6
 7
 8
-9</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">event_logs</span>
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">event_logs</span>
 
 <span class="k">for</span> <span class="n">log</span> <span class="ow">in</span> <span class="n">event_logs</span><span class="o">.</span><span class="n">event_logs</span><span class="p">():</span>
-    <span class="k">print</span> <span class="n">log</span>
+    <span class="nb">print</span> <span class="n">log</span>
     <span class="k">for</span> <span class="n">n_event</span><span class="p">,</span> <span class="n">event</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">log</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">n_event</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span> <span class="k">break</span>
-        <span class="k">print</span> <span class="n">event</span><span class="o">.</span><span class="n">time_generated</span><span class="p">,</span> <span class="n">event</span>
+        <span class="nb">print</span> <span class="n">event</span><span class="o">.</span><span class="n">time_generated</span><span class="p">,</span> <span class="n">event</span>
 
-    <span class="k">print</span>
+    <span class="nb">print</span>
 </pre></div>
 </td></tr></table></div>
 <div class="section" id="id1">
 <h3>Discussion<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>By default, iterating over an event log starts oldest first. To pick up
 the most recent records, we reverse the iterator. This makes use of the
-<a class="reference internal" href="../event_logs.html#event_logs.EventLog.__reversed__" title="event_logs.EventLog.__reversed__"><tt class="xref py py-meth docutils literal"><span class="pre">EventLog.__reversed__()</span></tt></a> magic method which starts a reverse iterator. Without that,
+<a class="reference internal" href="../event_logs.html#event_logs.EventLog.__reversed__" title="event_logs.EventLog.__reversed__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">EventLog.__reversed__()</span></code></a> magic method which starts a reverse iterator. Without that,
 the implementation would fall back to a __getitem__-based sequence
-solution, asking for [-1] and then [-2] and so on. Since our <a class="reference internal" href="../event_logs.html#event_logs.EventLog.__getitem__" title="event_logs.EventLog.__getitem__"><tt class="xref py py-meth docutils literal"><span class="pre">EventLog.__getitem__()</span></tt></a>
+solution, asking for [-1] and then [-2] and so on. Since our <a class="reference internal" href="../event_logs.html#event_logs.EventLog.__getitem__" title="event_logs.EventLog.__getitem__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">EventLog.__getitem__()</span></code></a>
 implementation actually iterates anyway, this would be a less-than-optimal
 solution.</p>
 <p>The standard __str__ for an event log record shows the record number,
-the source and the event type. We add here the record&#8217;s timestamp.</p>
+the source and the event type. We add here the record’s timestamp.</p>
 </div>
 </div>
 <div class="section" id="write-to-csv-selected-events-from-a-remote-event-log">
@@ -146,7 +136,7 @@ the source and the event type. We add here the record&#8217;s timestamp.</p>
 <p>Go through the a remote System event log and write to CSV the
 record number, id and message for records matching a particular
 event source and type.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -167,43 +157,43 @@ event source and type.</p>
 19
 20
 21
-22</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+22</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">event_logs</span><span class="p">,</span> <span class="n">dialogs</span>
 
 <span class="k">def</span> <span class="nf">remote_events</span><span class="p">(</span><span class="n">computer</span><span class="p">,</span> <span class="n">event_source</span><span class="p">,</span> <span class="n">event_type_id</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">event_logs</span><span class="o">.</span><span class="n">event_log</span><span class="p">(</span><span class="s">r&quot;</span><span class="se">\\</span><span class="si">%s</span><span class="s">\system&quot;</span> <span class="o">%</span> <span class="n">computer</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">event_logs</span><span class="o">.</span><span class="n">event_log</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="si">%s</span><span class="s2">\system&quot;</span> <span class="o">%</span> <span class="n">computer</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">source_name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="n">event_source</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="o">==</span> <span class="n">event_type_id</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">event</span>
 
 <span class="n">computer</span><span class="p">,</span> <span class="n">event_source</span><span class="p">,(</span><span class="n">event_type_name</span><span class="p">,</span> <span class="n">event_type_id</span><span class="p">)</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span><span class="p">(</span>
-    <span class="s">&quot;Computer&quot;</span><span class="p">,</span>
-    <span class="p">(</span><span class="s">&quot;Computer Name&quot;</span><span class="p">,</span> <span class="s">&quot;.&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s">&quot;Event Source&quot;</span><span class="p">,</span> <span class="s">&quot;DHCP&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s">&quot;Event Type&quot;</span><span class="p">,</span> <span class="n">event_logs</span><span class="o">.</span><span class="n">EVENTLOG_TYPE</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="s2">&quot;Computer&quot;</span><span class="p">,</span>
+    <span class="p">(</span><span class="s2">&quot;Computer Name&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;Event Source&quot;</span><span class="p">,</span> <span class="s2">&quot;DHCP&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;Event Type&quot;</span><span class="p">,</span> <span class="n">event_logs</span><span class="o">.</span><span class="n">EVENTLOG_TYPE</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 <span class="p">)</span>
 
-<span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&quot;dhcp.csv&quot;</span><span class="p">,</span> <span class="s">&quot;wb&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span>
+<span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;dhcp.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span>
    <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">record_number</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">time_generated</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">event_id</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">message</span><span class="p">)</span> <span class="k">for</span>
         <span class="n">event</span> <span class="ow">in</span> <span class="n">remote_events</span><span class="p">(</span><span class="n">computer</span><span class="p">,</span> <span class="n">event_source</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">event_type_id</span><span class="p">)</span>
 <span class="p">)</span>
 
-<span class="n">os</span><span class="o">.</span><span class="n">startfile</span><span class="p">(</span><span class="s">&quot;dhcp.csv&quot;</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">startfile</span><span class="p">(</span><span class="s2">&quot;dhcp.csv&quot;</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
 <div class="section" id="id2">
 <h3>Discussion<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>We use the winsys <a class="reference internal" href="../dialogs.html#dialogs.dialog" title="dialogs.dialog"><tt class="xref py py-mod docutils literal"><span class="pre">dialogs.dialog</span></tt></a> module convenience function to request
+<p>We use the winsys <a class="reference internal" href="../dialogs.html#dialogs.dialog" title="dialogs.dialog"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dialogs.dialog</span></code></a> module convenience function to request
 the name of the remote computer and the source and event type from the user.
 It would be possible to pick out the list of event sources for a computer
-(using the <a class="reference internal" href="../event_logs.html#event_logs.event_sources" title="event_logs.event_sources"><tt class="xref py py-func docutils literal"><span class="pre">event_sources()</span></tt></a> function), but there&#8217;s no mechanism
+(using the <a class="reference internal" href="../event_logs.html#event_logs.event_sources" title="event_logs.event_sources"><code class="xref py py-func docutils literal notranslate"><span class="pre">event_sources()</span></code></a> function), but there’s no mechanism
 within the dialogs module for updating one field on the basis of another, so
 we could only pre-populate with the valid list for one particular computer.</p>
-<p>The module-level convenience function <a class="reference internal" href="../event_logs.html#event_logs.event_log" title="event_logs.event_log"><tt class="xref py py-func docutils literal"><span class="pre">event_log()</span></tt></a> returns an
-instance of an <a class="reference internal" href="../event_logs.html#event_logs.EventLog" title="event_logs.EventLog"><tt class="xref py py-class docutils literal"><span class="pre">EventLog</span></tt></a> matching the computer and event log name in the
+<p>The module-level convenience function <a class="reference internal" href="../event_logs.html#event_logs.event_log" title="event_logs.event_log"><code class="xref py py-func docutils literal notranslate"><span class="pre">event_log()</span></code></a> returns an
+instance of an <a class="reference internal" href="../event_logs.html#event_logs.EventLog" title="event_logs.EventLog"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventLog</span></code></a> matching the computer and event log name in the
 UNC-style moniker. The standard iterator goes from the oldest first forwards.
-If we wanted to see the records in reverse chronological order, we&#8217;d use the
-reversed builtin to invoke the class&#8217;s <a class="reference internal" href="../event_logs.html#event_logs.EventLog.__reversed__" title="event_logs.EventLog.__reversed__"><tt class="xref py py-meth docutils literal"><span class="pre">EventLog.__reversed__()</span></tt></a>
+If we wanted to see the records in reverse chronological order, we’d use the
+reversed builtin to invoke the class’s <a class="reference internal" href="../event_logs.html#event_logs.EventLog.__reversed__" title="event_logs.EventLog.__reversed__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">EventLog.__reversed__()</span></code></a>
 method.</p>
 </div>
 </div>
@@ -213,12 +203,12 @@ method.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../contents.html">
               <img class="logo" src="../_static/cpython2.png" alt="Logo"/>
             </a></p>
-  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <h3><a href="../contents.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Using the event_logs module</a><ul>
 <li><a class="reference internal" href="#log-an-event-against-an-event-source">Log an event against an event source</a><ul>
@@ -243,29 +233,28 @@ method.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="fs.html"
                         title="next chapter">Using the fs module</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/cookbook/event_logs.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/cookbook/event_logs.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -280,13 +269,13 @@ method.</p>
         <li class="right" >
           <a href="environment.html" title="Using the environment module"
              >previous</a> |</li>
-        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="../cookbook.html" >Cookbook</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../cookbook.html" >Cookbook</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Tim Golden.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.2.
     </div>
   </body>
 </html>

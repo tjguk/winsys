@@ -1,36 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Using the accounts module &mdash; WinSys 1.0beta documentation</title>
-    
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>Using the accounts module &#8212; WinSys 1.0beta documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.0beta',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys 1.0beta documentation" href="../index.html" />
-    <link rel="up" title="Cookbook" href="../cookbook.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Using the asyncio module" href="asyncio.html" />
     <link rel="prev" title="Cookbook" href="../cookbook.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -45,27 +35,27 @@
         <li class="right" >
           <a href="../cookbook.html" title="Cookbook"
              accesskey="P">previous</a> |</li>
-        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="../cookbook.html" accesskey="U">Cookbook</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../cookbook.html" accesskey="U">Cookbook</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="using-the-accounts-module">
 <h1>Using the accounts module<a class="headerlink" href="#using-the-accounts-module" title="Permalink to this headline">¶</a></h1>
-<p>The examples here all refer to the <a class="reference internal" href="../accounts.html#module-accounts" title="accounts: User accounts, SIDs &amp;c."><tt class="xref py py-mod docutils literal"><span class="pre">accounts</span></tt></a> module.</p>
+<p>The examples here all refer to the <a class="reference internal" href="../accounts.html#module-accounts" title="accounts: User accounts, SIDs &amp;c."><code class="xref py py-mod docutils literal notranslate"><span class="pre">accounts</span></code></a> module.</p>
 <div class="section" id="get-the-logged-on-user-s-account">
-<h2>Get the logged-on user&#8217;s account<a class="headerlink" href="#get-the-logged-on-user-s-account" title="Permalink to this headline">¶</a></h2>
+<h2>Get the logged-on user’s account<a class="headerlink" href="#get-the-logged-on-user-s-account" title="Permalink to this headline">¶</a></h2>
 <p>Get the account for the logged-on user.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
-3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
 
-<span class="k">print</span> <span class="n">accounts</span><span class="o">.</span><span class="n">me</span><span class="p">()</span>
+<span class="nb">print</span> <span class="n">accounts</span><span class="o">.</span><span class="n">me</span><span class="p">()</span>
 </pre></div>
 </td></tr></table></div>
 <div class="section" id="discussion">
@@ -75,10 +65,10 @@
 </div>
 <div class="section" id="act-as-another-user">
 <h2>Act as another user<a class="headerlink" href="#act-as-another-user" title="Permalink to this headline">¶</a></h2>
-<p>Temporarily switch the current process to use another user&#8217;s identity. Create
+<p>Temporarily switch the current process to use another user’s identity. Create
 a file as that other user and then check that the file was created with that
-owner. (Assumes the existence of a &#8220;python&#8221; user).</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+owner. (Assumes the existence of a “python” user).</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -94,11 +84,11 @@ owner. (Assumes the existence of a &#8220;python&#8221; user).</p>
 14
 15
 16
-17</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">uuid</span>
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span><span class="p">,</span> <span class="n">security</span><span class="p">,</span> <span class="n">fs</span>
 
 <span class="n">username</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid1</span><span class="p">())[:</span><span class="mi">8</span><span class="p">]</span>
-<span class="n">user</span> <span class="o">=</span> <span class="n">accounts</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">)</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">accounts</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 <span class="k">assert</span><span class="p">(</span><span class="ow">not</span> <span class="n">f</span><span class="p">)</span>
 
@@ -118,14 +108,14 @@ owner. (Assumes the existence of a &#8220;python&#8221; user).</p>
 <p>There can be a lot of subtlety involved in switching users. The winsys
 code at present takes a very straightforward approach which should work
 for several cases.</p>
-<p>Since we&#8217;re using the <a class="reference internal" href="../accounts.html#accounts.Principal" title="accounts.Principal"><tt class="xref py py-class docutils literal"><span class="pre">Principal</span></tt></a> class itself as a context manager,
+<p>Since we’re using the <a class="reference internal" href="../accounts.html#accounts.Principal" title="accounts.Principal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Principal</span></code></a> class itself as a context manager,
 no password can be passed in, so the program automatically pops up a
 standard Windows password UI with the username filled in. To pass a
-password in automatically, use the <a class="reference internal" href="../accounts.html#accounts.Principal.impersonate" title="accounts.Principal.impersonate"><tt class="xref py py-meth docutils literal"><span class="pre">Principal.impersonate()</span></tt></a> method
+password in automatically, use the <a class="reference internal" href="../accounts.html#accounts.Principal.impersonate" title="accounts.Principal.impersonate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Principal.impersonate()</span></code></a> method
 which accepts a password and a logon type.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This hasn&#8217;t been tested at all on Vista or W7 where
+<p class="admonition-title">Note</p>
+<p>This hasn’t been tested at all on Vista or W7 where
 the security model is much tighter, particularly with respect to raising
 privs.</p>
 </div>
@@ -134,13 +124,13 @@ privs.</p>
 <div class="section" id="create-a-local-user">
 <h2>Create a local user<a class="headerlink" href="#create-a-local-user" title="Permalink to this headline">¶</a></h2>
 <p>Create a new local user with minimum permissions and a password.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
-4</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
 
-<span class="n">python</span> <span class="o">=</span> <span class="n">accounts</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;python&quot;</span><span class="p">,</span> <span class="s">&quot;Pa55w0rd&quot;</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">python</span>
+<span class="n">python</span> <span class="o">=</span> <span class="n">accounts</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;python&quot;</span><span class="p">,</span> <span class="s2">&quot;Pa55w0rd&quot;</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">python</span>
 </pre></div>
 </td></tr></table></div>
 <div class="section" id="id2">
@@ -148,18 +138,18 @@ privs.</p>
 <p>The new user will have no logon script, no home directory and will not be
 in the Users group. (This last means that it will not show up on the
 quick-logon screen in XP etc.). The same approach can be used for creating
-a local group, except that the <tt class="xref py py-meth docutils literal"><span class="pre">Group.create()</span></tt> method should be called on
-the <a class="reference internal" href="../accounts.html#accounts.Group" title="accounts.Group"><tt class="xref py py-class docutils literal"><span class="pre">Group</span></tt></a> class instead.</p>
+a local group, except that the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Group.create()</span></code> method should be called on
+the <a class="reference internal" href="../accounts.html#accounts.Group" title="accounts.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">Group</span></code></a> class instead.</p>
 </div>
 </div>
 <div class="section" id="delete-a-local-user">
 <h2>Delete a local user<a class="headerlink" href="#delete-a-local-user" title="Permalink to this headline">¶</a></h2>
 <p>Delete an existing local user</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
-3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span>
 
-<span class="n">accounts</span><span class="o">.</span><span class="n">principal</span><span class="p">(</span><span class="s">&quot;python&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+<span class="n">accounts</span><span class="o">.</span><span class="n">principal</span><span class="p">(</span><span class="s2">&quot;python&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
 </pre></div>
 </td></tr></table></div>
 <div class="section" id="id3">
@@ -173,15 +163,15 @@ the <a class="reference internal" href="../accounts.html#accounts.Group" title="
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../contents.html">
               <img class="logo" src="../_static/cpython2.png" alt="Logo"/>
             </a></p>
-  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <h3><a href="../contents.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Using the accounts module</a><ul>
-<li><a class="reference internal" href="#get-the-logged-on-user-s-account">Get the logged-on user&#8217;s account</a><ul>
+<li><a class="reference internal" href="#get-the-logged-on-user-s-account">Get the logged-on user’s account</a><ul>
 <li><a class="reference internal" href="#discussion">Discussion</a></li>
 </ul>
 </li>
@@ -207,29 +197,28 @@ the <a class="reference internal" href="../accounts.html#accounts.Group" title="
   <h4>Next topic</h4>
   <p class="topless"><a href="asyncio.html"
                         title="next chapter">Using the asyncio module</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/cookbook/accounts.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/cookbook/accounts.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -244,13 +233,13 @@ the <a class="reference internal" href="../accounts.html#accounts.Group" title="
         <li class="right" >
           <a href="../cookbook.html" title="Cookbook"
              >previous</a> |</li>
-        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="../cookbook.html" >Cookbook</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../cookbook.html" >Cookbook</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Tim Golden.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.2.
     </div>
   </body>
 </html>

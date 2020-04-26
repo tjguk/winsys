@@ -1,36 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>The Pipe classes &mdash; WinSys 1.0beta documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>The Pipe classes &#8212; WinSys 1.0beta documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.0beta',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
-    <link rel="up" title="ipc – Interprocess Communication" href="ipc.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="registry – Registry" href="registry.html" />
     <link rel="prev" title="The Mutex class" href="mutexes.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -45,22 +35,22 @@
         <li class="right" >
           <a href="mutexes.html" title="The Mutex class"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="ipc.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipc</span></code> – Interprocess Communication</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="the-pipe-classes">
 <h1>The Pipe classes<a class="headerlink" href="#the-pipe-classes" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="ipc.Pipe">
-<em class="property">class </em><tt class="descclassname">ipc.</tt><tt class="descname">Pipe</tt><big>(</big><em>name=None</em>, <em>inheritable=False</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Pipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Pipe" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
+<em class="property">class </em><code class="sig-prename descclassname">ipc.</code><code class="sig-name descname">Pipe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">inheritable</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#Pipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Pipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">winsys.core._WinSysObject</span></code></p>
 <p>A pipe is a kernel object which allows communication between two parts
 of a process or two separate processes, possibly on separate machines. A
 pipe can be named or anonymous. The former can span processes and machines;
@@ -70,62 +60,59 @@ processes with some effort.</p>
 interesting for handing off between a client and a server: the server can
 transparently impersonate the security context of the client. This makes
 them ideal for, eg, a server which accepts requests from a client and
-actions them on the client&#8217;s behalf.</p>
-<dl class="attribute">
+actions them on the client’s behalf.</p>
+<dl class="py attribute">
 <dt id="ipc.Pipe.DEFAULT_IN_BUFFER_SIZE">
-<tt class="descname">DEFAULT_IN_BUFFER_SIZE</tt><em class="property"> = 4096</em><a class="headerlink" href="#ipc.Pipe.DEFAULT_IN_BUFFER_SIZE" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">DEFAULT_IN_BUFFER_SIZE</code><em class="property"> = 4096</em><a class="headerlink" href="#ipc.Pipe.DEFAULT_IN_BUFFER_SIZE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="ipc.Pipe.DEFAULT_OUT_BUFFER_SIZE">
-<tt class="descname">DEFAULT_OUT_BUFFER_SIZE</tt><em class="property"> = 4096</em><a class="headerlink" href="#ipc.Pipe.DEFAULT_OUT_BUFFER_SIZE" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">DEFAULT_OUT_BUFFER_SIZE</code><em class="property"> = 4096</em><a class="headerlink" href="#ipc.Pipe.DEFAULT_OUT_BUFFER_SIZE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="ipc.AnonymousPipe">
-<em class="property">class </em><tt class="descclassname">ipc.</tt><tt class="descname">AnonymousPipe</tt><big>(</big><em>inheritable=False</em>, <em>buffer_size=0</em><big>)</big><a class="reference internal" href="_modules/ipc.html#AnonymousPipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.AnonymousPipe" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#ipc.Pipe" title="ipc.Pipe"><tt class="xref py py-class docutils literal"><span class="pre">ipc.Pipe</span></tt></a></p>
-<dl class="method">
+<em class="property">class </em><code class="sig-prename descclassname">ipc.</code><code class="sig-name descname">AnonymousPipe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inheritable</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">buffer_size</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#AnonymousPipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.AnonymousPipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ipc.Pipe" title="ipc.Pipe"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipc.Pipe</span></code></a></p>
+<dl class="py method">
 <dt id="ipc.AnonymousPipe.read">
-<tt class="descname">read</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#AnonymousPipe.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.AnonymousPipe.read" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#AnonymousPipe.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.AnonymousPipe.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read bytes from the pipe.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">any bytes waiting in the pipe. Will block if nothing is ready.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>any bytes waiting in the pipe. Will block if nothing is ready.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="ipc.AnonymousPipe.reader">
-<tt class="descname">reader</tt><big>(</big><em>process=None</em><big>)</big><a class="reference internal" href="_modules/ipc.html#AnonymousPipe.reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.AnonymousPipe.reader" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">process</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#AnonymousPipe.reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.AnonymousPipe.reader" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="ipc.AnonymousPipe.write">
-<tt class="descname">write</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/ipc.html#AnonymousPipe.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.AnonymousPipe.write" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#AnonymousPipe.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.AnonymousPipe.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes <cite>data</cite> to the pipe. Will block if the internal buffer fills up.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="ipc.AnonymousPipe.writer">
-<tt class="descname">writer</tt><big>(</big><em>process=None</em><big>)</big><a class="reference internal" href="_modules/ipc.html#AnonymousPipe.writer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.AnonymousPipe.writer" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">writer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">process</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#AnonymousPipe.writer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.AnonymousPipe.writer" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="ipc.NamedPipe">
-<em class="property">class </em><tt class="descclassname">ipc.</tt><tt class="descname">NamedPipe</tt><big>(</big><em>name</em>, <em>mode=1073741827</em>, <em>type=0</em>, <em>max_instances=255</em>, <em>in_buffer_size=4096</em>, <em>out_buffer_size=4096</em>, <em>default_timeout=0</em>, <em>inheritable=False</em><big>)</big><a class="reference internal" href="_modules/ipc.html#NamedPipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.NamedPipe" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#ipc.Pipe" title="ipc.Pipe"><tt class="xref py py-class docutils literal"><span class="pre">ipc.Pipe</span></tt></a></p>
-<dl class="method">
+<em class="property">class </em><code class="sig-prename descclassname">ipc.</code><code class="sig-name descname">NamedPipe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">1073741827</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">max_instances</span><span class="o">=</span><span class="default_value">255</span></em>, <em class="sig-param"><span class="n">in_buffer_size</span><span class="o">=</span><span class="default_value">4096</span></em>, <em class="sig-param"><span class="n">out_buffer_size</span><span class="o">=</span><span class="default_value">4096</span></em>, <em class="sig-param"><span class="n">default_timeout</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">inheritable</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#NamedPipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.NamedPipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ipc.Pipe" title="ipc.Pipe"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipc.Pipe</span></code></a></p>
+<dl class="py method">
 <dt id="ipc.NamedPipe.listen">
-<tt class="descname">listen</tt><big>(</big><em>async=False</em><big>)</big><a class="reference internal" href="_modules/ipc.html#NamedPipe.listen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.NamedPipe.listen" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">listen</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">use_async</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#NamedPipe.listen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.NamedPipe.listen" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -136,7 +123,7 @@ actions them on the client&#8217;s behalf.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="contents.html">
               <img class="logo" src="_static/cpython2.png" alt="Logo"/>
@@ -146,30 +133,29 @@ actions them on the client&#8217;s behalf.</p>
                         title="previous chapter">The Mutex class</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="registry.html"
-                        title="next chapter"><tt class="docutils literal"><span class="pre">registry</span></tt> &#8211; Registry</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/pipes.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">registry</span></code> – Registry</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/pipes.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -184,13 +170,13 @@ actions them on the client&#8217;s behalf.</p>
         <li class="right" >
           <a href="mutexes.html" title="The Mutex class"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" ><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="ipc.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipc</span></code> – Interprocess Communication</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Tim Golden.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.2.
     </div>
   </body>
 </html>

@@ -1,35 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>constants &mdash; WinSys 1.0beta documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>constants &#8212; WinSys 1.0beta documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.0beta',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="exc – Exceptions" href="exc.html" />
     <link rel="prev" title="core – Core objects" href="core.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,218 +35,228 @@
         <li class="right" >
           <a href="core.html" title="core – Core objects"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="contents.html">WinSys 1.0beta documentation</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-constants">
-<span id="constants"></span><h1><a class="reference internal" href="#module-constants" title="constants: Constants"><tt class="xref py py-mod docutils literal"><span class="pre">constants</span></tt></a><a class="headerlink" href="#module-constants" title="Permalink to this headline">¶</a></h1>
+<span id="constants"></span><h1><a class="reference internal" href="#module-constants" title="constants: Constants"><code class="xref py py-mod docutils literal notranslate"><span class="pre">constants</span></code></a><a class="headerlink" href="#module-constants" title="Permalink to this headline">¶</a></h1>
 <p>Provide unified access to the different sets of constants used by
 the winsys module. Some of them are provided by modules within the
 pywin32 package. Others belong to those sets but are not present in
 the modules. Still others are not present at all within pywin32 and
 are added here manually.</p>
-<p>The constants are grouped together into <a class="reference internal" href="#constants.Constants" title="constants.Constants"><tt class="xref py py-class docutils literal"><span class="pre">Constants</span></tt></a> classes
+<p>The constants are grouped together into <a class="reference internal" href="#constants.Constants" title="constants.Constants"><code class="xref py py-class docutils literal notranslate"><span class="pre">Constants</span></code></a> classes
 which combine the effect of being a namespace and also providing
 functions to list the constant name or names given a value, which
 is useful when displaying Win32 structures.</p>
-<p>For useful documentation, each <a class="reference internal" href="#constants.Constants" title="constants.Constants"><tt class="xref py py-class docutils literal"><span class="pre">Constants</span></tt></a> generates a readable
+<p>For useful documentation, each <a class="reference internal" href="#constants.Constants" title="constants.Constants"><code class="xref py py-class docutils literal notranslate"><span class="pre">Constants</span></code></a> generates a readable
 docstring tabulating its names &amp; values.</p>
 <div class="section" id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="constants.Constants">
-<em class="property">class </em><tt class="descclassname">constants.</tt><tt class="descname">Constants</tt><big>(</big><em>dict_initialiser={}</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">constants.</code><code class="sig-name descname">Constants</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dict_initialiser</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide a dict-like interface for a group of related
 constants. These can come from a module or other namespace according
 to a wildcard name, or can be added as a list of (unrelated) names from
 a namespace or can simply be a raw dictionary of name-value pairs:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">win32con</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">win32con</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">constants</span>
 <span class="n">COMPRESSION_ENGINE</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span> <span class="p">(</span>
-    <span class="s">&quot;COMPRESSION_ENGINE_*&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;COMPRESSION_ENGINE_*&quot;</span><span class="p">,</span>
     <span class="n">namespace</span><span class="o">=</span><span class="n">win32con</span>
 <span class="p">)</span>
 <span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span>
     <span class="n">EXTRA_VALUE</span> <span class="o">=</span> <span class="mi">5</span>
 <span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">MAXIMUM</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">MAXIMUM</span><span class="p">)</span>
 <span class="n">COMPRESSION_ENGINE</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The convention is to name the set of constants after the common
-prefix of the constant names, as in the example above, but it&#8217;s
+prefix of the constant names, as in the example above, but it’s
 just a convention. The pattern parameter to the various factory
 functions will be used to rename the constants on the way in,
 but it can be empty.</p>
 <p>The constants can be accessed as attributes or as items. In addition,
-passing a name or a value to the <a class="reference internal" href="#constants.Constants.constant" title="constants.Constants.constant"><tt class="xref py py-meth docutils literal"><span class="pre">constant()</span></tt></a> method will return
+passing a name or a value to the <a class="reference internal" href="#constants.Constants.constant" title="constants.Constants.constant"><code class="xref py py-meth docutils literal notranslate"><span class="pre">constant()</span></code></a> method will return
 the value. This is done automatically by most functions which expect
 a parameter based on one of these constants sets.</p>
 <p>To retrieve the name or names corresponding to a value, use the
-<a class="reference internal" href="#constants.Constants.name_from_value" title="constants.Constants.name_from_value"><tt class="xref py py-meth docutils literal"><span class="pre">name_from_value()</span></tt></a> or <a class="reference internal" href="#constants.Constants.names_from_value" title="constants.Constants.names_from_value"><tt class="xref py py-meth docutils literal"><span class="pre">names_from_value()</span></tt></a> function:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">win32con</span>
+<a class="reference internal" href="#constants.Constants.name_from_value" title="constants.Constants.name_from_value"><code class="xref py py-meth docutils literal notranslate"><span class="pre">name_from_value()</span></code></a> or <a class="reference internal" href="#constants.Constants.names_from_value" title="constants.Constants.names_from_value"><code class="xref py py-meth docutils literal notranslate"><span class="pre">names_from_value()</span></code></a> function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">win32con</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">constants</span>
 <span class="n">ACE_TYPES</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span><span class="p">(</span>
-    <span class="s">&quot;*_ACE_TYPE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;*_ACE_TYPE&quot;</span><span class="p">,</span>
     <span class="n">namespace</span><span class="o">=</span><span class="n">win32con</span>
 <span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">ACE_TYPES</span><span class="o">.</span><span class="n">name_from_value</span><span class="p">(</span><span class="n">ACE_TYPES</span><span class="o">.</span><span class="n">ACCESS_ALLOWED</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ACE_TYPES</span><span class="o">.</span><span class="n">name_from_value</span><span class="p">(</span><span class="n">ACE_TYPES</span><span class="o">.</span><span class="n">ACCESS_ALLOWED</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Build an internal structure from a dictionary-like
 set of initial values.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="constants.Constants.as_string">
-<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="headerlink" href="#constants.Constants.as_string" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">as_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#constants.Constants.as_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Produce a readable version of the data, used by
 __str__.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="constants.Constants.constant">
-<tt class="descname">constant</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.constant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.constant" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">constant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.constant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.constant" title="Permalink to this definition">¶</a></dt>
 <dd><p>From a value, which may be a string or an integer, determine
 the corresponding value in this set of constants. If the value
 is a number, it is passed straight back out. If not, it is
 assumed to be a single string or a list of strings, each string
 corresponding to one of the constants in this set of constants:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys.security</span> <span class="kn">import</span> <span class="n">SD_CONTROL</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">winsys.security</span> <span class="kn">import</span> <span class="n">SD_CONTROL</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span><span class="p">([</span><span class="s">&quot;dacl_protected&quot;</span><span class="p">,</span> <span class="s">&quot;sacl_protected&quot;</span><span class="p">]))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PROTECTED</span> <span class="o">|</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PROTECTED</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="mi">12288</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span><span class="p">([</span><span class="s2">&quot;dacl_protected&quot;</span><span class="p">,</span> <span class="s2">&quot;sacl_protected&quot;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">DACL_PROTECTED</span> <span class="o">|</span> <span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">SACL_PROTECTED</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">SD_CONTROL</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="mi">12288</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">No attempt is made to verify that the number passed in represents
+<p class="admonition-title">Note</p>
+<p>No attempt is made to verify that the number passed in represents
 a combination of the constants in this set.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="constants.Constants.doc">
-<tt class="descname">doc</tt><big>(</big><em>preamble</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.doc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">doc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">preamble</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.doc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="constants.Constants.dump">
-<tt class="descname">dump</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#constants.Constants.dump" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">level</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#constants.Constants.dump" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="constants.Constants.dumped">
-<tt class="descname">dumped</tt><big>(</big><em>level=None</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.dumped"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.dumped" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dumped</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">level</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.dumped"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.dumped" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="classmethod">
+<dl class="py method">
 <dt id="constants.Constants.from_dict">
-<em class="property">classmethod </em><tt class="descname">from_dict</tt><big>(</big><em>d</em>, <em>pattern=None</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.from_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.from_dict" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span></em>, <em class="sig-param"><span class="n">pattern</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.from_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.from_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Factory method to return a class instance from a dictionary-like set of values.
 If a pattern is passed in, use the distinguished part of the name (the part
 which matches the wildcard) as the key name.</p>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="py method">
 <dt id="constants.Constants.from_list">
-<em class="property">classmethod </em><tt class="descname">from_list</tt><big>(</big><em>keys</em>, <em>namespace</em>, <em>pattern=None</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.from_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.from_list" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">from_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">keys</span></em>, <em class="sig-param"><span class="n">namespace</span></em>, <em class="sig-param"><span class="n">pattern</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.from_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.from_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Factory method to return a class instance from a list-like set of values
 within a namespace. Hands off to the from_dict factory.</p>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="py method">
 <dt id="constants.Constants.from_pattern">
-<em class="property">classmethod </em><tt class="descname">from_pattern</tt><big>(</big><em>pattern=u'*'</em>, <em>excluded=</em>, <span class="optional">[</span><span class="optional">]</span><em>namespace=&lt;module 'win32con' from 'C:Python27libsite-packageswin32libwin32con.pyc'&gt;</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.from_pattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.from_pattern" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">from_pattern</code><span class="sig-paren">(</span><em class="sig-param">pattern='*'</em>, <em class="sig-param">excluded=[]</em>, <em class="sig-param">namespace=&lt;module 'win32con' from 'c:\\work-in-progress\\winsys\\.venv\\lib\\site-packages\\win32\\lib\\win32con.py'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.from_pattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.from_pattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>Factory method to return a class instance from a wildcard name pattern. This is
 the most common method of constructing a list of constants by passing in, eg,
 FILE_ATTRIBUTE_* and the win32file module as the namespace.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="constants.Constants.init">
-<tt class="descname">init</tt><big>(</big><em>dict_initialiser</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.init" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">init</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dict_initialiser</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.init" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="constants.Constants.items">
-<tt class="descname">items</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.items" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.items" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
+<dt id="constants.Constants.iteritems">
+<code class="sig-name descname">iteritems</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#constants.Constants.iteritems" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="constants.Constants.iterkeys">
-<tt class="descname">iterkeys</tt><big>(</big><big>)</big><a class="headerlink" href="#constants.Constants.iterkeys" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">iterkeys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#constants.Constants.iterkeys" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
+<dt id="constants.Constants.itervalues">
+<code class="sig-name descname">itervalues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#constants.Constants.itervalues" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="constants.Constants.keys">
-<tt class="descname">keys</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.keys" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.keys" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="constants.Constants.name_from_value">
-<tt class="descname">name_from_value</tt><big>(</big><em>value, default=&lt;Unset&gt;, patterns=[u'*']</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.name_from_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.name_from_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">name_from_value</code><span class="sig-paren">(</span><em class="sig-param">value, default=&lt;Unset&gt;, patterns=['*']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.name_from_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.name_from_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the one name in the set of constants (optionally qualified by pattern)
 which matches value.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="constants.Constants.names">
-<tt class="descname">names</tt><big>(</big><em>patterns=[u'*']</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.names" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">names</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">patterns</span><span class="o">=</span><span class="default_value">['*']</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.names" title="Permalink to this definition">¶</a></dt>
 <dd><p>From a list of patterns, return the matching names from the
 list of constants. A single string is considered as though a
 list of one.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="constants.Constants.names_from_value">
-<tt class="descname">names_from_value</tt><big>(</big><em>value, patterns=[u'*']</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.names_from_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.names_from_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">names_from_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">patterns</span><span class="o">=</span><span class="default_value">['*']</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.names_from_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.names_from_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>From a number representing the or-ing of several integer values,
 work out which of the constants make up the number using the pattern
-to filter the &#8220;classes&#8221; or constants present in the dataset.</p>
+to filter the “classes” or constants present in the dataset.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="constants.Constants.reset_doc">
-<tt class="descname">reset_doc</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.reset_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.reset_doc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reset_doc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.reset_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.reset_doc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="constants.Constants.update">
-<tt class="descname">update</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Act as a dict for updates so that several constant sets may
 be merged into one.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="constants.Constants.values">
-<tt class="descname">values</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.values" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.values" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="constants.Constants.values_from_value">
-<tt class="descname">values_from_value</tt><big>(</big><em>value, patterns=[u'*']</em><big>)</big><a class="reference internal" href="_modules/constants.html#Constants.values_from_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.values_from_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">values_from_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">patterns</span><span class="o">=</span><span class="default_value">['*']</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Constants.values_from_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Constants.values_from_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the list of values which make up the combined value</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="constants.Attributes">
-<em class="property">class </em><tt class="descclassname">constants.</tt><tt class="descname">Attributes</tt><big>(</big><em>flags</em>, <em>const</em><big>)</big><a class="reference internal" href="_modules/constants.html#Attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Attributes" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">constants.</code><code class="sig-name descname">Attributes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flags</span></em>, <em class="sig-param"><span class="n">const</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/constants.html#Attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#constants.Attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple class wrapper for the list of file attributes
 (readonly, hidden, &amp;c.) It can be accessed by attribute
-access, item access and the &#8220;in&#8221; operator:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
-<span class="n">attributes</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span> <span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span><span class="o">.</span><span class="n">attributes</span>
+access, item access and the “in” operator:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span>
+<span class="n">attributes</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span> <span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span><span class="o">.</span><span class="n">attributes</span>
 <span class="k">assert</span><span class="p">(</span><span class="n">attributes</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
 <span class="k">assert</span><span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="n">fs</span><span class="o">.</span><span class="n">FILE_ATTRIBUTE</span><span class="o">.</span><span class="n">DIRECTORY</span><span class="p">])</span>
-<span class="k">assert</span><span class="p">(</span><span class="s">&quot;directory&quot;</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">)</span>
+<span class="k">assert</span><span class="p">(</span><span class="s2">&quot;directory&quot;</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -263,213 +264,213 @@ access, item access and the &#8220;in&#8221; operator:</p>
 </div>
 <div class="section" id="id1">
 <h2>Constants<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<dl class="data">
+<dl class="py data">
 <dt id="constants.GENERAL">
-<tt class="descclassname">constants.</tt><tt class="descname">GENERAL</tt><em class="property"> = &lt;Constants: {'INFINITE': -1, 'MAXIMUM_ALLOWED': 33554432}&gt;</em><a class="headerlink" href="#constants.GENERAL" title="Permalink to this definition">¶</a></dt>
-<dd><table border="1" class="docutils">
+<code class="sig-prename descclassname">constants.</code><code class="sig-name descname">GENERAL</code><em class="property"> = &lt;Constants: {'MAXIMUM_ALLOWED': 33554432, 'INFINITE': -1}&gt;</em><a class="headerlink" href="#constants.GENERAL" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils align-default">
 <colgroup>
-<col width="38%" />
-<col width="25%" />
-<col width="38%" />
+<col style="width: 39%" />
+<col style="width: 21%" />
+<col style="width: 39%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>MAXIMUM_ALLOWED</td>
-<td>0x02000000</td>
-<td>MAXIMUM_ALLOWED</td>
+<tbody>
+<tr class="row-even"><td><p>INFINITE</p></td>
+<td><p>-1</p></td>
+<td><p>INFINITE</p></td>
 </tr>
-<tr class="row-odd"><td>INFINITE</td>
-<td>0xFFFFFFFF</td>
-<td>INFINITE</td>
+<tr class="row-odd"><td><p>MAXIMUM_ALLOWED</p></td>
+<td><p>33554432</p></td>
+<td><p>MAXIMUM_ALLOWED</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="constants.TOKEN_FLAG">
-<tt class="descclassname">constants.</tt><tt class="descname">TOKEN_FLAG</tt><em class="property"> = &lt;Constants: {'ALL_ACCESS': 983295, 'ADJUST_DEFAULT': 128, 'EXECUTE': 131072, 'SOURCE_LENGTH': 8, 'READ': 131080, 'ASSIGN_PRIMARY': 1, 'WRITE': 131296, 'ADJUST_PRIVILEGES': 32, 'DUPLICATE': 2, 'IMPERSONATE': 4, 'QUERY_SOURCE': 16, 'QUERY': 8, 'ADJUST_GROUPS': 64}&gt;</em><a class="headerlink" href="#constants.TOKEN_FLAG" title="Permalink to this definition">¶</a></dt>
-<dd><table border="1" class="docutils">
+<code class="sig-prename descclassname">constants.</code><code class="sig-name descname">TOKEN_FLAG</code><em class="property"> = &lt;Constants: {'ADJUST_DEFAULT': 128, 'ADJUST_GROUPS': 64, 'ADJUST_PRIVILEGES': 32, 'ALL_ACCESS': 983295, 'ASSIGN_PRIMARY': 1, 'DUPLICATE': 2, 'EXECUTE': 131072, 'IMPERSONATE': 4, 'QUERY': 8, 'QUERY_SOURCE': 16, 'READ': 131080, 'SOURCE_LENGTH': 8, 'WRITE': 131296}&gt;</em><a class="headerlink" href="#constants.TOKEN_FLAG" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils align-default">
 <colgroup>
-<col width="35%" />
-<col width="17%" />
-<col width="48%" />
+<col style="width: 37%" />
+<col style="width: 13%" />
+<col style="width: 50%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>ASSIGN_PRIMARY</td>
-<td>0x000001</td>
-<td>TOKEN_ASSIGN_PRIMARY</td>
+<tbody>
+<tr class="row-even"><td><p>ASSIGN_PRIMARY</p></td>
+<td><p>1</p></td>
+<td><p>TOKEN_ASSIGN_PRIMARY</p></td>
 </tr>
-<tr class="row-odd"><td>DUPLICATE</td>
-<td>0x000002</td>
-<td>TOKEN_DUPLICATE</td>
+<tr class="row-odd"><td><p>ADJUST_DEFAULT</p></td>
+<td><p>128</p></td>
+<td><p>TOKEN_ADJUST_DEFAULT</p></td>
 </tr>
-<tr class="row-even"><td>IMPERSONATE</td>
-<td>0x000004</td>
-<td>TOKEN_IMPERSONATE</td>
+<tr class="row-even"><td><p>EXECUTE</p></td>
+<td><p>131072</p></td>
+<td><p>TOKEN_EXECUTE</p></td>
 </tr>
-<tr class="row-odd"><td>SOURCE_LENGTH</td>
-<td>0x000008</td>
-<td>TOKEN_SOURCE_LENGTH</td>
+<tr class="row-odd"><td><p>READ</p></td>
+<td><p>131080</p></td>
+<td><p>TOKEN_READ</p></td>
 </tr>
-<tr class="row-even"><td>QUERY</td>
-<td>0x000008</td>
-<td>TOKEN_SOURCE_LENGTH</td>
+<tr class="row-even"><td><p>WRITE</p></td>
+<td><p>131296</p></td>
+<td><p>TOKEN_WRITE</p></td>
 </tr>
-<tr class="row-odd"><td>QUERY_SOURCE</td>
-<td>0x000010</td>
-<td>TOKEN_QUERY_SOURCE</td>
+<tr class="row-odd"><td><p>QUERY_SOURCE</p></td>
+<td><p>16</p></td>
+<td><p>TOKEN_QUERY_SOURCE</p></td>
 </tr>
-<tr class="row-even"><td>ADJUST_PRIVILEGES</td>
-<td>0x000020</td>
-<td>TOKEN_ADJUST_PRIVILEGES</td>
+<tr class="row-even"><td><p>DUPLICATE</p></td>
+<td><p>2</p></td>
+<td><p>TOKEN_DUPLICATE</p></td>
 </tr>
-<tr class="row-odd"><td>ADJUST_GROUPS</td>
-<td>0x000040</td>
-<td>TOKEN_ADJUST_GROUPS</td>
+<tr class="row-odd"><td><p>ADJUST_PRIVILEGES</p></td>
+<td><p>32</p></td>
+<td><p>TOKEN_ADJUST_PRIVILEGES</p></td>
 </tr>
-<tr class="row-even"><td>ADJUST_DEFAULT</td>
-<td>0x000080</td>
-<td>TOKEN_ADJUST_DEFAULT</td>
+<tr class="row-even"><td><p>IMPERSONATE</p></td>
+<td><p>4</p></td>
+<td><p>TOKEN_IMPERSONATE</p></td>
 </tr>
-<tr class="row-odd"><td>EXECUTE</td>
-<td>0x020000</td>
-<td>TOKEN_EXECUTE</td>
+<tr class="row-odd"><td><p>ADJUST_GROUPS</p></td>
+<td><p>64</p></td>
+<td><p>TOKEN_ADJUST_GROUPS</p></td>
 </tr>
-<tr class="row-even"><td>READ</td>
-<td>0x020008</td>
-<td>TOKEN_READ</td>
+<tr class="row-even"><td><p>QUERY</p></td>
+<td><p>8</p></td>
+<td><p>TOKEN_SOURCE_LENGTH</p></td>
 </tr>
-<tr class="row-odd"><td>WRITE</td>
-<td>0x0200E0</td>
-<td>TOKEN_WRITE</td>
+<tr class="row-odd"><td><p>SOURCE_LENGTH</p></td>
+<td><p>8</p></td>
+<td><p>TOKEN_SOURCE_LENGTH</p></td>
 </tr>
-<tr class="row-even"><td>ALL_ACCESS</td>
-<td>0x0F00FF</td>
-<td>TOKEN_ALL_ACCESS</td>
+<tr class="row-even"><td><p>ALL_ACCESS</p></td>
+<td><p>983295</p></td>
+<td><p>TOKEN_ALL_ACCESS</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="constants.ACCESS">
-<tt class="descclassname">constants.</tt><tt class="descname">ACCESS</tt><em class="property"> = &lt;Constants: {'ACCESS_SYSTEM_SECURITY': 16777216, u'WRITE_DAC': 262144, u'SYNCHRONIZE': 1048576, u'READ_CONTROL': 131072, u'WRITE_OWNER': 524288, u'DELETE': 65536}&gt;</em><a class="headerlink" href="#constants.ACCESS" title="Permalink to this definition">¶</a></dt>
-<dd><table border="1" class="docutils">
+<code class="sig-prename descclassname">constants.</code><code class="sig-name descname">ACCESS</code><em class="property"> = &lt;Constants: {'DELETE': 65536, 'READ_CONTROL': 131072, 'WRITE_DAC': 262144, 'WRITE_OWNER': 524288, 'SYNCHRONIZE': 1048576, 'ACCESS_SYSTEM_SECURITY': 16777216}&gt;</em><a class="headerlink" href="#constants.ACCESS" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils align-default">
 <colgroup>
-<col width="41%" />
-<col width="19%" />
-<col width="41%" />
+<col style="width: 42%" />
+<col style="width: 15%" />
+<col style="width: 42%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>DELETE</td>
-<td>0x00010000</td>
-<td>DELETE</td>
+<tbody>
+<tr class="row-even"><td><p>SYNCHRONIZE</p></td>
+<td><p>1048576</p></td>
+<td><p>SYNCHRONIZE</p></td>
 </tr>
-<tr class="row-odd"><td>READ_CONTROL</td>
-<td>0x00020000</td>
-<td>READ_CONTROL</td>
+<tr class="row-odd"><td><p>READ_CONTROL</p></td>
+<td><p>131072</p></td>
+<td><p>READ_CONTROL</p></td>
 </tr>
-<tr class="row-even"><td>WRITE_DAC</td>
-<td>0x00040000</td>
-<td>WRITE_DAC</td>
+<tr class="row-even"><td><p>ACCESS_SYSTEM_SECURITY</p></td>
+<td><p>16777216</p></td>
+<td><p>ACCESS_SYSTEM_SECURITY</p></td>
 </tr>
-<tr class="row-odd"><td>WRITE_OWNER</td>
-<td>0x00080000</td>
-<td>WRITE_OWNER</td>
+<tr class="row-odd"><td><p>WRITE_DAC</p></td>
+<td><p>262144</p></td>
+<td><p>WRITE_DAC</p></td>
 </tr>
-<tr class="row-even"><td>SYNCHRONIZE</td>
-<td>0x00100000</td>
-<td>SYNCHRONIZE</td>
+<tr class="row-even"><td><p>WRITE_OWNER</p></td>
+<td><p>524288</p></td>
+<td><p>WRITE_OWNER</p></td>
 </tr>
-<tr class="row-odd"><td>ACCESS_SYSTEM_SECURITY</td>
-<td>0x01000000</td>
-<td>ACCESS_SYSTEM_SECURITY</td>
+<tr class="row-odd"><td><p>DELETE</p></td>
+<td><p>65536</p></td>
+<td><p>DELETE</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="constants.GENERIC_ACCESS">
-<tt class="descclassname">constants.</tt><tt class="descname">GENERIC_ACCESS</tt><em class="property"> = &lt;Constants: {'READ': -2147483648, 'WRITE': 1073741824, 'ALL': 268435456, 'EXECUTE': 536870912}&gt;</em><a class="headerlink" href="#constants.GENERIC_ACCESS" title="Permalink to this definition">¶</a></dt>
-<dd><table border="1" class="docutils">
+<code class="sig-prename descclassname">constants.</code><code class="sig-name descname">GENERIC_ACCESS</code><em class="property"> = &lt;Constants: {'ALL': 268435456, 'EXECUTE': 536870912, 'READ': -2147483648, 'WRITE': 1073741824}&gt;</em><a class="headerlink" href="#constants.GENERIC_ACCESS" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils align-default">
 <colgroup>
-<col width="22%" />
-<col width="31%" />
-<col width="47%" />
+<col style="width: 21%" />
+<col style="width: 33%" />
+<col style="width: 45%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>ALL</td>
-<td>0x10000000</td>
-<td>GENERIC_ALL</td>
+<tbody>
+<tr class="row-even"><td><p>READ</p></td>
+<td><p>-2147483648</p></td>
+<td><p>GENERIC_READ</p></td>
 </tr>
-<tr class="row-odd"><td>EXECUTE</td>
-<td>0x20000000</td>
-<td>GENERIC_EXECUTE</td>
+<tr class="row-odd"><td><p>WRITE</p></td>
+<td><p>1073741824</p></td>
+<td><p>GENERIC_WRITE</p></td>
 </tr>
-<tr class="row-even"><td>WRITE</td>
-<td>0x40000000</td>
-<td>GENERIC_WRITE</td>
+<tr class="row-even"><td><p>ALL</p></td>
+<td><p>268435456</p></td>
+<td><p>GENERIC_ALL</p></td>
 </tr>
-<tr class="row-odd"><td>READ</td>
-<td>0x80000000</td>
-<td>GENERIC_READ</td>
+<tr class="row-odd"><td><p>EXECUTE</p></td>
+<td><p>536870912</p></td>
+<td><p>GENERIC_EXECUTE</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="constants.STANDARD_ACCESS">
-<tt class="descclassname">constants.</tt><tt class="descname">STANDARD_ACCESS</tt><em class="property"> = &lt;Constants: {u'SYNCHRONIZE': 1048576, u'STANDARD_RIGHTS_WRITE': 131072, u'STANDARD_RIGHTS_READ': 131072}&gt;</em><a class="headerlink" href="#constants.STANDARD_ACCESS" title="Permalink to this definition">¶</a></dt>
-<dd><table border="1" class="docutils">
+<code class="sig-prename descclassname">constants.</code><code class="sig-name descname">STANDARD_ACCESS</code><em class="property"> = &lt;Constants: {'STANDARD_RIGHTS_READ': 131072, 'STANDARD_RIGHTS_WRITE': 131072, 'SYNCHRONIZE': 1048576}&gt;</em><a class="headerlink" href="#constants.STANDARD_ACCESS" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils align-default">
 <colgroup>
-<col width="42%" />
-<col width="16%" />
-<col width="42%" />
+<col style="width: 43%" />
+<col style="width: 14%" />
+<col style="width: 43%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>STANDARD_RIGHTS_WRITE</td>
-<td>0x020000</td>
-<td>STANDARD_RIGHTS_WRITE</td>
+<tbody>
+<tr class="row-even"><td><p>SYNCHRONIZE</p></td>
+<td><p>1048576</p></td>
+<td><p>SYNCHRONIZE</p></td>
 </tr>
-<tr class="row-odd"><td>STANDARD_RIGHTS_READ</td>
-<td>0x020000</td>
-<td>STANDARD_RIGHTS_WRITE</td>
+<tr class="row-odd"><td><p>STANDARD_RIGHTS_READ</p></td>
+<td><p>131072</p></td>
+<td><p>STANDARD_RIGHTS_WRITE</p></td>
 </tr>
-<tr class="row-even"><td>SYNCHRONIZE</td>
-<td>0x100000</td>
-<td>SYNCHRONIZE</td>
+<tr class="row-even"><td><p>STANDARD_RIGHTS_WRITE</p></td>
+<td><p>131072</p></td>
+<td><p>STANDARD_RIGHTS_WRITE</p></td>
 </tr>
 </tbody>
 </table>
@@ -479,10 +480,10 @@ access, item access and the &#8220;in&#8221; operator:</p>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<dl class="last docutils">
-<dt><a class="reference internal" href="cookbook/constants.html"><em>Using the constants module</em></a></dt>
-<dd>Cookbook examples of using the constants module</dd>
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="cookbook/constants.html"><span class="doc">Using the constants module</span></a></dt><dd><p>Cookbook examples of using the constants module</p>
+</dd>
 </dl>
 </div>
 </div>
@@ -492,14 +493,14 @@ access, item access and the &#8220;in&#8221; operator:</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="contents.html">
               <img class="logo" src="_static/cpython2.png" alt="Logo"/>
             </a></p>
-  <h3><a href="contents.html">Table Of Contents</a></h3>
+  <h3><a href="contents.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">constants</span></tt></a><ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">constants</span></code></a><ul>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#id1">Constants</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
@@ -509,33 +510,32 @@ access, item access and the &#8220;in&#8221; operator:</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="core.html"
-                        title="previous chapter"><tt class="docutils literal"><span class="pre">core</span></tt> &#8211; Core objects</a></p>
+                        title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">core</span></code> – Core objects</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="exc.html"
-                        title="next chapter"><tt class="docutils literal"><span class="pre">exc</span></tt> &#8211; Exceptions</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/constants.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">exc</span></code> – Exceptions</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/constants.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -550,12 +550,12 @@ access, item access and the &#8220;in&#8221; operator:</p>
         <li class="right" >
           <a href="core.html" title="core – Core objects"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="contents.html">WinSys 1.0beta documentation</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Tim Golden.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.2.
     </div>
   </body>
 </html>

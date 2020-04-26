@@ -1,34 +1,24 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>registry &mdash; WinSys 1.0beta documentation</title>
-    
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>registry &#8212; WinSys 1.0beta documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.0beta',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys 1.0beta documentation" href="../index.html" />
-    <link rel="up" title="Module code" href="index.html" /> 
-  </head>
-  <body>
-    <div class="related">
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -37,18 +27,18 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for registry</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: utf-8 -*-</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">The registry consists of a series of roots from each of which descends</span>
 <span class="sd">a tree of keys and values. Each key has an anonymous (default) value</span>
@@ -93,7 +83,7 @@
 
 <span class="k">class</span> <span class="nc">RegistryConstants</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">name_from_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;*&quot;</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="nf">name_from_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot;Find the longest name in the set of constants (optionally qualified by pattern)</span>
 <span class="sd">        which matches value.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -104,20 +94,20 @@
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&quot;No constant matching name </span><span class="si">%s</span><span class="s"> and value </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">patterns</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;No constant matching name </span><span class="si">%s</span><span class="s2"> and value </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">patterns</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">default</span>
 
 <span class="n">REGISTRY_HIVE</span> <span class="o">=</span> <span class="n">RegistryConstants</span><span class="o">.</span><span class="n">from_list</span><span class="p">([</span>
-    <span class="s">&quot;HKEY_CLASSES_ROOT&quot;</span><span class="p">,</span>
-    <span class="s">&quot;HKEY_CURRENT_CONFIG&quot;</span><span class="p">,</span>
-    <span class="s">&quot;HKEY_CURRENT_USER&quot;</span><span class="p">,</span>
-    <span class="s">&quot;HKEY_DYN_DATA&quot;</span><span class="p">,</span>
-    <span class="s">&quot;HKEY_LOCAL_MACHINE&quot;</span><span class="p">,</span>
-    <span class="s">&quot;HKEY_PERFORMANCE_DATA&quot;</span><span class="p">,</span>
-    <span class="s">&quot;HKEY_PERFORMANCE_NLSTEXT&quot;</span><span class="p">,</span>
-    <span class="s">&quot;HKEY_PERFORMANCE_TEXT&quot;</span><span class="p">,</span>
-    <span class="s">&quot;HKEY_USERS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;HKEY_CLASSES_ROOT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;HKEY_CURRENT_CONFIG&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;HKEY_CURRENT_USER&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;HKEY_DYN_DATA&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;HKEY_LOCAL_MACHINE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;HKEY_PERFORMANCE_DATA&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;HKEY_PERFORMANCE_NLSTEXT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;HKEY_PERFORMANCE_TEXT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;HKEY_USERS&quot;</span><span class="p">,</span>
 <span class="p">],</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32con</span><span class="p">)</span>
 <span class="n">REGISTRY_HIVE</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span>
     <span class="n">HKLM</span> <span class="o">=</span> <span class="n">REGISTRY_HIVE</span><span class="o">.</span><span class="n">HKEY_LOCAL_MACHINE</span><span class="p">,</span>
@@ -125,52 +115,52 @@
     <span class="n">HKCR</span> <span class="o">=</span> <span class="n">REGISTRY_HIVE</span><span class="o">.</span><span class="n">HKEY_CLASSES_ROOT</span><span class="p">,</span>
     <span class="n">HKU</span> <span class="o">=</span> <span class="n">REGISTRY_HIVE</span><span class="o">.</span><span class="n">HKEY_USERS</span>
 <span class="p">))</span>
-<span class="n">REGISTRY_HIVE</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="s">&quot;Registry hives (root keys) including common aliases (HKCU, HKLM, etc.)&quot;</span><span class="p">)</span>
+<span class="n">REGISTRY_HIVE</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="s2">&quot;Registry hives (root keys) including common aliases (HKCU, HKLM, etc.)&quot;</span><span class="p">)</span>
 <span class="n">REGISTRY_ACCESS</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_list</span><span class="p">([</span>
-    <span class="s">&quot;KEY_ALL_ACCESS&quot;</span><span class="p">,</span>
-    <span class="s">&quot;KEY_CREATE_LINK&quot;</span><span class="p">,</span>
-    <span class="s">&quot;KEY_CREATE_SUB_KEY&quot;</span><span class="p">,</span>
-    <span class="s">&quot;KEY_ENUMERATE_SUB_KEYS&quot;</span><span class="p">,</span>
-    <span class="s">&quot;KEY_EXECUTE&quot;</span><span class="p">,</span>
-    <span class="s">&quot;KEY_NOTIFY&quot;</span><span class="p">,</span>
-    <span class="s">&quot;KEY_QUERY_VALUE&quot;</span><span class="p">,</span>
-    <span class="s">&quot;KEY_READ&quot;</span><span class="p">,</span>
-    <span class="s">&quot;KEY_SET_VALUE&quot;</span><span class="p">,</span>
-    <span class="s">&quot;KEY_WOW64_32KEY&quot;</span><span class="p">,</span>
-    <span class="s">&quot;KEY_WOW64_64KEY&quot;</span><span class="p">,</span>
-    <span class="s">&quot;KEY_WRITE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;KEY_ALL_ACCESS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;KEY_CREATE_LINK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;KEY_CREATE_SUB_KEY&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;KEY_ENUMERATE_SUB_KEYS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;KEY_EXECUTE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;KEY_NOTIFY&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;KEY_QUERY_VALUE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;KEY_READ&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;KEY_SET_VALUE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;KEY_WOW64_32KEY&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;KEY_WOW64_64KEY&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;KEY_WRITE&quot;</span><span class="p">,</span>
 <span class="p">],</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32con</span><span class="p">)</span>
-<span class="n">REGISTRY_ACCESS</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="s">&quot;Registry-specific access rights&quot;</span><span class="p">)</span>
+<span class="n">REGISTRY_ACCESS</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="s2">&quot;Registry-specific access rights&quot;</span><span class="p">)</span>
 <span class="n">REGISTRY_VALUE_TYPE</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_list</span><span class="p">([</span>
-    <span class="s">&quot;REG_BINARY&quot;</span><span class="p">,</span>
-    <span class="s">&quot;REG_DWORD&quot;</span><span class="p">,</span>
-    <span class="s">&quot;REG_DWORD_LITTLE_ENDIAN&quot;</span><span class="p">,</span>
-    <span class="s">&quot;REG_DWORD_BIG_ENDIAN&quot;</span><span class="p">,</span>
-    <span class="s">&quot;REG_EXPAND_SZ&quot;</span><span class="p">,</span>
-    <span class="s">&quot;REG_LINK&quot;</span><span class="p">,</span>
-    <span class="s">&quot;REG_MULTI_SZ&quot;</span><span class="p">,</span>
-    <span class="s">&quot;REG_NONE&quot;</span><span class="p">,</span>
-    <span class="s">&quot;REG_QWORD&quot;</span><span class="p">,</span>
-    <span class="s">&quot;REG_QWORD_LITTLE_ENDIAN&quot;</span><span class="p">,</span>
-    <span class="s">&quot;REG_SZ&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;REG_BINARY&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;REG_DWORD&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;REG_DWORD_LITTLE_ENDIAN&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;REG_DWORD_BIG_ENDIAN&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;REG_EXPAND_SZ&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;REG_LINK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;REG_MULTI_SZ&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;REG_NONE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;REG_QWORD&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;REG_QWORD_LITTLE_ENDIAN&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;REG_SZ&quot;</span><span class="p">,</span>
 <span class="p">],</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32con</span><span class="p">)</span>
-<span class="n">REGISTRY_VALUE_TYPE</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="s">&quot;Registry value data types&quot;</span><span class="p">)</span>
+<span class="n">REGISTRY_VALUE_TYPE</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="s2">&quot;Registry value data types&quot;</span><span class="p">)</span>
 
 <span class="n">PyHANDLE</span> <span class="o">=</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">HANDLEType</span>
 
 <div class="viewcode-block" id="x_registry"><a class="viewcode-back" href="../registry.html#registry.x_registry">[docs]</a><span class="k">class</span> <span class="nc">x_registry</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">x_winsys</span><span class="p">):</span>
-    <span class="s">&quot;Base exception for all registry exceptions&quot;</span>
-</div>
+    <span class="s2">&quot;Base exception for all registry exceptions&quot;</span></div>
+
 <div class="viewcode-block" id="x_moniker"><a class="viewcode-back" href="../registry.html#registry.x_moniker">[docs]</a><span class="k">class</span> <span class="nc">x_moniker</span><span class="p">(</span><span class="n">x_registry</span><span class="p">):</span>
-    <span class="s">&quot;Base exception for problems with monikers&quot;</span>
-</div>
+    <span class="s2">&quot;Base exception for problems with monikers&quot;</span></div>
+
 <div class="viewcode-block" id="x_moniker_ill_formed"><a class="viewcode-back" href="../registry.html#registry.x_moniker_ill_formed">[docs]</a><span class="k">class</span> <span class="nc">x_moniker_ill_formed</span><span class="p">(</span><span class="n">x_moniker</span><span class="p">):</span>
-    <span class="s">&quot;Raised when a moniker does not match the correct format&quot;</span>
-</div>
+    <span class="s2">&quot;Raised when a moniker does not match the correct format&quot;</span></div>
+
 <div class="viewcode-block" id="x_moniker_no_root"><a class="viewcode-back" href="../registry.html#registry.x_moniker_no_root">[docs]</a><span class="k">class</span> <span class="nc">x_moniker_no_root</span><span class="p">(</span><span class="n">x_moniker</span><span class="p">):</span>
-    <span class="s">&quot;Raised when a moniker has no Hive in the first or second position&quot;</span>
-</div>
-<span class="n">sep</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span>
+    <span class="s2">&quot;Raised when a moniker has no Hive in the first or second position&quot;</span></div>
+
+<span class="n">sep</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span>
 
 <span class="n">WINERROR_MAP</span> <span class="o">=</span> <span class="p">{</span>
     <span class="n">winerror</span><span class="o">.</span><span class="n">ERROR_PATH_NOT_FOUND</span> <span class="p">:</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">,</span>
@@ -182,8 +172,8 @@
 <span class="n">wrapped</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="n">wrapper</span><span class="p">(</span><span class="n">WINERROR_MAP</span><span class="p">,</span> <span class="n">x_registry</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_parse_moniker</span><span class="p">(</span><span class="n">moniker</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Take a registry moniker and return the computer, root key, subkey path and value label.</span>
+<span class="k">def</span> <span class="nf">_parse_moniker</span><span class="p">(</span><span class="n">moniker</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Take a registry moniker and return the computer, root key, subkey path and value label.</span>
 <span class="sd">    NB: neither the computer nor the registry key need exist; they</span>
 <span class="sd">    need simply to be of the right format. The slashes must be backslashes (since</span>
 <span class="sd">    registry key names can contain forward slashes). accept_value is mostly used</span>
@@ -206,51 +196,51 @@
 <span class="sd">        -&gt; &quot;&quot;, 0x80000001, &quot;Software\Python&quot;, &quot;&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">accept_value</span><span class="p">:</span>
-        <span class="n">moniker_parser</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&quot;(?:</span><span class="se">\\\\</span><span class="s">([^</span><span class="se">\\</span><span class="s">]+)</span><span class="se">\\</span><span class="s">)?([^:]+)(:?)(.*)&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
+        <span class="n">moniker_parser</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?:</span><span class="se">\\\\</span><span class="s2">([^</span><span class="se">\\</span><span class="s2">]+)</span><span class="se">\\</span><span class="s2">)?([^:]+)(:?)(.*)&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">moniker_parser</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&quot;(?:</span><span class="se">\\\\</span><span class="s">([^</span><span class="se">\\</span><span class="s">]+)</span><span class="se">\\</span><span class="s">)?(.*)&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
+        <span class="n">moniker_parser</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?:</span><span class="se">\\\\</span><span class="s2">([^</span><span class="se">\\</span><span class="s2">]+)</span><span class="se">\\</span><span class="s2">)?(.*)&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
 
     <span class="n">matcher</span> <span class="o">=</span> <span class="n">moniker_parser</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">moniker</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">matcher</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">x_moniker_ill_formed</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">&quot;_parse_moniker&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">&quot;Ill-formed moniker: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">moniker</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">x_moniker_ill_formed</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s2">&quot;_parse_moniker&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s2">&quot;Ill-formed moniker: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">moniker</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">accept_value</span><span class="p">:</span>
         <span class="n">computer</span><span class="p">,</span> <span class="n">keypath</span><span class="p">,</span> <span class="n">colon</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">matcher</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">computer</span><span class="p">,</span> <span class="n">keypath</span> <span class="o">=</span> <span class="n">matcher</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
-        <span class="n">colon</span> <span class="o">=</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">colon</span> <span class="o">=</span> <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="n">keypath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
 
-    <span class="n">root</span> <span class="o">=</span> <span class="n">path</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">path</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="n">key0</span> <span class="o">=</span> <span class="n">keys</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">root</span> <span class="o">=</span> <span class="n">REGISTRY_HIVE</span><span class="p">[</span><span class="n">key0</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="n">root</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">keys</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">keys</span><span class="p">:</span>
         <span class="n">key1</span> <span class="o">=</span> <span class="n">keys</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">root</span> <span class="o">=</span> <span class="n">REGISTRY_HIVE</span><span class="p">[</span><span class="n">key1</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="n">root</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">x_moniker_no_root</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">&quot;_parse_moniker&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">&quot;A registry hive must be the first or second segment in moniker&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">x_moniker_no_root</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s2">&quot;_parse_moniker&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s2">&quot;A registry hive must be the first or second segment in moniker&quot;</span><span class="p">)</span>
 
     <span class="n">path</span> <span class="o">=</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
 
-    <span class="c">#</span>
-    <span class="c"># If a value is indicated (by a colon) but none is supplied,</span>
-    <span class="c"># use &quot;&quot; to indicate that the default value is requested.</span>
-    <span class="c"># Otherwise use None to indicate that no value is requested</span>
-    <span class="c">#</span>
-    <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s">&quot;&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">colon</span><span class="p">:</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="c1">#</span>
+    <span class="c1"># If a value is indicated (by a colon) but none is supplied,</span>
+    <span class="c1"># use &quot;&quot; to indicate that the default value is requested.</span>
+    <span class="c1"># Otherwise use None to indicate that no value is requested</span>
+    <span class="c1">#</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">colon</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">return</span> <span class="n">computer</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span>
 
-<div class="viewcode-block" id="create_moniker"><a class="viewcode-back" href="../registry.html#registry.create_moniker">[docs]</a><span class="k">def</span> <span class="nf">create_moniker</span><span class="p">(</span><span class="n">computer</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="create_moniker"><a class="viewcode-back" href="../registry.html#registry.create_moniker">[docs]</a><span class="k">def</span> <span class="nf">create_moniker</span><span class="p">(</span><span class="n">computer</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return a valid registry moniker from component parts. Computer</span>
 <span class="sd">    is optional but root and path must be specified.</span>
 
@@ -264,14 +254,14 @@
         <span class="n">root</span> <span class="o">=</span> <span class="n">REGISTRY_HIVE</span><span class="o">.</span><span class="n">name_from_value</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
     <span class="n">fullpath</span> <span class="o">=</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">root</span><span class="p">]</span> <span class="o">+</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">computer</span><span class="p">:</span>
-        <span class="n">moniker</span> <span class="o">=</span> <span class="s">r&quot;</span><span class="se">\\</span><span class="si">%s</span><span class="s">\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">computer</span><span class="p">,</span> <span class="n">fullpath</span><span class="p">)</span>
+        <span class="n">moniker</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="si">%s</span><span class="s2">\</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">computer</span><span class="p">,</span> <span class="n">fullpath</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">moniker</span> <span class="o">=</span> <span class="n">fullpath</span>
     <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">moniker</span> <span class="o">+</span> <span class="s">&quot;:&quot;</span> <span class="o">+</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">moniker</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">value</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">moniker</span>
-</div>
+        <span class="k">return</span> <span class="n">moniker</span></div>
+
 <div class="viewcode-block" id="Registry"><a class="viewcode-back" href="../registry.html#registry.Registry">[docs]</a><span class="k">class</span> <span class="nc">Registry</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Represent a registry key (including one of the roots) giving</span>
@@ -331,13 +321,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">ACCESS</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&quot;Q&quot;</span> <span class="p">:</span> <span class="n">REGISTRY_ACCESS</span><span class="o">.</span><span class="n">KEY_QUERY_VALUE</span><span class="p">,</span>
-        <span class="s">&quot;D&quot;</span> <span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">ACCESS</span><span class="o">.</span><span class="n">DELETE</span><span class="p">,</span>
-        <span class="s">&quot;R&quot;</span> <span class="p">:</span> <span class="n">REGISTRY_ACCESS</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">,</span>
-        <span class="s">&quot;W&quot;</span> <span class="p">:</span> <span class="n">REGISTRY_ACCESS</span><span class="o">.</span><span class="n">KEY_WRITE</span><span class="p">,</span>
-        <span class="s">&quot;C&quot;</span> <span class="p">:</span> <span class="n">REGISTRY_ACCESS</span><span class="o">.</span><span class="n">KEY_READ</span> <span class="o">|</span> <span class="n">REGISTRY_ACCESS</span><span class="o">.</span><span class="n">KEY_WRITE</span><span class="p">,</span>
-        <span class="s">&quot;F&quot;</span> <span class="p">:</span> <span class="n">REGISTRY_ACCESS</span><span class="o">.</span><span class="n">KEY_ALL_ACCESS</span><span class="p">,</span>
-        <span class="s">&quot;S&quot;</span> <span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">ACCESS</span><span class="o">.</span><span class="n">READ_CONTROL</span> <span class="o">|</span> <span class="n">constants</span><span class="o">.</span><span class="n">ACCESS</span><span class="o">.</span><span class="n">WRITE_DAC</span><span class="p">,</span>
+        <span class="s2">&quot;Q&quot;</span> <span class="p">:</span> <span class="n">REGISTRY_ACCESS</span><span class="o">.</span><span class="n">KEY_QUERY_VALUE</span><span class="p">,</span>
+        <span class="s2">&quot;D&quot;</span> <span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">ACCESS</span><span class="o">.</span><span class="n">DELETE</span><span class="p">,</span>
+        <span class="s2">&quot;R&quot;</span> <span class="p">:</span> <span class="n">REGISTRY_ACCESS</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">,</span>
+        <span class="s2">&quot;W&quot;</span> <span class="p">:</span> <span class="n">REGISTRY_ACCESS</span><span class="o">.</span><span class="n">KEY_WRITE</span><span class="p">,</span>
+        <span class="s2">&quot;C&quot;</span> <span class="p">:</span> <span class="n">REGISTRY_ACCESS</span><span class="o">.</span><span class="n">KEY_READ</span> <span class="o">|</span> <span class="n">REGISTRY_ACCESS</span><span class="o">.</span><span class="n">KEY_WRITE</span><span class="p">,</span>
+        <span class="s2">&quot;F&quot;</span> <span class="p">:</span> <span class="n">REGISTRY_ACCESS</span><span class="o">.</span><span class="n">KEY_ALL_ACCESS</span><span class="p">,</span>
+        <span class="s2">&quot;S&quot;</span> <span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">ACCESS</span><span class="o">.</span><span class="n">READ_CONTROL</span> <span class="o">|</span> <span class="n">constants</span><span class="o">.</span><span class="n">ACCESS</span><span class="o">.</span><span class="n">WRITE_DAC</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="sd">&quot;&quot;&quot;Mapping between characters and access rights:</span>
 
@@ -349,66 +339,66 @@
 <span class="sd">    * F - Full Control</span>
 <span class="sd">    * S - Security</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">DEFAULT_ACCESS</span> <span class="o">=</span> <span class="s">&quot;R&quot;</span>
+    <span class="n">DEFAULT_ACCESS</span> <span class="o">=</span> <span class="s2">&quot;R&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">moniker</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">DEFAULT_ACCESS</span><span class="p">):</span>
-        <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;hKey&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;moniker&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">moniker</span><span class="p">))</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;id&quot;</span><span class="p">,</span> <span class="n">_parse_moniker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">moniker</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;access&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access</span><span class="p">(</span><span class="n">access</span><span class="p">))</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="n">moniker</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">moniker</span> <span class="k">else</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">moniker</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">DEFAULT_ACCESS</span><span class="p">):</span>
+        <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;hKey&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;moniker&quot;</span><span class="p">,</span> <span class="n">unicode</span><span class="p">(</span><span class="n">moniker</span><span class="p">))</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">_parse_moniker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">moniker</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;access&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access</span><span class="p">(</span><span class="n">access</span><span class="p">))</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">moniker</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">moniker</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_access</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">access</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_access</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">access</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Conversion function which returns an integer representing a security access</span>
 <span class="sd">        bit pattern. Uses the class&#39;s ACCESS map to translate letters to integers.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">access</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="n">access</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">access</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">or_</span><span class="p">,</span> <span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">ACCESS</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">access</span><span class="o">.</span><span class="n">upper</span><span class="p">()),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">or_</span><span class="p">,</span> <span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">ACCESS</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">access</span><span class="o">.</span><span class="n">upper</span><span class="p">()),</span> <span class="mi">0</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">access</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">access</span>
 
-    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">access</span><span class="p">))</span>
 
-<div class="viewcode-block" id="Registry.__add__"><a class="viewcode-back" href="../registry.html#registry.Registry.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="Registry.__add__"><a class="viewcode-back" href="../registry.html#registry.Registry.__add__">[docs]</a>    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Allow a key to be added to an existing moniker.</span>
 
 <span class="sd">        :param path: can be a simple name or a backslash-separated relative path</span>
 <span class="sd">        :returns: a :class:`Registry` object for the new path</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">path</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">moniker</span> <span class="o">+</span> <span class="n">sep</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">moniker</span> <span class="o">+</span> <span class="n">sep</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c">#</span>
-            <span class="c"># path is unlikely to be empty for a specific call,</span>
-            <span class="c"># but this functionality is used by the create and</span>
-            <span class="c"># delete methods which refer to the existing class</span>
-            <span class="c"># by default.</span>
-            <span class="c">#</span>
-            <span class="k">return</span> <span class="bp">self</span>
-</div>
+            <span class="c1">#</span>
+            <span class="c1"># path is unlikely to be empty for a specific call,</span>
+            <span class="c1"># but this functionality is used by the create and</span>
+            <span class="c1"># delete methods which refer to the existing class</span>
+            <span class="c1"># by default.</span>
+            <span class="c1">#</span>
+            <span class="k">return</span> <span class="bp">self</span></div>
+
 <div class="viewcode-block" id="Registry.pyobject"><a class="viewcode-back" href="../registry.html#registry.Registry.pyobject">[docs]</a>    <span class="k">def</span> <span class="nf">pyobject</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Lazily return an internal registry key handle according to the instance&#39;s</span>
 <span class="sd">        access requirements.</span>
 
 <span class="sd">        :raises: :exc:`x_not_found` if the registry path the key refers to does not exist</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hKey</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">hKey</span><span class="p">,</span> <span class="n">moniker</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_from_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">moniker</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">access</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-            <span class="n">utils</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;hKey&quot;</span><span class="p">,</span> <span class="n">hKey</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hKey</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">&quot;Registry.pyobject&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">&quot;Registry path </span><span class="si">%s</span><span class="s"> not found&quot;</span> <span class="o">%</span> <span class="n">moniker</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hKey</span>
-</div>
-    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">moniker</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hKey</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">hKey</span><span class="p">,</span> <span class="n">moniker</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_from_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">moniker</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">access</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;hKey&quot;</span><span class="p">,</span> <span class="n">hKey</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hKey</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s2">&quot;Registry.pyobject&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s2">&quot;Registry path </span><span class="si">%s</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">moniker</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hKey</span></div>
+
+<div class="viewcode-block" id="Registry.as_string"><a class="viewcode-back" href="../registry.html#registry.Registry.as_string">[docs]</a>    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">moniker</span></div>
 
 <div class="viewcode-block" id="Registry.security"><a class="viewcode-back" href="../registry.html#registry.Registry.security">[docs]</a>    <span class="k">def</span> <span class="nf">security</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">security</span><span class="o">.</span><span class="n">Security</span><span class="o">.</span><span class="n">DEFAULT_OPTIONS</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;For a security request, hand off to the :meth:`~security.Security.from_object` method</span>
@@ -423,26 +413,26 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">pyobject</span><span class="p">(),</span>
             <span class="n">object_type</span><span class="o">=</span><span class="n">security</span><span class="o">.</span><span class="n">SE_OBJECT_TYPE</span><span class="o">.</span><span class="n">REGISTRY_KEY</span><span class="p">,</span>
             <span class="n">options</span><span class="o">=</span><span class="n">options</span>
-        <span class="p">)</span>
-</div>
+        <span class="p">)</span></div>
+
     <span class="k">def</span> <span class="nf">__nonzero__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Determine whether the registry key exists or not.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">hKey</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_from_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">moniker</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">hKey</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_from_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">moniker</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">hKey</span><span class="p">)</span>
-    <span class="n">__bool__</span> <span class="o">=</span> <span class="n">__nonzero__</span>
+    <span class="fm">__bool__</span> <span class="o">=</span> <span class="n">__nonzero__</span>
 
     <span class="k">def</span> <span class="nf">dumped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_string</span><span class="p">())</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;access: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">access</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;access: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">access</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;keys:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped_list</span><span class="p">((</span><span class="n">key</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">(</span><span class="n">ignore_access_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">)),</span> <span class="n">level</span><span class="p">))</span>
-            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;values:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">((</span><span class="n">name</span> <span class="ow">or</span> <span class="s">&quot;(Default)&quot;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">))</span> <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">itervalues</span><span class="p">(</span><span class="n">ignore_access_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">)),</span> <span class="n">level</span><span class="p">))</span>
-            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;security:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">security</span><span class="p">()</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="n">level</span><span class="p">),</span> <span class="n">level</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">level</span><span class="p">)</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;keys:</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped_list</span><span class="p">((</span><span class="n">key</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">(</span><span class="n">ignore_access_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span> <span class="n">level</span><span class="p">))</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;values:</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">((</span><span class="n">name</span> <span class="ow">or</span> <span class="s2">&quot;(Default)&quot;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">))</span> <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">itervalues</span><span class="p">(</span><span class="n">ignore_access_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span> <span class="n">level</span><span class="p">))</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;security:</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">security</span><span class="p">()</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="n">level</span><span class="p">),</span> <span class="n">level</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">level</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Allow attribute access (key.value) by trying for a value</span>
 <span class="sd">        first and then falling back to a key and finally raising</span>
 <span class="sd">        AttributeError</span>
@@ -454,15 +444,15 @@
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">AttributeError</span>
-    <span class="n">__getitem__</span> <span class="o">=</span> <span class="n">__getattr__</span>
+    <span class="fm">__getitem__</span> <span class="o">=</span> <span class="fm">__getattr__</span>
 
-    <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Allow attribute assignment by assigning a value.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-    <span class="n">__setitem__</span> <span class="o">=</span> <span class="n">__setattr__</span>
+    <span class="fm">__setitem__</span> <span class="o">=</span> <span class="fm">__setattr__</span>
 
-    <span class="k">def</span> <span class="nf">__delattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__delattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">del_value</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">:</span>
@@ -470,28 +460,28 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">AttributeError</span>
-    <span class="n">__delitem__</span> <span class="o">=</span> <span class="n">__delattr__</span>
+    <span class="fm">__delitem__</span> <span class="o">=</span> <span class="fm">__delattr__</span>
 
 <div class="viewcode-block" id="Registry.get_value"><a class="viewcode-back" href="../registry.html#registry.Registry.get_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the key&#39;s value corresponding to name</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">value</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">RegQueryValueEx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyobject</span><span class="p">(),</span> <span class="n">name</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">value</span>
-</div>
+        <span class="k">return</span> <span class="n">value</span></div>
+
 <div class="viewcode-block" id="Registry.get_value_type"><a class="viewcode-back" href="../registry.html#registry.Registry.get_value_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_value_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the type of the key&#39;s value corresponding to name</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">value</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">RegQueryValueEx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyobject</span><span class="p">(),</span> <span class="n">name</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">type</span>
-</div>
+        <span class="k">return</span> <span class="nb">type</span></div>
+
 <div class="viewcode-block" id="Registry.get_key"><a class="viewcode-back" href="../registry.html#registry.Registry.get_key">[docs]</a>    <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a Registry instance corresponding to the key&#39;s subkey name</span>
 
 <span class="sd">        :param name: a registry relative path (may be a single name or a backslash-separated path</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span> <span class="o">+</span> <span class="n">name</span>
-</div>
-<div class="viewcode-block" id="Registry.set_value"><a class="viewcode-back" href="../registry.html#registry.Registry.set_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="o">+</span> <span class="n">name</span></div>
+
+<div class="viewcode-block" id="Registry.set_value"><a class="viewcode-back" href="../registry.html#registry.Registry.set_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Attempt to set one of the key&#39;s named values. If type is</span>
 <span class="sd">        None, then if the value already exists under the key its</span>
 <span class="sd">        current type is assumed; otherwise a guess is made at</span>
@@ -515,70 +505,70 @@
                 <span class="k">return</span> <span class="n">REGISTRY_VALUE_TYPE</span><span class="o">.</span><span class="n">REG_DWORD</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">REGISTRY_VALUE_TYPE</span><span class="o">.</span><span class="n">REG_MULTI_SZ</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s">&quot;%&quot;</span> <span class="ow">in</span> <span class="n">value</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&quot;%&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;%&quot;</span> <span class="ow">in</span> <span class="n">value</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">REGISTRY_VALUE_TYPE</span><span class="o">.</span><span class="n">REG_EXPAND_SZ</span>
             <span class="k">return</span> <span class="n">REGISTRY_VALUE_TYPE</span><span class="o">.</span><span class="n">REG_SZ</span>
 
         <span class="nb">type</span> <span class="o">=</span> <span class="n">REGISTRY_VALUE_TYPE</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">_</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">RegQueryValueEx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyobject</span><span class="p">(),</span> <span class="n">label</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">:</span>
                 <span class="nb">type</span> <span class="o">=</span> <span class="n">_guess_type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        <span class="n">wrapped</span><span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">RegSetValueEx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyobject</span><span class="p">(),</span> <span class="n">label</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-</div>
+        <span class="n">wrapped</span><span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">RegSetValueEx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyobject</span><span class="p">(),</span> <span class="n">label</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Registry.del_value"><a class="viewcode-back" href="../registry.html#registry.Registry.del_value">[docs]</a>    <span class="k">def</span> <span class="nf">del_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Removed the value identified by label from this registry key&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">RegDeleteValue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyobject</span><span class="p">(),</span> <span class="n">label</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">RegDeleteValue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyobject</span><span class="p">(),</span> <span class="n">label</span><span class="p">)</span></div>
+
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_from_string</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">DEFAULT_ACCESS</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">DEFAULT_ACCESS</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Treat the string param as a moniker and return the corresponding</span>
 <span class="sd">        registry key and value name.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">computer</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">_parse_moniker</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="n">accept_value</span><span class="p">)</span>
-        <span class="n">moniker</span> <span class="o">=</span> <span class="n">REGISTRY_HIVE</span><span class="o">.</span><span class="n">name_from_value</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">sep</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span> <span class="k">else</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">moniker</span> <span class="o">=</span> <span class="n">REGISTRY_HIVE</span><span class="o">.</span><span class="n">name_from_value</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">sep</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">computer</span><span class="p">:</span>
-            <span class="n">hRoot</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">RegConnectRegistry</span><span class="p">,</span> <span class="bp">None</span> <span class="k">if</span> <span class="n">computer</span> <span class="o">==</span> <span class="s">&quot;.&quot;</span> <span class="k">else</span> <span class="n">computer</span><span class="p">,</span> <span class="n">root</span><span class="p">)</span>
+            <span class="n">hRoot</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">RegConnectRegistry</span><span class="p">,</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">computer</span> <span class="o">==</span> <span class="s2">&quot;.&quot;</span> <span class="k">else</span> <span class="n">computer</span><span class="p">,</span> <span class="n">root</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">hRoot</span> <span class="o">=</span> <span class="n">root</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">computer</span><span class="p">:</span>
-                <span class="n">moniker</span> <span class="o">=</span> <span class="s">r&quot;</span><span class="se">\\</span><span class="si">%s</span><span class="s">\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">computer</span><span class="p">,</span> <span class="n">moniker</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">RegOpenKeyEx</span><span class="p">,</span> <span class="n">hRoot</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cls</span><span class="o">.</span><span class="n">_access</span><span class="p">(</span><span class="n">access</span><span class="p">)),</span> <span class="n">moniker</span><span class="p">,</span> <span class="n">value</span>
+                <span class="n">moniker</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="si">%s</span><span class="s2">\</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">computer</span><span class="p">,</span> <span class="n">moniker</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">RegOpenKeyEx</span><span class="p">,</span> <span class="n">hRoot</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_access</span><span class="p">(</span><span class="n">access</span><span class="p">)),</span> <span class="n">moniker</span><span class="p">,</span> <span class="n">value</span>
         <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">None</span><span class="p">,</span> <span class="n">moniker</span><span class="p">,</span> <span class="n">value</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">moniker</span><span class="p">,</span> <span class="n">value</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Registry.from_string"><a class="viewcode-back" href="../registry.html#registry.Registry.from_string">[docs]</a>    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">DEFAULT_ACCESS</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Registry.from_string"><a class="viewcode-back" href="../registry.html#registry.Registry.from_string">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">DEFAULT_ACCESS</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Treat the string param as a moniker return either a key</span>
 <span class="sd">        or a value. This is mostly used via the :func:`registry` function.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">hKey</span><span class="p">,</span> <span class="n">moniker</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_from_string</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">access</span><span class="p">,</span> <span class="n">accept_value</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">moniker</span><span class="p">,</span> <span class="n">access</span><span class="p">)</span>
+        <span class="n">hKey</span><span class="p">,</span> <span class="n">moniker</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_string</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">access</span><span class="p">,</span> <span class="n">accept_value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">moniker</span><span class="p">,</span> <span class="n">access</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">moniker</span><span class="p">,</span> <span class="n">access</span><span class="p">)</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-</div></div>
-<div class="viewcode-block" id="registry"><a class="viewcode-back" href="../registry.html#registry.registry">[docs]</a><span class="k">def</span> <span class="nf">registry</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">Registry</span><span class="o">.</span><span class="n">DEFAULT_ACCESS</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">moniker</span><span class="p">,</span> <span class="n">access</span><span class="p">)</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="registry"><a class="viewcode-back" href="../registry.html#registry.registry">[docs]</a><span class="k">def</span> <span class="nf">registry</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">Registry</span><span class="o">.</span><span class="n">DEFAULT_ACCESS</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Factory function for the Registry class.</span>
 
 <span class="sd">    :param root: any of None, a Registry instance, or a moniker string</span>
 <span class="sd">    :param access: an integer bitmask or an :data:`Registry.ACCESS` string</span>
 <span class="sd">    :returns: a :class:`Registry` object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">Registry</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">root</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Registry</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">access</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="n">accept_value</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">x_registry</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">&quot;registry&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">&quot;root must be None, an existing key or a moniker&quot;</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="values"><a class="viewcode-back" href="../registry.html#registry.values">[docs]</a><span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">ignore_access_errors</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">_want_types</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">x_registry</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s2">&quot;registry&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s2">&quot;root must be None, an existing key or a moniker&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="values"><a class="viewcode-back" href="../registry.html#registry.values">[docs]</a><span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">ignore_access_errors</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">_want_types</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Yield the values of a registry key as (name, value). This is convenient</span>
 <span class="sd">    for, eg, populating a dictionary::</span>
 
@@ -592,59 +582,63 @@
 <span class="sd">    :param _want_types: (internal) used when, eg, copying keys exactly</span>
 <span class="sd">    :returns: yields (name, value) for every value under :const:`root`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">root</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">hKey</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">pyobject</span><span class="p">()</span>
     <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_access_denied</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">ignore_access_errors</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">StopIteration</span>
+            <span class="k">return</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span>
 
     <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">RegEnumValue</span><span class="p">,</span> <span class="n">hKey</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">_want_types</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span>
+        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+            <span class="k">return</span>
         <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_access_denied</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">ignore_access_errors</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">StopIteration</span>
+                <span class="k">return</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span>
         <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span></div>
 <span class="n">itervalues</span> <span class="o">=</span> <span class="n">values</span>
 
-<div class="viewcode-block" id="keys"><a class="viewcode-back" href="../registry.html#registry.keys">[docs]</a><span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">ignore_access_errors</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="keys"><a class="viewcode-back" href="../registry.html#registry.keys">[docs]</a><span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">ignore_access_errors</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Yield the subkeys of a registry key as :class:`Registry` objects</span>
 
 <span class="sd">    :param root: anything accepted by :func:`registry`</span>
 <span class="sd">    :param ignore_access_errors: if True, will keep on iterating even if access denied</span>
 <span class="sd">    :returns: yield :class:`Registry` objects for each key under `root`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">root</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">hRoot</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">pyobject</span><span class="p">()</span>
     <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_access_denied</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">ignore_access_errors</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">StopIteration</span>
+            <span class="k">return</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">subname</span><span class="p">,</span> <span class="n">reserved</span><span class="p">,</span> <span class="n">subclass</span><span class="p">,</span> <span class="n">written_at</span> <span class="ow">in</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">RegEnumKeyExW</span><span class="p">,</span> <span class="n">hRoot</span><span class="p">):</span>
-            <span class="k">yield</span> <span class="n">registry</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">moniker</span> <span class="o">+</span> <span class="n">sep</span> <span class="o">+</span> <span class="n">subname</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">registry</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">moniker</span> <span class="o">+</span> <span class="n">sep</span> <span class="o">+</span> <span class="n">subname</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+        <span class="k">return</span>
     <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_access_denied</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">ignore_access_errors</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">StopIteration</span>
+            <span class="k">return</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span></div>
 <span class="n">iterkeys</span> <span class="o">=</span> <span class="n">keys</span>
 
-<div class="viewcode-block" id="copy"><a class="viewcode-back" href="../registry.html#registry.copy">[docs]</a><span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="n">from_key</span><span class="p">,</span> <span class="n">to_key</span><span class="p">,</span> <span class="n">use_access</span><span class="o">=</span><span class="s">&quot;F&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="copy"><a class="viewcode-back" href="../registry.html#registry.copy">[docs]</a><span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="n">from_key</span><span class="p">,</span> <span class="n">to_key</span><span class="p">,</span> <span class="n">use_access</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Copy one registry key to another, returning the target. If the</span>
 <span class="sd">    target doesn&#39;t already exist it will be created.</span>
 
@@ -652,30 +646,30 @@
 <span class="sd">    :param to_key: anything accepted by :func:`registry`</span>
 <span class="sd">    :returns: a :class:`Registry` object for `to_key`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">source</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">from_key</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">target</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">to_key</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">use_access</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">from_key</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">to_key</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">use_access</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">target</span><span class="p">:</span>
         <span class="n">target</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 
-    <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">subkeys</span><span class="p">,</span> <span class="n">subvalues</span> <span class="ow">in</span> <span class="n">walk</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">_want_types</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">subkeys</span><span class="p">,</span> <span class="n">subvalues</span> <span class="ow">in</span> <span class="n">walk</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">_want_types</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="n">target_root</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span>
                 <span class="n">target</span><span class="o">.</span><span class="n">moniker</span> <span class="o">+</span> <span class="n">utils</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">moniker</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">moniker</span><span class="p">),</span>
                 <span class="n">access</span><span class="o">=</span><span class="n">use_access</span><span class="p">,</span>
-                <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span>
+                <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">subkeys</span><span class="p">:</span>
             <span class="n">target_key</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span>
                 <span class="n">target</span><span class="o">.</span><span class="n">moniker</span> <span class="o">+</span> <span class="n">utils</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">moniker</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">moniker</span><span class="p">),</span>
-                <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">access</span><span class="o">=</span><span class="n">use_access</span>
             <span class="p">)</span>
             <span class="n">target_key</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span> <span class="ow">in</span> <span class="n">subvalues</span><span class="p">:</span>
             <span class="n">target_root</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">target</span>
-</div>
-<div class="viewcode-block" id="delete"><a class="viewcode-back" href="../registry.html#registry.delete">[docs]</a><span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">subkey</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">target</span></div>
+
+<div class="viewcode-block" id="delete"><a class="viewcode-back" href="../registry.html#registry.delete">[docs]</a><span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">subkey</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Delete a registry key and all its subkeys</span>
 
 <span class="sd">    The common use for this will be to delete a key itself.</span>
@@ -698,13 +692,13 @@
 <span class="sd">    :param subkey: anything accepted by :meth:`Registry.get_key`</span>
 <span class="sd">    :returns: a :class:`Registry` object for `root`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">subkey</span><span class="p">)</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">subkey</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">key</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">():</span>
         <span class="n">k</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
     <span class="n">win32api</span><span class="o">.</span><span class="n">RegDeleteKey</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span><span class="o">.</span><span class="n">pyobject</span><span class="p">(),</span> <span class="n">key</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">key</span>
-</div>
-<div class="viewcode-block" id="create"><a class="viewcode-back" href="../registry.html#registry.create">[docs]</a><span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">subkey</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">key</span></div>
+
+<div class="viewcode-block" id="create"><a class="viewcode-back" href="../registry.html#registry.create">[docs]</a><span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">subkey</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a key and apply specific security to it, returning the</span>
 <span class="sd">    key created. Note that a colon in the key name is treated as part</span>
 <span class="sd">    of the name not as a value indicator. Any parts of the path not</span>
@@ -720,12 +714,12 @@
 <span class="sd">    :param sec: a :class:`security.Security` instance or None</span>
 <span class="sd">    :returns: a :class:`Registry` object for `root`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">subkey</span><span class="p">)</span>
-    <span class="n">computer0</span><span class="p">,</span> <span class="n">root0</span><span class="p">,</span> <span class="n">path0</span><span class="p">,</span> <span class="n">value0</span> <span class="o">=</span> <span class="n">_parse_moniker</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">moniker</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">subkey</span><span class="p">)</span>
+    <span class="n">computer0</span><span class="p">,</span> <span class="n">root0</span><span class="p">,</span> <span class="n">path0</span><span class="p">,</span> <span class="n">value0</span> <span class="o">=</span> <span class="n">_parse_moniker</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">moniker</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="n">parts</span> <span class="o">=</span> <span class="n">path0</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">part</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">parts</span><span class="p">):</span>
-        <span class="n">computer</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">_parse_moniker</span><span class="p">(</span><span class="n">create_moniker</span><span class="p">(</span><span class="n">computer0</span><span class="p">,</span> <span class="n">root0</span><span class="p">,</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">[:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])),</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">computer</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">_parse_moniker</span><span class="p">(</span><span class="n">create_moniker</span><span class="p">(</span><span class="n">computer0</span><span class="p">,</span> <span class="n">root0</span><span class="p">,</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">[:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])),</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">computer</span><span class="p">:</span>
             <span class="n">hRoot</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32api</span><span class="o">.</span><span class="n">RegConnectRegistry</span><span class="p">,</span> <span class="n">computer</span><span class="p">,</span> <span class="n">root</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -735,12 +729,12 @@
             <span class="n">Key</span><span class="o">=</span><span class="n">hRoot</span><span class="p">,</span>
             <span class="n">SubKey</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
             <span class="n">samDesired</span><span class="o">=</span><span class="n">Registry</span><span class="o">.</span><span class="n">_access</span><span class="p">(</span><span class="n">Registry</span><span class="o">.</span><span class="n">DEFAULT_ACCESS</span><span class="p">),</span>
-            <span class="n">SecurityAttributes</span><span class="o">=</span><span class="n">sec</span><span class="o">.</span><span class="n">pyobject</span><span class="p">()</span> <span class="k">if</span> <span class="n">sec</span> <span class="k">else</span> <span class="bp">None</span>
+            <span class="n">SecurityAttributes</span><span class="o">=</span><span class="n">sec</span><span class="o">.</span><span class="n">pyobject</span><span class="p">()</span> <span class="k">if</span> <span class="n">sec</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">key</span>
-</div>
-<div class="viewcode-block" id="walk"><a class="viewcode-back" href="../registry.html#registry.walk">[docs]</a><span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">ignore_access_errors</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">_want_types</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">key</span></div>
+
+<div class="viewcode-block" id="walk"><a class="viewcode-back" href="../registry.html#registry.walk">[docs]</a><span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">ignore_access_errors</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">_want_types</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Mimic the os.walk functionality for the registry, starting at root and</span>
 <span class="sd">    yielding (key, subkeys, values) for each key visited. subkeys and values are</span>
 <span class="sd">    themselves generators.</span>
@@ -750,7 +744,7 @@
 <span class="sd">    :param _want_types: (internal) indicates whether value types are returned as well as values</span>
 <span class="sd">    :returns: yields `key`, `subkeys`, `values` recursively for every key under `root`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">root</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">yield</span> <span class="p">(</span>
         <span class="n">root</span><span class="p">,</span>
         <span class="n">root</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">(</span><span class="n">ignore_access_errors</span><span class="o">=</span><span class="n">ignore_access_errors</span><span class="p">),</span>
@@ -758,9 +752,9 @@
     <span class="p">)</span>
     <span class="k">for</span> <span class="n">subkey</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">(</span><span class="n">ignore_access_errors</span><span class="o">=</span><span class="n">ignore_access_errors</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">walk</span><span class="p">(</span><span class="n">subkey</span><span class="p">,</span> <span class="n">ignore_access_errors</span><span class="o">=</span><span class="n">ignore_access_errors</span><span class="p">,</span> <span class="n">_want_types</span><span class="o">=</span><span class="n">_want_types</span><span class="p">):</span>
-            <span class="k">yield</span> <span class="n">result</span>
-</div>
-<div class="viewcode-block" id="flat"><a class="viewcode-back" href="../registry.html#registry.flat">[docs]</a><span class="k">def</span> <span class="nf">flat</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">ignore_access_errors</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="flat"><a class="viewcode-back" href="../registry.html#registry.flat">[docs]</a><span class="k">def</span> <span class="nf">flat</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">ignore_access_errors</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Yield a flattened version the tree rooted at root.</span>
 
 <span class="sd">    :param root: anything accepted by :func:`registry`</span>
@@ -770,8 +764,8 @@
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">subkeys</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">walk</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">ignore_access_errors</span><span class="p">):</span>
         <span class="k">yield</span> <span class="n">key</span>
         <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">value</span>
-</div>
+            <span class="k">yield</span> <span class="n">value</span></div>
+
 <div class="viewcode-block" id="parent"><a class="viewcode-back" href="../registry.html#registry.parent">[docs]</a><span class="k">def</span> <span class="nf">parent</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return a registry key&#39;s parent key if it exists</span>
 
@@ -779,26 +773,26 @@
 <span class="sd">    :returns: a :class:`Registry` object representing the parent of key</span>
 <span class="sd">    :raises: :exc:`x_registry` if no parent exists (eg for a hive)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">computer</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">_parse_moniker</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">moniker</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">computer</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">_parse_moniker</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">moniker</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">parent_moniker</span> <span class="o">=</span> <span class="n">create_moniker</span><span class="p">(</span><span class="n">computer</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
-    <span class="n">pcomputer</span><span class="p">,</span> <span class="n">proot</span><span class="p">,</span> <span class="n">ppath</span><span class="p">,</span> <span class="n">pvalue</span> <span class="o">=</span> <span class="n">_parse_moniker</span><span class="p">(</span><span class="n">parent_moniker</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">pcomputer</span><span class="p">,</span> <span class="n">proot</span><span class="p">,</span> <span class="n">ppath</span><span class="p">,</span> <span class="n">pvalue</span> <span class="o">=</span> <span class="n">_parse_moniker</span><span class="p">(</span><span class="n">parent_moniker</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">ppath</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">registry</span><span class="p">(</span><span class="n">parent_moniker</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">access</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">registry</span><span class="p">(</span><span class="n">parent_moniker</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">access</span><span class="p">,</span> <span class="n">accept_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">x_registry</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s">&quot;parent&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> has no parent&quot;</span> <span class="o">%</span> <span class="n">key</span><span class="o">.</span><span class="n">moniker</span><span class="p">)</span>
-</div>
+        <span class="k">raise</span> <span class="n">x_registry</span><span class="p">(</span><span class="n">errctx</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">,</span> <span class="n">errmsg</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> has no parent&quot;</span> <span class="o">%</span> <span class="n">key</span><span class="o">.</span><span class="n">moniker</span><span class="p">)</span></div>
+
 <span class="k">def</span> <span class="nf">hklm</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">registry</span><span class="p">(</span><span class="s">&quot;hklm&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">registry</span><span class="p">(</span><span class="s2">&quot;hklm&quot;</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">hkcu</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">registry</span><span class="p">(</span><span class="s">&quot;hkcu&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">registry</span><span class="p">(</span><span class="s2">&quot;hkcu&quot;</span><span class="p">)</span>
 
 <span class="n">Registry</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">values</span>
 <span class="n">Registry</span><span class="o">.</span><span class="n">itervalues</span> <span class="o">=</span> <span class="n">itervalues</span>
 <span class="n">Registry</span><span class="o">.</span><span class="n">keys</span> <span class="o">=</span> <span class="n">keys</span>
 <span class="n">Registry</span><span class="o">.</span><span class="n">iterkeys</span> <span class="o">=</span> <span class="n">iterkeys</span>
-<span class="n">Registry</span><span class="o">.</span><span class="n">__iter__</span> <span class="o">=</span> <span class="n">keys</span>
+<span class="n">Registry</span><span class="o">.</span><span class="fm">__iter__</span> <span class="o">=</span> <span class="n">keys</span>
 <span class="n">Registry</span><span class="o">.</span><span class="n">delete</span> <span class="o">=</span> <span class="n">delete</span>
 <span class="n">Registry</span><span class="o">.</span><span class="n">create</span> <span class="o">=</span> <span class="n">create</span>
 <span class="n">Registry</span><span class="o">.</span><span class="n">walk</span> <span class="o">=</span> <span class="n">walk</span>
@@ -810,29 +804,26 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../contents.html">
               <img class="logo" src="../_static/cpython2.png" alt="Logo"/>
             </a></p>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -841,13 +832,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Tim Golden.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.2.
     </div>
   </body>
 </html>
