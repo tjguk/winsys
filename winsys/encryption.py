@@ -12,7 +12,7 @@ from winsys._compat import *
 from winsys import constants, exc
 
 class x_encryption(exc.x_winsys):
-    "Base exception for all env exceptions"
+    "Base exception for all encryption exceptions"
 
 PROTECT = constants.Constants.from_pattern("CRYPTPROTECT_*", namespace=win32crypt)
 
