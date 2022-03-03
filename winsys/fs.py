@@ -1425,6 +1425,23 @@ class File(Entry):
         ).close()
         return self
 
+    def is_zip(self):
+        return zipfile.is_zipfile(self)
+
+    def unzip(self):
+        try:
+            zf = zipfile.ZipFile(self)
+        except:
+            yield None, None
+        else:
+            for zi in zf.infolist():
+                if not zi.is_dir():
+                    try:
+                        with zf.open(zi) as f:
+                            yield zi.filename, f.read()
+                    except:
+                        yield None, None
+
     def zip(self, zip_filename=core.UNSET, mode="w", compression=zipfile.ZIP_DEFLATED, allow_zip64=False):
         """Zip the file up into a zipfile. By default, the zipfile will have the
         name of the file with ".zip" appended and will be a sibling of the file.
