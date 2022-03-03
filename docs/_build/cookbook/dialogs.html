@@ -1,36 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Using the dialogs module &mdash; WinSys 1.0beta documentation</title>
-    
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>Using the dialogs module &#8212; WinSys 1.0beta documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.0beta',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys 1.0beta documentation" href="../index.html" />
-    <link rel="up" title="Cookbook" href="../cookbook.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Using the environment module" href="environment.html" />
     <link rel="prev" title="Using the constants module" href="constants.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -45,28 +35,28 @@
         <li class="right" >
           <a href="constants.html" title="Using the constants module"
              accesskey="P">previous</a> |</li>
-        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="../cookbook.html" accesskey="U">Cookbook</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../cookbook.html" accesskey="U">Cookbook</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="using-the-dialogs-module">
 <h1>Using the dialogs module<a class="headerlink" href="#using-the-dialogs-module" title="Permalink to this headline">¶</a></h1>
-<p>The examples here all refer to the <a class="reference internal" href="../dialogs.html#module-dialogs" title="dialogs: Dialog boxes"><tt class="xref py py-mod docutils literal"><span class="pre">dialogs</span></tt></a> module.</p>
+<p>The examples here all refer to the <a class="reference internal" href="../dialogs.html#module-dialogs" title="dialogs: Dialog boxes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dialogs</span></code></a> module.</p>
 <div class="section" id="ask-the-user-for-input">
 <h2>Ask the user for input<a class="headerlink" href="#ask-the-user-for-input" title="Permalink to this headline">¶</a></h2>
 <p>This is the simplest kind of dialog box: a one-line edit
 control with [Ok] and [Cancel].</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
-3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span>
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span>
 
-<span class="n">name</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span><span class="p">(</span><span class="s">&quot;What is your name?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">))</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span><span class="p">(</span><span class="s2">&quot;What is your name?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
 </pre></div>
 </td></tr></table></div>
 </div>
@@ -76,7 +66,7 @@ control with [Ok] and [Cancel].</p>
 and then use os.startfile to open the file. Allow the
 user to type the filename in, drag-and-drop a file from
 Explorer, or select from a dialog box.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -88,17 +78,17 @@ Explorer, or select from a dialog box.</p>
 10
 11
 12
-13</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+13</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">dialogs</span><span class="p">,</span> <span class="n">fs</span>
 
-<span class="n">DEFAULT</span> <span class="o">=</span> <span class="s">&quot;temp.csv&quot;</span>
+<span class="n">DEFAULT</span> <span class="o">=</span> <span class="s2">&quot;temp.csv&quot;</span>
 <span class="n">filename</span><span class="p">,</span> <span class="o">=</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">dialog</span><span class="p">(</span>
-    <span class="s">&quot;Open a filename&quot;</span><span class="p">,</span>
-   <span class="p">(</span><span class="s">&quot;Filename&quot;</span><span class="p">,</span> <span class="n">DEFAULT</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">get_filename</span><span class="p">)</span>
+    <span class="s2">&quot;Open a filename&quot;</span><span class="p">,</span>
+   <span class="p">(</span><span class="s2">&quot;Filename&quot;</span><span class="p">,</span> <span class="n">DEFAULT</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">.</span><span class="n">get_filename</span><span class="p">)</span>
 <span class="p">)</span>
 
 <span class="k">if</span> <span class="ow">not</span> <span class="n">fs</span><span class="o">.</span><span class="n">file</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> does not exist&quot;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> does not exist&quot;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">os</span><span class="o">.</span><span class="n">startfile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 </pre></div>
@@ -106,12 +96,12 @@ Explorer, or select from a dialog box.</p>
 <div class="section" id="discussion">
 <h3>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h3>
 <p>All edit controls accept files drag/dropped from Explorer.
-In addition, by specifying a third field for the &#8220;Filename&#8221;
+In addition, by specifying a third field for the “Filename”
 input, we can call out to another dialog box to select the
 file. Here we use the one supplied by winsys, but the only
 requirement for the callback is that it return a string or
 None to indicate no change.</p>
-<p>A <a class="reference internal" href="../fs_entry.html#fs.Entry" title="fs.Entry"><tt class="xref py py-class docutils literal"><span class="pre">fs.Entry</span></tt></a> object evaluates to True if the file
+<p>A <a class="reference internal" href="../fs_entry.html#fs.Entry" title="fs.Entry"><code class="xref py py-class docutils literal notranslate"><span class="pre">fs.Entry</span></code></a> object evaluates to True if the file
 it represents exists on the file system.</p>
 </div>
 </div>
@@ -121,12 +111,12 @@ it represents exists on the file system.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../contents.html">
               <img class="logo" src="../_static/cpython2.png" alt="Logo"/>
             </a></p>
-  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <h3><a href="../contents.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Using the dialogs module</a><ul>
 <li><a class="reference internal" href="#ask-the-user-for-input">Ask the user for input</a></li>
@@ -144,29 +134,28 @@ it represents exists on the file system.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="environment.html"
                         title="next chapter">Using the environment module</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/cookbook/dialogs.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/cookbook/dialogs.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -181,13 +170,13 @@ it represents exists on the file system.</p>
         <li class="right" >
           <a href="constants.html" title="Using the constants module"
              >previous</a> |</li>
-        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="../cookbook.html" >Cookbook</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../cookbook.html" >Cookbook</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Tim Golden.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.2.
     </div>
   </body>
 </html>

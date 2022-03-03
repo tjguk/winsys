@@ -1,36 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Using the ipc module &mdash; WinSys 1.0beta documentation</title>
-    
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>Using the ipc module &#8212; WinSys 1.0beta documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.0beta',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys 1.0beta documentation" href="../index.html" />
-    <link rel="up" title="Cookbook" href="../cookbook.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Using the registry module" href="registry.html" />
     <link rel="prev" title="Using the fs module" href="fs.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -45,15 +35,15 @@
         <li class="right" >
           <a href="fs.html" title="Using the fs module"
              accesskey="P">previous</a> |</li>
-        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="../cookbook.html" accesskey="U">Cookbook</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../cookbook.html" accesskey="U">Cookbook</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="using-the-ipc-module">
 <h1>Using the ipc module<a class="headerlink" href="#using-the-ipc-module" title="Permalink to this headline">¶</a></h1>
@@ -61,7 +51,7 @@
 <h2>Writing to a network logger<a class="headerlink" href="#writing-to-a-network-logger" title="Permalink to this headline">¶</a></h2>
 <p>Sending log entries to a logging mailslot which may or may not be running
 without needing to know which server is hosting it.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -79,47 +69,47 @@ without needing to know which server is hosting it.</p>
 16
 17
 18
-19</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">threading</span>
+19</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">threading</span>
 
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">ipc</span>
 
 <span class="k">def</span> <span class="nf">logger</span><span class="p">():</span>
-    <span class="k">with</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span><span class="p">(</span><span class="s">&quot;logger&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">l</span><span class="p">:</span>
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span><span class="p">(</span><span class="s2">&quot;logger&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">l</span><span class="p">:</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">word</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">word</span> <span class="o">==</span> <span class="s">&quot;STOP&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">word</span> <span class="o">==</span> <span class="s2">&quot;STOP&quot;</span><span class="p">:</span>
                 <span class="k">break</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">print</span> <span class="n">word</span>
+                <span class="nb">print</span> <span class="n">word</span>
 
 <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
-<span class="k">with</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span><span class="p">(</span><span class="s">r&quot;</span><span class="se">\\</span><span class="s">*\mailslot\logger&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logging_mailslot</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="s">&quot;the quick brown fox&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+<span class="k">with</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">*\mailslot\logger&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logging_mailslot</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="s2">&quot;the quick brown fox&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
         <span class="n">logging_mailslot</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
-    <span class="n">logging_mailslot</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;STOP&quot;</span><span class="p">)</span>
+    <span class="n">logging_mailslot</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;STOP&quot;</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
 <p>This is where mailslots really score over named pipes, sockets, etc. You can
-send messages to a named mailslot without knowing where it is or if it&#8217;s even
+send messages to a named mailslot without knowing where it is or if it’s even
 running. Furthermore, there may be several active mailslots with the same
 name, all of which will receive the data sent.</p>
 <p>The obvious application is for centralised or distributed logging but it
 could also be used as a form of pub-sub mechanism, at least for small
 pieces of data. The maximum message size across the network is about 400 bytes.</p>
-<p>The <a class="reference internal" href="../ipc.html#ipc.mailslot" title="ipc.mailslot"><tt class="xref py py-func docutils literal"><span class="pre">mailslot()</span></tt></a> function is the quickest way to get hold of a mailslot
+<p>The <a class="reference internal" href="../ipc.html#ipc.mailslot" title="ipc.mailslot"><code class="xref py py-func docutils literal notranslate"><span class="pre">mailslot()</span></code></a> function is the quickest way to get hold of a mailslot
 for reading or writing. It provides useful defaults especially for local
 mailslots where the full path can be determined. Since the underlying
-<a class="reference internal" href="../mailslots.html#ipc.Mailslot" title="ipc.Mailslot"><tt class="xref py py-class docutils literal"><span class="pre">Mailslot</span></tt></a> can be context-managed, I&#8217;ve enclosed the activity of
-each mailslot in a &#8220;with&#8221; block.</p>
-<p>For simplicity I&#8217;ve run a reading mailslot inside a thread. For a clearer
+<a class="reference internal" href="../mailslots.html#ipc.Mailslot" title="ipc.Mailslot"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mailslot</span></code></a> can be context-managed, I’ve enclosed the activity of
+each mailslot in a “with” block.</p>
+<p>For simplicity I’ve run a reading mailslot inside a thread. For a clearer
 demonstration you could run the same code in a separate process, ideally on
 a separate machine within the same domain.</p>
 </div>
 <div class="section" id="read-and-write-a-local-mailslot">
 <h2>Read and write a local mailslot<a class="headerlink" href="#read-and-write-a-local-mailslot" title="Permalink to this headline">¶</a></h2>
 <p>Read and write to local named mailslot, interleaving reads and writes.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -142,48 +132,48 @@ a separate machine within the same domain.</p>
 21
 22
 23
-24</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">random</span>
+24</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
 
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">ipc</span>
 
-<span class="n">reader</span> <span class="o">=</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span><span class="p">(</span><span class="s">&quot;reader&quot;</span><span class="p">)</span>
-<span class="n">writer</span> <span class="o">=</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span><span class="p">(</span><span class="s">&quot;reader&quot;</span><span class="p">)</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span><span class="p">(</span><span class="s2">&quot;reader&quot;</span><span class="p">)</span>
+<span class="n">writer</span> <span class="o">=</span> <span class="n">ipc</span><span class="o">.</span><span class="n">mailslot</span><span class="p">(</span><span class="s2">&quot;reader&quot;</span><span class="p">)</span>
 
-<span class="n">message</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="s">&quot;the quick brown fox jumps over the lazy dog&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
+<span class="n">message</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="s2">&quot;the quick brown fox jumps over the lazy dog&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
 
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s">&quot;STOP&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s2">&quot;STOP&quot;</span><span class="p">:</span>
             <span class="k">break</span>
     <span class="k">except</span> <span class="n">ipc</span><span class="o">.</span><span class="n">x_mailslot_empty</span><span class="p">:</span>
         <span class="k">pass</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">print</span> <span class="n">data</span>
+        <span class="nb">print</span> <span class="n">data</span>
 
     <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">95</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">writer</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;STOP&quot;</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;STOP&quot;</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
 <p>Although the most likely application of mailslots is from separate threads or processes
-on separate machines even, it&#8217;s quite possible for the same thread to read from
+on separate machines even, it’s quite possible for the same thread to read from
 and write to the same mailslot. The caveat is that one object must be obtained
 for reading and another for writing. They are linked by passing the same name to
-<a class="reference internal" href="../ipc.html#ipc.mailslot" title="ipc.mailslot"><tt class="xref py py-func docutils literal"><span class="pre">mailslot()</span></tt></a>.</p>
-<p>We make use of the fact that the <a class="reference internal" href="../mailslots.html#ipc.Mailslot" title="ipc.Mailslot"><tt class="xref py py-class docutils literal"><span class="pre">Mailslot</span></tt></a> objects are mimicking Python&#8217;s
-<cite>Queue</cite> objects. This includes a <a class="reference internal" href="../mailslots.html#ipc.Mailslot.get" title="ipc.Mailslot.get"><tt class="xref py py-meth docutils literal"><span class="pre">Mailslot.get()</span></tt></a> method which has a timeout
+<a class="reference internal" href="../ipc.html#ipc.mailslot" title="ipc.mailslot"><code class="xref py py-func docutils literal notranslate"><span class="pre">mailslot()</span></code></a>.</p>
+<p>We make use of the fact that the <a class="reference internal" href="../mailslots.html#ipc.Mailslot" title="ipc.Mailslot"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mailslot</span></code></a> objects are mimicking Python’s
+<cite>Queue</cite> objects. This includes a <a class="reference internal" href="../mailslots.html#ipc.Mailslot.get" title="ipc.Mailslot.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Mailslot.get()</span></code></a> method which has a timeout
 option. Using this, we can check for active messages and pass on by if none is
 present. We then randomly put one word from our message into the mailslot from
-the writer&#8217;s end and go round again. Finally, we send our STOP sentinel so that
+the writer’s end and go round again. Finally, we send our STOP sentinel so that
 both ends release their respective mailslot handles.</p>
 </div>
 <div class="section" id="mailslot-as-an-iterable">
 <h2>Mailslot as an iterable<a class="headerlink" href="#mailslot-as-an-iterable" title="Permalink to this headline">¶</a></h2>
 <p>Iterate over the contents of a mailslot</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">ipc</span>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">ipc</span>
 </pre></div>
 </td></tr></table></div>
 </div>
@@ -193,12 +183,12 @@ both ends release their respective mailslot handles.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../contents.html">
               <img class="logo" src="../_static/cpython2.png" alt="Logo"/>
             </a></p>
-  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <h3><a href="../contents.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Using the ipc module</a><ul>
 <li><a class="reference internal" href="#writing-to-a-network-logger">Writing to a network logger</a></li>
@@ -214,29 +204,28 @@ both ends release their respective mailslot handles.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="registry.html"
                         title="next chapter">Using the registry module</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/cookbook/ipc.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/cookbook/ipc.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -251,13 +240,13 @@ both ends release their respective mailslot handles.</p>
         <li class="right" >
           <a href="fs.html" title="Using the fs module"
              >previous</a> |</li>
-        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="../cookbook.html" >Cookbook</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../cookbook.html" >Cookbook</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Tim Golden.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.2.
     </div>
   </body>
 </html>

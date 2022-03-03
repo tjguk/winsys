@@ -7,3 +7,4 @@
 /dist
 /.venv
 /WinSys.egg-info
+/build

@@ -1,36 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>The File class &mdash; WinSys 1.0beta documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>The File class &#8212; WinSys 1.0beta documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.0beta',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
-    <link rel="up" title="fs – Files, Directories, &amp;c." href="fs.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="The Dir class" href="fs_dir.html" />
     <link rel="prev" title="The Entry class" href="fs_entry.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -45,242 +35,210 @@
         <li class="right" >
           <a href="fs_entry.html" title="The Entry class"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="fs.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fs</span></code> – Files, Directories, &amp;c.</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="the-file-class">
 <h1>The File class<a class="headerlink" href="#the-file-class" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="fs.File">
-<em class="property">class </em><tt class="descclassname">fs.</tt><tt class="descname">File</tt><a class="reference internal" href="_modules/fs.html#File"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="fs_entry.html#fs.Entry" title="fs.Entry"><tt class="xref py py-class docutils literal"><span class="pre">fs.Entry</span></tt></a></p>
-<dl class="method">
+<em class="property">class </em><code class="sig-prename descclassname">fs.</code><code class="sig-name descname">File</code><a class="reference internal" href="_modules/fs.html#File"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="fs_entry.html#fs.Entry" title="fs.Entry"><code class="xref py py-class docutils literal notranslate"><span class="pre">fs.Entry</span></code></a></p>
+<dl class="py method">
 <dt id="fs.File.bytes">
-<tt class="descname">bytes</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#File.bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.bytes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">bytes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#File.bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.bytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the contents of the file as a bytes object (str in 2.x)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a bytes/str object corresponding to the contents of the file</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a bytes/str object corresponding to the contents of the file</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.File.copy">
-<tt class="descname">copy</tt><big>(</big><em>other</em>, <em>callback=None</em>, <em>callback_data=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.copy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">copy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">callback</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">callback_data</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#File.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copy this file to another file or directory. If other is
 a directory, this file is copied into it, otherwise this file
 is copied over it.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.entry" title="fs.entry"><tt class="xref py py-func docutils literal"><span class="pre">entry()</span></tt></a></li>
-<li><strong>callback</strong> &#8211; function receiving total size, total so far, callback_data</li>
-<li><strong>callback_data</strong> &#8211; passed to callback</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – anything accepted by <a class="reference internal" href="fs.html#fs.entry" title="fs.entry"><code class="xref py py-func docutils literal notranslate"><span class="pre">entry()</span></code></a></p></li>
+<li><p><strong>callback</strong> – function receiving total size, total so far, callback_data</p></li>
+<li><p><strong>callback_data</strong> – passed to callback</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object representing other</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference internal" href="#fs.File" title="fs.File"><code class="xref py py-class docutils literal notranslate"><span class="pre">File</span></code></a> object representing other</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.File.create">
-<tt class="descname">create</tt><big>(</big><em>security=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.create" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">security</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#File.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create this file optionally with specific <a href="#id1"><span class="problematic" id="id2">security_</span></a>. If the
 file already exists it will not be overwritten.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>security</strong> &#8211; a <tt class="xref py py-class docutils literal"><span class="pre">security_.Security</span></tt> object</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">this object</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>security</strong> – a <code class="xref py py-class docutils literal notranslate"><span class="pre">security_.Security</span></code> object</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>this object</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.File.delete">
-<tt class="descname">delete</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#File.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.delete" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#File.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete this file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>self</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.File.equal_contents">
-<tt class="descname">equal_contents</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.equal_contents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.equal_contents" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">equal_contents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#File.equal_contents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.equal_contents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compare only the contents of the two files, ignoring
 everything else. Note that filecmp.cmp fails early.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><tt class="xref py py-func docutils literal"><span class="pre">file()</span></tt></a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the files are equal in contents</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> – anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><code class="xref py py-func docutils literal notranslate"><span class="pre">file()</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the files are equal in contents</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.File.equals">
-<tt class="descname">equals</tt><big>(</big><em>other</em>, <em>compare_contents=False</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.equals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.equals" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">equals</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">compare_contents</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#File.equals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.equals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is this file equal in size, dates and attributes to another.
 if <cite>compare_contents</cite> is True, use filecmp to compare the contents
 of the files. Note that filecmp.cmp fails early.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><tt class="xref py py-func docutils literal"><span class="pre">file()</span></tt></a></td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Compare_contents:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">True to compare contents, False otherwise</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the files are equal in size, modification date, attributes and contents</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> – anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><code class="xref py py-func docutils literal notranslate"><span class="pre">file()</span></code></a></p>
+</dd>
+<dt class="field-even">Compare_contents</dt>
+<dd class="field-even"><p>True to compare contents, False otherwise</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the files are equal in size, modification date, attributes and contents</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.File.hard_link_from">
-<tt class="descname">hard_link_from</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.hard_link_from"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.hard_link_from" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">hard_link_from</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#File.hard_link_from"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.hard_link_from" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create this file as a hard link from other</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><tt class="xref py py-func docutils literal"><span class="pre">file()</span></tt></a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">this <a class="reference internal" href="#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> – anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><code class="xref py py-func docutils literal notranslate"><span class="pre">file()</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>this <a class="reference internal" href="#fs.File" title="fs.File"><code class="xref py py-class docutils literal notranslate"><span class="pre">File</span></code></a> object</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.File.hard_link_to">
-<tt class="descname">hard_link_to</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.hard_link_to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.hard_link_to" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">hard_link_to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#File.hard_link_to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.hard_link_to" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create <cite>other</cite> as a hard link to this file.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><tt class="xref py py-func docutils literal"><span class="pre">file()</span></tt></a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object corresponding to <cite>other</cite></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> – anything accepted by <a class="reference internal" href="fs.html#fs.file" title="fs.file"><code class="xref py py-func docutils literal notranslate"><span class="pre">file()</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference internal" href="#fs.File" title="fs.File"><code class="xref py py-class docutils literal notranslate"><span class="pre">File</span></code></a> object corresponding to <cite>other</cite></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.File.open_">
-<tt class="descname">open_</tt><big>(</big><em>mode=u'r'</em>, <em>attributes=None</em>, <em>sec=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.open_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.open_" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">open_</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'r'</span></em>, <em class="sig-param"><span class="n">attributes</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sec</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#File.open_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.open_" title="Permalink to this definition">¶</a></dt>
 <dd><p>EXPERIMENTAL: Use the <cite>codecs.open</cite> function to open this file as a Python file
 object. Positional and keyword arguments are passed straight through to
 the codecs function.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mode</strong> &#8211; any of the usual Python modes</li>
-<li><strong>attributes</strong> &#8211; anything accepted by <a class="reference internal" href="fs_constants.html#fs.FILE_ATTRIBUTE" title="fs.FILE_ATTRIBUTE"><tt class="xref py py-const docutils literal"><span class="pre">FILE_ATTRIBUTE</span></tt></a></li>
-<li><strong>sec</strong> &#8211; anything accepted by <tt class="xref py py-func docutils literal"><span class="pre">Security.security()</span></tt></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> – any of the usual Python modes</p></li>
+<li><p><strong>attributes</strong> – anything accepted by <a class="reference internal" href="fs_constants.html#fs.FILE_ATTRIBUTE" title="fs.FILE_ATTRIBUTE"><code class="xref py py-const docutils literal notranslate"><span class="pre">FILE_ATTRIBUTE</span></code></a></p></li>
+<li><p><strong>sec</strong> – anything accepted by <code class="xref py py-func docutils literal notranslate"><span class="pre">Security.security()</span></code></p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.File.text">
-<tt class="descname">text</tt><big>(</big><em>encoding=u'ascii'</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.text" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">text</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">encoding</span><span class="o">=</span><span class="default_value">'ascii'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#File.text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.text" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the contents of the file as a text object (unicode in 2.x)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>encoding</strong> &#8211; valid encoding to pass to codecs.open</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a text/unicode object corresponding to the contents of the file</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>encoding</strong> – valid encoding to pass to codecs.open</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a text/unicode object corresponding to the contents of the file</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.File.touch">
-<tt class="descname">touch</tt><big>(</big><em>security=None</em><big>)</big><a class="headerlink" href="#fs.File.touch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">touch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">security</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fs.File.touch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create this file optionally with specific <a href="#id3"><span class="problematic" id="id4">security_</span></a>. If the
 file already exists it will not be overwritten.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>security</strong> &#8211; a <tt class="xref py py-class docutils literal"><span class="pre">security_.Security</span></tt> object</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">this object</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>security</strong> – a <code class="xref py py-class docutils literal notranslate"><span class="pre">security_.Security</span></code> object</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>this object</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.File.zip">
-<tt class="descname">zip</tt><big>(</big><em>zip_filename=&lt;Unset&gt;</em>, <em>mode=u'w'</em>, <em>compression=8</em>, <em>allow_zip64=False</em><big>)</big><a class="reference internal" href="_modules/fs.html#File.zip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.zip" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">zip</code><span class="sig-paren">(</span><em class="sig-param">zip_filename=&lt;Unset&gt;</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">compression=8</em>, <em class="sig-param">allow_zip64=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#File.zip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.File.zip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Zip the file up into a zipfile. By default, the zipfile will have the
-name of the file with &#8221;.zip&#8221; appended and will be a sibling of the file.
+name of the file with “.zip” appended and will be a sibling of the file.
 Also by default a new zipfile will be created, overwriting any existing one, and
 standard compression will be used. The filename will be stored without any directory
 information.</p>
 <p>A different zipfile can be specific as the zip_filename parameter, and this
-can be appended to (if it exists) by specifying &#8220;a&#8221; as the mode param.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>zip_filename</strong> &#8211; The name of the resulting zipfile [this file with the extension changed to .zip]</li>
-<li><strong>mode</strong> &#8211; mode (usually &#8220;w&#8221;) to pass to the zipfile constructor</li>
-<li><strong>compression</strong> &#8211; compression level (usually DEFLATED)</li>
-<li><strong>allow_zip64</strong> &#8211; passed to the zipfile constructor to allow &gt; 2Gb files</li>
+can be appended to (if it exists) by specifying “a” as the mode param.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zip_filename</strong> – The name of the resulting zipfile [this file with the extension changed to .zip]</p></li>
+<li><p><strong>mode</strong> – mode (usually “w”) to pass to the zipfile constructor</p></li>
+<li><p><strong>compression</strong> – compression level (usually DEFLATED)</p></li>
+<li><p><strong>allow_zip64</strong> – passed to the zipfile constructor to allow &gt; 2Gb files</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <a class="reference internal" href="#fs.File" title="fs.File"><tt class="xref py py-class docutils literal"><span class="pre">File</span></tt></a> object corresponding to the zipfile created</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a <a class="reference internal" href="#fs.File" title="fs.File"><code class="xref py py-class docutils literal notranslate"><span class="pre">File</span></code></a> object corresponding to the zipfile created</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -291,7 +249,7 @@ can be appended to (if it exists) by specifying &#8220;a&#8221; as the mode para
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="contents.html">
               <img class="logo" src="_static/cpython2.png" alt="Logo"/>
@@ -302,29 +260,28 @@ can be appended to (if it exists) by specifying &#8220;a&#8221; as the mode para
   <h4>Next topic</h4>
   <p class="topless"><a href="fs_dir.html"
                         title="next chapter">The Dir class</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/fs_file.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/fs_file.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -339,13 +296,13 @@ can be appended to (if it exists) by specifying &#8220;a&#8221; as the mode para
         <li class="right" >
           <a href="fs_entry.html" title="The Entry class"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="fs.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">fs</span></code> – Files, Directories, &amp;c.</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Tim Golden.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.2.
     </div>
   </body>
 </html>

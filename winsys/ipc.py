@@ -13,6 +13,7 @@ import win32file
 import win32pipe
 import win32security
 
+from winsys._compat import *
 from winsys import constants, core, exc, fs, security, utils, handles
 
 WAIT = constants.Constants.from_pattern("WAIT_*", namespace=win32event)

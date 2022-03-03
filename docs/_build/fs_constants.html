@@ -1,36 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>fs Constants &mdash; WinSys 1.0beta documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>fs Constants &#8212; WinSys 1.0beta documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.0beta',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
-    <link rel="up" title="fs – Files, Directories, &amp;c." href="fs.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="ipc – Interprocess Communication" href="ipc.html" />
     <link rel="prev" title="The Dir class" href="fs_dir.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -45,1074 +35,1074 @@
         <li class="right" >
           <a href="fs_dir.html" title="The Dir class"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="fs.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fs</span></code> – Files, Directories, &amp;c.</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="fs-constants">
 <h1>fs Constants<a class="headerlink" href="#fs-constants" title="Permalink to this headline">¶</a></h1>
-<dl class="data">
+<dl class="py data">
 <dt id="fs.FILE_ACCESS">
-<tt class="descclassname">fs.</tt><tt class="descname">FILE_ACCESS</tt><em class="property"> = &lt;Constants: {'EXECUTE': 536870912, 'GENERIC_READ': 1179785, 'READ': -2147483648, 'ACCESS_SYSTEM_SECURITY': 16777216, 'TRAVERSE': 32, u'SYNCHRONIZE': 1048576, u'WRITE_OWNER': 524288, 'GENERIC_EXECUTE': 1179808, 'READ_EA': 8, 'READ_DATA': 1, u'STANDARD_RIGHTS_WRITE': 131072, 'WRITE_EA': 16, 'READ_ATTRIBUTES': 128, 'ADD_FILE': 2, 'ADD_SUBDIRECTORY': 4, 'DELETE_CHILD': 64, 'WRITE_ATTRIBUTES': 256, 'LIST_DIRECTORY': 1, u'WRITE_DAC': 262144, 'WRITE': 1073741824, u'READ_CONTROL': 131072, 'ALL_ACCESS': 2032639, 'ALL': 268435456, u'STANDARD_RIGHTS_READ': 131072, 'GENERIC_WRITE': 1179926, 'WRITE_DATA': 2, u'DELETE': 65536, 'APPEND_DATA': 4, 'CREATE_PIPE_INSTANCE': 4}&gt;</em><a class="headerlink" href="#fs.FILE_ACCESS" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fs.</code><code class="sig-name descname">FILE_ACCESS</code><em class="property"> = &lt;Constants: {'ADD_FILE': 2, 'ADD_SUBDIRECTORY': 4, 'ALL_ACCESS': 2032127, 'APPEND_DATA': 4, 'CREATE_PIPE_INSTANCE': 4, 'DELETE_CHILD': 64, 'EXECUTE': 536870912, 'GENERIC_EXECUTE': 1179808, 'GENERIC_READ': 1179785, 'GENERIC_WRITE': 1179926, 'LIST_DIRECTORY': 1, 'READ_ATTRIBUTES': 128, 'READ_DATA': 1, 'READ_EA': 8, 'TRAVERSE': 32, 'WRITE_ATTRIBUTES': 256, 'WRITE_DATA': 2, 'WRITE_EA': 16, 'STANDARD_RIGHTS_READ': 131072, 'STANDARD_RIGHTS_WRITE': 131072, 'SYNCHRONIZE': 1048576, 'ALL': 268435456, 'READ': -2147483648, 'WRITE': 1073741824, 'DELETE': 65536, 'READ_CONTROL': 131072, 'WRITE_DAC': 262144, 'WRITE_OWNER': 524288, 'ACCESS_SYSTEM_SECURITY': 16777216}&gt;</em><a class="headerlink" href="#fs.FILE_ACCESS" title="Permalink to this definition">¶</a></dt>
 <dd><p>File-specific access rights</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="39%" />
-<col width="18%" />
-<col width="44%" />
+<col style="width: 38%" />
+<col style="width: 19%" />
+<col style="width: 43%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>READ_DATA</td>
-<td>0x00000001</td>
-<td>FILE_READ_DATA</td>
+<tbody>
+<tr class="row-even"><td><p>READ</p></td>
+<td><p>-2147483648</p></td>
+<td><p>READ</p></td>
 </tr>
-<tr class="row-odd"><td>LIST_DIRECTORY</td>
-<td>0x00000001</td>
-<td>FILE_READ_DATA</td>
+<tr class="row-odd"><td><p>LIST_DIRECTORY</p></td>
+<td><p>1</p></td>
+<td><p>FILE_READ_DATA</p></td>
 </tr>
-<tr class="row-even"><td>ADD_FILE</td>
-<td>0x00000002</td>
-<td>FILE_WRITE_DATA</td>
+<tr class="row-even"><td><p>READ_DATA</p></td>
+<td><p>1</p></td>
+<td><p>FILE_READ_DATA</p></td>
 </tr>
-<tr class="row-odd"><td>WRITE_DATA</td>
-<td>0x00000002</td>
-<td>FILE_WRITE_DATA</td>
+<tr class="row-odd"><td><p>SYNCHRONIZE</p></td>
+<td><p>1048576</p></td>
+<td><p>SYNCHRONIZE</p></td>
 </tr>
-<tr class="row-even"><td>ADD_SUBDIRECTORY</td>
-<td>0x00000004</td>
-<td>FILE_CREATE_PIPE_INSTANCE</td>
+<tr class="row-even"><td><p>WRITE</p></td>
+<td><p>1073741824</p></td>
+<td><p>WRITE</p></td>
 </tr>
-<tr class="row-odd"><td>APPEND_DATA</td>
-<td>0x00000004</td>
-<td>FILE_CREATE_PIPE_INSTANCE</td>
+<tr class="row-odd"><td><p>GENERIC_READ</p></td>
+<td><p>1179785</p></td>
+<td><p>FILE_GENERIC_READ</p></td>
 </tr>
-<tr class="row-even"><td>CREATE_PIPE_INSTANCE</td>
-<td>0x00000004</td>
-<td>FILE_CREATE_PIPE_INSTANCE</td>
+<tr class="row-even"><td><p>GENERIC_EXECUTE</p></td>
+<td><p>1179808</p></td>
+<td><p>FILE_GENERIC_EXECUTE</p></td>
 </tr>
-<tr class="row-odd"><td>READ_EA</td>
-<td>0x00000008</td>
-<td>FILE_READ_EA</td>
+<tr class="row-odd"><td><p>GENERIC_WRITE</p></td>
+<td><p>1179926</p></td>
+<td><p>FILE_GENERIC_WRITE</p></td>
 </tr>
-<tr class="row-even"><td>WRITE_EA</td>
-<td>0x00000010</td>
-<td>FILE_WRITE_EA</td>
+<tr class="row-even"><td><p>READ_ATTRIBUTES</p></td>
+<td><p>128</p></td>
+<td><p>FILE_READ_ATTRIBUTES</p></td>
 </tr>
-<tr class="row-odd"><td>TRAVERSE</td>
-<td>0x00000020</td>
-<td>FILE_TRAVERSE</td>
+<tr class="row-odd"><td><p>STANDARD_RIGHTS_READ</p></td>
+<td><p>131072</p></td>
+<td><p>READ_CONTROL</p></td>
 </tr>
-<tr class="row-even"><td>DELETE_CHILD</td>
-<td>0x00000040</td>
-<td>FILE_DELETE_CHILD</td>
+<tr class="row-even"><td><p>STANDARD_RIGHTS_WRITE</p></td>
+<td><p>131072</p></td>
+<td><p>READ_CONTROL</p></td>
 </tr>
-<tr class="row-odd"><td>READ_ATTRIBUTES</td>
-<td>0x00000080</td>
-<td>FILE_READ_ATTRIBUTES</td>
+<tr class="row-odd"><td><p>READ_CONTROL</p></td>
+<td><p>131072</p></td>
+<td><p>READ_CONTROL</p></td>
 </tr>
-<tr class="row-even"><td>WRITE_ATTRIBUTES</td>
-<td>0x00000100</td>
-<td>FILE_WRITE_ATTRIBUTES</td>
+<tr class="row-even"><td><p>WRITE_EA</p></td>
+<td><p>16</p></td>
+<td><p>FILE_WRITE_EA</p></td>
 </tr>
-<tr class="row-odd"><td>DELETE</td>
-<td>0x00010000</td>
-<td>DELETE</td>
+<tr class="row-odd"><td><p>ACCESS_SYSTEM_SECURITY</p></td>
+<td><p>16777216</p></td>
+<td><p>ACCESS_SYSTEM_SECURITY</p></td>
 </tr>
-<tr class="row-even"><td>STANDARD_RIGHTS_WRITE</td>
-<td>0x00020000</td>
-<td>READ_CONTROL</td>
+<tr class="row-even"><td><p>ADD_FILE</p></td>
+<td><p>2</p></td>
+<td><p>FILE_WRITE_DATA</p></td>
 </tr>
-<tr class="row-odd"><td>READ_CONTROL</td>
-<td>0x00020000</td>
-<td>READ_CONTROL</td>
+<tr class="row-odd"><td><p>WRITE_DATA</p></td>
+<td><p>2</p></td>
+<td><p>FILE_WRITE_DATA</p></td>
 </tr>
-<tr class="row-even"><td>STANDARD_RIGHTS_READ</td>
-<td>0x00020000</td>
-<td>READ_CONTROL</td>
+<tr class="row-even"><td><p>ALL_ACCESS</p></td>
+<td><p>2032127</p></td>
+<td><p>FILE_ALL_ACCESS</p></td>
 </tr>
-<tr class="row-odd"><td>WRITE_DAC</td>
-<td>0x00040000</td>
-<td>WRITE_DAC</td>
+<tr class="row-odd"><td><p>WRITE_ATTRIBUTES</p></td>
+<td><p>256</p></td>
+<td><p>FILE_WRITE_ATTRIBUTES</p></td>
 </tr>
-<tr class="row-even"><td>WRITE_OWNER</td>
-<td>0x00080000</td>
-<td>WRITE_OWNER</td>
+<tr class="row-even"><td><p>WRITE_DAC</p></td>
+<td><p>262144</p></td>
+<td><p>WRITE_DAC</p></td>
 </tr>
-<tr class="row-odd"><td>SYNCHRONIZE</td>
-<td>0x00100000</td>
-<td>SYNCHRONIZE</td>
+<tr class="row-odd"><td><p>ALL</p></td>
+<td><p>268435456</p></td>
+<td><p>ALL</p></td>
 </tr>
-<tr class="row-even"><td>GENERIC_READ</td>
-<td>0x00120089</td>
-<td>FILE_GENERIC_READ</td>
+<tr class="row-even"><td><p>TRAVERSE</p></td>
+<td><p>32</p></td>
+<td><p>FILE_TRAVERSE</p></td>
 </tr>
-<tr class="row-odd"><td>GENERIC_EXECUTE</td>
-<td>0x001200A0</td>
-<td>FILE_GENERIC_EXECUTE</td>
+<tr class="row-odd"><td><p>ADD_SUBDIRECTORY</p></td>
+<td><p>4</p></td>
+<td><p>FILE_CREATE_PIPE_INSTANCE</p></td>
 </tr>
-<tr class="row-even"><td>GENERIC_WRITE</td>
-<td>0x00120116</td>
-<td>FILE_GENERIC_WRITE</td>
+<tr class="row-even"><td><p>APPEND_DATA</p></td>
+<td><p>4</p></td>
+<td><p>FILE_CREATE_PIPE_INSTANCE</p></td>
 </tr>
-<tr class="row-odd"><td>ALL_ACCESS</td>
-<td>0x001F03FF</td>
-<td>FILE_ALL_ACCESS</td>
+<tr class="row-odd"><td><p>CREATE_PIPE_INSTANCE</p></td>
+<td><p>4</p></td>
+<td><p>FILE_CREATE_PIPE_INSTANCE</p></td>
 </tr>
-<tr class="row-even"><td>ACCESS_SYSTEM_SECURITY</td>
-<td>0x01000000</td>
-<td>ACCESS_SYSTEM_SECURITY</td>
+<tr class="row-even"><td><p>WRITE_OWNER</p></td>
+<td><p>524288</p></td>
+<td><p>WRITE_OWNER</p></td>
 </tr>
-<tr class="row-odd"><td>ALL</td>
-<td>0x10000000</td>
-<td>ALL</td>
+<tr class="row-odd"><td><p>EXECUTE</p></td>
+<td><p>536870912</p></td>
+<td><p>EXECUTE</p></td>
 </tr>
-<tr class="row-even"><td>EXECUTE</td>
-<td>0x20000000</td>
-<td>EXECUTE</td>
+<tr class="row-even"><td><p>DELETE_CHILD</p></td>
+<td><p>64</p></td>
+<td><p>FILE_DELETE_CHILD</p></td>
 </tr>
-<tr class="row-odd"><td>WRITE</td>
-<td>0x40000000</td>
-<td>WRITE</td>
+<tr class="row-odd"><td><p>DELETE</p></td>
+<td><p>65536</p></td>
+<td><p>DELETE</p></td>
 </tr>
-<tr class="row-even"><td>READ</td>
-<td>0x80000000</td>
-<td>READ</td>
+<tr class="row-even"><td><p>READ_EA</p></td>
+<td><p>8</p></td>
+<td><p>FILE_READ_EA</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="fs.FILE_SHARE">
-<tt class="descclassname">fs.</tt><tt class="descname">FILE_SHARE</tt><em class="property"> = &lt;Constants: {'READ': 1, 'WRITE': 2, 'DELETE': 4}&gt;</em><a class="headerlink" href="#fs.FILE_SHARE" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fs.</code><code class="sig-name descname">FILE_SHARE</code><em class="property"> = &lt;Constants: {'DELETE': 4, 'READ': 1, 'WRITE': 2}&gt;</em><a class="headerlink" href="#fs.FILE_SHARE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ways of sharing a file for reading, writing, &amp;c.</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="21%" />
-<col width="18%" />
-<col width="61%" />
+<col style="width: 23%" />
+<col style="width: 12%" />
+<col style="width: 65%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>READ</td>
-<td>0x001</td>
-<td>FILE_SHARE_READ</td>
+<tbody>
+<tr class="row-even"><td><p>READ</p></td>
+<td><p>1</p></td>
+<td><p>FILE_SHARE_READ</p></td>
 </tr>
-<tr class="row-odd"><td>WRITE</td>
-<td>0x002</td>
-<td>FILE_SHARE_WRITE</td>
+<tr class="row-odd"><td><p>WRITE</p></td>
+<td><p>2</p></td>
+<td><p>FILE_SHARE_WRITE</p></td>
 </tr>
-<tr class="row-even"><td>DELETE</td>
-<td>0x004</td>
-<td>FILE_SHARE_DELETE</td>
+<tr class="row-even"><td><p>DELETE</p></td>
+<td><p>4</p></td>
+<td><p>FILE_SHARE_DELETE</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="fs.FILE_NOTIFY_CHANGE">
-<tt class="descclassname">fs.</tt><tt class="descname">FILE_NOTIFY_CHANGE</tt><em class="property"> = &lt;Constants: {'DIR_NAME': 2, 'FILE_NAME': 1, 'LAST_WRITE': 16, 'ATTRIBUTES': 4, 'SECURITY': 256, 'SIZE': 8}&gt;</em><a class="headerlink" href="#fs.FILE_NOTIFY_CHANGE" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fs.</code><code class="sig-name descname">FILE_NOTIFY_CHANGE</code><em class="property"> = &lt;Constants: {'ATTRIBUTES': 4, 'DIR_NAME': 2, 'FILE_NAME': 1, 'LAST_WRITE': 16, 'SECURITY': 256, 'SIZE': 8}&gt;</em><a class="headerlink" href="#fs.FILE_NOTIFY_CHANGE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Notification types to watch for when a file changes</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="22%" />
-<col width="13%" />
-<col width="64%" />
+<col style="width: 24%" />
+<col style="width: 7%" />
+<col style="width: 69%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>FILE_NAME</td>
-<td>0x0001</td>
-<td>FILE_NOTIFY_CHANGE_FILE_NAME</td>
+<tbody>
+<tr class="row-even"><td><p>FILE_NAME</p></td>
+<td><p>1</p></td>
+<td><p>FILE_NOTIFY_CHANGE_FILE_NAME</p></td>
 </tr>
-<tr class="row-odd"><td>DIR_NAME</td>
-<td>0x0002</td>
-<td>FILE_NOTIFY_CHANGE_DIR_NAME</td>
+<tr class="row-odd"><td><p>LAST_WRITE</p></td>
+<td><p>16</p></td>
+<td><p>FILE_NOTIFY_CHANGE_LAST_WRITE</p></td>
 </tr>
-<tr class="row-even"><td>ATTRIBUTES</td>
-<td>0x0004</td>
-<td>FILE_NOTIFY_CHANGE_ATTRIBUTES</td>
+<tr class="row-even"><td><p>DIR_NAME</p></td>
+<td><p>2</p></td>
+<td><p>FILE_NOTIFY_CHANGE_DIR_NAME</p></td>
 </tr>
-<tr class="row-odd"><td>SIZE</td>
-<td>0x0008</td>
-<td>FILE_NOTIFY_CHANGE_SIZE</td>
+<tr class="row-odd"><td><p>SECURITY</p></td>
+<td><p>256</p></td>
+<td><p>FILE_NOTIFY_CHANGE_SECURITY</p></td>
 </tr>
-<tr class="row-even"><td>LAST_WRITE</td>
-<td>0x0010</td>
-<td>FILE_NOTIFY_CHANGE_LAST_WRITE</td>
+<tr class="row-even"><td><p>ATTRIBUTES</p></td>
+<td><p>4</p></td>
+<td><p>FILE_NOTIFY_CHANGE_ATTRIBUTES</p></td>
 </tr>
-<tr class="row-odd"><td>SECURITY</td>
-<td>0x0100</td>
-<td>FILE_NOTIFY_CHANGE_SECURITY</td>
+<tr class="row-odd"><td><p>SIZE</p></td>
+<td><p>8</p></td>
+<td><p>FILE_NOTIFY_CHANGE_SIZE</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="fs.FILE_ACTION">
-<tt class="descclassname">fs.</tt><tt class="descname">FILE_ACTION</tt><em class="property"> = &lt;Constants: {'RENAMED_NEW_NAME': 5, 'RENAMED_OLD_NAME': 4, 'REMOVED': 2, 'ADDED': 1, 'MODIFIED': 3}&gt;</em><a class="headerlink" href="#fs.FILE_ACTION" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fs.</code><code class="sig-name descname">FILE_ACTION</code><em class="property"> = &lt;Constants: {'ADDED': 1, 'REMOVED': 2, 'MODIFIED': 3, 'RENAMED_OLD_NAME': 4, 'RENAMED_NEW_NAME': 5}&gt;</em><a class="headerlink" href="#fs.FILE_ACTION" title="Permalink to this definition">¶</a></dt>
 <dd><p>Results of a file change</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="43%" />
-<col width="14%" />
-<col width="43%" />
+<col style="width: 46%" />
+<col style="width: 9%" />
+<col style="width: 46%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>ADDED</td>
-<td>0x001</td>
-<td>ADDED</td>
+<tbody>
+<tr class="row-even"><td><p>ADDED</p></td>
+<td><p>1</p></td>
+<td><p>ADDED</p></td>
 </tr>
-<tr class="row-odd"><td>REMOVED</td>
-<td>0x002</td>
-<td>REMOVED</td>
+<tr class="row-odd"><td><p>REMOVED</p></td>
+<td><p>2</p></td>
+<td><p>REMOVED</p></td>
 </tr>
-<tr class="row-even"><td>MODIFIED</td>
-<td>0x003</td>
-<td>MODIFIED</td>
+<tr class="row-even"><td><p>MODIFIED</p></td>
+<td><p>3</p></td>
+<td><p>MODIFIED</p></td>
 </tr>
-<tr class="row-odd"><td>RENAMED_OLD_NAME</td>
-<td>0x004</td>
-<td>RENAMED_OLD_NAME</td>
+<tr class="row-odd"><td><p>RENAMED_OLD_NAME</p></td>
+<td><p>4</p></td>
+<td><p>RENAMED_OLD_NAME</p></td>
 </tr>
-<tr class="row-even"><td>RENAMED_NEW_NAME</td>
-<td>0x005</td>
-<td>RENAMED_NEW_NAME</td>
+<tr class="row-even"><td><p>RENAMED_NEW_NAME</p></td>
+<td><p>5</p></td>
+<td><p>RENAMED_NEW_NAME</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="fs.FILE_ATTRIBUTE">
-<tt class="descclassname">fs.</tt><tt class="descname">FILE_ATTRIBUTE</tt><em class="property"> = &lt;Constants: {'TEMPORARY': 256, 'OFFLINE': 4096, 'NORMAL': 128, 'ENCRYPTED': 16384, 'SYSTEM': 4, 'VIRTUAL': 65536, 'NOT_CONTENT_INDEXES': 8192, 'READONLY': 1, 'COMPRESSED': 2048, 'DIRECTORY': 16, 'HIDDEN': 2, 'SPARSE_FILE': 512, 'ARCHIVE': 32, 'REPARSE_POINT': 1024}&gt;</em><a class="headerlink" href="#fs.FILE_ATTRIBUTE" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fs.</code><code class="sig-name descname">FILE_ATTRIBUTE</code><em class="property"> = &lt;Constants: {'ARCHIVE': 32, 'COMPRESSED': 2048, 'DIRECTORY': 16, 'HIDDEN': 2, 'NORMAL': 128, 'OFFLINE': 4096, 'READONLY': 1, 'SYSTEM': 4, 'TEMPORARY': 256, 'ENCRYPTED': 16384, 'REPARSE_POINT': 1024, 'SPARSE_FILE': 512, 'VIRTUAL': 65536, 'NOT_CONTENT_INDEXES': 8192}&gt;</em><a class="headerlink" href="#fs.FILE_ATTRIBUTE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attributes applying to any file</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="37%" />
-<col width="15%" />
-<col width="48%" />
+<col style="width: 39%" />
+<col style="width: 10%" />
+<col style="width: 51%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>READONLY</td>
-<td>0x000001</td>
-<td>FILE_ATTRIBUTE_READONLY</td>
+<tbody>
+<tr class="row-even"><td><p>READONLY</p></td>
+<td><p>1</p></td>
+<td><p>FILE_ATTRIBUTE_READONLY</p></td>
 </tr>
-<tr class="row-odd"><td>HIDDEN</td>
-<td>0x000002</td>
-<td>FILE_ATTRIBUTE_HIDDEN</td>
+<tr class="row-odd"><td><p>REPARSE_POINT</p></td>
+<td><p>1024</p></td>
+<td><p>REPARSE_POINT</p></td>
 </tr>
-<tr class="row-even"><td>SYSTEM</td>
-<td>0x000004</td>
-<td>FILE_ATTRIBUTE_SYSTEM</td>
+<tr class="row-even"><td><p>NORMAL</p></td>
+<td><p>128</p></td>
+<td><p>FILE_ATTRIBUTE_NORMAL</p></td>
 </tr>
-<tr class="row-odd"><td>DIRECTORY</td>
-<td>0x000010</td>
-<td>FILE_ATTRIBUTE_DIRECTORY</td>
+<tr class="row-odd"><td><p>DIRECTORY</p></td>
+<td><p>16</p></td>
+<td><p>FILE_ATTRIBUTE_DIRECTORY</p></td>
 </tr>
-<tr class="row-even"><td>ARCHIVE</td>
-<td>0x000020</td>
-<td>FILE_ATTRIBUTE_ARCHIVE</td>
+<tr class="row-even"><td><p>ENCRYPTED</p></td>
+<td><p>16384</p></td>
+<td><p>ENCRYPTED</p></td>
 </tr>
-<tr class="row-odd"><td>NORMAL</td>
-<td>0x000080</td>
-<td>FILE_ATTRIBUTE_NORMAL</td>
+<tr class="row-odd"><td><p>HIDDEN</p></td>
+<td><p>2</p></td>
+<td><p>FILE_ATTRIBUTE_HIDDEN</p></td>
 </tr>
-<tr class="row-even"><td>TEMPORARY</td>
-<td>0x000100</td>
-<td>FILE_ATTRIBUTE_TEMPORARY</td>
+<tr class="row-even"><td><p>COMPRESSED</p></td>
+<td><p>2048</p></td>
+<td><p>FILE_ATTRIBUTE_COMPRESSED</p></td>
 </tr>
-<tr class="row-odd"><td>SPARSE_FILE</td>
-<td>0x000200</td>
-<td>SPARSE_FILE</td>
+<tr class="row-odd"><td><p>TEMPORARY</p></td>
+<td><p>256</p></td>
+<td><p>FILE_ATTRIBUTE_TEMPORARY</p></td>
 </tr>
-<tr class="row-even"><td>REPARSE_POINT</td>
-<td>0x000400</td>
-<td>REPARSE_POINT</td>
+<tr class="row-even"><td><p>ARCHIVE</p></td>
+<td><p>32</p></td>
+<td><p>FILE_ATTRIBUTE_ARCHIVE</p></td>
 </tr>
-<tr class="row-odd"><td>COMPRESSED</td>
-<td>0x000800</td>
-<td>FILE_ATTRIBUTE_COMPRESSED</td>
+<tr class="row-odd"><td><p>SYSTEM</p></td>
+<td><p>4</p></td>
+<td><p>FILE_ATTRIBUTE_SYSTEM</p></td>
 </tr>
-<tr class="row-even"><td>OFFLINE</td>
-<td>0x001000</td>
-<td>FILE_ATTRIBUTE_OFFLINE</td>
+<tr class="row-even"><td><p>OFFLINE</p></td>
+<td><p>4096</p></td>
+<td><p>FILE_ATTRIBUTE_OFFLINE</p></td>
 </tr>
-<tr class="row-odd"><td>NOT_CONTENT_INDEXES</td>
-<td>0x002000</td>
-<td>NOT_CONTENT_INDEXES</td>
+<tr class="row-odd"><td><p>SPARSE_FILE</p></td>
+<td><p>512</p></td>
+<td><p>SPARSE_FILE</p></td>
 </tr>
-<tr class="row-even"><td>ENCRYPTED</td>
-<td>0x004000</td>
-<td>ENCRYPTED</td>
+<tr class="row-even"><td><p>VIRTUAL</p></td>
+<td><p>65536</p></td>
+<td><p>VIRTUAL</p></td>
 </tr>
-<tr class="row-odd"><td>VIRTUAL</td>
-<td>0x010000</td>
-<td>VIRTUAL</td>
+<tr class="row-odd"><td><p>NOT_CONTENT_INDEXES</p></td>
+<td><p>8192</p></td>
+<td><p>NOT_CONTENT_INDEXES</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="fs.PROGRESS">
-<tt class="descclassname">fs.</tt><tt class="descname">PROGRESS</tt><em class="property"> = &lt;Constants: {'CANCEL': 1, 'CONTINUE': 0, 'STOP': 2, 'QUIET': 3}&gt;</em><a class="headerlink" href="#fs.PROGRESS" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fs.</code><code class="sig-name descname">PROGRESS</code><em class="property"> = &lt;Constants: {'CANCEL': 1, 'CONTINUE': 0, 'QUIET': 3, 'STOP': 2}&gt;</em><a class="headerlink" href="#fs.PROGRESS" title="Permalink to this definition">¶</a></dt>
 <dd><p>States within a file move/copy progress</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="27%" />
-<col width="17%" />
-<col width="57%" />
+<col style="width: 29%" />
+<col style="width: 11%" />
+<col style="width: 61%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>CONTINUE</td>
-<td>0x000</td>
-<td>PROGRESS_CONTINUE</td>
+<tbody>
+<tr class="row-even"><td><p>CONTINUE</p></td>
+<td><p>0</p></td>
+<td><p>PROGRESS_CONTINUE</p></td>
 </tr>
-<tr class="row-odd"><td>CANCEL</td>
-<td>0x001</td>
-<td>PROGRESS_CANCEL</td>
+<tr class="row-odd"><td><p>CANCEL</p></td>
+<td><p>1</p></td>
+<td><p>PROGRESS_CANCEL</p></td>
 </tr>
-<tr class="row-even"><td>STOP</td>
-<td>0x002</td>
-<td>PROGRESS_STOP</td>
+<tr class="row-even"><td><p>STOP</p></td>
+<td><p>2</p></td>
+<td><p>PROGRESS_STOP</p></td>
 </tr>
-<tr class="row-odd"><td>QUIET</td>
-<td>0x003</td>
-<td>PROGRESS_QUIET</td>
+<tr class="row-odd"><td><p>QUIET</p></td>
+<td><p>3</p></td>
+<td><p>PROGRESS_QUIET</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="fs.MOVEFILE">
-<tt class="descclassname">fs.</tt><tt class="descname">MOVEFILE</tt><em class="property"> = &lt;Constants: {'FAIL_IF_NOT_TRACKABLE': 32, 'COPY_ALLOWED': 2, 'REPLACE_EXISTING': 1, 'DELAY_UNTIL_REBOOT': 4, 'WRITE_THROUGH': 8, 'CREATE_HARDLINK': 16}&gt;</em><a class="headerlink" href="#fs.MOVEFILE" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fs.</code><code class="sig-name descname">MOVEFILE</code><em class="property"> = &lt;Constants: {'COPY_ALLOWED': 2, 'CREATE_HARDLINK': 16, 'DELAY_UNTIL_REBOOT': 4, 'FAIL_IF_NOT_TRACKABLE': 32, 'REPLACE_EXISTING': 1, 'WRITE_THROUGH': 8}&gt;</em><a class="headerlink" href="#fs.MOVEFILE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Options when moving a file</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="38%" />
-<col width="9%" />
-<col width="54%" />
+<col style="width: 39%" />
+<col style="width: 6%" />
+<col style="width: 56%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>REPLACE_EXISTING</td>
-<td>0x001</td>
-<td>MOVEFILE_REPLACE_EXISTING</td>
+<tbody>
+<tr class="row-even"><td><p>REPLACE_EXISTING</p></td>
+<td><p>1</p></td>
+<td><p>MOVEFILE_REPLACE_EXISTING</p></td>
 </tr>
-<tr class="row-odd"><td>COPY_ALLOWED</td>
-<td>0x002</td>
-<td>MOVEFILE_COPY_ALLOWED</td>
+<tr class="row-odd"><td><p>CREATE_HARDLINK</p></td>
+<td><p>16</p></td>
+<td><p>MOVEFILE_CREATE_HARDLINK</p></td>
 </tr>
-<tr class="row-even"><td>DELAY_UNTIL_REBOOT</td>
-<td>0x004</td>
-<td>MOVEFILE_DELAY_UNTIL_REBOOT</td>
+<tr class="row-even"><td><p>COPY_ALLOWED</p></td>
+<td><p>2</p></td>
+<td><p>MOVEFILE_COPY_ALLOWED</p></td>
 </tr>
-<tr class="row-odd"><td>WRITE_THROUGH</td>
-<td>0x008</td>
-<td>MOVEFILE_WRITE_THROUGH</td>
+<tr class="row-odd"><td><p>FAIL_IF_NOT_TRACKABLE</p></td>
+<td><p>32</p></td>
+<td><p>MOVEFILE_FAIL_IF_NOT_TRACKABLE</p></td>
 </tr>
-<tr class="row-even"><td>CREATE_HARDLINK</td>
-<td>0x010</td>
-<td>MOVEFILE_CREATE_HARDLINK</td>
+<tr class="row-even"><td><p>DELAY_UNTIL_REBOOT</p></td>
+<td><p>4</p></td>
+<td><p>MOVEFILE_DELAY_UNTIL_REBOOT</p></td>
 </tr>
-<tr class="row-odd"><td>FAIL_IF_NOT_TRACKABLE</td>
-<td>0x020</td>
-<td>MOVEFILE_FAIL_IF_NOT_TRACKABLE</td>
+<tr class="row-odd"><td><p>WRITE_THROUGH</p></td>
+<td><p>8</p></td>
+<td><p>MOVEFILE_WRITE_THROUGH</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="fs.FILE_FLAG">
-<tt class="descclassname">fs.</tt><tt class="descname">FILE_FLAG</tt><em class="property"> = &lt;Constants: {'SEQUENTIAL_SCAN': 134217728, 'DELETE_ON_CLOSE': 67108864, 'OVERLAPPED': 1073741824, 'RANDOM_ACCESS': 268435456, 'NO_BUFFERING': 536870912, 'BACKUP_SEMANTICS': 33554432, 'POSIX_SEMANTICS': 16777216, 'WRITE_THROUGH': -2147483648}&gt;</em><a class="headerlink" href="#fs.FILE_FLAG" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fs.</code><code class="sig-name descname">FILE_FLAG</code><em class="property"> = &lt;Constants: {'BACKUP_SEMANTICS': 33554432, 'DELETE_ON_CLOSE': 67108864, 'NO_BUFFERING': 536870912, 'OVERLAPPED': 1073741824, 'POSIX_SEMANTICS': 16777216, 'RANDOM_ACCESS': 268435456, 'SEQUENTIAL_SCAN': 134217728, 'WRITE_THROUGH': -2147483648}&gt;</em><a class="headerlink" href="#fs.FILE_FLAG" title="Permalink to this definition">¶</a></dt>
 <dd><p>File flags</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="31%" />
-<col width="19%" />
-<col width="50%" />
+<col style="width: 30%" />
+<col style="width: 21%" />
+<col style="width: 49%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>POSIX_SEMANTICS</td>
-<td>0x01000000</td>
-<td>FILE_FLAG_POSIX_SEMANTICS</td>
+<tbody>
+<tr class="row-even"><td><p>WRITE_THROUGH</p></td>
+<td><p>-2147483648</p></td>
+<td><p>FILE_FLAG_WRITE_THROUGH</p></td>
 </tr>
-<tr class="row-odd"><td>BACKUP_SEMANTICS</td>
-<td>0x02000000</td>
-<td>FILE_FLAG_BACKUP_SEMANTICS</td>
+<tr class="row-odd"><td><p>OVERLAPPED</p></td>
+<td><p>1073741824</p></td>
+<td><p>FILE_FLAG_OVERLAPPED</p></td>
 </tr>
-<tr class="row-even"><td>DELETE_ON_CLOSE</td>
-<td>0x04000000</td>
-<td>FILE_FLAG_DELETE_ON_CLOSE</td>
+<tr class="row-even"><td><p>SEQUENTIAL_SCAN</p></td>
+<td><p>134217728</p></td>
+<td><p>FILE_FLAG_SEQUENTIAL_SCAN</p></td>
 </tr>
-<tr class="row-odd"><td>SEQUENTIAL_SCAN</td>
-<td>0x08000000</td>
-<td>FILE_FLAG_SEQUENTIAL_SCAN</td>
+<tr class="row-odd"><td><p>POSIX_SEMANTICS</p></td>
+<td><p>16777216</p></td>
+<td><p>FILE_FLAG_POSIX_SEMANTICS</p></td>
 </tr>
-<tr class="row-even"><td>RANDOM_ACCESS</td>
-<td>0x10000000</td>
-<td>FILE_FLAG_RANDOM_ACCESS</td>
+<tr class="row-even"><td><p>RANDOM_ACCESS</p></td>
+<td><p>268435456</p></td>
+<td><p>FILE_FLAG_RANDOM_ACCESS</p></td>
 </tr>
-<tr class="row-odd"><td>NO_BUFFERING</td>
-<td>0x20000000</td>
-<td>FILE_FLAG_NO_BUFFERING</td>
+<tr class="row-odd"><td><p>BACKUP_SEMANTICS</p></td>
+<td><p>33554432</p></td>
+<td><p>FILE_FLAG_BACKUP_SEMANTICS</p></td>
 </tr>
-<tr class="row-even"><td>OVERLAPPED</td>
-<td>0x40000000</td>
-<td>FILE_FLAG_OVERLAPPED</td>
+<tr class="row-even"><td><p>NO_BUFFERING</p></td>
+<td><p>536870912</p></td>
+<td><p>FILE_FLAG_NO_BUFFERING</p></td>
 </tr>
-<tr class="row-odd"><td>WRITE_THROUGH</td>
-<td>0x80000000</td>
-<td>FILE_FLAG_WRITE_THROUGH</td>
+<tr class="row-odd"><td><p>DELETE_ON_CLOSE</p></td>
+<td><p>67108864</p></td>
+<td><p>FILE_FLAG_DELETE_ON_CLOSE</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="fs.FILE_CREATION">
-<tt class="descclassname">fs.</tt><tt class="descname">FILE_CREATION</tt><em class="property"> = &lt;Constants: {u'TRUNCATE_EXISTING': 5, u'OPEN_EXISTING': 3, u'OPEN_ALWAYS': 4, u'CREATE_ALWAYS': 2, u'CREATE_NEW': 1}&gt;</em><a class="headerlink" href="#fs.FILE_CREATION" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fs.</code><code class="sig-name descname">FILE_CREATION</code><em class="property"> = &lt;Constants: {'CREATE_ALWAYS': 2, 'CREATE_NEW': 1, 'OPEN_ALWAYS': 4, 'OPEN_EXISTING': 3, 'TRUNCATE_EXISTING': 5}&gt;</em><a class="headerlink" href="#fs.FILE_CREATION" title="Permalink to this definition">¶</a></dt>
 <dd><p>Options when creating a file</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="44%" />
-<col width="13%" />
-<col width="44%" />
+<col style="width: 46%" />
+<col style="width: 8%" />
+<col style="width: 46%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>CREATE_NEW</td>
-<td>0x001</td>
-<td>CREATE_NEW</td>
+<tbody>
+<tr class="row-even"><td><p>CREATE_NEW</p></td>
+<td><p>1</p></td>
+<td><p>CREATE_NEW</p></td>
 </tr>
-<tr class="row-odd"><td>CREATE_ALWAYS</td>
-<td>0x002</td>
-<td>CREATE_ALWAYS</td>
+<tr class="row-odd"><td><p>CREATE_ALWAYS</p></td>
+<td><p>2</p></td>
+<td><p>CREATE_ALWAYS</p></td>
 </tr>
-<tr class="row-even"><td>OPEN_EXISTING</td>
-<td>0x003</td>
-<td>OPEN_EXISTING</td>
+<tr class="row-even"><td><p>OPEN_EXISTING</p></td>
+<td><p>3</p></td>
+<td><p>OPEN_EXISTING</p></td>
 </tr>
-<tr class="row-odd"><td>OPEN_ALWAYS</td>
-<td>0x004</td>
-<td>OPEN_ALWAYS</td>
+<tr class="row-odd"><td><p>OPEN_ALWAYS</p></td>
+<td><p>4</p></td>
+<td><p>OPEN_ALWAYS</p></td>
 </tr>
-<tr class="row-even"><td>TRUNCATE_EXISTING</td>
-<td>0x005</td>
-<td>TRUNCATE_EXISTING</td>
+<tr class="row-even"><td><p>TRUNCATE_EXISTING</p></td>
+<td><p>5</p></td>
+<td><p>TRUNCATE_EXISTING</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="fs.VOLUME_FLAG">
-<tt class="descclassname">fs.</tt><tt class="descname">VOLUME_FLAG</tt><em class="property"> = &lt;Constants: {'NAMED_STREAMS': 262144, 'SUPPORTS_TRANSACTIONS': 2097152, 'SUPPORTS_OBJECT_IDS': 65536, 'FILE_COMPRESSION': 16, 'SUPPORTS_REMOTE_STORAGE': 256, 'SUPPORTS_SPARSE_FILES': 64, 'UNICODE_ON_DISK': 4, 'VOLUME_IS_COMPRESSED': 32768, 'CASE_PRESERVED_NAMES': 2, 'SEQUENTIAL_WRITE_ONCE': 1048576, 'VOLUME_QUOTAS': 32, 'SUPPORTS_REPARSE_POINTS': 128, 'READ_ONLY_VOLUME': 524288, 'SUPPORTS_ENCRYPTION': 131072, 'CASE_SENSITIVE_SEARCH': 1, 'PERSISTENT_ACLS': 8}&gt;</em><a class="headerlink" href="#fs.VOLUME_FLAG" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fs.</code><code class="sig-name descname">VOLUME_FLAG</code><em class="property"> = &lt;Constants: {'CASE_SENSITIVE_SEARCH': 1, 'CASE_PRESERVED_NAMES': 2, 'UNICODE_ON_DISK': 4, 'PERSISTENT_ACLS': 8, 'FILE_COMPRESSION': 16, 'VOLUME_QUOTAS': 32, 'SUPPORTS_SPARSE_FILES': 64, 'SUPPORTS_REPARSE_POINTS': 128, 'SUPPORTS_REMOTE_STORAGE': 256, 'VOLUME_IS_COMPRESSED': 32768, 'SUPPORTS_OBJECT_IDS': 65536, 'SUPPORTS_ENCRYPTION': 131072, 'NAMED_STREAMS': 262144, 'READ_ONLY_VOLUME': 524288, 'SEQUENTIAL_WRITE_ONCE': 1048576, 'SUPPORTS_TRANSACTIONS': 2097152}&gt;</em><a class="headerlink" href="#fs.VOLUME_FLAG" title="Permalink to this definition">¶</a></dt>
 <dd><p>Characteristics of a volume</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="39%" />
-<col width="14%" />
-<col width="47%" />
+<col style="width: 40%" />
+<col style="width: 12%" />
+<col style="width: 48%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>CASE_SENSITIVE_SEARCH</td>
-<td>0x000001</td>
-<td>FILE_CASE_SENSITIVE_SEARCH</td>
+<tbody>
+<tr class="row-even"><td><p>CASE_SENSITIVE_SEARCH</p></td>
+<td><p>1</p></td>
+<td><p>FILE_CASE_SENSITIVE_SEARCH</p></td>
 </tr>
-<tr class="row-odd"><td>CASE_PRESERVED_NAMES</td>
-<td>0x000002</td>
-<td>FILE_CASE_PRESERVED_NAMES</td>
+<tr class="row-odd"><td><p>SEQUENTIAL_WRITE_ONCE</p></td>
+<td><p>1048576</p></td>
+<td><p>FILE_SEQUENTIAL_WRITE_ONCE</p></td>
 </tr>
-<tr class="row-even"><td>UNICODE_ON_DISK</td>
-<td>0x000004</td>
-<td>FILE_UNICODE_ON_DISK</td>
+<tr class="row-even"><td><p>SUPPORTS_REPARSE_POINTS</p></td>
+<td><p>128</p></td>
+<td><p>FILE_SUPPORTS_REPARSE_POINTS</p></td>
 </tr>
-<tr class="row-odd"><td>PERSISTENT_ACLS</td>
-<td>0x000008</td>
-<td>FILE_PERSISTENT_ACLS</td>
+<tr class="row-odd"><td><p>SUPPORTS_ENCRYPTION</p></td>
+<td><p>131072</p></td>
+<td><p>FILE_SUPPORTS_ENCRYPTION</p></td>
 </tr>
-<tr class="row-even"><td>FILE_COMPRESSION</td>
-<td>0x000010</td>
-<td>FILE_FILE_COMPRESSION</td>
+<tr class="row-even"><td><p>FILE_COMPRESSION</p></td>
+<td><p>16</p></td>
+<td><p>FILE_FILE_COMPRESSION</p></td>
 </tr>
-<tr class="row-odd"><td>VOLUME_QUOTAS</td>
-<td>0x000020</td>
-<td>FILE_VOLUME_QUOTAS</td>
+<tr class="row-odd"><td><p>CASE_PRESERVED_NAMES</p></td>
+<td><p>2</p></td>
+<td><p>FILE_CASE_PRESERVED_NAMES</p></td>
 </tr>
-<tr class="row-even"><td>SUPPORTS_SPARSE_FILES</td>
-<td>0x000040</td>
-<td>FILE_SUPPORTS_SPARSE_FILES</td>
+<tr class="row-even"><td><p>SUPPORTS_TRANSACTIONS</p></td>
+<td><p>2097152</p></td>
+<td><p>FILE_SUPPORTS_TRANSACTIONS</p></td>
 </tr>
-<tr class="row-odd"><td>SUPPORTS_REPARSE_POINTS</td>
-<td>0x000080</td>
-<td>FILE_SUPPORTS_REPARSE_POINTS</td>
+<tr class="row-odd"><td><p>SUPPORTS_REMOTE_STORAGE</p></td>
+<td><p>256</p></td>
+<td><p>FILE_SUPPORTS_REMOTE_STORAGE</p></td>
 </tr>
-<tr class="row-even"><td>SUPPORTS_REMOTE_STORAGE</td>
-<td>0x000100</td>
-<td>FILE_SUPPORTS_REMOTE_STORAGE</td>
+<tr class="row-even"><td><p>NAMED_STREAMS</p></td>
+<td><p>262144</p></td>
+<td><p>FILE_NAMED_STREAMS</p></td>
 </tr>
-<tr class="row-odd"><td>VOLUME_IS_COMPRESSED</td>
-<td>0x008000</td>
-<td>FILE_VOLUME_IS_COMPRESSED</td>
+<tr class="row-odd"><td><p>VOLUME_QUOTAS</p></td>
+<td><p>32</p></td>
+<td><p>FILE_VOLUME_QUOTAS</p></td>
 </tr>
-<tr class="row-even"><td>SUPPORTS_OBJECT_IDS</td>
-<td>0x010000</td>
-<td>FILE_SUPPORTS_OBJECT_IDS</td>
+<tr class="row-even"><td><p>VOLUME_IS_COMPRESSED</p></td>
+<td><p>32768</p></td>
+<td><p>FILE_VOLUME_IS_COMPRESSED</p></td>
 </tr>
-<tr class="row-odd"><td>SUPPORTS_ENCRYPTION</td>
-<td>0x020000</td>
-<td>FILE_SUPPORTS_ENCRYPTION</td>
+<tr class="row-odd"><td><p>UNICODE_ON_DISK</p></td>
+<td><p>4</p></td>
+<td><p>FILE_UNICODE_ON_DISK</p></td>
 </tr>
-<tr class="row-even"><td>NAMED_STREAMS</td>
-<td>0x040000</td>
-<td>FILE_NAMED_STREAMS</td>
+<tr class="row-even"><td><p>READ_ONLY_VOLUME</p></td>
+<td><p>524288</p></td>
+<td><p>FILE_READ_ONLY_VOLUME</p></td>
 </tr>
-<tr class="row-odd"><td>READ_ONLY_VOLUME</td>
-<td>0x080000</td>
-<td>FILE_READ_ONLY_VOLUME</td>
+<tr class="row-odd"><td><p>SUPPORTS_SPARSE_FILES</p></td>
+<td><p>64</p></td>
+<td><p>FILE_SUPPORTS_SPARSE_FILES</p></td>
 </tr>
-<tr class="row-even"><td>SEQUENTIAL_WRITE_ONCE</td>
-<td>0x100000</td>
-<td>FILE_SEQUENTIAL_WRITE_ONCE</td>
+<tr class="row-even"><td><p>SUPPORTS_OBJECT_IDS</p></td>
+<td><p>65536</p></td>
+<td><p>FILE_SUPPORTS_OBJECT_IDS</p></td>
 </tr>
-<tr class="row-odd"><td>SUPPORTS_TRANSACTIONS</td>
-<td>0x200000</td>
-<td>FILE_SUPPORTS_TRANSACTIONS</td>
+<tr class="row-odd"><td><p>PERSISTENT_ACLS</p></td>
+<td><p>8</p></td>
+<td><p>FILE_PERSISTENT_ACLS</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="fs.DRIVE_TYPE">
-<tt class="descclassname">fs.</tt><tt class="descname">DRIVE_TYPE</tt><em class="property"> = &lt;Constants: {'RAMDISK': 6, 'REMOTE': 4, 'UNKNOWN': 0, 'REMOVABLE': 2, 'NO_ROOT_DIR': 1, 'CDROM': 5, 'FIXED': 3}&gt;</em><a class="headerlink" href="#fs.DRIVE_TYPE" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fs.</code><code class="sig-name descname">DRIVE_TYPE</code><em class="property"> = &lt;Constants: {'CDROM': 5, 'FIXED': 3, 'NO_ROOT_DIR': 1, 'RAMDISK': 6, 'REMOTE': 4, 'REMOVABLE': 2, 'UNKNOWN': 0}&gt;</em><a class="headerlink" href="#fs.DRIVE_TYPE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Types of drive</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="33%" />
-<col width="15%" />
-<col width="52%" />
+<col style="width: 35%" />
+<col style="width: 10%" />
+<col style="width: 55%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>UNKNOWN</td>
-<td>0x000</td>
-<td>DRIVE_UNKNOWN</td>
+<tbody>
+<tr class="row-even"><td><p>UNKNOWN</p></td>
+<td><p>0</p></td>
+<td><p>DRIVE_UNKNOWN</p></td>
 </tr>
-<tr class="row-odd"><td>NO_ROOT_DIR</td>
-<td>0x001</td>
-<td>DRIVE_NO_ROOT_DIR</td>
+<tr class="row-odd"><td><p>NO_ROOT_DIR</p></td>
+<td><p>1</p></td>
+<td><p>DRIVE_NO_ROOT_DIR</p></td>
 </tr>
-<tr class="row-even"><td>REMOVABLE</td>
-<td>0x002</td>
-<td>DRIVE_REMOVABLE</td>
+<tr class="row-even"><td><p>REMOVABLE</p></td>
+<td><p>2</p></td>
+<td><p>DRIVE_REMOVABLE</p></td>
 </tr>
-<tr class="row-odd"><td>FIXED</td>
-<td>0x003</td>
-<td>DRIVE_FIXED</td>
+<tr class="row-odd"><td><p>FIXED</p></td>
+<td><p>3</p></td>
+<td><p>DRIVE_FIXED</p></td>
 </tr>
-<tr class="row-even"><td>REMOTE</td>
-<td>0x004</td>
-<td>DRIVE_REMOTE</td>
+<tr class="row-even"><td><p>REMOTE</p></td>
+<td><p>4</p></td>
+<td><p>DRIVE_REMOTE</p></td>
 </tr>
-<tr class="row-odd"><td>CDROM</td>
-<td>0x005</td>
-<td>DRIVE_CDROM</td>
+<tr class="row-odd"><td><p>CDROM</p></td>
+<td><p>5</p></td>
+<td><p>DRIVE_CDROM</p></td>
 </tr>
-<tr class="row-even"><td>RAMDISK</td>
-<td>0x006</td>
-<td>DRIVE_RAMDISK</td>
+<tr class="row-even"><td><p>RAMDISK</p></td>
+<td><p>6</p></td>
+<td><p>DRIVE_RAMDISK</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="fs.COMPRESSION_FORMAT">
-<tt class="descclassname">fs.</tt><tt class="descname">COMPRESSION_FORMAT</tt><em class="property"> = &lt;Constants: {'DEFAULT': 1, 'NONE': 0, 'LZNT1': 2}&gt;</em><a class="headerlink" href="#fs.COMPRESSION_FORMAT" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fs.</code><code class="sig-name descname">COMPRESSION_FORMAT</code><em class="property"> = &lt;Constants: {'NONE': 0, 'DEFAULT': 1, 'LZNT1': 2}&gt;</em><a class="headerlink" href="#fs.COMPRESSION_FORMAT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ways in which a file can be compressed</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="37%" />
-<col width="26%" />
-<col width="37%" />
+<col style="width: 41%" />
+<col style="width: 18%" />
+<col style="width: 41%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>NONE</td>
-<td>0x000</td>
-<td>NONE</td>
+<tbody>
+<tr class="row-even"><td><p>NONE</p></td>
+<td><p>0</p></td>
+<td><p>NONE</p></td>
 </tr>
-<tr class="row-odd"><td>DEFAULT</td>
-<td>0x001</td>
-<td>DEFAULT</td>
+<tr class="row-odd"><td><p>DEFAULT</p></td>
+<td><p>1</p></td>
+<td><p>DEFAULT</p></td>
 </tr>
-<tr class="row-even"><td>LZNT1</td>
-<td>0x002</td>
-<td>LZNT1</td>
+<tr class="row-even"><td><p>LZNT1</p></td>
+<td><p>2</p></td>
+<td><p>LZNT1</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="fs.FSCTL">
-<tt class="descclassname">fs.</tt><tt class="descname">FSCTL</tt><em class="property"> = &lt;Constants: {'IS_PATHNAME_VALID': 589868, 'QUERY_ON_DISK_VOLUME_INFO': 590140, 'MARK_HANDLE': 590076, 'IS_VOLUME_DIRTY': 589944, 'TXFS_LIST_TRANSACTION_LOCKED_FILES': 606688, 'GET_COMPRESSION': 589884, 'SET_REPAIR': 590232, 'SIS_COPYFILE': 590080, 'FILESYSTEM_GET_STATISTICS': 589920, 'TXFS_ROLLFORWARD_REDO': 622928, 'DFSR_SET_GHOST_HANDLE_STATE': 590264, 'TXFS_SHUTDOWN_RM': 622940, 'TXFS_MODIFY_RM': 622916, 'FILE_PREFETCH': 590112, 'TXFS_TRANSACTION_ACTIVE': 606604, 'SET_REPARSE_POINT': 589988, 'SET_ZERO_DATA': 622792, 'DELETE_OBJECT_ID': 589984, 'UNLOCK_VOLUME': 589852, 'ALLOW_EXTENDED_DASD_IO': 589955, 'SET_ENCRYPTION': 590039, 'READ_FILE_USN_DATA': 590059, 'SET_ZERO_ON_DEALLOCATION': 590228, 'GET_NTFS_FILE_RECORD': 589928, 'SIS_LINK_FILES': 639236, 'SECURITY_ID_CHECK': 606391, 'EXTEND_VOLUME': 590064, 'GET_VOLUME_BITMAP': 589935, 'SET_DEFECT_MANAGEMENT': 622900, 'QUERY_FAT_BPB': 589912, 'HSM_MSG': 639240, 'MARK_AS_SYSTEM_HIVE': 589903, 'RECALL_FILE': 590103, 'OPLOCK_BREAK_NOTIFY': 589844, 'REQUEST_OPLOCK_LEVEL_2': 589828, 'REQUEST_OPLOCK_LEVEL_1': 589824, 'GET_OBJECT_ID': 589980, 'SET_COMPRESSION': 639040, 'GET_RETRIEVAL_POINTERS': 589939, 'GET_NTFS_VOLUME_DATA': 589924, 'TXFS_START_RM': 622936, 'INITIATE_REPAIR': 590248, 'TXFS_GET_TRANSACTED_VERSION': 606576, 'ENUM_USN_DATA': 590003, 'ENCRYPTION_FSCTL_IO': 590043, 'GET_REPAIR': 590236, 'DELETE_REPARSE_POINT': 589996, 'IS_VOLUME_MOUNTED': 589864, 'CSC_INTERNAL': 590255, 'REQUEST_FILTER_OPLOCK': 589916, 'READ_USN_JOURNAL': 590011, 'CREATE_OR_GET_OBJECT_ID': 590016, 'MOVE_FILE': 589940, 'TXFS_CREATE_MINIVERSION': 622972, 'DISMOUNT_VOLUME': 589856, 'LOCK_VOLUME': 589848, 'TXFS_WRITE_BACKUP_INFORMATION': 622948, 'TXFS_CREATE_SECONDARY_RM': 622952, 'TXFS_LIST_TRANSACTIONS': 606692, 'SET_VOLUME_COMPRESSION_STATE': 590144, 'OPLOCK_BREAK_ACK_NO_2': 589904, 'OPBATCH_ACK_CLOSE_PENDING': 589840, 'QUERY_USN_JOURNAL': 590068, 'TXFS_READ_BACKUP_INFORMATION': 606560, 'CREATE_USN_JOURNAL': 590055, 'QUERY_SPARING_INFO': 590136, 'READ_FROM_PLEX': 606494, 'READ_RAW_ENCRYPTED': 590051, 'DELETE_USN_JOURNAL': 590072, 'INVALIDATE_VOLUMES': 589908, 'SHRINK_VOLUME': 590256, 'SET_OBJECT_ID': 589976, 'REQUEST_BATCH_OPLOCK': 589832, 'HSM_DATA': 639251, 'SET_SPARSE': 590020, 'QUERY_PAGEFILE_ENCRYPTION': 590312, 'WAIT_FOR_REPAIR': 590240, 'SET_OBJECT_ID_EXTENDED': 590012, 'MAKE_MEDIA_COMPATIBLE': 622896, 'FIND_FILES_BY_SID': 589967, 'QUERY_RETRIEVAL_POINTERS': 589883, 'TXFS_GET_METADATA_INFO': 606572, 'TXFS_ROLLFORWARD_UNDO': 622932, 'QUERY_ALLOCATED_RANGES': 606415, 'WRITE_USN_CLOSE_RECORD': 590063, 'SET_SHORT_NAME_BEHAVIOR': 590260, 'OPLOCK_BREAK_ACKNOWLEDGE': 589836, 'WRITE_RAW_ENCRYPTED': 590047, 'GET_REPARSE_POINT': 589992, 'TXFS_QUERY_RM_INFORMATION': 606536, 'MARK_VOLUME_DIRTY': 589872}&gt;</em><a class="headerlink" href="#fs.FSCTL" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fs.</code><code class="sig-name descname">FSCTL</code><em class="property"> = &lt;Constants: {'ALLOW_EXTENDED_DASD_IO': 589955, 'CREATE_OR_GET_OBJECT_ID': 590016, 'CREATE_USN_JOURNAL': 590055, 'CSC_INTERNAL': 590255, 'DELETE_OBJECT_ID': 589984, 'DELETE_REPARSE_POINT': 589996, 'DELETE_USN_JOURNAL': 590072, 'DFSR_SET_GHOST_HANDLE_STATE': 590264, 'DISMOUNT_VOLUME': 589856, 'ENCRYPTION_FSCTL_IO': 590043, 'ENUM_USN_DATA': 590003, 'EXTEND_VOLUME': 590064, 'FILESYSTEM_GET_STATISTICS': 589920, 'FILE_PREFETCH': 590112, 'FIND_FILES_BY_SID': 589967, 'GET_COMPRESSION': 589884, 'GET_NTFS_FILE_RECORD': 589928, 'GET_NTFS_VOLUME_DATA': 589924, 'GET_OBJECT_ID': 589980, 'GET_REPAIR': 590236, 'GET_REPARSE_POINT': 589992, 'GET_RETRIEVAL_POINTERS': 589939, 'GET_VOLUME_BITMAP': 589935, 'HSM_DATA': 639251, 'HSM_MSG': 639240, 'INITIATE_REPAIR': 590248, 'INVALIDATE_VOLUMES': 589908, 'IS_PATHNAME_VALID': 589868, 'IS_VOLUME_DIRTY': 589944, 'IS_VOLUME_MOUNTED': 589864, 'LOCK_VOLUME': 589848, 'MAKE_MEDIA_COMPATIBLE': 622896, 'MARK_AS_SYSTEM_HIVE': 589903, 'MARK_HANDLE': 590076, 'MARK_VOLUME_DIRTY': 589872, 'MOVE_FILE': 589940, 'OPBATCH_ACK_CLOSE_PENDING': 589840, 'OPLOCK_BREAK_ACKNOWLEDGE': 589836, 'OPLOCK_BREAK_ACK_NO_2': 589904, 'OPLOCK_BREAK_NOTIFY': 589844, 'QUERY_ALLOCATED_RANGES': 606415, 'QUERY_FAT_BPB': 589912, 'QUERY_ON_DISK_VOLUME_INFO': 590140, 'QUERY_PAGEFILE_ENCRYPTION': 590312, 'QUERY_RETRIEVAL_POINTERS': 589883, 'QUERY_SPARING_INFO': 590136, 'QUERY_USN_JOURNAL': 590068, 'READ_FILE_USN_DATA': 590059, 'READ_FROM_PLEX': 606494, 'READ_RAW_ENCRYPTED': 590051, 'READ_USN_JOURNAL': 590011, 'RECALL_FILE': 590103, 'REQUEST_BATCH_OPLOCK': 589832, 'REQUEST_FILTER_OPLOCK': 589916, 'REQUEST_OPLOCK_LEVEL_1': 589824, 'REQUEST_OPLOCK_LEVEL_2': 589828, 'SECURITY_ID_CHECK': 606391, 'SET_COMPRESSION': 639040, 'SET_DEFECT_MANAGEMENT': 622900, 'SET_ENCRYPTION': 590039, 'SET_OBJECT_ID': 589976, 'SET_OBJECT_ID_EXTENDED': 590012, 'SET_REPAIR': 590232, 'SET_REPARSE_POINT': 589988, 'SET_SHORT_NAME_BEHAVIOR': 590260, 'SET_SPARSE': 590020, 'SET_VOLUME_COMPRESSION_STATE': 590144, 'SET_ZERO_DATA': 622792, 'SET_ZERO_ON_DEALLOCATION': 590228, 'SHRINK_VOLUME': 590256, 'SIS_COPYFILE': 590080, 'SIS_LINK_FILES': 639236, 'TXFS_CREATE_MINIVERSION': 622972, 'TXFS_CREATE_SECONDARY_RM': 622952, 'TXFS_GET_METADATA_INFO': 606572, 'TXFS_GET_TRANSACTED_VERSION': 606576, 'TXFS_LIST_TRANSACTIONS': 606692, 'TXFS_LIST_TRANSACTION_LOCKED_FILES': 606688, 'TXFS_MODIFY_RM': 622916, 'TXFS_QUERY_RM_INFORMATION': 606536, 'TXFS_READ_BACKUP_INFORMATION': 606560, 'TXFS_ROLLFORWARD_REDO': 622928, 'TXFS_ROLLFORWARD_UNDO': 622932, 'TXFS_SHUTDOWN_RM': 622940, 'TXFS_START_RM': 622936, 'TXFS_TRANSACTION_ACTIVE': 606604, 'TXFS_WRITE_BACKUP_INFORMATION': 622948, 'UNLOCK_VOLUME': 589852, 'WAIT_FOR_REPAIR': 590240, 'WRITE_RAW_ENCRYPTED': 590047, 'WRITE_USN_CLOSE_RECORD': 590063}&gt;</em><a class="headerlink" href="#fs.FSCTL" title="Permalink to this definition">¶</a></dt>
 <dd><p>Types of fsctl operation</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="41%" />
-<col width="10%" />
-<col width="49%" />
+<col style="width: 43%" />
+<col style="width: 8%" />
+<col style="width: 50%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Val</th>
-<th class="head">Win32</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Val</p></th>
+<th class="head"><p>Win32</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>REQUEST_OPLOCK_LEVEL_1</td>
-<td>0x090000</td>
-<td>FSCTL_REQUEST_OPLOCK_LEVEL_1</td>
-</tr>
-<tr class="row-odd"><td>REQUEST_OPLOCK_LEVEL_2</td>
-<td>0x090004</td>
-<td>FSCTL_REQUEST_OPLOCK_LEVEL_2</td>
-</tr>
-<tr class="row-even"><td>REQUEST_BATCH_OPLOCK</td>
-<td>0x090008</td>
-<td>FSCTL_REQUEST_BATCH_OPLOCK</td>
-</tr>
-<tr class="row-odd"><td>OPLOCK_BREAK_ACKNOWLEDGE</td>
-<td>0x09000C</td>
-<td>FSCTL_OPLOCK_BREAK_ACKNOWLEDGE</td>
-</tr>
-<tr class="row-even"><td>OPBATCH_ACK_CLOSE_PENDING</td>
-<td>0x090010</td>
-<td>FSCTL_OPBATCH_ACK_CLOSE_PENDING</td>
-</tr>
-<tr class="row-odd"><td>OPLOCK_BREAK_NOTIFY</td>
-<td>0x090014</td>
-<td>FSCTL_OPLOCK_BREAK_NOTIFY</td>
-</tr>
-<tr class="row-even"><td>LOCK_VOLUME</td>
-<td>0x090018</td>
-<td>FSCTL_LOCK_VOLUME</td>
-</tr>
-<tr class="row-odd"><td>UNLOCK_VOLUME</td>
-<td>0x09001C</td>
-<td>FSCTL_UNLOCK_VOLUME</td>
-</tr>
-<tr class="row-even"><td>DISMOUNT_VOLUME</td>
-<td>0x090020</td>
-<td>FSCTL_DISMOUNT_VOLUME</td>
-</tr>
-<tr class="row-odd"><td>IS_VOLUME_MOUNTED</td>
-<td>0x090028</td>
-<td>FSCTL_IS_VOLUME_MOUNTED</td>
-</tr>
-<tr class="row-even"><td>IS_PATHNAME_VALID</td>
-<td>0x09002C</td>
-<td>FSCTL_IS_PATHNAME_VALID</td>
-</tr>
-<tr class="row-odd"><td>MARK_VOLUME_DIRTY</td>
-<td>0x090030</td>
-<td>FSCTL_MARK_VOLUME_DIRTY</td>
-</tr>
-<tr class="row-even"><td>QUERY_RETRIEVAL_POINTERS</td>
-<td>0x09003B</td>
-<td>FSCTL_QUERY_RETRIEVAL_POINTERS</td>
-</tr>
-<tr class="row-odd"><td>GET_COMPRESSION</td>
-<td>0x09003C</td>
-<td>FSCTL_GET_COMPRESSION</td>
-</tr>
-<tr class="row-even"><td>MARK_AS_SYSTEM_HIVE</td>
-<td>0x09004F</td>
-<td>FSCTL_MARK_AS_SYSTEM_HIVE</td>
-</tr>
-<tr class="row-odd"><td>OPLOCK_BREAK_ACK_NO_2</td>
-<td>0x090050</td>
-<td>FSCTL_OPLOCK_BREAK_ACK_NO_2</td>
-</tr>
-<tr class="row-even"><td>INVALIDATE_VOLUMES</td>
-<td>0x090054</td>
-<td>FSCTL_INVALIDATE_VOLUMES</td>
-</tr>
-<tr class="row-odd"><td>QUERY_FAT_BPB</td>
-<td>0x090058</td>
-<td>FSCTL_QUERY_FAT_BPB</td>
-</tr>
-<tr class="row-even"><td>REQUEST_FILTER_OPLOCK</td>
-<td>0x09005C</td>
-<td>FSCTL_REQUEST_FILTER_OPLOCK</td>
-</tr>
-<tr class="row-odd"><td>FILESYSTEM_GET_STATISTICS</td>
-<td>0x090060</td>
-<td>FSCTL_FILESYSTEM_GET_STATISTICS</td>
-</tr>
-<tr class="row-even"><td>GET_NTFS_VOLUME_DATA</td>
-<td>0x090064</td>
-<td>FSCTL_GET_NTFS_VOLUME_DATA</td>
-</tr>
-<tr class="row-odd"><td>GET_NTFS_FILE_RECORD</td>
-<td>0x090068</td>
-<td>FSCTL_GET_NTFS_FILE_RECORD</td>
-</tr>
-<tr class="row-even"><td>GET_VOLUME_BITMAP</td>
-<td>0x09006F</td>
-<td>FSCTL_GET_VOLUME_BITMAP</td>
-</tr>
-<tr class="row-odd"><td>GET_RETRIEVAL_POINTERS</td>
-<td>0x090073</td>
-<td>FSCTL_GET_RETRIEVAL_POINTERS</td>
-</tr>
-<tr class="row-even"><td>MOVE_FILE</td>
-<td>0x090074</td>
-<td>FSCTL_MOVE_FILE</td>
-</tr>
-<tr class="row-odd"><td>IS_VOLUME_DIRTY</td>
-<td>0x090078</td>
-<td>FSCTL_IS_VOLUME_DIRTY</td>
+<tbody>
+<tr class="row-even"><td><p>REQUEST_OPLOCK_LEVEL_1</p></td>
+<td><p>589824</p></td>
+<td><p>FSCTL_REQUEST_OPLOCK_LEVEL_1</p></td>
+</tr>
+<tr class="row-odd"><td><p>REQUEST_OPLOCK_LEVEL_2</p></td>
+<td><p>589828</p></td>
+<td><p>FSCTL_REQUEST_OPLOCK_LEVEL_2</p></td>
+</tr>
+<tr class="row-even"><td><p>REQUEST_BATCH_OPLOCK</p></td>
+<td><p>589832</p></td>
+<td><p>FSCTL_REQUEST_BATCH_OPLOCK</p></td>
+</tr>
+<tr class="row-odd"><td><p>OPLOCK_BREAK_ACKNOWLEDGE</p></td>
+<td><p>589836</p></td>
+<td><p>FSCTL_OPLOCK_BREAK_ACKNOWLEDGE</p></td>
+</tr>
+<tr class="row-even"><td><p>OPBATCH_ACK_CLOSE_PENDING</p></td>
+<td><p>589840</p></td>
+<td><p>FSCTL_OPBATCH_ACK_CLOSE_PENDING</p></td>
+</tr>
+<tr class="row-odd"><td><p>OPLOCK_BREAK_NOTIFY</p></td>
+<td><p>589844</p></td>
+<td><p>FSCTL_OPLOCK_BREAK_NOTIFY</p></td>
+</tr>
+<tr class="row-even"><td><p>LOCK_VOLUME</p></td>
+<td><p>589848</p></td>
+<td><p>FSCTL_LOCK_VOLUME</p></td>
+</tr>
+<tr class="row-odd"><td><p>UNLOCK_VOLUME</p></td>
+<td><p>589852</p></td>
+<td><p>FSCTL_UNLOCK_VOLUME</p></td>
+</tr>
+<tr class="row-even"><td><p>DISMOUNT_VOLUME</p></td>
+<td><p>589856</p></td>
+<td><p>FSCTL_DISMOUNT_VOLUME</p></td>
+</tr>
+<tr class="row-odd"><td><p>IS_VOLUME_MOUNTED</p></td>
+<td><p>589864</p></td>
+<td><p>FSCTL_IS_VOLUME_MOUNTED</p></td>
+</tr>
+<tr class="row-even"><td><p>IS_PATHNAME_VALID</p></td>
+<td><p>589868</p></td>
+<td><p>FSCTL_IS_PATHNAME_VALID</p></td>
+</tr>
+<tr class="row-odd"><td><p>MARK_VOLUME_DIRTY</p></td>
+<td><p>589872</p></td>
+<td><p>FSCTL_MARK_VOLUME_DIRTY</p></td>
+</tr>
+<tr class="row-even"><td><p>QUERY_RETRIEVAL_POINTERS</p></td>
+<td><p>589883</p></td>
+<td><p>FSCTL_QUERY_RETRIEVAL_POINTERS</p></td>
+</tr>
+<tr class="row-odd"><td><p>GET_COMPRESSION</p></td>
+<td><p>589884</p></td>
+<td><p>FSCTL_GET_COMPRESSION</p></td>
+</tr>
+<tr class="row-even"><td><p>MARK_AS_SYSTEM_HIVE</p></td>
+<td><p>589903</p></td>
+<td><p>FSCTL_MARK_AS_SYSTEM_HIVE</p></td>
+</tr>
+<tr class="row-odd"><td><p>OPLOCK_BREAK_ACK_NO_2</p></td>
+<td><p>589904</p></td>
+<td><p>FSCTL_OPLOCK_BREAK_ACK_NO_2</p></td>
+</tr>
+<tr class="row-even"><td><p>INVALIDATE_VOLUMES</p></td>
+<td><p>589908</p></td>
+<td><p>FSCTL_INVALIDATE_VOLUMES</p></td>
+</tr>
+<tr class="row-odd"><td><p>QUERY_FAT_BPB</p></td>
+<td><p>589912</p></td>
+<td><p>FSCTL_QUERY_FAT_BPB</p></td>
+</tr>
+<tr class="row-even"><td><p>REQUEST_FILTER_OPLOCK</p></td>
+<td><p>589916</p></td>
+<td><p>FSCTL_REQUEST_FILTER_OPLOCK</p></td>
+</tr>
+<tr class="row-odd"><td><p>FILESYSTEM_GET_STATISTICS</p></td>
+<td><p>589920</p></td>
+<td><p>FSCTL_FILESYSTEM_GET_STATISTICS</p></td>
+</tr>
+<tr class="row-even"><td><p>GET_NTFS_VOLUME_DATA</p></td>
+<td><p>589924</p></td>
+<td><p>FSCTL_GET_NTFS_VOLUME_DATA</p></td>
+</tr>
+<tr class="row-odd"><td><p>GET_NTFS_FILE_RECORD</p></td>
+<td><p>589928</p></td>
+<td><p>FSCTL_GET_NTFS_FILE_RECORD</p></td>
+</tr>
+<tr class="row-even"><td><p>GET_VOLUME_BITMAP</p></td>
+<td><p>589935</p></td>
+<td><p>FSCTL_GET_VOLUME_BITMAP</p></td>
+</tr>
+<tr class="row-odd"><td><p>GET_RETRIEVAL_POINTERS</p></td>
+<td><p>589939</p></td>
+<td><p>FSCTL_GET_RETRIEVAL_POINTERS</p></td>
+</tr>
+<tr class="row-even"><td><p>MOVE_FILE</p></td>
+<td><p>589940</p></td>
+<td><p>FSCTL_MOVE_FILE</p></td>
+</tr>
+<tr class="row-odd"><td><p>IS_VOLUME_DIRTY</p></td>
+<td><p>589944</p></td>
+<td><p>FSCTL_IS_VOLUME_DIRTY</p></td>
 </tr>
-<tr class="row-even"><td>ALLOW_EXTENDED_DASD_IO</td>
-<td>0x090083</td>
-<td>FSCTL_ALLOW_EXTENDED_DASD_IO</td>
+<tr class="row-even"><td><p>ALLOW_EXTENDED_DASD_IO</p></td>
+<td><p>589955</p></td>
+<td><p>FSCTL_ALLOW_EXTENDED_DASD_IO</p></td>
 </tr>
-<tr class="row-odd"><td>FIND_FILES_BY_SID</td>
-<td>0x09008F</td>
-<td>FSCTL_FIND_FILES_BY_SID</td>
+<tr class="row-odd"><td><p>FIND_FILES_BY_SID</p></td>
+<td><p>589967</p></td>
+<td><p>FSCTL_FIND_FILES_BY_SID</p></td>
 </tr>
-<tr class="row-even"><td>SET_OBJECT_ID</td>
-<td>0x090098</td>
-<td>FSCTL_SET_OBJECT_ID</td>
+<tr class="row-even"><td><p>SET_OBJECT_ID</p></td>
+<td><p>589976</p></td>
+<td><p>FSCTL_SET_OBJECT_ID</p></td>
 </tr>
-<tr class="row-odd"><td>GET_OBJECT_ID</td>
-<td>0x09009C</td>
-<td>FSCTL_GET_OBJECT_ID</td>
+<tr class="row-odd"><td><p>GET_OBJECT_ID</p></td>
+<td><p>589980</p></td>
+<td><p>FSCTL_GET_OBJECT_ID</p></td>
 </tr>
-<tr class="row-even"><td>DELETE_OBJECT_ID</td>
-<td>0x0900A0</td>
-<td>FSCTL_DELETE_OBJECT_ID</td>
+<tr class="row-even"><td><p>DELETE_OBJECT_ID</p></td>
+<td><p>589984</p></td>
+<td><p>FSCTL_DELETE_OBJECT_ID</p></td>
 </tr>
-<tr class="row-odd"><td>SET_REPARSE_POINT</td>
-<td>0x0900A4</td>
-<td>FSCTL_SET_REPARSE_POINT</td>
+<tr class="row-odd"><td><p>SET_REPARSE_POINT</p></td>
+<td><p>589988</p></td>
+<td><p>FSCTL_SET_REPARSE_POINT</p></td>
 </tr>
-<tr class="row-even"><td>GET_REPARSE_POINT</td>
-<td>0x0900A8</td>
-<td>FSCTL_GET_REPARSE_POINT</td>
+<tr class="row-even"><td><p>GET_REPARSE_POINT</p></td>
+<td><p>589992</p></td>
+<td><p>FSCTL_GET_REPARSE_POINT</p></td>
 </tr>
-<tr class="row-odd"><td>DELETE_REPARSE_POINT</td>
-<td>0x0900AC</td>
-<td>FSCTL_DELETE_REPARSE_POINT</td>
+<tr class="row-odd"><td><p>DELETE_REPARSE_POINT</p></td>
+<td><p>589996</p></td>
+<td><p>FSCTL_DELETE_REPARSE_POINT</p></td>
 </tr>
-<tr class="row-even"><td>ENUM_USN_DATA</td>
-<td>0x0900B3</td>
-<td>FSCTL_ENUM_USN_DATA</td>
+<tr class="row-even"><td><p>ENUM_USN_DATA</p></td>
+<td><p>590003</p></td>
+<td><p>FSCTL_ENUM_USN_DATA</p></td>
 </tr>
-<tr class="row-odd"><td>READ_USN_JOURNAL</td>
-<td>0x0900BB</td>
-<td>FSCTL_READ_USN_JOURNAL</td>
+<tr class="row-odd"><td><p>READ_USN_JOURNAL</p></td>
+<td><p>590011</p></td>
+<td><p>FSCTL_READ_USN_JOURNAL</p></td>
 </tr>
-<tr class="row-even"><td>SET_OBJECT_ID_EXTENDED</td>
-<td>0x0900BC</td>
-<td>FSCTL_SET_OBJECT_ID_EXTENDED</td>
+<tr class="row-even"><td><p>SET_OBJECT_ID_EXTENDED</p></td>
+<td><p>590012</p></td>
+<td><p>FSCTL_SET_OBJECT_ID_EXTENDED</p></td>
 </tr>
-<tr class="row-odd"><td>CREATE_OR_GET_OBJECT_ID</td>
-<td>0x0900C0</td>
-<td>FSCTL_CREATE_OR_GET_OBJECT_ID</td>
+<tr class="row-odd"><td><p>CREATE_OR_GET_OBJECT_ID</p></td>
+<td><p>590016</p></td>
+<td><p>FSCTL_CREATE_OR_GET_OBJECT_ID</p></td>
 </tr>
-<tr class="row-even"><td>SET_SPARSE</td>
-<td>0x0900C4</td>
-<td>FSCTL_SET_SPARSE</td>
+<tr class="row-even"><td><p>SET_SPARSE</p></td>
+<td><p>590020</p></td>
+<td><p>FSCTL_SET_SPARSE</p></td>
 </tr>
-<tr class="row-odd"><td>SET_ENCRYPTION</td>
-<td>0x0900D7</td>
-<td>FSCTL_SET_ENCRYPTION</td>
+<tr class="row-odd"><td><p>SET_ENCRYPTION</p></td>
+<td><p>590039</p></td>
+<td><p>FSCTL_SET_ENCRYPTION</p></td>
 </tr>
-<tr class="row-even"><td>ENCRYPTION_FSCTL_IO</td>
-<td>0x0900DB</td>
-<td>FSCTL_ENCRYPTION_FSCTL_IO</td>
+<tr class="row-even"><td><p>ENCRYPTION_FSCTL_IO</p></td>
+<td><p>590043</p></td>
+<td><p>FSCTL_ENCRYPTION_FSCTL_IO</p></td>
 </tr>
-<tr class="row-odd"><td>WRITE_RAW_ENCRYPTED</td>
-<td>0x0900DF</td>
-<td>FSCTL_WRITE_RAW_ENCRYPTED</td>
+<tr class="row-odd"><td><p>WRITE_RAW_ENCRYPTED</p></td>
+<td><p>590047</p></td>
+<td><p>FSCTL_WRITE_RAW_ENCRYPTED</p></td>
 </tr>
-<tr class="row-even"><td>READ_RAW_ENCRYPTED</td>
-<td>0x0900E3</td>
-<td>FSCTL_READ_RAW_ENCRYPTED</td>
+<tr class="row-even"><td><p>READ_RAW_ENCRYPTED</p></td>
+<td><p>590051</p></td>
+<td><p>FSCTL_READ_RAW_ENCRYPTED</p></td>
 </tr>
-<tr class="row-odd"><td>CREATE_USN_JOURNAL</td>
-<td>0x0900E7</td>
-<td>FSCTL_CREATE_USN_JOURNAL</td>
+<tr class="row-odd"><td><p>CREATE_USN_JOURNAL</p></td>
+<td><p>590055</p></td>
+<td><p>FSCTL_CREATE_USN_JOURNAL</p></td>
 </tr>
-<tr class="row-even"><td>READ_FILE_USN_DATA</td>
-<td>0x0900EB</td>
-<td>FSCTL_READ_FILE_USN_DATA</td>
+<tr class="row-even"><td><p>READ_FILE_USN_DATA</p></td>
+<td><p>590059</p></td>
+<td><p>FSCTL_READ_FILE_USN_DATA</p></td>
 </tr>
-<tr class="row-odd"><td>WRITE_USN_CLOSE_RECORD</td>
-<td>0x0900EF</td>
-<td>FSCTL_WRITE_USN_CLOSE_RECORD</td>
+<tr class="row-odd"><td><p>WRITE_USN_CLOSE_RECORD</p></td>
+<td><p>590063</p></td>
+<td><p>FSCTL_WRITE_USN_CLOSE_RECORD</p></td>
 </tr>
-<tr class="row-even"><td>EXTEND_VOLUME</td>
-<td>0x0900F0</td>
-<td>FSCTL_EXTEND_VOLUME</td>
+<tr class="row-even"><td><p>EXTEND_VOLUME</p></td>
+<td><p>590064</p></td>
+<td><p>FSCTL_EXTEND_VOLUME</p></td>
 </tr>
-<tr class="row-odd"><td>QUERY_USN_JOURNAL</td>
-<td>0x0900F4</td>
-<td>FSCTL_QUERY_USN_JOURNAL</td>
+<tr class="row-odd"><td><p>QUERY_USN_JOURNAL</p></td>
+<td><p>590068</p></td>
+<td><p>FSCTL_QUERY_USN_JOURNAL</p></td>
 </tr>
-<tr class="row-even"><td>DELETE_USN_JOURNAL</td>
-<td>0x0900F8</td>
-<td>FSCTL_DELETE_USN_JOURNAL</td>
+<tr class="row-even"><td><p>DELETE_USN_JOURNAL</p></td>
+<td><p>590072</p></td>
+<td><p>FSCTL_DELETE_USN_JOURNAL</p></td>
 </tr>
-<tr class="row-odd"><td>MARK_HANDLE</td>
-<td>0x0900FC</td>
-<td>FSCTL_MARK_HANDLE</td>
+<tr class="row-odd"><td><p>MARK_HANDLE</p></td>
+<td><p>590076</p></td>
+<td><p>FSCTL_MARK_HANDLE</p></td>
 </tr>
-<tr class="row-even"><td>SIS_COPYFILE</td>
-<td>0x090100</td>
-<td>FSCTL_SIS_COPYFILE</td>
+<tr class="row-even"><td><p>SIS_COPYFILE</p></td>
+<td><p>590080</p></td>
+<td><p>FSCTL_SIS_COPYFILE</p></td>
 </tr>
-<tr class="row-odd"><td>RECALL_FILE</td>
-<td>0x090117</td>
-<td>FSCTL_RECALL_FILE</td>
+<tr class="row-odd"><td><p>RECALL_FILE</p></td>
+<td><p>590103</p></td>
+<td><p>FSCTL_RECALL_FILE</p></td>
 </tr>
-<tr class="row-even"><td>FILE_PREFETCH</td>
-<td>0x090120</td>
-<td>FSCTL_FILE_PREFETCH</td>
+<tr class="row-even"><td><p>FILE_PREFETCH</p></td>
+<td><p>590112</p></td>
+<td><p>FSCTL_FILE_PREFETCH</p></td>
 </tr>
-<tr class="row-odd"><td>QUERY_SPARING_INFO</td>
-<td>0x090138</td>
-<td>FSCTL_QUERY_SPARING_INFO</td>
+<tr class="row-odd"><td><p>QUERY_SPARING_INFO</p></td>
+<td><p>590136</p></td>
+<td><p>FSCTL_QUERY_SPARING_INFO</p></td>
 </tr>
-<tr class="row-even"><td>QUERY_ON_DISK_VOLUME_INFO</td>
-<td>0x09013C</td>
-<td>FSCTL_QUERY_ON_DISK_VOLUME_INFO</td>
+<tr class="row-even"><td><p>QUERY_ON_DISK_VOLUME_INFO</p></td>
+<td><p>590140</p></td>
+<td><p>FSCTL_QUERY_ON_DISK_VOLUME_INFO</p></td>
 </tr>
-<tr class="row-odd"><td>SET_VOLUME_COMPRESSION_STATE</td>
-<td>0x090140</td>
-<td>FSCTL_SET_VOLUME_COMPRESSION_STATE</td>
+<tr class="row-odd"><td><p>SET_VOLUME_COMPRESSION_STATE</p></td>
+<td><p>590144</p></td>
+<td><p>FSCTL_SET_VOLUME_COMPRESSION_STATE</p></td>
 </tr>
-<tr class="row-even"><td>SET_ZERO_ON_DEALLOCATION</td>
-<td>0x090194</td>
-<td>FSCTL_SET_ZERO_ON_DEALLOCATION</td>
+<tr class="row-even"><td><p>SET_ZERO_ON_DEALLOCATION</p></td>
+<td><p>590228</p></td>
+<td><p>FSCTL_SET_ZERO_ON_DEALLOCATION</p></td>
 </tr>
-<tr class="row-odd"><td>SET_REPAIR</td>
-<td>0x090198</td>
-<td>FSCTL_SET_REPAIR</td>
+<tr class="row-odd"><td><p>SET_REPAIR</p></td>
+<td><p>590232</p></td>
+<td><p>FSCTL_SET_REPAIR</p></td>
 </tr>
-<tr class="row-even"><td>GET_REPAIR</td>
-<td>0x09019C</td>
-<td>FSCTL_GET_REPAIR</td>
+<tr class="row-even"><td><p>GET_REPAIR</p></td>
+<td><p>590236</p></td>
+<td><p>FSCTL_GET_REPAIR</p></td>
 </tr>
-<tr class="row-odd"><td>WAIT_FOR_REPAIR</td>
-<td>0x0901A0</td>
-<td>FSCTL_WAIT_FOR_REPAIR</td>
+<tr class="row-odd"><td><p>WAIT_FOR_REPAIR</p></td>
+<td><p>590240</p></td>
+<td><p>FSCTL_WAIT_FOR_REPAIR</p></td>
 </tr>
-<tr class="row-even"><td>INITIATE_REPAIR</td>
-<td>0x0901A8</td>
-<td>FSCTL_INITIATE_REPAIR</td>
+<tr class="row-even"><td><p>INITIATE_REPAIR</p></td>
+<td><p>590248</p></td>
+<td><p>FSCTL_INITIATE_REPAIR</p></td>
 </tr>
-<tr class="row-odd"><td>CSC_INTERNAL</td>
-<td>0x0901AF</td>
-<td>FSCTL_CSC_INTERNAL</td>
+<tr class="row-odd"><td><p>CSC_INTERNAL</p></td>
+<td><p>590255</p></td>
+<td><p>FSCTL_CSC_INTERNAL</p></td>
 </tr>
-<tr class="row-even"><td>SHRINK_VOLUME</td>
-<td>0x0901B0</td>
-<td>FSCTL_SHRINK_VOLUME</td>
+<tr class="row-even"><td><p>SHRINK_VOLUME</p></td>
+<td><p>590256</p></td>
+<td><p>FSCTL_SHRINK_VOLUME</p></td>
 </tr>
-<tr class="row-odd"><td>SET_SHORT_NAME_BEHAVIOR</td>
-<td>0x0901B4</td>
-<td>FSCTL_SET_SHORT_NAME_BEHAVIOR</td>
+<tr class="row-odd"><td><p>SET_SHORT_NAME_BEHAVIOR</p></td>
+<td><p>590260</p></td>
+<td><p>FSCTL_SET_SHORT_NAME_BEHAVIOR</p></td>
 </tr>
-<tr class="row-even"><td>DFSR_SET_GHOST_HANDLE_STATE</td>
-<td>0x0901B8</td>
-<td>FSCTL_DFSR_SET_GHOST_HANDLE_STATE</td>
+<tr class="row-even"><td><p>DFSR_SET_GHOST_HANDLE_STATE</p></td>
+<td><p>590264</p></td>
+<td><p>FSCTL_DFSR_SET_GHOST_HANDLE_STATE</p></td>
 </tr>
-<tr class="row-odd"><td>QUERY_PAGEFILE_ENCRYPTION</td>
-<td>0x0901E8</td>
-<td>FSCTL_QUERY_PAGEFILE_ENCRYPTION</td>
+<tr class="row-odd"><td><p>QUERY_PAGEFILE_ENCRYPTION</p></td>
+<td><p>590312</p></td>
+<td><p>FSCTL_QUERY_PAGEFILE_ENCRYPTION</p></td>
 </tr>
-<tr class="row-even"><td>SECURITY_ID_CHECK</td>
-<td>0x0940B7</td>
-<td>FSCTL_SECURITY_ID_CHECK</td>
+<tr class="row-even"><td><p>SECURITY_ID_CHECK</p></td>
+<td><p>606391</p></td>
+<td><p>FSCTL_SECURITY_ID_CHECK</p></td>
 </tr>
-<tr class="row-odd"><td>QUERY_ALLOCATED_RANGES</td>
-<td>0x0940CF</td>
-<td>FSCTL_QUERY_ALLOCATED_RANGES</td>
+<tr class="row-odd"><td><p>QUERY_ALLOCATED_RANGES</p></td>
+<td><p>606415</p></td>
+<td><p>FSCTL_QUERY_ALLOCATED_RANGES</p></td>
 </tr>
-<tr class="row-even"><td>READ_FROM_PLEX</td>
-<td>0x09411E</td>
-<td>FSCTL_READ_FROM_PLEX</td>
+<tr class="row-even"><td><p>READ_FROM_PLEX</p></td>
+<td><p>606494</p></td>
+<td><p>FSCTL_READ_FROM_PLEX</p></td>
 </tr>
-<tr class="row-odd"><td>TXFS_QUERY_RM_INFORMATION</td>
-<td>0x094148</td>
-<td>FSCTL_TXFS_QUERY_RM_INFORMATION</td>
+<tr class="row-odd"><td><p>TXFS_QUERY_RM_INFORMATION</p></td>
+<td><p>606536</p></td>
+<td><p>FSCTL_TXFS_QUERY_RM_INFORMATION</p></td>
 </tr>
-<tr class="row-even"><td>TXFS_READ_BACKUP_INFORMATION</td>
-<td>0x094160</td>
-<td>FSCTL_TXFS_READ_BACKUP_INFORMATION</td>
+<tr class="row-even"><td><p>TXFS_READ_BACKUP_INFORMATION</p></td>
+<td><p>606560</p></td>
+<td><p>FSCTL_TXFS_READ_BACKUP_INFORMATION</p></td>
 </tr>
-<tr class="row-odd"><td>TXFS_GET_METADATA_INFO</td>
-<td>0x09416C</td>
-<td>FSCTL_TXFS_GET_METADATA_INFO</td>
+<tr class="row-odd"><td><p>TXFS_GET_METADATA_INFO</p></td>
+<td><p>606572</p></td>
+<td><p>FSCTL_TXFS_GET_METADATA_INFO</p></td>
 </tr>
-<tr class="row-even"><td>TXFS_GET_TRANSACTED_VERSION</td>
-<td>0x094170</td>
-<td>FSCTL_TXFS_GET_TRANSACTED_VERSION</td>
+<tr class="row-even"><td><p>TXFS_GET_TRANSACTED_VERSION</p></td>
+<td><p>606576</p></td>
+<td><p>FSCTL_TXFS_GET_TRANSACTED_VERSION</p></td>
 </tr>
-<tr class="row-odd"><td>TXFS_TRANSACTION_ACTIVE</td>
-<td>0x09418C</td>
-<td>FSCTL_TXFS_TRANSACTION_ACTIVE</td>
+<tr class="row-odd"><td><p>TXFS_TRANSACTION_ACTIVE</p></td>
+<td><p>606604</p></td>
+<td><p>FSCTL_TXFS_TRANSACTION_ACTIVE</p></td>
 </tr>
-<tr class="row-even"><td>TXFS_LIST_TRANSACTION_LOCKED_FILES</td>
-<td>0x0941E0</td>
-<td>FSCTL_TXFS_LIST_TRANSACTION_LOCKED_FILES</td>
+<tr class="row-even"><td><p>TXFS_LIST_TRANSACTION_LOCKED_FILES</p></td>
+<td><p>606688</p></td>
+<td><p>FSCTL_TXFS_LIST_TRANSACTION_LOCKED_FILES</p></td>
 </tr>
-<tr class="row-odd"><td>TXFS_LIST_TRANSACTIONS</td>
-<td>0x0941E4</td>
-<td>FSCTL_TXFS_LIST_TRANSACTIONS</td>
+<tr class="row-odd"><td><p>TXFS_LIST_TRANSACTIONS</p></td>
+<td><p>606692</p></td>
+<td><p>FSCTL_TXFS_LIST_TRANSACTIONS</p></td>
 </tr>
-<tr class="row-even"><td>SET_ZERO_DATA</td>
-<td>0x0980C8</td>
-<td>FSCTL_SET_ZERO_DATA</td>
+<tr class="row-even"><td><p>SET_ZERO_DATA</p></td>
+<td><p>622792</p></td>
+<td><p>FSCTL_SET_ZERO_DATA</p></td>
 </tr>
-<tr class="row-odd"><td>MAKE_MEDIA_COMPATIBLE</td>
-<td>0x098130</td>
-<td>FSCTL_MAKE_MEDIA_COMPATIBLE</td>
+<tr class="row-odd"><td><p>MAKE_MEDIA_COMPATIBLE</p></td>
+<td><p>622896</p></td>
+<td><p>FSCTL_MAKE_MEDIA_COMPATIBLE</p></td>
 </tr>
-<tr class="row-even"><td>SET_DEFECT_MANAGEMENT</td>
-<td>0x098134</td>
-<td>FSCTL_SET_DEFECT_MANAGEMENT</td>
+<tr class="row-even"><td><p>SET_DEFECT_MANAGEMENT</p></td>
+<td><p>622900</p></td>
+<td><p>FSCTL_SET_DEFECT_MANAGEMENT</p></td>
 </tr>
-<tr class="row-odd"><td>TXFS_MODIFY_RM</td>
-<td>0x098144</td>
-<td>FSCTL_TXFS_MODIFY_RM</td>
+<tr class="row-odd"><td><p>TXFS_MODIFY_RM</p></td>
+<td><p>622916</p></td>
+<td><p>FSCTL_TXFS_MODIFY_RM</p></td>
 </tr>
-<tr class="row-even"><td>TXFS_ROLLFORWARD_REDO</td>
-<td>0x098150</td>
-<td>FSCTL_TXFS_ROLLFORWARD_REDO</td>
+<tr class="row-even"><td><p>TXFS_ROLLFORWARD_REDO</p></td>
+<td><p>622928</p></td>
+<td><p>FSCTL_TXFS_ROLLFORWARD_REDO</p></td>
 </tr>
-<tr class="row-odd"><td>TXFS_ROLLFORWARD_UNDO</td>
-<td>0x098154</td>
-<td>FSCTL_TXFS_ROLLFORWARD_UNDO</td>
+<tr class="row-odd"><td><p>TXFS_ROLLFORWARD_UNDO</p></td>
+<td><p>622932</p></td>
+<td><p>FSCTL_TXFS_ROLLFORWARD_UNDO</p></td>
 </tr>
-<tr class="row-even"><td>TXFS_START_RM</td>
-<td>0x098158</td>
-<td>FSCTL_TXFS_START_RM</td>
+<tr class="row-even"><td><p>TXFS_START_RM</p></td>
+<td><p>622936</p></td>
+<td><p>FSCTL_TXFS_START_RM</p></td>
 </tr>
-<tr class="row-odd"><td>TXFS_SHUTDOWN_RM</td>
-<td>0x09815C</td>
-<td>FSCTL_TXFS_SHUTDOWN_RM</td>
+<tr class="row-odd"><td><p>TXFS_SHUTDOWN_RM</p></td>
+<td><p>622940</p></td>
+<td><p>FSCTL_TXFS_SHUTDOWN_RM</p></td>
 </tr>
-<tr class="row-even"><td>TXFS_WRITE_BACKUP_INFORMATION</td>
-<td>0x098164</td>
-<td>FSCTL_TXFS_WRITE_BACKUP_INFORMATION</td>
+<tr class="row-even"><td><p>TXFS_WRITE_BACKUP_INFORMATION</p></td>
+<td><p>622948</p></td>
+<td><p>FSCTL_TXFS_WRITE_BACKUP_INFORMATION</p></td>
 </tr>
-<tr class="row-odd"><td>TXFS_CREATE_SECONDARY_RM</td>
-<td>0x098168</td>
-<td>FSCTL_TXFS_CREATE_SECONDARY_RM</td>
+<tr class="row-odd"><td><p>TXFS_CREATE_SECONDARY_RM</p></td>
+<td><p>622952</p></td>
+<td><p>FSCTL_TXFS_CREATE_SECONDARY_RM</p></td>
 </tr>
-<tr class="row-even"><td>TXFS_CREATE_MINIVERSION</td>
-<td>0x09817C</td>
-<td>FSCTL_TXFS_CREATE_MINIVERSION</td>
+<tr class="row-even"><td><p>TXFS_CREATE_MINIVERSION</p></td>
+<td><p>622972</p></td>
+<td><p>FSCTL_TXFS_CREATE_MINIVERSION</p></td>
 </tr>
-<tr class="row-odd"><td>SET_COMPRESSION</td>
-<td>0x09C040</td>
-<td>FSCTL_SET_COMPRESSION</td>
+<tr class="row-odd"><td><p>SET_COMPRESSION</p></td>
+<td><p>639040</p></td>
+<td><p>FSCTL_SET_COMPRESSION</p></td>
 </tr>
-<tr class="row-even"><td>SIS_LINK_FILES</td>
-<td>0x09C104</td>
-<td>FSCTL_SIS_LINK_FILES</td>
+<tr class="row-even"><td><p>SIS_LINK_FILES</p></td>
+<td><p>639236</p></td>
+<td><p>FSCTL_SIS_LINK_FILES</p></td>
 </tr>
-<tr class="row-odd"><td>HSM_MSG</td>
-<td>0x09C108</td>
-<td>FSCTL_HSM_MSG</td>
+<tr class="row-odd"><td><p>HSM_MSG</p></td>
+<td><p>639240</p></td>
+<td><p>FSCTL_HSM_MSG</p></td>
 </tr>
-<tr class="row-even"><td>HSM_DATA</td>
-<td>0x09C113</td>
-<td>FSCTL_HSM_DATA</td>
+<tr class="row-even"><td><p>HSM_DATA</p></td>
+<td><p>639251</p></td>
+<td><p>FSCTL_HSM_DATA</p></td>
 </tr>
 </tbody>
 </table>
@@ -1124,7 +1114,7 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="contents.html">
               <img class="logo" src="_static/cpython2.png" alt="Logo"/>
@@ -1134,30 +1124,29 @@
                         title="previous chapter">The Dir class</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="ipc.html"
-                        title="next chapter"><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/fs_constants.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipc</span></code> – Interprocess Communication</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/fs_constants.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -1172,13 +1161,13 @@
         <li class="right" >
           <a href="fs_dir.html" title="The Dir class"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="fs.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">fs</span></code> – Files, Directories, &amp;c.</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Tim Golden.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.2.
     </div>
   </body>
 </html>

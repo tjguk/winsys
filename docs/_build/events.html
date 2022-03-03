@@ -1,36 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>The Event class &mdash; WinSys 1.0beta documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>The Event class &#8212; WinSys 1.0beta documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.0beta',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
-    <link rel="up" title="ipc – Interprocess Communication" href="ipc.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="The Mutex class" href="mutexes.html" />
     <link rel="prev" title="The Mailslot class" href="mailslots.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -45,95 +35,95 @@
         <li class="right" >
           <a href="mailslots.html" title="The Mailslot class"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" accesskey="U"><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="ipc.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipc</span></code> – Interprocess Communication</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="the-event-class">
 <h1>The Event class<a class="headerlink" href="#the-event-class" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="ipc.Event">
-<em class="property">class </em><tt class="descclassname">ipc.</tt><tt class="descname">Event</tt><big>(</big><em>security=None</em>, <em>needs_manual_reset=False</em>, <em>initially_set=False</em>, <em>name=None</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">winsys.core._WinSysObject</span></tt></p>
+<em class="property">class </em><code class="sig-prename descclassname">ipc.</code><code class="sig-name descname">Event</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">security</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">needs_manual_reset</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">initially_set</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#Event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">winsys.core._WinSysObject</span></code></p>
 <p>An event object is an interprocess (but not intermachine) synchronisation
 mechanism which allows one or more threads of control to wait on others.
 The most common configuration is given by the defaults: anonymous,
 not set initially, and automatically reset once set (ie only set for long
 enough to release any waiting threads and then reset. A common
 variant is a named event which can then be referred to easily by other
-processes without having to pass handles around. This is why the <a class="reference internal" href="ipc.html#ipc.event" title="ipc.event"><tt class="xref py py-func docutils literal"><span class="pre">ipc.event()</span></tt></a>
+processes without having to pass handles around. This is why the <a class="reference internal" href="ipc.html#ipc.event" title="ipc.event"><code class="xref py py-func docutils literal notranslate"><span class="pre">ipc.event()</span></code></a>
 function reverses the order of parameters and takes the name first.</p>
-<p>The Event class mimics Python&#8217;s Event objects which are in any case very
+<p>The Event class mimics Python’s Event objects which are in any case very
 close to the semantics of the underlying Windows object. For that reason,
-although <a class="reference internal" href="#ipc.Event.clear" title="ipc.Event.clear"><tt class="xref py py-meth docutils literal"><span class="pre">clear()</span></tt></a> is used to reset the event, <a class="reference internal" href="#ipc.Event.reset" title="ipc.Event.reset"><tt class="xref py py-meth docutils literal"><span class="pre">reset()</span></tt></a> is also
+although <a class="reference internal" href="#ipc.Event.clear" title="ipc.Event.clear"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clear()</span></code></a> is used to reset the event, <a class="reference internal" href="#ipc.Event.reset" title="ipc.Event.reset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reset()</span></code></a> is also
 provided as an alias, matching the Windows API.</p>
 <p>An event is Truthful if it is currently set</p>
-<dl class="method">
+<dl class="py method">
 <dt id="ipc.Event.as_string">
-<tt class="descname">as_string</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.as_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.as_string" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">as_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#Event.as_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.as_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce a readable version of the data, used by
+__str__.</p>
+</dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="ipc.Event.clear">
-<tt class="descname">clear</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.clear" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#Event.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reset the event</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="ipc.Event.dumped">
-<tt class="descname">dumped</tt><big>(</big><em>level=0</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.dumped"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.dumped" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dumped</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">level</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#Event.dumped"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.dumped" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="ipc.Event.isSet">
-<tt class="descname">isSet</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.isSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.isSet" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">isSet</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#Event.isSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.isSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Detect whether the event is currently set (by waiting without blocking)</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="ipc.Event.pulse">
-<tt class="descname">pulse</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.pulse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.pulse" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pulse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#Event.pulse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.pulse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cause the event to set and reset immediately</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="ipc.Event.pyobject">
-<tt class="descname">pyobject</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.pyobject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.pyobject" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pyobject</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#Event.pyobject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.pyobject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="ipc.Event.reset">
-<tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#ipc.Event.reset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipc.Event.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reset the event</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="ipc.Event.set">
-<tt class="descname">set</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.set" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#Event.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Signal the event</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="ipc.Event.wait">
-<tt class="descname">wait</tt><big>(</big><em>timeout_s=-1</em><big>)</big><a class="reference internal" href="_modules/ipc.html#Event.wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.wait" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wait, optionally timing out, for the event to fire. cf also the <a class="reference internal" href="ipc.html#ipc.any" title="ipc.any"><tt class="xref py py-func docutils literal"><span class="pre">any()</span></tt></a> and
-<a class="reference internal" href="ipc.html#ipc.all" title="ipc.all"><tt class="xref py py-func docutils literal"><span class="pre">all()</span></tt></a> convenience functions which take an iterable of events or other objects.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout_s</strong> (<em>float</em>) &#8211; how many seconds to wait before timing out.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite> if the event fired, <cite>False</cite> otherwise</td>
-</tr>
-</tbody>
-</table>
+<code class="sig-name descname">wait</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeout_s</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ipc.html#Event.wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ipc.Event.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait, optionally timing out, for the event to fire. cf also the <a class="reference internal" href="ipc.html#ipc.any" title="ipc.any"><code class="xref py py-func docutils literal notranslate"><span class="pre">any()</span></code></a> and
+<a class="reference internal" href="ipc.html#ipc.all" title="ipc.all"><code class="xref py py-func docutils literal notranslate"><span class="pre">all()</span></code></a> convenience functions which take an iterable of events or other objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>timeout_s</strong> (<em>float</em>) – how many seconds to wait before timing out.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>True</cite> if the event fired, <cite>False</cite> otherwise</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -144,7 +134,7 @@ provided as an alias, matching the Windows API.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="contents.html">
               <img class="logo" src="_static/cpython2.png" alt="Logo"/>
@@ -155,29 +145,28 @@ provided as an alias, matching the Windows API.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="mutexes.html"
                         title="next chapter">The Mutex class</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/events.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/events.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -192,13 +181,13 @@ provided as an alias, matching the Windows API.</p>
         <li class="right" >
           <a href="mailslots.html" title="The Mailslot class"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="ipc.html" ><tt class="docutils literal"><span class="pre">ipc</span></tt> &#8211; Interprocess Communication</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="ipc.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipc</span></code> – Interprocess Communication</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Tim Golden.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.2.
     </div>
   </body>
 </html>

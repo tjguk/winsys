@@ -4,31 +4,31 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>core &#8212; WinSys 1.0beta documentation</title>
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <title>winsys.core &#8212; WinSys 1.0beta documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     
-    <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -37,7 +37,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for core</h1><div class="highlight"><pre>
+  <h1>Source code for winsys.core</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Provide functionality common to all classes in the package. Very</span>
 <span class="sd">little is expected to be here, only methods which are clearly common</span>
@@ -52,13 +52,13 @@
 
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">utils</span>
 
-<div class="viewcode-block" id="_WinSysObject"><a class="viewcode-back" href="../core.html#core._WinSysObject">[docs]</a><span class="k">class</span> <span class="nc">_WinSysObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">_WinSysObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-<div class="viewcode-block" id="_WinSysObject.as_string"><a class="viewcode-back" href="../core.html#core._WinSysObject.as_string">[docs]</a>    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Produce a readable version of the data, used by</span>
 <span class="sd">        __str__.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_string</span><span class="p">()</span>
@@ -75,11 +75,11 @@
     <span class="c1"># internal items, call their dumped functions at the</span>
     <span class="c1"># next level down.</span>
     <span class="c1">#</span>
-<div class="viewcode-block" id="_WinSysObject.dumped"><a class="viewcode-back" href="../core.html#core._WinSysObject.dumped">[docs]</a>    <span class="k">def</span> <span class="nf">dumped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_string</span><span class="p">(),</span> <span class="n">level</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">dumped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_string</span><span class="p">(),</span> <span class="n">level</span><span class="p">)</span>
 
-<div class="viewcode-block" id="_WinSysObject.dump"><a class="viewcode-back" href="../core.html#core._WinSysObject.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="n">level</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="n">level</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="c1">#</span>
     <span class="c1"># Fill-in functions to ensure that a complete</span>
@@ -97,7 +97,7 @@
         <span class="k">return</span> <span class="bp">self</span> <span class="o">&gt;</span> <span class="n">other</span> <span class="ow">or</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">other</span>
 
     <span class="k">def</span> <span class="fm">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span> <span class="o">&lt;</span> <span class="n">other</span> <span class="ow">or</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">other</span></div>
+        <span class="k">return</span> <span class="bp">self</span> <span class="o">&lt;</span> <span class="n">other</span> <span class="ow">or</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">other</span>
 
 <span class="k">class</span> <span class="nc">Unset</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -141,13 +141,13 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../contents.html">
-              <img class="logo" src="../_static/cpython2.png" alt="Logo"/>
+            <p class="logo"><a href="../../contents.html">
+              <img class="logo" src="../../_static/cpython2.png" alt="Logo"/>
             </a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
@@ -162,13 +162,13 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

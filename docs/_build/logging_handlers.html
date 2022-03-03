@@ -1,36 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>logging_handlers – Additional Logging Handlers &mdash; WinSys 1.0beta documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>logging_handlers – Additional Logging Handlers &#8212; WinSys 1.0beta documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.0beta',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
-    <link rel="up" title="Miscellaneous" href="misc.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="environment – Environment Block" href="environment.html" />
     <link rel="prev" title="Miscellaneous" href="misc.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -45,53 +35,53 @@
         <li class="right" >
           <a href="misc.html" title="Miscellaneous"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="misc.html" accesskey="U">Miscellaneous</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="misc.html" accesskey="U">Miscellaneous</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-logging_handlers">
-<span id="logging-handlers-additional-logging-handlers"></span><h1><a class="reference internal" href="#module-logging_handlers" title="logging_handlers: Additional handlers for the builtin logging module"><tt class="xref py py-mod docutils literal"><span class="pre">logging_handlers</span></tt></a> &#8211; Additional Logging Handlers<a class="headerlink" href="#module-logging_handlers" title="Permalink to this headline">¶</a></h1>
+<span id="logging-handlers-additional-logging-handlers"></span><h1><a class="reference internal" href="#module-logging_handlers" title="logging_handlers: Additional handlers for the builtin logging module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging_handlers</span></code></a> – Additional Logging Handlers<a class="headerlink" href="#module-logging_handlers" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>Python&#8217;s <a class="reference external" href="http://docs.python.org/library/logging.html">builtin logging module</a>
+<p>Python’s <a class="reference external" href="http://docs.python.org/library/logging.html">builtin logging module</a>
 offers the concept of <a class="reference external" href="http://docs.python.org/library/logging.html#handlers">handlers</a>
 each of which takes the logged message and passes to an output channel. There
 are handlers provided for screen, files, NT Event Logs and so on. This module
 offers two handlers to output to a named Windows mailslot. It makes use of the
-<a class="reference internal" href="mailslots.html#ipc.Mailslot" title="ipc.Mailslot"><tt class="xref py py-class docutils literal"><span class="pre">ipc.Mailslot</span></tt></a> class and can write to a one-time
+<a class="reference internal" href="mailslots.html#ipc.Mailslot" title="ipc.Mailslot"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipc.Mailslot</span></code></a> class and can write to a one-time
 mailslot or to a mailslot which is running permanently.</p>
 <p>The sort of situation where this might be useful is where you have a number
 of system routines running on and off. If they all log to the same mailslot,
-say on an administrator&#8217;s desktop, then he can see the progress of all in one
+say on an administrator’s desktop, then he can see the progress of all in one
 place. Better still, if they log to all the mailslots of the same name in the
 domain, then everyone can have a logging screen running on their desktop which
 they can start up and close down at will to see the current progress.</p>
 </div>
 <div class="section" id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="logging_handlers.MailslotHandler">
-<em class="property">class </em><tt class="descclassname">logging_handlers.</tt><tt class="descname">MailslotHandler</tt><big>(</big><em>mailslot_name : string</em><big>)</big><a class="reference internal" href="_modules/logging_handlers.html#MailslotHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#logging_handlers.MailslotHandler" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">logging_handlers.</code><code class="sig-name descname">MailslotHandler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mailslot_name</span><span class="p">:</span> <span class="n">string</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logging_handlers.html#MailslotHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#logging_handlers.MailslotHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up a handler going to the named mailslot. Note that the usual
 possibilities obtain for mailslot names: an unqualified name must exist
 on the local machine; a computer or domain-qualified name will broadcast
 to that machine or that domain without checking existence; a * will just
 broadcast, full-stop.</p>
 <p>The close function sends a None to the receiving mailslot, intended to act as a
-prompt to shut down. (Although that&#8217;s obviously in the hands of the receiver).</p>
+prompt to shut down. (Although that’s obviously in the hands of the receiver).</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="logging_handlers.PermanentMailslotHandler">
-<em class="property">class </em><tt class="descclassname">logging_handlers.</tt><tt class="descname">PermanentMailslotHandler</tt><big>(</big><em>mailslot_name : string</em><big>)</big><a class="reference internal" href="_modules/logging_handlers.html#PermanentMailslotHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#logging_handlers.PermanentMailslotHandler" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">logging_handlers.</code><code class="sig-name descname">PermanentMailslotHandler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mailslot_name</span><span class="p">:</span> <span class="n">string</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logging_handlers.html#PermanentMailslotHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#logging_handlers.PermanentMailslotHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Subclass the MailslotHandler and override the close function so that it
-doesn&#8217;t send the shutdown token to the receiving mailslot(s).</p>
+doesn’t send the shutdown token to the receiving mailslot(s).</p>
 </dd></dl>
 
 </div>
@@ -101,14 +91,14 @@ doesn&#8217;t send the shutdown token to the receiving mailslot(s).</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="contents.html">
               <img class="logo" src="_static/cpython2.png" alt="Logo"/>
             </a></p>
-  <h3><a href="contents.html">Table Of Contents</a></h3>
+  <h3><a href="contents.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">logging_handlers</span></tt> &#8211; Additional Logging Handlers</a><ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging_handlers</span></code> – Additional Logging Handlers</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 </ul>
@@ -120,30 +110,29 @@ doesn&#8217;t send the shutdown token to the receiving mailslot(s).</p>
                         title="previous chapter">Miscellaneous</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="environment.html"
-                        title="next chapter"><tt class="docutils literal"><span class="pre">environment</span></tt> &#8211; Environment Block</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/logging_handlers.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">environment</span></code> – Environment Block</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/logging_handlers.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -158,13 +147,13 @@ doesn&#8217;t send the shutdown token to the receiving mailslot(s).</p>
         <li class="right" >
           <a href="misc.html" title="Miscellaneous"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="misc.html" >Miscellaneous</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="misc.html" >Miscellaneous</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Tim Golden.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.2.
     </div>
   </body>
 </html>

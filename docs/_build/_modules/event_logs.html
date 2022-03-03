@@ -1,34 +1,24 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>event_logs &mdash; WinSys 1.0beta documentation</title>
-    
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>event_logs &#8212; WinSys 1.0beta documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.0beta',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="WinSys 1.0beta documentation" href="../index.html" />
-    <link rel="up" title="Module code" href="index.html" /> 
-  </head>
-  <body>
-    <div class="related">
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -37,18 +27,18 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for event_logs</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: utf-8 -*-</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
 <span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">contextlib</span>
@@ -66,23 +56,23 @@
 <span class="kn">from</span> <span class="nn">winsys._compat</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">accounts</span><span class="p">,</span> <span class="n">constants</span><span class="p">,</span> <span class="n">core</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">registry</span><span class="p">,</span> <span class="n">utils</span>
 
-<span class="n">EVENTLOG_READ</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span><span class="p">(</span><span class="s">&quot;EVENTLOG_*_READ&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32evtlog</span><span class="p">)</span>
-<span class="n">EVENTLOG_READ</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="s">&quot;Ways of reading event logs&quot;</span><span class="p">)</span>
-<span class="n">EVENTLOG_TYPE</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span><span class="p">(</span><span class="s">&quot;EVENTLOG_*_TYPE&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32evtlog</span><span class="p">)</span>
+<span class="n">EVENTLOG_READ</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span><span class="p">(</span><span class="s2">&quot;EVENTLOG_*_READ&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32evtlog</span><span class="p">)</span>
+<span class="n">EVENTLOG_READ</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="s2">&quot;Ways of reading event logs&quot;</span><span class="p">)</span>
+<span class="n">EVENTLOG_TYPE</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Constants</span><span class="o">.</span><span class="n">from_pattern</span><span class="p">(</span><span class="s2">&quot;EVENTLOG_*_TYPE&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">win32evtlog</span><span class="p">)</span>
 <span class="n">EVENTLOG_TYPE</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span>
     <span class="n">EVENTLOG_SUCCESS</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">AUDIT_FAILURE</span> <span class="o">=</span> <span class="n">win32evtlog</span><span class="o">.</span><span class="n">EVENTLOG_AUDIT_FAILURE</span><span class="p">,</span>
     <span class="n">AUDIT_SUCCESS</span> <span class="o">=</span> <span class="n">win32evtlog</span><span class="o">.</span><span class="n">EVENTLOG_AUDIT_SUCCESS</span>
 <span class="p">))</span>
-<span class="n">EVENTLOG_TYPE</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="s">&quot;Types of records in event logs&quot;</span><span class="p">)</span>
+<span class="n">EVENTLOG_TYPE</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="s2">&quot;Types of records in event logs&quot;</span><span class="p">)</span>
 
 <span class="n">PyHANDLE</span> <span class="o">=</span> <span class="n">pywintypes</span><span class="o">.</span><span class="n">HANDLEType</span>
 
-<span class="n">DEFAULT_LOG_NAME</span> <span class="o">=</span> <span class="s">&quot;Application&quot;</span>
+<span class="n">DEFAULT_LOG_NAME</span> <span class="o">=</span> <span class="s2">&quot;Application&quot;</span>
 
 <div class="viewcode-block" id="x_event_logs"><a class="viewcode-back" href="../event_logs.html#event_logs.x_event_logs">[docs]</a><span class="k">class</span> <span class="nc">x_event_logs</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">x_winsys</span><span class="p">):</span>
-    <span class="s">&quot;Base exception for eventlog-specific exceptions&quot;</span>
-</div>
+    <span class="s2">&quot;Base exception for eventlog-specific exceptions&quot;</span></div>
+
 <span class="n">WINERROR_MAP</span> <span class="o">=</span> <span class="p">{</span>
     <span class="n">winerror</span><span class="o">.</span><span class="n">ERROR_ACCESS_DENIED</span> <span class="p">:</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_access_denied</span>
 <span class="p">}</span>
@@ -99,7 +89,7 @@
 <span class="sd">    record number on the same event log on the same computer.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_log_name</span><span class="p">,</span> <span class="n">event_log_entry</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_log_name</span><span class="p">,</span> <span class="n">event_log_entry</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_event_log_name</span> <span class="o">=</span> <span class="n">event_log_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_event_log_entry</span> <span class="o">=</span> <span class="n">event_log_entry</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">record_number</span> <span class="o">=</span> <span class="n">event_log_entry</span><span class="o">.</span><span class="n">RecordNumber</span>
@@ -111,45 +101,45 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sid</span> <span class="o">=</span> <span class="n">accounts</span><span class="o">.</span><span class="n">principal</span><span class="p">(</span><span class="n">event_log_entry</span><span class="o">.</span><span class="n">Sid</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">accounts</span><span class="o">.</span><span class="n">x_accounts</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sid</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sid</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">computer_name</span> <span class="o">=</span> <span class="n">event_log_entry</span><span class="o">.</span><span class="n">ComputerName</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source_name</span> <span class="o">=</span> <span class="n">event_log_entry</span><span class="o">.</span><span class="n">SourceName</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">event_log_entry</span><span class="o">.</span><span class="n">Data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_message</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;</span><span class="si">%d</span><span class="s"> - </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record_number</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_name</span><span class="p">,</span> <span class="n">EVENTLOG_TYPE</span><span class="o">.</span><span class="n">name_from_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event_type</span><span class="p">,</span> <span class="s">&quot;&lt;Unknown&gt;&quot;</span><span class="p">))</span>
+<div class="viewcode-block" id="_EventLogEntry.as_string"><a class="viewcode-back" href="../event_logs.html#event_logs._EventLogEntry.as_string">[docs]</a>    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> - </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record_number</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_name</span><span class="p">,</span> <span class="n">EVENTLOG_TYPE</span><span class="o">.</span><span class="n">name_from_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event_type</span><span class="p">,</span> <span class="s2">&quot;&lt;Unknown&gt;&quot;</span><span class="p">))</span></div>
 
-    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">computer_name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">computer_name</span> <span class="ow">and</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">_event_log_name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_event_log_name</span> <span class="ow">and</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">record_number</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">record_number</span>
 
-    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">computer_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_log_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">record_number</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">dumped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;record_number: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">record_number</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;time_generated: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_generated</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;time_written: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_written</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;event_id: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_id</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;source_name: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_name</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;event_type: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">EVENTLOG_TYPE</span><span class="o">.</span><span class="n">name_from_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event_type</span><span class="p">))</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;event_category: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_category</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;sid: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">sid</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;computer_name: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">computer_name</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;data: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;message: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">level</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;record_number: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">record_number</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;time_generated: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_generated</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;time_written: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_written</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;event_id: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_id</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;source_name: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_name</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;event_type: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">EVENTLOG_TYPE</span><span class="o">.</span><span class="n">name_from_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event_type</span><span class="p">))</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;event_category: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_category</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;sid: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">sid</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;computer_name: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">computer_name</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;data: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;message: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">level</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_message</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_message</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_message</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_message</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlogutil</span><span class="o">.</span><span class="n">SafeFormatMessage</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_log_entry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_log_name</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_message</span>
-    <span class="n">message</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_message</span><span class="p">)</span>
-</div>
+    <span class="n">message</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_message</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="EventLog"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog">[docs]</a><span class="k">class</span> <span class="nc">EventLog</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;An Event Log is a sequential database managed through API calls</span>
@@ -169,51 +159,51 @@
 <span class="sd">    :func:`event_log` function.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">REG_ROOT</span> <span class="o">=</span> <span class="s">r&quot;</span><span class="se">\\</span><span class="si">%s</span><span class="s">\HKLM\SYSTEM\CurrentControlSet\Services\Eventlog&quot;</span>
+    <span class="n">REG_ROOT</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="si">%s</span><span class="s2">\HKLM\SYSTEM\CurrentControlSet\Services\Eventlog&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">computer</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">computer</span> <span class="o">=</span> <span class="n">computer</span> <span class="ow">or</span> <span class="s">&quot;.&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">computer</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">computer</span> <span class="o">=</span> <span class="n">computer</span> <span class="ow">or</span> <span class="s2">&quot;.&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">key</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">REG_ROOT</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">computer</span><span class="p">)</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_winsys</span><span class="p">(</span><span class="n">err</span><span class="p">):</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Registry access failed with error: </span><span class="si">%s</span><span class="s">; log access may still be possible&quot;</span> <span class="o">%</span> <span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_winsys</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Registry access failed with error: </span><span class="si">%s</span><span class="s2">; log access may still be possible&quot;</span> <span class="o">%</span> <span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">values</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">key</span><span class="p">:</span>
                 <span class="n">values</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;EventLog&quot;</span><span class="p">,</span> <span class="s">r&quot;</span><span class="se">\\</span><span class="si">%s</span><span class="s">\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">computer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;EventLog&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="si">%s</span><span class="s2">\</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">computer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">auto_backup_log_files</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;AutoBackupLogFiles&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">display_name_file</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;DisplayNameFile&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">display_name_id</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;DisplayNameID&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;File&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;MaxSize&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">primary_module</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;PrimaryModule&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">restrict_guest_access</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;RestrictGuestAccess&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">retention</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;Retention&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;Sources&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">auto_backup_log_files</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;AutoBackupLogFiles&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display_name_file</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DisplayNameFile&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display_name_id</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DisplayNameID&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;File&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MaxSize&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">primary_module</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PrimaryModule&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">restrict_guest_access</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RestrictGuestAccess&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retention</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Retention&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Sources&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlog</span><span class="o">.</span><span class="n">OpenEventLog</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">computer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">r&quot;</span><span class="si">%s</span><span class="s">\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">computer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<div class="viewcode-block" id="EventLog.as_string"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog.as_string">[docs]</a>    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">\</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">computer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">dumped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auto_backup_log_files</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;auto_backup_log_files: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">auto_backup_log_files</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_name_file</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;display_name_file: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_name_file</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_name_id</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;display_name_id: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_name_id</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;file: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;max_size: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_as_mb</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_module</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;primary_module: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_module</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">restrict_guest_access</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;restrict_guest_access: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">restrict_guest_access</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">retention</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;retention: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">secs_as_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">retention</span><span class="p">))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;sources: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">level</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">level</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auto_backup_log_files</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;auto_backup_log_files: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">auto_backup_log_files</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_name_file</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;display_name_file: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_name_file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_name_id</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;display_name_id: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_name_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;file: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;max_size: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_as_mb</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_module</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;primary_module: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_module</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">restrict_guest_access</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;restrict_guest_access: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">restrict_guest_access</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">retention</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;retention: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">secs_as_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">retention</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;sources: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">level</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">level</span><span class="p">)</span>
 
-    <span class="nd">@contextlib.contextmanager</span>
+    <span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
     <span class="k">def</span> <span class="nf">_temp_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Internal, context-managed function to provide a working</span>
 <span class="sd">        handle for the event log. You can&#39;t just open one at the</span>
@@ -223,17 +213,17 @@
         <span class="k">yield</span> <span class="n">handle</span>
         <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlog</span><span class="o">.</span><span class="n">CloseEventLog</span><span class="p">,</span> <span class="n">handle</span><span class="p">)</span>
 
-<div class="viewcode-block" id="EventLog.clear"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_to_filename</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="EventLog.clear"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_to_filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Clear the event log, optionally saving out to an opaque file first,</span>
 <span class="sd">        using the built-in functionality.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlog</span><span class="o">.</span><span class="n">ClearEventLog</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">save_to_filename</span><span class="p">)</span> <span class="k">if</span> <span class="n">save_to_filename</span> <span class="k">else</span> <span class="bp">None</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="EventLog.__len__"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog.__len__">[docs]</a>    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlog</span><span class="o">.</span><span class="n">ClearEventLog</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">,</span> <span class="n">unicode</span><span class="p">(</span><span class="n">save_to_filename</span><span class="p">)</span> <span class="k">if</span> <span class="n">save_to_filename</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EventLog.__len__"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog.__len__">[docs]</a>    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Allow len() to return the number of records in the event log&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlog</span><span class="o">.</span><span class="n">GetNumberOfEventLogRecords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="EventLog.__getitem__"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlog</span><span class="o">.</span><span class="n">GetNumberOfEventLogRecords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EventLog.__getitem__"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Allow the event log to be accessed by numeric index. An index of</span>
 <span class="sd">        zero represents the oldest available record; -1 represents the latest</span>
 <span class="sd">        available record.</span>
@@ -255,14 +245,14 @@
                 <span class="n">EVENTLOG_READ</span><span class="o">.</span><span class="n">SEEK</span> <span class="o">|</span> <span class="n">direction</span><span class="p">,</span>
                 <span class="n">record_number</span>
             <span class="p">):</span>
-                <span class="k">return</span> <span class="n">_EventLogEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">)</span>
-</div>
+                <span class="k">return</span> <span class="n">_EventLogEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">)</span></div>
+
     <span class="k">def</span> <span class="nf">_iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Internal function to open a handle over the event log and iterate</span>
 <span class="sd">        in either direction.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_handle</span><span class="p">()</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
-            <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="n">entries</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlog</span><span class="o">.</span><span class="n">ReadEventLog</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">entries</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
@@ -270,15 +260,15 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">StopIteration</span>
 
-<div class="viewcode-block" id="EventLog.__iter__"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog.__iter__">[docs]</a>    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EventLog.__iter__"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return an iterator which traverses this event log lates record first&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iterator</span><span class="p">(</span><span class="n">EVENTLOG_READ</span><span class="o">.</span><span class="n">FORWARDS</span> <span class="o">|</span> <span class="n">EVENTLOG_READ</span><span class="o">.</span><span class="n">SEQUENTIAL</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="EventLog.__reversed__"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog.__reversed__">[docs]</a>    <span class="k">def</span> <span class="nf">__reversed__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iterator</span><span class="p">(</span><span class="n">EVENTLOG_READ</span><span class="o">.</span><span class="n">FORWARDS</span> <span class="o">|</span> <span class="n">EVENTLOG_READ</span><span class="o">.</span><span class="n">SEQUENTIAL</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EventLog.__reversed__"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog.__reversed__">[docs]</a>    <span class="k">def</span> <span class="fm">__reversed__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return an iterator which traverses this event log oldest record first&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iterator</span><span class="p">(</span><span class="n">EVENTLOG_READ</span><span class="o">.</span><span class="n">BACKWARDS</span> <span class="o">|</span> <span class="n">EVENTLOG_READ</span><span class="o">.</span><span class="n">SEQUENTIAL</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="EventLog.watcher"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog.watcher">[docs]</a>    <span class="k">def</span> <span class="nf">watcher</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iterator</span><span class="p">(</span><span class="n">EVENTLOG_READ</span><span class="o">.</span><span class="n">BACKWARDS</span> <span class="o">|</span> <span class="n">EVENTLOG_READ</span><span class="o">.</span><span class="n">SEQUENTIAL</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EventLog.watcher"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog.watcher">[docs]</a>    <span class="k">def</span> <span class="nf">watcher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stop_event</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;(EXPERIMENTAL) Unsure if this will be of any use. In principle, you can ask for an event</span>
 <span class="sd">        to fire when a new record is written to this log. In practice, though, there&#39;s</span>
 <span class="sd">        no way of determining which record was added and you have to do some housekeeping</span>
@@ -286,9 +276,17 @@
 
 <span class="sd">        Probably quite inefficient since it has to keep iterating backwards over the</span>
 <span class="sd">        log every time to find the last record to match against. Does work, though.</span>
+
+<span class="sd">        Accepts an optional event that can be externally set that tells the watcher to exit</span>
+<span class="sd">        prematurely.</span>
+
+<span class="sd">        NB Doesn&#39;t work with remote event logs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">TIMEOUT_SECS</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="n">hEvent</span> <span class="o">=</span> <span class="n">win32event</span><span class="o">.</span><span class="n">CreateEvent</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">hEvent</span> <span class="o">=</span> <span class="n">win32event</span><span class="o">.</span><span class="n">CreateEvent</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">hEvent</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">stop_event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stop_event</span><span class="o">.</span><span class="n">pyobject</span><span class="p">())</span>
 
         <span class="n">iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">last_record</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -297,19 +295,22 @@
                 <span class="k">break</span>
 
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_handle</span><span class="p">()</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
-            <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlog</span><span class="o">.</span><span class="n">NotifyChangeEventLog</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">,</span> <span class="n">hEvent</span><span class="p">)</span>
-            <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">win32event</span><span class="o">.</span><span class="n">WaitForSingleObject</span><span class="p">(</span><span class="n">hEvent</span><span class="p">,</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">TIMEOUT_SECS</span><span class="p">)</span> <span class="o">!=</span> <span class="n">win32event</span><span class="o">.</span><span class="n">WAIT_TIMEOUT</span><span class="p">:</span>
+            <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlog</span><span class="o">.</span><span class="n">NotifyChangeEventLog</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">hEvent</span><span class="p">)</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">stopped_by</span> <span class="o">=</span> <span class="n">win32event</span><span class="o">.</span><span class="n">WaitForMultipleObjects</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">TIMEOUT_SECS</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">stopped_by</span> <span class="o">==</span> <span class="n">win32event</span><span class="o">.</span><span class="n">WAIT_OBJECT_0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">StopIteration</span>
+                <span class="k">elif</span> <span class="n">stopped_by</span> <span class="o">==</span> <span class="n">win32event</span><span class="o">.</span><span class="n">WAIT_OBJECT_0</span><span class="p">:</span>
                     <span class="n">last_record</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">:</span>
                         <span class="k">yield</span> <span class="n">i</span>
                         <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">last_record</span><span class="p">:</span>
-                            <span class="k">break</span>
-</div>
+                            <span class="k">break</span></div>
+
 <div class="viewcode-block" id="EventLog.log_event"><a class="viewcode-back" href="../event_logs.html#event_logs.EventLog.log_event">[docs]</a>    <span class="k">def</span> <span class="nf">log_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pass-through for :func:`log_event`&quot;&quot;&quot;</span>
-        <span class="n">log_event</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</div></div>
+        <span class="n">log_event</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
 <div class="viewcode-block" id="EventSource"><a class="viewcode-back" href="../event_logs.html#event_logs.EventSource">[docs]</a><span class="k">class</span> <span class="nc">EventSource</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;An Event Source is an apparently necessary but in fact slightly unnecessary</span>
 <span class="sd">    part of the event log mechanism. In principle, it represents a name and a DLL</span>
@@ -327,72 +328,72 @@
 <span class="sd">    module-level function.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;CategoryCount&#39;</span><span class="p">,</span> <span class="s">&#39;CategoryMessageFile&#39;</span><span class="p">,</span> <span class="s">&#39;EventMessageFile&#39;</span><span class="p">,</span> <span class="s">&#39;ParameterMessageFile&#39;</span><span class="p">,</span> <span class="s">&#39;TypesSupported&#39;</span><span class="p">]</span>
+    <span class="n">_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CategoryCount&#39;</span><span class="p">,</span> <span class="s1">&#39;CategoryMessageFile&#39;</span><span class="p">,</span> <span class="s1">&#39;EventMessageFile&#39;</span><span class="p">,</span> <span class="s1">&#39;ParameterMessageFile&#39;</span><span class="p">,</span> <span class="s1">&#39;TypesSupported&#39;</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">computer</span><span class="p">,</span> <span class="n">log_name</span><span class="p">,</span> <span class="n">source_name</span><span class="p">):</span>
-        <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">computer</span> <span class="o">=</span> <span class="n">computer</span> <span class="ow">or</span> <span class="s">&quot;.&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">computer</span><span class="p">,</span> <span class="n">log_name</span><span class="p">,</span> <span class="n">source_name</span><span class="p">):</span>
+        <span class="n">core</span><span class="o">.</span><span class="n">_WinSysObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">computer</span> <span class="o">=</span> <span class="n">computer</span> <span class="ow">or</span> <span class="s2">&quot;.&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log_name</span> <span class="o">=</span> <span class="n">log_name</span> <span class="ow">or</span> <span class="n">DEFAULT_LOG_NAME</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">source_name</span>
-        <span class="n">key</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span><span class="p">(</span><span class="s">r&quot;</span><span class="si">%s</span><span class="s">\</span><span class="si">%s</span><span class="s">\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">EventLog</span><span class="o">.</span><span class="n">REG_ROOT</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">computer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">\</span><span class="si">%s</span><span class="s2">\</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">EventLog</span><span class="o">.</span><span class="n">REG_ROOT</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">computer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;EventSource&quot;</span><span class="p">,</span> <span class="s">r&quot;</span><span class="se">\\</span><span class="si">%s</span><span class="s">\</span><span class="si">%s</span><span class="s">\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">computer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">raise</span> <span class="n">exc</span><span class="o">.</span><span class="n">x_not_found</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;EventSource&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="si">%s</span><span class="s2">\</span><span class="si">%s</span><span class="s2">\</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">computer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">values</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-        <span class="n">types</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">in</span> <span class="n">key</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">_want_types</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">category_count</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;CategoryCount&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">category_message_file</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;CategoryMessageFile&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">event_message_file</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;EventMessageFile&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameter_message_file</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;ParameterMessageFile&quot;</span><span class="p">)</span>
-        <span class="n">types_supported</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;TypesSupported&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span>
-        <span class="c">#</span>
-        <span class="c"># This is messy because, although TypeSupported is specified</span>
-        <span class="c"># as a DWORD and constitutes a set of flags, it seems to be</span>
-        <span class="c"># implemented in any number of ingenious ways, including</span>
-        <span class="c"># binary data representing a number and a string representing</span>
-        <span class="c"># the hexadecimal value of the flags.</span>
-        <span class="c">#</span>
+        <span class="n">types</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">in</span> <span class="n">key</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">_want_types</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">category_count</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CategoryCount&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">category_message_file</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CategoryMessageFile&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_message_file</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;EventMessageFile&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameter_message_file</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ParameterMessageFile&quot;</span><span class="p">)</span>
+        <span class="n">types_supported</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;TypesSupported&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span>
+        <span class="c1">#</span>
+        <span class="c1"># This is messy because, although TypeSupported is specified</span>
+        <span class="c1"># as a DWORD and constitutes a set of flags, it seems to be</span>
+        <span class="c1"># implemented in any number of ingenious ways, including</span>
+        <span class="c1"># binary data representing a number and a string representing</span>
+        <span class="c1"># the hexadecimal value of the flags.</span>
+        <span class="c1">#</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">types_supported</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">types_supported</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-            <span class="n">types_type</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;TypesSupported&quot;</span><span class="p">)</span>
+            <span class="n">types_type</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;TypesSupported&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">types_type</span> <span class="o">==</span> <span class="n">registry</span><span class="o">.</span><span class="n">REGISTRY_VALUE_TYPE</span><span class="o">.</span><span class="n">REG_SZ</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">types_supported</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&quot;0x&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">types_supported</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;0x&quot;</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">types_supported</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">types_supported</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">types_supported</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">types_supported</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">types_type</span> <span class="o">==</span> <span class="n">registry</span><span class="o">.</span><span class="n">REGISTRY_VALUE_TYPE</span><span class="o">.</span><span class="n">REG_BINARY</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">types_supported</span><span class="p">,</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&quot;L&quot;</span><span class="p">,</span> <span class="n">types_supported</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">types_supported</span><span class="p">,</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="n">types_supported</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">x_event_logs</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&quot;Can&#39;t determine types supported&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">x_event_logs</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Can&#39;t determine types supported&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">r&quot;</span><span class="si">%s</span><span class="s">\</span><span class="si">%s</span><span class="s">\</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">computer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<div class="viewcode-block" id="EventSource.as_string"><a class="viewcode-back" href="../event_logs.html#event_logs.EventSource.as_string">[docs]</a>    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">\</span><span class="si">%s</span><span class="s2">\</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">computer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">dumped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_string</span><span class="p">())</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;category_count: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">category_count</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;category_message_file: </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">category_message_file</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;event_message_file: </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_message_file</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;parameter_message_file: </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter_message_file</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;types_supported: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">EVENTLOG_TYPE</span><span class="o">.</span><span class="n">names_from_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">types_supported</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">level</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;category_count: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">category_count</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;category_message_file: </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">category_message_file</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;event_message_file: </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_message_file</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;parameter_message_file: </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter_message_file</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;types_supported: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">EVENTLOG_TYPE</span><span class="o">.</span><span class="n">names_from_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">types_supported</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">dumped</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">level</span><span class="p">)</span>
 
-    <span class="c">#</span>
-    <span class="c"># Context manager to allow a handle for this event source to</span>
-    <span class="c"># be passed to the ReportEvent function in log_event (qv).</span>
-    <span class="c">#</span>
-    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1">#</span>
+    <span class="c1"># Context manager to allow a handle for this event source to</span>
+    <span class="c1"># be passed to the ReportEvent function in log_event (qv).</span>
+    <span class="c1">#</span>
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlog</span><span class="o">.</span><span class="n">RegisterEventSource</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">computer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span>
 
-    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">exc_info</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">exc_info</span><span class="p">):</span>
         <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlog</span><span class="o">.</span><span class="n">DeregisterEventSource</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="EventSource.create"><a class="viewcode-back" href="../event_logs.html#event_logs.EventSource.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">log_name</span><span class="o">=</span><span class="n">DEFAULT_LOG_NAME</span><span class="p">):</span>
+<div class="viewcode-block" id="EventSource.create"><a class="viewcode-back" href="../event_logs.html#event_logs.EventSource.create">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">log_name</span><span class="o">=</span><span class="n">DEFAULT_LOG_NAME</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Call the convenience functions to add a simple event source to</span>
 <span class="sd">        the registry against a named event log (usually Application).</span>
 <span class="sd">        Return the event source so you can log against it.</span>
@@ -401,28 +402,29 @@
 <span class="sd">        :param log_name: name of the associated event log</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlogutil</span><span class="o">.</span><span class="n">AddSourceToRegistry</span><span class="p">,</span> <span class="n">appName</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">eventLogType</span><span class="o">=</span><span class="n">log_name</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">log_name</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">log_name</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="EventSource.delete"><a class="viewcode-back" href="../event_logs.html#event_logs.EventSource.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove an event source from the registry. NB There is no particular</span>
 <span class="sd">        security at work here: it&#39;s perfectly possible to remove someone else&#39;s</span>
 <span class="sd">        event source.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlogutil</span><span class="o">.</span><span class="n">RemoveSourceFromRegistry</span><span class="p">,</span> <span class="n">appName</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">eventLogType</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log_name</span><span class="p">)</span>
-</div>
+        <span class="n">wrapped</span><span class="p">(</span><span class="n">win32evtlogutil</span><span class="o">.</span><span class="n">RemoveSourceFromRegistry</span><span class="p">,</span> <span class="n">appName</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">eventLogType</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log_name</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="EventSource.log_event"><a class="viewcode-back" href="../event_logs.html#event_logs.EventSource.log_event">[docs]</a>    <span class="k">def</span> <span class="nf">log_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pass-through to module-level :func:`log_event`&quot;&quot;&quot;</span>
-        <span class="n">log_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">log_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
-<span class="c">#</span>
-<span class="c"># Module-level convenience functions</span>
-<span class="c">#</span></div></div>
-<div class="viewcode-block" id="event_logs"><a class="viewcode-back" href="../event_logs.html#event_logs.event_logs">[docs]</a><span class="k">def</span> <span class="nf">event_logs</span><span class="p">(</span><span class="n">computer</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">):</span>
+<span class="c1">#</span>
+<span class="c1"># Module-level convenience functions</span>
+<span class="c1">#</span>
+<div class="viewcode-block" id="event_logs"><a class="viewcode-back" href="../event_logs.html#event_logs.event_logs">[docs]</a><span class="k">def</span> <span class="nf">event_logs</span><span class="p">(</span><span class="n">computer</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simple iterator over all known event logs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span><span class="p">(</span><span class="n">EventLog</span><span class="o">.</span><span class="n">REG_ROOT</span> <span class="o">%</span> <span class="n">computer</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">yield</span> <span class="n">EventLog</span><span class="p">(</span><span class="n">computer</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-</div>
+        <span class="k">if</span> <span class="s2">&quot;DisplayNameID&quot;</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+            <span class="k">yield</span> <span class="n">EventLog</span><span class="p">(</span><span class="n">computer</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="event_log"><a class="viewcode-back" href="../event_logs.html#event_logs.event_log">[docs]</a><span class="k">def</span> <span class="nf">event_log</span><span class="p">(</span><span class="n">log</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Convenience function to return an :class:`EventLog` object representing</span>
 <span class="sd">    one of the existing event logs. Will raise :exc:`x_not_found` if the event</span>
@@ -430,26 +432,26 @@
 
 <span class="sd">    :param log: one of None, an :class:`EventLog` instance, or a [\\\\computer\\]name moniker</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">log</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="n">log</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="n">EventLog</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">log</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s">r&quot;(?:</span><span class="se">\\\\</span><span class="s">([^</span><span class="se">\\</span><span class="s">]+)</span><span class="se">\\</span><span class="s">)?(.+)$&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">log</span><span class="p">),</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">x_event_logs</span><span class="p">(</span><span class="n">errmsg</span><span class="o">=</span><span class="s">r&quot;Event log must be of form [</span><span class="se">\\</span><span class="s">computer\]event_log&quot;</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?:</span><span class="se">\\\\</span><span class="s2">([^</span><span class="se">\\</span><span class="s2">]+)</span><span class="se">\\</span><span class="s2">)?(.+)$&quot;</span><span class="p">,</span> <span class="n">unicode</span><span class="p">(</span><span class="n">log</span><span class="p">),</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_event_logs</span><span class="p">(</span><span class="n">errmsg</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;Event log must be of form [</span><span class="se">\\</span><span class="s2">computer\]event_log&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">computer</span><span class="p">,</span> <span class="n">log_name</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
-            <span class="k">return</span> <span class="n">EventLog</span><span class="p">(</span><span class="n">computer</span> <span class="ow">or</span> <span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">log_name</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="event_sources"><a class="viewcode-back" href="../event_logs.html#event_logs.event_sources">[docs]</a><span class="k">def</span> <span class="nf">event_sources</span><span class="p">(</span><span class="n">log_name</span><span class="o">=</span><span class="n">DEFAULT_LOG_NAME</span><span class="p">,</span> <span class="n">computer</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">EventLog</span><span class="p">(</span><span class="n">computer</span> <span class="ow">or</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">log_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="event_sources"><a class="viewcode-back" href="../event_logs.html#event_logs.event_sources">[docs]</a><span class="k">def</span> <span class="nf">event_sources</span><span class="p">(</span><span class="n">log_name</span><span class="o">=</span><span class="n">DEFAULT_LOG_NAME</span><span class="p">,</span> <span class="n">computer</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simple iterator over all the event sources for a named log</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">registry</span><span class="o">.</span><span class="n">registry</span><span class="p">(</span><span class="n">EventLog</span><span class="o">.</span><span class="n">REG_ROOT</span> <span class="o">%</span> <span class="n">computer</span><span class="p">)</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">log_name</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">yield</span> <span class="n">EventSource</span><span class="p">(</span><span class="n">computer</span><span class="p">,</span> <span class="n">log_name</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-</div>
+        <span class="k">yield</span> <span class="n">EventSource</span><span class="p">(</span><span class="n">computer</span><span class="p">,</span> <span class="n">log_name</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="event_source"><a class="viewcode-back" href="../event_logs.html#event_logs.event_source">[docs]</a><span class="k">def</span> <span class="nf">event_source</span><span class="p">(</span><span class="n">source</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Convenience function to return an :class:`EventSource` object representing</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Convenience function to return an :class:`EventSource` object representing</span>
 <span class="sd">    one of the existing event sources. Will raise :exc:`exceptions.x_not_found` if the event</span>
 <span class="sd">    source does not exist.</span>
 
@@ -457,17 +459,17 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">EventSource</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">source</span>
-    <span class="k">elif</span> <span class="n">source</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">elif</span> <span class="n">source</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s">r&quot;(?:</span><span class="se">\\\\</span><span class="s">([^</span><span class="se">\\</span><span class="s">]+)</span><span class="se">\\</span><span class="s">)?(?:([^</span><span class="se">\\</span><span class="s">]+)</span><span class="se">\\</span><span class="s">)?(.+)$&quot;</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">x_event_logs</span><span class="p">(</span><span class="n">errmsg</span><span class="o">=</span><span class="s">r&quot;Event source must be of form [</span><span class="se">\\</span><span class="s">computer\]event_log\event_source&quot;</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?:</span><span class="se">\\\\</span><span class="s2">([^</span><span class="se">\\</span><span class="s2">]+)</span><span class="se">\\</span><span class="s2">)?(?:([^</span><span class="se">\\</span><span class="s2">]+)</span><span class="se">\\</span><span class="s2">)?(.+)$&quot;</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">x_event_logs</span><span class="p">(</span><span class="n">errmsg</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;Event source must be of form [</span><span class="se">\\</span><span class="s2">computer\]event_log\event_source&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">computer</span><span class="p">,</span> <span class="n">log_name</span><span class="p">,</span> <span class="n">source_name</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
-            <span class="k">return</span> <span class="n">EventSource</span><span class="p">(</span><span class="n">computer</span> <span class="ow">or</span> <span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">log_name</span> <span class="ow">or</span> <span class="n">DEFAULT_LOG_NAME</span><span class="p">,</span> <span class="n">source_name</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="log_event"><a class="viewcode-back" href="../event_logs.html#event_logs.log_event">[docs]</a><span class="k">def</span> <span class="nf">log_event</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;error&quot;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">principal</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">EventSource</span><span class="p">(</span><span class="n">computer</span> <span class="ow">or</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">log_name</span> <span class="ow">or</span> <span class="n">DEFAULT_LOG_NAME</span><span class="p">,</span> <span class="n">source_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="log_event"><a class="viewcode-back" href="../event_logs.html#event_logs.log_event">[docs]</a><span class="k">def</span> <span class="nf">log_event</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">principal</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">UNSET</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Convenience function to log an event against an existing source.</span>
 
 <span class="sd">    :param source: anything accepted by :func:`event_source`</span>
@@ -480,7 +482,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="n">EVENTLOG_TYPE</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span>
     <span class="n">principal</span> <span class="o">=</span> <span class="n">accounts</span><span class="o">.</span><span class="n">me</span><span class="p">()</span> <span class="k">if</span> <span class="n">principal</span> <span class="ow">is</span> <span class="n">core</span><span class="o">.</span><span class="n">UNSET</span> <span class="k">else</span> <span class="n">accounts</span><span class="o">.</span><span class="n">principal</span><span class="p">(</span><span class="n">principal</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
         <span class="n">message</span> <span class="o">=</span> <span class="p">[</span><span class="n">message</span><span class="p">]</span>
     <span class="n">message</span> <span class="o">=</span> <span class="n">message</span> <span class="ow">or</span> <span class="p">[]</span>
 
@@ -494,38 +496,35 @@
             <span class="n">principal</span><span class="o">.</span><span class="n">pyobject</span><span class="p">(),</span>
             <span class="n">message</span><span class="p">,</span>
             <span class="n">data</span>
-        <span class="p">)</span>
-</div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+        <span class="p">)</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="k">pass</span>
 </pre></div>
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../contents.html">
               <img class="logo" src="../_static/cpython2.png" alt="Logo"/>
             </a></p>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -534,13 +533,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Tim Golden.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.2.
     </div>
   </body>
 </html>

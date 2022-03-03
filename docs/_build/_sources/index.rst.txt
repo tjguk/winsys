@@ -1,7 +1,7 @@
 WinSys - Python tools for the Windows Administrator
 ===================================================
 
-*We read MSDN so you don't have to*
+*We read the Windows docs so you don't have to*
 
 Introduction
 ------------
@@ -9,8 +9,7 @@ Introduction
 WinSys is a Python package which wraps aspects of the Windows API to make
 them more Pythonic and usable by Windows administrators directly
 from the interpreter or as part of a wider set of applications.
-It targets recent versions of Python and reasonably recent versions of Windows
-although it's not yet up to speed on Vista/W7 & x64.
+It targets recent versions of Python and reasonably recent versions of Windows.
 
 It is unashamedly platform-specific: no hint of a concession towards more
 Unix-like operating systems.  You can read about the design
@@ -42,30 +41,17 @@ You can see :ref:`discussion <copy-one-registry-key-to-another>` of this example
 Download
 --------
 
-* easy_install::
+* pip::
 
-    FIXME: NOT YET -- easy_install winsys
-
-* MSI installers & Zipped archives
-
-  Visit http://timgolden.me.uk/python/downloads/winsys/
-  and then::
-
-    winsys-x.y.z.msi
-
-  or::
-
-    unzip winsys-x.y.z.zip
-    python setup.py install
+    pip install winsys
 
 * Git master::
 
     git clone git://github.com/tjguk/winsys.git
 
-  and then either add that directory into sys.path (I use a .pth
-  file but whatever works for you) or run setup.py install from
-  there. I don't do setuptools, so you can't do setup.py develop
-  unless you tweak the setup.py code.
+  and then, from within that clone::
+
+    pip install -e .[all]
 
 Copyright & License
 -------------------

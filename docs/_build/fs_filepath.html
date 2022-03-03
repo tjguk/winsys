@@ -1,36 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>The FilePath class &mdash; WinSys 1.0beta documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <meta charset="utf-8" />
+    <title>The FilePath class &#8212; WinSys 1.0beta documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.0beta',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WinSys 1.0beta documentation" href="index.html" />
-    <link rel="up" title="fs – Files, Directories, &amp;c." href="fs.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="The Entry class" href="fs_entry.html" />
     <link rel="prev" title="The Drive class" href="fs_drive_vol.html" /> 
-  </head>
-  <body>
-    <div class="related">
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -45,22 +35,22 @@
         <li class="right" >
           <a href="fs_drive_vol.html" title="The Drive class"
              accesskey="P">previous</a> |</li>
-        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" accesskey="U"><tt class="docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="fs.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fs</span></code> – Files, Directories, &amp;c.</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="the-filepath-class">
 <h1>The FilePath class<a class="headerlink" href="#the-filepath-class" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="fs.FilePath">
-<em class="property">class </em><tt class="descclassname">fs.</tt><tt class="descname">FilePath</tt><a class="reference internal" href="_modules/fs.html#FilePath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt></p>
+<em class="property">class </em><code class="sig-prename descclassname">fs.</code><code class="sig-name descname">FilePath</code><a class="reference internal" href="_modules/fs.html#FilePath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
 <p>A unicode subtype which knows about path structures on Windows.
 The path itself need not exist on any filesystem, but it has to match
 the rules which would make it possible.</p>
@@ -69,191 +59,182 @@ the root attribute is empty for relative paths. They can be added
 to each other or to other unicode strings which will use os.path.join
 semantics.</p>
 <p>A FilePath offers quick access to the different parts of the path:</p>
-<ul>
-<li><p class="first">parts - a list of the components (cf <a class="reference internal" href="fs.html#fs.get_parts" title="fs.get_parts"><tt class="xref py py-func docutils literal"><span class="pre">fs.get_parts()</span></tt></a>)</p>
-</li>
-<li><p class="first">root - the drive or UNC server/share ending in a backslash unless a drive-relative path</p>
-</li>
-<li><p class="first">filename - final component</p>
-</li>
-<li><p class="first">name - same as filename (convenience)</p>
-</li>
-<li><p class="first">dirname - all path components before the last</p>
-</li>
-<li><p class="first">path - combination of root and dirname</p>
-</li>
-<li><dl class="first docutils">
-<dt>parent - combination of root and all path components before second penultimate; raises</dt>
-<dd><p class="first last">an exception is FilePath is relative.</p>
+<ul class="simple">
+<li><p>parts - a list of the components (cf <a class="reference internal" href="fs.html#fs.get_parts" title="fs.get_parts"><code class="xref py py-func docutils literal notranslate"><span class="pre">fs.get_parts()</span></code></a>)</p></li>
+<li><p>root - the drive or UNC server/share ending in a backslash unless a drive-relative path</p></li>
+<li><p>filename - final component</p></li>
+<li><p>name - same as filename (convenience)</p></li>
+<li><p>dirname - all path components before the last</p></li>
+<li><p>path - combination of root and dirname</p></li>
+<li><dl class="simple">
+<dt>parent - combination of root and all path components before second penultimate; raises</dt><dd><p>an exception is FilePath is relative.</p>
 </dd>
 </dl>
 </li>
-<li><p class="first">base - base part of filename (ie the piece before the dot)</p>
-</li>
-<li><p class="first">ext - ext part of filename (ie the dot and the piece after)</p>
-</li>
+<li><p>base - base part of filename (ie the piece before the dot)</p></li>
+<li><p>ext - ext part of filename (ie the dot and the piece after)</p></li>
 </ul>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="22%" />
-<col width="11%" />
-<col width="10%" />
-<col width="10%" />
-<col width="10%" />
-<col width="13%" />
-<col width="13%" />
-<col width="6%" />
-<col width="5%" />
+<col style="width: 22%" />
+<col style="width: 11%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 6%" />
+<col style="width: 5%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Path</th>
-<th class="head">root</th>
-<th class="head">filename</th>
-<th class="head">name</th>
-<th class="head">dirname</th>
-<th class="head">path</th>
-<th class="head">parent</th>
-<th class="head">base</th>
-<th class="head">ext</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Path</p></th>
+<th class="head"><p>root</p></th>
+<th class="head"><p>filename</p></th>
+<th class="head"><p>name</p></th>
+<th class="head"><p>dirname</p></th>
+<th class="head"><p>path</p></th>
+<th class="head"><p>parent</p></th>
+<th class="head"><p>base</p></th>
+<th class="head"><p>ext</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>\\abcd.txt</td>
-<td>\\ab</td>
-<td>d.txt</td>
-<td>d.txt</td>
-<td>c</td>
-<td>\\abc</td>
-<td>\\abc d</td>
-<td>&nbsp;</td>
-<td>.txt</td>
+<tbody>
+<tr class="row-even"><td><p>\abcd.txt</p></td>
+<td><p>\ab</p></td>
+<td><p>d.txt</p></td>
+<td><p>d.txt</p></td>
+<td><p>c</p></td>
+<td><p>\abc</p></td>
+<td><p>\abc d</p></td>
+<td></td>
+<td><p>.txt</p></td>
 </tr>
-<tr class="row-odd"><td>c:\boot.ini</td>
-<td>c:\</td>
-<td>boot.ini</td>
-<td>boot.ini</td>
-<td>_</td>
-<td>c:\</td>
-<td>c:\</td>
-<td>boot</td>
-<td>.ini</td>
+<tr class="row-odd"><td><p>c:\boot.ini</p></td>
+<td><p>c:\</p></td>
+<td><p>boot.ini</p></td>
+<td><p>boot.ini</p></td>
+<td><p>_</p></td>
+<td><p>c:\</p></td>
+<td><p>c:\</p></td>
+<td><p>boot</p></td>
+<td><p>.ini</p></td>
 </tr>
-<tr class="row-even"><td>boot.ini</td>
-<td>_</td>
-<td>boot.ini</td>
-<td>boot.ini</td>
-<td>_</td>
-<td>_</td>
-<td>x_fs</td>
-<td>boot</td>
-<td>.ini</td>
+<tr class="row-even"><td><p>boot.ini</p></td>
+<td><p>_</p></td>
+<td><p>boot.ini</p></td>
+<td><p>boot.ini</p></td>
+<td><p>_</p></td>
+<td><p>_</p></td>
+<td><p>x_fs</p></td>
+<td><p>boot</p></td>
+<td><p>.ini</p></td>
 </tr>
-<tr class="row-odd"><td>c:\t</td>
-<td>c:\</td>
-<td>t</td>
-<td>t</td>
-<td>_</td>
-<td>c:\</td>
-<td>c:\</td>
-<td>t</td>
-<td>_</td>
+<tr class="row-odd"><td><p>c:\t</p></td>
+<td><p>c:\</p></td>
+<td><p>t</p></td>
+<td><p>t</p></td>
+<td><p>_</p></td>
+<td><p>c:\</p></td>
+<td><p>c:\</p></td>
+<td><p>t</p></td>
+<td><p>_</p></td>
 </tr>
-<tr class="row-even"><td>c:\t</td>
-<td>c:\</td>
-<td>t</td>
-<td>t</td>
-<td>_</td>
-<td>c:\</td>
-<td>c:\</td>
-<td>t</td>
-<td>_</td>
+<tr class="row-even"><td><p>c:\t</p></td>
+<td><p>c:\</p></td>
+<td><p>t</p></td>
+<td><p>t</p></td>
+<td><p>_</p></td>
+<td><p>c:\</p></td>
+<td><p>c:\</p></td>
+<td><p>t</p></td>
+<td><p>_</p></td>
 </tr>
-<tr class="row-odd"><td>c:\ta.txt</td>
-<td>c:\</td>
-<td>a.txt</td>
-<td>a.txt</td>
-<td>t</td>
-<td>c:\t</td>
-<td>c:\t</td>
-<td>a</td>
-<td>.txt</td>
+<tr class="row-odd"><td><p>c:\ta.txt</p></td>
+<td><p>c:\</p></td>
+<td><p>a.txt</p></td>
+<td><p>a.txt</p></td>
+<td><p>t</p></td>
+<td><p>c:\t</p></td>
+<td><p>c:\t</p></td>
+<td><p>a</p></td>
+<td><p>.txt</p></td>
 </tr>
-<tr class="row-even"><td>c:a.txt</td>
-<td>c:</td>
-<td>a.txt</td>
-<td>a.txt</td>
-<td>_</td>
-<td>c:</td>
-<td>x_fs</td>
-<td>a</td>
-<td>.txt</td>
+<tr class="row-even"><td><p>c:a.txt</p></td>
+<td><p>c:</p></td>
+<td><p>a.txt</p></td>
+<td><p>a.txt</p></td>
+<td><p>_</p></td>
+<td><p>c:</p></td>
+<td><p>x_fs</p></td>
+<td><p>a</p></td>
+<td><p>.txt</p></td>
 </tr>
-<tr class="row-odd"><td>a.txt</td>
-<td>_</td>
-<td>a.txt</td>
-<td>a.txt</td>
-<td>_</td>
-<td>_</td>
-<td>x_fs</td>
-<td>a</td>
-<td>.txt</td>
+<tr class="row-odd"><td><p>a.txt</p></td>
+<td><p>_</p></td>
+<td><p>a.txt</p></td>
+<td><p>a.txt</p></td>
+<td><p>_</p></td>
+<td><p>_</p></td>
+<td><p>x_fs</p></td>
+<td><p>a</p></td>
+<td><p>.txt</p></td>
 </tr>
 </tbody>
 </table>
-<dl class="method">
+<dl class="py method">
 <dt id="fs.FilePath.absolute">
-<tt class="descname">absolute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#FilePath.absolute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.absolute" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">absolute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#FilePath.absolute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.absolute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an absolute version of the current FilePath, whether
-relative or not. Use <tt class="xref py py-func docutils literal"><span class="pre">os.path.abspath()</span></tt> semantics.</p>
+relative or not. Use <code class="xref py py-func docutils literal notranslate"><span class="pre">os.path.abspath()</span></code> semantics.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.FilePath.abspath">
-<tt class="descname">abspath</tt><big>(</big><big>)</big><a class="headerlink" href="#fs.FilePath.abspath" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">abspath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fs.FilePath.abspath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an absolute version of the current FilePath, whether
-relative or not. Use <tt class="xref py py-func docutils literal"><span class="pre">os.path.abspath()</span></tt> semantics.</p>
+relative or not. Use <code class="xref py py-func docutils literal notranslate"><span class="pre">os.path.abspath()</span></code> semantics.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.FilePath.changed">
-<tt class="descname">changed</tt><big>(</big><em>root=None</em>, <em>dirname=None</em>, <em>filename=None</em>, <em>base=None</em>, <em>infix=None</em>, <em>ext=None</em><big>)</big><a class="reference internal" href="_modules/fs.html#FilePath.changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.changed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a new <a class="reference internal" href="#fs.FilePath" title="fs.FilePath"><tt class="xref py py-class docutils literal"><span class="pre">FilePath</span></tt></a> with one or more parts changed. This is particularly
+<code class="sig-name descname">changed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">root</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dirname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">base</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">infix</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ext</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#FilePath.changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new <a class="reference internal" href="#fs.FilePath" title="fs.FilePath"><code class="xref py py-class docutils literal notranslate"><span class="pre">FilePath</span></code></a> with one or more parts changed. This is particularly
 convenient for, say, changing the extension of a file or producing a version on
 another path, eg:</p>
-<div class="highlight-python"><div class="highlight"><pre>from winsys import fs, shell
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">winsys</span> <span class="kn">import</span> <span class="n">fs</span><span class="p">,</span> <span class="n">shell</span>
 
-BACKUP_DRIVE = &quot;D:\&quot;
-for f in fs.flat(shell.special_folder(&quot;personal&quot;), &quot;*.doc&quot;):
-    f.copy(f.changed(root=BACKUP_DRIVE))
+<span class="n">BACKUP_DRIVE</span> <span class="o">=</span> <span class="s2">&quot;D:</span><span class="se">\&quot;</span>
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">flat</span><span class="p">(</span><span class="n">shell</span><span class="o">.</span><span class="n">special_folder</span><span class="p">(</span><span class="s2">&quot;personal&quot;</span><span class="p">),</span> <span class="s2">&quot;*.doc&quot;</span><span class="p">):</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">changed</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">BACKUP_DRIVE</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="py method">
 <dt id="fs.FilePath.factory">
-<em class="property">classmethod </em><tt class="descname">factory</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/fs.html#FilePath.factory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.factory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Designed to be redefined in a subclass so that the <tt class="xref py py-meth docutils literal"><span class="pre">__add__()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">__radd__()</span></tt>
+<em class="property">classmethod </em><code class="sig-name descname">factory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filepath</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#FilePath.factory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Designed to be redefined in a subclass so that the <code class="xref py py-meth docutils literal notranslate"><span class="pre">__add__()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">__radd__()</span></code>
 methods can return the appropriate type.</p>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="py method">
 <dt id="fs.FilePath.from_parts">
-<em class="property">classmethod </em><tt class="descname">from_parts</tt><big>(</big><em>root</em>, <em>dirname</em>, <em>base</em>, <em>ext</em><big>)</big><a class="reference internal" href="_modules/fs.html#FilePath.from_parts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.from_parts" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">from_parts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">root</span></em>, <em class="sig-param"><span class="n">dirname</span></em>, <em class="sig-param"><span class="n">base</span></em>, <em class="sig-param"><span class="n">ext</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#FilePath.from_parts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.from_parts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recreate a filepath from its constituent parts. No real validation is done;
 it is assumed that the parameters are valid parts of a filepath.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.FilePath.is_relative">
-<tt class="descname">is_relative</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fs.html#FilePath.is_relative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.is_relative" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_relative</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#FilePath.is_relative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.is_relative" title="Permalink to this definition">¶</a></dt>
 <dd><p>A filepath is relative if it has no root or if its
 root is a drive letter only (without a directory backslash).</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fs.FilePath.relative_to">
-<tt class="descname">relative_to</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="_modules/fs.html#FilePath.relative_to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.relative_to" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return this filepath as relative to another. cf <tt class="xref py py-func docutils literal"><span class="pre">utils.relative_to()</span></tt></p>
+<code class="sig-name descname">relative_to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fs.html#FilePath.relative_to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fs.FilePath.relative_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return this filepath as relative to another. cf <code class="xref py py-func docutils literal notranslate"><span class="pre">utils.relative_to()</span></code></p>
 </dd></dl>
 
 </dd></dl>
@@ -264,7 +245,7 @@ root is a drive letter only (without a directory backslash).</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="contents.html">
               <img class="logo" src="_static/cpython2.png" alt="Logo"/>
@@ -275,29 +256,28 @@ root is a drive letter only (without a directory backslash).</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="fs_entry.html"
                         title="next chapter">The Entry class</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/fs_filepath.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/fs_filepath.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -312,13 +292,13 @@ root is a drive letter only (without a directory backslash).</p>
         <li class="right" >
           <a href="fs_drive_vol.html" title="The Drive class"
              >previous</a> |</li>
-        <li><a href="contents.html">WinSys 1.0beta documentation</a> &raquo;</li>
-          <li><a href="fs.html" ><tt class="docutils literal"><span class="pre">fs</span></tt> &#8211; Files, Directories, &amp;c.</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="contents.html">WinSys 1.0beta documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="fs.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">fs</span></code> – Files, Directories, &amp;c.</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Tim Golden.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Tim Golden.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.2.
     </div>
   </body>
 </html>

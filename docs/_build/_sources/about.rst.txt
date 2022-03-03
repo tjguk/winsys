@@ -3,12 +3,12 @@
 About WinSys
 ============
 
-The `Windows API <http://msdn.microsoft.com/en-us/library/default.aspx>`_ 
+The `Windows API <http://msdn.microsoft.com/en-us/library/default.aspx>`_
 offers the would-be system administrator a plethora of
 low-level tools to secure files, log changes, investigate problems and
 do whatever else might be needed to a Windows system. The `pywin32 extensions
 for Windows <https://sourceforge.net/projects/pywin32/>`_ offer an enormous
-amount of that functionality to the Python user. And the builtin 
+amount of that functionality to the Python user. And the builtin
 `ctypes library <http://docs.python.org/library/ctypes.html>`_ allows you to
 fill in the gaps.
 
@@ -35,7 +35,7 @@ and packages wherever possible:
 * Provide sensible defaults for the common cases, always allowing for more complex scenarios
 * Put all constants into one place, grouping them according to their API usage
 * Use the pywin32 functionality where available, supplementing it with ctypes where needed
-* Assume a recent version of Python (2.5 at least)
+* Assume a recent version of Python (tested on 2.6, 2.7, 3.2 and 3.3)
 * Make good use of context managers (with-statements)
 * Have each object able to dump its contents and that of its children cleanly
 * Maintain an object approach, but provide convenient module-level functions
@@ -54,7 +54,7 @@ Pythonic Naming
 This is mildly contentious, but the same naming convention has been used
 throughout, following the ``lowercase_with_underscores`` convention widely
 adopted in the Python community. The most widespread exception to this is
-in the :mod:`constants` module, where Windows constants retain their 
+in the :mod:`constants` module, where Windows constants retain their
 ``UPPERCASE_WITH_UNDERSCORES`` names.
 
 Module-level Functions
@@ -74,7 +74,7 @@ Most of the classes have a corresponding factory function (usually with
 the same name in lower case) which tries to be more accepting in what
 its parameters are and to convert them to what's needed by the class's
 own ``__init__`` method. So, for example, the :class:`Principal` class whose
-initialiser expects a PySID structure has a corresponding :func:`principal` 
+initialiser expects a PySID structure has a corresponding :func:`principal`
 function which will take a Sid or a user or group name or None or an existing
 :class:`Principal` object.
 
@@ -110,7 +110,7 @@ ToDo
 
 Obviously, there's loads to do. The Windows API is vast; even the amount of
 it exposed by pywin32 far exceeds my immediate needs and the time at my
-disposal. The implementation of this package has been driven largely by the 
+disposal. The implementation of this package has been driven largely by the
 very specific needs of our Windows sysadmins in their day-to-day work. My
 intention is to carry on wrapping Windows functionality in a similar way,
 but if anyone has particular needs, or can provide functionality to add in,
