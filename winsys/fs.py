@@ -1425,6 +1425,23 @@ class File(Entry):
         ).close()
         return self
 
+    def is_zip(self):
+        return zipfile.is_zipfile(self)
+
+    def unzip(self):
+        try:
+            zf = zipfile.ZipFile(self)
+        except:
+            yield None, None
+        else:
+            for zi in zf.infolist():
+                if not zi.is_dir():
+                    try:
+                        with zf.open(zi) as f:
+                            yield zi.filename, f.read()
+                    except:
+                        yield None, None
+
     def zip(self, zip_filename=core.UNSET, mode="w", compression=zipfile.ZIP_DEFLATED, allow_zip64=False):
         """Zip the file up into a zipfile. By default, the zipfile will have the
         name of the file with ".zip" appended and will be a sibling of the file.
@@ -1841,7 +1858,7 @@ def _files(pattern="*", ignore=[".", ".."], error_handler=None):
     #
     if pattern == '.':
         yield Dir(".")
-        raise StopIteration
+        return
 
     try:
         iterator = wrapped(win32file.FindFilesIterator, pattern)
@@ -1852,14 +1869,14 @@ def _files(pattern="*", ignore=[".", ".."], error_handler=None):
         # iteration.
         #
         core.warn("Ignored no-such-file on first iteration of %s", pattern)
-        raise StopIteration
+        return
     except:
         #
         # If we get a trappable error at this point, there's nowhere
         # else to go: raise StopIteration to exit cleanly
         #
         if error_handler and error_handler(sys.exc_info()):
-            raise StopIteration
+            return
         else:
             raise
 
@@ -1882,7 +1899,7 @@ def _files(pattern="*", ignore=[".", ".."], error_handler=None):
             # iteration.
             #
             core.warn("Ignored no-such-file on first iteration of %s", pattern)
-            raise StopIteration
+            return
         except:
             #
             # If the error_handler chooses to swallow this error, carry on
@@ -2264,7 +2281,7 @@ class _DirWatcher(object):
                 self.TIMEOUT
             )
             if stopped_by == win32event.WAIT_OBJECT_0 + 1:
-                raise StopIteration
+                return
             elif stopped_by == win32event.WAIT_OBJECT_0:
                 n_bytes = wrapped(win32file.GetOverlappedResult, self.hDir, self.overlapped, True)
                 if n_bytes == 0:
